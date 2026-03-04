@@ -452,9 +452,14 @@ function clearDataLabels() {
 function ensureDataTimer() {
   if (this._dataRefreshId) return;
   const ctx = this;
-  this._dataRefreshId = setInterval(function () {
-    refreshAllActiveData.call(ctx);
-  }, this._refreshInterval || 30000);
+  this._dataStopped = false;
+  const scheduleNext = function () {
+    if (ctx._dataStopped) return;
+    ctx._dataRefreshId = setTimeout(function () {
+      refreshAllActiveData.call(ctx).finally(scheduleNext);
+    }, ctx._refreshInterval || 30000);
+  };
+  scheduleNext();
 }
 
 /**
@@ -463,7 +468,8 @@ function ensureDataTimer() {
 function stopDataTimerIfIdle() {
   if (this._activeModes.humidity || this._activeModes.temperature) return;
   if (this._dataRefreshId) {
-    clearInterval(this._dataRefreshId);
+    this._dataStopped = true;
+    clearTimeout(this._dataRefreshId);
     this._dataRefreshId = null;
   }
 }
@@ -481,7 +487,7 @@ function refreshAllActiveData() {
     this._centerInstance._heatmap &&
     this._centerInstance._heatmap.visible;
 
-  if (!humidityActive && !temperatureActive) return;
+  if (!humidityActive && !temperatureActive) return Promise.resolve();
 
   const iter = makeIterator(this.page, 'threeLayer');
   const targets = [];
@@ -525,7 +531,7 @@ function refreshAllActiveData() {
     }
   }
 
-  if (targets.length === 0) return;
+  if (targets.length === 0) return Promise.resolve();
 
   const fetchPromises = targets.map(function (target) {
     return fetchData(ctx.page, 'metricLatest', {
@@ -540,7 +546,7 @@ function refreshAllActiveData() {
       });
   });
 
-  Promise.all(fetchPromises).then(function (results) {
+  return Promise.all(fetchPromises).then(function (results) {
     const valid = results.filter(function (r) {
       return r && r.data && Array.isArray(r.data);
     });

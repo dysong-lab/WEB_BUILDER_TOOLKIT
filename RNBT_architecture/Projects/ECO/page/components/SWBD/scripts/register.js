@@ -296,7 +296,14 @@ function showDetail() {
     this.datasetInfo,
     fx.filter((d) => d.refreshInterval > 0),
     fx.each((d) => {
-      d._intervalId = setInterval(() => fetchDatasetAndRender.call(this, d), d.refreshInterval);
+      d._stopped = false;
+      const scheduleNext = () => {
+        if (d._stopped) return;
+        d._timerId = setTimeout(() => {
+          fetchDatasetAndRender.call(this, d).finally(scheduleNext);
+        }, d.refreshInterval);
+      };
+      scheduleNext();
     })
   );
 }
@@ -363,7 +370,7 @@ function fetchDatasetAndRender(d) {
       const yesterdayFrom = formatLocalDate(yesterdayStart);
       const yesterdayTo = formatLocalDate(yesterdayEnd);
 
-      Promise.all([
+      return Promise.all([
         fetchData(this.page, datasetName, { ...param, timeFrom: todayFrom, timeTo: todayTo }),
         fetchData(this.page, datasetName, {
           ...param,
@@ -386,7 +393,7 @@ function fetchDatasetAndRender(d) {
       param.timeFrom = formatLocalDate(from);
       param.timeTo = formatLocalDate(now);
 
-      fetchData(this.page, datasetName, param)
+      return fetchData(this.page, datasetName, param)
         .then((response) => {
           const data = extractData(response);
           if (!data) return;
@@ -396,11 +403,10 @@ function fetchDatasetAndRender(d) {
         })
         .catch((e) => console.warn('[SWBD] Trend fetch failed:', e));
     }
-    return;
   }
 
   // 일반 데이터셋 (assetDetail 등)
-  fetchData(this.page, datasetName, param)
+  return fetchData(this.page, datasetName, param)
     .then((response) => {
       const data = extractData(response);
       if (!data) return;
@@ -413,10 +419,11 @@ function stopRefresh() {
   const datasetInfo = this.datasetInfo ?? [];
   fx.go(
     datasetInfo,
-    fx.filter((d) => d._intervalId),
+    fx.filter((d) => d.refreshInterval > 0),
     fx.each((d) => {
-      clearInterval(d._intervalId);
-      d._intervalId = null;
+      d._stopped = true;
+      clearTimeout(d._timerId);
+      d._timerId = null;
     })
   );
 }

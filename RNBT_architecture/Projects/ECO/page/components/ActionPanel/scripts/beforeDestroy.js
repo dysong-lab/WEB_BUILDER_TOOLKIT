@@ -17,7 +17,8 @@ this.customEvents = null;
 // ======================
 
 if (this._dataRefreshId) {
-  clearInterval(this._dataRefreshId);
+  this._dataStopped = true;
+  clearTimeout(this._dataRefreshId);
   this._dataRefreshId = null;
 }
 
