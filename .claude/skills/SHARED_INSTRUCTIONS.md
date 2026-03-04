@@ -82,11 +82,8 @@ function renderList(config, { response }) { ... }
 
 ## 주기적 데이터 갱신 패턴
 
-> **⚠️ 2026-03 이후 적용 규칙**
-> 기존 컴포넌트 예제나 문서에 `setInterval` + `_intervalId` 패턴이 남아있을 수 있습니다.
-> 이는 리팩토링 이전의 구 패턴이며, **새로 작성하거나 수정하는 코드는 반드시 아래 패턴을 따릅니다.**
-
 `setInterval` 대신 **setTimeout 체이닝 + `_stopped` 가드**를 사용합니다.
+기존 코드에 `setInterval`이 남아있으면 이 패턴으로 교체합니다.
 
 | 방식 | 문제 |
 |------|------|
