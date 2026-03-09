@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
-const PORT = process.env.PORT || 4004;
+const PORT = process.env.PORT || 6381;
 
 app.use(cors());
 app.use(express.json());
@@ -861,6 +861,7 @@ function generateMetricsByAssetType(assetKey) {
     return [
         { metricCode: 'SENSOR.TEMP', eventedAt, valueType: 'NUMBER', valueNumber: 20 + Math.round(Math.random() * 10 * 10) / 10 },
         { metricCode: 'SENSOR.HUMIDITY', eventedAt, valueType: 'NUMBER', valueNumber: 40 + Math.round(Math.random() * 30 * 10) / 10 },
+        { metricCode: 'SENSOR.MEASURED_AT', eventedAt, valueType: 'NUMBER', valueNumber: now.getTime() },
     ];
 }
 
@@ -1010,12 +1011,7 @@ app.post('/api/v1/mh/gl', (req, res) => {
     // 메트릭 데이터 생성
     const metrics = generateMetricsByAssetType(assetKey);
 
-    res.json({
-        data: metrics,
-        path: '/api/v1/mh/gl',
-        success: true,
-        timestamp: new Date().toISOString()
-    });
+    res.json(createListResponse(metrics, '/api/v1/mh/gl'));
 });
 
 // ======================
@@ -1028,10 +1024,12 @@ app.post('/api/v1/mh/gl', (req, res) => {
  */
 function generateMhsRow(time, assetKey, metricCode, interval, statsKeys) {
     const baseAvg = 20 + Math.random() * 10;
+    const count = 60 + Math.round(Math.random() * 10);
     const fullStats = {
-        count: 60 + Math.round(Math.random() * 10),
+        count: count,
         numeric_count: 58 + Math.round(Math.random() * 10),
         avg: Math.round(baseAvg * 10) / 10,
+        sum: Math.round(baseAvg * count * 10) / 10,
         min: Math.round((baseAvg - 2 - Math.random() * 3) * 10) / 10,
         max: Math.round((baseAvg + 2 + Math.random() * 3) * 10) / 10
     };

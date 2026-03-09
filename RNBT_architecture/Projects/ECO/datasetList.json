@@ -9,7 +9,7 @@
         {
           "param_name": "baseUrl",
           "param_type": "string",
-          "default_value": "10.23.128.125:4004"
+          "default_value": "127.0.0.1:6381"
         }
       ],
       "data_type": "1",
@@ -30,7 +30,7 @@
         {
           "param_name": "baseUrl",
           "param_type": "string",
-          "default_value": "10.23.128.125:4004"
+          "default_value": "127.0.0.1:6381"
         },
         { "param_name": "page", "param_type": "number", "default_value": "0" },
         { "param_name": "size", "param_type": "number", "default_value": "20" }
@@ -53,7 +53,7 @@
         {
           "param_name": "baseUrl",
           "param_type": "string",
-          "default_value": "10.23.128.125:4004"
+          "default_value": "127.0.0.1:6381"
         },
         {
           "param_name": "assetKey",
@@ -84,7 +84,7 @@
         {
           "param_name": "baseUrl",
           "param_type": "string",
-          "default_value": "10.23.128.140:8822"
+          "default_value": "127.0.0.1:6381"
         },
         {
           "param_name": "toAssetKey",
@@ -110,7 +110,7 @@
         {
           "param_name": "baseUrl",
           "param_type": "string",
-          "default_value": "10.23.128.125:4004"
+          "default_value": "127.0.0.1:6381"
         },
         {
           "param_name": "assetKey",
@@ -136,7 +136,7 @@
         {
           "param_name": "baseUrl",
           "param_type": "string",
-          "default_value": "10.23.128.125:4004"
+          "default_value": "127.0.0.1:6381"
         },
         {
           "param_name": "relationType",
@@ -162,7 +162,7 @@
         {
           "param_name": "baseUrl",
           "param_type": "string",
-          "default_value": "10.23.128.125:4004"
+          "default_value": "127.0.0.1:6381"
         },
         {
           "param_name": "fromAssetKey",
@@ -188,7 +188,7 @@
         {
           "param_name": "baseUrl",
           "param_type": "string",
-          "default_value": "10.23.128.125:4004"
+          "default_value": "127.0.0.1:6381"
         },
         {
           "param_name": "assetKey",
@@ -214,7 +214,7 @@
         {
           "param_name": "baseUrl",
           "param_type": "string",
-          "default_value": "10.23.128.125:4004"
+          "default_value": "127.0.0.1:6381"
         },
         {
           "param_name": "assetModelKey",
@@ -240,7 +240,7 @@
         {
           "param_name": "baseUrl",
           "param_type": "string",
-          "default_value": "10.23.128.125:4004"
+          "default_value": "127.0.0.1:6381"
         },
         {
           "param_name": "assetVendorKey",
@@ -266,7 +266,7 @@
         {
           "param_name": "baseUrl",
           "param_type": "string",
-          "default_value": "10.23.128.140:8811"
+          "default_value": "127.0.0.1:6381"
         },
         {
           "param_name": "assetKey",
