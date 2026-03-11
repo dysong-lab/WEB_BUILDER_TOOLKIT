@@ -205,7 +205,6 @@ function activateMode(action) {
 
 /**
  * 히트맵 OFF
- * - 삭제하지 않고 숨김 처리 (Stale-While-Revalidate 캐시 유지)
  */
 function deactivateHeatmap() {
   if (
@@ -213,7 +212,7 @@ function deactivateHeatmap() {
     this._centerInstance._heatmap &&
     this._centerInstance._heatmap.visible
   ) {
-    this._centerInstance._heatmap.visible = false;
+    this._centerInstance.toggleHeatmap();
   }
   stopDataTimerIfIdle.call(this);
 }
@@ -271,12 +270,7 @@ function activateHeatmap() {
 
     this._centerInstance.toggleHeatmap();
   } else {
-    this._centerInstance.updateHeatmapConfig(HEATMAP_PRESET);
-
-    // Stale-While-Revalidate: 숨겨진 히트맵 즉시 복원
-    if (!this._centerInstance._heatmap.visible) {
-      this._centerInstance._heatmap.visible = true;
-    }
+    this._centerInstance.toggleHeatmap();
   }
 
   // 통합 타이머 시작 (이미 실행 중이면 무시)
