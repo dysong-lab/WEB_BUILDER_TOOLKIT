@@ -1,14 +1,14 @@
 ---
 name: create-project
-description: RNBT 아키텍처 패턴에 맞는 완전한 대시보드 페이지를 생성합니다. Master/Page 레이어, 여러 컴포넌트, Mock 서버, datasetList.json을 포함합니다.
+description: 기능 중심 컴포넌트 시스템(Mixin 기반)에 맞는 대시보드 프로젝트를 생성합니다.
 ---
 
-# RNBT 프로젝트 생성
+# 프로젝트 생성
 
-Master/Page 레이어, 컴포넌트, Mock 서버, datasetList.json을 포함한 완전한 프로젝트를 생성합니다.
+Mixin 기반 컴포넌트, 페이지 스크립트, Mock 서버, datasetList.json을 포함한 완전한 프로젝트를 생성합니다.
 
+> 설계 문서: [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md) 참조
 > 공통 규칙: [SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md) 참조
-> 기본 원칙: [RNBT_architecture/README.md](/RNBT_architecture/README.md) 참조
 
 ---
 
@@ -17,129 +17,342 @@ Master/Page 레이어, 컴포넌트, Mock 서버, datasetList.json을 포함한 
 **코드 작성 전 반드시 다음 파일들을 Read 도구로 읽으세요.**
 **이전에 읽었더라도 매번 다시 읽어야 합니다 - 캐싱하거나 생략하지 마세요.**
 
-1. [/.claude/skills/SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md) - 공통 규칙
-2. [/RNBT_architecture/README.md](/RNBT_architecture/README.md) - 아키텍처 이해
-3. [/.claude/guides/CODING_STYLE.md](/.claude/guides/CODING_STYLE.md) - 코딩 스타일
-4. **기존 프로젝트 패턴 확인** - SimpleDashboard 또는 TaskMonitor의 page_scripts 구조를 먼저 읽을 것
+1. [/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md) - 시스템 설계
+2. [/.claude/skills/SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md) - 공통 규칙
+3. **기존 예제 확인** - SimpleDashboard의 구조와 패턴을 먼저 읽을 것
+
+---
+
+## 핵심 원칙
+
+### 컴포넌트 = 껍데기 + 조립 코드
+
+```
+컴포넌트는 HTML/CSS(껍데기)만 소유한다.
+기능은 Mixin이 소유한다.
+register.js는 Mixin 적용 + 구독 연결 + 이벤트 매핑만 한다.
+도메인 로직은 없다.
+```
+
+### 선택자 계약
+
+```
+cssSelectors     — textContent 반영 (시각용)
+datasetSelectors — dataset 반영 (시스템용)
+약속된 선택자를 HTML에서 유지하면 디자인은 자유
+```
+
+### 페이지 = 오케스트레이터
+
+```
+페이지가 데이터 정의(pageDataMappings), interval 관리, 이벤트 핸들러를 담당.
+컴포넌트는 구독만 하고, Mixin 메서드에 네임스페이스로 직접 접근.
+```
 
 ---
 
 ## 출력 구조
 
 ```
-Examples/[project_name]/
-├── mock_server/                    # Express API 서버
+DesignComponentSystem/Examples/[project_name]/
+├── Mixins/                            # 재사용 Mixin
+│   ├── FieldRenderMixin.js
+│   ├── FieldRenderMixin.md
+│   ├── ListRenderMixin.js
+│   └── ListRenderMixin.md
+│
+├── mock_server/                       # Express API 서버
 │   ├── server.js
 │   └── package.json
 │
-├── master/page/                    # MASTER 레이어 (앱 전역)
+├── page/                              # 페이지 레이어
 │   ├── page_scripts/
-│   │   ├── before_load.js
-│   │   ├── loaded.js
-│   │   └── before_unload.js
-│   ├── page_styles/container.css
+│   │   ├── before_load.js             # 이벤트 핸들러 등록
+│   │   ├── loaded.js                  # 데이터 매핑 + interval
+│   │   └── before_unload.js           # 정리
 │   └── components/
-│       ├── Header/
-│       └── Sidebar/
+│       └── [ComponentName]/
+│           ├── views/
+│           │   ├── 01_[name].html     # 디자인 변형 A
+│           │   └── 02_[name].html     # 디자인 변형 B
+│           ├── styles/
+│           │   ├── 01_[name].css
+│           │   └── 02_[name].css
+│           ├── scripts/
+│           │   ├── register.js        # 조립 코드 (불변)
+│           │   └── beforeDestroy.js   # 정리 코드 (불변)
+│           └── preview/               # 컴포넌트 단독 테스트
+│               ├── 01_[name].html
+│               └── 02_[name].html
 │
-├── page/                           # PAGE 레이어 (페이지별)
-│   ├── page_scripts/
-│   │   ├── before_load.js
-│   │   ├── loaded.js
-│   │   └── before_unload.js
-│   ├── page_styles/container.css
-│   └── components/
-│
-├── datasetList.json
-├── preview.html
-└── README.md
+├── datasetList.json                   # 실제 포맷 (version, data, rest_api)
+└── preview.html                       # 통합 preview (디자인 전환 가능)
 ```
 
 ---
 
-## Master vs Page 레이어
+## 컴포넌트 register.js 패턴
 
-| 레이어 | 범위 | 용도 | 예시 |
-|--------|------|------|------|
-| **Master** | 앱 전역 | 공통 UI, 네비게이션 | Header, Sidebar |
-| **Page** | 페이지별 | 페이지 고유 콘텐츠 | StatsCards, DataTable, Chart |
-
-### `this` 공유
-
-Master와 Page는 **동일한 `this` 인스턴스를 공유**합니다.
-
-- Master와 Page는 별도 레이어지만 하나의 페이지 인스턴스
-- 이벤트 핸들러는 등록 시점이 아닌 실행 시점에 `this` 참조
-
-### ⚠️ 덮어쓰기 방지 — 접두사 분리 패턴
-
-Master와 Page가 같은 변수명을 쓰면 나중에 실행되는 쪽이 덮어씁니다.
-**접두사로 변수를 분리**하여 충돌을 원천 방지합니다.
+register.js는 **조립 코드만** 포함한다. 순서가 중요하다.
 
 ```javascript
-// Master before_load.js
-const { onEventBusHandlers } = Wkit;
+const { subscribe } = GlobalDataPublisher;
+const { bindEvents } = Wkit;
+const { each, go } = fx;
 
-this.masterEventBusHandlers = {
-    '@userMenuClicked': ({ event }) => { ... },
-    '@navItemClicked': ({ event }) => { ... }
+// ======================
+// 1. MIXIN 적용 — 반드시 먼저
+// ======================
+
+applyFieldRenderMixin(this, {
+    cssSelectors: {
+        name:        '.system-info__name',
+        statusLabel: '.system-info__status'
+    },
+    datasetSelectors: {
+        status:      '[data-status]'
+    },
+    dataFormat: (data) => ({
+        name:        data.hostname,
+        status:      data.status,
+        statusLabel: data.statusLabel
+    })
+});
+
+// ======================
+// 2. 구독 연결 — Mixin 메서드 참조 (함수 참조)
+// ======================
+
+this.subscriptions = {
+    systemInfo: [this.fieldRender.renderData]
 };
-onEventBusHandlers(this.masterEventBusHandlers);
 
-// Page before_load.js
-const { onEventBusHandlers } = Wkit;
+go(
+    Object.entries(this.subscriptions),
+    each(([topic, handlers]) =>
+        each(handler => subscribe(topic, this, handler), handlers)
+    )
+);
 
-this.pageParams = {
-    tableData: { category: 'all' },
-    chartData: { period: '7d' }
-};
+// ======================
+// 3. 이벤트 매핑 — Mixin 선택자를 computed property로 참조
+// ======================
 
-this.pageEventBusHandlers = {
-    '@cardClicked': ({ event }) => { ... },
-    '@filterChanged': ({ event }) => {
-        this.pageParams.tableData = { category: event.target.value };
-        GlobalDataPublisher.fetchAndPublish('tableData', this, this.pageParams.tableData);
+this.customEvents = {};
+bindEvents(this, this.customEvents);
+```
+
+### ListRenderMixin 사용 시
+
+```javascript
+applyListRenderMixin(this, {
+    container: '.event-log__list',
+    item:      '.event-log__item',
+    template:  '#event-log-item-template',
+    cssSelectors: {
+        level:   '.event-log__level',
+        time:    '.event-log__time',
+        message: '.event-log__message'
+    },
+    datasetSelectors: {
+        level:   '[data-level]'
+    },
+    dataFormat: (data) => ({
+        items: data.events.map(event => ({
+            level:   event.level,
+            time:    event.formattedTime,
+            message: event.message
+        }))
+    })
+});
+
+// customEvents에서 Mixin의 item 선택자를 computed property로 참조
+this.customEvents = {
+    click: {
+        [this.listRender.item]: '@eventClicked'
     }
 };
+```
+
+---
+
+## beforeDestroy.js 패턴
+
+생성의 역순으로 정리.
+
+```javascript
+const { unsubscribe } = GlobalDataPublisher;
+const { removeCustomEvents } = Wkit;
+const { each, go } = fx;
+
+// 3. 이벤트 제거
+removeCustomEvents(this, this.customEvents);
+this.customEvents = null;
+
+// 2. 구독 해제
+go(
+    Object.entries(this.subscriptions),
+    each(([topic, _]) => unsubscribe(topic, this))
+);
+this.subscriptions = null;
+
+// 1. Mixin 정리
+this.fieldRender.destroy();
+```
+
+---
+
+## 페이지 스크립트 패턴
+
+### before_load.js — 이벤트 핸들러
+
+Mixin 메서드에 **네임스페이스로 직접 접근**.
+
+```javascript
+const { onEventBusHandlers } = Wkit;
+
+this.pageEventBusHandlers = {
+    '@cardClicked': ({ event }) => {
+        const card = event.target.closest('.status-card');
+        console.log('[Page] Card clicked:', card?.dataset.metric);
+    },
+    '@clearClicked': ({ targetInstance }) => {
+        targetInstance.listRender.clear();
+    }
+};
+
 onEventBusHandlers(this.pageEventBusHandlers);
 ```
 
-**핵심 규칙:**
-- 이벤트 핸들러: `this.masterEventBusHandlers` / `this.pageEventBusHandlers` (접두사 분리)
-- 파라미터: `this.pageParams` (Page 전용)
-- 등록: `onEventBusHandlers()` 함수로 런타임에 등록 (Wkit 제공)
+### loaded.js — 데이터 매핑 + interval
+
+```javascript
+const { registerMapping, fetchAndPublish } = GlobalDataPublisher;
+const { each, go } = fx;
+
+this.pageDataMappings = [
+    {
+        topic: 'systemInfo',
+        datasetInfo: {
+            datasetName: 'dashboard_systemInfo',
+            param: { baseUrl: 'localhost:4010' }
+        }
+    },
+    {
+        topic: 'stats',
+        datasetInfo: {
+            datasetName: 'dashboard_stats',
+            param: { baseUrl: 'localhost:4010' }
+        },
+        refreshInterval: 5000
+    }
+];
+
+this.pageParams = {};
+
+go(
+    this.pageDataMappings,
+    each(registerMapping),
+    each(({ topic }) => this.pageParams[topic] = {}),
+    each(({ topic }) =>
+        fetchAndPublish(topic, this)
+            .catch(err => console.error(`[Page] ${topic}:`, err))
+    )
+);
+
+// interval 관리
+this.startAllIntervals = () => { /* ... */ };
+this.stopAllIntervals = () => { /* ... */ };
+this.startAllIntervals();
+```
+
+### before_unload.js — 정리
+
+```javascript
+const { unregisterMapping } = GlobalDataPublisher;
+const { offEventBusHandlers } = Wkit;
+const { each, go } = fx;
+
+if (this.stopAllIntervals) this.stopAllIntervals();
+this.pageIntervals = null;
+
+offEventBusHandlers(this.pageEventBusHandlers);
+this.pageEventBusHandlers = null;
+
+go(
+    this.pageDataMappings,
+    each(({ topic }) => unregisterMapping(topic))
+);
+this.pageDataMappings = null;
+this.pageParams = null;
+```
 
 ---
 
-## 라이프사이클 흐름
+## datasetList.json
 
-```
-[페이지 로드]
-  MASTER before_load
-    ↓
-  PAGE before_load
-    ↓
-  컴포넌트 register (MASTER + PAGE 모두)
-    ↓
-  리소스 로딩 → 컴포넌트 completed
-    ↓
-  MASTER loaded
-    ↓
-  PAGE loaded
+실제 런타임 포맷을 따른다. API 주소는 `rest_api` 필드에 정의, `param`은 런타임 변수만.
 
-[페이지 언로드]
-  MASTER before_unload
-    ↓
-  PAGE before_unload
-    ↓
-  컴포넌트 beforeDestroy (MASTER + PAGE 모두)
+```json
+{
+  "version": "3.2.0",
+  "data": [
+    {
+      "datasource": "",
+      "mode": "0",
+      "delivery_type": "0",
+      "param_info": [
+        {
+          "param_name": "baseUrl",
+          "param_type": "string",
+          "default_value": "localhost:4010"
+        }
+      ],
+      "data_type": "1",
+      "interval": "5000",
+      "page_id": "PAGE",
+      "query": "",
+      "query_type": "",
+      "description": "시스템 메트릭 조회",
+      "dataset_id": "dcs-stats-001",
+      "name": "dashboard_stats",
+      "rest_api": "{\"url\":\"http://#{baseUrl}/api/stats\",\"method\":\"GET\",\"headers\":{},\"body\":\"\"}"
+    }
+  ],
+  "datasource": []
+}
 ```
 
 ---
 
-## 이벤트 처리 원칙
+## 디자인 변형
 
-> **상세: [SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md#이벤트-처리-이중-구조) 참조**
+같은 register.js(Mixin 조립)로 여러 디자인이 동작하는 것을 시연.
+
+```
+views/
+├── 01_bar.html      ← 디자인 A
+├── 02_card.html     ← 디자인 B (극단적으로 다른 구조)
+└── 03_minimal.html  ← 디자인 C
+
+scripts/
+├── register.js      ← 동일 (불변)
+└── beforeDestroy.js ← 동일 (불변)
+
+조건: 약속된 선택자(cssSelectors, datasetSelectors의 값)를 HTML에서 유지
+```
+
+---
+
+## 조립 코드에서 허용/불허
+
+| 허용 | 불허 |
+|------|------|
+| Mixin 적용 (applyXxxMixin) | 렌더링 로직 (innerHTML, DOM 조작) |
+| 구독 연결 (subscriptions) | 데이터 가공 로직 |
+| 이벤트 매핑 (customEvents) | 상태 관리 (_state 등) |
+| dataFormat 함수 정의 | fetch 호출 |
+| | Mixin 메서드 재정의 |
 
 ---
 
@@ -149,45 +362,9 @@ onEventBusHandlers(this.pageEventBusHandlers);
 
 - ❌ datasetList.json 형식 임의 변경
 - ❌ 라이프사이클 순서 위반
-
----
-
-## preview.html 검증
-
-### HTML/CSS 일관성
-
-- preview.html의 HTML 구조는 `views/component.html`과 **동일**해야 함
-- CSS 셀렉터는 component.html의 클래스명 기준으로 작성
-- preview.html에서 임의로 다른 클래스명 사용 금지
-
-### 스크린샷 검증
-
-Playwright로 preview.html 렌더링 결과를 확인할 수 있습니다.
-
-```bash
-cd Figma_Conversion
-nvm use 20
-npx playwright screenshot \
-  --wait-for-timeout=3000 \
-  --viewport-size="1920,1080" \
-  "file:///path/to/preview.html" \
-  "screenshot.png"
-```
-
-- `--wait-for-timeout=3000`: 데이터 로딩 대기 (API fetch, 차트 렌더링 등)
-- file:// 프로토콜 사용 시 mock_server 실행 필요
-
-### DOM 순서
-
-```html
-<!-- Page가 먼저 (레이어 아래) -->
-<div id="page-container">...</div>
-
-<!-- Master가 나중에 (레이어 위) -->
-<div id="master-container">...</div>
-```
-
-DOM에서 나중에 오는 요소가 z-index 없이도 위에 렌더링됩니다.
+- ❌ 컴포넌트에서 직접 fetch
+- ❌ Mixin 메서드 재정의 (래핑, 덮어쓰기)
+- ❌ customEvents에서 선택자 하드코딩 (Mixin의 computed property 사용)
 
 ---
 
@@ -195,5 +372,7 @@ DOM에서 나중에 오는 요소가 z-index 없이도 위에 렌더링됩니다
 
 | 참조 | 위치 |
 |------|------|
-| 컴포넌트 생성 | [/.claude/skills/2-component/create-standard-component/SKILL.md](/.claude/skills/2-component/create-standard-component/SKILL.md) |
-| 예제 | [/RNBT_architecture/.legacy_ref/Examples/SimpleDashboard/](/RNBT_architecture/.legacy_ref/Examples/SimpleDashboard/) |
+| 시스템 설계 문서 | [/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md) |
+| 예제 | [/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/](/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/) |
+| FieldRenderMixin | [/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/Mixins/FieldRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/Mixins/FieldRenderMixin.md) |
+| ListRenderMixin | [/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/Mixins/ListRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/Mixins/ListRenderMixin.md) |
