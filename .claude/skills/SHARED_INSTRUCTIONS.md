@@ -157,21 +157,23 @@ Mixin:        throw (에러를 알림)
 
 ## dataFormat 원칙
 
-- API 키 → cssSelectors/datasetSelectors 키 매핑만 수행
-- 값 가공은 하지 않는다 (서버가 제공한 값 그대로)
-- 라벨이 필요하면 서버가 label 키로 제공한다
+- API 키 → cssSelectors/datasetSelectors 키 매핑이 주 역할
+- 라벨이 필요하면 서버가 label 키로 제공하는 것이 바람직하다
+- 프로젝트 상황에 따라 값 가공은 허용된다 (프로젝트 레벨 책임)
 
 ```javascript
-// ✅ 매핑만
+// 기본: 매핑
 dataFormat: (data) => ({
     name:        data.hostname,
     status:      data.status,
     statusLabel: data.statusLabel
 })
 
-// ❌ 값 가공
+// 허용: 프로젝트에서 필요한 가공
 dataFormat: (data) => ({
-    status: data.status === 'RUNNING' ? '정상' : data.status
+    status:  data.status,
+    uptime:  `${data.uptime}h`,
+    time:    new Date(data.timestamp).toLocaleTimeString(...)
 })
 ```
 
@@ -228,4 +230,3 @@ body { ... }
 - ❌ customEvents에서 선택자 하드코딩 (Mixin의 computed property 사용)
 - ❌ HTML 문자열을 JS에 작성 (template 태그 사용)
 - ❌ 컴포넌트에서 직접 fetch
-- ❌ dataFormat에서 값 가공 (매핑만)
