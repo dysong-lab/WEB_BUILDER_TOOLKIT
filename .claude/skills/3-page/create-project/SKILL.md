@@ -196,4 +196,4 @@ DOM에서 나중에 오는 요소가 z-index 없이도 위에 렌더링됩니다
 | 참조 | 위치 |
 |------|------|
 | 컴포넌트 생성 | [/.claude/skills/2-component/create-standard-component/SKILL.md](/.claude/skills/2-component/create-standard-component/SKILL.md) |
-| 예제 | [/RNBT_architecture/Examples/SimpleDashboard/](/RNBT_architecture/Examples/SimpleDashboard/) |
+| 예제 | [/RNBT_architecture/.legacy_ref/Examples/SimpleDashboard/](/RNBT_architecture/.legacy_ref/Examples/SimpleDashboard/) |

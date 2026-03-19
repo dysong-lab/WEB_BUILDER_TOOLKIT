@@ -425,4 +425,4 @@ components/[ComponentName]/
 
 | 참조 | 위치 | 특징 |
 |------|------|------|
-| Cube3DSymbol | [/RNBT_architecture/Projects/Symbol_Test/page/components/Cube3DSymbol/](/RNBT_architecture/Projects/Symbol_Test/page/components/Cube3DSymbol/) | 10 gradient × 3 상태, 완전한 패턴 |
+| Cube3DSymbol | [/RNBT_architecture/.legacy_ref/Projects/Symbol_Test/page/components/Cube3DSymbol/](/RNBT_architecture/.legacy_ref/Projects/Symbol_Test/page/components/Cube3DSymbol/) | 10 gradient × 3 상태, 완전한 패턴 |

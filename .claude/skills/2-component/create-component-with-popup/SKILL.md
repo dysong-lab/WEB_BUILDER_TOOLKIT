@@ -20,7 +20,7 @@ description: Shadow DOM 팝업을 가진 컴포넌트를 생성합니다. 컴포
 1. [/.claude/skills/SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md) - 공통 규칙
 2. [/RNBT_architecture/README.md](/RNBT_architecture/README.md) - 아키텍처 이해
 3. [/.claude/guides/CODING_STYLE.md](/.claude/guides/CODING_STYLE.md) - 코딩 스타일
-4. [/RNBT_architecture/Utils/PopupMixin.js](/RNBT_architecture/Utils/PopupMixin.js) - PopupMixin API
+4. [/RNBT_architecture/.legacy_ref/Utils/PopupMixin.js](/RNBT_architecture/.legacy_ref/Utils/PopupMixin.js) - PopupMixin API
 5. **기존 팝업 컴포넌트 패턴 확인** - UPS, PDU, CRAC 중 하나를 먼저 읽을 것
 
 ---
@@ -481,7 +481,7 @@ components/[ComponentName]/
 
 | 참조 | 위치 | 특징 |
 |------|------|------|
-| UPS (기본) | [/RNBT_architecture/Projects/ECO/page/components/UPS/](/RNBT_architecture/Projects/ECO/page/components/UPS/) | config 패턴, 4카드 + 3탭 차트 |
-| PDU (탭 UI + 비교 차트) | [/RNBT_architecture/Projects/ECO/page/components/PDU/](/RNBT_architecture/Projects/ECO/page/components/PDU/) | 4탭 차트 + 금일/전일 비교 |
-| CRAC (듀얼 Y축 차트) | [/RNBT_architecture/Projects/ECO/page/components/CRAC/](/RNBT_architecture/Projects/ECO/page/components/CRAC/) | 듀얼 Y축 ECharts + 6개 BOOL 인디케이터 |
-| TempHumiditySensor (센서) | [/RNBT_architecture/Projects/ECO/page/components/TempHumiditySensor/](/RNBT_architecture/Projects/ECO/page/components/TempHumiditySensor/) | 2카드 + 바/라인 복합 차트 |
+| UPS (기본) | [/RNBT_architecture/.legacy_ref/Projects/ECO/page/components/UPS/](/RNBT_architecture/.legacy_ref/Projects/ECO/page/components/UPS/) | config 패턴, 4카드 + 3탭 차트 |
+| PDU (탭 UI + 비교 차트) | [/RNBT_architecture/.legacy_ref/Projects/ECO/page/components/PDU/](/RNBT_architecture/.legacy_ref/Projects/ECO/page/components/PDU/) | 4탭 차트 + 금일/전일 비교 |
+| CRAC (듀얼 Y축 차트) | [/RNBT_architecture/.legacy_ref/Projects/ECO/page/components/CRAC/](/RNBT_architecture/.legacy_ref/Projects/ECO/page/components/CRAC/) | 듀얼 Y축 ECharts + 6개 BOOL 인디케이터 |
+| TempHumiditySensor (센서) | [/RNBT_architecture/.legacy_ref/Projects/ECO/page/components/TempHumiditySensor/](/RNBT_architecture/.legacy_ref/Projects/ECO/page/components/TempHumiditySensor/) | 2카드 + 바/라인 복합 차트 |

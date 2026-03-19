@@ -19,7 +19,7 @@ description: 표준 RNBT 컴포넌트를 생성합니다. 페이지가 GlobalDat
 1. [/.claude/skills/SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md) - 공통 규칙
 2. [/RNBT_architecture/README.md](/RNBT_architecture/README.md) - 아키텍처 이해
 3. [/.claude/guides/CODING_STYLE.md](/.claude/guides/CODING_STYLE.md) - 코딩 스타일
-4. **기존 컴포넌트 패턴 확인** - `/RNBT_architecture/Components/LogViewer/` 등 기존 컴포넌트의 구조와 패턴을 먼저 확인
+4. **기존 컴포넌트 패턴 확인** - `/RNBT_architecture/.legacy_ref/Components/LogViewer/` 등 기존 컴포넌트의 구조와 패턴을 먼저 확인
 
 ---
 
@@ -292,7 +292,7 @@ this.customEvents = {
 
 | 문서 | 위치 |
 |------|------|
-| LogViewer (기본 패턴) | [/RNBT_architecture/Components/LogViewer/](/RNBT_architecture/Components/LogViewer/) |
-| AssetTree (트리/검색 패턴) | [/RNBT_architecture/Components/AssetTree/](/RNBT_architecture/Components/AssetTree/) |
-| EventStatus (단순 패턴) | [/RNBT_architecture/Components/EventStatus/](/RNBT_architecture/Components/EventStatus/) |
-| 예제 | [/RNBT_architecture/Examples/SimpleDashboard/](/RNBT_architecture/Examples/SimpleDashboard/) |
+| LogViewer (기본 패턴) | [/RNBT_architecture/.legacy_ref/Components/LogViewer/](/RNBT_architecture/.legacy_ref/Components/LogViewer/) |
+| AssetTree (트리/검색 패턴) | [/RNBT_architecture/.legacy_ref/Components/AssetTree/](/RNBT_architecture/.legacy_ref/Components/AssetTree/) |
+| EventStatus (단순 패턴) | [/RNBT_architecture/.legacy_ref/Components/EventStatus/](/RNBT_architecture/.legacy_ref/Components/EventStatus/) |
+| 예제 | [/RNBT_architecture/.legacy_ref/Examples/SimpleDashboard/](/RNBT_architecture/.legacy_ref/Examples/SimpleDashboard/) |
