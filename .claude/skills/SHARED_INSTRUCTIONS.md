@@ -158,22 +158,15 @@ Mixin:        throw (에러를 알림)
 ## dataFormat 원칙
 
 - API 키 → cssSelectors/datasetSelectors 키 매핑이 주 역할
-- 라벨이 필요하면 서버가 label 키로 제공하는 것이 바람직하다
-- 프로젝트 상황에 따라 값 가공은 허용된다 (프로젝트 레벨 책임)
+- 값 가공이 필요하면 dataFormat에서 처리 (프로젝트 레벨 책임)
+- 시스템 값과 시각 값을 분리해야 하면 datasetSelectors + cssSelectors로 해결
 
 ```javascript
-// 기본: 매핑
 dataFormat: (data) => ({
     name:        data.hostname,
-    status:      data.status,
-    statusLabel: data.statusLabel
-})
-
-// 허용: 프로젝트에서 필요한 가공
-dataFormat: (data) => ({
-    status:  data.status,
-    uptime:  `${data.uptime}h`,
-    time:    new Date(data.timestamp).toLocaleTimeString(...)
+    status:      data.status,           // → datasetSelectors → dataset
+    statusLabel: data.statusLabel,      // → cssSelectors → textContent
+    uptime:      `${data.uptime}h`      // 가공도 가능
 })
 ```
 
