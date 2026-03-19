@@ -338,6 +338,5 @@ CSS가 하는 일:
 
 | 참조 | 위치 | 특징 |
 |------|------|------|
-| Cube3DSymbol (레거시) | [/RNBT_architecture/.legacy_ref/Projects/Symbol_Test/page/components/Cube3DSymbol/](/RNBT_architecture/.legacy_ref/Projects/Symbol_Test/page/components/Cube3DSymbol/) | 10 gradient × 3 상태, 완전한 패턴 |
 | FieldRenderMixin | [/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/Mixins/FieldRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/Mixins/FieldRenderMixin.md) | datasetSelectors 사용법 |
 | 시스템 설계 문서 | [/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md) | 전체 아키텍처 |
