@@ -49,6 +49,7 @@
         }
 
         #event-log-container { height: 360px; padding: 0 24px; }
+        #event-browser-container { height: 480px; padding: 0 24px; }
         #status-cards-container { padding: 0 24px; }
     </style>
 
@@ -56,6 +57,7 @@
     <style id="dynamic-system-info-css"></style>
     <style id="dynamic-status-cards-css"></style>
     <style id="dynamic-event-log-css"></style>
+    <style id="dynamic-event-browser-css"></style>
 </head>
 <body>
 
@@ -92,6 +94,9 @@
     <div id="system-info-container"></div>
     <div id="status-cards-container"></div>
     <div id="event-log-container"></div>
+
+    <!-- EventBrowser: EventListMixin -->
+    <div id="event-browser-container"></div>
 </div>
 
 <script>
@@ -305,6 +310,56 @@ const DESIGNS = {
                 .event-log__message { font-size:13px; color:#334155; line-height:1.5; }
             }`
         }
+    },
+    EventBrowser: {
+        '01_standard': {
+            html: `<div class="event-browser">
+                <div class="event-browser__header">
+                    <span class="event-browser__title">Event Browser</span>
+                </div>
+                <div class="event-browser__list"></div>
+                <template id="event-browser-item-template">
+                    <div class="event-browser__item" data-id="" data-severity="" data-ack="false">
+                        <div class="event-browser__severity-bar"></div>
+                        <div class="event-browser__content">
+                            <div class="event-browser__top-row">
+                                <span class="event-browser__severity-label"></span>
+                                <span class="event-browser__time"></span>
+                                <span class="event-browser__source"></span>
+                            </div>
+                            <div class="event-browser__message"></div>
+                        </div>
+                        <button class="event-browser__ack-btn">ACK</button>
+                    </div>
+                </template>
+            </div>`,
+            css: `#event-browser-container {
+                .event-browser { background:#fff; border:1px solid #e2e8f0; border-radius:8px; display:flex; flex-direction:column; height:100%; overflow:hidden; }
+                .event-browser__header { display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid #e2e8f0; }
+                .event-browser__title { font-size:15px; font-weight:600; color:#0f172a; }
+                .event-browser__list { flex:1; overflow-y:auto; }
+                .event-browser__item { display:flex; align-items:stretch; border-bottom:1px solid #f1f5f9; transition:background .15s; }
+                .event-browser__item:hover { background:#f8fafc; }
+                .event-browser__severity-bar { width:4px; flex-shrink:0; }
+                .event-browser__item[data-severity="critical"] .event-browser__severity-bar { background:#ef4444; }
+                .event-browser__item[data-severity="warning"] .event-browser__severity-bar { background:#f59e0b; }
+                .event-browser__item[data-severity="info"] .event-browser__severity-bar { background:#3b82f6; }
+                .event-browser__item[data-severity="critical"] .event-browser__severity-label { color:#ef4444; }
+                .event-browser__item[data-severity="warning"] .event-browser__severity-label { color:#f59e0b; }
+                .event-browser__item[data-severity="info"] .event-browser__severity-label { color:#3b82f6; }
+                .event-browser__content { flex:1; padding:10px 16px; min-width:0; }
+                .event-browser__top-row { display:flex; align-items:center; gap:8px; margin-bottom:4px; }
+                .event-browser__severity-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; }
+                .event-browser__time { font-size:12px; color:#94a3b8; font-family:monospace; }
+                .event-browser__source { font-size:11px; color:#94a3b8; margin-left:auto; }
+                .event-browser__message { font-size:13px; color:#334155; line-height:1.4; }
+                .event-browser__ack-btn { align-self:center; margin-right:12px; padding:4px 12px; font-size:11px; font-weight:600; border:1px solid #e2e8f0; border-radius:4px; background:#fff; color:#64748b; cursor:pointer; flex-shrink:0; transition:all .15s; }
+                .event-browser__ack-btn:hover { background:#f1f5f9; border-color:#cbd5e1; }
+                .event-browser__item[data-ack="true"] { opacity:0.5; }
+                .event-browser__item[data-ack="true"] .event-browser__ack-btn { display:none; }
+                .event-browser__item[data-ack="false"] { font-weight:500; }
+            }`
+        }
     }
 };
 
@@ -314,9 +369,10 @@ const DESIGNS = {
 // ═══════════════════════════════════════════════════════════════
 
 const _datasetRegistry = {
-    dashboard_systemInfo: '/api/system-info',
-    dashboard_stats:      '/api/stats',
-    dashboard_events:     '/api/events'
+    dashboard_systemInfo:    '/api/system-info',
+    dashboard_stats:         '/api/stats',
+    dashboard_events:        '/api/events',
+    dashboard_eventBrowser:  '/api/event-browser'
 };
 
 const fx = {
@@ -461,6 +517,75 @@ function applyListRenderMixin(instance, options) {
 }
 
 
+// ── EventListMixin ──
+// ListRenderMixin + updateItemState (개별 항목 상태 변경)
+function applyEventListMixin(instance, options) {
+    const { container, item, itemKey, template, cssSelectors = {}, datasetSelectors = {}, dataFormat } = options;
+    const ns = {};
+    instance.eventList = ns;
+    ns.container = container;
+    ns.item = item;
+    ns.cssSelectors = { ...cssSelectors };
+    ns.datasetSelectors = { ...datasetSelectors };
+
+    ns.renderData = function({ response }) {
+        const { data } = response;
+        if (!data) throw new Error('[EventListMixin] data is null');
+        const formatted = dataFormat ? dataFormat(data) : { items: data };
+        const containerEl = instance.appendElement.querySelector(container);
+        const templateEl = instance.appendElement.querySelector(template);
+        if (!containerEl || !templateEl) return;
+        containerEl.innerHTML = '';
+        formatted.items.forEach(function(itemData) {
+            const clone = templateEl.content.cloneNode(true);
+            const rootEl = clone.querySelector(item);
+            if (rootEl && itemKey && itemData[itemKey] != null) {
+                rootEl.dataset[itemKey] = itemData[itemKey];
+            }
+            Object.entries(datasetSelectors).forEach(function([key, selector]) {
+                const el = clone.querySelector(selector);
+                if (el && itemData[key] != null) el.dataset[key] = itemData[key];
+            });
+            Object.entries(cssSelectors).forEach(function([key, selector]) {
+                const el = clone.querySelector(selector);
+                if (el && itemData[key] != null) el.textContent = itemData[key];
+            });
+            containerEl.appendChild(clone);
+        });
+    };
+
+    ns.updateItemState = function(id, state) {
+        const el = instance.appendElement.querySelector(
+            item + '[data-' + itemKey + '="' + id + '"]'
+        );
+        if (!el) return;
+        Object.entries(state).forEach(function([key, value]) {
+            el.dataset[key] = value;
+        });
+    };
+
+    ns.getItemState = function(id) {
+        const el = instance.appendElement.querySelector(
+            item + '[data-' + itemKey + '="' + id + '"]'
+        );
+        if (!el) return null;
+        return Object.assign({}, el.dataset);
+    };
+
+    ns.clear = function() {
+        const containerEl = instance.appendElement.querySelector(container);
+        if (containerEl) containerEl.innerHTML = '';
+    };
+
+    ns.destroy = function() {
+        ns.renderData = null; ns.updateItemState = null; ns.getItemState = null; ns.clear = null;
+        ns.container = null; ns.item = null;
+        ns.cssSelectors = null; ns.datasetSelectors = null;
+        instance.eventList = null;
+    };
+}
+
+
 // ═══════════════════════════════════════════════════════════════
 // 컴포넌트 등록 (Mixin 적용 — register.js와 동일)
 // 디자인이 바뀌어도 이 코드는 변하지 않는다
@@ -510,7 +635,8 @@ function registerStatusCards() {
             cpuValue:     '.status-card[data-metric="cpu"] .status-card__value',
             memoryValue:  '.status-card[data-metric="memory"] .status-card__value',
             diskValue:    '.status-card[data-metric="disk"] .status-card__value',
-            networkValue: '.status-card[data-metric="network"] .status-card__value'
+            networkValue: '.status-card[data-metric="network"] .status-card__value',
+            card:         '.status-card'
         },
         dataFormat: (data) => ({
             cpuValue:     data.cpu.value,
@@ -525,7 +651,7 @@ function registerStatusCards() {
         handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
     );
 
-    instance.customEvents = { click: { '.status-card': '@cardClicked' } };
+    instance.customEvents = { click: { [instance.fieldRender.cssSelectors.card]: '@cardClicked' } };
     Wkit.bindEvents(instance, instance.customEvents);
 }
 
@@ -538,9 +664,10 @@ function registerEventLog() {
         item: '.event-log__item',
         template: '#event-log-item-template',
         cssSelectors: {
-            level:   '.event-log__level',
-            time:    '.event-log__time',
-            message: '.event-log__message'
+            level:    '.event-log__level',
+            time:     '.event-log__time',
+            message:  '.event-log__message',
+            clearBtn: '.event-log__clear-btn'
         },
         datasetSelectors: {
             level: '[data-level]'
@@ -561,15 +688,66 @@ function registerEventLog() {
 
     instance.customEvents = {
         click: {
-            [instance.listRender.item]: '@eventClicked',
-            '.event-log__clear-btn': '@clearClicked'
+            [instance.listRender.item]:               '@eventClicked',
+            [instance.listRender.cssSelectors.clearBtn]: '@clearClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+}
+
+function registerEventBrowser() {
+    const instance = { id: 'event-browser', appendElement: document.getElementById('event-browser-container') };
+    instances.eventBrowser = instance;
+
+    applyEventListMixin(instance, {
+        container: '.event-browser__list',
+        item: '.event-browser__item',
+        itemKey: 'id',
+        template: '#event-browser-item-template',
+        cssSelectors: {
+            severity: '.event-browser__severity-label',
+            time:     '.event-browser__time',
+            source:   '.event-browser__source',
+            message:  '.event-browser__message',
+            ackBtn:   '.event-browser__ack-btn'
+        },
+        datasetSelectors: {
+            severity: '[data-severity]',
+            ack:      '[data-ack]'
+        },
+        dataFormat: (data) => ({
+            items: data.events.map(event => ({
+                id:       String(event.id),
+                severity: event.severity,
+                time:     new Date(event.timestamp).toLocaleTimeString('ko-KR', {
+                    hour: '2-digit', minute: '2-digit', second: '2-digit'
+                }),
+                source:   event.source,
+                message:  event.message,
+                ack:      String(event.acknowledged)
+            }))
+        })
+    });
+
+    instance.subscriptions = { eventBrowser: [instance.eventList.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.eventList.cssSelectors.ackBtn]: '@ackClicked',
+            [instance.eventList.item]:                '@eventSelected'
         }
     };
     Wkit.bindEvents(instance, instance.customEvents);
 }
 
 function destroyAll() {
-    Object.values(pageIntervals).forEach(clearInterval);
+    Object.values(pageIntervals).forEach(state => {
+        state._stopped = true;
+        clearTimeout(state._timerId);
+    });
     pageIntervals = {};
 
     Object.values(instances).forEach(inst => {
@@ -581,6 +759,7 @@ function destroyAll() {
         }
         if (inst.fieldRender) inst.fieldRender.destroy();
         if (inst.listRender) inst.listRender.destroy();
+        if (inst.eventList) inst.eventList.destroy();
     });
 
     Object.keys(instances).forEach(k => delete instances[k]);
@@ -596,12 +775,14 @@ function applyDesign(component, version) {
     const containerMap = {
         SystemInfo: 'system-info-container',
         StatusCards: 'status-cards-container',
-        EventLog: 'event-log-container'
+        EventLog: 'event-log-container',
+        EventBrowser: 'event-browser-container'
     };
     const cssMap = {
         SystemInfo: 'dynamic-system-info-css',
         StatusCards: 'dynamic-status-cards-css',
-        EventLog: 'dynamic-event-log-css'
+        EventLog: 'dynamic-event-log-css',
+        EventBrowser: 'dynamic-event-browser-css'
     };
 
     document.getElementById(containerMap[component]).innerHTML = design.html;
@@ -613,24 +794,47 @@ function boot() {
     applyDesign('SystemInfo', document.getElementById('select-system-info').value);
     applyDesign('StatusCards', document.getElementById('select-status-cards').value);
     applyDesign('EventLog', document.getElementById('select-event-log').value);
+    applyDesign('EventBrowser', '01_standard');
 
     // 컴포넌트 등록 (register.js — Mixin 조립)
     registerSystemInfo();
     registerStatusCards();
     registerEventLog();
+    registerEventBrowser();
 
     // 페이지 이벤트 핸들러
     Wkit.onEventBusHandlers({
-        '@cardClicked': ({ event }) => {
-            const card = event.target.closest('.status-card');
+        '@cardClicked': ({ event, targetInstance }) => {
+            const card = event.target.closest(targetInstance.fieldRender.cssSelectors.card);
             console.log('[Page] Card clicked:', card?.dataset.metric);
         },
-        '@eventClicked': ({ event }) => {
-            const item = event.target.closest('.event-log__item');
-            console.log('[Page] Event clicked:', item?.querySelector('.event-log__message')?.textContent);
+        '@eventClicked': ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.listRender.item);
+            console.log('[Page] Event clicked:', item?.querySelector(targetInstance.listRender.cssSelectors.message)?.textContent);
         },
         '@clearClicked': ({ targetInstance }) => {
             targetInstance.listRender.clear();
+        },
+        '@ackClicked': async ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.eventList.item);
+            const eventId = item?.dataset.id;
+            if (!eventId) return;
+            try {
+                await fetch('http://localhost:4010/api/event-browser/ack', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ eventId })
+                });
+                targetInstance.eventList.updateItemState(eventId, { ack: 'true' });
+                console.log('[Page] Event acknowledged:', eventId);
+            } catch (err) {
+                console.error('[Page] Ack failed:', err);
+            }
+        },
+        '@eventSelected': ({ event, targetInstance }) => {
+            if (event.target.closest(targetInstance.eventList.cssSelectors.ackBtn)) return;
+            const item = event.target.closest(targetInstance.eventList.item);
+            console.log('[Page] Event selected:', item?.dataset.id);
         }
     });
 
@@ -638,7 +842,8 @@ function boot() {
     const mappings = [
         { topic: 'systemInfo', datasetInfo: { datasetName: 'dashboard_systemInfo', param: { baseUrl: 'localhost:4010' } } },
         { topic: 'stats', datasetInfo: { datasetName: 'dashboard_stats', param: { baseUrl: 'localhost:4010' } }, refreshInterval: 5000 },
-        { topic: 'events', datasetInfo: { datasetName: 'dashboard_events', param: { baseUrl: 'localhost:4010' } }, refreshInterval: 10000 }
+        { topic: 'events', datasetInfo: { datasetName: 'dashboard_events', param: { baseUrl: 'localhost:4010' } }, refreshInterval: 10000 },
+        { topic: 'eventBrowser', datasetInfo: { datasetName: 'dashboard_eventBrowser', param: { baseUrl: 'localhost:4010' } }, refreshInterval: 15000 }
     ];
 
     mappings.forEach(GlobalDataPublisher.registerMapping);
@@ -647,9 +852,17 @@ function boot() {
     );
 
     mappings.filter(m => m.refreshInterval).forEach(({ topic, refreshInterval }) => {
-        pageIntervals[topic] = setInterval(() => {
-            GlobalDataPublisher.fetchAndPublish(topic, {}).catch(err => console.error(`[Page] ${topic}:`, err));
-        }, refreshInterval);
+        const state = { _stopped: false, _timerId: null };
+        pageIntervals[topic] = state;
+        const scheduleNext = () => {
+            if (state._stopped) return;
+            state._timerId = setTimeout(() => {
+                GlobalDataPublisher.fetchAndPublish(topic, {})
+                    .catch(err => console.error(`[Page] ${topic}:`, err))
+                    .finally(scheduleNext);
+            }, refreshInterval);
+        };
+        scheduleNext();
     });
 
     console.log('[Boot] SimpleDashboard started');

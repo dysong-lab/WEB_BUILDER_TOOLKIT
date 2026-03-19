@@ -6,6 +6,8 @@
 
 배열의 각 항목을 HTML `<template>` 태그의 cloneNode로 생성하는 **N:N 생성** 패턴이다. FieldRenderMixin과 달리 DOM을 생성한다. HTML 구조는 template 태그 안에 정의되므로 JS에 HTML 문자열이 없다.
 
+> **Mixin 공통 사용법**: [COMPONENT_SYSTEM_DESIGN.md](../../docs/COMPONENT_SYSTEM_DESIGN.md)의 "Mixin > 공통 사용법" 참조
+
 ### FieldRenderMixin과의 차이
 
 | | FieldRenderMixin | ListRenderMixin |
@@ -14,63 +16,11 @@
 | DOM | 이미 존재하는 요소에 값 채움 | template에서 복제하여 생성 |
 | 추가 옵션 | — | container, item, template |
 
-### 공통점
-
-| | FieldRenderMixin | ListRenderMixin |
-|---|---|---|
-| cssSelectors | 요소별 textContent | 항목 내 textContent |
-| datasetSelectors | 요소별 dataset | 항목 내 dataset |
-| dataFormat | 데이터 매핑 | 데이터 매핑 (items 배열) |
-
 ---
 
-## 네임스페이스
+## 사용법
 
-`this.listRender`
-
----
-
-## 옵션
-
-```javascript
-applyListRenderMixin(instance, {
-    container,          // String — 항목이 렌더링될 컨테이너 CSS 선택자
-    item,               // String — 각 항목의 CSS 선택자 (customEvents에서 참조)
-    template,           // String — <template> 태그의 CSS 선택자
-    cssSelectors,       // Object — { dataFormatKey: '항목 내 CSS 선택자' }
-    datasetSelectors,   // Object — { dataFormatKey: '항목 내 [data-*] 선택자' } (선택적)
-    dataFormat          // Function — (data) => ({ items: [...] }) (선택적)
-});
-```
-
-| 옵션 | 필수 | 설명 |
-|------|------|------|
-| container | O | 항목이 추가될 부모 요소 선택자 |
-| item | O | 각 항목의 선택자 (customEvents computed property용) |
-| template | O | `<template>` 태그 선택자 (cloneNode 대상) |
-| cssSelectors | O | 각 항목 내부에서 textContent를 반영할 요소들 |
-| datasetSelectors | X | 각 항목 내부에서 dataset을 반영할 요소들 |
-| dataFormat | X | 데이터 형태 매핑. `{ items: [...] }` 형태를 반환해야 함 |
-
----
-
-## 주입되는 속성/메서드
-
-| 속성/메서드 | 설명 |
-|-------------|------|
-| `this.listRender.container` | 컨테이너 선택자 |
-| `this.listRender.item` | 항목 선택자 (customEvents에서 computed property로 참조) |
-| `this.listRender.cssSelectors` | 주입된 cssSelectors |
-| `this.listRender.datasetSelectors` | 주입된 datasetSelectors |
-| `this.listRender.renderData({ response })` | 데이터 수신 → 리스트 렌더링 |
-| `this.listRender.clear()` | 컨테이너 비우기 |
-| `this.listRender.destroy()` | 자기 정리 |
-
----
-
-## 사용 예시
-
-### HTML (마크업 — 컴포넌트가 소유)
+### 1단계: HTML을 본다
 
 ```html
 <div class="event-log">
@@ -90,47 +40,79 @@ applyListRenderMixin(instance, {
 </div>
 ```
 
-### register.js (조립 코드)
+HTML에서 확인하는 것:
+- 항목이 렌더링될 컨테이너 → `.event-log__list`
+- template 태그 → `#event-log-item-template`
+- template 안에서 항목 루트 → `.event-log__item`
+- 텍스트를 넣을 요소 → `.event-log__level`, `.event-log__time`, `.event-log__message`
+- data 속성이 있는 요소 → `data-level` → dataset 바인딩 대상
+- template 밖의 버튼 → `.event-log__clear-btn` → 이벤트 바인딩 대상
+
+### 2단계: Mixin을 적용한다 (register.js)
 
 ```javascript
-// 1. Mixin 적용
 applyListRenderMixin(this, {
     container: '.event-log__list',
     item:      '.event-log__item',
     template:  '#event-log-item-template',
     cssSelectors: {
-        level:   '.event-log__level',
-        time:    '.event-log__time',
-        message: '.event-log__message'
+        level:    '.event-log__level',       // 데이터 바인딩용
+        time:     '.event-log__time',        // 데이터 바인딩용
+        message:  '.event-log__message',     // 데이터 바인딩용
+        clearBtn: '.event-log__clear-btn'    // 이벤트 바인딩 전용 (template 밖)
     },
     datasetSelectors: {
-        level:   '[data-level]'
+        level: '[data-level]'
     },
     dataFormat: (data) => ({
         items: data.events.map(event => ({
-            level:   event.level,
-            time:    event.formattedTime,
-            message: event.message
+            level:   event.level,       // → cssSelectors.level textContent + datasetSelectors.level dataset
+            time:    event.formattedTime,// → cssSelectors.time textContent
+            message: event.message      // → cssSelectors.message textContent
+            // clearBtn 키 없음 → cssSelectors.clearBtn 건너뜀
         }))
     })
 });
+```
 
-// 2. 구독 연결
+**FieldRenderMixin과의 차이:**
+- `container`, `item`, `template` 옵션이 추가됨
+- dataFormat은 `{ items: [...] }` 형태를 반환해야 함
+
+**키 매칭 규칙은 동일:**
+- dataFormat 항목의 키가 cssSelectors에 있으면 → textContent
+- dataFormat 항목의 키가 datasetSelectors에 있으면 → dataset
+- cssSelectors에 있지만 dataFormat에 없으면 → 건너뜀 (이벤트 전용)
+
+### 3단계: 구독을 연결한다
+
+```javascript
 this.subscriptions = {
     events: [this.listRender.renderData]
 };
 
-// 3. 이벤트 매핑 — item 선택자를 computed property로 참조
+go(
+    Object.entries(this.subscriptions),
+    each(([topic, handlers]) =>
+        each(handler => subscribe(topic, this, handler), handlers)
+    )
+);
+```
+
+### 4단계: 이벤트를 매핑한다
+
+```javascript
+// Mixin의 선택자를 computed property로 참조 — 하드코딩 금지
 this.customEvents = {
     click: {
-        [this.listRender.item]:  '@eventClicked',
-        '.event-log__clear-btn': '@clearClicked'
+        [this.listRender.item]:               '@eventClicked',
+        [this.listRender.cssSelectors.clearBtn]: '@clearClicked'
     }
 };
 bindEvents(this, this.customEvents);
 ```
 
-### beforeDestroy.js (정리 코드)
+### 5단계: 정리한다 (beforeDestroy.js)
 
 ```javascript
 removeCustomEvents(this, this.customEvents);
@@ -145,13 +127,75 @@ this.subscriptions = null;
 this.listRender.destroy();
 ```
 
-### 페이지에서 Mixin 메서드 접근
+---
+
+## 옵션
 
 ```javascript
-// before_load.js — 네임스페이스로 직접 접근
-'@clearClicked': ({ targetInstance }) => {
-    targetInstance.listRender.clear();
-}
+applyListRenderMixin(instance, {
+    container,          // String — 항목이 렌더링될 컨테이너 CSS 선택자
+    item,               // String — 각 항목의 CSS 선택자
+    template,           // String — <template> 태그의 CSS 선택자
+    cssSelectors,       // Object — { key: '항목 내 CSS 선택자' }
+    datasetSelectors,   // Object — { key: '항목 내 [data-*] 선택자' } (선택적)
+    dataFormat          // Function — (data) => ({ items: [...] }) (선택적)
+});
+```
+
+| 옵션 | 필수 | 설명 |
+|------|------|------|
+| container | O | 항목이 추가될 부모 요소 선택자 |
+| item | O | 각 항목의 선택자 (customEvents에서 computed property로 참조) |
+| template | O | `<template>` 태그 선택자 (cloneNode 대상) |
+| cssSelectors | O | HTML 요소를 CSS 선택자로 찾아 참조. dataFormat에 키가 있으면 textContent 반영 |
+| datasetSelectors | X | HTML 요소를 data 속성 선택자로 찾아 참조. dataFormat에 키가 있으면 dataset 반영 |
+| dataFormat | X | 데이터 형태 매핑. `{ items: [...] }` 형태를 반환해야 함 |
+
+---
+
+## 주입되는 인터페이스
+
+네임스페이스: `this.listRender`
+
+### 속성
+
+| 속성 | 역할 |
+|------|------|
+| `container` | 컨테이너 선택자 |
+| `item` | 항목 선택자 (customEvents에서 computed property로 참조) |
+| `cssSelectors` | 주입된 cssSelectors |
+| `datasetSelectors` | 주입된 datasetSelectors |
+
+### 메서드
+
+#### `renderData({ response })`
+
+데이터를 수신하여 항목을 렌더링한다. template을 cloneNode하여 항목을 생성하고, 각 항목에 cssSelectors와 datasetSelectors를 반영한다.
+
+```javascript
+// 구독을 통한 자동 호출
+subscribe('events', this, this.listRender.renderData);
+```
+
+- 호출될 때마다 컨테이너를 비우고 전체 재렌더링
+- dataFormat에 없는 cssSelectors 키는 건너뜀
+
+#### `clear()`
+
+컨테이너의 모든 항목을 제거한다.
+
+```javascript
+// 페이지 핸들러에서 호출
+targetInstance.listRender.clear();
+```
+
+#### `destroy()`
+
+Mixin이 주입한 모든 속성과 메서드를 정리한다.
+
+```javascript
+// beforeDestroy.js
+this.listRender.destroy();
 ```
 
 ---

@@ -264,16 +264,28 @@ this.fieldRender.destroy();
 
 Mixin은 **속성과 메서드를 네임스페이스로 컴포넌트 인스턴스에 주입**하는 함수다.
 
+### 공통 사용법
+
+모든 Mixin의 기본 사용법은 동일하다.
+
+1. **cssSelectors / datasetSelectors** — HTML 요소의 선택자 정보를 받는다.
+2. **dataFormat** — dataFormat의 키는 위 selectors의 키를 활용해서, 기대한 선택자에 데이터를 매핑한다.
+3. **Mixin의 기본 역할은 여기까지다.** 추가 기능(updateItemState 등)은 Mixin별 문서를 참고한다.
+
 ### 선택자 구분
 
 Mixin은 두 종류의 선택자를 받는다.
 
-| 선택자 | 역할 | 반영 대상 |
-|--------|------|-----------|
-| cssSelectors | CSS 선택자로 요소를 찾아 값 반영 | textContent (시각용 — 사람이 읽는 것) |
-| datasetSelectors | [data-*] 선택자로 요소를 찾아 값 반영 | dataset (시스템용 — 시스템이 읽는 것) |
+| 선택자 | 역할 |
+|--------|------|
+| cssSelectors | CSS 선택자로 HTML 요소를 찾아 참조한다 |
+| datasetSelectors | [data-*] 선택자로 HTML 요소를 찾아 참조한다 |
+
+cssSelectors에는 데이터 바인딩용 선택자와 이벤트 바인딩용 선택자가 모두 포함될 수 있다. dataFormat에 해당 키가 없으면 데이터 바인딩은 건너뛴다.
 
 마크업 시점에 `data-*` 속성이 선언되면, 그 요소는 datasetSelectors의 대상이 된다.
+
+반영 방식의 상세는 각 Mixin 문서를 참고한다.
 
 ### FieldRenderMixin 구조
 

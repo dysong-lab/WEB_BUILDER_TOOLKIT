@@ -66,6 +66,58 @@ app.get('/api/events', (req, res) => {
     res.json({ events });
 });
 
+// ─────────────────────────────────────────
+// GET /api/event-browser
+// EventBrowser 컴포넌트용 (EventListMixin)
+// ─────────────────────────────────────────
+const severities = ['critical', 'warning', 'info'];
+const eventMessages = [
+    'UPS-01 input voltage drop below threshold',
+    'CRAC-03 return temperature exceeding 28°C',
+    'PDU-02 load percentage above 85%',
+    'Sensor-015 humidity reading anomaly detected',
+    'Network switch port flapping detected',
+    'Backup power generator test scheduled',
+    'Fire suppression system inspection due',
+    'Cooling unit fan speed variance detected',
+    'Access control door held open alert',
+    'Battery replacement required for UPS-02',
+    'Server rack temperature rising steadily',
+    'Power distribution imbalance on phase B'
+];
+
+// Ack 상태를 메모리에 유지 (서버 재시작 시 초기화)
+const ackedEvents = new Set();
+
+app.get('/api/event-browser', (req, res) => {
+    const now = Date.now();
+    const events = Array.from({ length: 15 }, (_, i) => {
+        const id = 'evt-' + String(1000 + i);
+        return {
+            id: id,
+            timestamp: new Date(now - i * 120000 - Math.random() * 60000).toISOString(),
+            severity: severities[Math.floor(Math.random() * severities.length)],
+            message: eventMessages[Math.floor(Math.random() * eventMessages.length)],
+            source: ['UPS', 'CRAC', 'PDU', 'Sensor', 'Network'][Math.floor(Math.random() * 5)],
+            acknowledged: ackedEvents.has(id)
+        };
+    });
+    res.json({ events });
+});
+
+// ─────────────────────────────────────────
+// POST /api/event-browser/ack
+// Ack API — 페이지가 호출
+// ─────────────────────────────────────────
+app.post('/api/event-browser/ack', (req, res) => {
+    const { eventId } = req.body;
+    if (!eventId) {
+        return res.status(400).json({ error: 'eventId required' });
+    }
+    ackedEvents.add(eventId);
+    res.json({ success: true, eventId: eventId, acknowledged: true });
+});
+
 app.listen(PORT, () => {
     console.log(`Mock server running on http://localhost:${PORT}`);
 });

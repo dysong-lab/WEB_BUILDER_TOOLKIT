@@ -1,0 +1,131 @@
+/* 01_standard: 표준 이벤트 브라우저 */
+#event-browser-container {
+    .event-browser {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .event-browser__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .event-browser__title {
+        font-size: 15px;
+        font-weight: 600;
+        color: #0f172a;
+    }
+
+    .event-browser__list {
+        flex: 1;
+        overflow-y: auto;
+    }
+
+    /* ── 항목 ── */
+    .event-browser__item {
+        display: flex;
+        align-items: stretch;
+        border-bottom: 1px solid #f1f5f9;
+        transition: background 0.15s;
+    }
+
+    .event-browser__item:hover {
+        background: #f8fafc;
+    }
+
+    /* severity 컬러 바 */
+    .event-browser__severity-bar {
+        width: 4px;
+        flex-shrink: 0;
+    }
+
+    .event-browser__item[data-severity="critical"] .event-browser__severity-bar { background: #ef4444; }
+    .event-browser__item[data-severity="warning"]  .event-browser__severity-bar { background: #f59e0b; }
+    .event-browser__item[data-severity="info"]     .event-browser__severity-bar { background: #3b82f6; }
+
+    /* severity 라벨 색상 */
+    .event-browser__item[data-severity="critical"] .event-browser__severity-label { color: #ef4444; }
+    .event-browser__item[data-severity="warning"]  .event-browser__severity-label { color: #f59e0b; }
+    .event-browser__item[data-severity="info"]     .event-browser__severity-label { color: #3b82f6; }
+
+    .event-browser__content {
+        flex: 1;
+        padding: 10px 16px;
+        min-width: 0;
+    }
+
+    .event-browser__top-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 4px;
+    }
+
+    .event-browser__severity-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .event-browser__time {
+        font-size: 12px;
+        color: #94a3b8;
+        font-family: monospace;
+    }
+
+    .event-browser__source {
+        font-size: 11px;
+        color: #94a3b8;
+        margin-left: auto;
+    }
+
+    .event-browser__message {
+        font-size: 13px;
+        color: #334155;
+        line-height: 1.4;
+    }
+
+    /* ── Ack 버튼 ── */
+    .event-browser__ack-btn {
+        align-self: center;
+        margin-right: 12px;
+        padding: 4px 12px;
+        font-size: 11px;
+        font-weight: 600;
+        border: 1px solid #e2e8f0;
+        border-radius: 4px;
+        background: #ffffff;
+        color: #64748b;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: all 0.15s;
+    }
+
+    .event-browser__ack-btn:hover {
+        background: #f1f5f9;
+        border-color: #cbd5e1;
+    }
+
+    /* ── Ack 상태 ── */
+    .event-browser__item[data-ack="true"] {
+        opacity: 0.5;
+    }
+
+    .event-browser__item[data-ack="true"] .event-browser__ack-btn {
+        display: none;
+    }
+
+    .event-browser__item[data-ack="false"] {
+        font-weight: 500;
+    }
+}

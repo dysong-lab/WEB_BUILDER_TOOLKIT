@@ -34,6 +34,14 @@ this.pageDataMappings = [
             param: { baseUrl: 'localhost:4010' }
         },
         refreshInterval: 10000
+    },
+    {
+        topic: 'eventBrowser',
+        datasetInfo: {
+            datasetName: 'dashboard_eventBrowser',
+            param: { baseUrl: 'localhost:4010' }
+        },
+        refreshInterval: 15000
     }
 ];
 
@@ -54,32 +62,44 @@ go(
 );
 
 // ======================
-// INTERVAL MANAGEMENT
+// INTERVAL MANAGEMENT (setTimeout 체이닝)
 // ======================
 
-this.startAllIntervals = () => {
-    this.pageIntervals = {};
+this.pageTimers = {};
 
+this.startAllIntervals = () => {
     go(
         this.pageDataMappings,
         each(({ topic, refreshInterval }) => {
-            if (refreshInterval) {
-                this.pageIntervals[topic] = setInterval(() => {
+            if (!refreshInterval) return;
+
+            const state = { _stopped: false, _timerId: null };
+            this.pageTimers[topic] = state;
+
+            const scheduleNext = () => {
+                if (state._stopped) return;
+                state._timerId = setTimeout(() => {
                     fetchAndPublish(
                         topic,
                         this,
                         this.pageParams[topic] || {}
-                    ).catch(err => console.error(`[Page] ${topic} refresh failed:`, err));
+                    )
+                        .catch(err => console.error(`[Page] ${topic} refresh failed:`, err))
+                        .finally(scheduleNext);
                 }, refreshInterval);
-            }
+            };
+            scheduleNext();
         })
     );
 };
 
 this.stopAllIntervals = () => {
     go(
-        Object.values(this.pageIntervals || {}),
-        each(interval => clearInterval(interval))
+        Object.entries(this.pageTimers),
+        each(([_, state]) => {
+            state._stopped = true;
+            clearTimeout(state._timerId);
+        })
     );
 };
 

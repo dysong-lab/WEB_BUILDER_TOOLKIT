@@ -17,7 +17,8 @@ applyFieldRenderMixin(this, {
         cpuValue:     '.status-card[data-metric="cpu"] .status-card__value',
         memoryValue:  '.status-card[data-metric="memory"] .status-card__value',
         diskValue:    '.status-card[data-metric="disk"] .status-card__value',
-        networkValue: '.status-card[data-metric="network"] .status-card__value'
+        networkValue: '.status-card[data-metric="network"] .status-card__value',
+        card:         '.status-card'
     },
     dataFormat: (data) => ({
         cpuValue:     data.cpu.value,
@@ -48,7 +49,7 @@ go(
 
 this.customEvents = {
     click: {
-        '.status-card': '@cardClicked'
+        [this.fieldRender.cssSelectors.card]: '@cardClicked'
     }
 };
 bindEvents(this, this.customEvents);

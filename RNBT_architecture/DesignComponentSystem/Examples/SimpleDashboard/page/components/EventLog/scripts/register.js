@@ -17,9 +17,10 @@ applyListRenderMixin(this, {
     item:      '.event-log__item',
     template:  '#event-log-item-template',
     cssSelectors: {
-        level:   '.event-log__level',
-        time:    '.event-log__time',
-        message: '.event-log__message'
+        level:    '.event-log__level',
+        time:     '.event-log__time',
+        message:  '.event-log__message',
+        clearBtn: '.event-log__clear-btn'
     },
     datasetSelectors: {
         level:   '[data-level]'
@@ -54,8 +55,8 @@ go(
 
 this.customEvents = {
     click: {
-        [this.listRender.item]:  '@eventClicked',
-        '.event-log__clear-btn': '@clearClicked'
+        [this.listRender.item]:               '@eventClicked',
+        [this.listRender.cssSelectors.clearBtn]: '@clearClicked'
     }
 };
 bindEvents(this, this.customEvents);

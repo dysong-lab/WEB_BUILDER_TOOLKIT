@@ -1,0 +1,22 @@
+<!-- 01_standard: 표준 이벤트 브라우저 (severity 컬러 + Ack 버튼) -->
+<div class="event-browser">
+    <div class="event-browser__header">
+        <span class="event-browser__title">Event Browser</span>
+    </div>
+    <div class="event-browser__list"></div>
+
+    <template id="event-browser-item-template">
+        <div class="event-browser__item" data-id="" data-severity="" data-ack="false">
+            <div class="event-browser__severity-bar"></div>
+            <div class="event-browser__content">
+                <div class="event-browser__top-row">
+                    <span class="event-browser__severity-label"></span>
+                    <span class="event-browser__time"></span>
+                    <span class="event-browser__source"></span>
+                </div>
+                <div class="event-browser__message"></div>
+            </div>
+            <button class="event-browser__ack-btn">ACK</button>
+        </div>
+    </template>
+</div>

@@ -63,6 +63,27 @@
       "dataset_id": "dcs-events-001",
       "name": "dashboard_events",
       "rest_api": "{\"url\":\"http://#{baseUrl}/api/events\",\"method\":\"GET\",\"headers\":{},\"body\":\"\"}"
+    },
+    {
+      "datasource": "",
+      "mode": "0",
+      "delivery_type": "0",
+      "param_info": [
+        {
+          "param_name": "baseUrl",
+          "param_type": "string",
+          "default_value": "localhost:4010"
+        }
+      ],
+      "data_type": "1",
+      "interval": "15000",
+      "page_id": "PAGE",
+      "query": "",
+      "query_type": "",
+      "description": "이벤트 브라우저 조회 (EventBrowser 컴포넌트) - 15초 갱신",
+      "dataset_id": "dcs-event-browser-001",
+      "name": "dashboard_eventBrowser",
+      "rest_api": "{\"url\":\"http://#{baseUrl}/api/event-browser\",\"method\":\"GET\",\"headers\":{},\"body\":\"\"}"
     }
   ],
   "datasource": []
