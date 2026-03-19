@@ -1,0 +1,21 @@
+<!-- 02_table: 테이블 구조 (줄무늬, 헤더 고정) -->
+<div class="event-log">
+    <div class="event-log__header">
+        <span class="event-log__title">System Events</span>
+        <button class="event-log__clear-btn">&#10005;</button>
+    </div>
+    <div class="event-log__table-header">
+        <span class="event-log__col-level">Level</span>
+        <span class="event-log__col-time">Time</span>
+        <span class="event-log__col-message">Message</span>
+    </div>
+    <div class="event-log__list"></div>
+
+    <template id="event-log-item-template">
+        <div class="event-log__item">
+            <span class="event-log__level" data-level=""></span>
+            <span class="event-log__time"></span>
+            <span class="event-log__message"></span>
+        </div>
+    </template>
+</div>

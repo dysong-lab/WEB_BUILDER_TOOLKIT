@@ -1,0 +1,36 @@
+/* 03_minimal: 텍스트만, 구분선으로 분리 */
+#system-info-container {
+    .system-info {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        padding: 8px 0;
+        font-family: monospace;
+        font-size: 14px;
+        color: #334155;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .system-info__name {
+        font-weight: 700;
+    }
+
+    .system-info__sep {
+        color: #cbd5e1;
+    }
+
+    .system-info__status {
+        font-weight: 500;
+    }
+
+    .system-info__status[data-status="RUNNING"] {
+        color: #16a34a;
+    }
+
+    .system-info__status[data-status="unknown"] {
+        color: #9ca3af;
+    }
+
+    .system-info__version { color: #64748b; }
+    .system-info__uptime { color: #64748b; }
+}

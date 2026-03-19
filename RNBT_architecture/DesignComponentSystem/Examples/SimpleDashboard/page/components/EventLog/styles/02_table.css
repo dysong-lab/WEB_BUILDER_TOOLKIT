@@ -1,0 +1,78 @@
+/* 02_table: 테이블 구조 (줄무늬, 헤더 고정) */
+#event-log-container {
+    .event-log {
+        background: #ffffff;
+        border: 1px solid #d1d5db;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .event-log__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: #1e293b;
+        color: #f8fafc;
+    }
+
+    .event-log__title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+    .event-log__clear-btn {
+        width: 24px;
+        height: 24px;
+        border: none;
+        background: transparent;
+        color: #94a3b8;
+        font-size: 14px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+    .event-log__clear-btn:hover { background: #334155; color: #f8fafc; }
+
+    .event-log__table-header {
+        display: grid;
+        grid-template-columns: 70px 60px 1fr;
+        gap: 8px;
+        padding: 8px 16px;
+        background: #f1f5f9;
+        font-size: 11px;
+        font-weight: 600;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+    .event-log__list { flex: 1; overflow-y: auto; }
+
+    .event-log__item {
+        display: grid;
+        grid-template-columns: 70px 60px 1fr;
+        gap: 8px;
+        padding: 8px 16px;
+        font-size: 13px;
+        border-bottom: 1px solid #f1f5f9;
+        cursor: pointer;
+    }
+
+    .event-log__item:nth-child(even) { background: #fafbfc; }
+    .event-log__item:hover { background: #eff6ff; }
+
+    .event-log__level {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .event-log__level[data-level="info"]  { color: #2563eb; }
+    .event-log__level[data-level="warn"]  { color: #d97706; }
+    .event-log__level[data-level="error"] { color: #dc2626; }
+
+    .event-log__time { color: #94a3b8; font-size: 12px; font-family: monospace; }
+    .event-log__message { color: #334155; }
+}

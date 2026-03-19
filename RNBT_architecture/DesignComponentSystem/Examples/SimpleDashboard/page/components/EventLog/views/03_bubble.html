@@ -1,0 +1,21 @@
+<!-- 03_bubble: 채팅 버블 (타임라인형) -->
+<div class="event-log">
+    <div class="event-log__header">
+        <span class="event-log__title">Activity Feed</span>
+        <button class="event-log__clear-btn">Clear All</button>
+    </div>
+    <div class="event-log__list"></div>
+
+    <template id="event-log-item-template">
+        <div class="event-log__item">
+            <div class="event-log__dot"></div>
+            <div class="event-log__bubble">
+                <div class="event-log__bubble-top">
+                    <span class="event-log__level" data-level=""></span>
+                    <span class="event-log__time"></span>
+                </div>
+                <div class="event-log__message"></div>
+            </div>
+        </div>
+    </template>
+</div>

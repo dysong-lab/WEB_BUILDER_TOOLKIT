@@ -1,3 +1,4 @@
+/* 01_grid: 4열 그리드 카드 */
 #status-cards-container {
     .status-cards {
         display: grid;
@@ -17,25 +18,9 @@
         transition: box-shadow 0.15s;
     }
 
-    .status-card:hover {
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    }
+    .status-card:hover { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); }
 
-    .status-card__label {
-        font-size: 13px;
-        color: #64748b;
-        font-weight: 500;
-    }
-
-    .status-card__value {
-        font-size: 32px;
-        font-weight: 700;
-        color: #0f172a;
-        line-height: 1;
-    }
-
-    .status-card__unit {
-        font-size: 13px;
-        color: #94a3b8;
-    }
+    .status-card__label { font-size: 13px; color: #64748b; font-weight: 500; }
+    .status-card__value { font-size: 32px; font-weight: 700; color: #0f172a; line-height: 1; }
+    .status-card__unit { font-size: 13px; color: #94a3b8; }
 }

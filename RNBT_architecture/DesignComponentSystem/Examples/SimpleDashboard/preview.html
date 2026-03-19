@@ -7,250 +7,376 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', -apple-system, sans-serif; background: #f1f5f9; }
 
-        /* ─────────────────────────────────────────
-           Page Layout
-           ───────────────────────────────────────── */
+        /* ── 디자인 선택기 ── */
+        .design-selector {
+            display: flex;
+            gap: 16px;
+            padding: 16px 24px;
+            background: #0f172a;
+            color: #f8fafc;
+            align-items: center;
+            font-size: 13px;
+            flex-wrap: wrap;
+        }
+        .design-selector__title {
+            font-weight: 700;
+            font-size: 14px;
+            margin-right: 8px;
+        }
+        .design-selector__group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .design-selector__label { color: #94a3b8; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .design-selector select {
+            padding: 4px 8px;
+            border: 1px solid #334155;
+            border-radius: 4px;
+            background: #1e293b;
+            color: #f8fafc;
+            font-size: 12px;
+        }
+
+        /* ── 페이지 레이아웃 ── */
         .page-root {
             width: 960px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
             gap: 24px;
+            padding-bottom: 24px;
         }
 
-        /* ─────────────────────────────────────────
-           SystemInfo Container
-           ───────────────────────────────────────── */
-        #system-info-container {
-            .system-info {
-                display: flex;
-                align-items: center;
-                gap: 16px;
-                padding: 0 24px;
-                height: 56px;
-                background: #1e293b;
-                color: #f8fafc;
-            }
-            .system-info__label { font-size: 12px; color: #94a3b8; text-dataFormat: uppercase; letter-spacing: 1px; }
-            .system-info__name { font-size: 16px; font-weight: 600; }
-            .system-info__meta { display: flex; gap: 12px; margin-left: auto; font-size: 13px; }
-            .system-info__status { padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; }
-            .system-info__status[data-status="RUNNING"] { background: #065f46; color: #6ee7b7; }
-            .system-info__status[data-status="unknown"] { background: #374151; color: #9ca3af; }
-            .system-info__version { color: #94a3b8; }
-            .system-info__uptime { color: #94a3b8; }
-        }
-
-        /* ─────────────────────────────────────────
-           StatusCards Container
-           ───────────────────────────────────────── */
-        #status-cards-container {
-            padding: 0 24px;
-            .status-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-            .status-card {
-                background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px;
-                padding: 20px; display: flex; flex-direction: column; gap: 8px;
-                cursor: pointer; transition: box-shadow 0.15s;
-            }
-            .status-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-            .status-card__label { font-size: 13px; color: #64748b; font-weight: 500; }
-            .status-card__value { font-size: 32px; font-weight: 700; color: #0f172a; line-height: 1; }
-            .status-card__unit { font-size: 13px; color: #94a3b8; }
-        }
-
-        /* ─────────────────────────────────────────
-           EventLog Container
-           ───────────────────────────────────────── */
-        #event-log-container {
-            padding: 0 24px 24px;
-            .event-log {
-                background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px;
-                display: flex; flex-direction: column; height: 360px; overflow: hidden;
-            }
-            .event-log__header {
-                display: flex; justify-content: space-between; align-items: center;
-                padding: 16px 20px; border-bottom: 1px solid #e2e8f0;
-            }
-            .event-log__title { font-size: 15px; font-weight: 600; color: #0f172a; }
-            .event-log__clear-btn {
-                padding: 4px 12px; font-size: 12px; border: 1px solid #e2e8f0;
-                border-radius: 4px; background: #ffffff; color: #64748b; cursor: pointer;
-            }
-            .event-log__clear-btn:hover { background: #f8fafc; }
-            .event-log__list { flex: 1; overflow-y: auto; padding: 8px 0; }
-            .event-log__item {
-                display: flex; align-items: flex-start; gap: 12px;
-                padding: 8px 20px; font-size: 13px; cursor: pointer;
-            }
-            .event-log__item:hover { background: #f8fafc; }
-            .event-log__level {
-                padding: 1px 6px; border-radius: 3px; font-size: 11px;
-                font-weight: 500; text-dataFormat: uppercase; flex-shrink: 0;
-            }
-            .event-log__level[data-level="info"]  { background: #dbeafe; color: #1e40af; }
-            .event-log__level[data-level="warn"]  { background: #fef3c7; color: #92400e; }
-            .event-log__level[data-level="error"] { background: #fee2e2; color: #991b1b; }
-            .event-log__time { color: #94a3b8; flex-shrink: 0; font-size: 12px; min-width: 50px; }
-            .event-log__message { color: #334155; flex: 1; }
-        }
+        #event-log-container { height: 360px; padding: 0 24px; }
+        #status-cards-container { padding: 0 24px; }
     </style>
+
+    <!-- 디자인별 CSS를 동적으로 로드 -->
+    <style id="dynamic-system-info-css"></style>
+    <style id="dynamic-status-cards-css"></style>
+    <style id="dynamic-event-log-css"></style>
 </head>
 <body>
 
+<!-- 디자인 버전 선택기 -->
+<div class="design-selector">
+    <span class="design-selector__title">Design Version</span>
+    <div class="design-selector__group">
+        <span class="design-selector__label">SystemInfo</span>
+        <select id="select-system-info">
+            <option value="01_bar">01_bar</option>
+            <option value="02_card">02_card</option>
+            <option value="03_minimal">03_minimal</option>
+        </select>
+    </div>
+    <div class="design-selector__group">
+        <span class="design-selector__label">StatusCards</span>
+        <select id="select-status-cards">
+            <option value="01_grid">01_grid</option>
+            <option value="02_list">02_list</option>
+            <option value="03_inline">03_inline</option>
+        </select>
+    </div>
+    <div class="design-selector__group">
+        <span class="design-selector__label">EventLog</span>
+        <select id="select-event-log">
+            <option value="01_list">01_list</option>
+            <option value="02_table">02_table</option>
+            <option value="03_bubble">03_bubble</option>
+        </select>
+    </div>
+</div>
+
 <div class="page-root">
-    <!-- SystemInfo: FieldRenderMixin -->
-    <div id="system-info-container">
-        <div class="system-info">
-            <div class="system-info__label">System</div>
-            <div class="system-info__name">-</div>
-            <div class="system-info__meta">
-                <span class="system-info__status" data-status="unknown">-</span>
-                <span class="system-info__version">-</span>
-                <span class="system-info__uptime">-</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- StatusCards: FieldRenderMixin (같은 Mixin, 다른 껍데기) -->
-    <div id="status-cards-container">
-        <div class="status-cards">
-            <div class="status-card" data-metric="cpu">
-                <div class="status-card__label">CPU</div>
-                <div class="status-card__value">-</div>
-                <div class="status-card__unit">%</div>
-            </div>
-            <div class="status-card" data-metric="memory">
-                <div class="status-card__label">Memory</div>
-                <div class="status-card__value">-</div>
-                <div class="status-card__unit">%</div>
-            </div>
-            <div class="status-card" data-metric="disk">
-                <div class="status-card__label">Disk</div>
-                <div class="status-card__value">-</div>
-                <div class="status-card__unit">%</div>
-            </div>
-            <div class="status-card" data-metric="network">
-                <div class="status-card__label">Network</div>
-                <div class="status-card__value">-</div>
-                <div class="status-card__unit">Mbps</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- EventLog: ListRenderMixin -->
-    <div id="event-log-container">
-        <div class="event-log">
-            <div class="event-log__header">
-                <span class="event-log__title">Event Log</span>
-                <button class="event-log__clear-btn">Clear</button>
-            </div>
-            <div class="event-log__list"></div>
-
-            <template id="event-log-item-template">
-                <div class="event-log__item">
-                    <span class="event-log__level" data-level=""></span>
-                    <span class="event-log__time"></span>
-                    <span class="event-log__message"></span>
-                </div>
-            </template>
-        </div>
-    </div>
+    <div id="system-info-container"></div>
+    <div id="status-cards-container"></div>
+    <div id="event-log-container"></div>
 </div>
 
 <script>
 // ═══════════════════════════════════════════════════════════════
-// 최소 런타임 시뮬레이션
-// preview.html에서 Mixin 시스템이 실제 동작하는 것을 확인하기 위함
+// 디자인 버전별 HTML/CSS 정의
+// (실제로는 파일에서 로드하지만, preview에서는 인라인으로 정의)
 // ═══════════════════════════════════════════════════════════════
 
-// datasetList.json의 rest_api URL 템플릿을 시뮬레이션
-// 실제 런타임에서는 Wkit.fetchData가 처리
+const DESIGNS = {
+    SystemInfo: {
+        '01_bar': {
+            html: `<div class="system-info">
+                <div class="system-info__label">System</div>
+                <div class="system-info__name">-</div>
+                <div class="system-info__meta">
+                    <span class="system-info__status" data-status="unknown">-</span>
+                    <span class="system-info__version">-</span>
+                    <span class="system-info__uptime">-</span>
+                </div>
+            </div>`,
+            css: `#system-info-container {
+                .system-info { display:flex; align-items:center; gap:16px; padding:0 24px; height:56px; background:#1e293b; color:#f8fafc; }
+                .system-info__label { font-size:12px; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; }
+                .system-info__name { font-size:16px; font-weight:600; }
+                .system-info__meta { display:flex; gap:12px; margin-left:auto; font-size:13px; }
+                .system-info__status { padding:2px 8px; border-radius:4px; font-size:12px; font-weight:500; }
+                .system-info__status[data-status="RUNNING"] { background:#065f46; color:#6ee7b7; }
+                .system-info__status[data-status="unknown"] { background:#374151; color:#9ca3af; }
+                .system-info__version { color:#94a3b8; }
+                .system-info__uptime { color:#94a3b8; }
+            }`
+        },
+        '02_card': {
+            html: `<div class="system-info">
+                <div class="system-info__icon">&#9881;</div>
+                <div class="system-info__name">-</div>
+                <div class="system-info__status" data-status="unknown">-</div>
+                <div class="system-info__details">
+                    <div class="system-info__detail-row"><span class="system-info__detail-label">Version</span><span class="system-info__version">-</span></div>
+                    <div class="system-info__detail-row"><span class="system-info__detail-label">Uptime</span><span class="system-info__uptime">-</span></div>
+                </div>
+            </div>`,
+            css: `#system-info-container {
+                padding: 0 24px;
+                .system-info { display:flex; flex-direction:column; align-items:center; gap:12px; padding:32px; background:#fff; border:1px solid #e2e8f0; border-radius:16px; text-align:center; max-width:280px; }
+                .system-info__icon { font-size:48px; line-height:1; }
+                .system-info__name { font-size:22px; font-weight:700; color:#0f172a; }
+                .system-info__status { padding:6px 16px; border-radius:20px; font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
+                .system-info__status[data-status="RUNNING"] { background:#dcfce7; color:#166534; }
+                .system-info__status[data-status="unknown"] { background:#f3f4f6; color:#6b7280; }
+                .system-info__details { width:100%; border-top:1px solid #f1f5f9; padding-top:16px; display:flex; flex-direction:column; gap:8px; }
+                .system-info__detail-row { display:flex; justify-content:space-between; font-size:13px; }
+                .system-info__detail-label { color:#94a3b8; }
+                .system-info__version { color:#334155; font-weight:500; }
+                .system-info__uptime { color:#334155; font-weight:500; }
+            }`
+        },
+        '03_minimal': {
+            html: `<div class="system-info">
+                <span class="system-info__name">-</span>
+                <span class="system-info__sep">|</span>
+                <span class="system-info__status" data-status="unknown">-</span>
+                <span class="system-info__sep">|</span>
+                <span class="system-info__version">-</span>
+                <span class="system-info__sep">|</span>
+                <span class="system-info__uptime">-</span>
+            </div>`,
+            css: `#system-info-container {
+                padding: 0 24px;
+                .system-info { display:flex; align-items:baseline; gap:8px; padding:8px 0; font-family:monospace; font-size:14px; color:#334155; border-bottom:1px solid #e2e8f0; }
+                .system-info__name { font-weight:700; }
+                .system-info__sep { color:#cbd5e1; }
+                .system-info__status { font-weight:500; }
+                .system-info__status[data-status="RUNNING"] { color:#16a34a; }
+                .system-info__status[data-status="unknown"] { color:#9ca3af; }
+                .system-info__version { color:#64748b; }
+                .system-info__uptime { color:#64748b; }
+            }`
+        }
+    },
+    StatusCards: {
+        '01_grid': {
+            html: `<div class="status-cards">
+                <div class="status-card" data-metric="cpu"><div class="status-card__label">CPU</div><div class="status-card__value">-</div><div class="status-card__unit">%</div></div>
+                <div class="status-card" data-metric="memory"><div class="status-card__label">Memory</div><div class="status-card__value">-</div><div class="status-card__unit">%</div></div>
+                <div class="status-card" data-metric="disk"><div class="status-card__label">Disk</div><div class="status-card__value">-</div><div class="status-card__unit">%</div></div>
+                <div class="status-card" data-metric="network"><div class="status-card__label">Network</div><div class="status-card__value">-</div><div class="status-card__unit">Mbps</div></div>
+            </div>`,
+            css: `#status-cards-container {
+                .status-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+                .status-card { background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:20px; display:flex; flex-direction:column; gap:8px; cursor:pointer; transition:box-shadow .15s; }
+                .status-card:hover { box-shadow:0 2px 8px rgba(0,0,0,.08); }
+                .status-card__label { font-size:13px; color:#64748b; font-weight:500; }
+                .status-card__value { font-size:32px; font-weight:700; color:#0f172a; line-height:1; }
+                .status-card__unit { font-size:13px; color:#94a3b8; }
+            }`
+        },
+        '02_list': {
+            html: `<div class="status-cards">
+                <div class="status-card" data-metric="cpu"><div class="status-card__left"><div class="status-card__label">CPU Usage</div><div class="status-card__desc">Processor utilization</div></div><div class="status-card__right"><span class="status-card__value">-</span><span class="status-card__unit">%</span></div></div>
+                <div class="status-card" data-metric="memory"><div class="status-card__left"><div class="status-card__label">Memory Usage</div><div class="status-card__desc">RAM utilization</div></div><div class="status-card__right"><span class="status-card__value">-</span><span class="status-card__unit">%</span></div></div>
+                <div class="status-card" data-metric="disk"><div class="status-card__left"><div class="status-card__label">Disk Usage</div><div class="status-card__desc">Storage utilization</div></div><div class="status-card__right"><span class="status-card__value">-</span><span class="status-card__unit">%</span></div></div>
+                <div class="status-card" data-metric="network"><div class="status-card__left"><div class="status-card__label">Network</div><div class="status-card__desc">Throughput</div></div><div class="status-card__right"><span class="status-card__value">-</span><span class="status-card__unit">Mbps</span></div></div>
+            </div>`,
+            css: `#status-cards-container {
+                .status-cards { display:flex; flex-direction:column; gap:8px; }
+                .status-card { display:flex; justify-content:space-between; align-items:center; padding:16px 20px; background:#fff; border-left:4px solid #3b82f6; border-radius:0 8px 8px 0; box-shadow:0 1px 3px rgba(0,0,0,.06); cursor:pointer; transition:background .15s; }
+                .status-card:hover { background:#f8fafc; }
+                .status-card[data-metric="cpu"] { border-left-color:#3b82f6; }
+                .status-card[data-metric="memory"] { border-left-color:#8b5cf6; }
+                .status-card[data-metric="disk"] { border-left-color:#f59e0b; }
+                .status-card[data-metric="network"] { border-left-color:#10b981; }
+                .status-card__left { display:flex; flex-direction:column; gap:2px; }
+                .status-card__label { font-size:14px; font-weight:600; color:#0f172a; }
+                .status-card__desc { font-size:12px; color:#94a3b8; }
+                .status-card__right { display:flex; align-items:baseline; gap:4px; }
+                .status-card__value { font-size:28px; font-weight:800; color:#0f172a; }
+                .status-card__unit { font-size:14px; color:#64748b; font-weight:500; }
+            }`
+        },
+        '03_inline': {
+            html: `<div class="status-cards">
+                <div class="status-card" data-metric="cpu"><span class="status-card__label">CPU</span><span class="status-card__value">-</span><span class="status-card__unit">%</span></div>
+                <div class="status-card" data-metric="memory"><span class="status-card__label">MEM</span><span class="status-card__value">-</span><span class="status-card__unit">%</span></div>
+                <div class="status-card" data-metric="disk"><span class="status-card__label">DISK</span><span class="status-card__value">-</span><span class="status-card__unit">%</span></div>
+                <div class="status-card" data-metric="network"><span class="status-card__label">NET</span><span class="status-card__value">-</span><span class="status-card__unit">Mbps</span></div>
+            </div>`,
+            css: `#status-cards-container {
+                .status-cards { display:flex; gap:8px; flex-wrap:wrap; }
+                .status-card { display:inline-flex; align-items:center; gap:6px; padding:6px 14px; background:#0f172a; border-radius:20px; cursor:pointer; transition:opacity .15s; }
+                .status-card:hover { opacity:.85; }
+                .status-card__label { font-size:10px; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:.5px; }
+                .status-card__value { font-size:16px; font-weight:700; color:#f8fafc; }
+                .status-card__unit { font-size:11px; color:#64748b; }
+            }`
+        }
+    },
+    EventLog: {
+        '01_list': {
+            html: `<div class="event-log">
+                <div class="event-log__header"><span class="event-log__title">Event Log</span><button class="event-log__clear-btn">Clear</button></div>
+                <div class="event-log__list"></div>
+                <template id="event-log-item-template"><div class="event-log__item"><span class="event-log__level" data-level=""></span><span class="event-log__time"></span><span class="event-log__message"></span></div></template>
+            </div>`,
+            css: `#event-log-container {
+                .event-log { background:#fff; border:1px solid #e2e8f0; border-radius:8px; display:flex; flex-direction:column; height:100%; overflow:hidden; }
+                .event-log__header { display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid #e2e8f0; }
+                .event-log__title { font-size:15px; font-weight:600; color:#0f172a; }
+                .event-log__clear-btn { padding:4px 12px; font-size:12px; border:1px solid #e2e8f0; border-radius:4px; background:#fff; color:#64748b; cursor:pointer; }
+                .event-log__clear-btn:hover { background:#f8fafc; }
+                .event-log__list { flex:1; overflow-y:auto; padding:8px 0; }
+                .event-log__item { display:flex; align-items:flex-start; gap:12px; padding:8px 20px; font-size:13px; cursor:pointer; }
+                .event-log__item:hover { background:#f8fafc; }
+                .event-log__level { padding:1px 6px; border-radius:3px; font-size:11px; font-weight:500; text-transform:uppercase; flex-shrink:0; }
+                .event-log__level[data-level="info"] { background:#dbeafe; color:#1e40af; }
+                .event-log__level[data-level="warn"] { background:#fef3c7; color:#92400e; }
+                .event-log__level[data-level="error"] { background:#fee2e2; color:#991b1b; }
+                .event-log__time { color:#94a3b8; flex-shrink:0; font-size:12px; min-width:50px; }
+                .event-log__message { color:#334155; flex:1; }
+            }`
+        },
+        '02_table': {
+            html: `<div class="event-log">
+                <div class="event-log__header"><span class="event-log__title">System Events</span><button class="event-log__clear-btn">&#10005;</button></div>
+                <div class="event-log__table-header"><span class="event-log__col-level">Level</span><span class="event-log__col-time">Time</span><span class="event-log__col-message">Message</span></div>
+                <div class="event-log__list"></div>
+                <template id="event-log-item-template"><div class="event-log__item"><span class="event-log__level" data-level=""></span><span class="event-log__time"></span><span class="event-log__message"></span></div></template>
+            </div>`,
+            css: `#event-log-container {
+                .event-log { background:#fff; border:1px solid #d1d5db; display:flex; flex-direction:column; height:100%; overflow:hidden; }
+                .event-log__header { display:flex; justify-content:space-between; align-items:center; padding:12px 16px; background:#1e293b; color:#f8fafc; }
+                .event-log__title { font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:1px; }
+                .event-log__clear-btn { width:24px; height:24px; border:none; background:transparent; color:#94a3b8; font-size:14px; cursor:pointer; border-radius:4px; }
+                .event-log__clear-btn:hover { background:#334155; color:#f8fafc; }
+                .event-log__table-header { display:grid; grid-template-columns:70px 60px 1fr; gap:8px; padding:8px 16px; background:#f1f5f9; font-size:11px; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:.5px; border-bottom:2px solid #e2e8f0; }
+                .event-log__list { flex:1; overflow-y:auto; }
+                .event-log__item { display:grid; grid-template-columns:70px 60px 1fr; gap:8px; padding:8px 16px; font-size:13px; border-bottom:1px solid #f1f5f9; cursor:pointer; }
+                .event-log__item:nth-child(even) { background:#fafbfc; }
+                .event-log__item:hover { background:#eff6ff; }
+                .event-log__level { font-size:11px; font-weight:700; text-transform:uppercase; }
+                .event-log__level[data-level="info"] { color:#2563eb; }
+                .event-log__level[data-level="warn"] { color:#d97706; }
+                .event-log__level[data-level="error"] { color:#dc2626; }
+                .event-log__time { color:#94a3b8; font-size:12px; font-family:monospace; }
+                .event-log__message { color:#334155; }
+            }`
+        },
+        '03_bubble': {
+            html: `<div class="event-log">
+                <div class="event-log__header"><span class="event-log__title">Activity Feed</span><button class="event-log__clear-btn">Clear All</button></div>
+                <div class="event-log__list"></div>
+                <template id="event-log-item-template"><div class="event-log__item"><div class="event-log__dot"></div><div class="event-log__bubble"><div class="event-log__bubble-top"><span class="event-log__level" data-level=""></span><span class="event-log__time"></span></div><div class="event-log__message"></div></div></div></template>
+            </div>`,
+            css: `#event-log-container {
+                .event-log { background:#f8fafc; border-radius:16px; display:flex; flex-direction:column; height:100%; overflow:hidden; }
+                .event-log__header { display:flex; justify-content:space-between; align-items:center; padding:20px 24px 12px; }
+                .event-log__title { font-size:18px; font-weight:700; color:#0f172a; }
+                .event-log__clear-btn { padding:6px 14px; font-size:12px; border:none; border-radius:20px; background:#e2e8f0; color:#475569; cursor:pointer; font-weight:500; }
+                .event-log__clear-btn:hover { background:#cbd5e1; }
+                .event-log__list { flex:1; overflow-y:auto; padding:8px 24px 24px; display:flex; flex-direction:column; gap:4px; }
+                .event-log__item { display:flex; gap:12px; align-items:flex-start; cursor:pointer; }
+                .event-log__dot { width:8px; height:8px; border-radius:50%; background:#cbd5e1; margin-top:10px; flex-shrink:0; }
+                .event-log__bubble { flex:1; background:#fff; border-radius:12px; padding:12px 16px; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+                .event-log__item:hover .event-log__bubble { box-shadow:0 2px 6px rgba(0,0,0,.08); }
+                .event-log__bubble-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }
+                .event-log__level { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; }
+                .event-log__level[data-level="info"] { color:#3b82f6; }
+                .event-log__level[data-level="warn"] { color:#f59e0b; }
+                .event-log__level[data-level="error"] { color:#ef4444; }
+                .event-log__time { font-size:11px; color:#94a3b8; }
+                .event-log__message { font-size:13px; color:#334155; line-height:1.5; }
+            }`
+        }
+    }
+};
+
+
+// ═══════════════════════════════════════════════════════════════
+// 최소 런타임 시뮬레이션
+// ═══════════════════════════════════════════════════════════════
+
 const _datasetRegistry = {
     dashboard_systemInfo: '/api/system-info',
     dashboard_stats:      '/api/stats',
     dashboard_events:     '/api/events'
 };
 
-// ── fx 최소 구현 ──
 const fx = {
     go: (...args) => args.reduce((a, f) => typeof f === 'function' ? f(a) : a),
     each: (fn) => (iter) => { for (const v of iter) fn(v); return iter; },
-    map: (fn) => (iter) => [...iter].map(fn),
     filter: (fn) => (iter) => [...iter].filter(fn)
 };
 
-// ── GlobalDataPublisher 최소 구현 ──
 const _mappings = new Map();
 const _subscribers = new Map();
 
 const GlobalDataPublisher = {
-    registerMapping: ({ topic, datasetInfo }) => {
-        _mappings.set(topic, datasetInfo);
-    },
-    unregisterMapping: (topic) => {
-        _mappings.delete(topic);
-        _subscribers.delete(topic);
-    },
+    registerMapping: ({ topic, datasetInfo }) => { _mappings.set(topic, datasetInfo); },
+    unregisterMapping: (topic) => { _mappings.delete(topic); _subscribers.delete(topic); },
     subscribe: (topic, instance, handler) => {
         if (!_subscribers.has(topic)) _subscribers.set(topic, new Set());
         _subscribers.get(topic).add({ instance, handler });
     },
     unsubscribe: (topic, instance) => {
         const subs = _subscribers.get(topic);
-        if (subs) {
-            for (const sub of subs) {
-                if (sub.instance === instance) subs.delete(sub);
-            }
-        }
+        if (subs) { for (const sub of subs) { if (sub.instance === instance) subs.delete(sub); } }
     },
     fetchAndPublish: async (topic, page, params) => {
         const info = _mappings.get(topic);
         if (!info) return;
-
-        // datasetList.json의 rest_api에서 URL을 가져오고, param의 baseUrl로 조립
         const endpoint = _datasetRegistry[info.datasetName];
         const baseUrl = info.param.baseUrl || 'localhost:4010';
         const url = `http://${baseUrl}${endpoint}`;
-
         const res = await fetch(url);
         const data = await res.json();
         const payload = { response: { data } };
-
         const subs = _subscribers.get(topic) || new Set();
-        for (const { instance, handler } of subs) {
-            handler.call(instance, payload);
-        }
+        for (const { instance, handler } of subs) { handler.call(instance, payload); }
     }
 };
 
-// ── Weventbus 최소 구현 ──
 const _eventHandlers = {};
-const Weventbus = {
-    emit: (name, payload) => {
-        if (_eventHandlers[name]) _eventHandlers[name](payload);
-    }
-};
-
-// ── Wkit 최소 구현 ──
+const Weventbus = { emit: (name, payload) => { if (_eventHandlers[name]) _eventHandlers[name](payload); } };
 const Wkit = {
     bindEvents: (instance, customEvents) => {
-        Object.entries(customEvents).forEach(([eventName, selectorMap]) => {
-            instance.appendElement.addEventListener(eventName, (e) => {
+        const listener = (e) => {
+            Object.entries(customEvents).forEach(([eventName, selectorMap]) => {
+                if (eventName !== e.type) return;
                 Object.entries(selectorMap).forEach(([selector, emitName]) => {
-                    if (e.target.closest(selector)) {
-                        Weventbus.emit(emitName, { event: e, targetInstance: instance });
-                    }
+                    if (e.target.closest(selector)) Weventbus.emit(emitName, { event: e, targetInstance: instance });
                 });
             });
+        };
+        instance._listener = listener;
+        Object.keys(customEvents).forEach(eventName => {
+            instance.appendElement.addEventListener(eventName, listener);
         });
     },
-    removeCustomEvents: () => {},
-    onEventBusHandlers: (handlers) => {
-        Object.assign(_eventHandlers, handlers);
+    removeCustomEvents: (instance) => {
+        if (instance._listener) {
+            ['click', 'change'].forEach(e => instance.appendElement.removeEventListener(e, instance._listener));
+        }
     },
-    offEventBusHandlers: (handlers) => {
-        Object.keys(handlers).forEach(k => delete _eventHandlers[k]);
-    }
+    onEventBusHandlers: (handlers) => { Object.assign(_eventHandlers, handlers); },
+    offEventBusHandlers: (handlers) => { Object.keys(handlers).forEach(k => delete _eventHandlers[k]); }
 };
 
 
@@ -258,9 +384,6 @@ const Wkit = {
 // Mixin 정의
 // ═══════════════════════════════════════════════════════════════
 
-// ── FieldRenderMixin ──
-// cssSelectors  → textContent 반영
-// datasetSelectors → dataset 반영
 function applyFieldRenderMixin(instance, options) {
     const { cssSelectors = {}, datasetSelectors = {}, dataFormat } = options;
     const ns = {};
@@ -274,14 +397,10 @@ function applyFieldRenderMixin(instance, options) {
         const fields = dataFormat ? dataFormat(data) : data;
         Object.entries(fields).forEach(([key, value]) => {
             if (value === undefined || value === null) return;
-
-            // datasetSelectors에 키가 있으면 → dataset 반영
             if (datasetSelectors[key]) {
                 const dataEl = instance.appendElement.querySelector(datasetSelectors[key]);
                 if (dataEl) dataEl.dataset[key] = value;
             }
-
-            // cssSelectors에 키가 있으면 → textContent 반영
             if (cssSelectors[key]) {
                 const el = instance.appendElement.querySelector(cssSelectors[key]);
                 if (el) el.textContent = value;
@@ -297,9 +416,6 @@ function applyFieldRenderMixin(instance, options) {
     };
 }
 
-// ── ListRenderMixin ──
-// template 기반 반복 렌더링
-// cssSelectors → 항목 내 textContent, datasetSelectors → 항목 내 dataset
 function applyListRenderMixin(instance, options) {
     const { container, item, template, cssSelectors = {}, datasetSelectors = {}, dataFormat } = options;
     const ns = {};
@@ -313,30 +429,20 @@ function applyListRenderMixin(instance, options) {
         const { data } = response;
         if (!data) throw new Error('[ListRenderMixin] data is null');
         const formatted = dataFormat ? dataFormat(data) : { items: data };
-
         const containerEl = instance.appendElement.querySelector(container);
-        if (!containerEl) return;
         const templateEl = instance.appendElement.querySelector(template);
-        if (!templateEl) return;
-
+        if (!containerEl || !templateEl) return;
         containerEl.innerHTML = '';
         formatted.items.forEach(item => {
             const clone = templateEl.content.cloneNode(true);
-
             Object.entries(datasetSelectors).forEach(([key, selector]) => {
                 const el = clone.querySelector(selector);
-                if (el && item[key] !== undefined && item[key] !== null) {
-                    el.dataset[key] = item[key];
-                }
+                if (el && item[key] != null) el.dataset[key] = item[key];
             });
-
             Object.entries(cssSelectors).forEach(([key, selector]) => {
                 const el = clone.querySelector(selector);
-                if (el && item[key] !== undefined && item[key] !== null) {
-                    el.textContent = item[key];
-                }
+                if (el && item[key] != null) el.textContent = item[key];
             });
-
             containerEl.appendChild(clone);
         });
     };
@@ -347,214 +453,222 @@ function applyListRenderMixin(instance, options) {
     };
 
     ns.destroy = function() {
-        ns.renderData = null;
-        ns.clear = null;
-        ns.container = null;
-        ns.item = null;
-        ns.cssSelectors = null;
-        ns.datasetSelectors = null;
+        ns.renderData = null; ns.clear = null;
+        ns.container = null; ns.item = null;
+        ns.cssSelectors = null; ns.datasetSelectors = null;
         instance.listRender = null;
     };
 }
 
 
 // ═══════════════════════════════════════════════════════════════
-// 컴포넌트 인스턴스 시뮬레이션
+// 컴포넌트 등록 (Mixin 적용 — register.js와 동일)
+// 디자인이 바뀌어도 이 코드는 변하지 않는다
 // ═══════════════════════════════════════════════════════════════
 
-function createInstance(containerId) {
-    return {
-        id: containerId,
-        appendElement: document.getElementById(containerId),
-        page: {}
+const instances = {};
+let pageIntervals = {};
+
+function registerSystemInfo() {
+    const instance = { id: 'system-info', appendElement: document.getElementById('system-info-container') };
+    instances.systemInfo = instance;
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            name:        '.system-info__name',
+            statusLabel: '.system-info__status',
+            version:     '.system-info__version',
+            uptime:      '.system-info__uptime'
+        },
+        datasetSelectors: {
+            status: '[data-status]'
+        },
+        dataFormat: (data) => ({
+            name:        data.hostname,
+            status:      data.status,
+            statusLabel: data.statusLabel,
+            version:     data.version,
+            uptime:      data.uptime
+        })
+    });
+
+    instance.subscriptions = { systemInfo: [instance.fieldRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {};
+    Wkit.bindEvents(instance, instance.customEvents);
+}
+
+function registerStatusCards() {
+    const instance = { id: 'status-cards', appendElement: document.getElementById('status-cards-container') };
+    instances.statusCards = instance;
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            cpuValue:     '.status-card[data-metric="cpu"] .status-card__value',
+            memoryValue:  '.status-card[data-metric="memory"] .status-card__value',
+            diskValue:    '.status-card[data-metric="disk"] .status-card__value',
+            networkValue: '.status-card[data-metric="network"] .status-card__value'
+        },
+        dataFormat: (data) => ({
+            cpuValue:     data.cpu.value,
+            memoryValue:  data.memory.value,
+            diskValue:    data.disk.value,
+            networkValue: String(data.network.value)
+        })
+    });
+
+    instance.subscriptions = { stats: [instance.fieldRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = { click: { '.status-card': '@cardClicked' } };
+    Wkit.bindEvents(instance, instance.customEvents);
+}
+
+function registerEventLog() {
+    const instance = { id: 'event-log', appendElement: document.getElementById('event-log-container') };
+    instances.eventLog = instance;
+
+    applyListRenderMixin(instance, {
+        container: '.event-log__list',
+        item: '.event-log__item',
+        template: '#event-log-item-template',
+        cssSelectors: {
+            level:   '.event-log__level',
+            time:    '.event-log__time',
+            message: '.event-log__message'
+        },
+        datasetSelectors: {
+            level: '[data-level]'
+        },
+        dataFormat: (data) => ({
+            items: data.events.map(event => ({
+                level:   event.level,
+                time:    new Date(event.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
+                message: event.message
+            }))
+        })
+    });
+
+    instance.subscriptions = { events: [instance.listRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.listRender.item]: '@eventClicked',
+            '.event-log__clear-btn': '@clearClicked'
+        }
     };
+    Wkit.bindEvents(instance, instance.customEvents);
+}
+
+function destroyAll() {
+    Object.values(pageIntervals).forEach(clearInterval);
+    pageIntervals = {};
+
+    Object.values(instances).forEach(inst => {
+        if (inst.customEvents) Wkit.removeCustomEvents(inst);
+        if (inst.subscriptions) {
+            Object.entries(inst.subscriptions).forEach(([topic]) =>
+                GlobalDataPublisher.unsubscribe(topic, inst)
+            );
+        }
+        if (inst.fieldRender) inst.fieldRender.destroy();
+        if (inst.listRender) inst.listRender.destroy();
+    });
+
+    Object.keys(instances).forEach(k => delete instances[k]);
 }
 
 
 // ═══════════════════════════════════════════════════════════════
-// 부팅 시퀀스 (RNBT 라이프사이클 시뮬레이션)
+// 디자인 전환 + 부팅
 // ═══════════════════════════════════════════════════════════════
 
-(async function boot() {
-    const page = { appendElement: document.querySelector('.page-root') };
+function applyDesign(component, version) {
+    const design = DESIGNS[component][version];
+    const containerMap = {
+        SystemInfo: 'system-info-container',
+        StatusCards: 'status-cards-container',
+        EventLog: 'event-log-container'
+    };
+    const cssMap = {
+        SystemInfo: 'dynamic-system-info-css',
+        StatusCards: 'dynamic-status-cards-css',
+        EventLog: 'dynamic-event-log-css'
+    };
 
-    // ──────────────────────────────
-    // 1. Page before_load
-    // ──────────────────────────────
-    (function pageBeforeLoad() {
-        const ctx = page;
+    document.getElementById(containerMap[component]).innerHTML = design.html;
+    document.getElementById(cssMap[component]).textContent = design.css;
+}
 
-        ctx.pageEventBusHandlers = {
-            '@cardClicked': ({ event }) => {
-                const card = event.target.closest('.status-card');
-                console.log('[Page] Card clicked:', card?.dataset.metric);
-            },
-            '@eventClicked': ({ event }) => {
-                const item = event.target.closest('.event-log__item');
-                console.log('[Page] Event clicked:', item?.querySelector('.event-log__message')?.textContent);
-            },
-            '@clearClicked': ({ targetInstance }) => {
-                targetInstance.listRender.clear();
-            }
-        };
+function boot() {
+    // 디자인 적용
+    applyDesign('SystemInfo', document.getElementById('select-system-info').value);
+    applyDesign('StatusCards', document.getElementById('select-status-cards').value);
+    applyDesign('EventLog', document.getElementById('select-event-log').value);
 
-        Wkit.onEventBusHandlers(ctx.pageEventBusHandlers);
-    })();
+    // 컴포넌트 등록 (register.js — Mixin 조립)
+    registerSystemInfo();
+    registerStatusCards();
+    registerEventLog();
 
-    // ──────────────────────────────
-    // 2. Component register
-    // ──────────────────────────────
+    // 페이지 이벤트 핸들러
+    Wkit.onEventBusHandlers({
+        '@cardClicked': ({ event }) => {
+            const card = event.target.closest('.status-card');
+            console.log('[Page] Card clicked:', card?.dataset.metric);
+        },
+        '@eventClicked': ({ event }) => {
+            const item = event.target.closest('.event-log__item');
+            console.log('[Page] Event clicked:', item?.querySelector('.event-log__message')?.textContent);
+        },
+        '@clearClicked': ({ targetInstance }) => {
+            targetInstance.listRender.clear();
+        }
+    });
 
-    // SystemInfo — FieldRenderMixin
-    const systemInfo = createInstance('system-info-container');
-    (function register() {
-        const instance = systemInfo;
+    // 데이터 매핑 + 발행
+    const mappings = [
+        { topic: 'systemInfo', datasetInfo: { datasetName: 'dashboard_systemInfo', param: { baseUrl: 'localhost:4010' } } },
+        { topic: 'stats', datasetInfo: { datasetName: 'dashboard_stats', param: { baseUrl: 'localhost:4010' } }, refreshInterval: 5000 },
+        { topic: 'events', datasetInfo: { datasetName: 'dashboard_events', param: { baseUrl: 'localhost:4010' } }, refreshInterval: 10000 }
+    ];
 
-        applyFieldRenderMixin(instance, {
-            cssSelectors: {
-                name:        '.system-info__name',
-                statusLabel: '.system-info__status',
-                version:     '.system-info__version',
-                uptime:      '.system-info__uptime'
-            },
-            datasetSelectors: {
-                status:      '[data-status]'
-            },
-            dataFormat: (data) => ({
-                name:        data.hostname,
-                status:      data.status,           // → datasetSelectors → dataset
-                statusLabel: data.statusLabel,      // → cssSelectors → textContent
-                version:     data.version,
-                uptime:      data.uptime
-            })
-        });
+    mappings.forEach(GlobalDataPublisher.registerMapping);
+    mappings.forEach(({ topic }) =>
+        GlobalDataPublisher.fetchAndPublish(topic, {}).catch(err => console.error(`[Page] ${topic}:`, err))
+    );
 
-        instance.subscriptions = {
-            systemInfo: [instance.fieldRender.renderData]
-        };
-        Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
-            handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
-        );
+    mappings.filter(m => m.refreshInterval).forEach(({ topic, refreshInterval }) => {
+        pageIntervals[topic] = setInterval(() => {
+            GlobalDataPublisher.fetchAndPublish(topic, {}).catch(err => console.error(`[Page] ${topic}:`, err));
+        }, refreshInterval);
+    });
 
-        instance.customEvents = {};
-        Wkit.bindEvents(instance, instance.customEvents);
-    })();
+    console.log('[Boot] SimpleDashboard started');
+}
 
-    // StatusCards — FieldRenderMixin (같은 Mixin, 다른 껍데기)
-    const statusCards = createInstance('status-cards-container');
-    (function register() {
-        const instance = statusCards;
+function reboot() {
+    destroyAll();
+    _mappings.clear();
+    _subscribers.clear();
+    boot();
+}
 
-        applyFieldRenderMixin(instance, {
-            cssSelectors: {
-                cpuValue:     '.status-card[data-metric="cpu"] .status-card__value',
-                memoryValue:  '.status-card[data-metric="memory"] .status-card__value',
-                diskValue:    '.status-card[data-metric="disk"] .status-card__value',
-                networkValue: '.status-card[data-metric="network"] .status-card__value'
-            },
-            dataFormat: (data) => ({
-                cpuValue:     data.cpu.value,
-                memoryValue:  data.memory.value,
-                diskValue:    data.disk.value,
-                networkValue: String(data.network.value)
-            })
-        });
+// 디자인 선택 시 재부팅
+document.getElementById('select-system-info').addEventListener('change', reboot);
+document.getElementById('select-status-cards').addEventListener('change', reboot);
+document.getElementById('select-event-log').addEventListener('change', reboot);
 
-        instance.subscriptions = {
-            stats: [instance.fieldRender.renderData]
-        };
-        Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
-            handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
-        );
-
-        instance.customEvents = { click: { '.status-card': '@cardClicked' } };
-        Wkit.bindEvents(instance, instance.customEvents);
-    })();
-
-    // EventLog — ListRenderMixin
-    const eventLog = createInstance('event-log-container');
-    (function register() {
-        const instance = eventLog;
-
-        applyListRenderMixin(instance, {
-            container: '.event-log__list',
-            item:      '.event-log__item',
-            template:  '#event-log-item-template',
-            cssSelectors: {
-                level:   '.event-log__level',
-                time:    '.event-log__time',
-                message: '.event-log__message'
-            },
-            datasetSelectors: {
-                level:   '[data-level]'
-            },
-            dataFormat: (data) => ({
-                items: data.events.map(event => ({
-                    level:   event.level,
-                    time:    new Date(event.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
-                    message: event.message
-                }))
-            })
-        });
-
-        instance.subscriptions = {
-            events: [instance.listRender.renderData]
-        };
-        Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
-            handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
-        );
-
-        instance.customEvents = {
-            click: {
-                [instance.listRender.item]: '@eventClicked',
-                '.event-log__clear-btn': '@clearClicked'
-            }
-        };
-        Wkit.bindEvents(instance, instance.customEvents);
-    })();
-
-    // ──────────────────────────────
-    // 3. Page loaded
-    // ──────────────────────────────
-    (function pageLoaded() {
-        const ctx = page;
-
-        ctx.pageDataMappings = [
-            { topic: 'systemInfo', datasetInfo: { datasetName: 'dashboard_systemInfo', param: { baseUrl: 'localhost:4010' } } },
-            { topic: 'stats', datasetInfo: { datasetName: 'dashboard_stats', param: { baseUrl: 'localhost:4010' } }, refreshInterval: 5000 },
-            { topic: 'events', datasetInfo: { datasetName: 'dashboard_events', param: { baseUrl: 'localhost:4010' } }, refreshInterval: 10000 }
-        ];
-
-        ctx.pageParams = {};
-
-        fx.go(
-            ctx.pageDataMappings,
-            fx.each(GlobalDataPublisher.registerMapping),
-            fx.each(({ topic }) => ctx.pageParams[topic] = {}),
-            fx.each(({ topic }) =>
-                GlobalDataPublisher.fetchAndPublish(topic, ctx)
-                    .catch(err => console.error(`[Page] ${topic}:`, err))
-            )
-        );
-
-        ctx.pageIntervals = {};
-        fx.go(
-            ctx.pageDataMappings,
-            fx.filter(m => m.refreshInterval),
-            fx.each(({ topic, refreshInterval }) => {
-                ctx.pageIntervals[topic] = setInterval(() => {
-                    GlobalDataPublisher.fetchAndPublish(topic, ctx)
-                        .catch(err => console.error(`[Page] ${topic}:`, err));
-                }, refreshInterval);
-            })
-        );
-    })();
-
-    console.log('[Boot] SimpleDashboard started — mock server: localhost:4010');
-    console.log('[Boot] SystemInfo: FieldRenderMixin');
-    console.log('[Boot] StatusCards: FieldRenderMixin (같은 Mixin, 다른 껍데기)');
-    console.log('[Boot] EventLog:   ListRenderMixin');
-})();
+// 초기 부팅
+boot();
 </script>
 
 </body>

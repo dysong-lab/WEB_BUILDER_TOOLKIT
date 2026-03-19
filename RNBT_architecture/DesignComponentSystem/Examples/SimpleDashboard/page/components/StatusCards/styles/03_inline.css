@@ -1,0 +1,40 @@
+/* 03_inline: 한 줄 뱃지 */
+#status-cards-container {
+    .status-cards {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .status-card {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        background: #0f172a;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: opacity 0.15s;
+    }
+
+    .status-card:hover { opacity: 0.85; }
+
+    .status-card__label {
+        font-size: 10px;
+        font-weight: 700;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .status-card__value {
+        font-size: 16px;
+        font-weight: 700;
+        color: #f8fafc;
+    }
+
+    .status-card__unit {
+        font-size: 11px;
+        color: #64748b;
+    }
+}

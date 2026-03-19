@@ -1,0 +1,68 @@
+/* 02_card: 세로 카드 (라이트 배경, 아이콘 포함, 수직 배치) */
+#system-info-container {
+    .system-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        padding: 32px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        text-align: center;
+        font-family: 'Inter', sans-serif;
+        max-width: 280px;
+    }
+
+    .system-info__icon {
+        font-size: 48px;
+        line-height: 1;
+    }
+
+    .system-info__name {
+        font-size: 22px;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .system-info__status {
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .system-info__status[data-status="RUNNING"] {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .system-info__status[data-status="unknown"] {
+        background: #f3f4f6;
+        color: #6b7280;
+    }
+
+    .system-info__details {
+        width: 100%;
+        border-top: 1px solid #f1f5f9;
+        padding-top: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .system-info__detail-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+    }
+
+    .system-info__detail-label {
+        color: #94a3b8;
+    }
+
+    .system-info__version { color: #334155; font-weight: 500; }
+    .system-info__uptime { color: #334155; font-weight: 500; }
+}

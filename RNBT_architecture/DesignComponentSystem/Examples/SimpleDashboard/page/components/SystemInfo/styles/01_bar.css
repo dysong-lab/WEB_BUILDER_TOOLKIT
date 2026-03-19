@@ -1,3 +1,4 @@
+/* 01_bar: 가로 바 (다크 배경, 인라인 배치) */
 #system-info-container {
     .system-info {
         display: flex;
@@ -46,11 +47,6 @@
         color: #9ca3af;
     }
 
-    .system-info__version {
-        color: #94a3b8;
-    }
-
-    .system-info__uptime {
-        color: #94a3b8;
-    }
+    .system-info__version { color: #94a3b8; }
+    .system-info__uptime { color: #94a3b8; }
 }
