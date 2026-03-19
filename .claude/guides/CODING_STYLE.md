@@ -210,6 +210,34 @@ fx.go(
 );
 ```
 
+### 5. 주기적 실행은 setTimeout 체이닝
+
+`setInterval`은 응답 완료 전 다음 요청이 누적될 수 있다. `setTimeout` 체이닝 + `_stopped` 가드를 사용한다.
+
+```javascript
+// ❌ setInterval — 요청 누적 위험
+setInterval(() => {
+    fetchAndPublish(topic, this);
+}, 5000);
+
+// ✅ setTimeout 체이닝 — 응답 완료 후 다음 예약
+const state = { _stopped: false, _timerId: null };
+
+const scheduleNext = () => {
+    if (state._stopped) return;            // 좀비 방지 가드
+    state._timerId = setTimeout(() => {
+        fetchAndPublish(topic, this)
+            .catch(err => console.error(err))
+            .finally(scheduleNext);        // 완료 후 다음 예약
+    }, 5000);
+};
+scheduleNext();
+
+// 정지
+state._stopped = true;                    // 반드시 clearTimeout보다 먼저
+clearTimeout(state._timerId);
+```
+
 ---
 
 ## 실전 패턴 카탈로그
