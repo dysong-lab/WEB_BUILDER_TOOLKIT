@@ -1,0 +1,17 @@
+<div class="event-log">
+    <div class="event-log__header">
+        <span class="event-log__title">Event Log</span>
+        <button class="event-log__clear-btn">Clear</button>
+    </div>
+    <div class="event-log__list">
+        <!-- ListRenderMixin이 여기에 렌더링 -->
+    </div>
+
+    <template id="event-log-item-template">
+        <div class="event-log__item">
+            <span class="event-log__level" data-level=""></span>
+            <span class="event-log__time"></span>
+            <span class="event-log__message"></span>
+        </div>
+    </template>
+</div>
