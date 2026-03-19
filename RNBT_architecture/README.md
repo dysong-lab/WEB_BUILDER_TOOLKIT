@@ -14,14 +14,10 @@
   - [Interval 관리](#interval-관리)
   - [YAGNI 원칙](#yagni-원칙)
 - [컴포넌트 라이프사이클 패턴](#컴포넌트-라이프사이클-패턴)
-- [Default JS 템플릿](#default-js-템플릿)
+- [Default JS 템플릿 (Mixin 기반)](#default-js-템플릿-mixin-기반)
 - [fx.go 기반 에러 핸들링 가이드](#fxgo-기반-에러-핸들링-가이드)
 - [Component Structure Guide](#component-structure-guide)
 - [부록 A: 라이프사이클 상세](#부록-a-라이프사이클-상세)
-- [부록 B: 컴포넌트 로드 시점 초기화 패턴](#부록-b-컴포넌트-로드-시점-초기화-패턴)
-- [부록 C: 컴포넌트 내부 이벤트 패턴](#부록-c-컴포넌트-내부-이벤트-패턴)
-- [부록 D: Configuration 설계 원칙](#부록-d-configuration-설계-원칙)
-- [부록 E: PopupMixin 패턴](#부록-e-popupmixin-패턴)
 - [부록 F: 인스턴스 스코프, 생명주기, GC 분석](#부록-f-인스턴스-스코프-생명주기-gc-분석)
 
 ---
@@ -279,39 +275,60 @@ fx.go(
 
 ### Interval 관리
 
-**문제:** 데이터마다 갱신 주기가 다를 수 있음
+**문제:** 데이터마다 갱신 주기가 다를 수 있음. `setInterval`은 응답 완료 전 다음 요청이 누적될 수 있음.
 
-**해결:** topic별 독립적인 interval 관리
+**해결:** `setTimeout` 체이닝 + `_stopped` 가드
 
 ```javascript
 this.startAllIntervals = () => {
     this.pageIntervals = {};
 
-    fx.go(
+    go(
         this.pageDataMappings,
         each(({ topic, refreshInterval }) => {
             if (refreshInterval) {
-                this.pageIntervals[topic] = setInterval(() => {
-                    GlobalDataPublisher.fetchAndPublish(
-                        topic,
-                        this,
-                        this.pageParams[topic] || {}
-                    );
-                }, refreshInterval);
+                const state = { _stopped: false, _timerId: null };
+                this.pageIntervals[topic] = state;
+
+                const scheduleNext = () => {
+                    if (state._stopped) return;    // 좀비 방지 가드
+                    state._timerId = setTimeout(() => {
+                        fetchAndPublish(
+                            topic,
+                            this,
+                            this.pageParams[topic] || {}
+                        )
+                        .catch(err => console.error(`[Page] ${topic}:`, err))
+                        .finally(scheduleNext);    // 완료 후 다음 예약
+                    }, refreshInterval);
+                };
+                scheduleNext();
             }
         })
     );
 };
 
 this.stopAllIntervals = () => {
-    fx.go(
+    go(
         Object.values(this.pageIntervals || {}),
-        each(interval => clearInterval(interval))
+        each(state => {
+            state._stopped = true;             // 반드시 clearTimeout보다 먼저
+            clearTimeout(state._timerId);
+            state._timerId = null;
+        })
     );
 };
 
 this.startAllIntervals();
 ```
+
+**왜 setTimeout 체이닝인가:**
+
+| 방식 | 문제 |
+|------|------|
+| `setInterval` | 응답 완료 전 다음 요청이 누적됨 |
+| `setTimeout` + `.finally()` | 응답 완료 후에만 다음 요청 예약 |
+| + `_stopped` 가드 | `stopAllIntervals` 후 `.finally()`가 좀비 타이머를 재등록하는 것을 방지 |
 
 ### YAGNI 원칙
 
@@ -328,58 +345,44 @@ this.startAllIntervals();
 ## 컴포넌트 라이프사이클 패턴
 
 컴포넌트는 register와 beforeDestroy 두 개의 라이프사이클 단계를 활용합니다.
+register.js는 **조립 코드**만 포함하며, 도메인 로직은 Mixin이 담당합니다.
 
-> **코드 템플릿**: [Default JS 템플릿](#default-js-템플릿) 참조
+> **설계 문서**: [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md) 참조
 
-### Register 패턴
+### Register 패턴 (Mixin 기반)
 
-| 패턴 | 용도 | 핵심 포인트 |
-|------|------|------------|
-| 2D 이벤트 바인딩 | DOM 이벤트 → Weventbus | 이벤트 위임, `@` 접두사, 컴포넌트는 발행만 |
-| GlobalDataPublisher 구독 | 데이터 수신 → 렌더링 | topic별 메서드 매핑, `{ response }` 구조 |
+register.js의 순서는 중요합니다. Mixin 적용이 모든 것의 전제 조건입니다.
 
-### beforeDestroy 패턴
+```
+1. Mixin 적용     — 반드시 먼저 (네임스페이스 생성)
+2. 구독 연결      — Mixin 메서드를 함수 참조로 연결
+3. 이벤트 매핑    — Mixin의 선택자를 computed property로 참조
+```
 
-정리 순서: 이벤트 제거 → 구독 해제 → 핸들러 참조 제거
+### beforeDestroy 패턴 (생성의 역순, 3단계)
 
 | 생성 (register) | 정리 (beforeDestroy) |
 |-----------------|----------------------|
-| `this.subscriptions = {...}` | `this.subscriptions = null` |
-| `subscribe(topic, this, handler)` | `unsubscribe(topic, this)` |
-| `this.customEvents = {...}` | `this.customEvents = null` |
 | `bindEvents(this, customEvents)` | `removeCustomEvents(this, customEvents)` |
-| `this._internalHandlers = {...}` | `this._internalHandlers = null` |
-| `addEventListener(...)` | `removeEventListener(...)` |
-| `this.renderData = fn.bind(this)` | `this.renderData = null` |
-| `this._state = value` | `this._state = null` |
-| `createPopup(this, config)` | `destroyPopup(this)` |
-| `this.pageEventBusHandlers = {...}` | `this.pageEventBusHandlers = null` |
-| `onEventBusHandlers(handlers)` | `offEventBusHandlers(handlers)` |
+| `subscribe(topic, this, handler)` | `unsubscribe(topic, this)` |
+| `applyXxxMixin(this, options)` | `this.xxxMixin.destroy()` |
 
 ---
 
-## Default JS 템플릿
+## Default JS 템플릿 (Mixin 기반)
 
-새 컴포넌트/페이지 생성 시 복사하여 시작하는 기본 스크립트 구조
-
-### 개요
-
-Default JS는 프로젝트 패턴을 따르는 시작점 코드입니다.
-퍼블리싱(HTML/CSS) 완료 후, 이 템플릿을 복사하여 사용자 정의 로직을 추가합니다.
-
-> **필수 네이밍 규칙:** [DEFAULT_JS_NAMING.md](/RNBT_architecture/.legacy_ref/docs/DEFAULT_JS_NAMING.md) - 라이브러리가 강제하는 객체명과 형태
+새 컴포넌트/페이지 생성 시 복사하여 시작하는 기본 스크립트 구조.
+컴포넌트의 register.js는 **조립 코드만** 포함한다.
 
 ```
 Figma 디자인
     ↓
-HTML/CSS 퍼블리싱 (컴포넌트 구조에 맞춤)
+HTML/CSS 퍼블리싱 (약속된 선택자 포함)
     ↓
-Default JS 적용 ← 이 문서
-    ↓
-사용자 정의 메소드 + 이벤트 핸들러 구현
+Mixin 조립 코드 적용 ← 이 문서
 ```
 
-### 1. 컴포넌트 Default JS
+### 1. 컴포넌트 Default JS (Mixin 기반)
 
 #### register.js
 
@@ -389,45 +392,47 @@ const { bindEvents } = Wkit;
 const { each, go } = fx;
 
 // ======================
-// SUBSCRIPTIONS
+// 1. MIXIN 적용 — 반드시 먼저
+// ======================
+
+applyFieldRenderMixin(this, {
+    cssSelectors: {
+        // dataFormat 키: 'CSS 선택자'
+    },
+    datasetSelectors: {
+        // dataFormat 키: '[data-*] 선택자'
+    },
+    dataFormat: (data) => ({
+        // API 키 → cssSelectors/datasetSelectors 키 매핑
+    })
+});
+
+// ======================
+// 2. 구독 연결 — Mixin 메서드를 함수 참조로
 // ======================
 
 this.subscriptions = {
-    // topic: ['핸들러명']
+    // topic: [this.fieldRender.renderData]
 };
-
-// 핸들러 바인딩
-// this.renderData = renderData.bind(this);
 
 go(
     Object.entries(this.subscriptions),
-    each(([topic, fnList]) =>
-        each(fn => this[fn] && subscribe(topic, this, this[fn]), fnList)
+    each(([topic, handlers]) =>
+        each(handler => subscribe(topic, this, handler), handlers)
     )
 );
 
 // ======================
-// EVENT BINDING
+// 3. 이벤트 매핑 — Mixin의 선택자를 computed property로
 // ======================
 
 this.customEvents = {
     // click: {
-    //     '.my-button': '@myButtonClicked'
+    //     [this.listRender.item]: '@itemClicked'
     // }
 };
 
 bindEvents(this, this.customEvents);
-
-// ======================
-// RENDER FUNCTIONS
-// ======================
-
-// function renderData({ response }) {
-//     const { data } = response;
-//     if (!data) return;
-//
-//     // 렌더링 로직
-// }
 ```
 
 #### beforeDestroy.js
@@ -437,102 +442,44 @@ const { unsubscribe } = GlobalDataPublisher;
 const { removeCustomEvents } = Wkit;
 const { each, go } = fx;
 
-// ======================
-// SUBSCRIPTION CLEANUP
-// ======================
+// 3. 이벤트 제거
+removeCustomEvents(this, this.customEvents);
+this.customEvents = null;
 
+// 2. 구독 해제
 go(
     Object.entries(this.subscriptions),
     each(([topic, _]) => unsubscribe(topic, this))
 );
 this.subscriptions = null;
 
-// ======================
-// EVENT CLEANUP
-// ======================
-
-removeCustomEvents(this, this.customEvents);
-this.customEvents = null;
-
-// ======================
-// HANDLER CLEANUP
-// ======================
-
-// this.renderData = null;
+// 1. Mixin 정리
+this.fieldRender.destroy();
+// this.listRender.destroy();
 ```
 
-### 2. 3D 컴포넌트 Default JS ( 컴포넌트 Default JS를 기반으로 )
-
-#### register.js
-
-```javascript
-const { bind3DEvents } = Wkit;
-
-// ======================
-// 3D EVENT BINDING
-// ======================
-
-this.customEvents = {
-    click: '@3dObjectClicked'
-    // mousemove: '@3dObjectHovered'
-};
-
-// Data source info (상호작용 시 데이터 필요한 경우, 즉 옵션 항목)
-// 배열 형태로 정의 (다중 데이터셋 지원)
-this.datasetInfo = [
-    {
-        datasetName: 'myDataset',
-        param: {
-            type: 'geometry',
-            id: this.id
-        }
-    }
-];
-
-bind3DEvents(this, this.customEvents);
-```
-
-> **Note:** 3D 컴포넌트의 정리
-> - 3D 리소스: 페이지 `before_unload.js`의 `disposeAllThreeResources()`에서 일괄 정리
->   - subscriptions 해제
->   - geometry, material, texture dispose
->   - Scene background 정리
-> - DOM 리소스: 팝업 컴포넌트(Shadow DOM 팝업 등)는 `beforeDestroy.js`에서 직접 정리
->   - `this.destroyPopup()` 등 컴포넌트가 생성한 DOM 리소스 정리
->
-> **주의:** `disposeAllThreeResources`는 인스턴스 속성(`customEvents`, `datasetInfo` 등)을 null 처리하지 않는다.
-> 외부에서 속성을 null 처리하면 `_onViewerDestroy()`의 정리 로직이 실패할 수 있다.
-> 상세: [INSTANCE_LIFECYCLE_GC.md](/RNBT_architecture/.legacy_ref/docs/INSTANCE_LIFECYCLE_GC.md)
-
-### 3. 페이지 Default JS
+### 2. 페이지 Default JS
 
 #### before_load.js
 
 ```javascript
-const { onEventBusHandlers, fetchData } = Wkit;
+const { onEventBusHandlers } = Wkit;
 
 // ======================
 // EVENT BUS HANDLERS
 // ======================
 
 this.pageEventBusHandlers = {
-    // 샘플: Primitive 조합 패턴
-    // '@itemClicked': async ({ event, targetInstance }) => {
-    //     const { datasetInfo } = targetInstance;
-    //     if (datasetInfo?.length) {
-    //         for (const { datasetName, param } of datasetInfo) {
-    //             const data = await fetchData(this, datasetName, param);
-    //             // 데이터 처리
-    //         }
-    //     }
+    // Mixin 메서드에 네임스페이스로 직접 접근
+    // '@clearClicked': ({ targetInstance }) => {
+    //     targetInstance.listRender.clear();
     // },
 
-    // 샘플: Param 업데이트 패턴
+    // Param 업데이트 패턴
     // '@filterChanged': ({ event }) => {
-    //     const filter = event.target.value;
     //     this.pageParams['myTopic'] = {
     //         ...this.pageParams['myTopic'],
-    //         filter
+    //         filter: event.target.value
     //     };
     //     GlobalDataPublisher.fetchAndPublish('myTopic', this, this.pageParams['myTopic']);
     // }
@@ -555,8 +502,8 @@ this.pageDataMappings = [
     // {
     //     topic: 'myTopic',
     //     datasetInfo: {
-    //         datasetName: 'myapi',
-    //         param: { endpoint: '/api/data' }
+    //         datasetName: 'myDataset',
+    //         param: { baseUrl: 'localhost:4010' }
     //     },
     //     refreshInterval: 5000  // 없으면 한 번만 fetch
     // }
@@ -574,12 +521,12 @@ go(
     each(({ topic }) => this.pageParams[topic] = {}),
     each(({ topic }) =>
         fetchAndPublish(topic, this)
-            .catch(err => console.error(`[fetchAndPublish:${topic}]`, err))
+            .catch(err => console.error(`[Page] ${topic}:`, err))
     )
 );
 
 // ======================
-// INTERVAL MANAGEMENT
+// INTERVAL MANAGEMENT (setTimeout 체이닝)
 // ======================
 
 this.startAllIntervals = () => {
@@ -589,13 +536,18 @@ this.startAllIntervals = () => {
         this.pageDataMappings,
         each(({ topic, refreshInterval }) => {
             if (refreshInterval) {
-                this.pageIntervals[topic] = setInterval(() => {
-                    fetchAndPublish(
-                        topic,
-                        this,
-                        this.pageParams[topic] || {}
-                    ).catch(err => console.error(`[fetchAndPublish:${topic}]`, err));
-                }, refreshInterval);
+                const state = { _stopped: false, _timerId: null };
+                this.pageIntervals[topic] = state;
+
+                const scheduleNext = () => {
+                    if (state._stopped) return;
+                    state._timerId = setTimeout(() => {
+                        fetchAndPublish(topic, this, this.pageParams[topic] || {})
+                            .catch(err => console.error(`[Page] ${topic}:`, err))
+                            .finally(scheduleNext);
+                    }, refreshInterval);
+                };
+                scheduleNext();
             }
         })
     );
@@ -604,7 +556,11 @@ this.startAllIntervals = () => {
 this.stopAllIntervals = () => {
     go(
         Object.values(this.pageIntervals || {}),
-        each(interval => clearInterval(interval))
+        each(state => {
+            state._stopped = true;
+            clearTimeout(state._timerId);
+            state._timerId = null;
+        })
     );
 };
 
@@ -617,6 +573,15 @@ this.startAllIntervals();
 const { unregisterMapping } = GlobalDataPublisher;
 const { offEventBusHandlers } = Wkit;
 const { each, go } = fx;
+
+// ======================
+// INTERVAL CLEANUP
+// ======================
+
+if (this.stopAllIntervals) {
+    this.stopAllIntervals();
+}
+this.pageIntervals = null;
 
 // ======================
 // EVENT BUS CLEANUP
@@ -636,63 +601,23 @@ go(
 
 this.pageDataMappings = null;
 this.pageParams = null;
-
-// ======================
-// INTERVAL CLEANUP
-// ======================
-
-if (this.stopAllIntervals) {
-    this.stopAllIntervals();
-}
-this.pageIntervals = null;
 ```
 
-### 4. 페이지 3D Default JS ( 페이지 Default JS를 기반으로 )
+### 3. 페이지 3D Default JS ( 페이지 Default JS를 기반으로 )
 
 3D 컴포넌트가 있는 페이지는 위 페이지 Default JS에 아래 내용을 추가합니다.
 
 #### before_load.js 추가
 
 ```javascript
-const { onEventBusHandlers, initThreeRaycasting, fetchData } = Wkit;
+const { initThreeRaycasting } = Wkit;
 
-// ======================
-// EVENT BUS HANDLERS (3D 핸들러 추가)
-// ======================
-
-this.pageEventBusHandlers = {
-    // ... 기존 핸들러 ...
-
-    // 3D 객체 클릭 핸들러
-    '@3dObjectClicked': async ({ event, targetInstance }) => {
-        console.log('Clicked 3D object:', event.intersects[0]?.object);
-
-        const { datasetInfo } = targetInstance;
-        if (datasetInfo?.length) {
-            // 배열 순회 (다중 데이터셋 지원)
-            for (const { datasetName, param } of datasetInfo) {
-                const data = await fetchData(this, datasetName, param);
-                console.log('3D object data:', data);
-            }
-        }
-    }
-};
-
-onEventBusHandlers(this.pageEventBusHandlers);
-
-// ======================
 // 3D RAYCASTING SETUP
-// ======================
-
 const { withSelector } = Wkit;
 
 this.raycastingEvents = withSelector(this.appendElement, 'canvas', canvas =>
     fx.go(
-        [
-            { type: 'click' }
-            // { type: 'mousemove' },
-            // { type: 'dblclick' }
-        ],
+        [{ type: 'click' }],
         fx.map(event => ({
             ...event,
             handler: initThreeRaycasting(canvas, event.type)
@@ -704,17 +629,9 @@ this.raycastingEvents = withSelector(this.appendElement, 'canvas', canvas =>
 #### before_unload.js 추가
 
 ```javascript
-const { disposeAllThreeResources } = Wkit;
-const { each, go } = fx;
+const { disposeAllThreeResources, withSelector } = Wkit;
 
-// ... 기존 cleanup 코드 ...
-
-// ======================
 // 3D RAYCASTING CLEANUP
-// ======================
-
-const { withSelector } = Wkit;
-
 withSelector(this.appendElement, 'canvas', canvas => {
     if (this.raycastingEvents) {
         go(
@@ -725,14 +642,7 @@ withSelector(this.appendElement, 'canvas', canvas => {
     }
 });
 
-// ======================
 // 3D RESOURCES CLEANUP
-// ======================
-
-// 한 줄로 모든 3D 컴포넌트 정리:
-// - subscriptions 해제
-// - geometry, material, texture dispose
-// - Scene background 정리
 disposeAllThreeResources(this);
 ```
 
@@ -1071,27 +981,33 @@ container.innerHTML = 사용자 정의 HTML
 
 ### 파일 구성
 
-하나의 컴포넌트는 다음 구조로 구성됩니다:
+하나의 컴포넌트는 다음 구조로 구성됩니다. 디자인 변형은 넘버링으로 관리하며, scripts/는 디자인이 달라져도 변하지 않습니다.
 
 ```
 ComponentName/
-├─ views/component.html       # 내부 요소 HTML
-├─ styles/component.css       # 내부 요소 스타일
+├─ views/
+│   ├─ 01_bar.html             # 디자인 변형 A
+│   └─ 02_card.html            # 디자인 변형 B
+├─ styles/
+│   ├─ 01_bar.css
+│   └─ 02_card.css
 ├─ scripts/
-│   ├─ register.js            # 초기화 로직
-│   └─ beforeDestroy.js       # 정리 로직
-└─ preview.html               # 독립 테스트
+│   ├─ register.js             # Mixin 조립 코드 (불변)
+│   └─ beforeDestroy.js        # 정리 코드 (불변)
+└─ preview/
+    ├─ 01_bar.html
+    └─ 02_card.html
 ```
 
 | 파일 | 역할 |
 |------|------|
-| views/component.html | 내부 요소 HTML |
-| styles/component.css | 내부 요소 스타일 |
-| scripts/register.js | 초기화 로직 |
-| scripts/beforeDestroy.js | 정리 로직 |
-| preview.html | 독립 테스트용 |
+| views/NN_name.html | 디자인 변형별 HTML (약속된 선택자 포함) |
+| styles/NN_name.css | 디자인 변형별 CSS |
+| scripts/register.js | Mixin 조립 코드 (디자인 무관, 불변) |
+| scripts/beforeDestroy.js | 정리 코드 (디자인 무관, 불변) |
+| preview/NN_name.html | 디자인 변형별 독립 테스트 |
 
-> **Note:** 컴포넌트 폴더명이 이미 ComponentName이므로 내부 파일명에 중복 불필요
+> **핵심:** 약속된 선택자(cssSelectors, datasetSelectors의 값)를 HTML에서 유지하면 디자인은 자유
 
 ### 컴포넌트 템플릿
 
@@ -1206,157 +1122,6 @@ ComponentName/
 > **권장:** `WScript DESTROY` 대신 `WScript BEFORE_DESTROY` 또는 `_onViewerDestroy()`에서 리소스 정리를 수행하세요.
 
 ---
-
-## 부록 B: 컴포넌트 로드 시점 초기화 패턴
-
-### 개요
-
-RNBT 아키텍처에서 컴포넌트는 수동적(passive)이고, 페이지가 오케스트레이터 역할을 합니다.
-그러나 일부 컴포넌트는 로드 시점에 자체적인 초기화 로직이 필요할 수 있습니다.
-
-이 섹션에서는 컴포넌트가 로드 시점에 무언가를 수행해야 할 때 사용할 수 있는 패턴들을 설명합니다.
-
-### 기본 원칙
-
-**컴포넌트 개발자가 사용하는 훅 (뷰어 전용):**
-- `_onViewerReady()` - 로드 시점 로직
-- `_onViewerDestroy()` - 정리 시점 로직
-
-```javascript
-class MyComponent extends WVDOMComponent {
-  constructor() {
-    super();
-  }
-
-  _onViewerReady() {
-    // 여기서 초기화 로직 수행 (super 호출 불필요)
-    // - element 접근 가능 (this.appendElement)
-    // - properties 접근 가능 (this.properties)
-  }
-
-  _onViewerDestroy() {
-    // 정리 로직 (super 호출 불필요)
-  }
-}
-```
-
-### 패턴 1: 컴포넌트가 직접 fetch
-
-컴포넌트가 자체적으로 데이터를 가져오는 경우:
-
-```javascript
-// datasetInfo 정의
-this.datasetInfo = [
-  { datasetName: 'myDataset', param: { id: this.id } }
-];
-
-_onViewerReady() {
-  // element가 준비된 시점이므로 fetch 실행
-  this.fetchAllData();
-}
-
-async fetchAllData() {
-  for (const { datasetName, param } of this.datasetInfo) {
-    try {
-      const data = await fetchData(this.page, datasetName, param);
-      this.renderData(data);
-    } catch (error) {
-      console.error(`[MyComponent] fetch error (${datasetName}):`, error);
-    }
-  }
-}
-```
-
-### 패턴 2: Weventbus emit으로 페이지 핸들러 트리거
-
-컴포넌트가 준비되었음을 페이지에 알리고, 페이지가 후속 작업을 수행하는 경우:
-
-**컴포넌트 소스:**
-```javascript
-_onViewerReady() {
-  // 컴포넌트 준비 완료를 페이지에 알림
-  Weventbus.emit('@componentReady', {
-    targetInstance: this,
-    event: { componentId: this.id }
-  });
-}
-```
-
-**페이지 (before_load.js):**
-```javascript
-this.pageEventBusHandlers = {
-  '@componentReady': async ({ event, targetInstance }) => {
-    // 컴포넌트의 datasetInfo를 사용하여 데이터 fetch
-    const { datasetInfo } = targetInstance;
-    if (datasetInfo?.length) {
-      for (const { datasetName, param } of datasetInfo) {
-        const data = await fetchData(this, datasetName, param);
-        targetInstance.setData(data);
-      }
-    }
-  }
-};
-
-onEventBusHandlers(this.pageEventBusHandlers);
-```
-
-### 패턴 선택 가이드
-
-| 시나리오 | 권장 패턴 | 이유 |
-|----------|----------|------|
-| 컴포넌트가 자체 API 엔드포인트를 가짐 | 패턴 1: 직접 fetch | 컴포넌트 독립성 |
-| 컴포넌트 초기화 시점을 페이지가 알아야 함 | 패턴 2: emit | 페이지가 오케스트레이션 |
-| 브라우저 이벤트를 기다려야 함 | 패턴 2: emit | 정확한 시점 제어 |
-
----
-
-## 부록 C: 컴포넌트 내부 이벤트 패턴
-
-> **상세 문서:** [EVENT_HANDLING.md](/RNBT_architecture/.legacy_ref/docs/EVENT_HANDLING.md) - 이벤트 처리 원칙, customEvents vs _internalHandlers 판단 기준
-
-### 핵심 개념
-
-"컴포넌트는 수동적이며, 자신의 콘텐츠를 가지고 있다"
-- "수동적" = 데이터 흐름과 비즈니스 로직 결정
-- "자신의 콘텐츠" = 컴포넌트가 자체 UI 상태를 관리할 수 있음
-
-### 내부 vs 외부 이벤트
-
-**판단 기준:** "이 동작의 결과를 페이지가 알아야 하는가?"
-
-| 답변 | 처리 방식 | 예시 |
-|------|----------|------|
-| No | `_internalHandlers` + `addEventListener` | 토글, 확장/축소 |
-| Yes | `customEvents` + `bindEvents()` | 행 선택, 필터 변경 |
-| 둘 다 | 둘 다 사용 | 클릭 → UI 변경 + 페이지 알림 |
-
-> **구현 예제:** [AssetList](/RNBT_architecture/.legacy_ref/Projects/ECO/page/components/AssetList/scripts/register.js)
-
----
-
-## 부록 D: Configuration 설계 원칙
-
-> **상세 문서:** [WHY_CONFIG.md](/RNBT_architecture/.legacy_ref/docs/WHY_CONFIG.md) - Config가 왜 필요한지, Data와 Config의 차이
-
-### Config의 본질
-
-Config는 **추상화된 구조에 다형성을 부여하기 위한 주입 옵션**이다.
-
-**핵심 질문:** "이 로직에서 미리 알 수 없는 부분은 무엇인가?" → 그 답이 config가 된다.
-
-- **목적:** 추상화된 로직에 다형성 부여
-- **대상:** 미리 알 수 없고 컨텍스트마다 달라지는 값
-- **주의:** 과도한 config는 복잡성 증가 → 기본값 제공
-
-> **구현 예제:** [PDU](/RNBT_architecture/.legacy_ref/Projects/ECO/page/components/PDU/scripts/register.js) - 정보 렌더링, 차트, 테이블 Config 모두 포함
-
----
-
-## 부록 E: PopupMixin 패턴
-
-3D 컴포넌트에 Shadow DOM 팝업, 차트, 테이블 기능을 Mixin으로 조합하여 팝업을 사용한 패턴.
-
-> **참조:** [Utils/PopupMixin.js](/RNBT_architecture/.legacy_ref/Utils/PopupMixin.js), [Projects/ECO/page/components/UPS/](/RNBT_architecture/.legacy_ref/Projects/ECO/page/components/UPS/)
 
 ---
 
