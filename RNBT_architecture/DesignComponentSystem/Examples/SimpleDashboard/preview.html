@@ -473,11 +473,12 @@ function applyFieldRenderMixin(instance, options) {
 }
 
 function applyListRenderMixin(instance, options) {
-    const { container, item, template, cssSelectors = {}, datasetSelectors = {}, dataFormat } = options;
+    const { cssSelectors = {}, datasetSelectors = {}, dataFormat } = options;
+    const container = cssSelectors.container;
+    const item = cssSelectors.item;
+    const template = cssSelectors.template;
     const ns = {};
     instance.listRender = ns;
-    ns.container = container;
-    ns.item = item;
     ns.cssSelectors = { ...cssSelectors };
     ns.datasetSelectors = { ...datasetSelectors };
 
@@ -489,15 +490,15 @@ function applyListRenderMixin(instance, options) {
         const templateEl = instance.appendElement.querySelector(template);
         if (!containerEl || !templateEl) return;
         containerEl.innerHTML = '';
-        formatted.items.forEach(item => {
+        formatted.items.forEach(itemData => {
             const clone = templateEl.content.cloneNode(true);
             Object.entries(datasetSelectors).forEach(([key, selector]) => {
                 const el = clone.querySelector(selector);
-                if (el && item[key] != null) el.dataset[key] = item[key];
+                if (el && itemData[key] != null) el.dataset[key] = itemData[key];
             });
             Object.entries(cssSelectors).forEach(([key, selector]) => {
                 const el = clone.querySelector(selector);
-                if (el && item[key] != null) el.textContent = item[key];
+                if (el && itemData[key] != null) el.textContent = itemData[key];
             });
             containerEl.appendChild(clone);
         });
@@ -510,7 +511,6 @@ function applyListRenderMixin(instance, options) {
 
     ns.destroy = function() {
         ns.renderData = null; ns.clear = null;
-        ns.container = null; ns.item = null;
         ns.cssSelectors = null; ns.datasetSelectors = null;
         instance.listRender = null;
     };
@@ -520,11 +520,13 @@ function applyListRenderMixin(instance, options) {
 // ── EventListMixin ──
 // ListRenderMixin + updateItemState (개별 항목 상태 변경)
 function applyEventListMixin(instance, options) {
-    const { container, item, itemKey, template, cssSelectors = {}, datasetSelectors = {}, dataFormat } = options;
+    const { cssSelectors = {}, datasetSelectors = {}, dataFormat } = options;
+    const container = cssSelectors.container;
+    const item = cssSelectors.item;
+    const itemKey = cssSelectors.itemKey;
+    const template = cssSelectors.template;
     const ns = {};
     instance.eventList = ns;
-    ns.container = container;
-    ns.item = item;
     ns.cssSelectors = { ...cssSelectors };
     ns.datasetSelectors = { ...datasetSelectors };
 
@@ -579,7 +581,6 @@ function applyEventListMixin(instance, options) {
 
     ns.destroy = function() {
         ns.renderData = null; ns.updateItemState = null; ns.getItemState = null; ns.clear = null;
-        ns.container = null; ns.item = null;
         ns.cssSelectors = null; ns.datasetSelectors = null;
         instance.eventList = null;
     };
@@ -660,14 +661,14 @@ function registerEventLog() {
     instances.eventLog = instance;
 
     applyListRenderMixin(instance, {
-        container: '.event-log__list',
-        item: '.event-log__item',
-        template: '#event-log-item-template',
         cssSelectors: {
-            level:    '.event-log__level',
-            time:     '.event-log__time',
-            message:  '.event-log__message',
-            clearBtn: '.event-log__clear-btn'
+            container: '.event-log__list',
+            item:      '.event-log__item',
+            template:  '#event-log-item-template',
+            level:     '.event-log__level',
+            time:      '.event-log__time',
+            message:   '.event-log__message',
+            clearBtn:  '.event-log__clear-btn'
         },
         datasetSelectors: {
             level: '[data-level]'
@@ -688,7 +689,7 @@ function registerEventLog() {
 
     instance.customEvents = {
         click: {
-            [instance.listRender.item]:               '@eventClicked',
+            [instance.listRender.cssSelectors.item]:               '@eventClicked',
             [instance.listRender.cssSelectors.clearBtn]: '@clearClicked'
         }
     };
@@ -700,16 +701,16 @@ function registerEventBrowser() {
     instances.eventBrowser = instance;
 
     applyEventListMixin(instance, {
-        container: '.event-browser__list',
-        item: '.event-browser__item',
-        itemKey: 'id',
-        template: '#event-browser-item-template',
         cssSelectors: {
-            severity: '.event-browser__severity-label',
-            time:     '.event-browser__time',
-            source:   '.event-browser__source',
-            message:  '.event-browser__message',
-            ackBtn:   '.event-browser__ack-btn'
+            container: '.event-browser__list',
+            item:      '.event-browser__item',
+            itemKey:   'id',
+            template:  '#event-browser-item-template',
+            severity:  '.event-browser__severity-label',
+            time:      '.event-browser__time',
+            source:    '.event-browser__source',
+            message:   '.event-browser__message',
+            ackBtn:    '.event-browser__ack-btn'
         },
         datasetSelectors: {
             severity: '[data-severity]',
@@ -737,7 +738,7 @@ function registerEventBrowser() {
     instance.customEvents = {
         click: {
             [instance.eventList.cssSelectors.ackBtn]: '@ackClicked',
-            [instance.eventList.item]:                '@eventSelected'
+            [instance.eventList.cssSelectors.item]:                '@eventSelected'
         }
     };
     Wkit.bindEvents(instance, instance.customEvents);
@@ -809,14 +810,14 @@ function boot() {
             console.log('[Page] Card clicked:', card?.dataset.metric);
         },
         '@eventClicked': ({ event, targetInstance }) => {
-            const item = event.target.closest(targetInstance.listRender.item);
+            const item = event.target.closest(targetInstance.listRender.cssSelectors.item);
             console.log('[Page] Event clicked:', item?.querySelector(targetInstance.listRender.cssSelectors.message)?.textContent);
         },
         '@clearClicked': ({ targetInstance }) => {
             targetInstance.listRender.clear();
         },
         '@ackClicked': async ({ event, targetInstance }) => {
-            const item = event.target.closest(targetInstance.eventList.item);
+            const item = event.target.closest(targetInstance.eventList.cssSelectors.item);
             const eventId = item?.dataset.id;
             if (!eventId) return;
             try {
@@ -833,7 +834,7 @@ function boot() {
         },
         '@eventSelected': ({ event, targetInstance }) => {
             if (event.target.closest(targetInstance.eventList.cssSelectors.ackBtn)) return;
-            const item = event.target.closest(targetInstance.eventList.item);
+            const item = event.target.closest(targetInstance.eventList.cssSelectors.item);
             console.log('[Page] Event selected:', item?.dataset.id);
         }
     });

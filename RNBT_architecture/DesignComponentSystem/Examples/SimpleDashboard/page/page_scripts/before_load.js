@@ -21,7 +21,7 @@ this.pageEventBusHandlers = {
 
     // EventLog에서 이벤트 항목 클릭
     '@eventClicked': ({ event, targetInstance }) => {
-        const item = event.target.closest(targetInstance.listRender.item);
+        const item = event.target.closest(targetInstance.listRender.cssSelectors.item);
         const message = item?.querySelector(targetInstance.listRender.cssSelectors.message)?.textContent;
         console.log('[Page] Event clicked:', message);
     },
@@ -35,7 +35,7 @@ this.pageEventBusHandlers = {
     // EventBrowser에서 Ack 버튼 클릭
     // → 페이지가 API 호출 → 성공 시 Mixin으로 DOM 상태 변경
     '@ackClicked': async ({ event, targetInstance }) => {
-        const item = event.target.closest(targetInstance.eventList.item);
+        const item = event.target.closest(targetInstance.eventList.cssSelectors.item);
         const eventId = item?.dataset.id;
         if (!eventId) return;
 
@@ -56,7 +56,7 @@ this.pageEventBusHandlers = {
 
     // EventBrowser에서 항목 클릭
     '@eventSelected': ({ event, targetInstance }) => {
-        const item = event.target.closest(targetInstance.eventList.item);
+        const item = event.target.closest(targetInstance.eventList.cssSelectors.item);
         if (event.target.closest(targetInstance.eventList.cssSelectors.ackBtn)) return;
         const eventId = item?.dataset.id;
         console.log('[Page] Event selected:', eventId);

@@ -13,14 +13,14 @@ const { each, go } = fx;
 // ======================
 
 applyListRenderMixin(this, {
-    container: '.event-log__list',
-    item:      '.event-log__item',
-    template:  '#event-log-item-template',
     cssSelectors: {
-        level:    '.event-log__level',
-        time:     '.event-log__time',
-        message:  '.event-log__message',
-        clearBtn: '.event-log__clear-btn'
+        container: '.event-log__list',
+        item:      '.event-log__item',
+        template:  '#event-log-item-template',
+        level:     '.event-log__level',
+        time:      '.event-log__time',
+        message:   '.event-log__message',
+        clearBtn:  '.event-log__clear-btn'
     },
     datasetSelectors: {
         level:   '[data-level]'
@@ -55,7 +55,7 @@ go(
 
 this.customEvents = {
     click: {
-        [this.listRender.item]:               '@eventClicked',
+        [this.listRender.cssSelectors.item]:     '@eventClicked',
         [this.listRender.cssSelectors.clearBtn]: '@clearClicked'
     }
 };

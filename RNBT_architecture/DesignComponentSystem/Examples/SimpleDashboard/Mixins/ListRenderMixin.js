@@ -24,12 +24,13 @@
  *     </template>
  *
  *   applyListRenderMixin(this, {
- *       container: '.event-log__list',
- *       template:  '#event-log-item-template',
  *       cssSelectors: {
- *           level:   '.event-log__level',
- *           time:    '.event-log__time',
- *           message: '.event-log__message'
+ *           container: '.event-log__list',
+ *           item:      '.event-log__item',
+ *           template:  '#event-log-item-template',
+ *           level:     '.event-log__level',
+ *           time:      '.event-log__time',
+ *           message:   '.event-log__message'
  *       },
  *       datasetSelectors: {
  *           level:   '[data-level]'
@@ -46,7 +47,7 @@
  * ─────────────────────────────────────────────────────────────
  * Mixin이 주입하는 것 (네임스페이스: this.listRender):
  *
- *   this.listRender.cssSelectors      — 항목 내 textContent용 선택자
+ *   this.listRender.cssSelectors      — 선택자 (container, item, template, 데이터/이벤트용)
  *   this.listRender.datasetSelectors  — 항목 내 dataset용 선택자
  *   this.listRender.renderData        — { response } → 리스트 렌더링
  *   this.listRender.clear             — 컨테이너 비우기
@@ -56,15 +57,18 @@
  */
 
 function applyListRenderMixin(instance, options) {
-    const { container, item, template, cssSelectors = {}, datasetSelectors = {}, dataFormat } = options;
+    const { cssSelectors = {}, datasetSelectors = {}, dataFormat } = options;
+
+    // 구조 선택자 추출
+    const container = cssSelectors.container;
+    const item = cssSelectors.item;
+    const template = cssSelectors.template;
 
     // 네임스페이스 생성
     const ns = {};
     instance.listRender = ns;
 
     // 선택자 보존 (외부에서 computed property로 참조 가능)
-    ns.container = container;
-    ns.item = item;
     ns.cssSelectors = { ...cssSelectors };
     ns.datasetSelectors = { ...datasetSelectors };
 
@@ -125,8 +129,6 @@ function applyListRenderMixin(instance, options) {
     ns.destroy = function() {
         ns.renderData = null;
         ns.clear = null;
-        ns.container = null;
-        ns.item = null;
         ns.cssSelectors = null;
         ns.datasetSelectors = null;
         instance.listRender = null;

@@ -13,16 +13,16 @@ const { each, go } = fx;
 // ======================
 
 applyEventListMixin(this, {
-    container: '.event-browser__list',
-    item:      '.event-browser__item',
-    itemKey:   'id',
-    template:  '#event-browser-item-template',
     cssSelectors: {
-        severity: '.event-browser__severity-label',
-        time:     '.event-browser__time',
-        source:   '.event-browser__source',
-        message:  '.event-browser__message',
-        ackBtn:   '.event-browser__ack-btn'
+        container: '.event-browser__list',
+        item:      '.event-browser__item',
+        itemKey:   'id',
+        template:  '#event-browser-item-template',
+        severity:  '.event-browser__severity-label',
+        time:      '.event-browser__time',
+        source:    '.event-browser__source',
+        message:   '.event-browser__message',
+        ackBtn:    '.event-browser__ack-btn'
     },
     datasetSelectors: {
         severity: '[data-severity]',
@@ -64,7 +64,7 @@ go(
 this.customEvents = {
     click: {
         [this.eventList.cssSelectors.ackBtn]: '@ackClicked',
-        [this.eventList.item]:                '@eventSelected'
+        [this.eventList.cssSelectors.item]:    '@eventSelected'
     }
 };
 bindEvents(this, this.customEvents);

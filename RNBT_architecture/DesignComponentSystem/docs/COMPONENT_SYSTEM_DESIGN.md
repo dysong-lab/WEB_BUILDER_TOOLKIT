@@ -180,13 +180,13 @@ bindEvents(this, this.customEvents);
 // ======================
 
 applyListRenderMixin(this, {
-    container: '.event-log__list',
-    item:      '.event-log__item',
-    template:  '#event-log-item-template',
     cssSelectors: {
-        level:   '.event-log__level',
-        time:    '.event-log__time',
-        message: '.event-log__message'
+        container: '.event-log__list',
+        item:      '.event-log__item',
+        template:  '#event-log-item-template',
+        level:     '.event-log__level',
+        time:      '.event-log__time',
+        message:   '.event-log__message'
     },
     datasetSelectors: {
         level:   '[data-level]'
@@ -216,7 +216,7 @@ this.subscriptions = {
 
 this.customEvents = {
     click: {
-        [this.listRender.item]: '@eventClicked'
+        [this.listRender.cssSelectors.item]: '@eventClicked'
     }
 };
 bindEvents(this, this.customEvents);
@@ -337,13 +337,16 @@ HTML의 `<template>` 태그를 cloneNode하여 항목을 생성한다. HTML 구�
 
 ```javascript
 function applyListRenderMixin(instance, options) {
-    const { container, item, template, cssSelectors = {}, datasetSelectors = {}, dataFormat } = options;
+    const { cssSelectors = {}, datasetSelectors = {}, dataFormat } = options;
+
+    // 구조 선택자 추출
+    const container = cssSelectors.container;
+    const item = cssSelectors.item;
+    const template = cssSelectors.template;
 
     const ns = {};
     instance.listRender = ns;
 
-    ns.container = container;
-    ns.item = item;          // customEvents에서 computed property로 참조
     ns.cssSelectors = { ...cssSelectors };
     ns.datasetSelectors = { ...datasetSelectors };
 
@@ -380,8 +383,6 @@ function applyListRenderMixin(instance, options) {
     ns.destroy = function() {
         ns.renderData = null;
         ns.clear = null;
-        ns.container = null;
-        ns.item = null;
         ns.cssSelectors = null;
         ns.datasetSelectors = null;
         instance.listRender = null;
@@ -396,7 +397,7 @@ function applyListRenderMixin(instance, options) {
 | cssSelectors | 요소별 textContent | 항목 내 textContent |
 | datasetSelectors | 요소별 dataset | 항목 내 dataset |
 | dataFormat | 데이터 매핑 | 데이터 매핑 (items 배열) |
-| 차이점 | — | container, item, template 추가 |
+| 차이점 | — | cssSelectors에 container, item, template 포함 |
 
 ### 네임스페이스 규칙
 
@@ -546,7 +547,7 @@ this.customEvents = {};
 // ListRenderMixin — item 선택자 참조
 this.customEvents = {
     click: {
-        [this.listRender.item]: '@eventClicked'
+        [this.listRender.cssSelectors.item]: '@eventClicked'
     }
 };
 bindEvents(this, this.customEvents);
@@ -629,7 +630,7 @@ customEvents는 Weventbus의 영역이며, Mixin 바깥에서 정의한다.
 ```javascript
 this.customEvents = {
     click: {
-        [this.listRender.item]: '@eventClicked'
+        [this.listRender.cssSelectors.item]: '@eventClicked'
     }
 };
 bindEvents(this, this.customEvents);

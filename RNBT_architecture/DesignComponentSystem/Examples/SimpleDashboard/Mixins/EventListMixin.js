@@ -12,14 +12,14 @@
  * 사용 예시:
  *
  *   applyEventListMixin(this, {
- *       container: '.event-list',
- *       item:      '.event-item',
- *       itemKey:   'id',
- *       template:  '#event-item-template',
  *       cssSelectors: {
- *           time:    '.event-time',
- *           message: '.event-message',
- *           source:  '.event-source'
+ *           container: '.event-list',
+ *           item:      '.event-item',
+ *           itemKey:   'id',
+ *           template:  '#event-item-template',
+ *           time:      '.event-time',
+ *           message:   '.event-message',
+ *           source:    '.event-source'
  *       },
  *       datasetSelectors: {
  *           severity: '[data-severity]',
@@ -40,9 +40,7 @@
  * ─────────────────────────────────────────────────────────────
  * Mixin이 주입하는 것 (네임스페이스: this.eventList):
  *
- *   this.eventList.container         — 컨테이너 선택자
- *   this.eventList.item              — 항목 선택자 (customEvents용)
- *   this.eventList.cssSelectors      — textContent용 선택자
+ *   this.eventList.cssSelectors      — 선택자 (container, item, template, 데이터/이벤트용)
  *   this.eventList.datasetSelectors  — dataset용 선택자
  *   this.eventList.renderData        — { response } → 목록 렌더링
  *   this.eventList.updateItemState   — (id, state) → 개별 항목 dataset 변경
@@ -54,15 +52,19 @@
  */
 
 function applyEventListMixin(instance, options) {
-    const { container, item, itemKey, template, cssSelectors = {}, datasetSelectors = {}, dataFormat } = options;
+    const { cssSelectors = {}, datasetSelectors = {}, dataFormat } = options;
+
+    // 구조 선택자 추출
+    const container = cssSelectors.container;
+    const item = cssSelectors.item;
+    const itemKey = cssSelectors.itemKey;
+    const template = cssSelectors.template;
 
     // 네임스페이스 생성
     const ns = {};
     instance.eventList = ns;
 
     // 선택자 보존
-    ns.container = container;
-    ns.item = item;
     ns.cssSelectors = { ...cssSelectors };
     ns.datasetSelectors = { ...datasetSelectors };
 
@@ -163,8 +165,6 @@ function applyEventListMixin(instance, options) {
         ns.updateItemState = null;
         ns.getItemState = null;
         ns.clear = null;
-        ns.container = null;
-        ns.item = null;
         ns.cssSelectors = null;
         ns.datasetSelectors = null;
         instance.eventList = null;
