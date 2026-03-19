@@ -44,8 +44,7 @@
 │   └── figma-to-inline-svg/SKILL.md
 ├── 2-component/
 │   ├── create-standard-component/SKILL.md
-│   ├── create-symbol-state-component/SKILL.md
-│   └── create-component-with-popup/SKILL.md
+│   └── create-symbol-state-component/SKILL.md
 ├── 3-page/
 │   └── create-project/SKILL.md
 ├── README.md

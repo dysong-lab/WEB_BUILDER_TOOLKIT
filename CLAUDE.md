@@ -48,7 +48,6 @@ This file provides guidance to Claude Code when working in this repository.
 | 조건 | SKILL |
 |------|-------|
 | 페이지에서 데이터를 받아 표시 (차트, 테이블, 로그 등) | `create-standard-component` |
-| 컴포넌트가 직접 fetch + 팝업으로 상세 표시 (장비 패널 등) | `create-component-with-popup` |
 | SVG 심볼의 색상/상태를 런타임에서 제어 | `create-symbol-state-component` |
 
 ### 페이지 생성 (3-page)

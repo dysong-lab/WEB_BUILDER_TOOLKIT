@@ -38,13 +38,6 @@ RNBT 컴포넌트 개발을 위한 Skills 사용 가이드입니다.
 │                               ▼                                      │
 │                      완전한 프로젝트 구조                             │
 │                      (Master/Page/컴포넌트/Mock서버)                  │
-│                                                                      │
-│  ┌─────────────────────────────────────────────────────────────┐    │
-│  │ 특수 경로                                                     │    │
-│  │                                                              │    │
-│  │  [create-component-with-popup]                               │    │
-│  │      → 팝업 컴포넌트 (컴포넌트가 직접 fetch, 3D 씬/위젯용)      │    │
-│  └─────────────────────────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -65,14 +58,6 @@ RNBT 컴포넌트 개발을 위한 Skills 사용 가이드입니다.
 |-------|------|------|------|
 | **create-standard-component** | Static HTML/CSS 또는 없음 | 표준 컴포넌트 | 페이지가 데이터 제어 (Figma 유무 분기) |
 | **create-symbol-state-component** | 인라인 SVG HTML | 상태 기반 심볼 | CSS 변수로 색상 제어 |
-
-### 팝업 컴포넌트 (특수 케이스)
-
-| Skill | 입력 | 출력 | 설명 |
-|-------|------|------|------|
-| **create-component-with-popup** | 없음 | 팝업 컴포넌트 | 컴포넌트가 직접 fetch + Shadow DOM 팝업 (3D 씬, 독립 위젯용) |
-
-> **설계 원칙**: 컴포넌트가 스스로 데이터를 fetch하는 것은 **팝업이 있을 때만** 허용됩니다.
 
 ### 프로젝트 생성
 
@@ -102,15 +87,6 @@ Figma 링크/node-id
     └─ create-standard-component (TBD 패턴으로 작성)
 ```
 
-### "팝업 컴포넌트가 필요하다" (3D 씬, 독립 위젯)
-
-```
-요구사항: 클릭 시 팝업으로 상세 정보 표시
-    │
-    └─ create-component-with-popup
-       (컴포넌트가 직접 fetch, Shadow DOM 팝업)
-```
-
 ### "전체 프로젝트를 새로 만든다"
 
 ```
@@ -131,8 +107,6 @@ figma-to-inline-svg
             └─→ create-project
 
 create-standard-component (Figma 없이) ─→ create-project
-
-create-component-with-popup ─→ create-project
 ```
 
 ---
@@ -153,4 +127,3 @@ create-component-with-popup ─→ create-project
 2. **정적/동적 분리**: Figma 단계에서는 스크립트 없이 순수 퍼블리싱만
 3. **Figma MCP 필요**: figma-to-* Skills는 Figma Desktop + MCP 서버 필요
 4. **CODING_STYLE 참조**: 모든 코드 작성 시 [/.claude/guides/CODING_STYLE.md](/.claude/guides/CODING_STYLE.md) 참조
-

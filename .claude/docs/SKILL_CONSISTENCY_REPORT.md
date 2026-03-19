@@ -310,7 +310,6 @@ Wkit.onEventBusHandlers(this);
 | figma-to-html | 대폭 축소 (280→72줄) | 워크플로우, MCP 도구, 추측금지, 에셋규칙, Playwright 등 |
 | figma-to-inline-svg | 중간 축소 | MCP 도구, CSS 원칙, 추측금지, Playwright 등 |
 | create-standard-component | 소폭 축소 | 이벤트 이중구조 테이블, 공통 금지사항 |
-| create-component-with-popup | 금지사항 1줄 삭제 | `{ response }` 필수 |
 | create-symbol-state-component | 금지사항 2줄 삭제 | 생성/정리 불일치, `{ response }` 필수 |
 | create-project | 소폭 축소 | 이벤트 처리 원칙 테이블, 공통 금지사항 |
 
