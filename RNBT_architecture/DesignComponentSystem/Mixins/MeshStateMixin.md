@@ -16,8 +16,9 @@
 
 | 옵션 | 필수 | 의미 |
 |------|------|------|
-| `container` | O | 메시를 찾을 3D 컨테이너 (THREE.Object3D). container.getObjectByName으로 탐색. |
 | `colorMap` | O | 상태값 → 색상(hex) 매핑 |
+
+3D 컴포넌트 자신의 메시 상태를 관리한다. `instance.appendElement`(THREE.Object3D)에서 `getObjectByName`으로 메시를 탐색한다.
 
 ### colorMap
 
@@ -49,8 +50,8 @@ colorMap: {
 ### register.js
 
 ```javascript
+// 3D 컴포넌트 자신의 메시 상태를 관리
 applyMeshStateMixin(this, {
-    container: otherInstance.appendElement,
     colorMap: {
         normal:   0x34d399,
         warning:  0xfbbf24,

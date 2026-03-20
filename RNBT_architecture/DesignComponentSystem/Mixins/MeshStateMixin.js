@@ -9,8 +9,8 @@
  * ─────────────────────────────────────────────────────────────
  * 사용 예시:
  *
+ *   // 3D 컴포넌트 자신의 메시 상태를 관리
  *   applyMeshStateMixin(this, {
- *       container: otherInstance.appendElement,
  *       colorMap: {
  *           normal:   0x34d399,
  *           warning:  0xfbbf24,
@@ -34,7 +34,7 @@
  */
 
 function applyMeshStateMixin(instance, options) {
-    const { container, colorMap = {} } = options;
+    const { colorMap = {} } = options;
 
     const ns = {};
     instance.meshState = ns;
@@ -64,9 +64,7 @@ function applyMeshStateMixin(instance, options) {
      * @param {string} status - 상태 키 (colorMap의 키)
      */
     ns.setMeshState = function(meshName, status) {
-        if (!container) return;
-
-        const mesh = container.getObjectByName(meshName);
+        const mesh = instance.appendElement.getObjectByName(meshName);
         if (!mesh) return;
 
         const color = colorMap[status];
