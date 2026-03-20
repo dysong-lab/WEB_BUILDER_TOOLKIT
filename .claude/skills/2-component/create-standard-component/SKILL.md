@@ -281,5 +281,5 @@ scripts/register.js    — 동일 (불변)
 | 예제 (SystemInfo) | [/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/page/components/SystemInfo/](/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/page/components/SystemInfo/) |
 | 예제 (StatusCards) | [/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/page/components/StatusCards/](/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/page/components/StatusCards/) |
 | 예제 (EventLog) | [/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/page/components/EventLog/](/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/page/components/EventLog/) |
-| FieldRenderMixin | [/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/Mixins/FieldRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/Mixins/FieldRenderMixin.md) |
-| ListRenderMixin | [/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/Mixins/ListRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/Mixins/ListRenderMixin.md) |
+| FieldRenderMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/FieldRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/FieldRenderMixin.md) |
+| ListRenderMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/ListRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/ListRenderMixin.md) |

@@ -361,5 +361,5 @@ scripts/
 |------|------|
 | 시스템 설계 문서 | [/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md) |
 | 예제 | [/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/](/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/) |
-| FieldRenderMixin | [/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/Mixins/FieldRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/Mixins/FieldRenderMixin.md) |
-| ListRenderMixin | [/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/Mixins/ListRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/Mixins/ListRenderMixin.md) |
+| FieldRenderMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/FieldRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/FieldRenderMixin.md) |
+| ListRenderMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/ListRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/ListRenderMixin.md) |

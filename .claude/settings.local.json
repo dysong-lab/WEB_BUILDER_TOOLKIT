@@ -51,7 +51,10 @@
       "Bash(md-to-pdf COMPONENT_RUNTIME_GUIDE.md --pdf-options '{\"\"format\"\":\"\"A4\"\",\"\"margin\"\":{\"\"top\"\":\"\"20mm\"\",\"\"bottom\"\":\"\"20mm\"\",\"\"left\"\":\"\"15mm\"\",\"\"right\"\":\"\"15mm\"\"}}')",
       "Bash(ls -lh /c/Users/junsungkim/Desktop/work/renobit/front_source/WEB_BUILDER_TOOLKIT/RNBT_architecture/docs/*.pdf)",
       "Bash(taskkill //F //IM \"chrome.exe\")",
-      "Bash(taskkill //F //IM \"chromium.exe\")"
+      "Bash(taskkill //F //IM \"chromium.exe\")",
+      "Bash(git -C /c/Users/junsungkim/Desktop/work/renobit/front_source/front diff --stat)",
+      "Read(//c/Users/junsungkim/Desktop/work/renobit/front_source/WEB_BUILDER_TOOLKIT/RNBT_architecture/Projects/ECO/**)",
+      "Read(//c/Users/junsungkim/Desktop/work/renobit/front_source/WEB_BUILDER_TOOLKIT/RNBT_architecture/Projects/ECO/page/components/ActionPanel//**)"
     ],
     "deny": [],
     "ask": []
