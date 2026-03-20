@@ -12,14 +12,23 @@
 
 ## 인터페이스
 
-### options
+### 적용 시점 옵션 (기본값)
 
 | 옵션 | 필수 | 의미 |
 |------|------|------|
-| `camera` | O | Three.js Camera 객체 |
-| `controls` | X | OrbitControls 등 카메라 컨트롤 |
-| `getMeshByName` | X | 메시 이름으로 객체를 찾는 함수 (focusOn 사용 시 필요) |
+| `camera` | X | Three.js Camera 객체 (기본값, 호출 시 override 가능) |
+| `controls` | X | OrbitControls 등 카메라 컨트롤 (기본값, 호출 시 override 가능) |
 | `duration` | X | 애니메이션 시간 (ms, 기본값 1000) |
+
+### 호출 시점 파라미터 (focusOn)
+
+| 파라미터 | 필수 | 의미 |
+|---------|------|------|
+| `container` | O | 메시를 찾을 3D 컨테이너 (THREE.Object3D) |
+| `meshName` | O | 포커스 대상 메시 이름 (container.getObjectByName으로 탐색) |
+| `offset` | X | 카메라 오프셋 { x, y, z } |
+| `camera` | X | 기본값 override |
+| `controls` | X | 기본값 override |
 
 ---
 
@@ -31,25 +40,20 @@
 applyCameraFocusMixin(this, {
     camera: this.camera,
     controls: this.controls,
-    getMeshByName: this.getMeshByName,
     duration: 1000
 });
 ```
 
-### 페이지에서 호출
+### 페이지 핸들러
 
 ```javascript
-// 메시 이름으로 포커스
-targetInstance.cameraFocus.focusOn('pump-01', { y: 5, z: 10 });
-
-// 좌표로 포커스
-targetInstance.cameraFocus.focusOnPosition(
-    { x: 0, y: 10, z: 20 },    // 카메라 위치
-    { x: 0, y: 0, z: 0 }       // 바라볼 위치
-);
-
-// 초기 위치로 복귀
-targetInstance.cameraFocus.reset();
+'@cameraFocusClicked': ({ event, targetInstance }) => {
+    const meshName = event.target.dataset.target;
+    targetInstance.cameraFocus.focusOn({
+        container: gltfInstance.appendElement,
+        meshName: meshName
+    });
+}
 ```
 
 ---
@@ -60,8 +64,7 @@ targetInstance.cameraFocus.reset();
 
 | 속성/메서드 | 역할 |
 |------------|------|
-| `focusOn(meshName, offset)` | 대상 메시로 카메라 이동. offset으로 카메라 위치 조정 |
-| `focusOnPosition(position, target)` | 지정 좌표로 카메라 이동 |
-| `reset()` | 초기 카메라 위치로 복귀 |
+| `focusOn({ container, meshName, offset, camera, controls })` | container에서 meshName을 찾아 카메라 이동 |
+| `focusOnPosition({ position, target, camera, controls })` | 지정 좌표로 카메라 이동 |
+| `reset({ camera, controls })` | 초기 카메라 위치로 복귀 |
 | `destroy()` | 애니메이션 정리 + 모든 속성/메서드 정리 |
-

@@ -16,12 +16,10 @@
 
 | 옵션 | 필수 | 의미 |
 |------|------|------|
-| `getMeshByName` | O | 메시 이름으로 Three.js 객체를 찾아 반환하는 함수 |
+| `container` | O | 메시를 찾을 3D 컨테이너 (THREE.Object3D). container.getObjectByName으로 탐색. |
 | `colorMap` | O | 상태값 → 색상(hex) 매핑 |
 
 ### colorMap
-
-상태값 → 색상(hex) 매핑. Mixin 적용 시 전달한다.
 
 ```javascript
 colorMap: {
@@ -52,7 +50,7 @@ colorMap: {
 
 ```javascript
 applyMeshStateMixin(this, {
-    getMeshByName: this.getMeshByName,
+    container: otherInstance.appendElement,
     colorMap: {
         normal:   0x34d399,
         warning:  0xfbbf24,
@@ -78,4 +76,3 @@ this.subscriptions = {
 | `setMeshState(meshName, status)` | 개별 메시의 상태(색상) 변경 |
 | `getMeshState(meshName)` | 개별 메시의 현재 상태 조회 |
 | `destroy()` | 상태 맵 정리 + 모든 속성/메서드 정리 |
-

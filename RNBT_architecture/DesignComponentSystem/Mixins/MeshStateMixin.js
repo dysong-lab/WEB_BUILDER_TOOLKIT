@@ -10,7 +10,7 @@
  * 사용 예시:
  *
  *   applyMeshStateMixin(this, {
- *       getMeshByName: this.getMeshByName,
+ *       container: otherInstance.appendElement,
  *       colorMap: {
  *           normal:   0x34d399,
  *           warning:  0xfbbf24,
@@ -34,7 +34,7 @@
  */
 
 function applyMeshStateMixin(instance, options) {
-    const { colorMap = {}, getMeshByName } = options;
+    const { container, colorMap = {} } = options;
 
     const ns = {};
     instance.meshState = ns;
@@ -64,7 +64,9 @@ function applyMeshStateMixin(instance, options) {
      * @param {string} status - 상태 키 (colorMap의 키)
      */
     ns.setMeshState = function(meshName, status) {
-        const mesh = getMeshByName ? getMeshByName(meshName) : null;
+        if (!container) return;
+
+        const mesh = container.getObjectByName(meshName);
         if (!mesh) return;
 
         const color = colorMap[status];

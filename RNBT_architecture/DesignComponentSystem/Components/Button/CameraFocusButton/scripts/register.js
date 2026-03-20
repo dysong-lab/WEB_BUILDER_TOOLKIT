@@ -13,7 +13,6 @@ const { bindEvents } = Wkit;
 applyCameraFocusMixin(this, {
     camera: this.camera,
     controls: this.controls,
-    getMeshByName: this.getMeshByName,
     duration: 1000
 });
 

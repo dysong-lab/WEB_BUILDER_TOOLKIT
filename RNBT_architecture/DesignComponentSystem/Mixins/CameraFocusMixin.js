@@ -12,8 +12,13 @@
  *   applyCameraFocusMixin(this, {
  *       camera: this.camera,
  *       controls: this.controls,
- *       getMeshByName: this.getMeshByName,
  *       duration: 1000
+ *   });
+ *
+ *   // focusOn 호출 시 container와 meshName을 지정
+ *   this.cameraFocus.focusOn({
+ *       container: gltfInstance.appendElement,
+ *       meshName: 'pump-01'
  *   });
  *
  * ─────────────────────────────────────────────────────────────
@@ -28,7 +33,11 @@
  */
 
 function applyCameraFocusMixin(instance, options) {
-    const { camera, controls, getMeshByName, duration = 1000 } = options;
+    const {
+        camera: defaultCamera,
+        controls: defaultControls,
+        duration = 1000
+    } = options;
 
     const ns = {};
     instance.cameraFocus = ns;
@@ -40,7 +49,7 @@ function applyCameraFocusMixin(instance, options) {
     /**
      * 초기 카메라 위치 저장
      */
-    function saveInitialState() {
+    function saveInitialState(camera, controls) {
         if (initialPosition) return;
         if (!camera) return;
 
@@ -51,14 +60,28 @@ function applyCameraFocusMixin(instance, options) {
     /**
      * 대상 메시로 카메라 이동
      *
-     * @param {string} meshName - 포커스 대상 메시 이름
-     * @param {Object} [offset] - 카메라 오프셋 { x, y, z }
+     * @param {Object} params
+     * @param {THREE.Object3D} params.container - 메시를 찾을 3D 컨테이너
+     * @param {string} params.meshName - 포커스 대상 메시 이름
+     * @param {Object} [params.offset] - 카메라 오프셋 { x, y, z }
+     * @param {THREE.Camera} [params.camera] - 카메라 (기본값 override)
+     * @param {Object} [params.controls] - 컨트롤 (기본값 override)
      */
-    ns.focusOn = function(meshName, offset) {
-        const mesh = getMeshByName ? getMeshByName(meshName) : null;
+    ns.focusOn = function(params) {
+        const {
+            container,
+            meshName,
+            offset,
+            camera = defaultCamera,
+            controls = defaultControls
+        } = params;
+
+        if (!container) return;
+
+        const mesh = container.getObjectByName(meshName);
         if (!mesh) return;
 
-        saveInitialState();
+        saveInitialState(camera, controls);
 
         const targetPos = mesh.position.clone();
         const cameraPos = targetPos.clone();
@@ -72,32 +95,50 @@ function applyCameraFocusMixin(instance, options) {
             cameraPos.z += 10;
         }
 
-        animateCamera(cameraPos, targetPos);
+        animateCamera(camera, controls, cameraPos, targetPos);
     };
 
     /**
      * 좌표로 카메라 이동
      *
-     * @param {{ x, y, z }} position - 카메라 위치
-     * @param {{ x, y, z }} target - 카메라가 바라볼 위치
+     * @param {Object} params
+     * @param {{ x, y, z }} params.position - 카메라 위치
+     * @param {{ x, y, z }} params.target - 카메라가 바라볼 위치
+     * @param {THREE.Camera} [params.camera] - 카메라 (기본값 override)
+     * @param {Object} [params.controls] - 컨트롤 (기본값 override)
      */
-    ns.focusOnPosition = function(position, target) {
-        saveInitialState();
-        animateCamera(position, target);
+    ns.focusOnPosition = function(params) {
+        const {
+            position,
+            target,
+            camera = defaultCamera,
+            controls = defaultControls
+        } = params;
+
+        saveInitialState(camera, controls);
+        animateCamera(camera, controls, position, target);
     };
 
     /**
      * 초기 위치로 복귀
+     *
+     * @param {Object} [params]
+     * @param {THREE.Camera} [params.camera] - 카메라 (기본값 override)
+     * @param {Object} [params.controls] - 컨트롤 (기본값 override)
      */
-    ns.reset = function() {
+    ns.reset = function(params) {
         if (!initialPosition) return;
-        animateCamera(initialPosition, initialTarget);
+
+        const camera = (params && params.camera) || defaultCamera;
+        const controls = (params && params.controls) || defaultControls;
+
+        animateCamera(camera, controls, initialPosition, initialTarget);
     };
 
     /**
      * 카메라 애니메이션 (내부)
      */
-    function animateCamera(targetCameraPos, targetLookAt) {
+    function animateCamera(camera, controls, targetCameraPos, targetLookAt) {
         if (animationId) cancelAnimationFrame(animationId);
         if (!camera) return;
 
