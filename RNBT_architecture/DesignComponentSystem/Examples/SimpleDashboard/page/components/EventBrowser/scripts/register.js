@@ -31,28 +31,11 @@ applyEventListMixin(this, {
 });
 
 // ======================
-// 2. 데이터 변환 + 구독 연결
+// 2. 구독 연결
 // ======================
 
-this.dataFormats = {
-    eventBrowser: (data) => data.events.map(event => ({
-        itemKey:  String(event.id),
-        severity: event.severity,
-        time:     new Date(event.timestamp).toLocaleTimeString('ko-KR', {
-            hour: '2-digit', minute: '2-digit', second: '2-digit'
-        }),
-        source:   event.source,
-        message:  event.message,
-        ack:      String(event.acknowledged)
-    }))
-};
-
 this.subscriptions = {
-    eventBrowser: [({ response }) => {
-        this.eventList.renderData({
-            response: { data: this.dataFormats.eventBrowser(response.data) }
-        });
-    }]
+    eventBrowser: [this.eventList.renderData]
 };
 
 go(

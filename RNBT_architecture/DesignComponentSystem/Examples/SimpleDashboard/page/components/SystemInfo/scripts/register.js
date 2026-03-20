@@ -25,25 +25,11 @@ applyFieldRenderMixin(this, {
 });
 
 // ======================
-// 2. 데이터 변환 + 구독 연결
+// 2. 구독 연결
 // ======================
 
-this.dataFormats = {
-    systemInfo: (data) => ({
-        name:        data.hostname,
-        status:      data.status,
-        statusLabel: data.statusLabel,
-        version:     data.version,
-        uptime:      data.uptime
-    })
-};
-
 this.subscriptions = {
-    systemInfo: [({ response }) => {
-        this.fieldRender.renderData({
-            response: { data: this.dataFormats.systemInfo(response.data) }
-        });
-    }]
+    systemInfo: [this.fieldRender.renderData]
 };
 
 go(
