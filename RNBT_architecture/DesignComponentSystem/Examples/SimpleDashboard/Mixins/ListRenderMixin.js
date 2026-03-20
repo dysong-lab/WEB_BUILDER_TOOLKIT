@@ -33,7 +33,7 @@
  *           message:   '.event-log__message'
  *       },
  *       datasetSelectors: {
- *           level:   '[data-level]'
+ *           level:   'level'
  *       },
  *       dataFormat: (data) => ({
  *           items: data.events.map(e => ({
@@ -84,30 +84,30 @@ function applyListRenderMixin(instance, options) {
         const formatted = dataFormat ? dataFormat(data) : { items: data };
 
         const containerEl = instance.appendElement.querySelector(container);
-        if (!containerEl) return;
+        if (!containerEl) throw new Error('[ListRenderMixin] container not found: ' + container);
 
         const templateEl = instance.appendElement.querySelector(template);
-        if (!templateEl) return;
+        if (!templateEl) throw new Error('[ListRenderMixin] template not found: ' + template);
 
         // 컨테이너 비우고 항목 생성
         containerEl.innerHTML = '';
 
-        formatted.items.forEach(item => {
+        formatted.items.forEach(itemData => {
             const clone = templateEl.content.cloneNode(true);
 
             // datasetSelectors 반영
-            Object.entries(datasetSelectors).forEach(([key, selector]) => {
-                const el = clone.querySelector(selector);
-                if (el && item[key] !== undefined && item[key] !== null) {
-                    el.dataset[key] = item[key];
+            Object.entries(datasetSelectors).forEach(([key, attr]) => {
+                const el = clone.querySelector('[data-' + attr + ']');
+                if (el && itemData[key] !== undefined && itemData[key] !== null) {
+                    el.dataset[attr] = itemData[key];
                 }
             });
 
             // cssSelectors 반영
             Object.entries(cssSelectors).forEach(([key, selector]) => {
                 const el = clone.querySelector(selector);
-                if (el && item[key] !== undefined && item[key] !== null) {
-                    el.textContent = item[key];
+                if (el && itemData[key] !== undefined && itemData[key] !== null) {
+                    el.textContent = itemData[key];
                 }
             });
 

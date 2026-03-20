@@ -20,7 +20,7 @@ applyFieldRenderMixin(this, {
         uptime:      '.system-info__uptime'
     },
     datasetSelectors: {
-        status:      '[data-status]'
+        status:      'status'
     },
     dataFormat: (data) => ({
         name:        data.hostname,

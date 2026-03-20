@@ -23,7 +23,7 @@ applyListRenderMixin(this, {
         clearBtn:  '.event-log__clear-btn'
     },
     datasetSelectors: {
-        level:   '[data-level]'
+        level:   'level'
     },
     dataFormat: (data) => ({
         items: data.events.map(event => ({

@@ -22,7 +22,7 @@
  *           version:     '.system-version'
  *       },
  *       datasetSelectors: {
- *           status:      '[data-status]'
+ *           status:      'status'
  *       },
  *       dataFormat: (data) => ({
  *           name:        data.hostname,
@@ -71,8 +71,9 @@ function applyFieldRenderMixin(instance, options) {
 
             // datasetSelectors에 키가 있으면 → dataset 반영
             if (datasetSelectors[key]) {
-                const dataEl = instance.appendElement.querySelector(datasetSelectors[key]);
-                if (dataEl) dataEl.dataset[key] = value;
+                const attr = datasetSelectors[key];
+                const dataEl = instance.appendElement.querySelector('[data-' + attr + ']');
+                if (dataEl) dataEl.dataset[attr] = value;
             }
 
             // cssSelectors에 키가 있으면 → textContent 반영

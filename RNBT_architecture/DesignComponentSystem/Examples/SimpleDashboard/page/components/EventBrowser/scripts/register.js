@@ -16,7 +16,6 @@ applyEventListMixin(this, {
     cssSelectors: {
         container: '.event-browser__list',
         item:      '.event-browser__item',
-        itemKey:   'id',
         template:  '#event-browser-item-template',
         severity:  '.event-browser__severity-label',
         time:      '.event-browser__time',
@@ -25,12 +24,13 @@ applyEventListMixin(this, {
         ackBtn:    '.event-browser__ack-btn'
     },
     datasetSelectors: {
-        severity: '[data-severity]',
-        ack:      '[data-ack]'
+        itemKey:  'id',
+        severity: 'severity',
+        ack:      'ack'
     },
     dataFormat: (data) => ({
         items: data.events.map(event => ({
-            id:       String(event.id),
+            itemKey:  String(event.id),
             severity: event.severity,
             time:     new Date(event.timestamp).toLocaleTimeString('ko-KR', {
                 hour: '2-digit', minute: '2-digit', second: '2-digit'

@@ -56,29 +56,29 @@ HTML에서 확인하는 것:
 
 ```javascript
 applyEventListMixin(this, {
-    container: '.event-browser__list',
-    item:      '.event-browser__item',
-    itemKey:   'id',
-    template:  '#event-browser-item-template',
     cssSelectors: {
-        severity: '.event-browser__severity-label',
-        time:     '.event-browser__time',
-        source:   '.event-browser__source',
-        message:  '.event-browser__message',
-        ackBtn:   '.event-browser__ack-btn'     // 이벤트 바인딩 전용
+        container: '.event-browser__list',
+        item:      '.event-browser__item',
+        template:  '#event-browser-item-template',
+        severity:  '.event-browser__severity-label',
+        time:      '.event-browser__time',
+        source:    '.event-browser__source',
+        message:   '.event-browser__message',
+        ackBtn:    '.event-browser__ack-btn'     // 이벤트 바인딩 전용
     },
     datasetSelectors: {
-        severity: '[data-severity]',
-        ack:      '[data-ack]'
+        itemKey:  'id',                          // Mixin 정의 KEY: 항목 식별 속성
+        severity: 'severity',
+        ack:      'ack'
     },
     dataFormat: (data) => ({
         items: data.events.map(event => ({
-            id:       String(event.id),        // → itemKey로 항목 식별
-            severity: event.severity,          // → cssSelectors + datasetSelectors 양쪽
-            time:     event.formattedTime,     // → cssSelectors.time
-            source:   event.source,            // → cssSelectors.source
-            message:  event.message,           // → cssSelectors.message
-            ack:      String(event.acknowledged) // → datasetSelectors.ack
+            itemKey:  String(event.id),          // → datasetSelectors['itemKey'] → data-id
+            severity: event.severity,            // → cssSelectors + datasetSelectors 양쪽
+            time:     event.formattedTime,       // → cssSelectors['time']
+            source:   event.source,              // → cssSelectors['source']
+            message:  event.message,             // → cssSelectors['message']
+            ack:      String(event.acknowledged) // → datasetSelectors['ack']
             // ackBtn 키 없음 → 건너뜀 (이벤트 전용)
         }))
     })
@@ -182,24 +182,24 @@ CSS가 시각 전환: [data-ack="true"] { opacity: 0.5; }
 
 ```javascript
 applyEventListMixin(instance, {
-    container,          // String — 컨테이너 CSS 선택자
-    item,               // String — 각 항목의 CSS 선택자
-    itemKey,            // String — 항목 식별 data 속성 키 (예: 'id' → data-id)
-    template,           // String — <template> 태그의 CSS 선택자
-    cssSelectors,       // Object — { key: 'CSS 선택자' }
-    datasetSelectors,   // Object — { key: '[data-*] 선택자' } (선택적)
-    dataFormat          // Function — (data) => ({ items: [...] }) (선택적)
+    cssSelectors,       // Object — { KEY: 'CSS 선택자' }
+                        //   Mixin 정의 KEY: container, item, template
+                        //   데이터 필드 KEY: 자유 정의
+    datasetSelectors,   // Object — { KEY: 'data-* 속성명' }
+                        //   Mixin 정의 KEY: itemKey (항목 식별 속성)
+                        //   데이터 필드 KEY: 자유 정의
+    dataFormat          // Function — (data) => ({ items: [...] })
 });
 ```
 
 | 옵션 | 필수 | 설명 |
 |------|------|------|
-| container | O | 항목이 추가될 부모 요소 선택자 |
-| item | O | 각 항목의 선택자 |
-| itemKey | O | 항목 식별 data 속성 키. updateItemState에서 사용 |
-| template | O | `<template>` 태그 선택자 |
-| cssSelectors | O | HTML 요소를 CSS 선택자로 찾아 참조 |
-| datasetSelectors | X | HTML 요소를 data 속성 선택자로 찾아 참조 |
+| cssSelectors | O | KEY: Mixin 인터페이스 이름, VALUE: CSS 선택자 |
+| cssSelectors.container | O | 항목이 추가될 부모 요소 선택자 |
+| cssSelectors.item | O | 각 항목의 선택자 |
+| cssSelectors.template | O | `<template>` 태그 선택자 |
+| datasetSelectors | O | KEY: Mixin 인터페이스 이름, VALUE: data-* 속성명 |
+| datasetSelectors.itemKey | O | 항목 식별 data 속성명. updateItemState에서 사용 |
 | dataFormat | X | `{ items: [...] }` 형태를 반환해야 함 |
 
 ---

@@ -15,19 +15,19 @@
  *       cssSelectors: {
  *           container: '.event-list',
  *           item:      '.event-item',
- *           itemKey:   'id',
  *           template:  '#event-item-template',
  *           time:      '.event-time',
  *           message:   '.event-message',
  *           source:    '.event-source'
  *       },
  *       datasetSelectors: {
- *           severity: '[data-severity]',
- *           ack:      '[data-ack]'
+ *           itemKey:  'id',
+ *           severity: 'severity',
+ *           ack:      'ack'
  *       },
  *       dataFormat: (data) => ({
  *           items: data.events.map(e => ({
- *               id:       e.id,
+ *               itemKey:  e.id,
  *               time:     e.formattedTime,
  *               message:  e.message,
  *               source:   e.source,
@@ -57,8 +57,10 @@ function applyEventListMixin(instance, options) {
     // 구조 선택자 추출
     const container = cssSelectors.container;
     const item = cssSelectors.item;
-    const itemKey = cssSelectors.itemKey;
     const template = cssSelectors.template;
+
+    // 항목 식별 속성 추출 (Mixin 정의 KEY)
+    const itemKeyAttr = datasetSelectors.itemKey;
 
     // 네임스페이스 생성
     const ns = {};
@@ -80,25 +82,21 @@ function applyEventListMixin(instance, options) {
         const formatted = dataFormat ? dataFormat(data) : { items: data };
 
         const containerEl = instance.appendElement.querySelector(container);
+        if (!containerEl) throw new Error('[EventListMixin] container not found: ' + container);
+
         const templateEl = instance.appendElement.querySelector(template);
-        if (!containerEl || !templateEl) return;
+        if (!templateEl) throw new Error('[EventListMixin] template not found: ' + template);
 
         containerEl.innerHTML = '';
 
         formatted.items.forEach(function(itemData) {
             const clone = templateEl.content.cloneNode(true);
-            const rootEl = clone.querySelector(item);
-
-            // itemKey를 data 속성으로 설정 (항목 식별용)
-            if (rootEl && itemKey && itemData[itemKey] != null) {
-                rootEl.dataset[itemKey] = itemData[itemKey];
-            }
 
             // datasetSelectors 반영
-            Object.entries(datasetSelectors).forEach(function([key, selector]) {
-                const el = clone.querySelector(selector);
+            Object.entries(datasetSelectors).forEach(function([key, attr]) {
+                const el = clone.querySelector('[data-' + attr + ']');
                 if (el && itemData[key] != null) {
-                    el.dataset[key] = itemData[key];
+                    el.dataset[attr] = itemData[key];
                 }
             });
 
@@ -125,7 +123,7 @@ function applyEventListMixin(instance, options) {
      */
     ns.updateItemState = function(id, state) {
         const el = instance.appendElement.querySelector(
-            item + '[data-' + itemKey + '="' + id + '"]'
+            item + '[data-' + itemKeyAttr + '="' + id + '"]'
         );
         if (!el) return;
 
@@ -142,7 +140,7 @@ function applyEventListMixin(instance, options) {
      */
     ns.getItemState = function(id) {
         const el = instance.appendElement.querySelector(
-            item + '[data-' + itemKey + '="' + id + '"]'
+            item + '[data-' + itemKeyAttr + '="' + id + '"]'
         );
         if (!el) return null;
 
