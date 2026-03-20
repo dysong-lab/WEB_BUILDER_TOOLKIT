@@ -29,13 +29,19 @@ const GlobalDataPublisher = (() => {
 
       const subs = subscriberTable.get(topic) || new Set();
 
-      try {
-        const data = await Wkit.fetchData(page, datasetInfo.datasetName, param);
+      const data = await Wkit.fetchData(page, datasetInfo.datasetName, param);
 
-        fx.each(({ instance, handler }) => handler.call(instance, data), subs);
-      } catch (error) {
-        console.error(`[GlobalDataPublisher] ${topic} fetch 실패:`, error);
-        throw error;
+      const errors = [];
+      fx.each(({ instance, handler }) => {
+        try {
+          handler.call(instance, data);
+        } catch (e) {
+          errors.push(e);
+        }
+      }, subs);
+
+      if (errors.length) {
+        throw new AggregateError(errors, `[GlobalDataPublisher] ${topic} handler 실패`);
       }
     },
 
