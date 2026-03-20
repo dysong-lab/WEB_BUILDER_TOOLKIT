@@ -344,9 +344,13 @@ function applyListRenderMixin(instance, options) {
         const { data } = response;
         if (!data) throw new Error('[ListRenderMixin] data is null');
 
+        if (!Array.isArray(data)) throw new Error('[ListRenderMixin] data is not an array');
+
         const containerEl = instance.appendElement.querySelector(container);
+        if (!containerEl) throw new Error('[ListRenderMixin] container not found: ' + container);
+
         const templateEl = instance.appendElement.querySelector(template);
-        if (!containerEl || !templateEl) return;
+        if (!templateEl) throw new Error('[ListRenderMixin] template not found: ' + template);
 
         containerEl.innerHTML = '';
         data.forEach(itemData => {
@@ -486,11 +490,8 @@ Mixin은 자기 상태만 관리한다. 리셋이 필요하면 Mixin이 reset �
 
 ```
 cssSelectors     — KEY: Mixin 인터페이스, VALUE: CSS 선택자
-                   데이터 바인딩용과 이벤트 바인딩용 모두 포함 가능
 
 datasetSelectors — KEY: Mixin 인터페이스, VALUE: data-* 속성명
-                   마크업 시점에 data-* 속성이 선언된 요소가 대상
-                   Mixin이 내부적으로 [data-속성명] 선택자를 조립한다
 ```
 
 datasetSelectors의 대상은 마크업 시점에 `data-*` 속성으로 이미 선언되어 있다.

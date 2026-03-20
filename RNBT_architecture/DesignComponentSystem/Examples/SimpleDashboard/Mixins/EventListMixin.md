@@ -11,48 +11,92 @@ ListRenderMixin:  데이터 → DOM 렌더링 (표시만)
 EventListMixin:   데이터 → DOM 렌더링 + 개별 항목 상태 변경
 ```
 
-> **Mixin 공통 사용법**: [COMPONENT_SYSTEM_DESIGN.md](../../docs/COMPONENT_SYSTEM_DESIGN.md)의 "Mixin > 공통 사용법" 참조
+> **설계 원칙**: [COMPONENT_SYSTEM_DESIGN.md](../../docs/COMPONENT_SYSTEM_DESIGN.md) 참조
+> **구독/이벤트/정리 패턴**: 설계 문서의 "라이프사이클" 참조
 
 ---
 
-## 사용법
+## 인터페이스
 
-### 1단계: HTML을 본다
+### cssSelectors
+
+CSS 선택자로 HTML 요소를 참조한다.
+
+| KEY | 필수 | 의미 |
+|-----|------|------|
+| `container` | O | 항목이 추가될 부모 요소 |
+| `item` | O | 각 항목의 루트 요소 (customEvents에서 참조) |
+| `template` | O | `<template>` 태그 (cloneNode 대상) |
+
+```javascript
+cssSelectors: {
+    container: '.event-browser__list',           // 항목이 추가될 부모
+    item:      '.event-browser__item',           // 각 항목의 루트
+    template:  '#event-browser-item-template',   // cloneNode 대상
+    severity:  '.event-browser__severity-label', // 심각도 라벨
+    time:      '.event-browser__time',           // 발생 시간
+    source:    '.event-browser__source',         // 이벤트 출처
+    message:   '.event-browser__message',        // 이벤트 메시지
+    ackBtn:    '.event-browser__ack-btn'         // 이벤트 매핑 전용
+}
+```
+
+### datasetSelectors
+
+data-* 속성으로 HTML 요소를 참조한다.
+
+| KEY | 필수 | 의미 |
+|-----|------|------|
+| `itemKey` | O | 항목을 식별하는 data-* 속성명. updateItemState에서 이 속성으로 항목을 찾는다. |
+
+```javascript
+datasetSelectors: {
+    itemKey:  'id',          // HTML의 data-id로 항목 식별
+    severity: 'severity',    // CSS가 [data-severity]로 스타일링
+    ack:      'ack'          // CSS가 [data-ack]로 스타일링
+}
+```
+
+### renderData가 기대하는 데이터
+
+배열. 각 항목의 KEY가 cssSelectors/datasetSelectors의 KEY와 일치해야 한다.
+
+```javascript
+[
+    {
+        itemKey:  '1',           // → datasetSelectors['itemKey'] → data-id="1"
+        severity: 'warning',     // → cssSelectors['severity'] + datasetSelectors['severity']
+        time:     '14:30:05',    // → cssSelectors['time']
+        source:   'sensor-01',   // → cssSelectors['source']
+        message:  'Temp high',   // → cssSelectors['message']
+        ack:      'false'        // → datasetSelectors['ack'] → data-ack="false"
+    }
+]
+```
+
+---
+
+## 사용 예시
+
+### HTML
 
 ```html
 <div class="event-browser">
-    <div class="event-browser__header">
-        <span class="event-browser__title">Event Browser</span>
-    </div>
     <div class="event-browser__list"></div>
 
     <template id="event-browser-item-template">
         <div class="event-browser__item" data-id="" data-severity="" data-ack="false">
-            <div class="event-browser__severity-bar"></div>
-            <div class="event-browser__content">
-                <div class="event-browser__top-row">
-                    <span class="event-browser__severity-label"></span>
-                    <span class="event-browser__time"></span>
-                    <span class="event-browser__source"></span>
-                </div>
-                <div class="event-browser__message"></div>
-            </div>
+            <span class="event-browser__severity-label"></span>
+            <span class="event-browser__time"></span>
+            <span class="event-browser__source"></span>
+            <div class="event-browser__message"></div>
             <button class="event-browser__ack-btn">ACK</button>
         </div>
     </template>
 </div>
 ```
 
-HTML에서 확인하는 것:
-- 컨테이너 → `.event-browser__list`
-- template → `#event-browser-item-template`
-- 항목 루트 → `.event-browser__item`
-- 항목 식별용 data 속성 → `data-id` → `itemKey: 'id'`
-- 텍스트 요소 → `.event-browser__severity-label`, `.event-browser__time`, `.event-browser__source`, `.event-browser__message`
-- data 속성 요소 → `data-severity`, `data-ack`
-- 이벤트 바인딩용 요소 → `.event-browser__ack-btn`
-
-### 2단계: Mixin을 적용한다 (register.js)
+### register.js
 
 ```javascript
 applyEventListMixin(this, {
@@ -64,71 +108,18 @@ applyEventListMixin(this, {
         time:      '.event-browser__time',
         source:    '.event-browser__source',
         message:   '.event-browser__message',
-        ackBtn:    '.event-browser__ack-btn'     // 이벤트 바인딩 전용
+        ackBtn:    '.event-browser__ack-btn'
     },
     datasetSelectors: {
-        itemKey:  'id',                          // Mixin 정의 KEY: 항목 식별 속성
+        itemKey:  'id',
         severity: 'severity',
         ack:      'ack'
-    },
-    dataFormat: (data) => ({
-        items: data.events.map(event => ({
-            itemKey:  String(event.id),          // → datasetSelectors['itemKey'] → data-id
-            severity: event.severity,            // → cssSelectors + datasetSelectors 양쪽
-            time:     event.formattedTime,       // → cssSelectors['time']
-            source:   event.source,              // → cssSelectors['source']
-            message:  event.message,             // → cssSelectors['message']
-            ack:      String(event.acknowledged) // → datasetSelectors['ack']
-            // ackBtn 키 없음 → 건너뜀 (이벤트 전용)
-        }))
-    })
+    }
 });
-```
 
-**ListRenderMixin과의 차이:**
-- `itemKey` 옵션이 추가됨 — 항목을 식별하는 data 속성 키
-- `updateItemState`, `getItemState` 메서드가 추가됨
-
-### 3단계: 구독을 연결한다
-
-```javascript
 this.subscriptions = {
     eventBrowser: [this.eventList.renderData]
 };
-
-go(
-    Object.entries(this.subscriptions),
-    each(([topic, handlers]) =>
-        each(handler => subscribe(topic, this, handler), handlers)
-    )
-);
-```
-
-### 4단계: 이벤트를 매핑한다
-
-```javascript
-this.customEvents = {
-    click: {
-        [this.eventList.cssSelectors.ackBtn]: '@ackClicked',
-        [this.eventList.item]:                '@eventSelected'
-    }
-};
-bindEvents(this, this.customEvents);
-```
-
-### 5단계: 정리한다 (beforeDestroy.js)
-
-```javascript
-removeCustomEvents(this, this.customEvents);
-this.customEvents = null;
-
-go(
-    Object.entries(this.subscriptions),
-    each(([topic, _]) => unsubscribe(topic, this))
-);
-this.subscriptions = null;
-
-this.eventList.destroy();
 ```
 
 ---
@@ -153,113 +144,21 @@ Mixin이 해당 항목의 dataset 변경 (DOM만)
 CSS가 시각 전환: [data-ack="true"] { opacity: 0.5; }
 ```
 
-### 페이지 핸들러 예시 (before_load.js)
-
-```javascript
-'@ackClicked': async ({ event, targetInstance }) => {
-    const item = event.target.closest(targetInstance.eventList.item);
-    const eventId = item?.dataset.id;
-    if (!eventId) return;
-
-    try {
-        await fetch('/api/event-browser/ack', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ eventId })
-        });
-
-        // API 성공 → Mixin으로 DOM 상태 변경
-        targetInstance.eventList.updateItemState(eventId, { ack: 'true' });
-    } catch (err) {
-        console.error('[Page] Ack failed:', err);
-    }
-}
-```
-
 ---
 
-## 옵션
+## 주입되는 네임스페이스
 
-```javascript
-applyEventListMixin(instance, {
-    cssSelectors,       // Object — { KEY: 'CSS 선택자' }
-                        //   Mixin 정의 KEY: container, item, template
-                        //   데이터 필드 KEY: 자유 정의
-    datasetSelectors,   // Object — { KEY: 'data-* 속성명' }
-                        //   Mixin 정의 KEY: itemKey (항목 식별 속성)
-                        //   데이터 필드 KEY: 자유 정의
-    dataFormat          // Function — (data) => ({ items: [...] })
-});
-```
+`this.eventList`
 
-| 옵션 | 필수 | 설명 |
-|------|------|------|
-| cssSelectors | O | KEY: Mixin 인터페이스 이름, VALUE: CSS 선택자 |
-| cssSelectors.container | O | 항목이 추가될 부모 요소 선택자 |
-| cssSelectors.item | O | 각 항목의 선택자 |
-| cssSelectors.template | O | `<template>` 태그 선택자 |
-| datasetSelectors | O | KEY: Mixin 인터페이스 이름, VALUE: data-* 속성명 |
-| datasetSelectors.itemKey | O | 항목 식별 data 속성명. updateItemState에서 사용 |
-| dataFormat | X | `{ items: [...] }` 형태를 반환해야 함 |
-
----
-
-## 주입되는 인터페이스
-
-네임스페이스: `this.eventList`
-
-### 속성
-
-| 속성 | 역할 |
-|------|------|
-| `container` | 컨테이너 선택자 |
-| `item` | 항목 선택자 (customEvents에서 computed property로 참조) |
-| `cssSelectors` | 주입된 cssSelectors |
+| 속성/메서드 | 역할 |
+|------------|------|
+| `cssSelectors` | 주입된 cssSelectors (customEvents에서 computed property로 참조) |
 | `datasetSelectors` | 주입된 datasetSelectors |
-
-### 메서드
-
-#### `renderData({ response })`
-
-데이터를 수신하여 항목을 렌더링한다. template을 cloneNode하여 항목을 생성한다.
-
-```javascript
-subscribe('eventBrowser', this, this.eventList.renderData);
-```
-
-- 호출될 때마다 컨테이너를 비우고 전체 재렌더링
-- `itemKey`에 해당하는 값을 항목의 data 속성으로 설정
-
-#### `updateItemState(id, state)`
-
-개별 항목의 dataset을 변경한다. `itemKey`로 항목을 식별한다.
-
-```javascript
-targetInstance.eventList.updateItemState('evt-001', { ack: 'true' });
-targetInstance.eventList.updateItemState('evt-002', { severity: 'critical' });
-```
-
-- API 호출은 페이지가 담당하고, Mixin은 DOM 상태 변경만 한다
-- Ack, severity 등 어떤 상태든 같은 메서드로 처리한다
-
-#### `getItemState(id)`
-
-개별 항목의 dataset을 조회한다. 복사본을 반환한다.
-
-```javascript
-const state = targetInstance.eventList.getItemState('evt-001');
-// → { id: 'evt-001', severity: 'warning', ack: 'false' }
-```
-
-- 항목이 없으면 `null` 반환
-
-#### `clear()`
-
-컨테이너의 모든 항목을 제거한다.
-
-#### `destroy()`
-
-Mixin이 주입한 모든 속성과 메서드를 정리한다.
+| `renderData({ response })` | selector KEY에 맞춰진 배열을 받아 항목을 생성하여 렌더링 |
+| `updateItemState(id, state)` | itemKey로 항목을 찾아 dataset을 변경. API 호출은 페이지가 담당. |
+| `getItemState(id)` | itemKey로 항목을 찾아 dataset 복사본을 반환. 없으면 null. |
+| `clear()` | 컨테이너의 모든 항목을 제거 |
+| `destroy()` | Mixin이 주입한 모든 속성과 메서드를 정리 |
 
 ---
 
