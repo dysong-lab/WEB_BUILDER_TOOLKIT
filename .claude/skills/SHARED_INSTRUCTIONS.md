@@ -155,19 +155,46 @@ Mixin:        throw (에러를 알림)
 
 ---
 
-## dataFormat 원칙
+## 데이터 변환 원칙
 
-- API 키 → cssSelectors/datasetSelectors 키 매핑이 주 역할
-- 값 가공이 필요하면 dataFormat에서 처리 (프로젝트 레벨 책임)
-- 시스템 값과 시각 값을 분리해야 하면 datasetSelectors + cssSelectors로 해결
+- Mixin은 데이터 출처를 모른다. 이미 selector KEY에 맞춰진 데이터만 받는다.
+- 데이터 변환은 Mixin 바깥에서 수행한다 (페이지 또는 인스턴스 메서드).
+- 변환이 필요하면 인스턴스에 메서드를 정의하고, 내부에서 Mixin 메서드를 호출한다.
 
 ```javascript
-dataFormat: (data) => ({
-    name:        data.hostname,
-    status:      data.status,           // → datasetSelectors → dataset
-    statusLabel: data.statusLabel,      // → cssSelectors → textContent
-    uptime:      `${data.uptime}h`      // 가공도 가능
-})
+// 변환이 필요 없는 경우 — API 응답의 키가 selector KEY와 일치
+// API: { name: 'RNBT-01', status: 'RUNNING' }
+// selector KEY: name, status → 그대로 전달
+this.subscriptions = {
+    systemInfo: [this.fieldRender.renderData]
+};
+```
+
+변환이 필요한 경우: **API 응답의 키가 selector KEY와 다를 때.**
+
+예를 들어 API가 `hostname`으로 주지만, cssSelectors의 KEY는 `name`인 경우:
+
+```javascript
+// API 응답:     { hostname: 'RNBT-01', status: 'RUNNING', statusLabel: '정상' }
+// selector KEY: name, status, statusLabel
+// → hostname ≠ name 이므로 변환이 필요
+
+this.updateSystemInfo = function({ response }) {
+    const data = response.data;
+    this.fieldRender.renderData({
+        response: {
+            data: {
+                name:        data.hostname,     // API 'hostname' → selector KEY 'name'
+                status:      data.status,       // 일치 → 그대로
+                statusLabel: data.statusLabel   // 일치 → 그대로
+            }
+        }
+    });
+};
+
+this.subscriptions = {
+    systemInfo: [this.updateSystemInfo]
+};
 ```
 
 ---

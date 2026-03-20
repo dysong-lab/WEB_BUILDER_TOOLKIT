@@ -110,13 +110,8 @@ applyFieldRenderMixin(this, {
         statusLabel: '.system-info__status'
     },
     datasetSelectors: {
-        status:      '[data-status]'
-    },
-    dataFormat: (data) => ({
-        name:        data.hostname,
-        status:      data.status,
-        statusLabel: data.statusLabel
-    })
+        status:      'status'
+    }
 });
 
 // ======================
@@ -146,24 +141,17 @@ bindEvents(this, this.customEvents);
 
 ```javascript
 applyListRenderMixin(this, {
-    container: '.event-log__list',
-    item:      '.event-log__item',
-    template:  '#event-log-item-template',
     cssSelectors: {
-        level:   '.event-log__level',
-        time:    '.event-log__time',
-        message: '.event-log__message'
+        container: '.event-log__list',
+        item:      '.event-log__item',
+        template:  '#event-log-item-template',
+        level:     '.event-log__level',
+        time:      '.event-log__time',
+        message:   '.event-log__message'
     },
     datasetSelectors: {
-        level:   '[data-level]'
-    },
-    dataFormat: (data) => ({
-        items: data.events.map(event => ({
-            level:   event.level,
-            time:    event.formattedTime,
-            message: event.message
-        }))
-    })
+        level:   'level'
+    }
 });
 
 // customEvents에서 Mixin의 item 선택자를 computed property로 참조
@@ -346,13 +334,12 @@ scripts/
 
 ## 조립 코드에서 허용/불허
 
-| 허용 | 불허 |
+| 허용 | 불허 (Mixin 재정의 금지) |
 |------|------|
 | Mixin 적용 (applyXxxMixin) | 렌더링 로직 (innerHTML, DOM 조작) |
-| 구독 연결 (subscriptions) | 데이터 가공 로직 |
-| 이벤트 매핑 (customEvents) | 상태 관리 (_state 등) |
-| dataFormat 함수 정의 | fetch 호출 |
-| | Mixin 메서드 재정의 |
+| 데이터 변환 메서드 정의 (Mixin이 기대하는 형태로) | Mixin 내부 상태 직접 조작 |
+| 구독 연결 (subscriptions) | Mixin 메서드 재정의 |
+| 이벤트 매핑 (customEvents) | fetch 호출 |
 
 ---
 

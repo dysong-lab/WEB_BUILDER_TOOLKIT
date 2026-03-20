@@ -59,11 +59,8 @@ const { each, go } = fx;
 
 applyFieldRenderMixin(this, {
     datasetSelectors: {
-        status: '[data-status]'
-    },
-    dataFormat: (data) => ({
-        status: data.status    // → dataset.status = 'green' | 'yellow' | 'red'
-    })
+        status: 'status'
+    }
 });
 
 // ======================
