@@ -1,0 +1,62 @@
+.data-list__container {
+    display: flex;
+    flex-direction: column;
+    background: #1a1d23;
+    border-radius: 6px;
+    border: 1px solid #2a2d35;
+    overflow: hidden;
+}
+
+.data-list__item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    border-bottom: 1px solid #22252d;
+    transition: background 0.15s;
+}
+
+.data-list__item:last-child {
+    border-bottom: none;
+}
+
+.data-list__item:hover {
+    background: #1e2128;
+}
+
+.data-list__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #3a3d45;
+    flex-shrink: 0;
+}
+
+.data-list__title {
+    font-size: 12px;
+    font-weight: 500;
+    color: #e8eaed;
+    white-space: nowrap;
+}
+
+.data-list__desc {
+    font-size: 11px;
+    color: #6b6f80;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.data-list__time {
+    font-size: 10px;
+    color: #4a4d55;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* level별 dot 색상 */
+.data-list__item[data-level="info"]    .data-list__dot { background: #60a5fa; }
+.data-list__item[data-level="success"] .data-list__dot { background: #34d399; }
+.data-list__item[data-level="warning"] .data-list__dot { background: #fbbf24; }
+.data-list__item[data-level="error"]   .data-list__dot { background: #f87171; }

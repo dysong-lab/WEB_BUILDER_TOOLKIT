@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>InfoCard — 01_standard</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            background: #0f1117;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .preview-grid {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+    </style>
+    <link rel="stylesheet" href="../styles/01_standard.css">
+</head>
+<body>
+    <div class="preview-grid">
+        <!-- running -->
+        <div class="info-card" data-status="running">
+            <div class="info-card__header">
+                <span class="info-card__title">Server</span>
+                <span class="info-card__indicator"></span>
+            </div>
+            <div class="info-card__body">
+                <span class="info-card__value">RNBT-01</span>
+            </div>
+            <div class="info-card__footer">
+                <span class="info-card__desc">Uptime 72h</span>
+            </div>
+        </div>
+
+        <!-- warning -->
+        <div class="info-card" data-status="warning">
+            <div class="info-card__header">
+                <span class="info-card__title">Database</span>
+                <span class="info-card__indicator"></span>
+            </div>
+            <div class="info-card__body">
+                <span class="info-card__value">PostgreSQL</span>
+            </div>
+            <div class="info-card__footer">
+                <span class="info-card__desc">High latency detected</span>
+            </div>
+        </div>
+
+        <!-- error -->
+        <div class="info-card" data-status="error">
+            <div class="info-card__header">
+                <span class="info-card__title">Gateway</span>
+                <span class="info-card__indicator"></span>
+            </div>
+            <div class="info-card__body">
+                <span class="info-card__value">Offline</span>
+            </div>
+            <div class="info-card__footer">
+                <span class="info-card__desc">Last seen 5m ago</span>
+            </div>
+        </div>
+
+        <!-- stopped -->
+        <div class="info-card" data-status="stopped">
+            <div class="info-card__header">
+                <span class="info-card__title">Backup</span>
+                <span class="info-card__indicator"></span>
+            </div>
+            <div class="info-card__body">
+                <span class="info-card__value">Disabled</span>
+            </div>
+            <div class="info-card__footer">
+                <span class="info-card__desc">Manual restart required</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

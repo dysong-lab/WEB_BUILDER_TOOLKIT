@@ -1,0 +1,18 @@
+<!-- 01_standard: 상태 관리 리스트 (severity 컬러 + action 버튼) -->
+<div class="state-list">
+    <div class="state-list__container"></div>
+
+    <template class="state-list__template">
+        <div class="state-list__item" data-id="" data-severity="" data-ack="false">
+            <div class="state-list__severity-bar"></div>
+            <div class="state-list__content">
+                <div class="state-list__row">
+                    <span class="state-list__title"></span>
+                    <span class="state-list__time"></span>
+                </div>
+                <span class="state-list__desc"></span>
+            </div>
+            <button class="state-list__action-btn">ACK</button>
+        </div>
+    </template>
+</div>

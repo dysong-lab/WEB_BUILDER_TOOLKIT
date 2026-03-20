@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>DataList — 02_compact</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            background: #0f1117;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .preview-wrapper {
+            max-width: 480px;
+        }
+    </style>
+    <link rel="stylesheet" href="../styles/02_compact.css">
+</head>
+<body>
+    <div class="preview-wrapper">
+        <div class="data-list__container">
+            <div class="data-list__item" data-level="error">
+                <span class="data-list__dot"></span>
+                <span class="data-list__title">Connection refused</span>
+                <span class="data-list__desc">DB pool exhausted</span>
+                <span class="data-list__time">14:32</span>
+            </div>
+
+            <div class="data-list__item" data-level="warning">
+                <span class="data-list__dot"></span>
+                <span class="data-list__title">High memory</span>
+                <span class="data-list__desc">Exceeded 85%</span>
+                <span class="data-list__time">14:30</span>
+            </div>
+
+            <div class="data-list__item" data-level="info">
+                <span class="data-list__dot"></span>
+                <span class="data-list__title">Deploy complete</span>
+                <span class="data-list__desc">v2.4.1 production</span>
+                <span class="data-list__time">14:28</span>
+            </div>
+
+            <div class="data-list__item" data-level="success">
+                <span class="data-list__dot"></span>
+                <span class="data-list__title">Health check</span>
+                <span class="data-list__desc">All endpoints OK</span>
+                <span class="data-list__time">14:25</span>
+            </div>
+
+            <div class="data-list__item" data-level="info">
+                <span class="data-list__dot"></span>
+                <span class="data-list__title">Config updated</span>
+                <span class="data-list__desc">Rate limiter 1000/s</span>
+                <span class="data-list__time">14:20</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
