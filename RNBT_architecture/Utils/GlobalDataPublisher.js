@@ -23,9 +23,7 @@ const GlobalDataPublisher = (() => {
       }
 
       // paramUpdates가 있으면 기존 param과 병합 (얕은 병합)
-      const param = paramUpdates
-        ? { ...datasetInfo.param, ...paramUpdates }
-        : datasetInfo.param;
+      const param = paramUpdates ? { ...datasetInfo.param, ...paramUpdates } : datasetInfo.param;
 
       const subs = subscriberTable.get(topic) || new Set();
 
@@ -41,10 +39,7 @@ const GlobalDataPublisher = (() => {
           }
         }, subs);
         if (errors.length) {
-          throw new AggregateError(
-            errors,
-            `[GlobalDataPublisher] ${topic} handler 실패`,
-          );
+          throw new AggregateError(errors, `[GlobalDataPublisher] ${topic} handler 실패`);
         }
       } catch (error) {
         console.error(`[GlobalDataPublisher] ${topic} fetch 실패:`, error);
@@ -66,10 +61,10 @@ const GlobalDataPublisher = (() => {
       }
     },
     getGlobalMappingSchema({
-      topic = "weather",
+      topic = 'weather',
       datasetInfo = {
-        datasetName: "dummyjson",
-        param: { dataType: "weather", id: "default" },
+        datasetName: 'dummyjson',
+        param: { dataType: 'weather', id: 'default' },
       },
     } = {}) {
       return {
