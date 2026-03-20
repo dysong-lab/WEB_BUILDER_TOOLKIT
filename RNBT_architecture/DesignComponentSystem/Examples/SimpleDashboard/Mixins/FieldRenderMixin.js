@@ -23,14 +23,11 @@
  *       },
  *       datasetSelectors: {
  *           status:      'status'
- *       },
- *       dataFormat: (data) => ({
- *           name:        data.hostname,
- *           status:      data.status,        // → datasetSelectors → dataset
- *           statusLabel: data.statusLabel,   // → cssSelectors → textContent
- *           version:     data.version
- *       })
+ *       }
  *   });
+ *
+ *   // renderData는 이미 selector KEY에 맞춰진 데이터를 받는다:
+ *   // { name: 'server-01', status: 'RUNNING', statusLabel: '정상', version: '1.0' }
  *
  * ─────────────────────────────────────────────────────────────
  * Mixin이 주입하는 것 (네임스페이스: this.fieldRender):
@@ -44,7 +41,7 @@
  */
 
 function applyFieldRenderMixin(instance, options) {
-    const { cssSelectors = {}, datasetSelectors = {}, dataFormat } = options;
+    const { cssSelectors = {}, datasetSelectors = {} } = options;
 
     // 네임스페이스 생성
     const ns = {};
@@ -63,10 +60,7 @@ function applyFieldRenderMixin(instance, options) {
         const { data } = response;
         if (!data) throw new Error('[FieldRenderMixin] data is null');
 
-        // dataFormat으로 API 응답 → Mixin 기대 포맷
-        const fields = dataFormat ? dataFormat(data) : data;
-
-        Object.entries(fields).forEach(([key, value]) => {
+        Object.entries(data).forEach(([key, value]) => {
             if (value === undefined || value === null) return;
 
             // datasetSelectors에 키가 있으면 → dataset 반영

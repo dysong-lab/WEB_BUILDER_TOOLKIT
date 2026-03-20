@@ -19,21 +19,28 @@ applyFieldRenderMixin(this, {
         diskValue:    '.status-card[data-metric="disk"] .status-card__value',
         networkValue: '.status-card[data-metric="network"] .status-card__value',
         card:         '.status-card'
-    },
-    dataFormat: (data) => ({
+    }
+});
+
+// ======================
+// 2. 데이터 변환 + 구독 연결
+// ======================
+
+this.dataFormats = {
+    stats: (data) => ({
         cpuValue:     data.cpu.value,
         memoryValue:  data.memory.value,
         diskValue:    data.disk.value,
         networkValue: String(data.network.value)
     })
-});
-
-// ======================
-// 2. 구독 연결
-// ======================
+};
 
 this.subscriptions = {
-    stats: [this.fieldRender.renderData]
+    stats: [({ response }) => {
+        this.fieldRender.renderData({
+            response: { data: this.dataFormats.stats(response.data) }
+        });
+    }]
 };
 
 go(

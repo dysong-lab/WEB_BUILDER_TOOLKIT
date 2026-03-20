@@ -24,22 +24,27 @@ applyListRenderMixin(this, {
     },
     datasetSelectors: {
         level:   'level'
-    },
-    dataFormat: (data) => ({
-        items: data.events.map(event => ({
-            level:   event.level,
-            time:    new Date(event.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
-            message: event.message
-        }))
-    })
+    }
 });
 
 // ======================
-// 2. 구독 연결
+// 2. 데이터 변환 + 구독 연결
 // ======================
 
+this.dataFormats = {
+    events: (data) => data.events.map(event => ({
+        level:   event.level,
+        time:    new Date(event.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
+        message: event.message
+    }))
+};
+
 this.subscriptions = {
-    events: [this.listRender.renderData]
+    events: [({ response }) => {
+        this.listRender.renderData({
+            response: { data: this.dataFormats.events(response.data) }
+        });
+    }]
 };
 
 go(

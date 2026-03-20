@@ -34,15 +34,11 @@
  *       },
  *       datasetSelectors: {
  *           level:   'level'
- *       },
- *       dataFormat: (data) => ({
- *           items: data.events.map(e => ({
- *               level: e.level,
- *               time: '14:30',
- *               message: e.message
- *           }))
- *       })
+ *       }
  *   });
+ *
+ *   // renderData는 이미 selector KEY에 맞춰진 배열을 받는다:
+ *   // [{ level: 'ERROR', time: '14:30', message: '...' }, ...]
  *
  * ─────────────────────────────────────────────────────────────
  * Mixin이 주입하는 것 (네임스페이스: this.listRender):
@@ -57,7 +53,7 @@
  */
 
 function applyListRenderMixin(instance, options) {
-    const { cssSelectors = {}, datasetSelectors = {}, dataFormat } = options;
+    const { cssSelectors = {}, datasetSelectors = {} } = options;
 
     // 구조 선택자 추출
     const container = cssSelectors.container;
@@ -80,8 +76,7 @@ function applyListRenderMixin(instance, options) {
     ns.renderData = function({ response }) {
         const { data } = response;
         if (!data) throw new Error('[ListRenderMixin] data is null');
-
-        const formatted = dataFormat ? dataFormat(data) : { items: data };
+        if (!Array.isArray(data)) throw new Error('[ListRenderMixin] data is not an array');
 
         const containerEl = instance.appendElement.querySelector(container);
         if (!containerEl) throw new Error('[ListRenderMixin] container not found: ' + container);
@@ -92,7 +87,7 @@ function applyListRenderMixin(instance, options) {
         // 컨테이너 비우고 항목 생성
         containerEl.innerHTML = '';
 
-        formatted.items.forEach(itemData => {
+        data.forEach(itemData => {
             const clone = templateEl.content.cloneNode(true);
 
             // datasetSelectors 반영

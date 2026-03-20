@@ -24,18 +24,11 @@
  *           itemKey:  'id',
  *           severity: 'severity',
  *           ack:      'ack'
- *       },
- *       dataFormat: (data) => ({
- *           items: data.events.map(e => ({
- *               itemKey:  e.id,
- *               time:     e.formattedTime,
- *               message:  e.message,
- *               source:   e.source,
- *               severity: e.severity,
- *               ack:      String(e.acknowledged)
- *           }))
- *       })
+ *       }
  *   });
+ *
+ *   // renderData는 이미 selector KEY에 맞춰진 배열을 받는다:
+ *   // [{ itemKey: '1', time: '14:30', message: '...', severity: 'warning', ack: 'false' }, ...]
  *
  * ─────────────────────────────────────────────────────────────
  * Mixin이 주입하는 것 (네임스페이스: this.eventList):
@@ -52,7 +45,7 @@
  */
 
 function applyEventListMixin(instance, options) {
-    const { cssSelectors = {}, datasetSelectors = {}, dataFormat } = options;
+    const { cssSelectors = {}, datasetSelectors = {} } = options;
 
     // 구조 선택자 추출
     const container = cssSelectors.container;
@@ -78,8 +71,7 @@ function applyEventListMixin(instance, options) {
     ns.renderData = function({ response }) {
         const { data } = response;
         if (!data) throw new Error('[EventListMixin] data is null');
-
-        const formatted = dataFormat ? dataFormat(data) : { items: data };
+        if (!Array.isArray(data)) throw new Error('[EventListMixin] data is not an array');
 
         const containerEl = instance.appendElement.querySelector(container);
         if (!containerEl) throw new Error('[EventListMixin] container not found: ' + container);
@@ -89,7 +81,7 @@ function applyEventListMixin(instance, options) {
 
         containerEl.innerHTML = '';
 
-        formatted.items.forEach(function(itemData) {
+        data.forEach(function(itemData) {
             const clone = templateEl.content.cloneNode(true);
 
             // datasetSelectors 반영

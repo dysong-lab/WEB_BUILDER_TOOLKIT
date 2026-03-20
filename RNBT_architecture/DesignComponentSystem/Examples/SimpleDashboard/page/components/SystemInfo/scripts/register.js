@@ -21,22 +21,29 @@ applyFieldRenderMixin(this, {
     },
     datasetSelectors: {
         status:      'status'
-    },
-    dataFormat: (data) => ({
-        name:        data.hostname,
-        status:      data.status,           // → datasetSelectors → dataset
-        statusLabel: data.statusLabel,      // → cssSelectors → textContent
-        version:     data.version,
-        uptime:      data.uptime
-    })
+    }
 });
 
 // ======================
-// 2. 구독 연결
+// 2. 데이터 변환 + 구독 연결
 // ======================
 
+this.dataFormats = {
+    systemInfo: (data) => ({
+        name:        data.hostname,
+        status:      data.status,
+        statusLabel: data.statusLabel,
+        version:     data.version,
+        uptime:      data.uptime
+    })
+};
+
 this.subscriptions = {
-    systemInfo: [this.fieldRender.renderData]
+    systemInfo: [({ response }) => {
+        this.fieldRender.renderData({
+            response: { data: this.dataFormats.systemInfo(response.data) }
+        });
+    }]
 };
 
 go(
