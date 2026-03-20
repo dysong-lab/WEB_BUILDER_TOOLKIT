@@ -243,13 +243,12 @@ this.fieldRender.destroy();
 
 ### 조립 코드에서 허용되는 것 / 허용되지 않는 것
 
-| 허용 | 불허 |
+| 허용 | 불허 (Mixin 재정의 금지) |
 |------|------|
 | Mixin 적용 (applyXxxMixin) | 렌더링 로직 (innerHTML, DOM 조작) |
-| 구독 연결 (subscriptions) | 데이터 변환 로직 |
-| 이벤트 매핑 (customEvents) | 상태 관리 (_state 등) |
-| | fetch 호출 |
-| | Mixin 메서드 재정의 |
+| 데이터 변환 메서드 정의 (Mixin이 기대하는 형태로) | Mixin 내부 상태 직접 조작 |
+| 구독 연결 (subscriptions) | Mixin 메서드 재정의 |
+| 이벤트 매핑 (customEvents) | fetch 호출 |
 
 ---
 
