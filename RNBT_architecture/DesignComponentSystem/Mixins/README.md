@@ -27,9 +27,8 @@ DOM 조작 방식, 데이터 형태, 구현 패턴은 목적에 의해 결정되
 
 ## Mixin 공통 원칙
 
-- **선택자는 인터페이스다.** KEY는 Mixin이 정의한다. VALUE는 HTML에서 온다.
-- **Mixin에 주입되는 것은 cssSelectors와 datasetSelectors 두 객체뿐이다.**
-- **데이터 변환은 Mixin의 관심사가 아니다.** Mixin은 이미 selector KEY에 맞춰진 데이터만 받는다.
+- **각 Mixin이 받는 옵션이 그 Mixin의 인터페이스다.** 옵션은 Mixin별 문서를 참고한다.
+- **데이터 변환은 Mixin의 관심사가 아니다.** Mixin은 이미 가공된 데이터만 받는다.
 - **Mixin은 자기 것만 관리한다.** destroy에서 자기가 만든 것만 정리한다.
 
 ---

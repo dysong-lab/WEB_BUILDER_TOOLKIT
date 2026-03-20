@@ -52,7 +52,7 @@ const itemKeyAttr = datasetSelectors.itemKey;  // → 'id'
 
 ### 원칙
 
-- Mixin에 주입되는 것은 cssSelectors와 datasetSelectors 두 객체뿐이다.
+- 각 Mixin이 받는 옵션이 그 Mixin의 인터페이스다.
 - 데이터 변환은 Mixin의 관심사가 아니다.
 
 ### 결과

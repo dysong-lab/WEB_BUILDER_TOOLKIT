@@ -441,7 +441,7 @@ const Wkit = {
 // ═══════════════════════════════════════════════════════════════
 
 function applyFieldRenderMixin(instance, options) {
-    const { cssSelectors = {}, datasetSelectors = {}, dataFormat } = options;
+    const { cssSelectors = {}, datasetSelectors = {} } = options;
     const ns = {};
     instance.fieldRender = ns;
     ns.cssSelectors = { ...cssSelectors };
@@ -450,12 +450,12 @@ function applyFieldRenderMixin(instance, options) {
     ns.renderData = function({ response }) {
         const { data } = response;
         if (!data) throw new Error('[FieldRenderMixin] data is null');
-        const fields = dataFormat ? dataFormat(data) : data;
-        Object.entries(fields).forEach(([key, value]) => {
+        Object.entries(data).forEach(([key, value]) => {
             if (value === undefined || value === null) return;
             if (datasetSelectors[key]) {
-                const dataEl = instance.appendElement.querySelector(datasetSelectors[key]);
-                if (dataEl) dataEl.dataset[key] = value;
+                const attr = datasetSelectors[key];
+                const dataEl = instance.appendElement.querySelector('[data-' + attr + ']');
+                if (dataEl) dataEl.dataset[attr] = value;
             }
             if (cssSelectors[key]) {
                 const el = instance.appendElement.querySelector(cssSelectors[key]);
@@ -473,7 +473,7 @@ function applyFieldRenderMixin(instance, options) {
 }
 
 function applyListRenderMixin(instance, options) {
-    const { cssSelectors = {}, datasetSelectors = {}, dataFormat } = options;
+    const { cssSelectors = {}, datasetSelectors = {} } = options;
     const container = cssSelectors.container;
     const item = cssSelectors.item;
     const template = cssSelectors.template;
@@ -485,20 +485,25 @@ function applyListRenderMixin(instance, options) {
     ns.renderData = function({ response }) {
         const { data } = response;
         if (!data) throw new Error('[ListRenderMixin] data is null');
-        const formatted = dataFormat ? dataFormat(data) : { items: data };
+        if (!Array.isArray(data)) throw new Error('[ListRenderMixin] data is not an array');
         const containerEl = instance.appendElement.querySelector(container);
+        if (!containerEl) throw new Error('[ListRenderMixin] container not found: ' + container);
         const templateEl = instance.appendElement.querySelector(template);
-        if (!containerEl || !templateEl) return;
+        if (!templateEl) throw new Error('[ListRenderMixin] template not found: ' + template);
         containerEl.innerHTML = '';
-        formatted.items.forEach(itemData => {
+        data.forEach(itemData => {
             const clone = templateEl.content.cloneNode(true);
-            Object.entries(datasetSelectors).forEach(([key, selector]) => {
-                const el = clone.querySelector(selector);
-                if (el && itemData[key] != null) el.dataset[key] = itemData[key];
+            Object.entries(datasetSelectors).forEach(([key, attr]) => {
+                const el = clone.querySelector('[data-' + attr + ']');
+                if (el && itemData[key] !== undefined && itemData[key] !== null) {
+                    el.dataset[attr] = itemData[key];
+                }
             });
             Object.entries(cssSelectors).forEach(([key, selector]) => {
                 const el = clone.querySelector(selector);
-                if (el && itemData[key] != null) el.textContent = itemData[key];
+                if (el && itemData[key] !== undefined && itemData[key] !== null) {
+                    el.textContent = itemData[key];
+                }
             });
             containerEl.appendChild(clone);
         });
@@ -520,11 +525,11 @@ function applyListRenderMixin(instance, options) {
 // ── StatefulListRenderMixin ──
 // ListRenderMixin + updateItemState (개별 항목 상태 변경)
 function applyStatefulListRenderMixin(instance, options) {
-    const { cssSelectors = {}, datasetSelectors = {}, dataFormat } = options;
+    const { cssSelectors = {}, datasetSelectors = {} } = options;
     const container = cssSelectors.container;
     const item = cssSelectors.item;
-    const itemKey = cssSelectors.itemKey;
     const template = cssSelectors.template;
+    const itemKeyAttr = datasetSelectors.itemKey;
     const ns = {};
     instance.statefulList = ns;
     ns.cssSelectors = { ...cssSelectors };
@@ -533,24 +538,25 @@ function applyStatefulListRenderMixin(instance, options) {
     ns.renderData = function({ response }) {
         const { data } = response;
         if (!data) throw new Error('[StatefulListRenderMixin] data is null');
-        const formatted = dataFormat ? dataFormat(data) : { items: data };
+        if (!Array.isArray(data)) throw new Error('[StatefulListRenderMixin] data is not an array');
         const containerEl = instance.appendElement.querySelector(container);
+        if (!containerEl) throw new Error('[StatefulListRenderMixin] container not found: ' + container);
         const templateEl = instance.appendElement.querySelector(template);
-        if (!containerEl || !templateEl) return;
+        if (!templateEl) throw new Error('[StatefulListRenderMixin] template not found: ' + template);
         containerEl.innerHTML = '';
-        formatted.items.forEach(function(itemData) {
+        data.forEach(function(itemData) {
             const clone = templateEl.content.cloneNode(true);
-            const rootEl = clone.querySelector(item);
-            if (rootEl && itemKey && itemData[itemKey] != null) {
-                rootEl.dataset[itemKey] = itemData[itemKey];
-            }
-            Object.entries(datasetSelectors).forEach(function([key, selector]) {
-                const el = clone.querySelector(selector);
-                if (el && itemData[key] != null) el.dataset[key] = itemData[key];
+            Object.entries(datasetSelectors).forEach(function([key, attr]) {
+                const el = clone.querySelector('[data-' + attr + ']');
+                if (el && itemData[key] != null) {
+                    el.dataset[attr] = itemData[key];
+                }
             });
             Object.entries(cssSelectors).forEach(function([key, selector]) {
                 const el = clone.querySelector(selector);
-                if (el && itemData[key] != null) el.textContent = itemData[key];
+                if (el && itemData[key] != null) {
+                    el.textContent = itemData[key];
+                }
             });
             containerEl.appendChild(clone);
         });
@@ -558,7 +564,7 @@ function applyStatefulListRenderMixin(instance, options) {
 
     ns.updateItemState = function(id, state) {
         const el = instance.appendElement.querySelector(
-            item + '[data-' + itemKey + '="' + id + '"]'
+            item + '[data-' + itemKeyAttr + '="' + id + '"]'
         );
         if (!el) return;
         Object.entries(state).forEach(function([key, value]) {
@@ -568,7 +574,7 @@ function applyStatefulListRenderMixin(instance, options) {
 
     ns.getItemState = function(id) {
         const el = instance.appendElement.querySelector(
-            item + '[data-' + itemKey + '="' + id + '"]'
+            item + '[data-' + itemKeyAttr + '="' + id + '"]'
         );
         if (!el) return null;
         return Object.assign({}, el.dataset);
@@ -607,18 +613,26 @@ function registerSystemInfo() {
             uptime:      '.system-info__uptime'
         },
         datasetSelectors: {
-            status: '[data-status]'
-        },
-        dataFormat: (data) => ({
-            name:        data.hostname,
-            status:      data.status,
-            statusLabel: data.statusLabel,
-            version:     data.version,
-            uptime:      data.uptime
-        })
+            status: 'status'
+        }
     });
 
-    instance.subscriptions = { systemInfo: [instance.fieldRender.renderData] };
+    instance.updateSystemInfo = function({ response }) {
+        const data = response.data;
+        instance.fieldRender.renderData({
+            response: {
+                data: {
+                    name:        data.hostname,
+                    status:      data.status,
+                    statusLabel: data.statusLabel,
+                    version:     data.version,
+                    uptime:      data.uptime
+                }
+            }
+        });
+    };
+
+    instance.subscriptions = { systemInfo: [instance.updateSystemInfo] };
     Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
         handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
     );
@@ -638,16 +652,24 @@ function registerStatusCards() {
             diskValue:    '.status-card[data-metric="disk"] .status-card__value',
             networkValue: '.status-card[data-metric="network"] .status-card__value',
             card:         '.status-card'
-        },
-        dataFormat: (data) => ({
-            cpuValue:     data.cpu.value,
-            memoryValue:  data.memory.value,
-            diskValue:    data.disk.value,
-            networkValue: String(data.network.value)
-        })
+        }
     });
 
-    instance.subscriptions = { stats: [instance.fieldRender.renderData] };
+    instance.updateStats = function({ response }) {
+        const data = response.data;
+        instance.fieldRender.renderData({
+            response: {
+                data: {
+                    cpuValue:     data.cpu.value,
+                    memoryValue:  data.memory.value,
+                    diskValue:    data.disk.value,
+                    networkValue: String(data.network.value)
+                }
+            }
+        });
+    };
+
+    instance.subscriptions = { stats: [instance.updateStats] };
     Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
         handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
     );
@@ -671,18 +693,24 @@ function registerEventLog() {
             clearBtn:  '.event-log__clear-btn'
         },
         datasetSelectors: {
-            level: '[data-level]'
-        },
-        dataFormat: (data) => ({
-            items: data.events.map(event => ({
-                level:   event.level,
-                time:    new Date(event.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
-                message: event.message
-            }))
-        })
+            level: 'level'
+        }
     });
 
-    instance.subscriptions = { events: [instance.listRender.renderData] };
+    instance.updateEvents = function({ response }) {
+        const data = response.data;
+        instance.listRender.renderData({
+            response: {
+                data: data.events.map(event => ({
+                    level:   event.level,
+                    time:    new Date(event.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
+                    message: event.message
+                }))
+            }
+        });
+    };
+
+    instance.subscriptions = { events: [instance.updateEvents] };
     Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
         handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
     );
@@ -704,7 +732,6 @@ function registerEventBrowser() {
         cssSelectors: {
             container: '.event-browser__list',
             item:      '.event-browser__item',
-            itemKey:   'id',
             template:  '#event-browser-item-template',
             severity:  '.event-browser__severity-label',
             time:      '.event-browser__time',
@@ -713,24 +740,31 @@ function registerEventBrowser() {
             ackBtn:    '.event-browser__ack-btn'
         },
         datasetSelectors: {
-            severity: '[data-severity]',
-            ack:      '[data-ack]'
-        },
-        dataFormat: (data) => ({
-            items: data.events.map(event => ({
-                id:       String(event.id),
-                severity: event.severity,
-                time:     new Date(event.timestamp).toLocaleTimeString('ko-KR', {
-                    hour: '2-digit', minute: '2-digit', second: '2-digit'
-                }),
-                source:   event.source,
-                message:  event.message,
-                ack:      String(event.acknowledged)
-            }))
-        })
+            itemKey:  'id',
+            severity: 'severity',
+            ack:      'ack'
+        }
     });
 
-    instance.subscriptions = { eventBrowser: [instance.statefulList.renderData] };
+    instance.updateEventBrowser = function({ response }) {
+        const data = response.data;
+        instance.statefulList.renderData({
+            response: {
+                data: data.events.map(event => ({
+                    itemKey:  String(event.id),
+                    severity: event.severity,
+                    time:     new Date(event.timestamp).toLocaleTimeString('ko-KR', {
+                        hour: '2-digit', minute: '2-digit', second: '2-digit'
+                    }),
+                    source:   event.source,
+                    message:  event.message,
+                    ack:      String(event.acknowledged)
+                }))
+            }
+        });
+    };
+
+    instance.subscriptions = { eventBrowser: [instance.updateEventBrowser] };
     Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
         handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
     );

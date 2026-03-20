@@ -189,6 +189,8 @@ class MyChart extends WVDOMComponent {
 
 라이프사이클에 대해 정리하였다. 라이프사이클에 대해 정리한 이유는 작업자가 RENOBIT에서 코드를 작업하는 영역에 대해 이해할 수 있어야 자신이 원하는 코드 작업을 원하는 위치에 작성할 수 있기 때문이다. 이러한 라이프사이클을 기반으로 다음의 아키텍쳐에 따라 코드를 작업할 수 있다.
 
+> **참고:** 컴포넌트의 register.js 내부 구조는 **Mixin 기반**으로 전환되었다. register.js는 조립 코드(Mixin 적용, 구독 연결, 이벤트 매핑)만 포함하며, 렌더링 로직은 Mixin이 담당한다. 상세는 [컴포넌트 라이프사이클 패턴](#컴포넌트-라이프사이클-패턴) 및 [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md) 참조.
+
 ---
 
 ## 역할은 알겠는데 이 역할을 나눈 것의 의미는 무엇이죠? 각 탭에서는 그래서 무슨 코드를 써야하나요?
@@ -397,14 +399,11 @@ const { each, go } = fx;
 
 applyFieldRenderMixin(this, {
     cssSelectors: {
-        // dataFormat 키: 'CSS 선택자'
+        // Mixin 인터페이스 KEY: 'CSS 선택자'
     },
     datasetSelectors: {
-        // dataFormat 키: '[data-*] 선택자'
-    },
-    dataFormat: (data) => ({
-        // API 키 → cssSelectors/datasetSelectors 키 매핑
-    })
+        // Mixin 인터페이스 KEY: 'data-* 속성명'
+    }
 });
 
 // ======================
@@ -506,6 +505,7 @@ this.pageDataMappings = [
     //         param: { baseUrl: 'localhost:4010' }
     //     },
     //     refreshInterval: 5000  // 없으면 한 번만 fetch
+    //     // dataFormat — API 응답을 selector KEY에 맞춰 변환하는 함수를 필요 시 정의
     // }
 ];
 

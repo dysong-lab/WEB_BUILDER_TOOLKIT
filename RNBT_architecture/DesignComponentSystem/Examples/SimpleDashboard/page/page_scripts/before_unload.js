@@ -31,4 +31,5 @@ go(
 );
 
 this.pageDataMappings = null;
+this.dataFormats = null;
 this.pageParams = null;
