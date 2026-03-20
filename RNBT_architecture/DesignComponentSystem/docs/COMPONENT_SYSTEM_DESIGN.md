@@ -724,17 +724,19 @@ this.pageEventBusHandlers = {
 
 ## 컴포넌트 목록과 Mixin 목록
 
-### 컴포넌트 카탈로그 (Bootstrap식 — 시각 구조 중심)
+### 컴포넌트 카탈로그 (시각 구조 중심)
 
 컴포넌트는 HTML/CSS 구조만 정의한다. 분류 기준은 시각적 형태다.
 
 디자인이 달라지면 컴포넌트가 추가된다. Mixin이 달라지지 않는다.
 
-> 구체적인 컴포넌트 목록은 별도 문서 참조: [RENOBIT_2D_Component_Design.md]
+> 생성 기준 및 목록: [Components/README.md](../Components/README.md)
 
-### Mixin 카탈로그 (기능 중심)
+### Mixin 카탈로그 (목적 중심)
 
-Mixin은 행위를 정의한다. 분류 기준은 "다루는 행위가 본질적으로 다른가"이다.
+Mixin은 행위를 정의한다. 분류 기준은 "이 Mixin의 목적이 무엇인가"이다.
+
+> 생성 기준 및 목록: [Mixins/README.md](../Mixins/README.md)
 
 | Mixin | 역할 | 주입 네임스페이스 |
 |-------|------|-------------------|
