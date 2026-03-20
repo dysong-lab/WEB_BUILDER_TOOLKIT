@@ -29,19 +29,26 @@ const GlobalDataPublisher = (() => {
 
       const subs = subscriberTable.get(topic) || new Set();
 
-      const data = await Wkit.fetchData(page, datasetInfo.datasetName, param);
+      try {
+        const data = await Wkit.fetchData(page, datasetInfo.datasetName, param);
 
-      const errors = [];
-      fx.each(({ instance, handler }) => {
-        try {
-          handler.call(instance, data);
-        } catch (e) {
-          errors.push(e);
+        const errors = [];
+        fx.each(({ instance, handler }) => {
+          try {
+            handler.call(instance, data);
+          } catch (e) {
+            errors.push(e);
+          }
+        }, subs);
+        if (errors.length) {
+          throw new AggregateError(
+            errors,
+            `[GlobalDataPublisher] ${topic} handler 실패`,
+          );
         }
-      }, subs);
-
-      if (errors.length) {
-        throw new AggregateError(errors, `[GlobalDataPublisher] ${topic} handler 실패`);
+      } catch (error) {
+        console.error(`[GlobalDataPublisher] ${topic} fetch 실패:`, error);
+        throw error;
       }
     },
 
@@ -59,10 +66,10 @@ const GlobalDataPublisher = (() => {
       }
     },
     getGlobalMappingSchema({
-      topic = 'weather',
+      topic = "weather",
       datasetInfo = {
-        datasetName: 'dummyjson',
-        param: { dataType: 'weather', id: 'default' },
+        datasetName: "dummyjson",
+        param: { dataType: "weather", id: "default" },
       },
     } = {}) {
       return {
