@@ -395,7 +395,7 @@ function applyListRenderMixin(instance, options) {
 |-------|-------------|
 | applyFieldRenderMixin | `this.fieldRender` |
 | applyListRenderMixin | `this.listRender` |
-| applyEventListMixin | `this.eventList` |
+| applyStatefulListRenderMixin | `this.statefulList` |
 
 ### Mixin이 소유하는 것
 
@@ -740,7 +740,7 @@ Mixin은 행위를 정의한다. 분류 기준은 "다루는 행위가 본질적
 |-------|------|-------------------|
 | FieldRenderMixin | 데이터 객체의 필드를 DOM 요소에 매핑하여 렌더링 | `this.fieldRender` |
 | ListRenderMixin | template 기반 배열 데이터 반복 렌더링 | `this.listRender` |
-| EventListMixin | ListRenderMixin + 개별 항목 상태 변경 (Ack 등) | `this.eventList` |
+| StatefulListRenderMixin | ListRenderMixin + 개별 항목 상태 변경 (Ack 등) | `this.statefulList` |
 
 ### 관계
 

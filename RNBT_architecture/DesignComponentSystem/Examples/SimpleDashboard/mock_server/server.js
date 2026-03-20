@@ -68,7 +68,7 @@ app.get('/api/events', (req, res) => {
 
 // ─────────────────────────────────────────
 // GET /api/event-browser
-// EventBrowser 컴포넌트용 (EventListMixin)
+// EventBrowser 컴포넌트용 (StatefulListRenderMixin)
 // ─────────────────────────────────────────
 const severities = ['critical', 'warning', 'info'];
 const eventMessages = [

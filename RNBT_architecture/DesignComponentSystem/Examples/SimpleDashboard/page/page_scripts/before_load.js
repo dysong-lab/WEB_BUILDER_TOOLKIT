@@ -35,7 +35,7 @@ this.pageEventBusHandlers = {
     // EventBrowser에서 Ack 버튼 클릭
     // → 페이지가 API 호출 → 성공 시 Mixin으로 DOM 상태 변경
     '@ackClicked': async ({ event, targetInstance }) => {
-        const item = event.target.closest(targetInstance.eventList.cssSelectors.item);
+        const item = event.target.closest(targetInstance.statefulList.cssSelectors.item);
         const eventId = item?.dataset.id;
         if (!eventId) return;
 
@@ -47,7 +47,7 @@ this.pageEventBusHandlers = {
             });
 
             // API 성공 → Mixin의 updateItemState로 DOM만 변경
-            targetInstance.eventList.updateItemState(eventId, { ack: 'true' });
+            targetInstance.statefulList.updateItemState(eventId, { ack: 'true' });
             console.log('[Page] Event acknowledged:', eventId);
         } catch (err) {
             console.error('[Page] Ack failed:', err);
@@ -56,8 +56,8 @@ this.pageEventBusHandlers = {
 
     // EventBrowser에서 항목 클릭
     '@eventSelected': ({ event, targetInstance }) => {
-        const item = event.target.closest(targetInstance.eventList.cssSelectors.item);
-        if (event.target.closest(targetInstance.eventList.cssSelectors.ackBtn)) return;
+        const item = event.target.closest(targetInstance.statefulList.cssSelectors.item);
+        if (event.target.closest(targetInstance.statefulList.cssSelectors.ackBtn)) return;
         const eventId = item?.dataset.id;
         console.log('[Page] Event selected:', eventId);
     }

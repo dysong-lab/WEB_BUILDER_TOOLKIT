@@ -1,17 +1,17 @@
 /**
- * EventListMixin
+ * StatefulListRenderMixin
  *
  * 이벤트 목록을 template 기반으로 렌더링하고,
  * 개별 항목의 상태(ack, severity 등)를 변경할 수 있다.
  *
  * ListRenderMixin과의 차이:
  *   ListRenderMixin  — 배열 렌더링만 (표시)
- *   EventListMixin   — 배열 렌더링 + 개별 항목 상태 변경 (표시 + 상호작용)
+ *   StatefulListRenderMixin   — 배열 렌더링 + 개별 항목 상태 변경 (표시 + 상호작용)
  *
  * ─────────────────────────────────────────────────────────────
  * 사용 예시:
  *
- *   applyEventListMixin(this, {
+ *   applyStatefulListRenderMixin(this, {
  *       cssSelectors: {
  *           container: '.event-list',
  *           item:      '.event-item',
@@ -31,20 +31,20 @@
  *   // [{ itemKey: '1', time: '14:30', message: '...', severity: 'warning', ack: 'false' }, ...]
  *
  * ─────────────────────────────────────────────────────────────
- * Mixin이 주입하는 것 (네임스페이스: this.eventList):
+ * Mixin이 주입하는 것 (네임스페이스: this.statefulList):
  *
- *   this.eventList.cssSelectors      — 선택자 (container, item, template, 데이터/이벤트용)
- *   this.eventList.datasetSelectors  — dataset용 선택자
- *   this.eventList.renderData        — { response } → 목록 렌더링
- *   this.eventList.updateItemState   — (id, state) → 개별 항목 dataset 변경
- *   this.eventList.getItemState      — (id) → 항목의 dataset 반환
- *   this.eventList.clear             — 컨테이너 비우기
- *   this.eventList.destroy           — 자기 정리
+ *   this.statefulList.cssSelectors      — 선택자 (container, item, template, 데이터/이벤트용)
+ *   this.statefulList.datasetSelectors  — dataset용 선택자
+ *   this.statefulList.renderData        — { response } → 목록 렌더링
+ *   this.statefulList.updateItemState   — (id, state) → 개별 항목 dataset 변경
+ *   this.statefulList.getItemState      — (id) → 항목의 dataset 반환
+ *   this.statefulList.clear             — 컨테이너 비우기
+ *   this.statefulList.destroy           — 자기 정리
  *
  * ─────────────────────────────────────────────────────────────
  */
 
-function applyEventListMixin(instance, options) {
+function applyStatefulListRenderMixin(instance, options) {
     const { cssSelectors = {}, datasetSelectors = {} } = options;
 
     // 구조 선택자 추출
@@ -57,7 +57,7 @@ function applyEventListMixin(instance, options) {
 
     // 네임스페이스 생성
     const ns = {};
-    instance.eventList = ns;
+    instance.statefulList = ns;
 
     // 선택자 보존
     ns.cssSelectors = { ...cssSelectors };
@@ -70,14 +70,14 @@ function applyEventListMixin(instance, options) {
      */
     ns.renderData = function({ response }) {
         const { data } = response;
-        if (!data) throw new Error('[EventListMixin] data is null');
-        if (!Array.isArray(data)) throw new Error('[EventListMixin] data is not an array');
+        if (!data) throw new Error('[StatefulListRenderMixin] data is null');
+        if (!Array.isArray(data)) throw new Error('[StatefulListRenderMixin] data is not an array');
 
         const containerEl = instance.appendElement.querySelector(container);
-        if (!containerEl) throw new Error('[EventListMixin] container not found: ' + container);
+        if (!containerEl) throw new Error('[StatefulListRenderMixin] container not found: ' + container);
 
         const templateEl = instance.appendElement.querySelector(template);
-        if (!templateEl) throw new Error('[EventListMixin] template not found: ' + template);
+        if (!templateEl) throw new Error('[StatefulListRenderMixin] template not found: ' + template);
 
         containerEl.innerHTML = '';
 
@@ -157,6 +157,6 @@ function applyEventListMixin(instance, options) {
         ns.clear = null;
         ns.cssSelectors = null;
         ns.datasetSelectors = null;
-        instance.eventList = null;
+        instance.statefulList = null;
     };
 }

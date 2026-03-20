@@ -1,14 +1,14 @@
-# EventListMixin
+# StatefulListRenderMixin
 
 ## 설계 의도
 
 이벤트 목록을 렌더링하고, **개별 항목의 상태를 변경**할 수 있는 Mixin이다.
 
-ListRenderMixin은 "표시"만 하지만, EventListMixin은 "표시 + 상태 변경"을 담당한다.
+ListRenderMixin은 "표시"만 하지만, StatefulListRenderMixin은 "표시 + 상태 변경"을 담당한다.
 
 ```
 ListRenderMixin:  데이터 → DOM 렌더링 (표시만)
-EventListMixin:   데이터 → DOM 렌더링 + 개별 항목 상태 변경
+StatefulListRenderMixin:   데이터 → DOM 렌더링 + 개별 항목 상태 변경
 ```
 
 > **설계 원칙**: [COMPONENT_SYSTEM_DESIGN.md](../../docs/COMPONENT_SYSTEM_DESIGN.md) 참조
@@ -99,7 +99,7 @@ datasetSelectors: {
 ### register.js
 
 ```javascript
-applyEventListMixin(this, {
+applyStatefulListRenderMixin(this, {
     cssSelectors: {
         container: '.event-browser__list',
         item:      '.event-browser__item',
@@ -118,7 +118,7 @@ applyEventListMixin(this, {
 });
 
 this.subscriptions = {
-    eventBrowser: [this.eventList.renderData]
+    eventBrowser: [this.statefulList.renderData]
 };
 ```
 
@@ -137,7 +137,7 @@ customEvents → '@ackClicked' → Weventbus
     ↓
 페이지가 Ack API 호출
     ↓
-성공 → targetInstance.eventList.updateItemState(id, { ack: 'true' })
+성공 → targetInstance.statefulList.updateItemState(id, { ack: 'true' })
     ↓
 Mixin이 해당 항목의 dataset 변경 (DOM만)
     ↓
@@ -148,7 +148,7 @@ CSS가 시각 전환: [data-ack="true"] { opacity: 0.5; }
 
 ## 주입되는 네임스페이스
 
-`this.eventList`
+`this.statefulList`
 
 | 속성/메서드 | 역할 |
 |------------|------|
@@ -167,4 +167,4 @@ CSS가 시각 전환: [data-ack="true"] { opacity: 0.5; }
 | 조건 | 선택 |
 |---|---|
 | 데이터를 표시만 하면 되는가 | ListRenderMixin |
-| 개별 항목의 상태를 변경해야 하는가 (Ack, severity 등) | EventListMixin |
+| 개별 항목의 상태를 변경해야 하는가 (Ack, severity 등) | StatefulListRenderMixin |

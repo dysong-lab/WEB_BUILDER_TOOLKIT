@@ -1,7 +1,7 @@
 /**
  * StateList — 조립 코드
  *
- * EventListMixin을 적용하여 상태 관리 목록을 표시한다.
+ * StatefulListRenderMixin을 적용하여 상태 관리 목록을 표시한다.
  * 개별 항목의 상태(ack, severity 등)를 변경할 수 있다.
  */
 const { subscribe } = GlobalDataPublisher;
@@ -12,7 +12,7 @@ const { each, go } = fx;
 // 1. MIXIN 적용
 // ======================
 
-applyEventListMixin(this, {
+applyStatefulListRenderMixin(this, {
     cssSelectors: {
         container: '.state-list__container',
         item:      '.state-list__item',
@@ -41,8 +41,8 @@ this.subscriptions = {};
 
 this.customEvents = {
     click: {
-        [this.eventList.cssSelectors.actionBtn]: '@actionClicked',
-        [this.eventList.cssSelectors.item]:      '@itemClicked'
+        [this.statefulList.cssSelectors.actionBtn]: '@actionClicked',
+        [this.statefulList.cssSelectors.item]:      '@itemClicked'
     }
 };
 bindEvents(this, this.customEvents);

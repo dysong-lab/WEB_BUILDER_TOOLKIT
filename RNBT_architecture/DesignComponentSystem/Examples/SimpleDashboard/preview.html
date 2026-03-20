@@ -95,7 +95,7 @@
     <div id="status-cards-container"></div>
     <div id="event-log-container"></div>
 
-    <!-- EventBrowser: EventListMixin -->
+    <!-- EventBrowser: StatefulListRenderMixin -->
     <div id="event-browser-container"></div>
 </div>
 
@@ -517,22 +517,22 @@ function applyListRenderMixin(instance, options) {
 }
 
 
-// ── EventListMixin ──
+// ── StatefulListRenderMixin ──
 // ListRenderMixin + updateItemState (개별 항목 상태 변경)
-function applyEventListMixin(instance, options) {
+function applyStatefulListRenderMixin(instance, options) {
     const { cssSelectors = {}, datasetSelectors = {}, dataFormat } = options;
     const container = cssSelectors.container;
     const item = cssSelectors.item;
     const itemKey = cssSelectors.itemKey;
     const template = cssSelectors.template;
     const ns = {};
-    instance.eventList = ns;
+    instance.statefulList = ns;
     ns.cssSelectors = { ...cssSelectors };
     ns.datasetSelectors = { ...datasetSelectors };
 
     ns.renderData = function({ response }) {
         const { data } = response;
-        if (!data) throw new Error('[EventListMixin] data is null');
+        if (!data) throw new Error('[StatefulListRenderMixin] data is null');
         const formatted = dataFormat ? dataFormat(data) : { items: data };
         const containerEl = instance.appendElement.querySelector(container);
         const templateEl = instance.appendElement.querySelector(template);
@@ -582,7 +582,7 @@ function applyEventListMixin(instance, options) {
     ns.destroy = function() {
         ns.renderData = null; ns.updateItemState = null; ns.getItemState = null; ns.clear = null;
         ns.cssSelectors = null; ns.datasetSelectors = null;
-        instance.eventList = null;
+        instance.statefulList = null;
     };
 }
 
@@ -700,7 +700,7 @@ function registerEventBrowser() {
     const instance = { id: 'event-browser', appendElement: document.getElementById('event-browser-container') };
     instances.eventBrowser = instance;
 
-    applyEventListMixin(instance, {
+    applyStatefulListRenderMixin(instance, {
         cssSelectors: {
             container: '.event-browser__list',
             item:      '.event-browser__item',
@@ -730,15 +730,15 @@ function registerEventBrowser() {
         })
     });
 
-    instance.subscriptions = { eventBrowser: [instance.eventList.renderData] };
+    instance.subscriptions = { eventBrowser: [instance.statefulList.renderData] };
     Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
         handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
     );
 
     instance.customEvents = {
         click: {
-            [instance.eventList.cssSelectors.ackBtn]: '@ackClicked',
-            [instance.eventList.cssSelectors.item]:                '@eventSelected'
+            [instance.statefulList.cssSelectors.ackBtn]: '@ackClicked',
+            [instance.statefulList.cssSelectors.item]:                '@eventSelected'
         }
     };
     Wkit.bindEvents(instance, instance.customEvents);
@@ -760,7 +760,7 @@ function destroyAll() {
         }
         if (inst.fieldRender) inst.fieldRender.destroy();
         if (inst.listRender) inst.listRender.destroy();
-        if (inst.eventList) inst.eventList.destroy();
+        if (inst.statefulList) inst.statefulList.destroy();
     });
 
     Object.keys(instances).forEach(k => delete instances[k]);
@@ -817,7 +817,7 @@ function boot() {
             targetInstance.listRender.clear();
         },
         '@ackClicked': async ({ event, targetInstance }) => {
-            const item = event.target.closest(targetInstance.eventList.cssSelectors.item);
+            const item = event.target.closest(targetInstance.statefulList.cssSelectors.item);
             const eventId = item?.dataset.id;
             if (!eventId) return;
             try {
@@ -826,15 +826,15 @@ function boot() {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ eventId })
                 });
-                targetInstance.eventList.updateItemState(eventId, { ack: 'true' });
+                targetInstance.statefulList.updateItemState(eventId, { ack: 'true' });
                 console.log('[Page] Event acknowledged:', eventId);
             } catch (err) {
                 console.error('[Page] Ack failed:', err);
             }
         },
         '@eventSelected': ({ event, targetInstance }) => {
-            if (event.target.closest(targetInstance.eventList.cssSelectors.ackBtn)) return;
-            const item = event.target.closest(targetInstance.eventList.cssSelectors.item);
+            if (event.target.closest(targetInstance.statefulList.cssSelectors.ackBtn)) return;
+            const item = event.target.closest(targetInstance.statefulList.cssSelectors.item);
             console.log('[Page] Event selected:', item?.dataset.id);
         }
     });

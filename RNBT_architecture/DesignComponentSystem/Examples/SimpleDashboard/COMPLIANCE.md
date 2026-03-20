@@ -8,7 +8,7 @@
 
 | 분류 | 파일 | 수량 |
 |------|------|------|
-| Mixin | FieldRenderMixin.js, ListRenderMixin.js, EventListMixin.js | 3 |
+| Mixin | FieldRenderMixin.js, ListRenderMixin.js, StatefulListRenderMixin.js | 3 |
 | 컴포넌트 스크립트 | register.js, beforeDestroy.js × 4개 컴포넌트 | 8 |
 | 페이지 스크립트 | before_load.js, loaded.js, before_unload.js | 3 |
 
@@ -28,11 +28,11 @@
 |-------|---------------------------|-----------|-------------|
 | FieldRenderMixin | `'status'` ✅ | `querySelector('[data-' + attr + ']')` ✅ | `dataset[attr]` ✅ |
 | ListRenderMixin | `'level'` ✅ | `querySelector('[data-' + attr + ']')` ✅ | `dataset[attr]` ✅ |
-| EventListMixin | `'id'`, `'severity'`, `'ack'` ✅ | `querySelector('[data-' + attr + ']')` ✅ | `dataset[attr]` ✅ |
+| StatefulListRenderMixin | `'id'`, `'severity'`, `'ack'` ✅ | `querySelector('[data-' + attr + ']')` ✅ | `dataset[attr]` ✅ |
 
 ### itemKey 위치
 
-EventListMixin의 `itemKey`는 datasetSelectors 안에 Mixin 정의 KEY로 위치한다.
+StatefulListRenderMixin의 `itemKey`는 datasetSelectors 안에 Mixin 정의 KEY로 위치한다.
 
 ```javascript
 // EventBrowser register.js
@@ -42,7 +42,7 @@ datasetSelectors: {
     ack:      'ack'
 }
 
-// EventListMixin.js 내부
+// StatefulListRenderMixin.js 내부
 const itemKeyAttr = datasetSelectors.itemKey;  // → 'id'
 ```
 
@@ -61,7 +61,7 @@ const itemKeyAttr = datasetSelectors.itemKey;  // → 'id'
 |-------|-------------|-----------------|------------|
 | FieldRenderMixin | ✅ | ✅ | 없음 ✅ |
 | ListRenderMixin | ✅ | ✅ | 없음 ✅ |
-| EventListMixin | ✅ | ✅ | 없음 ✅ |
+| StatefulListRenderMixin | ✅ | ✅ | 없음 ✅ |
 
 ---
 
@@ -71,7 +71,7 @@ const itemKeyAttr = datasetSelectors.itemKey;  // → 'id'
 
 - Mixin은 이미 selector KEY에 맞춰진 데이터만 받는다.
 - FieldRenderMixin: 플랫 객체
-- ListRenderMixin / EventListMixin: 배열
+- ListRenderMixin / StatefulListRenderMixin: 배열
 
 ### 결과
 
@@ -79,7 +79,7 @@ const itemKeyAttr = datasetSelectors.itemKey;  // → 'id'
 |-------|----------|----------|
 | FieldRenderMixin | `{ key: value }` | N/A |
 | ListRenderMixin | `[{ key: value }, ...]` | `Array.isArray(data)` ✅ |
-| EventListMixin | `[{ key: value }, ...]` | `Array.isArray(data)` ✅ |
+| StatefulListRenderMixin | `[{ key: value }, ...]` | `Array.isArray(data)` ✅ |
 
 ---
 
@@ -95,7 +95,7 @@ const itemKeyAttr = datasetSelectors.itemKey;  // → 'id'
 |-------|-----------|---------------|---------------|
 | FieldRenderMixin | throw ✅ | N/A | N/A |
 | ListRenderMixin | throw ✅ | throw ✅ | throw ✅ |
-| EventListMixin | throw ✅ | throw ✅ | throw ✅ |
+| StatefulListRenderMixin | throw ✅ | throw ✅ | throw ✅ |
 
 ---
 
@@ -114,7 +114,7 @@ const itemKeyAttr = datasetSelectors.itemKey;  // → 'id'
 | SystemInfo | FieldRenderMixin | ✅ | `this.fieldRender.renderData` ✅ | 없음 ✅ |
 | StatusCards | FieldRenderMixin | ✅ | `this.fieldRender.renderData` ✅ | 없음 ✅ |
 | EventLog | ListRenderMixin | ✅ | `this.listRender.renderData` ✅ | 없음 ✅ |
-| EventBrowser | EventListMixin | ✅ | `this.eventList.renderData` ✅ | 없음 ✅ |
+| EventBrowser | StatefulListRenderMixin | ✅ | `this.statefulList.renderData` ✅ | 없음 ✅ |
 
 ---
 

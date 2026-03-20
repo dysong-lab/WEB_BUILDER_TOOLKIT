@@ -16,7 +16,7 @@ DOM 조작 방식, 데이터 형태, 구현 패턴은 목적에 의해 결정되
 |-------|------|
 | FieldRenderMixin | 기존 요소에 데이터를 표시한다 |
 | ListRenderMixin | 항목을 반복 생성하여 표시한다 |
-| EventListMixin | 항목을 반복 생성하여 표시하고, 생성한 개별 항목의 data 속성을 변경한다 |
+| StatefulListRenderMixin | 항목을 반복 생성하여 표시하고, 생성한 개별 항목의 data 속성을 변경한다 |
 
 ---
 
@@ -35,4 +35,4 @@ DOM 조작 방식, 데이터 형태, 구현 패턴은 목적에 의해 결정되
 |-------|------|
 | FieldRenderMixin | [FieldRenderMixin.md](FieldRenderMixin.md) |
 | ListRenderMixin | [ListRenderMixin.md](ListRenderMixin.md) |
-| EventListMixin | [EventListMixin.md](EventListMixin.md) |
+| StatefulListRenderMixin | [StatefulListRenderMixin.md](StatefulListRenderMixin.md) |
