@@ -57,7 +57,7 @@
 function applyListRenderMixin(instance, options) {
     const { cssSelectors = {}, datasetAttrs = {} } = options;
 
-    // 구조 선택자 추출
+    // Mixin이 직접 참조하는 KEY 추출
     const container = cssSelectors.container;
     const template = cssSelectors.template;
 
