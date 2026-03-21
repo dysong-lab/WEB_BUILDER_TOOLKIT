@@ -1,6 +1,6 @@
 ---
 name: create-symbol-state-component
-description: 인라인 SVG HTML을 Mixin 기반 상태 동적 컴포넌트로 변환합니다. datasetSelectors로 data-status를 제어하고 CSS가 색상을 전환합니다.
+description: 인라인 SVG HTML을 Mixin 기반 상태 동적 컴포넌트로 변환합니다. datasetAttrs로 data-status를 제어하고 CSS가 색상을 전환합니다.
 ---
 
 # 심볼 상태 컴포넌트 생성 (Mixin 기반)
@@ -34,7 +34,7 @@ SVG path에 layer 클래스 부여 (layer-grad0, layer-fill-primary)
   ↓
 CSS [data-status="xxx"] 셀렉터로 fill URL 제어
   ↓
-FieldRenderMixin의 datasetSelectors로 data-status 변경 → CSS가 색상 전환
+FieldRenderMixin의 datasetAttrs로 data-status 변경 → CSS가 색상 전환
 ```
 
 **장점:** innerHTML 교체 없이 속성만 변경 (DOM 효율적)
@@ -43,7 +43,7 @@ FieldRenderMixin의 datasetSelectors로 data-status 변경 → CSS가 색상 전
 
 ## Mixin 적용
 
-심볼 컴포넌트는 **FieldRenderMixin의 datasetSelectors**를 활용한다.
+심볼 컴포넌트는 **FieldRenderMixin의 datasetAttrs**를 활용한다.
 `data-status` 속성이 변경되면 CSS가 자동으로 색상을 전환한다.
 
 ### register.js
@@ -58,7 +58,7 @@ const { each, go } = fx;
 // ======================
 
 applyFieldRenderMixin(this, {
-    datasetSelectors: {
+    datasetAttrs: {
         status: 'status'
     }
 });
@@ -251,7 +251,7 @@ Red:             id="paint0-red"
 ## FieldRenderMixin과 심볼의 관계
 
 ```
-FieldRenderMixin의 datasetSelectors:
+FieldRenderMixin의 datasetAttrs:
   status: '[data-status]'
 
 API 응답: { status: 'green' }
@@ -294,7 +294,7 @@ CSS가 하는 일:
    └─ [data-status="xxx"] { .layer-gradN { fill: url(...); } ... }
 
 6. register.js 작성
-   └─ FieldRenderMixin + datasetSelectors: { status: '[data-status]' }
+   └─ FieldRenderMixin + datasetAttrs: { status: '[data-status]' }
 
 7. beforeDestroy.js 작성
    └─ 이벤트 제거 → 구독 해제 → Mixin destroy
@@ -335,5 +335,5 @@ CSS가 하는 일:
 
 | 참조 | 위치 | 특징 |
 |------|------|------|
-| FieldRenderMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/FieldRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/FieldRenderMixin.md) | datasetSelectors 사용법 |
+| FieldRenderMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/FieldRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/FieldRenderMixin.md) | datasetAttrs 사용법 |
 | 시스템 설계 문서 | [/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md) | 전체 아키텍처 |

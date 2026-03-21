@@ -8,7 +8,7 @@
  *
  *   template     → HTML <template> 태그를 cloneNode하여 항목 생성
  *   cssSelectors → 각 항목 내에서 요소를 찾아 textContent 반영
- *   datasetSelectors → 각 항목 내에서 요소를 찾아 dataset 반영
+ *   datasetAttrs → 각 항목 내에서 요소를 찾아 dataset 반영
  *
  * 선택자는 renderData 외에도 이벤트 매핑, 페이지 접근 등에서 활용된다.
  *
@@ -34,7 +34,7 @@
  *           time:      '.event-log__time',
  *           message:   '.event-log__message'
  *       },
- *       datasetSelectors: {
+ *       datasetAttrs: {
  *           level:   'level'
  *       }
  *   });
@@ -46,7 +46,7 @@
  * Mixin이 주입하는 것 (네임스페이스: this.listRender):
  *
  *   this.listRender.cssSelectors      — CSS 선택자 (렌더링, 이벤트 매핑, 페이지 접근)
- *   this.listRender.datasetSelectors  — data-* 속성 선택자 (렌더링, CSS 스타일링)
+ *   this.listRender.datasetAttrs  — data-* 속성 선택자 (렌더링, CSS 스타일링)
  *   this.listRender.renderData        — { response } → 리스트 렌더링
  *   this.listRender.clear             — 컨테이너 비우기
  *   this.listRender.destroy           — 자기 정리
@@ -55,7 +55,7 @@
  */
 
 function applyListRenderMixin(instance, options) {
-    const { cssSelectors = {}, datasetSelectors = {} } = options;
+    const { cssSelectors = {}, datasetAttrs = {} } = options;
 
     // 구조 선택자 추출
     const container = cssSelectors.container;
@@ -68,7 +68,7 @@ function applyListRenderMixin(instance, options) {
 
     // 선택자 보존 (외부에서 computed property로 참조 가능)
     ns.cssSelectors = { ...cssSelectors };
-    ns.datasetSelectors = { ...datasetSelectors };
+    ns.datasetAttrs = { ...datasetAttrs };
 
     /**
      * 데이터 렌더링
@@ -92,8 +92,8 @@ function applyListRenderMixin(instance, options) {
         data.forEach(itemData => {
             const clone = templateEl.content.cloneNode(true);
 
-            // datasetSelectors 반영
-            Object.entries(datasetSelectors).forEach(([key, attr]) => {
+            // datasetAttrs 반영
+            Object.entries(datasetAttrs).forEach(([key, attr]) => {
                 const el = clone.querySelector('[data-' + attr + ']');
                 if (el && itemData[key] !== undefined && itemData[key] !== null) {
                     el.dataset[attr] = itemData[key];
@@ -127,7 +127,7 @@ function applyListRenderMixin(instance, options) {
         ns.renderData = null;
         ns.clear = null;
         ns.cssSelectors = null;
-        ns.datasetSelectors = null;
+        ns.datasetAttrs = null;
         instance.listRender = null;
     };
 }

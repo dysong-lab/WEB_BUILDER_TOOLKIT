@@ -401,7 +401,7 @@ applyFieldRenderMixin(this, {
     cssSelectors: {
         // Mixin 인터페이스 KEY: 'CSS 선택자'
     },
-    datasetSelectors: {
+    datasetAttrs: {
         // Mixin 인터페이스 KEY: 'data-* 속성명'
     }
 });
@@ -1007,7 +1007,7 @@ ComponentName/
 | scripts/beforeDestroy.js | 정리 코드 (디자인 무관, 불변) |
 | preview/NN_name.html | 디자인 변형별 독립 테스트 |
 
-> **핵심:** 약속된 선택자(cssSelectors, datasetSelectors의 값)를 HTML에서 유지하면 디자인은 자유
+> **핵심:** 약속된 선택자(cssSelectors, datasetAttrs의 값)를 HTML에서 유지하면 디자인은 자유
 
 ### 컴포넌트 템플릿
 

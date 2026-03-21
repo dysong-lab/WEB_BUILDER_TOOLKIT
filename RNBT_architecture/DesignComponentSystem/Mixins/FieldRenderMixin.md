@@ -28,12 +28,12 @@ cssSelectors: {
 
 데이터의 KEY와 일치하면 해당 요소의 textContent에 값을 반영한다. 일치하지 않으면 건너뛴다.
 
-### datasetSelectors
+### datasetAttrs
 
 data-* 속성으로 HTML 요소를 참조한다. VALUE는 속성명만 기술한다.
 
 ```javascript
-datasetSelectors: {
+datasetAttrs: {
     status: 'status'        // HTML의 data-status 속성을 가진 요소
 }
 ```
@@ -42,13 +42,13 @@ datasetSelectors: {
 
 ### renderData가 기대하는 데이터
 
-플랫 객체. KEY가 cssSelectors/datasetSelectors의 KEY와 일치해야 한다.
+플랫 객체. KEY가 cssSelectors/datasetAttrs의 KEY와 일치해야 한다.
 
 ```javascript
 // 이 데이터가 renderData에 전달되면:
 {
     name:        'RNBT-01',     // → cssSelectors['name'] → textContent
-    status:      'RUNNING',     // → datasetSelectors['status'] → dataset
+    status:      'RUNNING',     // → datasetAttrs['status'] → dataset
     statusLabel: '정상',        // → cssSelectors['statusLabel'] → textContent
     version:     'v2.4.1'      // → cssSelectors['version'] → textContent
 }
@@ -77,7 +77,7 @@ applyFieldRenderMixin(this, {
         statusLabel: '.system-info__status',
         version:     '.system-info__version'
     },
-    datasetSelectors: {
+    datasetAttrs: {
         status:      'status'
     }
 });
@@ -106,7 +106,7 @@ DOM:
 | 속성/메서드 | 역할 |
 |------------|------|
 | `cssSelectors` | 주입된 cssSelectors (customEvents에서 computed property로 참조) |
-| `datasetSelectors` | 주입된 datasetSelectors |
+| `datasetAttrs` | 주입된 datasetAttrs |
 | `renderData({ response })` | selector KEY에 맞춰진 데이터를 받아 DOM에 반영 |
 | `destroy()` | Mixin이 주입한 모든 속성과 메서드를 정리 |
 
@@ -114,7 +114,7 @@ DOM:
 
 ## 디자인 변형
 
-같은 register.js로 HTML/CSS만 교체할 수 있다. 조건은 **cssSelectors와 datasetSelectors의 VALUE에 해당하는 요소가 HTML에 존재**하는 것이다.
+같은 register.js로 HTML/CSS만 교체할 수 있다. 조건은 **cssSelectors와 datasetAttrs의 VALUE에 해당하는 요소가 HTML에 존재**하는 것이다.
 
 ```
 01_bar.html      — 가로 바 (다크 배경)

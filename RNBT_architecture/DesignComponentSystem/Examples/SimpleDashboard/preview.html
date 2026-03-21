@@ -441,19 +441,19 @@ const Wkit = {
 // ═══════════════════════════════════════════════════════════════
 
 function applyFieldRenderMixin(instance, options) {
-    const { cssSelectors = {}, datasetSelectors = {} } = options;
+    const { cssSelectors = {}, datasetAttrs = {} } = options;
     const ns = {};
     instance.fieldRender = ns;
     ns.cssSelectors = { ...cssSelectors };
-    ns.datasetSelectors = { ...datasetSelectors };
+    ns.datasetAttrs = { ...datasetAttrs };
 
     ns.renderData = function({ response }) {
         const { data } = response;
         if (!data) throw new Error('[FieldRenderMixin] data is null');
         Object.entries(data).forEach(([key, value]) => {
             if (value === undefined || value === null) return;
-            if (datasetSelectors[key]) {
-                const attr = datasetSelectors[key];
+            if (datasetAttrs[key]) {
+                const attr = datasetAttrs[key];
                 const dataEl = instance.appendElement.querySelector('[data-' + attr + ']');
                 if (dataEl) dataEl.dataset[attr] = value;
             }
@@ -467,20 +467,20 @@ function applyFieldRenderMixin(instance, options) {
     ns.destroy = function() {
         ns.renderData = null;
         ns.cssSelectors = null;
-        ns.datasetSelectors = null;
+        ns.datasetAttrs = null;
         instance.fieldRender = null;
     };
 }
 
 function applyListRenderMixin(instance, options) {
-    const { cssSelectors = {}, datasetSelectors = {} } = options;
+    const { cssSelectors = {}, datasetAttrs = {} } = options;
     const container = cssSelectors.container;
     const item = cssSelectors.item;
     const template = cssSelectors.template;
     const ns = {};
     instance.listRender = ns;
     ns.cssSelectors = { ...cssSelectors };
-    ns.datasetSelectors = { ...datasetSelectors };
+    ns.datasetAttrs = { ...datasetAttrs };
 
     ns.renderData = function({ response }) {
         const { data } = response;
@@ -493,7 +493,7 @@ function applyListRenderMixin(instance, options) {
         containerEl.innerHTML = '';
         data.forEach(itemData => {
             const clone = templateEl.content.cloneNode(true);
-            Object.entries(datasetSelectors).forEach(([key, attr]) => {
+            Object.entries(datasetAttrs).forEach(([key, attr]) => {
                 const el = clone.querySelector('[data-' + attr + ']');
                 if (el && itemData[key] !== undefined && itemData[key] !== null) {
                     el.dataset[attr] = itemData[key];
@@ -516,7 +516,7 @@ function applyListRenderMixin(instance, options) {
 
     ns.destroy = function() {
         ns.renderData = null; ns.clear = null;
-        ns.cssSelectors = null; ns.datasetSelectors = null;
+        ns.cssSelectors = null; ns.datasetAttrs = null;
         instance.listRender = null;
     };
 }
@@ -525,15 +525,15 @@ function applyListRenderMixin(instance, options) {
 // ── StatefulListRenderMixin ──
 // ListRenderMixin + updateItemState (개별 항목 상태 변경)
 function applyStatefulListRenderMixin(instance, options) {
-    const { cssSelectors = {}, datasetSelectors = {} } = options;
+    const { cssSelectors = {}, datasetAttrs = {} } = options;
     const container = cssSelectors.container;
     const item = cssSelectors.item;
     const template = cssSelectors.template;
-    const itemKeyAttr = datasetSelectors.itemKey;
+    const itemKeyAttr = datasetAttrs.itemKey;
     const ns = {};
     instance.statefulList = ns;
     ns.cssSelectors = { ...cssSelectors };
-    ns.datasetSelectors = { ...datasetSelectors };
+    ns.datasetAttrs = { ...datasetAttrs };
 
     ns.renderData = function({ response }) {
         const { data } = response;
@@ -546,7 +546,7 @@ function applyStatefulListRenderMixin(instance, options) {
         containerEl.innerHTML = '';
         data.forEach(function(itemData) {
             const clone = templateEl.content.cloneNode(true);
-            Object.entries(datasetSelectors).forEach(function([key, attr]) {
+            Object.entries(datasetAttrs).forEach(function([key, attr]) {
                 const el = clone.querySelector('[data-' + attr + ']');
                 if (el && itemData[key] != null) {
                     el.dataset[attr] = itemData[key];
@@ -587,7 +587,7 @@ function applyStatefulListRenderMixin(instance, options) {
 
     ns.destroy = function() {
         ns.renderData = null; ns.updateItemState = null; ns.getItemState = null; ns.clear = null;
-        ns.cssSelectors = null; ns.datasetSelectors = null;
+        ns.cssSelectors = null; ns.datasetAttrs = null;
         instance.statefulList = null;
     };
 }
@@ -612,7 +612,7 @@ function registerSystemInfo() {
             version:     '.system-info__version',
             uptime:      '.system-info__uptime'
         },
-        datasetSelectors: {
+        datasetAttrs: {
             status: 'status'
         }
     });
@@ -692,7 +692,7 @@ function registerEventLog() {
             message:   '.event-log__message',
             clearBtn:  '.event-log__clear-btn'
         },
-        datasetSelectors: {
+        datasetAttrs: {
             level: 'level'
         }
     });
@@ -739,7 +739,7 @@ function registerEventBrowser() {
             message:   '.event-browser__message',
             ackBtn:    '.event-browser__ack-btn'
         },
-        datasetSelectors: {
+        datasetAttrs: {
             itemKey:  'id',
             severity: 'severity',
             ack:      'ack'

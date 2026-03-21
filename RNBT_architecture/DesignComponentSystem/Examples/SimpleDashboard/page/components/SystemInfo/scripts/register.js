@@ -19,7 +19,7 @@ applyFieldRenderMixin(this, {
         version:     '.system-info__version',
         uptime:      '.system-info__uptime'
     },
-    datasetSelectors: {
+    datasetAttrs: {
         status:      'status'
     }
 });

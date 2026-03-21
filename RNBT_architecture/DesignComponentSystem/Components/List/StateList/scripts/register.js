@@ -22,7 +22,7 @@ applyStatefulListRenderMixin(this, {
         time:      '.state-list__time',
         actionBtn: '.state-list__action-btn'
     },
-    datasetSelectors: {
+    datasetAttrs: {
         itemKey:  'id',
         severity: 'severity',
         ack:      'ack'

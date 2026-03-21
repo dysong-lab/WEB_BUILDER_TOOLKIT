@@ -20,7 +20,7 @@
  *           message:   '.event-message',
  *           source:    '.event-source'
  *       },
- *       datasetSelectors: {
+ *       datasetAttrs: {
  *           itemKey:  'id',
  *           severity: 'severity',
  *           ack:      'ack'
@@ -34,7 +34,7 @@
  * Mixin이 주입하는 것 (네임스페이스: this.statefulList):
  *
  *   this.statefulList.cssSelectors      — 선택자 (container, item, template, 데이터/이벤트용)
- *   this.statefulList.datasetSelectors  — dataset용 선택자
+ *   this.statefulList.datasetAttrs  — dataset용 선택자
  *   this.statefulList.renderData        — { response } → 목록 렌더링
  *   this.statefulList.updateItemState   — (id, state) → 개별 항목 dataset 변경
  *   this.statefulList.getItemState      — (id) → 항목의 dataset 반환
@@ -45,7 +45,7 @@
  */
 
 function applyStatefulListRenderMixin(instance, options) {
-    const { cssSelectors = {}, datasetSelectors = {} } = options;
+    const { cssSelectors = {}, datasetAttrs = {} } = options;
 
     // 구조 선택자 추출
     const container = cssSelectors.container;
@@ -53,7 +53,7 @@ function applyStatefulListRenderMixin(instance, options) {
     const template = cssSelectors.template;
 
     // 항목 식별 속성 추출 (Mixin 정의 KEY)
-    const itemKeyAttr = datasetSelectors.itemKey;
+    const itemKeyAttr = datasetAttrs.itemKey;
 
     // 네임스페이스 생성
     const ns = {};
@@ -61,7 +61,7 @@ function applyStatefulListRenderMixin(instance, options) {
 
     // 선택자 보존
     ns.cssSelectors = { ...cssSelectors };
-    ns.datasetSelectors = { ...datasetSelectors };
+    ns.datasetAttrs = { ...datasetAttrs };
 
     /**
      * 이벤트 목록 렌더링
@@ -84,8 +84,8 @@ function applyStatefulListRenderMixin(instance, options) {
         data.forEach(function(itemData) {
             const clone = templateEl.content.cloneNode(true);
 
-            // datasetSelectors 반영
-            Object.entries(datasetSelectors).forEach(function([key, attr]) {
+            // datasetAttrs 반영
+            Object.entries(datasetAttrs).forEach(function([key, attr]) {
                 const el = clone.querySelector('[data-' + attr + ']');
                 if (el && itemData[key] != null) {
                     el.dataset[attr] = itemData[key];
@@ -156,7 +156,7 @@ function applyStatefulListRenderMixin(instance, options) {
         ns.getItemState = null;
         ns.clear = null;
         ns.cssSelectors = null;
-        ns.datasetSelectors = null;
+        ns.datasetAttrs = null;
         instance.statefulList = null;
     };
 }

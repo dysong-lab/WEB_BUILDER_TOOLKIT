@@ -18,7 +18,7 @@ applyFieldRenderMixin(this, {
         value: '.info-card__value',
         desc:  '.info-card__desc'
     },
-    datasetSelectors: {
+    datasetAttrs: {
         status: 'status'
     }
 });

@@ -22,7 +22,7 @@ applyListRenderMixin(this, {
         message:   '.event-log__message',
         clearBtn:  '.event-log__clear-btn'
     },
-    datasetSelectors: {
+    datasetAttrs: {
         level:   'level'
     }
 });

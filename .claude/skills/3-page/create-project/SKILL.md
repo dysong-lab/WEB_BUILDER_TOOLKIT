@@ -38,7 +38,7 @@ register.js는 Mixin 적용 + 구독 연결 + 이벤트 매핑만 한다.
 
 ```
 cssSelectors     — textContent 반영 (시각용)
-datasetSelectors — dataset 반영 (시스템용)
+datasetAttrs — dataset 반영 (시스템용)
 약속된 선택자를 HTML에서 유지하면 디자인은 자유
 ```
 
@@ -109,7 +109,7 @@ applyFieldRenderMixin(this, {
         name:        '.system-info__name',
         statusLabel: '.system-info__status'
     },
-    datasetSelectors: {
+    datasetAttrs: {
         status:      'status'
     }
 });
@@ -149,7 +149,7 @@ applyListRenderMixin(this, {
         time:      '.event-log__time',
         message:   '.event-log__message'
     },
-    datasetSelectors: {
+    datasetAttrs: {
         level:   'level'
     }
 });
@@ -327,7 +327,7 @@ scripts/
 ├── register.js      ← 동일 (불변)
 └── beforeDestroy.js ← 동일 (불변)
 
-조건: 약속된 선택자(cssSelectors, datasetSelectors의 값)를 HTML에서 유지
+조건: 약속된 선택자(cssSelectors, datasetAttrs의 값)를 HTML에서 유지
 ```
 
 ---

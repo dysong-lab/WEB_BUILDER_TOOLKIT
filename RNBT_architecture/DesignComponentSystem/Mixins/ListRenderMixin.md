@@ -43,19 +43,19 @@ cssSelectors: {
 }
 ```
 
-### datasetSelectors
+### datasetAttrs
 
 data-* 속성으로 HTML 요소를 참조한다.
 
 ```javascript
-datasetSelectors: {
+datasetAttrs: {
     level: 'level'      // HTML의 data-level 속성을 가진 요소
 }
 ```
 
 ### renderData가 기대하는 데이터
 
-배열. 각 항목의 KEY가 cssSelectors/datasetSelectors의 KEY와 일치해야 한다.
+배열. 각 항목의 KEY가 cssSelectors/datasetAttrs의 KEY와 일치해야 한다.
 
 ```javascript
 // 이 배열이 renderData에 전달되면:
@@ -102,7 +102,7 @@ applyListRenderMixin(this, {
         message:   '.event-log__message',
         clearBtn:  '.event-log__clear-btn'
     },
-    datasetSelectors: {
+    datasetAttrs: {
         level: 'level'
     }
 });
@@ -121,7 +121,7 @@ this.subscriptions = {
 | 속성/메서드 | 역할 |
 |------------|------|
 | `cssSelectors` | 주입된 cssSelectors (customEvents에서 computed property로 참조) |
-| `datasetSelectors` | 주입된 datasetSelectors |
+| `datasetAttrs` | 주입된 datasetAttrs |
 | `renderData({ response })` | selector KEY에 맞춰진 배열을 받아 항목을 생성하여 렌더링 |
 | `clear()` | 컨테이너의 모든 항목을 제거 |
 | `destroy()` | Mixin이 주입한 모든 속성과 메서드를 정리 |
@@ -130,7 +130,7 @@ this.subscriptions = {
 
 ## template 태그의 약속
 
-template 내부의 HTML 구조는 자유롭지만, **cssSelectors와 datasetSelectors의 VALUE에 해당하는 요소**가 반드시 존재해야 한다.
+template 내부의 HTML 구조는 자유롭지만, **cssSelectors와 datasetAttrs의 VALUE에 해당하는 요소**가 반드시 존재해야 한다.
 
 ```
 01_list:   수직 리스트 (flex row)

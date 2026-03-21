@@ -23,7 +23,7 @@ applyStatefulListRenderMixin(this, {
         message:   '.event-browser__message',
         ackBtn:    '.event-browser__ack-btn'
     },
-    datasetSelectors: {
+    datasetAttrs: {
         itemKey:  'id',
         severity: 'severity',
         ack:      'ack'

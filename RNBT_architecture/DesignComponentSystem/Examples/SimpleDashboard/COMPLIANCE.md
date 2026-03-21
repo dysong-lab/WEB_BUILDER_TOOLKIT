@@ -20,11 +20,11 @@
 
 - KEY는 Mixin이 정의한다. VALUE는 HTML에서 온다.
 - cssSelectors: KEY → CSS 선택자(VALUE)
-- datasetSelectors: KEY → data-* 속성명(VALUE). Mixin이 내부적으로 `[data-속성명]` 선택자를 조립한다.
+- datasetAttrs: KEY → data-* 속성명(VALUE). Mixin이 내부적으로 `[data-속성명]` 선택자를 조립한다.
 
 ### 결과
 
-| Mixin | datasetSelectors VALUE 형식 | 내부 조립 | dataset 반영 |
+| Mixin | datasetAttrs VALUE 형식 | 내부 조립 | dataset 반영 |
 |-------|---------------------------|-----------|-------------|
 | FieldRenderMixin | `'status'` ✅ | `querySelector('[data-' + attr + ']')` ✅ | `dataset[attr]` ✅ |
 | ListRenderMixin | `'level'` ✅ | `querySelector('[data-' + attr + ']')` ✅ | `dataset[attr]` ✅ |
@@ -32,18 +32,18 @@
 
 ### itemKey 위치
 
-StatefulListRenderMixin의 `itemKey`는 datasetSelectors 안에 Mixin 정의 KEY로 위치한다.
+StatefulListRenderMixin의 `itemKey`는 datasetAttrs 안에 Mixin 정의 KEY로 위치한다.
 
 ```javascript
 // EventBrowser register.js
-datasetSelectors: {
+datasetAttrs: {
     itemKey:  'id',        // Mixin 정의 KEY
     severity: 'severity',
     ack:      'ack'
 }
 
 // StatefulListRenderMixin.js 내부
-const itemKeyAttr = datasetSelectors.itemKey;  // → 'id'
+const itemKeyAttr = datasetAttrs.itemKey;  // → 'id'
 ```
 
 ---
@@ -57,7 +57,7 @@ const itemKeyAttr = datasetSelectors.itemKey;  // → 'id'
 
 ### 결과
 
-| Mixin | cssSelectors | datasetSelectors | dataFormat |
+| Mixin | cssSelectors | datasetAttrs | dataFormat |
 |-------|-------------|-----------------|------------|
 | FieldRenderMixin | ✅ | ✅ | 없음 ✅ |
 | ListRenderMixin | ✅ | ✅ | 없음 ✅ |
@@ -157,7 +157,7 @@ const itemKeyAttr = datasetSelectors.itemKey;  // → 'id'
 
 ### 원칙
 
-- register.js가 선언한 cssSelectors/datasetSelectors의 VALUE에 해당하는 요소가 모든 HTML 디자인 변형에 존재해야 한다.
+- register.js가 선언한 cssSelectors/datasetAttrs의 VALUE에 해당하는 요소가 모든 HTML 디자인 변형에 존재해야 한다.
 
 ### 결과
 

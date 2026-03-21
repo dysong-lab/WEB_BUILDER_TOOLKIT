@@ -41,7 +41,7 @@ cssSelectors: {
 }
 ```
 
-### datasetSelectors
+### datasetAttrs
 
 data-* 속성으로 HTML 요소를 참조한다.
 
@@ -50,7 +50,7 @@ data-* 속성으로 HTML 요소를 참조한다.
 | `itemKey` | O | 항목을 식별하는 data-* 속성명. updateItemState에서 이 속성으로 항목을 찾는다. |
 
 ```javascript
-datasetSelectors: {
+datasetAttrs: {
     itemKey:  'id',          // HTML의 data-id로 항목 식별
     severity: 'severity',    // CSS가 [data-severity]로 스타일링
     ack:      'ack'          // CSS가 [data-ack]로 스타일링
@@ -59,17 +59,17 @@ datasetSelectors: {
 
 ### renderData가 기대하는 데이터
 
-배열. 각 항목의 KEY가 cssSelectors/datasetSelectors의 KEY와 일치해야 한다.
+배열. 각 항목의 KEY가 cssSelectors/datasetAttrs의 KEY와 일치해야 한다.
 
 ```javascript
 [
     {
-        itemKey:  '1',           // → datasetSelectors['itemKey'] → data-id="1"
-        severity: 'warning',     // → cssSelectors['severity'] + datasetSelectors['severity']
+        itemKey:  '1',           // → datasetAttrs['itemKey'] → data-id="1"
+        severity: 'warning',     // → cssSelectors['severity'] + datasetAttrs['severity']
         time:     '14:30:05',    // → cssSelectors['time']
         source:   'sensor-01',   // → cssSelectors['source']
         message:  'Temp high',   // → cssSelectors['message']
-        ack:      'false'        // → datasetSelectors['ack'] → data-ack="false"
+        ack:      'false'        // → datasetAttrs['ack'] → data-ack="false"
     }
 ]
 ```
@@ -110,7 +110,7 @@ applyStatefulListRenderMixin(this, {
         message:   '.event-browser__message',
         ackBtn:    '.event-browser__ack-btn'
     },
-    datasetSelectors: {
+    datasetAttrs: {
         itemKey:  'id',
         severity: 'severity',
         ack:      'ack'
@@ -153,7 +153,7 @@ CSS가 시각 전환: [data-ack="true"] { opacity: 0.5; }
 | 속성/메서드 | 역할 |
 |------------|------|
 | `cssSelectors` | 주입된 cssSelectors (customEvents에서 computed property로 참조) |
-| `datasetSelectors` | 주입된 datasetSelectors |
+| `datasetAttrs` | 주입된 datasetAttrs |
 | `renderData({ response })` | selector KEY에 맞춰진 배열을 받아 항목을 생성하여 렌더링 |
 | `updateItemState(id, state)` | itemKey로 항목을 찾아 dataset을 변경. API 호출은 페이지가 담당. |
 | `getItemState(id)` | itemKey로 항목을 찾아 dataset 복사본을 반환. 없으면 null. |

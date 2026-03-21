@@ -21,7 +21,7 @@ applyListRenderMixin(this, {
         desc:      '.data-list__desc',
         time:      '.data-list__time'
     },
-    datasetSelectors: {
+    datasetAttrs: {
         level: 'level'
     }
 });
