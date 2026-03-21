@@ -99,9 +99,8 @@ function applyListRenderMixin(instance, options) {
                 }
             });
 
-            // cssSelectors 반영 (구조 KEY 제외)
+            // cssSelectors 반영
             Object.entries(cssSelectors).forEach(([key, selector]) => {
-                if (key === 'container' || key === 'item' || key === 'template') return;
                 const el = clone.querySelector(selector);
                 if (el && itemData[key] != null) {
                     el.textContent = itemData[key];
