@@ -4,10 +4,12 @@
  * 데이터 객체의 필드를 DOM 요소에 매핑하여 렌더링한다.
  *
  * ─────────────────────────────────────────────────────────────
- * 값 반영 규칙:
+ * renderData 반영 규칙:
  *
- *   cssSelectors  → 요소를 찾아 textContent에 값 반영
- *   datasetSelectors → 요소를 찾아 dataset에 값 반영
+ *   cssSelectors  → 요소를 찾아 textContent 반영
+ *   datasetSelectors → 요소를 찾아 dataset 반영
+ *
+ * 선택자는 renderData 외에도 이벤트 매핑, 페이지 접근 등에서 활용된다.
  *
  * ─────────────────────────────────────────────────────────────
  * 사용 예시:
@@ -32,8 +34,8 @@
  * ─────────────────────────────────────────────────────────────
  * Mixin이 주입하는 것 (네임스페이스: this.fieldRender):
  *
- *   this.fieldRender.cssSelectors   — textContent용 선택자
- *   this.fieldRender.datasetSelectors  — dataset용 선택자
+ *   this.fieldRender.cssSelectors   — CSS 선택자 (렌더링, 이벤트 매핑, 페이지 접근)
+ *   this.fieldRender.datasetSelectors  — data-* 속성 선택자 (렌더링, CSS 스타일링)
  *   this.fieldRender.renderData     — { response } → DOM 업데이트
  *   this.fieldRender.destroy        — 자기 정리
  *

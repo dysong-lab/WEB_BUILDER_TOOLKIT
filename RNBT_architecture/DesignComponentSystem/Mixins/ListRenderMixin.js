@@ -4,11 +4,13 @@
  * 배열 데이터를 template 기반으로 반복 렌더링한다.
  *
  * ─────────────────────────────────────────────────────────────
- * 값 반영 규칙:
+ * renderData 반영 규칙:
  *
  *   template     → HTML <template> 태그를 cloneNode하여 항목 생성
  *   cssSelectors → 각 항목 내에서 요소를 찾아 textContent 반영
  *   datasetSelectors → 각 항목 내에서 요소를 찾아 dataset 반영
+ *
+ * 선택자는 renderData 외에도 이벤트 매핑, 페이지 접근 등에서 활용된다.
  *
  * ─────────────────────────────────────────────────────────────
  * 사용 예시:
@@ -43,8 +45,8 @@
  * ─────────────────────────────────────────────────────────────
  * Mixin이 주입하는 것 (네임스페이스: this.listRender):
  *
- *   this.listRender.cssSelectors      — 선택자 (container, item, template, 데이터/이벤트용)
- *   this.listRender.datasetSelectors  — 항목 내 dataset용 선택자
+ *   this.listRender.cssSelectors      — CSS 선택자 (렌더링, 이벤트 매핑, 페이지 접근)
+ *   this.listRender.datasetSelectors  — data-* 속성 선택자 (렌더링, CSS 스타일링)
  *   this.listRender.renderData        — { response } → 리스트 렌더링
  *   this.listRender.clear             — 컨테이너 비우기
  *   this.listRender.destroy           — 자기 정리
