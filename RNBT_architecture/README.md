@@ -427,7 +427,7 @@ go(
 
 this.customEvents = {
     // click: {
-    //     [this.listRender.item]: '@itemClicked'
+    //     [this.listRender.cssSelectors.item]: '@itemClicked'
     // }
 };
 

@@ -191,7 +191,7 @@ go(
 
 this.customEvents = {
     click: {
-        [this.listRender.item]: '@eventClicked'
+        [this.listRender.cssSelectors.item]: '@eventClicked'
     }
 };
 bindEvents(this, this.customEvents);

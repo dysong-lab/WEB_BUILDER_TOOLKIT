@@ -240,9 +240,9 @@ figma-to-inline-svg (정적)
     │
     ▼
 create-symbol-state-component (동적)
-    - 하드코딩 색상 → CSS 변수
-    - 상태별 색상 클래스
-    - 런타임 API (setStatus 등)
+    - 하드코딩 색상 → 상태별 CSS 블록
+    - FieldRenderMixin datasetAttrs로 data-status 변경
+    - CSS가 색상 전환 (별도 API 불필요)
 ```
 
 ---

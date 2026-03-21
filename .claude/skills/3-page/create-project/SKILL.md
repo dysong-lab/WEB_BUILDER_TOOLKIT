@@ -37,8 +37,8 @@ register.js는 Mixin 적용 + 구독 연결 + 이벤트 매핑만 한다.
 ### 선택자 계약
 
 ```
-cssSelectors     — textContent 반영 (시각용)
-datasetAttrs — dataset 반영 (시스템용)
+cssSelectors     — KEY: Mixin 인터페이스, VALUE: CSS 선택자
+datasetAttrs — KEY: Mixin 인터페이스, VALUE: data-* 속성명
 약속된 선택자를 HTML에서 유지하면 디자인은 자유
 ```
 
@@ -157,7 +157,7 @@ applyListRenderMixin(this, {
 // customEvents에서 Mixin의 item 선택자를 computed property로 참조
 this.customEvents = {
     click: {
-        [this.listRender.item]: '@eventClicked'
+        [this.listRender.cssSelectors.item]: '@eventClicked'
     }
 };
 ```

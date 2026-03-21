@@ -102,7 +102,7 @@ Mixin의 선택자를 **computed property**로 참조한다. 하드코딩 금지
 // ✅ Mixin의 선택자를 computed property로 참조
 this.customEvents = {
     click: {
-        [this.listRender.item]: '@eventClicked'
+        [this.listRender.cssSelectors.item]: '@eventClicked'
     }
 };
 

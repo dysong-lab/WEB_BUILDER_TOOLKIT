@@ -252,7 +252,7 @@ Red:             id="paint0-red"
 
 ```
 FieldRenderMixin의 datasetAttrs:
-  status: '[data-status]'
+  status: 'status'
 
 API 응답: { status: 'green' }
 
@@ -294,7 +294,7 @@ CSS가 하는 일:
    └─ [data-status="xxx"] { .layer-gradN { fill: url(...); } ... }
 
 6. register.js 작성
-   └─ FieldRenderMixin + datasetAttrs: { status: '[data-status]' }
+   └─ FieldRenderMixin + datasetAttrs: { status: 'status' }
 
 7. beforeDestroy.js 작성
    └─ 이벤트 제거 → 구독 해제 → Mixin destroy
