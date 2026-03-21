@@ -1,15 +1,15 @@
 /**
- * ChartRenderMixin
+ * EChartsMixin
  *
  * 차트 인스턴스를 생성하고, 옵션을 적용하여 표시한다.
  *
  * ListRenderMixin이 template을 복제하여 DOM을 생성하듯,
- * ChartRenderMixin은 ECharts 인스턴스를 생성하여 차트를 렌더링한다.
+ * EChartsMixin은 ECharts 인스턴스를 생성하여 차트를 렌더링한다.
  *
  * ─────────────────────────────────────────────────────────────
  * 사용 예시:
  *
- *   applyChartRenderMixin(this, {
+ *   applyEChartsMixin(this, {
  *       cssSelectors: {
  *           container: '.chart-container'
  *       }
@@ -19,25 +19,25 @@
  *   // { xAxis: {...}, yAxis: {...}, series: [...] }
  *
  * ─────────────────────────────────────────────────────────────
- * Mixin이 주입하는 것 (네임스페이스: this.chartRender):
+ * Mixin이 주입하는 것 (네임스페이스: this.echarts):
  *
- *   this.chartRender.cssSelectors   — 선택자
- *   this.chartRender.renderData     — { response } → 차트 옵션 적용
- *   this.chartRender.setOption      — 옵션 직접 적용 (merge 가능)
- *   this.chartRender.resize         — 차트 리사이즈
- *   this.chartRender.getInstance    — ECharts 인스턴스 반환
- *   this.chartRender.destroy        — 인스턴스 정리
+ *   this.echarts.cssSelectors   — 선택자
+ *   this.echarts.renderData     — { response } → 차트 옵션 적용
+ *   this.echarts.setOption      — 옵션 직접 적용 (merge 가능)
+ *   this.echarts.resize         — 차트 리사이즈
+ *   this.echarts.getInstance    — ECharts 인스턴스 반환
+ *   this.echarts.destroy        — 인스턴스 정리
  *
  * ─────────────────────────────────────────────────────────────
  */
 
-function applyChartRenderMixin(instance, options) {
+function applyEChartsMixin(instance, options) {
     const { cssSelectors = {} } = options;
 
     const container = cssSelectors.container;
 
     const ns = {};
-    instance.chartRender = ns;
+    instance.echarts = ns;
 
     ns.cssSelectors = { ...cssSelectors };
 
@@ -50,7 +50,7 @@ function applyChartRenderMixin(instance, options) {
         if (chartInstance) return chartInstance;
 
         const containerEl = instance.appendElement.querySelector(container);
-        if (!containerEl) throw new Error('[ChartRenderMixin] container not found: ' + container);
+        if (!containerEl) throw new Error('[EChartsMixin] container not found: ' + container);
 
         chartInstance = echarts.init(containerEl);
         return chartInstance;
@@ -63,7 +63,7 @@ function applyChartRenderMixin(instance, options) {
      */
     ns.renderData = function({ response }) {
         const { data } = response;
-        if (!data) throw new Error('[ChartRenderMixin] data is null');
+        if (!data) throw new Error('[EChartsMixin] data is null');
 
         ensureInstance().setOption(data);
     };
@@ -105,6 +105,6 @@ function applyChartRenderMixin(instance, options) {
         ns.resize = null;
         ns.getInstance = null;
         ns.cssSelectors = null;
-        instance.chartRender = null;
+        instance.echarts = null;
     };
 }

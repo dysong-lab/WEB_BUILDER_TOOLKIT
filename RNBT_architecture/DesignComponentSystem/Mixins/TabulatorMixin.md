@@ -1,4 +1,4 @@
-# TableRenderMixin
+# TabulatorMixin
 
 ## 설계 의도
 
@@ -56,7 +56,7 @@ columns: [
 ### register.js
 
 ```javascript
-applyTableRenderMixin(this, {
+applyTabulatorMixin(this, {
     cssSelectors: {
         container: '.data-table__container'
     },
@@ -68,7 +68,7 @@ applyTableRenderMixin(this, {
 });
 
 this.subscriptions = {
-    tableData: [this.tableRender.renderData]
+    tableData: [this.tabulator.renderData]
 };
 ```
 
@@ -76,7 +76,7 @@ this.subscriptions = {
 
 ## 주입되는 네임스페이스
 
-`this.tableRender`
+`this.tabulator`
 
 | 속성/메서드 | 역할 |
 |------------|------|

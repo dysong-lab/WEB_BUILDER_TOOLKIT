@@ -1,15 +1,15 @@
 /**
- * HeatmapRenderMixin
+ * HeatmapJsMixin
  *
  * 히트맵 서피스를 생성하고, 데이터를 매핑하여 표시한다.
  *
- * GPU Shader 기반으로 히트맵 서피스를 렌더링한다.
+ * heatmap.js(h337) 기반으로 히트맵 서피스를 렌더링한다.
  * 데이터 포인트의 위치와 값을 받아 열 분포를 시각화한다.
  *
  * ─────────────────────────────────────────────────────────────
  * 사용 예시:
  *
- *   applyHeatmapRenderMixin(this, {
+ *   applyHeatmapJsMixin(this, {
  *       cssSelectors: {
  *           container: '.heatmap-container'
  *       },
@@ -25,24 +25,24 @@
  *   // [{ x: 100, y: 200, value: 0.8 }, ...]
  *
  * ─────────────────────────────────────────────────────────────
- * Mixin이 주입하는 것 (네임스페이스: this.heatmapRender):
+ * Mixin이 주입하는 것 (네임스페이스: this.heatmapJs):
  *
- *   this.heatmapRender.cssSelectors    — 선택자
- *   this.heatmapRender.renderData      — { response } → 히트맵 데이터 적용
- *   this.heatmapRender.updateConfig    — 프리셋 변경
- *   this.heatmapRender.clear           — 히트맵 데이터 초기화
- *   this.heatmapRender.destroy         — 서피스 정리
+ *   this.heatmapJs.cssSelectors    — 선택자
+ *   this.heatmapJs.renderData      — { response } → 히트맵 데이터 적용
+ *   this.heatmapJs.updateConfig    — 프리셋 변경
+ *   this.heatmapJs.clear           — 히트맵 데이터 초기화
+ *   this.heatmapJs.destroy         — 서피스 정리
  *
  * ─────────────────────────────────────────────────────────────
  */
 
-function applyHeatmapRenderMixin(instance, options) {
+function applyHeatmapJsMixin(instance, options) {
     const { cssSelectors = {}, preset = {} } = options;
 
     const container = cssSelectors.container;
 
     const ns = {};
-    instance.heatmapRender = ns;
+    instance.heatmapJs = ns;
 
     ns.cssSelectors = { ...cssSelectors };
 
@@ -56,7 +56,7 @@ function applyHeatmapRenderMixin(instance, options) {
         if (heatmapInstance) return heatmapInstance;
 
         const containerEl = instance.appendElement.querySelector(container);
-        if (!containerEl) throw new Error('[HeatmapRenderMixin] container not found: ' + container);
+        if (!containerEl) throw new Error('[HeatmapJsMixin] container not found: ' + container);
 
         heatmapInstance = h337.create({
             container: containerEl,
@@ -74,7 +74,7 @@ function applyHeatmapRenderMixin(instance, options) {
      */
     ns.renderData = function({ response }) {
         const { data } = response;
-        if (!data) throw new Error('[HeatmapRenderMixin] data is null');
+        if (!data) throw new Error('[HeatmapJsMixin] data is null');
 
         ensureInstance().setData({
             max: data.max || 1,
@@ -114,6 +114,6 @@ function applyHeatmapRenderMixin(instance, options) {
         ns.updateConfig = null;
         ns.clear = null;
         ns.cssSelectors = null;
-        instance.heatmapRender = null;
+        instance.heatmapJs = null;
     };
 }

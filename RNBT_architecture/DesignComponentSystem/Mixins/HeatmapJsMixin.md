@@ -1,10 +1,10 @@
-# HeatmapRenderMixin
+# HeatmapJsMixin
 
 ## 설계 의도
 
 히트맵 서피스를 생성하고, 데이터를 매핑하여 표시한다.
 
-GPU Shader 기반으로 열 분포를 시각화한다. 데이터 포인트의 위치와 값을 받아 히트맵으로 렌더링한다.
+heatmap.js(h337) 기반으로 열 분포를 시각화한다. 데이터 포인트의 위치와 값을 받아 히트맵으로 렌더링한다.
 
 > **설계 원칙**: [COMPONENT_SYSTEM_DESIGN.md](../../docs/COMPONENT_SYSTEM_DESIGN.md) 참조
 
@@ -60,7 +60,7 @@ preset: {
 ### register.js
 
 ```javascript
-applyHeatmapRenderMixin(this, {
+applyHeatmapJsMixin(this, {
     cssSelectors: {
         container: '.heatmap-panel__surface'
     },
@@ -71,7 +71,7 @@ applyHeatmapRenderMixin(this, {
 });
 
 this.subscriptions = {
-    heatmapData: [this.heatmapRender.renderData]
+    heatmapData: [this.heatmapJs.renderData]
 };
 ```
 
@@ -79,7 +79,7 @@ this.subscriptions = {
 
 ## 주입되는 네임스페이스
 
-`this.heatmapRender`
+`this.heatmapJs`
 
 | 속성/메서드 | 역할 |
 |------------|------|

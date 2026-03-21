@@ -17,9 +17,9 @@ DOM 조작 방식, 데이터 형태, 구현 패턴은 목적에 의해 결정되
 | FieldRenderMixin | 기존 요소에 데이터를 표시한다 |
 | ListRenderMixin | 항목을 반복 생성하여 표시한다 |
 | StatefulListRenderMixin | 항목을 반복 생성하여 표시하고, 생성한 개별 항목의 data 속성을 변경한다 |
-| ChartRenderMixin | 차트 인스턴스를 생성하고, 옵션을 적용하여 표시한다 |
-| TableRenderMixin | 테이블 인스턴스를 생성하고, 데이터를 적용하여 표시한다 |
-| HeatmapRenderMixin | 히트맵 서피스를 생성하고, 데이터를 매핑하여 표시한다 |
+| EChartsMixin | ECharts 인스턴스를 생성하고 관리한다 |
+| TabulatorMixin | Tabulator 인스턴스를 생성하고 관리한다 |
+| HeatmapJsMixin | heatmap.js 기반 열 분포를 시각화하고 관리한다 |
 | MeshStateMixin | 3D 메시의 시각 상태를 데이터에 따라 변경한다 |
 | CameraFocusMixin | 카메라를 특정 대상으로 이동시킨다 |
 
@@ -40,8 +40,8 @@ DOM 조작 방식, 데이터 형태, 구현 패턴은 목적에 의해 결정되
 | FieldRenderMixin | [FieldRenderMixin.md](FieldRenderMixin.md) |
 | ListRenderMixin | [ListRenderMixin.md](ListRenderMixin.md) |
 | StatefulListRenderMixin | [StatefulListRenderMixin.md](StatefulListRenderMixin.md) |
-| ChartRenderMixin | [ChartRenderMixin.md](ChartRenderMixin.md) |
-| TableRenderMixin | [TableRenderMixin.md](TableRenderMixin.md) |
-| HeatmapRenderMixin | [HeatmapRenderMixin.md](HeatmapRenderMixin.md) |
+| EChartsMixin | [EChartsMixin.md](EChartsMixin.md) |
+| TabulatorMixin | [TabulatorMixin.md](TabulatorMixin.md) |
+| HeatmapJsMixin | [HeatmapJsMixin.md](HeatmapJsMixin.md) |
 | MeshStateMixin | [MeshStateMixin.md](MeshStateMixin.md) |
 | CameraFocusMixin | [CameraFocusMixin.md](CameraFocusMixin.md) |

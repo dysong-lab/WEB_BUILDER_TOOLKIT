@@ -1,4 +1,4 @@
-# ChartRenderMixin
+# EChartsMixin
 
 ## 설계 의도
 
@@ -46,14 +46,14 @@ ECharts 옵션 객체. 그대로 `setOption`에 전달된다.
 ### register.js
 
 ```javascript
-applyChartRenderMixin(this, {
+applyEChartsMixin(this, {
     cssSelectors: {
         container: '.chart-panel__chart'
     }
 });
 
 this.subscriptions = {
-    chartData: [this.chartRender.renderData]
+    chartData: [this.echarts.renderData]
 };
 ```
 
@@ -61,7 +61,7 @@ this.subscriptions = {
 
 ## 주입되는 네임스페이스
 
-`this.chartRender`
+`this.echarts`
 
 | 속성/메서드 | 역할 |
 |------------|------|

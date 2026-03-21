@@ -1,12 +1,12 @@
 /**
- * TableRenderMixin
+ * TabulatorMixin
  *
  * 테이블 인스턴스를 생성하고, 데이터를 적용하여 표시한다.
  *
  * ─────────────────────────────────────────────────────────────
  * 사용 예시:
  *
- *   applyTableRenderMixin(this, {
+ *   applyTabulatorMixin(this, {
  *       cssSelectors: {
  *           container: '.table-container'
  *       },
@@ -20,25 +20,25 @@
  *   // [{ name: 'CPU', value: '72%' }, ...]
  *
  * ─────────────────────────────────────────────────────────────
- * Mixin이 주입하는 것 (네임스페이스: this.tableRender):
+ * Mixin이 주입하는 것 (네임스페이스: this.tabulator):
  *
- *   this.tableRender.cssSelectors   — 선택자
- *   this.tableRender.renderData     — { response } → 테이블 데이터 적용
- *   this.tableRender.setData        — 데이터 직접 적용
- *   this.tableRender.clearData      — 데이터 비우기
- *   this.tableRender.getInstance    — Tabulator 인스턴스 반환
- *   this.tableRender.destroy        — 인스턴스 정리
+ *   this.tabulator.cssSelectors   — 선택자
+ *   this.tabulator.renderData     — { response } → 테이블 데이터 적용
+ *   this.tabulator.setData        — 데이터 직접 적용
+ *   this.tabulator.clearData      — 데이터 비우기
+ *   this.tabulator.getInstance    — Tabulator 인스턴스 반환
+ *   this.tabulator.destroy        — 인스턴스 정리
  *
  * ─────────────────────────────────────────────────────────────
  */
 
-function applyTableRenderMixin(instance, options) {
+function applyTabulatorMixin(instance, options) {
     const { cssSelectors = {}, columns = [] } = options;
 
     const container = cssSelectors.container;
 
     const ns = {};
-    instance.tableRender = ns;
+    instance.tabulator = ns;
 
     ns.cssSelectors = { ...cssSelectors };
 
@@ -51,7 +51,7 @@ function applyTableRenderMixin(instance, options) {
         if (tableInstance) return tableInstance;
 
         const containerEl = instance.appendElement.querySelector(container);
-        if (!containerEl) throw new Error('[TableRenderMixin] container not found: ' + container);
+        if (!containerEl) throw new Error('[TabulatorMixin] container not found: ' + container);
 
         tableInstance = new Tabulator(containerEl, {
             columns: columns,
@@ -68,8 +68,8 @@ function applyTableRenderMixin(instance, options) {
      */
     ns.renderData = function({ response }) {
         const { data } = response;
-        if (!data) throw new Error('[TableRenderMixin] data is null');
-        if (!Array.isArray(data)) throw new Error('[TableRenderMixin] data is not an array');
+        if (!data) throw new Error('[TabulatorMixin] data is null');
+        if (!Array.isArray(data)) throw new Error('[TabulatorMixin] data is not an array');
 
         ensureInstance().setData(data);
     };
@@ -110,6 +110,6 @@ function applyTableRenderMixin(instance, options) {
         ns.clearData = null;
         ns.getInstance = null;
         ns.cssSelectors = null;
-        instance.tableRender = null;
+        instance.tabulator = null;
     };
 }
