@@ -59,7 +59,6 @@ function applyListRenderMixin(instance, options) {
 
     // 구조 선택자 추출
     const container = cssSelectors.container;
-    const item = cssSelectors.item;
     const template = cssSelectors.template;
 
     // 네임스페이스 생성
@@ -95,15 +94,16 @@ function applyListRenderMixin(instance, options) {
             // datasetAttrs 반영
             Object.entries(datasetAttrs).forEach(([key, attr]) => {
                 const el = clone.querySelector('[data-' + attr + ']');
-                if (el && itemData[key] !== undefined && itemData[key] !== null) {
+                if (el && itemData[key] != null) {
                     el.dataset[attr] = itemData[key];
                 }
             });
 
-            // cssSelectors 반영
+            // cssSelectors 반영 (구조 KEY 제외)
             Object.entries(cssSelectors).forEach(([key, selector]) => {
+                if (key === 'container' || key === 'item' || key === 'template') return;
                 const el = clone.querySelector(selector);
-                if (el && itemData[key] !== undefined && itemData[key] !== null) {
+                if (el && itemData[key] != null) {
                     el.textContent = itemData[key];
                 }
             });

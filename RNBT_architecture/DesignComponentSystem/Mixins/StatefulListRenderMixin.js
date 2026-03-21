@@ -81,19 +81,20 @@ function applyStatefulListRenderMixin(instance, options) {
 
         containerEl.innerHTML = '';
 
-        data.forEach(function(itemData) {
+        data.forEach(itemData => {
             const clone = templateEl.content.cloneNode(true);
 
             // datasetAttrs 반영
-            Object.entries(datasetAttrs).forEach(function([key, attr]) {
+            Object.entries(datasetAttrs).forEach(([key, attr]) => {
                 const el = clone.querySelector('[data-' + attr + ']');
                 if (el && itemData[key] != null) {
                     el.dataset[attr] = itemData[key];
                 }
             });
 
-            // cssSelectors 반영
-            Object.entries(cssSelectors).forEach(function([key, selector]) {
+            // cssSelectors 반영 (구조 KEY 제외)
+            Object.entries(cssSelectors).forEach(([key, selector]) => {
+                if (key === 'container' || key === 'item' || key === 'template') return;
                 const el = clone.querySelector(selector);
                 if (el && itemData[key] != null) {
                     el.textContent = itemData[key];
@@ -119,7 +120,7 @@ function applyStatefulListRenderMixin(instance, options) {
         );
         if (!el) return;
 
-        Object.entries(state).forEach(function([key, value]) {
+        Object.entries(state).forEach(([key, value]) => {
             el.dataset[key] = value;
         });
     };

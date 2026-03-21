@@ -63,7 +63,7 @@ function applyFieldRenderMixin(instance, options) {
         if (!data) throw new Error('[FieldRenderMixin] data is null');
 
         Object.entries(data).forEach(([key, value]) => {
-            if (value === undefined || value === null) return;
+            if (value == null) return;
 
             // datasetAttrs에 키가 있으면 → dataset 반영
             if (datasetAttrs[key]) {
