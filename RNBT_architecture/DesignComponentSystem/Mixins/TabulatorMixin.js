@@ -33,7 +33,7 @@
  */
 
 function applyTabulatorMixin(instance, options) {
-    const { cssSelectors = {}, columns = [] } = options;
+    const { cssSelectors = {}, columns = [], tabulatorOptions = {} } = options;
 
     const container = cssSelectors.container;
 
@@ -53,11 +53,11 @@ function applyTabulatorMixin(instance, options) {
         const containerEl = instance.appendElement.querySelector(container);
         if (!containerEl) throw new Error('[TabulatorMixin] container not found: ' + container);
 
-        tableInstance = new Tabulator(containerEl, {
+        tableInstance = new Tabulator(containerEl, Object.assign({
             columns: columns,
             data: [],
             layout: 'fitColumns'
-        });
+        }, tabulatorOptions));
         return tableInstance;
     }
 

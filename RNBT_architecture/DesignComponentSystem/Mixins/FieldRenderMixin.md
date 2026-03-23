@@ -28,6 +28,8 @@ cssSelectors: {
 
 데이터의 KEY와 일치하면 해당 요소의 textContent에 값을 반영한다. 일치하지 않으면 건너뛴다.
 
+> **KEY의 성격:** 모든 KEY는 사용자가 정의한다. Mixin이 정의하는 구조적 KEY는 없다. KEY는 "이 데이터를 이 위치에 표시하라"는 지정이다. 데이터와 무관한 KEY(예: `card`)는 customEvents나 페이지 핸들러에서 요소 접근용으로 사용된다.
+
 ### datasetAttrs
 
 data-* 속성으로 HTML 요소를 참조한다. VALUE는 속성명만 기술한다.
@@ -39,6 +41,8 @@ datasetAttrs: {
 ```
 
 데이터의 KEY와 일치하면 해당 요소의 dataset에 값을 반영한다.
+
+> **KEY의 성격:** 모든 KEY는 사용자가 정의한다. cssSelectors와 달리 위치를 지정하지 않는다. "이 데이터를 dataset으로 사용하겠다"는 선언이며, Mixin이 내부에서 `[data-속성명]` 선택자를 조립하여 요소를 찾는다.
 
 ### renderData가 기대하는 데이터
 

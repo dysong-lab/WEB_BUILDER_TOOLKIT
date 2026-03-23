@@ -64,9 +64,9 @@ function applyStatefulListRenderMixin(instance, options) {
     ns.datasetAttrs = { ...datasetAttrs };
 
     /**
-     * 이벤트 목록 렌더링
+     * 목록 렌더링
      *
-     * @param {{ response: { data: Object } }} payload
+     * @param {{ response: { data: Array } }} payload
      */
     ns.renderData = function({ response }) {
         const { data } = response;

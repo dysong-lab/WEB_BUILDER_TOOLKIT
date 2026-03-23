@@ -43,6 +43,8 @@ cssSelectors: {
 }
 ```
 
+> **KEY의 두 종류:** `container`, `item`, `template`은 Mixin이 정의한 KEY다. Mixin이 DOM 구조를 제어하기 위해 직접 참조한다. 나머지(`level`, `time`, `message`, `clearBtn` 등)는 사용자가 정의한다. 데이터 key와 같은 이름의 KEY는 복제된 template 내부에서 자동으로 매칭되어 값이 채워진다. 사용자 정의 KEY가 없으면 template은 복제되지만 값은 채워지지 않는다.
+
 ### datasetAttrs
 
 data-* 속성으로 HTML 요소를 참조한다.
@@ -52,6 +54,8 @@ datasetAttrs: {
     level: 'level'      // HTML의 data-level 속성을 가진 요소
 }
 ```
+
+> **KEY의 성격:** 모든 KEY는 사용자가 정의한다. cssSelectors와 달리 위치를 지정하지 않는다. "이 데이터를 dataset으로 사용하겠다"는 선언이며, Mixin이 내부에서 `[data-속성명]` 선택자를 조립하여 요소를 찾는다.
 
 ### renderData가 기대하는 데이터
 
