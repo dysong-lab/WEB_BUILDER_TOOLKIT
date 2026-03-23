@@ -131,7 +131,7 @@ applyListRenderMixin(this, {
 });
 ```
 
-기능은 container, item, time, message 같은 KEY만 안다. 그 KEY가 HTML에서 어떤 요소인지는 모른다. 디자인이 `.event-log__list`를 `.alarm-list`로 바꿔도, VALUE만 변경하면 기능 코드는 그대로다.
+cssSelectors의 KEY는 두 종류다. `container`와 `template`은 Mixin이 규약으로 요구하는 KEY로, Mixin 내부에서 직접 참조한다. 나머지 KEY(`item`, `time`, `message` 등)는 사용자 정의 KEY로, Mixin은 이를 개별적으로 알지 못하며 일괄 순회하여 데이터를 반영한다. 둘 다 cssSelectors라는 동일한 인터페이스 안에 있으며, 디자인이 `.event-log__list`를 `.alarm-list`로 바꿔도 VALUE만 변경하면 기능 코드는 그대로다.
 
 > 상세 설계 및 구현: [DesignComponentSystem](../README.md)
 
