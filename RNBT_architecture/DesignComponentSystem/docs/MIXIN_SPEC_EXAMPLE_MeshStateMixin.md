@@ -9,7 +9,6 @@
 | 항목 | 내용 |
 |------|------|
 | **목적** | 데이터를 보여준다 (3D 메시의 시각 상태 변경) |
-| **수단** | THREE.Object3D에서 메시를 이름으로 탐색하여 material.color를 변경한다 |
 | **기능** | 데이터의 상태값에 따라 colorMap에서 색상을 찾아 메시에 적용한다. 개별 메시 상태 변경/조회도 지원한다 |
 
 ### 기존 Mixin과의 관계
@@ -17,7 +16,7 @@
 | 항목 | 내용 |
 |------|------|
 | **목적이 같은 기존 Mixin** | FieldRenderMixin (데이터를 보여준다) |
-| **수단의 차이** | FieldRenderMixin은 DOM 요소의 textContent/dataset을 변경한다. MeshStateMixin은 3D 메시의 material.color를 변경한다. 대상이 DOM이 아닌 THREE.Object3D이며, cssSelectors 대신 colorMap으로 상태-색상 매핑을 정의한다. |
+| **기능의 차이** | FieldRenderMixin은 DOM 요소의 textContent/dataset을 변경한다. MeshStateMixin은 3D 메시의 material.color를 변경한다. 대상이 DOM이 아닌 THREE.Object3D이며, cssSelectors 대신 colorMap으로 상태-색상 매핑을 정의한다. |
 
 ---
 

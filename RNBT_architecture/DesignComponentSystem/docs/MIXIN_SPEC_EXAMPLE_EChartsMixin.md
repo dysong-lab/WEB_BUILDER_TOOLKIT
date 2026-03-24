@@ -9,7 +9,6 @@
 | 항목 | 내용 |
 |------|------|
 | **목적** | 데이터를 보여준다 |
-| **수단** | ECharts 인스턴스를 생성하고, 옵션 객체를 setOption에 위임한다 |
 | **기능** | 컨테이너에 ECharts 인스턴스를 lazy init하고, 데이터(ECharts 옵션)를 그대로 setOption에 전달하여 차트를 렌더링한다 |
 
 ### 기존 Mixin과의 관계
@@ -17,7 +16,7 @@
 | 항목 | 내용 |
 |------|------|
 | **목적이 같은 기존 Mixin** | TabulatorMixin (데이터를 보여준다), HeatmapJsMixin (데이터를 보여준다) |
-| **수단의 차이** | TabulatorMixin은 테이블로, HeatmapJsMixin은 히트맵으로 시각화한다. EChartsMixin은 ECharts 라이브러리에 옵션 객체를 위임하여 차트로 시각화한다. 세 Mixin 모두 외부 라이브러리 인스턴스의 라이프사이클을 관리하는 동일한 패턴(lazy init, 데이터 적용, destroy)을 따른다. |
+| **기능의 차이** | TabulatorMixin은 테이블로, HeatmapJsMixin은 히트맵으로 시각화한다. EChartsMixin은 ECharts 라이브러리에 옵션 객체를 위임하여 차트로 시각화한다. 세 Mixin 모두 외부 라이브러리 인스턴스의 라이프사이클을 관리하는 동일한 패턴(lazy init, 데이터 적용, destroy)을 따른다. |
 
 ---
 

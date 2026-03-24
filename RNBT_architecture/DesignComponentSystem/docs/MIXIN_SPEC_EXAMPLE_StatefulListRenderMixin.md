@@ -9,7 +9,6 @@
 | 항목 | 내용 |
 |------|------|
 | **목적** | 데이터를 보여주고, 개별 항목의 상태를 변경한다 |
-| **수단** | HTML `<template>` 태그를 cloneNode하여 항목을 반복 생성하고, dataset을 통해 개별 항목의 상태를 관리한다 |
 | **기능** | template을 복제하여 배열 데이터를 반복 렌더링하고, itemKey로 특정 항목을 찾아 dataset 상태를 변경/조회한다 |
 
 ### 기존 Mixin과의 관계
@@ -17,7 +16,7 @@
 | 항목 | 내용 |
 |------|------|
 | **목적이 같은 기존 Mixin** | ListRenderMixin (데이터를 보여준다) |
-| **수단의 차이** | ListRenderMixin은 "표시"만 한다. StatefulListRenderMixin은 "표시 + 상태 변경"을 담당한다. updateItemState/getItemState로 개별 항목의 dataset을 변경/조회할 수 있다. |
+| **기능의 차이** | ListRenderMixin은 "표시"만 한다. StatefulListRenderMixin은 "표시 + 상태 변경"을 담당한다. updateItemState/getItemState로 개별 항목의 dataset을 변경/조회할 수 있다. |
 
 ---
 

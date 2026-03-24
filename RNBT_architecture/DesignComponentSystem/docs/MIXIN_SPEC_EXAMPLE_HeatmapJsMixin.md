@@ -9,7 +9,6 @@
 | 항목 | 내용 |
 |------|------|
 | **목적** | 데이터를 보여준다 |
-| **수단** | heatmap.js(h337) 인스턴스를 생성하고, 데이터 포인트를 매핑하여 열 분포를 시각화한다 |
 | **기능** | 컨테이너에 히트맵 서피스를 lazy init하고, 위치(x, y)와 값(value)을 가진 데이터 포인트 배열을 히트맵으로 렌더링한다 |
 
 ### 기존 Mixin과의 관계
@@ -17,7 +16,7 @@
 | 항목 | 내용 |
 |------|------|
 | **목적이 같은 기존 Mixin** | EChartsMixin (데이터를 보여준다), TabulatorMixin (데이터를 보여준다) |
-| **수단의 차이** | EChartsMixin은 차트로, TabulatorMixin은 테이블로 시각화한다. HeatmapJsMixin은 heatmap.js 라이브러리에 위임하여 열 분포 히트맵으로 시각화한다. 세 Mixin 모두 외부 라이브러리 인스턴스의 라이프사이클을 관리하는 동일한 패턴(lazy init, 데이터 적용, destroy)을 따른다. |
+| **기능의 차이** | EChartsMixin은 차트로, TabulatorMixin은 테이블로 시각화한다. HeatmapJsMixin은 heatmap.js 라이브러리에 위임하여 열 분포 히트맵으로 시각화한다. 세 Mixin 모두 외부 라이브러리 인스턴스의 라이프사이클을 관리하는 동일한 패턴(lazy init, 데이터 적용, destroy)을 따른다. |
 
 ---
 

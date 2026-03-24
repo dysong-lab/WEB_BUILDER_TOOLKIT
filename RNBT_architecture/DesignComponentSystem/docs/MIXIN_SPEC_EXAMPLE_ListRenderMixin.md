@@ -9,7 +9,6 @@
 | 항목 | 내용 |
 |------|------|
 | **목적** | 데이터를 보여준다 |
-| **수단** | HTML `<template>` 태그를 cloneNode하여 항목을 반복 생성한다 |
 | **기능** | template을 복제하여 배열 데이터를 반복 렌더링한다 |
 
 ### 기존 Mixin과의 관계
@@ -17,7 +16,7 @@
 | 항목 | 내용 |
 |------|------|
 | **목적이 같은 기존 Mixin** | FieldRenderMixin (데이터를 보여준다) |
-| **수단의 차이** | FieldRenderMixin은 이미 존재하는 DOM 요소에 값을 채움. ListRenderMixin은 template에서 DOM을 생성함. 데이터 형태도 다름 (플랫 객체 vs 배열). |
+| **기능의 차이** | FieldRenderMixin은 이미 존재하는 DOM 요소에 값을 채움. ListRenderMixin은 template에서 DOM을 생성함. 데이터 형태도 다름 (플랫 객체 vs 배열). |
 
 ---
 
