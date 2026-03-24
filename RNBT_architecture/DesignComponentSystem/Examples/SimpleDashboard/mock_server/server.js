@@ -9,39 +9,47 @@ app.use(express.json());
 // ─────────────────────────────────────────
 // GET /api/system-info
 // SystemInfo 컴포넌트용 (FieldRenderMixin)
+//
+// cssSelectors KEY: name, statusLabel, version, uptime
+// datasetAttrs KEY: status
 // ─────────────────────────────────────────
 app.get('/api/system-info', (req, res) => {
     const status = 'RUNNING';
     const statusMap = { RUNNING: '정상', STOPPED: '중지', ERROR: '오류' };
 
     res.json({
-        hostname: 'RNBT-PROD-01',
-        status: status,
+        name:        'RNBT-PROD-01',
+        status:      status,
         statusLabel: statusMap[status] || status,
-        version: 'v2.4.1',
-        uptime: `${Math.floor(Math.random() * 1000) + 100}h`
+        version:     'v2.4.1',
+        uptime:      `${Math.floor(Math.random() * 1000) + 100}h`
     });
 });
 
 // ─────────────────────────────────────────
 // GET /api/stats
 // StatusCards 컴포넌트용 (FieldRenderMixin)
+//
+// cssSelectors KEY: cpuValue, memoryValue, diskValue, networkValue
 // ─────────────────────────────────────────
 app.get('/api/stats', (req, res) => {
     res.json({
-        cpu: { value: (Math.random() * 60 + 20).toFixed(1), unit: '%' },
-        memory: { value: (Math.random() * 30 + 50).toFixed(1), unit: '%' },
-        disk: { value: (Math.random() * 10 + 70).toFixed(1), unit: '%' },
-        network: { value: Math.floor(Math.random() * 500 + 100), unit: 'Mbps' }
+        cpuValue:     (Math.random() * 60 + 20).toFixed(1),
+        memoryValue:  (Math.random() * 30 + 50).toFixed(1),
+        diskValue:    (Math.random() * 10 + 70).toFixed(1),
+        networkValue: String(Math.floor(Math.random() * 500 + 100))
     });
 });
 
 // ─────────────────────────────────────────
 // GET /api/events
 // EventLog 컴포넌트용 (ListRenderMixin)
+//
+// cssSelectors KEY: level, time, message
+// datasetAttrs KEY: level
 // ─────────────────────────────────────────
 const levels = ['info', 'warn', 'error'];
-const messages = [
+const eventMessages = [
     'System health check completed',
     'CPU temperature threshold warning',
     'Disk I/O latency spike detected',
@@ -57,21 +65,22 @@ const messages = [
 app.get('/api/events', (req, res) => {
     const now = Date.now();
     const events = Array.from({ length: 8 }, (_, i) => ({
-        id: now - i * 60000,
-        timestamp: new Date(now - i * 60000).toISOString(),
-        level: levels[Math.floor(Math.random() * levels.length)],
-        message: messages[Math.floor(Math.random() * messages.length)],
-        source: ['monitor', 'scheduler', 'agent'][Math.floor(Math.random() * 3)]
+        level:   levels[Math.floor(Math.random() * levels.length)],
+        time:    new Date(now - i * 60000).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
+        message: eventMessages[Math.floor(Math.random() * eventMessages.length)]
     }));
-    res.json({ events });
+    res.json(events);
 });
 
 // ─────────────────────────────────────────
 // GET /api/event-browser
 // EventBrowser 컴포넌트용 (StatefulListRenderMixin)
+//
+// cssSelectors KEY: severity, time, source, message
+// datasetAttrs KEY: itemKey(→data-id), severity, ack
 // ─────────────────────────────────────────
 const severities = ['critical', 'warning', 'info'];
-const eventMessages = [
+const browserMessages = [
     'UPS-01 input voltage drop below threshold',
     'CRAC-03 return temperature exceeding 28°C',
     'PDU-02 load percentage above 85%',
@@ -94,15 +103,17 @@ app.get('/api/event-browser', (req, res) => {
     const events = Array.from({ length: 15 }, (_, i) => {
         const id = 'evt-' + String(1000 + i);
         return {
-            id: id,
-            timestamp: new Date(now - i * 120000 - Math.random() * 60000).toISOString(),
+            itemKey:  id,
             severity: severities[Math.floor(Math.random() * severities.length)],
-            message: eventMessages[Math.floor(Math.random() * eventMessages.length)],
-            source: ['UPS', 'CRAC', 'PDU', 'Sensor', 'Network'][Math.floor(Math.random() * 5)],
-            acknowledged: ackedEvents.has(id)
+            time:     new Date(now - i * 120000 - Math.random() * 60000).toLocaleTimeString('ko-KR', {
+                hour: '2-digit', minute: '2-digit', second: '2-digit'
+            }),
+            source:   ['UPS', 'CRAC', 'PDU', 'Sensor', 'Network'][Math.floor(Math.random() * 5)],
+            message:  browserMessages[Math.floor(Math.random() * browserMessages.length)],
+            ack:      String(ackedEvents.has(id))
         };
     });
-    res.json({ events });
+    res.json(events);
 });
 
 // ─────────────────────────────────────────
