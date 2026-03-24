@@ -42,7 +42,7 @@ cssSelectors: {
 }
 ```
 
-> **KEY의 두 종류:** `container`, `template`은 Mixin이 규약으로 요구하는 KEY다. Mixin 내부에서 직접 참조한다. 나머지(`item`, `level`, `time`, `message`, `clearBtn` 등)는 사용자 정의 KEY다. 사용자 정의 KEY는 "이 데이터를 이 위치에 표시하라"는 지정이다. `item`은 Mixin 내부에서 참조하지 않지만, customEvents에서 항목 클릭 이벤트를 매핑하기 위해 관례적으로 정의한다. 데이터와 무관한 KEY(예: `clearBtn`)는 customEvents나 페이지 핸들러에서 요소 접근용으로 사용된다. 사용자 정의 KEY가 없으면 template은 복제되지만 값은 채워지지 않는다.
+> **KEY의 두 종류:** `container`, `template`은 Mixin이 규약으로 요구하는 KEY다. Mixin 내부에서 직접 참조한다. 나머지(`item`, `level`, `time`, `message`, `clearBtn` 등)는 사용자 정의 KEY다. `item`은 Mixin 내부에서 참조하지 않지만, customEvents에서 항목 클릭 이벤트를 매핑할 때 `[this.listRender.cssSelectors.item]`으로 참조하기 때문에 등록한다. 사용자 정의 KEY가 없으면 template은 복제되지만 값은 채워지지 않는다.
 
 ### datasetAttrs
 
