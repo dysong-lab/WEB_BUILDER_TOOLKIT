@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>StatusCards — 02_list</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: #f1f5f9; padding: 40px; }
+        #status-cards-container { width: 800px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<div id="status-cards-container"></div>
+
+<script src="../../preview_runtime.js"></script>
+<script src="../../../../Mixins/FieldRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('status-cards-container', '../views/02_list.html', '../styles/02_list.css');
+
+    const instance = { id: 'status-cards', appendElement: document.getElementById('status-cards-container') };
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            cpuValue:     '.status-card[data-metric="cpu"] .status-card__value',
+            memoryValue:  '.status-card[data-metric="memory"] .status-card__value',
+            diskValue:    '.status-card[data-metric="disk"] .status-card__value',
+            networkValue: '.status-card[data-metric="network"] .status-card__value',
+            card:         '.status-card'
+        }
+    });
+
+    instance.subscriptions = { stats: [instance.fieldRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.fieldRender.cssSelectors.card]: '@cardClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    Wkit.onEventBusHandlers({
+        '@cardClicked': ({ event, targetInstance }) => {
+            const card = event.target.closest(targetInstance.fieldRender.cssSelectors.card);
+            const metric = card?.dataset.metric;
+            console.log('[Preview] Card clicked:', metric);
+        }
+    });
+
+    GlobalDataPublisher.registerMapping({
+        topic: 'stats',
+        datasetInfo: { datasetName: 'dashboard_stats', param: { baseUrl: 'localhost:4010' } }
+    });
+    GlobalDataPublisher.fetchAndPublish('stats').catch(console.error);
+})();
+</script>
+</body>
+</html>

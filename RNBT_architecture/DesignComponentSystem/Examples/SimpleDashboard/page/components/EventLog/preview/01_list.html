@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>EventLog — 01_list</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: #f1f5f9; padding: 40px; }
+        #event-log-container { width: 700px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<div id="event-log-container"></div>
+
+<script src="../../preview_runtime.js"></script>
+<script src="../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('event-log-container', '../views/01_list.html', '../styles/01_list.css');
+
+    const instance = { id: 'event-log', appendElement: document.getElementById('event-log-container') };
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container: '.event-log__list',
+            item:      '.event-log__item',
+            template:  '#event-log-item-template',
+            level:     '.event-log__level',
+            time:      '.event-log__time',
+            message:   '.event-log__message',
+            clearBtn:  '.event-log__clear-btn'
+        },
+        datasetAttrs: {
+            level: 'level'
+        }
+    });
+
+    instance.subscriptions = { events: [instance.listRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.listRender.cssSelectors.item]:     '@eventClicked',
+            [instance.listRender.cssSelectors.clearBtn]: '@clearClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    Wkit.onEventBusHandlers({
+        '@eventClicked': ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.listRender.cssSelectors.item);
+            const message = item?.querySelector(targetInstance.listRender.cssSelectors.message)?.textContent;
+            console.log('[Preview] Event clicked:', message);
+        },
+        '@clearClicked': ({ targetInstance }) => {
+            targetInstance.listRender.clear();
+        }
+    });
+
+    GlobalDataPublisher.registerMapping({
+        topic: 'events',
+        datasetInfo: { datasetName: 'dashboard_events', param: { baseUrl: 'localhost:4010' } }
+    });
+    GlobalDataPublisher.fetchAndPublish('events').catch(console.error);
+})();
+</script>
+</body>
+</html>

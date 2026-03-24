@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>EventBrowser — 02_table</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: #f1f5f9; padding: 40px; }
+        #event-browser-container { width: 800px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<div id="event-browser-container"></div>
+
+<script src="../../preview_runtime.js"></script>
+<script src="../../../../Mixins/StatefulListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('event-browser-container', '../views/02_table.html', '../styles/02_table.css');
+
+    const instance = { id: 'event-browser', appendElement: document.getElementById('event-browser-container') };
+
+    applyStatefulListRenderMixin(instance, {
+        cssSelectors: {
+            container: '.event-browser__list',
+            item:      '.event-browser__item',
+            template:  '#event-browser-item-template',
+            severity:  '.event-browser__severity-label',
+            time:      '.event-browser__time',
+            source:    '.event-browser__source',
+            message:   '.event-browser__message',
+            ackBtn:    '.event-browser__ack-btn'
+        },
+        datasetAttrs: {
+            itemKey:  'id',
+            severity: 'severity',
+            ack:      'ack'
+        }
+    });
+
+    instance.subscriptions = { eventBrowser: [instance.statefulList.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.statefulList.cssSelectors.ackBtn]: '@ackClicked',
+            [instance.statefulList.cssSelectors.item]:    '@eventSelected'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    Wkit.onEventBusHandlers({
+        '@ackClicked': async ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.statefulList.cssSelectors.item);
+            const eventId = item?.dataset.id;
+            if (!eventId) return;
+
+            try {
+                await fetch('http://localhost:4010/api/event-browser/ack', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ eventId })
+                });
+
+                targetInstance.statefulList.updateItemState(eventId, { ack: 'true' });
+                console.log('[Preview] Event acknowledged:', eventId);
+            } catch (err) {
+                console.error('[Preview] Ack failed:', err);
+            }
+        },
+        '@eventSelected': ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.statefulList.cssSelectors.item);
+            if (event.target.closest(targetInstance.statefulList.cssSelectors.ackBtn)) return;
+            const eventId = item?.dataset.id;
+            console.log('[Preview] Event selected:', eventId);
+        }
+    });
+
+    GlobalDataPublisher.registerMapping({
+        topic: 'eventBrowser',
+        datasetInfo: { datasetName: 'dashboard_eventBrowser', param: { baseUrl: 'localhost:4010' } }
+    });
+    GlobalDataPublisher.fetchAndPublish('eventBrowser').catch(console.error);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>SystemInfo — 01_bar</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: #f1f5f9; padding: 40px; }
+        #system-info-container { width: 600px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<div id="system-info-container"></div>
+
+<script src="../../preview_runtime.js"></script>
+<script src="../../../../Mixins/FieldRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('system-info-container', '../views/01_bar.html', '../styles/01_bar.css');
+
+    const instance = { id: 'system-info', appendElement: document.getElementById('system-info-container') };
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            name:        '.system-info__name',
+            statusLabel: '.system-info__status',
+            version:     '.system-info__version',
+            uptime:      '.system-info__uptime'
+        },
+        datasetAttrs: {
+            status: 'status'
+        }
+    });
+
+    instance.subscriptions = { systemInfo: [instance.fieldRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {};
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    GlobalDataPublisher.registerMapping({
+        topic: 'systemInfo',
+        datasetInfo: { datasetName: 'dashboard_systemInfo', param: { baseUrl: 'localhost:4010' } }
+    });
+    GlobalDataPublisher.fetchAndPublish('systemInfo').catch(console.error);
+})();
+</script>
+</body>
+</html>
