@@ -2,7 +2,6 @@
  * SystemInfo — 조립 코드
  *
  * FieldRenderMixin을 적용하여 시스템 정보를 표시한다.
- * 도메인 로직 없음. Mixin 적용 + 구독 연결 + 이벤트 매핑만.
  */
 const { subscribe } = GlobalDataPublisher;
 const { bindEvents } = Wkit;

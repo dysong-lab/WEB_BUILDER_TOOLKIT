@@ -12,7 +12,7 @@ const { each, go } = fx;
 if (this.stopAllIntervals) {
     this.stopAllIntervals();
 }
-this.pageTimers = null;
+this.pageIntervals = null;
 
 // ======================
 // EVENT BUS CLEANUP
@@ -31,5 +31,4 @@ go(
 );
 
 this.pageDataMappings = null;
-this.dataFormats = null;
 this.pageParams = null;

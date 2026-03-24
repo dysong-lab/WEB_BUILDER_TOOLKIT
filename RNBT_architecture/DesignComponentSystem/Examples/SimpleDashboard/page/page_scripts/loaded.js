@@ -7,41 +7,6 @@ const { registerMapping, fetchAndPublish } = GlobalDataPublisher;
 const { each, go } = fx;
 
 // ======================
-// DATA FORMATS — API 응답을 selector KEY에 맞춰 변환
-// ======================
-
-this.dataFormats = {
-    systemInfo: (data) => ({
-        name:        data.hostname,
-        status:      data.status,
-        statusLabel: data.statusLabel,
-        version:     data.version,
-        uptime:      data.uptime
-    }),
-    stats: (data) => ({
-        cpuValue:     data.cpu.value,
-        memoryValue:  data.memory.value,
-        diskValue:    data.disk.value,
-        networkValue: String(data.network.value)
-    }),
-    events: (data) => data.events.map(event => ({
-        level:   event.level,
-        time:    new Date(event.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
-        message: event.message
-    })),
-    eventBrowser: (data) => data.events.map(event => ({
-        itemKey:  String(event.id),
-        severity: event.severity,
-        time:     new Date(event.timestamp).toLocaleTimeString('ko-KR', {
-            hour: '2-digit', minute: '2-digit', second: '2-digit'
-        }),
-        source:   event.source,
-        message:  event.message,
-        ack:      String(event.acknowledged)
-    }))
-};
-
-// ======================
 // DATA MAPPINGS
 // ======================
 
@@ -51,8 +16,7 @@ this.pageDataMappings = [
         datasetInfo: {
             datasetName: 'dashboard_systemInfo',
             param: { baseUrl: 'localhost:4010' }
-        },
-        dataFormat: this.dataFormats.systemInfo
+        }
         // refreshInterval 없음 → 1회만 fetch
     },
     {
@@ -61,7 +25,6 @@ this.pageDataMappings = [
             datasetName: 'dashboard_stats',
             param: { baseUrl: 'localhost:4010' }
         },
-        dataFormat: this.dataFormats.stats,
         refreshInterval: 5000
     },
     {
@@ -70,7 +33,6 @@ this.pageDataMappings = [
             datasetName: 'dashboard_events',
             param: { baseUrl: 'localhost:4010' }
         },
-        dataFormat: this.dataFormats.events,
         refreshInterval: 10000
     },
     {
@@ -79,7 +41,6 @@ this.pageDataMappings = [
             datasetName: 'dashboard_eventBrowser',
             param: { baseUrl: 'localhost:4010' }
         },
-        dataFormat: this.dataFormats.eventBrowser,
         refreshInterval: 15000
     }
 ];
@@ -104,7 +65,7 @@ go(
 // INTERVAL MANAGEMENT (setTimeout 체이닝)
 // ======================
 
-this.pageTimers = {};
+this.pageIntervals = {};
 
 this.startAllIntervals = () => {
     go(
@@ -113,7 +74,7 @@ this.startAllIntervals = () => {
             if (!refreshInterval) return;
 
             const state = { _stopped: false, _timerId: null };
-            this.pageTimers[topic] = state;
+            this.pageIntervals[topic] = state;
 
             const scheduleNext = () => {
                 if (state._stopped) return;
@@ -134,7 +95,7 @@ this.startAllIntervals = () => {
 
 this.stopAllIntervals = () => {
     go(
-        Object.entries(this.pageTimers),
+        Object.entries(this.pageIntervals),
         each(([_, state]) => {
             state._stopped = true;
             clearTimeout(state._timerId);
