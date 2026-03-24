@@ -1,0 +1,17 @@
+<!-- 03_compact: 컴팩트 한 줄 리스트 (severity 뱃지 + 핵심 정보) -->
+<div class="event-browser">
+    <div class="event-browser__header">
+        <span class="event-browser__title">Events</span>
+    </div>
+    <div class="event-browser__list"></div>
+
+    <template id="event-browser-item-template">
+        <div class="event-browser__item" data-id="" data-severity="" data-ack="false">
+            <span class="event-browser__severity-label"></span>
+            <span class="event-browser__time"></span>
+            <span class="event-browser__source"></span>
+            <span class="event-browser__message"></span>
+            <button class="event-browser__ack-btn">&#10003;</button>
+        </div>
+    </template>
+</div>

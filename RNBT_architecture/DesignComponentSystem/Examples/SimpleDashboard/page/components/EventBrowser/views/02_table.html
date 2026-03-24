@@ -1,0 +1,24 @@
+<!-- 02_table: 테이블 구조 (그리드 레이아웃, 헤더 고정) -->
+<div class="event-browser">
+    <div class="event-browser__header">
+        <span class="event-browser__title">Event Browser</span>
+    </div>
+    <div class="event-browser__table-header">
+        <span class="event-browser__col-severity">Severity</span>
+        <span class="event-browser__col-time">Time</span>
+        <span class="event-browser__col-source">Source</span>
+        <span class="event-browser__col-message">Message</span>
+        <span class="event-browser__col-action">Action</span>
+    </div>
+    <div class="event-browser__list"></div>
+
+    <template id="event-browser-item-template">
+        <div class="event-browser__item" data-id="" data-severity="" data-ack="false">
+            <span class="event-browser__severity-label"></span>
+            <span class="event-browser__time"></span>
+            <span class="event-browser__source"></span>
+            <span class="event-browser__message"></span>
+            <button class="event-browser__ack-btn">ACK</button>
+        </div>
+    </template>
+</div>

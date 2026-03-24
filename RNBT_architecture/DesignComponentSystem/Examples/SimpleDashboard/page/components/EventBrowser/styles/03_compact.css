@@ -1,0 +1,101 @@
+/* 03_compact: 컴팩트 한 줄 리스트 */
+#event-browser-container {
+    .event-browser {
+        background: #0f172a;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .event-browser__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        border-bottom: 1px solid #1e293b;
+    }
+
+    .event-browser__title {
+        font-size: 13px;
+        font-weight: 600;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .event-browser__list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 4px 0;
+    }
+
+    .event-browser__item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 16px;
+        font-size: 12px;
+        border-bottom: 1px solid #1e293b;
+        cursor: pointer;
+        transition: background 0.15s;
+    }
+
+    .event-browser__item:hover { background: #1e293b; }
+
+    .event-browser__severity-label {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        min-width: 60px;
+    }
+
+    .event-browser__item[data-severity="critical"] .event-browser__severity-label { color: #ef4444; }
+    .event-browser__item[data-severity="warning"]  .event-browser__severity-label { color: #f59e0b; }
+    .event-browser__item[data-severity="info"]     .event-browser__severity-label { color: #3b82f6; }
+
+    .event-browser__time {
+        font-size: 11px;
+        color: #475569;
+        font-family: monospace;
+        flex-shrink: 0;
+    }
+
+    .event-browser__source {
+        font-size: 11px;
+        color: #64748b;
+        flex-shrink: 0;
+        min-width: 50px;
+    }
+
+    .event-browser__message {
+        color: #cbd5e1;
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .event-browser__ack-btn {
+        padding: 2px 8px;
+        font-size: 11px;
+        border: 1px solid #334155;
+        border-radius: 3px;
+        background: transparent;
+        color: #64748b;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+
+    .event-browser__ack-btn:hover {
+        background: #334155;
+        color: #f8fafc;
+    }
+
+    /* Ack 상태 */
+    .event-browser__item[data-ack="true"] { opacity: 0.35; }
+    .event-browser__item[data-ack="true"] .event-browser__ack-btn { display: none; }
+}

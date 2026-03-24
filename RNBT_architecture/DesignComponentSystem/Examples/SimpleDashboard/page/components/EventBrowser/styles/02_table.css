@@ -1,0 +1,110 @@
+/* 02_table: 테이블 구조 (그리드 레이아웃, 헤더 고정) */
+#event-browser-container {
+    .event-browser {
+        background: #ffffff;
+        border: 1px solid #d1d5db;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .event-browser__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: #1e293b;
+        color: #f8fafc;
+    }
+
+    .event-browser__title {
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .event-browser__table-header {
+        display: grid;
+        grid-template-columns: 80px 90px 80px 1fr 60px;
+        gap: 8px;
+        padding: 8px 16px;
+        background: #f1f5f9;
+        font-size: 11px;
+        font-weight: 600;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+    .event-browser__list {
+        flex: 1;
+        overflow-y: auto;
+    }
+
+    .event-browser__item {
+        display: grid;
+        grid-template-columns: 80px 90px 80px 1fr 60px;
+        gap: 8px;
+        padding: 8px 16px;
+        font-size: 13px;
+        border-bottom: 1px solid #f1f5f9;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .event-browser__item:nth-child(even) { background: #fafbfc; }
+    .event-browser__item:hover { background: #eff6ff; }
+
+    .event-browser__severity-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .event-browser__item[data-severity="critical"] .event-browser__severity-label { color: #dc2626; }
+    .event-browser__item[data-severity="warning"]  .event-browser__severity-label { color: #d97706; }
+    .event-browser__item[data-severity="info"]     .event-browser__severity-label { color: #2563eb; }
+
+    .event-browser__time {
+        font-size: 12px;
+        color: #94a3b8;
+        font-family: monospace;
+    }
+
+    .event-browser__source {
+        font-size: 12px;
+        color: #64748b;
+        font-weight: 500;
+    }
+
+    .event-browser__message {
+        color: #334155;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .event-browser__ack-btn {
+        padding: 2px 8px;
+        font-size: 10px;
+        font-weight: 600;
+        border: 1px solid #e2e8f0;
+        border-radius: 3px;
+        background: #ffffff;
+        color: #64748b;
+        cursor: pointer;
+    }
+
+    .event-browser__ack-btn:hover {
+        background: #f1f5f9;
+        border-color: #cbd5e1;
+    }
+
+    /* Ack 상태 */
+    .event-browser__item[data-ack="true"] { opacity: 0.5; }
+    .event-browser__item[data-ack="true"] .event-browser__ack-btn { display: none; }
+}
