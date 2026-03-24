@@ -15,7 +15,7 @@
 |---|---|---|
 | 데이터 | 플랫 객체 1개 | 배열 N개 |
 | DOM | 이미 존재하는 요소에 값 채움 | template에서 복제하여 생성 |
-| 추가 KEY | — | container, item, template |
+| 규약 KEY | — | container, template |
 
 ---
 
@@ -25,11 +25,10 @@
 
 CSS 선택자로 HTML 요소를 참조한다.
 
-| KEY | 필수 | 의미 |
+| KEY | 종류 | 의미 |
 |-----|------|------|
-| `container` | O | 항목이 추가될 부모 요소 |
-| `item` | O | 각 항목의 루트 요소 (customEvents에서 참조) |
-| `template` | O | `<template>` 태그 (cloneNode 대상) |
+| `container` | 규약 | 항목이 추가될 부모 요소 |
+| `template` | 규약 | `<template>` 태그 (cloneNode 대상) |
 
 ```javascript
 cssSelectors: {
@@ -43,7 +42,7 @@ cssSelectors: {
 }
 ```
 
-> **KEY의 두 종류:** `container`, `item`, `template`은 Mixin이 정의한 KEY다. Mixin이 DOM 구조를 제어하기 위해 직접 참조한다. 나머지(`level`, `time`, `message`, `clearBtn` 등)는 사용자가 정의한다. 데이터 key와 같은 이름의 KEY는 복제된 template 내부에서 자동으로 매칭되어 값이 채워진다. 사용자 정의 KEY가 없으면 template은 복제되지만 값은 채워지지 않는다.
+> **KEY의 두 종류:** `container`, `template`은 Mixin이 규약으로 요구하는 KEY다. Mixin 내부에서 직접 참조한다. 나머지(`item`, `level`, `time`, `message`, `clearBtn` 등)는 사용자 정의 KEY다. `item`은 Mixin 내부에서 참조하지 않지만, customEvents에서 항목 클릭 이벤트를 매핑하기 위해 관례적으로 정의한다. 데이터 key와 같은 이름의 KEY는 복제된 template 내부에서 자동으로 매칭되어 값이 채워진다. 사용자 정의 KEY가 없으면 template은 복제되지만 값은 채워지지 않는다.
 
 ### datasetAttrs
 
