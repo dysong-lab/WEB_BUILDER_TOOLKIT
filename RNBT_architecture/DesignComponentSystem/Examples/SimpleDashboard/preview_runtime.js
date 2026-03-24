@@ -1,8 +1,58 @@
 /**
  * Preview Runtime — SimpleDashboard 컴포넌트 독립 프리뷰용 런타임 시뮬레이션
  *
- * 실제 런타임(Wkit, Weventbus, GlobalDataPublisher)을 최소한으로 시뮬레이션한다.
- * 각 컴포넌트의 preview HTML에서 <script src="../../preview_runtime.js">로 로드한다.
+ * ─────────────────────────────────────────────────────────────
+ * 이 파일이 필요한 이유:
+ *
+ * 컴포넌트의 register.js는 런타임 환경에서 실행되는 코드다.
+ * register.js 안에서 사용하는 GlobalDataPublisher, Wkit, Weventbus, fx 등은
+ * 실제 RENOBIT 뷰어 런타임이 제공하는 전역 객체다.
+ *
+ * 그런데 preview HTML은 브라우저에서 직접 여는 독립 파일이다.
+ * RENOBIT 런타임 없이 열기 때문에 위 전역 객체들이 존재하지 않는다.
+ * 이 상태에서 register.js의 패턴(Mixin 적용, 구독, 이벤트 매핑)을
+ * 그대로 사용하려면 전역 객체들을 시뮬레이션해야 한다.
+ *
+ * 이 파일이 그 시뮬레이션을 제공한다:
+ *
+ *   GlobalDataPublisher — topic 기반 데이터 발행/구독
+ *                         실제 파일(Utils/GlobalDataPublisher.js)이 존재하지만,
+ *                         내부에서 Wkit.fetchData()를 호출한다.
+ *                         Wkit.fetchData는 런타임이 제공하는 함수이므로
+ *                         preview에서는 직접 fetch(url)로 대체해야 한다.
+ *
+ *   Wkit               — DOM 이벤트 바인딩, 이벤트 버스 핸들러 등록
+ *                         실제 파일(Utils/Wkit.js)이 존재하지만,
+ *                         내부에서 뷰어 런타임의 다른 모듈에 의존한다.
+ *                         단독으로 <script src>로 로드할 수 없다.
+ *
+ *   Weventbus          — 컴포넌트 간 이벤트 전달
+ *                         실제 파일(Utils/Weventbus.js)은 의존성이 fx뿐이라
+ *                         단독 로드가 가능하지만, preview에서는
+ *                         Wkit.onEventBusHandlers와 통합된 간소화 버전을 사용한다.
+ *
+ *   fx                 — 함수형 유틸리티 (go, each)
+ *                         실제 파일(Utils/fx.js)이 존재하고 로드할 수 있지만,
+ *                         preview에서는 go, each만 사용하므로 최소 시뮬레이션이 더 단순.
+ *
+ * 또한 preview 전용 헬퍼(loadComponentAssets)를 제공하여
+ * HTML/CSS 파일을 fetch로 읽어 컨테이너에 삽입한다.
+ *
+ * ─────────────────────────────────────────────────────────────
+ * 사용법:
+ *
+ *   각 컴포넌트의 preview HTML에서:
+ *   <script src="../../../../preview_runtime.js"></script>
+ *   <script src="../../../../../../Mixins/FieldRenderMixin.js"></script>
+ *
+ * ─────────────────────────────────────────────────────────────
+ * 주의:
+ *
+ *   이 시뮬레이션은 preview 동작 확인용이며, 실제 런타임과 동일하지 않다.
+ *   실제 런타임의 Wkit.fetchData, 라이프사이클 관리 등은 포함되지 않는다.
+ *   mock 서버(localhost:4010)가 실행 중이어야 데이터를 받을 수 있다.
+ *
+ * ─────────────────────────────────────────────────────────────
  */
 
 // ── Dataset Registry (datasetName → API endpoint) ──

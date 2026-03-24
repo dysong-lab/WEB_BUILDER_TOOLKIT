@@ -34,11 +34,11 @@
         }
       ],
       "data_type": "1",
-      "interval": "5000",
+      "interval": "0",
       "page_id": "PAGE",
       "query": "",
       "query_type": "",
-      "description": "시스템 메트릭 조회 (StatusCards 컴포넌트) - 5초 갱신",
+      "description": "시스템 메트릭 조회 (StatusCards 컴포넌트)",
       "dataset_id": "dcs-stats-001",
       "name": "dashboard_stats",
       "rest_api": "{\"url\":\"http://#{baseUrl}/api/stats\",\"method\":\"GET\",\"headers\":{},\"body\":\"\"}"
@@ -55,11 +55,11 @@
         }
       ],
       "data_type": "1",
-      "interval": "10000",
+      "interval": "0",
       "page_id": "PAGE",
       "query": "",
       "query_type": "",
-      "description": "이벤트 로그 조회 (EventLog 컴포넌트) - 10초 갱신",
+      "description": "이벤트 로그 조회 (EventLog 컴포넌트)",
       "dataset_id": "dcs-events-001",
       "name": "dashboard_events",
       "rest_api": "{\"url\":\"http://#{baseUrl}/api/events\",\"method\":\"GET\",\"headers\":{},\"body\":\"\"}"
@@ -76,11 +76,11 @@
         }
       ],
       "data_type": "1",
-      "interval": "15000",
+      "interval": "0",
       "page_id": "PAGE",
       "query": "",
       "query_type": "",
-      "description": "이벤트 브라우저 조회 (EventBrowser 컴포넌트) - 15초 갱신",
+      "description": "이벤트 브라우저 조회 (EventBrowser 컴포넌트)",
       "dataset_id": "dcs-event-browser-001",
       "name": "dashboard_eventBrowser",
       "rest_api": "{\"url\":\"http://#{baseUrl}/api/event-browser\",\"method\":\"GET\",\"headers\":{},\"body\":\"\"}"
