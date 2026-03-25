@@ -20,7 +20,7 @@
 |-------|------|
 | FieldRenderMixin | 기존 요소에 데이터를 표시한다 |
 | ListRenderMixin | 항목을 반복 생성하여 표시한다 |
-| StatefulListRenderMixin | 항목을 반복 생성하여 표시하고, 생성한 개별 항목의 data 속성을 변경한다 |
+| StatefulListRenderMixin | 항목을 반복 생성하여 표시하고, 개별 항목의 상태를 변경한다 |
 | EChartsMixin | ECharts 인스턴스를 생성하고 관리한다 |
 | TabulatorMixin | Tabulator 인스턴스를 생성하고 관리한다 |
 | HeatmapJsMixin | heatmap.js 기반 열 분포를 시각화하고 관리한다 |
