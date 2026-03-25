@@ -2,7 +2,10 @@
  * DeviceList — 조립 코드
  *
  * ListRenderMixin으로 장치 목록을 표시하고,
- * PopupMixin으로 클릭한 장치의 상세 정보를 팝업으로 표시한다.
+ * PopupMixin + ListRenderMixin으로 클릭한 장치의 상세 정보를 팝업으로 표시한다.
+ *
+ * 팝업 내부에서도 ListRenderMixin을 사용한다.
+ * appendElement를 shadowRoot로 지정하면 Shadow DOM 안에서 동작한다.
  */
 const { subscribe } = GlobalDataPublisher;
 const { bindEvents } = Wkit;
@@ -12,6 +15,7 @@ const { each, go } = fx;
 // 1. MIXIN 적용
 // ======================
 
+// 장치 목록 (일반 DOM)
 applyListRenderMixin(this, {
     cssSelectors: {
         container: '.device-list__body',
@@ -26,16 +30,26 @@ applyListRenderMixin(this, {
     }
 });
 
+// 상세 팝업 (Shadow DOM)
+// onCreated에서 팝업 내부용 ListRenderMixin을 적용한다.
+this._popupScope = null;
+
 applyPopupMixin(this, {
     cssSelectors: {
-        template:  '#device-detail-popup-template',
-        closeBtn:  '.popup-close-btn',
-        title:     '.popup-title',
-        type:      '.popup-detail-type',
-        status:    '.popup-detail-status',
-        location:  '.popup-detail-location',
-        lastSeen:  '.popup-detail-lastSeen',
-        ip:        '.popup-detail-ip'
+        template: '#device-detail-popup-template',
+        closeBtn: '.popup-close-btn',
+        title:    '.popup-title'
+    },
+    onCreated: (shadowRoot) => {
+        this._popupScope = { appendElement: shadowRoot };
+        applyListRenderMixin(this._popupScope, {
+            cssSelectors: {
+                container: '.popup-detail-list',
+                template:  '#popup-detail-item-template',
+                label:     '.popup-field__label',
+                value:     '.popup-field__value'
+            }
+        });
     }
 });
 
@@ -66,8 +80,7 @@ this.customEvents = {
 };
 bindEvents(this, this.customEvents);
 
-// Shadow DOM 내부 이벤트 (bindEvents로는 shadow boundary를 넘을 수 없음)
-// '@eventName' 문자열을 넘기면 Weventbus로 전파된다 (customEvents와 동일한 패턴).
+// Shadow DOM 내부 이벤트 → Weventbus로 전파
 this.popup.bindPopupEvents({
     click: {
         [this.popup.cssSelectors.closeBtn]: '@devicePopupClose'

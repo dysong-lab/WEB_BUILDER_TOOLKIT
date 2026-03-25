@@ -22,6 +22,7 @@
 
     const instance = { id: 'device-list', appendElement: document.getElementById('device-list-container') };
 
+    // 장치 목록 (일반 DOM)
     applyListRenderMixin(instance, {
         cssSelectors: {
             container: '.device-list__body',
@@ -36,16 +37,25 @@
         }
     });
 
+    // 상세 팝업 (Shadow DOM) + 내부 ListRenderMixin
+    instance._popupScope = null;
+
     applyPopupMixin(instance, {
         cssSelectors: {
-            template:  '#device-detail-popup-template',
-            closeBtn:  '.popup-close-btn',
-            title:     '.popup-title',
-            type:      '.popup-detail-type',
-            status:    '.popup-detail-status',
-            location:  '.popup-detail-location',
-            lastSeen:  '.popup-detail-lastSeen',
-            ip:        '.popup-detail-ip'
+            template: '#device-detail-popup-template',
+            closeBtn: '.popup-close-btn',
+            title:    '.popup-title'
+        },
+        onCreated: (shadowRoot) => {
+            instance._popupScope = { appendElement: shadowRoot };
+            applyListRenderMixin(instance._popupScope, {
+                cssSelectors: {
+                    container: '.popup-detail-list',
+                    template:  '#popup-detail-item-template',
+                    label:     '.popup-field__label',
+                    value:     '.popup-field__value'
+                }
+            });
         }
     });
 
@@ -61,7 +71,6 @@
     };
     Wkit.bindEvents(instance, instance.customEvents);
 
-    // Shadow DOM 내부 이벤트 → Weventbus로 전파 (customEvents와 동일한 패턴)
     instance.popup.bindPopupEvents({
         click: {
             [instance.popup.cssSelectors.closeBtn]: '@devicePopupClose'
@@ -78,21 +87,23 @@
 
             targetInstance.popup.show();
 
-            const sel = targetInstance.popup.cssSelectors;
-            const titleEl = targetInstance.popup.query(sel.title);
+            // 팝업 제목
+            const titleEl = targetInstance.popup.query(targetInstance.popup.cssSelectors.title);
             if (titleEl) titleEl.textContent = item.querySelector(targetInstance.listRender.cssSelectors.name)?.textContent || '';
 
-            // 상세 데이터를 API에서 가져와 팝업에 표시
+            // API fetch → 데이터 변환 → 팝업 내부 ListRenderMixin
             const deviceName = item.querySelector(targetInstance.listRender.cssSelectors.name)?.textContent;
             fetch('http://localhost:4010/api/device-detail?name=' + encodeURIComponent(deviceName))
                 .then(r => r.json())
                 .then(detail => {
-                    const q = (s) => targetInstance.popup.query(s);
-                    if (q(sel.type))     q(sel.type).textContent     = detail.type     || '';
-                    if (q(sel.status))   q(sel.status).textContent   = detail.status   || '';
-                    if (q(sel.location)) q(sel.location).textContent = detail.location || '';
-                    if (q(sel.lastSeen)) q(sel.lastSeen).textContent = detail.lastSeen || '';
-                    if (q(sel.ip))       q(sel.ip).textContent       = detail.ip       || '';
+                    const data = [
+                        { label: 'Type',      value: detail.type },
+                        { label: 'Status',    value: detail.status },
+                        { label: 'Location',  value: detail.location },
+                        { label: 'Last Seen', value: detail.lastSeen },
+                        { label: 'IP',        value: detail.ip }
+                    ];
+                    targetInstance._popupScope.listRender.renderData({ response: { data } });
                 })
                 .catch(console.error);
         }

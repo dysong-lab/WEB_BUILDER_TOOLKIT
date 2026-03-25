@@ -61,20 +61,24 @@ this.pageEventBusHandlers = {
 
         targetInstance.popup.show();
 
-        const sel = targetInstance.popup.cssSelectors;
-        const titleEl = targetInstance.popup.query(sel.title);
+        // 팝업 제목 설정
+        const titleEl = targetInstance.popup.query(targetInstance.popup.cssSelectors.title);
         if (titleEl) titleEl.textContent = item.querySelector(targetInstance.listRender.cssSelectors.name)?.textContent || '';
 
+        // API fetch → 데이터 변환 → 팝업 내부 ListRenderMixin으로 렌더링
         const deviceName = item.querySelector(targetInstance.listRender.cssSelectors.name)?.textContent;
         fetch('http://localhost:4010/api/device-detail?name=' + encodeURIComponent(deviceName))
             .then(r => r.json())
             .then(detail => {
-                const q = (s) => targetInstance.popup.query(s);
-                if (q(sel.type))     q(sel.type).textContent     = detail.type     || '';
-                if (q(sel.status))   q(sel.status).textContent   = detail.status   || '';
-                if (q(sel.location)) q(sel.location).textContent = detail.location || '';
-                if (q(sel.lastSeen)) q(sel.lastSeen).textContent = detail.lastSeen || '';
-                if (q(sel.ip))       q(sel.ip).textContent       = detail.ip       || '';
+                // 플랫 객체 → 배열 변환 (페이지의 데이터 변환 책임)
+                const data = [
+                    { label: 'Type',      value: detail.type },
+                    { label: 'Status',    value: detail.status },
+                    { label: 'Location',  value: detail.location },
+                    { label: 'Last Seen', value: detail.lastSeen },
+                    { label: 'IP',        value: detail.ip }
+                ];
+                targetInstance._popupScope.listRender.renderData({ response: { data } });
             })
             .catch(err => console.error('[Page] Device detail fetch failed:', err));
     },
