@@ -101,20 +101,26 @@ Shadow DOM은 최초 show() 시 lazy 생성된다.
 | `hide()` | 팝업 숨김 |
 | `query(selector)` | Shadow DOM 내 단일 요소 선택. `shadowRoot.querySelector` |
 | `queryAll(selector)` | Shadow DOM 내 모든 요소 선택. `shadowRoot.querySelectorAll` |
-| `destroy()` | Shadow DOM 호스트 제거 + 모든 속성/메서드 null 처리 |
+| `bindPopupEvents(events)` | Shadow DOM 내 이벤트 위임. `'@eventName'`은 Weventbus로 전파. show() 전 호출 가능 (지연 바인딩) |
+| `removePopupEvents()` | `bindPopupEvents`로 바인딩된 이벤트 해제 |
+| `destroy()` | 이벤트 해제 + Shadow DOM 호스트 제거 + 모든 속성/메서드 null 처리 |
 
 ---
 
 ## 5. destroy 범위
 
 ```
+- removePopupEvents() (바인딩된 이벤트 해제)
 - host 요소를 DOM에서 제거 (host.remove())
 - shadowRoot = null
 - host = null
+- _pendingEvents = null
 - ns.show = null
 - ns.hide = null
 - ns.query = null
 - ns.queryAll = null
+- ns.bindPopupEvents = null
+- ns.removePopupEvents = null
 - ns.cssSelectors = null
 - ns.datasetAttrs = null
 - instance.shadowPopup = null
