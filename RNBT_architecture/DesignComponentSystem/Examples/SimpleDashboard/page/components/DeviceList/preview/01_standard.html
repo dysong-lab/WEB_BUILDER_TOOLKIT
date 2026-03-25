@@ -56,11 +56,17 @@
 
     instance.customEvents = {
         click: {
-            [instance.listRender.cssSelectors.item]:  '@deviceClicked',
-            [instance.popup.cssSelectors.closeBtn]:   '@devicePopupClose'
+            [instance.listRender.cssSelectors.item]: '@deviceClicked'
         }
     };
     Wkit.bindEvents(instance, instance.customEvents);
+
+    // Shadow DOM 내부 이벤트 (show 전에 호출 — lazy 바인딩)
+    instance.popup.bindPopupEvents({
+        click: {
+            [instance.popup.cssSelectors.closeBtn]: () => instance.popup.hide()
+        }
+    });
 
     Wkit.onEventBusHandlers({
         '@deviceClicked': ({ event, targetInstance }) => {
@@ -86,9 +92,6 @@
                     if (q(sel.ip))       q(sel.ip).textContent       = detail.ip       || '';
                 })
                 .catch(console.error);
-        },
-        '@devicePopupClose': ({ targetInstance }) => {
-            targetInstance.popup.hide();
         }
     });
 

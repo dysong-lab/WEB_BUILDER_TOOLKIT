@@ -18,6 +18,12 @@
  *       }
  *   });
  *
+ *   this.popup.bindPopupEvents({
+ *       click: {
+ *           [this.popup.cssSelectors.closeBtn]: () => this.popup.hide()
+ *       }
+ *   });
+ *
  *   this.popup.show();
  *   this.popup.query(this.popup.cssSelectors.title).textContent = 'Hello';
  *   this.popup.hide();
@@ -25,13 +31,15 @@
  * ─────────────────────────────────────────────────────────────
  * Mixin이 주입하는 것 (네임스페이스: this.popup):
  *
- *   this.popup.cssSelectors  — 주입된 선택자 (computed property 참조용)
- *   this.popup.datasetAttrs  — 주입된 dataset 속성
- *   this.popup.show          — 팝업 표시 (lazy init)
- *   this.popup.hide          — 팝업 숨김
- *   this.popup.query         — Shadow DOM 내 요소 선택
- *   this.popup.queryAll      — Shadow DOM 내 모든 요소 선택
- *   this.popup.destroy       — 정리
+ *   this.popup.cssSelectors      — 주입된 선택자 (computed property 참조용)
+ *   this.popup.datasetAttrs      — 주입된 dataset 속성
+ *   this.popup.show              — 팝업 표시 (lazy init)
+ *   this.popup.hide              — 팝업 숨김
+ *   this.popup.query             — Shadow DOM 내 요소 선택
+ *   this.popup.queryAll          — Shadow DOM 내 모든 요소 선택
+ *   this.popup.bindPopupEvents   — Shadow DOM 내 이벤트 바인딩
+ *   this.popup.removePopupEvents — Shadow DOM 내 이벤트 해제
+ *   this.popup.destroy           — 정리
  *
  * ─────────────────────────────────────────────────────────────
  */
@@ -50,8 +58,29 @@ function applyPopupMixin(instance, options) {
     let host = null;
     let shadowRoot = null;
 
+    // ── 이벤트 관리 ──
+
+    const _popupListeners = [];
+    let _pendingEvents = null;
+
+    function bindInternal(events) {
+        Object.entries(events).forEach(([eventType, selectorMap]) => {
+            Object.entries(selectorMap).forEach(([selector, handler]) => {
+                const listener = function(e) {
+                    const target = e.target.closest(selector);
+                    if (target) handler(e);
+                };
+                shadowRoot.addEventListener(eventType, listener);
+                _popupListeners.push({ eventType, listener });
+            });
+        });
+    }
+
+    // ── Shadow DOM 생성 ──
+
     /**
      * Shadow DOM 생성 (lazy init)
+     * 최초 show() 호출 시 실행된다.
      */
     function ensureInstance() {
         if (shadowRoot) return;
@@ -67,8 +96,16 @@ function applyPopupMixin(instance, options) {
 
         host.style.display = 'none';
 
+        // bindPopupEvents가 show() 전에 호출되었으면 여기서 바인딩
+        if (_pendingEvents) {
+            bindInternal(_pendingEvents);
+            _pendingEvents = null;
+        }
+
         if (onCreated) onCreated(shadowRoot);
     }
+
+    // ── Public 메서드 ──
 
     /**
      * 팝업 표시
@@ -111,18 +148,51 @@ function applyPopupMixin(instance, options) {
     };
 
     /**
+     * Shadow DOM 내 이벤트 바인딩
+     *
+     * Shadow DOM 내부 이벤트는 shadow boundary를 넘을 때 retarget되므로,
+     * instance.appendElement에서의 이벤트 위임(bindEvents)으로는 잡을 수 없다.
+     * 이 메서드로 Shadow DOM 내부에 직접 이벤트를 위임한다.
+     *
+     * show() 전에 호출해도 된다. Shadow DOM 생성 시 자동 바인딩된다.
+     *
+     * @param {Object} events - { eventType: { selector: handler } }
+     */
+    ns.bindPopupEvents = function(events) {
+        if (shadowRoot) {
+            bindInternal(events);
+        } else {
+            _pendingEvents = events;
+        }
+    };
+
+    /**
+     * Shadow DOM 내 이벤트 해제
+     */
+    ns.removePopupEvents = function() {
+        _popupListeners.forEach(({ eventType, listener }) => {
+            if (shadowRoot) shadowRoot.removeEventListener(eventType, listener);
+        });
+        _popupListeners.length = 0;
+    };
+
+    /**
      * 정리
      */
     ns.destroy = function() {
+        ns.removePopupEvents();
         if (host) {
             host.remove();
             host = null;
         }
         shadowRoot = null;
+        _pendingEvents = null;
         ns.show = null;
         ns.hide = null;
         ns.query = null;
         ns.queryAll = null;
+        ns.bindPopupEvents = null;
+        ns.removePopupEvents = null;
         ns.cssSelectors = null;
         ns.datasetAttrs = null;
         instance.popup = null;

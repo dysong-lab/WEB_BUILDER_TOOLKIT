@@ -58,10 +58,18 @@ go(
 // 3. 이벤트 매핑
 // ======================
 
+// 일반 DOM 이벤트 (instance.appendElement 안)
 this.customEvents = {
     click: {
-        [this.listRender.cssSelectors.item]:  '@deviceClicked',
-        [this.popup.cssSelectors.closeBtn]:   '@devicePopupClose'
+        [this.listRender.cssSelectors.item]: '@deviceClicked'
     }
 };
 bindEvents(this, this.customEvents);
+
+// Shadow DOM 내부 이벤트 (bindEvents로는 shadow boundary를 넘을 수 없음)
+// show() 전에 호출해도 된다 — Shadow DOM 생성 시 자동 바인딩된다.
+this.popup.bindPopupEvents({
+    click: {
+        [this.popup.cssSelectors.closeBtn]: () => this.popup.hide()
+    }
+});
