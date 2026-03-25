@@ -1,24 +1,93 @@
 ---
 name: audit-project
-description: DesignComponentSystem 프로젝트의 전체 건강 상태를 점검합니다. 구조 합리성, 구현-문서 일치, 설계 일관성, SKILL 정합성을 종합 진단합니다.
+description: WEB_BUILDER_TOOLKIT 프로젝트의 전체 건강 상태를 점검합니다. Figma 변환, 컴포넌트 시스템, SKILL, 문서 일관성을 종합 진단합니다.
 ---
 
 # 프로젝트 전체 점검 (Audit)
 
-DesignComponentSystem의 구조, 구현, 문서, SKILL이 일관되고 합리적인 상태인지 종합 점검한다.
+WEB_BUILDER_TOOLKIT 전체의 구조, 구현, 문서, SKILL이 일관되고 합리적인 상태인지 종합 점검한다.
 
 > 이 SKILL은 코드를 수정하지 않는다. 점검 결과만 보고한다.
 > 수정이 필요한 항목이 발견되면 사용자에게 보고하고 지시를 기다린다.
 
 ---
 
-## 점검 항목
+## 점검 범위
 
-5개 영역을 순서대로 점검한다. 각 영역의 결과를 개별 보고한 후 최종 요약을 제시한다.
+```
+WEB_BUILDER_TOOLKIT/
+├── Figma_Conversion/              ← 영역 1: Figma 파이프라인
+├── RNBT_architecture/
+│   ├── Utils/                     ← 영역 2: 런타임 유틸리티
+│   └── DesignComponentSystem/     ← 영역 3: 컴포넌트 시스템
+│       ├── Mixins/                ← 영역 3-1: 구현-문서 일치
+│       ├── Components/            ← 영역 3-2: 컴포넌트 카탈로그
+│       ├── Examples/              ← 영역 3-3: 예제 프로젝트
+│       └── docs/                  ← 영역 3-4: 설계 문서 일관성
+├── .claude/skills/                ← 영역 4: SKILL 정합성
+├── CLAUDE.md                      ← 영역 5: 루트 문서
+└── README.md                      ← 영역 5: 루트 문서
+```
+
+7개 영역을 순서대로 점검한다. 각 영역의 결과를 개별 보고한 후 최종 요약을 제시한다.
 
 ---
 
-## 1. 구조 합리성 (Strategy Validation)
+## 1. Figma 파이프라인 (Figma_Conversion)
+
+### 점검 내용
+
+Figma → 정적 HTML/CSS 변환 파이프라인이 정상 상태인지 확인한다.
+
+### 점검 방법
+
+1. [Figma_Conversion/CLAUDE.md](/Figma_Conversion/CLAUDE.md) 읽기
+2. [Figma_Conversion/PUBLISHING_COMPONENT_STRUCTURE.md](/Figma_Conversion/PUBLISHING_COMPONENT_STRUCTURE.md) 읽기
+3. Static_Components/ 디렉토리에 변환 결과물이 있는가
+4. 변환 결과물의 구조가 PUBLISHING_COMPONENT_STRUCTURE.md에서 정의한 형태와 일치하는가
+5. SKILL(figma-to-html, figma-to-inline-svg)에서 참조하는 가이드 파일이 존재하는가
+   - `/.claude/guides/FIGMA_MCP_GUIDE.md`
+   - `/.claude/guides/FIGMA_IMPLEMENTATION_GUIDE.md`
+   - `/.claude/guides/CODING_STYLE.md`
+
+### 보고 형식
+
+```
+■ Figma 파이프라인
+  CLAUDE.md:      ✅ / ⚠️
+  컴포넌트 구조 문서: ✅ / ⚠️
+  변환 결과물:    N개 프로젝트, M개 컴포넌트
+  가이드 파일:    ✅ 전부 존재 / ⚠️ N건 누락
+  비고: (문제가 있으면 구체적으로)
+```
+
+---
+
+## 2. 런타임 유틸리티 (Utils)
+
+### 점검 내용
+
+런타임 유틸리티가 존재하고, Mixin/예제에서 참조하는 함수가 실제로 존재하는지 확인한다.
+
+### 점검 방법
+
+1. [RNBT_architecture/Utils/](/RNBT_architecture/Utils/) 디렉토리의 .js 파일 목록
+2. Mixin/예제에서 사용하는 전역 객체(GlobalDataPublisher, Wkit, Weventbus, fx)가 Utils/에 있는가
+3. [RNBT_architecture/README.md](/RNBT_architecture/README.md)의 Utils 설명이 현재 파일과 일치하는가
+
+### 보고 형식
+
+```
+■ 런타임 유틸리티
+  Utils 파일:         N개 존재
+  전역 객체 매핑:     ✅ / ⚠️
+  README 일치:        ✅ / ⚠️
+  비고: (문제가 있으면 구체적으로)
+```
+
+---
+
+## 3. 구조 합리성 (Strategy Validation)
 
 ### 점검 내용
 
@@ -46,7 +115,7 @@ N + M 전략이 여전히 유효한지 확인한다.
 
 ---
 
-## 2. 구현-문서 일치 (Implementation-Document Sync)
+## 4. 구현-문서 일치 (Implementation-Document Sync)
 
 ### 점검 내용
 
@@ -78,7 +147,7 @@ N + M 전략이 여전히 유효한지 확인한다.
 
 ---
 
-## 3. 설계 문서 일관성 (Design Document Consistency)
+## 5. 설계 문서 일관성 (Design Document Consistency)
 
 ### 점검 내용
 
@@ -126,7 +195,7 @@ docs/ 디렉토리의 모든 문서가 서로 일관되는지 확인한다.
 
 ---
 
-## 4. SKILL 정합성 (Skill Coverage)
+## 6. SKILL 정합성 (Skill Coverage)
 
 ### 점검 내용
 
@@ -138,8 +207,9 @@ SKILL 파일들이 현재 시스템 상태와 일치하는지 확인한다.
 
 1. **용어 일치**: SKILL에서 사용하는 Mixin 이름, 네임스페이스, 함수명이 구현체와 일치하는가
 2. **패턴 일치**: SKILL에서 안내하는 register.js, beforeDestroy.js 패턴이 실제 예제와 일치하는가
-3. **커버리지**: 구현된 Mixin 중 SKILL에서 안내하지 않는 것이 있는가 (안내 필요 여부 판단 포함)
+3. **역할 분담**: SKILL이 "공통 패턴"을, Mixin .md가 "구체 사용법"을 담당하는 구조가 명확한가. SHARED_INSTRUCTIONS.md에 Mixin 문서 확인 규칙이 있는가.
 4. **참조 링크**: SKILL에서 참조하는 문서/예제 경로가 유효한가
+5. **삭제된 경로**: SKILL이 삭제된 디렉토리(Projects/, tests/ 등)를 참조하지 않는가
 
 ### 보고 형식
 
@@ -147,14 +217,15 @@ SKILL 파일들이 현재 시스템 상태와 일치하는지 확인한다.
 ■ SKILL 정합성
   용어 일치:    ✅ / ⚠️ N건 불일치
   패턴 일치:    ✅ / ⚠️ N건 불일치
-  커버리지:     N개 Mixin 중 M개 SKILL에서 안내
+  역할 분담:    ✅ 명확 / ⚠️ 불명확
   참조 링크:    ✅ 전부 유효 / ⚠️ N건 깨짐
+  삭제 경로:    ✅ 없음 / ⚠️ N건 발견
   비고: (문제가 있으면 구체적으로)
 ```
 
 ---
 
-## 5. 기타 프로젝트 점검 (Project Health)
+## 7. 프로젝트 건강 (Project Health)
 
 ### 점검 내용
 
@@ -172,23 +243,26 @@ SKILL 파일들이 현재 시스템 상태와 일치하는지 확인한다.
 
 3. **Mixins/README.md**: 목록이 실제 .js 파일과 일치하는가. 상세 문서 링크가 유효한가.
 
-4. **CLAUDE.md**: 프로젝트 루트의 CLAUDE.md가 현재 구조를 반영하는가.
+4. **루트 문서**: WEB_BUILDER_TOOLKIT/CLAUDE.md와 README.md가 현재 프로젝트 구조를 반영하는가. 삭제된 디렉토리(Projects/, tests/)를 참조하지 않는가.
+
+5. **RNBT_architecture 문서**: RNBT_architecture/CLAUDE.md와 README.md가 현재 상태와 일치하는가.
 
 ### 보고 형식
 
 ```
-■ 기타 프로젝트 점검
-  Components:        ✅ / ⚠️ (상세)
-  Examples:          ✅ / ⚠️ (상세)
-  Mixins/README.md:  ✅ / ⚠️ (상세)
-  CLAUDE.md:         ✅ / ⚠️ (상세)
+■ 프로젝트 건강
+  Components:             ✅ / ⚠️ (상세)
+  Examples:               ✅ / ⚠️ (상세)
+  Mixins/README.md:       ✅ / ⚠️ (상세)
+  루트 문서 (CLAUDE/README): ✅ / ⚠️ (상세)
+  RNBT 문서 (CLAUDE/README): ✅ / ⚠️ (상세)
 ```
 
 ---
 
 ## 최종 보고 형식
 
-5개 영역을 모두 점검한 후, 다음 형식으로 최종 요약을 제시한다.
+7개 영역을 모두 점검한 후, 다음 형식으로 최종 요약을 제시한다.
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━
@@ -199,11 +273,13 @@ SKILL 파일들이 현재 시스템 상태와 일치하는지 확인한다.
 
 | 영역 | 판정 | 불일치 |
 |------|------|--------|
+| Figma 파이프라인 | ✅ / ⚠️ / ❌ | N건 |
+| 런타임 유틸리티 | ✅ / ⚠️ / ❌ | N건 |
 | 구조 합리성 | ✅ / ⚠️ / ❌ | N건 |
 | 구현-문서 일치 | ✅ / ⚠️ / ❌ | N건 |
 | 설계 문서 일관성 | ✅ / ⚠️ / ❌ | N건 |
 | SKILL 정합성 | ✅ / ⚠️ / ❌ | N건 |
-| 기타 프로젝트 | ✅ / ⚠️ / ❌ | N건 |
+| 프로젝트 건강 | ✅ / ⚠️ / ❌ | N건 |
 
 총 불일치: N건
   심각: N건
