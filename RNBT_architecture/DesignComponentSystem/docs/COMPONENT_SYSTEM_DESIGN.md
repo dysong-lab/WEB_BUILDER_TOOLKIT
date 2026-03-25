@@ -166,7 +166,7 @@ StatefulListRenderMixin은 두 기능을 가진다:
 
 ```
 1.  컴포넌트 = HTML/CSS + 조립 코드(register.js)
-2.  Mixin = 네임스페이스로 1단계 주입, 속성+메서드 소유
+2.  Mixin = 네임스페이스로 주입, 속성+메서드 소유. 조합은 조립 코드가 주도
 3.  각 Mixin이 받는 옵션이 그 Mixin의 인터페이스
     - 2D DOM Mixin: cssSelectors/datasetAttrs (선택자 계약)
     - 그 외: Mixin별 문서 참고
@@ -510,17 +510,32 @@ function applyListRenderMixin(instance, options) {
 - 다른 Mixin에 대한 참조 (비의존 원칙)
 ```
 
-### 1단계 주입 원칙
+### 조립 코드 주도 원칙
 
-Mixin은 컴포넌트 인스턴스에 **직접(1단계)** 주입한다. Mixin이 다른 Mixin을 주입하거나 의존하지 않는다.
+Mixin의 조합은 **조립 코드(register.js)**가 주도한다. Mixin이 내부에서 다른 Mixin을 호출하지 않는다.
 
 ```
-✅ this.listRender.renderData()           — 1단계
-✅ this.echarts.setOption()               — 1단계
-❌ this.someMixin.echarts.setOption()     — 2단계 (금지)
+✅ register.js에서 applyListRenderMixin과 applyPopupMixin을 각각 호출
+   → 조립 코드가 주도. 두 Mixin은 서로를 모른다.
+
+❌ applyPopupMixin 내부에서 applyEChartsMixin을 호출
+   → Mixin이 주도. PopupMixin이 EChartsMixin에 의존하게 된다.
 ```
 
-Mixin 간 협력이 필요하면 **컴포넌트의 조립 코드**가 중재한다.
+Mixin이 콜백(onCreated 등)을 제공하고, 조립 코드가 그 콜백 안에서 다른 Mixin을 적용하는 것은 허용된다. 콜백의 코드는 register.js에 작성되므로, 주도권은 조립 코드에 있다.
+
+```javascript
+// register.js — 조립 코드가 주도하는 예시
+applyPopupMixin(this, {
+    cssSelectors: { template: '#popup-template', ... },
+    onCreated: (shadowRoot) => {
+        // 이 코드는 register.js에 작성되어 있다.
+        // PopupMixin은 이 안에 뭐가 있는지 모른다.
+        this._popupScope = { appendElement: shadowRoot };
+        applyListRenderMixin(this._popupScope, { ... });
+    }
+});
+```
 
 ### 에러 처리
 
