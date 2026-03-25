@@ -515,9 +515,9 @@ function applyListRenderMixin(instance, options) {
 Mixin은 컴포넌트 인스턴스에 **직접(1단계)** 주입한다. Mixin이 다른 Mixin을 주입하거나 의존하지 않는다.
 
 ```
-✅ this.listRender.renderData()    — 1단계
-✅ this.echarts.setOption()        — 1단계
-❌ this.popup.echarts.setOption()  — 2단계 (금지)
+✅ this.listRender.renderData()           — 1단계
+✅ this.echarts.setOption()               — 1단계
+❌ this.someMixin.echarts.setOption()     — 2단계 (금지)
 ```
 
 Mixin 간 협력이 필요하면 **컴포넌트의 조립 코드**가 중재한다.
