@@ -1,6 +1,6 @@
 # Mixin 범용성 검토
 
-검토일: 2026-03-23
+검토일: 2026-03-25
 
 ---
 
@@ -46,7 +46,7 @@
 
 ## StatefulListRenderMixin
 
-**하는 일:** 배열 반복 생성 + 개별 항목의 dataset 상태 변경
+**하는 일:** 배열 반복 생성 + 개별 항목의 상태 변경/조회
 
 **범용성:** "목록 표시 + 개별 항목 상태 변경" 패턴에 적합.
 
@@ -116,11 +116,23 @@ Tabulator의 고급 옵션(pagination, movableColumns, groupBy 등)을 전달할
 
 ## CameraFocusMixin
 
-**하는 일:** 카메라를 대상으로 부드럽게 이동, 초기 위치 복귀
+**하는 일:** 보는 위치를 전환한다. 카메라를 특정 메시나 좌표로 부드럽게 이동시키고, 초기 위치로 복귀한다.
 
 **범용성:** focusOn(메시 기반), focusOnPosition(좌표 기반), reset(초기 복귀)을 제공. offset, camera/controls override도 지원.
 
 **제약:** 없음.
+
+---
+
+## ShadowPopupMixin
+
+**하는 일:** Shadow DOM으로 팝업을 생성하고, 표시/숨김/정리를 관리한다. `<template>` 태그에서 HTML/CSS를 가져와 Shadow DOM에 주입한다.
+
+**범용성:** 스타일 격리(Shadow DOM), 선택자 계약(cssSelectors), 이벤트 전파(bindPopupEvents → Weventbus)를 지원. 팝업 내부에서 다른 Mixin을 사용할 수 있다(`appendElement`를 `shadowRoot`로 지정하는 래퍼 패턴).
+
+**제약:** 팝업 위치를 제어하는 옵션이 없다. 현재는 CSS로 위치를 결정한다(`position: fixed` + `inset: 0`으로 화면 중앙 오버레이). 팝업을 특정 요소 근처에 띄우는(tooltip, dropdown) 용도에는 CSS만으로는 한계가 있을 수 있다.
+
+**→ 새 Mixin 후보:** 특정 요소 기준 위치 지정이 필요하면 별도 Mixin 또는 옵션 확장 검토
 
 ---
 
@@ -136,6 +148,7 @@ Tabulator의 고급 옵션(pagination, movableColumns, groupBy 등)을 전달할
 | HeatmapJs | ✅ | 없음 |
 | MeshState | ⚠️ | 색상만 변경 |
 | CameraFocus | ✅ | 없음 |
+| ShadowPopup | ✅ | 팝업 위치 제어 옵션 없음 (CSS 의존) |
 
 ## 새 Mixin 후보
 
@@ -144,3 +157,4 @@ Tabulator의 고급 옵션(pagination, movableColumns, groupBy 등)을 전달할
 | FieldRender의 textContent 한정 | 요소의 속성(src, href, value 등)을 데이터에 따라 변경 |
 | ListRender의 전체 교체 | 부분 업데이트(추가/삭제/변경)로 목록 관리 |
 | MeshState의 색상 한정 | 3D 메시의 다양한 시각 속성(visibility, opacity 등) 변경 |
+| ShadowPopup의 위치 제어 부재 | 특정 요소 기준 위치 지정 (tooltip/dropdown 용도) |
