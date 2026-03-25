@@ -62,6 +62,13 @@ This file provides guidance to Claude Code when working in this repository.
 |------|-------|
 | 프로젝트 전체의 구조/구현/문서/SKILL 일관성 종합 진단 | `audit-project` |
 
+### Mixin 개발 (5-mixin)
+
+| 조건 | SKILL |
+|------|-------|
+| 새 Mixin이 필요할 때 — 요구사항 분석 → 명세서 작성 | `create-mixin-spec` |
+| 명세서가 승인된 후 — 구현 → 문서 → 동기화 | `implement-mixin` |
+
 ---
 
 ## 디렉토리별 문서
