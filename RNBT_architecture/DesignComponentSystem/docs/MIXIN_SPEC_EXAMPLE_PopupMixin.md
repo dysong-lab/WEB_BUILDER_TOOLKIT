@@ -26,12 +26,14 @@
 
 | KEY | 종류 | 의미 |
 |-----|------|------|
+| `template` | 규약 | 팝업 HTML/CSS가 담긴 `<template>` 태그. 내부의 `<style>`은 Shadow DOM 스코프로 격리된다. |
 | `closeBtn` | 사용자 정의 | 닫기 버튼. customEvents에서 참조 |
 | `title` | 사용자 정의 | 제목 표시 요소 |
 | `content` | 사용자 정의 | 콘텐츠 영역 |
 
-> **규약 KEY 없음.** 모든 KEY는 사용자가 정의한다. 팝업 내부의 어떤 요소에 이름을 붙일지는 디자인에 따라 달라진다.
-> **검색 범위:** 일반 Mixin의 cssSelectors는 `instance.appendElement` 안에서 요소를 찾는다. PopupMixin의 cssSelectors는 `shadowRoot` 안에서 요소를 찾는다. 검색 범위만 다르고, 디자인과 기능을 분리하는 역할은 동일하다.
+> **규약 KEY**: Mixin 내부에서 `cssSelectors.template`을 직접 참조하여 `<template>`을 찾고, 그 내용을 Shadow DOM에 주입한다. 없으면 show()에서 throw.
+> **사용자 정의 KEY**: 팝업 내부의 어떤 요소에 이름을 붙일지는 디자인에 따라 달라진다.
+> **검색 범위:** 일반 Mixin의 cssSelectors는 `instance.appendElement` 안에서 요소를 찾는다. PopupMixin에서 `template`은 `instance.appendElement` 안에서 찾고, 나머지 사용자 정의 KEY는 `shadowRoot` 안에서 찾는다. 디자인과 기능을 분리하는 역할은 동일하다.
 
 ### datasetAttrs
 
@@ -39,28 +41,13 @@
 |-----|------|------|
 | | 사용자 정의 | CSS에서 `[data-*]`로 스타일링에 활용 |
 
-> 규약 KEY 없음. 필요 시 사용자가 정의한다. Mixin이 `shadowRoot.querySelector('[data-' + attr + ']')`로 요소를 찾는다.
+> 규약 KEY 없음. 필요 시 사용자가 정의한다.
 
 ### 기타 옵션
 
 | 옵션 | 필수 | 의미 |
 |------|------|------|
-| `getHTML` | O | 팝업 내부 HTML을 반환하는 함수. `() => string` |
-| `getStyles` | X | 팝업 내부 CSS를 반환하는 함수. `() => string`. Shadow DOM 스코프 |
 | `onCreated` | X | Shadow DOM 생성 완료 후 호출되는 콜백. `(shadowRoot) => void` |
-
-```javascript
-applyPopupMixin(this, {
-    cssSelectors: {
-        closeBtn: '.popup-close-btn',
-        title:    '.popup-title',
-        content:  '.popup-content'
-    },
-    getHTML: () => htmlCode,
-    getStyles: () => cssCode,
-    onCreated: (shadowRoot) => { /* 초기 설정 */ }
-});
-```
 
 ---
 
@@ -88,7 +75,12 @@ renderData 패턴이 아닌 직접 호출 패턴:
   - 닫기 이벤트 수신 → popup.hide() 호출
 
 Shadow DOM은 최초 show() 시 lazy 생성된다.
-이후 show/hide는 visibility만 토글한다.
+  1. cssSelectors.template으로 <template> 태그를 찾는다
+  2. host 요소를 생성하고 Shadow DOM을 연결한다
+  3. template의 content를 clone하여 Shadow DOM에 주입한다
+  4. onCreated 콜백을 호출한다 (있으면)
+
+이후 show/hide는 display만 토글한다.
 ```
 
 ---
@@ -132,19 +124,42 @@ Shadow DOM은 최초 show() 시 lazy 생성된다.
 
 ## 6. 사용 예시
 
-### register.js (3D 컴포넌트)
+### HTML
+
+```html
+<div class="asset-component">
+    <!-- 컴포넌트 본체 -->
+
+    <template id="asset-popup-template">
+        <style>
+            .popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; }
+            .popup-panel { background: #1e1e1e; border-radius: 8px; padding: 24px; min-width: 400px; }
+            .popup-title { font-size: 18px; color: #fff; }
+            .popup-close-btn { cursor: pointer; }
+        </style>
+        <div class="popup-overlay">
+            <div class="popup-panel">
+                <div class="popup-header">
+                    <h2 class="popup-title"></h2>
+                    <button class="popup-close-btn">✕</button>
+                </div>
+                <div class="popup-content"></div>
+            </div>
+        </div>
+    </template>
+</div>
+```
+
+### register.js
 
 ```javascript
-const { htmlCode, cssCode } = this.properties.publishCode || {};
-
 applyPopupMixin(this, {
     cssSelectors: {
+        template: '#asset-popup-template',
         closeBtn: '.popup-close-btn',
         title:    '.popup-title',
         content:  '.popup-content'
-    },
-    getHTML: () => htmlCode,
-    getStyles: () => cssCode
+    }
 });
 
 // customEvents에서 Mixin의 선택자를 computed property로 참조
