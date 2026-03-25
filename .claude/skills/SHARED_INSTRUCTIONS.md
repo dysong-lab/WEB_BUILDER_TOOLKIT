@@ -114,6 +114,33 @@ this.customEvents = {
 };
 ```
 
+### Shadow DOM 내부 이벤트 (ShadowPopupMixin 사용 시)
+
+Shadow DOM 내부 이벤트는 shadow boundary를 넘을 때 `event.target`이 host 요소로 retarget된다. `bindEvents`로는 Shadow DOM 내부 요소의 클릭을 잡을 수 없다.
+
+`bindPopupEvents`를 사용한다. `@eventName` 문자열을 넘기면 Weventbus로 전파된다 (customEvents와 동일한 패턴).
+
+```javascript
+// 일반 DOM 이벤트 → bindEvents (기존 패턴)
+this.customEvents = {
+    click: {
+        [this.listRender.cssSelectors.item]: '@deviceClicked'
+    }
+};
+bindEvents(this, this.customEvents);
+
+// Shadow DOM 내부 이벤트 → bindPopupEvents
+this.shadowPopup.bindPopupEvents({
+    click: {
+        [this.shadowPopup.cssSelectors.closeBtn]: '@popupClose'
+    }
+});
+```
+
+`show()` 전에 호출해도 된다. Shadow DOM 생성 시 자동 바인딩된다.
+
+> 상세: [ShadowPopupMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/ShadowPopupMixin.md) 참조
+
 ---
 
 ## beforeDestroy 정리 순서

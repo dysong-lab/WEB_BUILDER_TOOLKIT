@@ -361,5 +361,8 @@ scripts/
 |------|------|
 | 시스템 설계 문서 | [/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md) |
 | 예제 | [/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/](/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/) |
+| 예제 (DeviceList — 팝업+목록 조합) | [/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/page/components/DeviceList/](/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/page/components/DeviceList/) |
 | FieldRenderMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/FieldRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/FieldRenderMixin.md) |
 | ListRenderMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/ListRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/ListRenderMixin.md) |
+| ShadowPopupMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/ShadowPopupMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/ShadowPopupMixin.md) |
+| 전체 Mixin 목록 | [/RNBT_architecture/DesignComponentSystem/Mixins/README.md](/RNBT_architecture/DesignComponentSystem/Mixins/README.md) |
