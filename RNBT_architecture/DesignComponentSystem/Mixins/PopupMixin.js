@@ -18,28 +18,28 @@
  *       }
  *   });
  *
- *   this.popup.bindPopupEvents({
+ *   this.shadowPopup.bindPopupEvents({
  *       click: {
- *           [this.popup.cssSelectors.closeBtn]: '@popupClose'
+ *           [this.shadowPopup.cssSelectors.closeBtn]: '@popupClose'
  *       }
  *   });
  *
- *   this.popup.show();
- *   this.popup.query(this.popup.cssSelectors.title).textContent = 'Hello';
- *   this.popup.hide();
+ *   this.shadowPopup.show();
+ *   this.shadowPopup.query(this.shadowPopup.cssSelectors.title).textContent = 'Hello';
+ *   this.shadowPopup.hide();
  *
  * ─────────────────────────────────────────────────────────────
- * Mixin이 주입하는 것 (네임스페이스: this.popup):
+ * Mixin이 주입하는 것 (네임스페이스: this.shadowPopup):
  *
- *   this.popup.cssSelectors      — 주입된 선택자 (computed property 참조용)
- *   this.popup.datasetAttrs      — 주입된 dataset 속성
- *   this.popup.show              — 팝업 표시 (lazy init)
- *   this.popup.hide              — 팝업 숨김
- *   this.popup.query             — Shadow DOM 내 요소 선택
- *   this.popup.queryAll          — Shadow DOM 내 모든 요소 선택
- *   this.popup.bindPopupEvents   — Shadow DOM 내 이벤트 바인딩
- *   this.popup.removePopupEvents — Shadow DOM 내 이벤트 해제
- *   this.popup.destroy           — 정리
+ *   this.shadowPopup.cssSelectors      — 주입된 선택자 (computed property 참조용)
+ *   this.shadowPopup.datasetAttrs      — 주입된 dataset 속성
+ *   this.shadowPopup.show              — 팝업 표시 (lazy init)
+ *   this.shadowPopup.hide              — 팝업 숨김
+ *   this.shadowPopup.query             — Shadow DOM 내 요소 선택
+ *   this.shadowPopup.queryAll          — Shadow DOM 내 모든 요소 선택
+ *   this.shadowPopup.bindPopupEvents   — Shadow DOM 내 이벤트 바인딩
+ *   this.shadowPopup.removePopupEvents — Shadow DOM 내 이벤트 해제
+ *   this.shadowPopup.destroy           — 정리
  *
  * ─────────────────────────────────────────────────────────────
  */
@@ -50,7 +50,7 @@ function applyPopupMixin(instance, options) {
     const template = cssSelectors.template;
 
     const ns = {};
-    instance.popup = ns;
+    instance.shadowPopup = ns;
 
     ns.cssSelectors = { ...cssSelectors };
     ns.datasetAttrs = { ...datasetAttrs };
@@ -204,6 +204,6 @@ function applyPopupMixin(instance, options) {
         ns.removePopupEvents = null;
         ns.cssSelectors = null;
         ns.datasetAttrs = null;
-        instance.popup = null;
+        instance.shadowPopup = null;
     };
 }

@@ -70,7 +70,7 @@ instance.appendElement
 
 ## 주입되는 네임스페이스
 
-`this.popup`
+`this.shadowPopup`
 
 | 속성/메서드 | 역할 |
 |------------|------|
@@ -102,9 +102,9 @@ bindEvents(this, this.customEvents);
 ### Shadow DOM 내부 이벤트 → bindPopupEvents
 
 ```javascript
-this.popup.bindPopupEvents({
+this.shadowPopup.bindPopupEvents({
     click: {
-        [this.popup.cssSelectors.closeBtn]: '@popupClose'
+        [this.shadowPopup.cssSelectors.closeBtn]: '@popupClose'
     }
 });
 ```
@@ -176,7 +176,7 @@ applyPopupMixin(this, {
 
 ```javascript
 '@deviceClicked': ({ event, targetInstance }) => {
-    targetInstance.popup.show();
+    targetInstance.shadowPopup.show();
 
     fetch('/api/device-detail?name=' + deviceName)
         .then(r => r.json())
@@ -204,7 +204,7 @@ if (this._popupScope && this._popupScope.listRender) {
     this._popupScope.listRender.destroy();
 }
 this._popupScope = null;
-this.popup.destroy();
+this.shadowPopup.destroy();
 ```
 
 ---
@@ -253,9 +253,9 @@ this.customEvents = {
 bindEvents(this, this.customEvents);
 
 // Shadow DOM 내부 이벤트 → Weventbus로 전파
-this.popup.bindPopupEvents({
+this.shadowPopup.bindPopupEvents({
     click: {
-        [this.popup.cssSelectors.closeBtn]: '@devicePopupClose'
+        [this.shadowPopup.cssSelectors.closeBtn]: '@devicePopupClose'
     }
 });
 ```

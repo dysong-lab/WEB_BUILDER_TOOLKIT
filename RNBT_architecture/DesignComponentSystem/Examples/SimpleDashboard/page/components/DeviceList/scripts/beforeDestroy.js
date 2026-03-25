@@ -20,5 +20,5 @@ if (this._popupScope && this._popupScope.listRender) {
     this._popupScope.listRender.destroy();
 }
 this._popupScope = null;
-this.popup.destroy();
+this.shadowPopup.destroy();
 this.listRender.destroy();

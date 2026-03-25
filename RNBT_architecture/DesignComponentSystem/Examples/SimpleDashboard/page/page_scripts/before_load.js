@@ -59,10 +59,10 @@ this.pageEventBusHandlers = {
         const item = event.target.closest(targetInstance.listRender.cssSelectors.item);
         if (!item) return;
 
-        targetInstance.popup.show();
+        targetInstance.shadowPopup.show();
 
         // 팝업 제목 설정
-        const titleEl = targetInstance.popup.query(targetInstance.popup.cssSelectors.title);
+        const titleEl = targetInstance.shadowPopup.query(targetInstance.shadowPopup.cssSelectors.title);
         if (titleEl) titleEl.textContent = item.querySelector(targetInstance.listRender.cssSelectors.name)?.textContent || '';
 
         // API fetch → 데이터 변환 → 팝업 내부 ListRenderMixin으로 렌더링
@@ -85,7 +85,7 @@ this.pageEventBusHandlers = {
 
     // DeviceList에서 팝업 닫기 (Shadow DOM → Weventbus로 전파됨)
     '@devicePopupClose': ({ targetInstance }) => {
-        targetInstance.popup.hide();
+        targetInstance.shadowPopup.hide();
     },
 
     // EventBrowser에서 항목 클릭

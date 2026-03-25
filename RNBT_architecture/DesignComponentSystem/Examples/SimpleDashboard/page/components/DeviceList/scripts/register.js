@@ -81,8 +81,8 @@ this.customEvents = {
 bindEvents(this, this.customEvents);
 
 // Shadow DOM 내부 이벤트 → Weventbus로 전파
-this.popup.bindPopupEvents({
+this.shadowPopup.bindPopupEvents({
     click: {
-        [this.popup.cssSelectors.closeBtn]: '@devicePopupClose'
+        [this.shadowPopup.cssSelectors.closeBtn]: '@devicePopupClose'
     }
 });

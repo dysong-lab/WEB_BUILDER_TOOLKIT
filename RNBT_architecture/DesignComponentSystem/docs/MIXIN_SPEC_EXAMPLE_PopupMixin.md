@@ -89,7 +89,7 @@ Shadow DOM은 최초 show() 시 lazy 생성된다.
 
 ### 네임스페이스 이름
 
-`this.popup`
+`this.shadowPopup`
 
 ### 메서드/속성
 
@@ -117,7 +117,7 @@ Shadow DOM은 최초 show() 시 lazy 생성된다.
 - ns.queryAll = null
 - ns.cssSelectors = null
 - ns.datasetAttrs = null
-- instance.popup = null
+- instance.shadowPopup = null
 ```
 
 ---
@@ -165,7 +165,7 @@ applyPopupMixin(this, {
 // customEvents에서 Mixin의 선택자를 computed property로 참조
 this.customEvents = {
     click: {
-        [this.popup.cssSelectors.closeBtn]: '@popupCloseClicked'
+        [this.shadowPopup.cssSelectors.closeBtn]: '@popupCloseClicked'
     }
 };
 ```
@@ -174,20 +174,20 @@ this.customEvents = {
 
 ```javascript
 '@assetClicked': ({ event, targetInstance }) => {
-    targetInstance.popup.show();
+    targetInstance.shadowPopup.show();
 
     // 선택자 계약을 통해 팝업 내부 요소에 접근
-    const titleEl = targetInstance.popup.query(
-        targetInstance.popup.cssSelectors.title
+    const titleEl = targetInstance.shadowPopup.query(
+        targetInstance.shadowPopup.cssSelectors.title
     );
     if (titleEl) titleEl.textContent = event.detail.name;
 }
 
 '@popupCloseClicked': ({ targetInstance }) => {
-    targetInstance.popup.hide();
+    targetInstance.shadowPopup.hide();
 }
 ```
 
-> 팝업 내부의 콘텐츠 렌더링(차트, 테이블 등)은 PopupMixin의 범위 밖이다. 컴포넌트의 조립 코드에서 `popup.query()`와 `popup.cssSelectors`로 요소를 찾아 직접 처리하거나, 별도 Mixin 인스턴스가 팝업 내부 요소를 대상으로 동작한다.
+> 팝업 내부의 콘텐츠 렌더링(차트, 테이블 등)은 PopupMixin의 범위 밖이다. 컴포넌트의 조립 코드에서 `shadowPopup.query()`와 `popup.cssSelectors`로 요소를 찾아 직접 처리하거나, 별도 Mixin 인스턴스가 팝업 내부 요소를 대상으로 동작한다.
 
 ---
