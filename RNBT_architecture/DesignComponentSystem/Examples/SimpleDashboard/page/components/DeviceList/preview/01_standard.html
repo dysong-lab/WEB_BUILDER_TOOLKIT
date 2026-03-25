@@ -61,14 +61,17 @@
     };
     Wkit.bindEvents(instance, instance.customEvents);
 
-    // Shadow DOM 내부 이벤트 (show 전에 호출 — lazy 바인딩)
+    // Shadow DOM 내부 이벤트 → Weventbus로 전파 (customEvents와 동일한 패턴)
     instance.popup.bindPopupEvents({
         click: {
-            [instance.popup.cssSelectors.closeBtn]: () => instance.popup.hide()
+            [instance.popup.cssSelectors.closeBtn]: '@devicePopupClose'
         }
     });
 
     Wkit.onEventBusHandlers({
+        '@devicePopupClose': ({ targetInstance }) => {
+            targetInstance.popup.hide();
+        },
         '@deviceClicked': ({ event, targetInstance }) => {
             const item = event.target.closest(targetInstance.listRender.cssSelectors.item);
             if (!item) return;

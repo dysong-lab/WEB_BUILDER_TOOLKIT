@@ -79,6 +79,11 @@ this.pageEventBusHandlers = {
             .catch(err => console.error('[Page] Device detail fetch failed:', err));
     },
 
+    // DeviceList에서 팝업 닫기 (Shadow DOM → Weventbus로 전파됨)
+    '@devicePopupClose': ({ targetInstance }) => {
+        targetInstance.popup.hide();
+    },
+
     // EventBrowser에서 항목 클릭
     '@eventSelected': ({ event, targetInstance }) => {
         const item = event.target.closest(targetInstance.statefulList.cssSelectors.item);

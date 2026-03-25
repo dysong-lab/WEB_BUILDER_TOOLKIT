@@ -20,7 +20,7 @@
  *
  *   this.popup.bindPopupEvents({
  *       click: {
- *           [this.popup.cssSelectors.closeBtn]: () => this.popup.hide()
+ *           [this.popup.cssSelectors.closeBtn]: '@popupClose'
  *       }
  *   });
  *
@@ -68,7 +68,14 @@ function applyPopupMixin(instance, options) {
             Object.entries(selectorMap).forEach(([selector, handler]) => {
                 const listener = function(e) {
                     const target = e.target.closest(selector);
-                    if (target) handler(e);
+                    if (!target) return;
+
+                    if (typeof handler === 'string' && handler.charAt(0) === '@') {
+                        // '@eventName' → Weventbus로 전파 (customEvents와 동일한 패턴)
+                        Weventbus.emit(handler, { event: e, targetInstance: instance });
+                    } else {
+                        handler(e);
+                    }
                 };
                 shadowRoot.addEventListener(eventType, listener);
                 _popupListeners.push({ eventType, listener });
@@ -156,7 +163,9 @@ function applyPopupMixin(instance, options) {
      *
      * show() 전에 호출해도 된다. Shadow DOM 생성 시 자동 바인딩된다.
      *
-     * @param {Object} events - { eventType: { selector: handler } }
+     * @param {Object} events - { eventType: { selector: '@eventName' | handler } }
+     *   값이 '@'로 시작하는 문자열이면 Weventbus로 전파한다 (customEvents와 동일한 패턴).
+     *   함수이면 직접 호출한다.
      */
     ns.bindPopupEvents = function(events) {
         if (shadowRoot) {

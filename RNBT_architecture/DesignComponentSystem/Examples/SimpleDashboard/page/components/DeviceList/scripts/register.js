@@ -67,9 +67,9 @@ this.customEvents = {
 bindEvents(this, this.customEvents);
 
 // Shadow DOM 내부 이벤트 (bindEvents로는 shadow boundary를 넘을 수 없음)
-// show() 전에 호출해도 된다 — Shadow DOM 생성 시 자동 바인딩된다.
+// '@eventName' 문자열을 넘기면 Weventbus로 전파된다 (customEvents와 동일한 패턴).
 this.popup.bindPopupEvents({
     click: {
-        [this.popup.cssSelectors.closeBtn]: () => this.popup.hide()
+        [this.popup.cssSelectors.closeBtn]: '@devicePopupClose'
     }
 });
