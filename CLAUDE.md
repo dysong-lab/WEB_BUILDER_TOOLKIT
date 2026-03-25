@@ -56,6 +56,12 @@ This file provides guidance to Claude Code when working in this repository.
 |------|-------|
 | 여러 컴포넌트를 조합한 대시보드 페이지 생성 | `create-project` |
 
+### 점검 (4-review)
+
+| 조건 | SKILL |
+|------|-------|
+| 프로젝트 전체의 구조/구현/문서/SKILL 일관성 종합 진단 | `audit-project` |
+
 ---
 
 ## 디렉토리별 문서
