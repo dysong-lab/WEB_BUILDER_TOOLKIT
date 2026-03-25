@@ -6,7 +6,7 @@
 
 Tabulator 인스턴스의 라이프사이클(생성, 데이터 적용, 정리)을 관리한다.
 
-> **설계 원칙**: [COMPONENT_SYSTEM_DESIGN.md](../../docs/COMPONENT_SYSTEM_DESIGN.md) 참조
+> **설계 원칙**: [COMPONENT_SYSTEM_DESIGN.md](../../docs/architecture/COMPONENT_SYSTEM_DESIGN.md) 참조
 
 ---
 

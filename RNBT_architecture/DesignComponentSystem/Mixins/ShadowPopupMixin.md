@@ -6,7 +6,7 @@
 
 Shadow DOM으로 팝업을 생성하고, 표시/숨김/정리를 관리한다. `<template>` 태그에서 HTML/CSS를 가져와 Shadow DOM에 주입하므로, 팝업의 시각 구조는 디자인(HTML)에서 정의된다.
 
-> **설계 원칙**: [COMPONENT_SYSTEM_DESIGN.md](../../docs/COMPONENT_SYSTEM_DESIGN.md) 참조
+> **설계 원칙**: [COMPONENT_SYSTEM_DESIGN.md](../../docs/architecture/COMPONENT_SYSTEM_DESIGN.md) 참조
 
 ---
 

@@ -11,7 +11,7 @@ ListRenderMixin:  데이터 → DOM 렌더링 (표시만)
 StatefulListRenderMixin:   데이터 → DOM 렌더링 + 개별 항목 상태 변경
 ```
 
-> **설계 원칙**: [COMPONENT_SYSTEM_DESIGN.md](../../docs/COMPONENT_SYSTEM_DESIGN.md) 참조
+> **설계 원칙**: [COMPONENT_SYSTEM_DESIGN.md](../../docs/architecture/COMPONENT_SYSTEM_DESIGN.md) 참조
 > **구독/이벤트/정리 패턴**: 설계 문서의 "라이프사이클" 참조
 
 ---

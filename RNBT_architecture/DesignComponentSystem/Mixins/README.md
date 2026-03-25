@@ -10,7 +10,7 @@
 
 목적이 같고 수단도 비슷해 보이는 경우, 다른 부분이 설정으로 분리 가능하면 같은 기능(하나의 Mixin)이고, 불가능하면 다른 기능(별도 Mixin)이다.
 
-> 기능의 정의에 대한 상세: [COMPONENT_SYSTEM_DESIGN.md — 기능의 정의](docs/COMPONENT_SYSTEM_DESIGN.md#기능의-정의)
+> 기능의 정의에 대한 상세: [COMPONENT_SYSTEM_DESIGN.md — 기능의 정의](docs/architecture/COMPONENT_SYSTEM_DESIGN.md#기능의-정의)
 
 ---
 

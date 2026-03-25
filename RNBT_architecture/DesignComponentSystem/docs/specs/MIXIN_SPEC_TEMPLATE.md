@@ -9,7 +9,7 @@
 | **목적** | (보편화된 행위. "어떻게?"에 대한 답이 복수이면 아직 목적이다) |
 | **기능** | (목적 + 수단의 결합. 한 문장으로 기술) |
 
-> 참고: 기능의 정의는 [COMPONENT_SYSTEM_DESIGN.md — 기능의 정의](COMPONENT_SYSTEM_DESIGN.md#기능의-정의) 참조
+> 참고: 기능의 정의는 [COMPONENT_SYSTEM_DESIGN.md — 기능의 정의](../architecture/COMPONENT_SYSTEM_DESIGN.md#기능의-정의) 참조
 
 ### 기존 Mixin과의 관계
 

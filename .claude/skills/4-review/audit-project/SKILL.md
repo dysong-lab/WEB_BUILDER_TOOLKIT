@@ -95,7 +95,7 @@ N + M 전략이 여전히 유효한지 확인한다.
 
 ### 점검 방법
 
-1. [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md) 읽기
+1. [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md) 읽기
 2. 다음을 확인:
    - Mixin(기능)과 Design(시각)의 직교성 원칙이 유지되는가
    - "조립 코드 주도 원칙"이 명시되어 있는가
@@ -295,6 +295,6 @@ SKILL 파일들이 현재 시스템 상태와 일치하는지 확인한다.
 - 이 SKILL은 **읽기 전용**이다. 코드나 문서를 수정하지 않는다.
 - 발견한 문제는 사용자에게 보고하고, 수정 여부와 방향은 사용자가 결정한다.
 - 점검 범위가 넓으므로, 병렬 Agent를 활용하여 효율적으로 진행한다.
-- 이전 점검 결과와 비교하려면 [SYSTEM_READINESS_REVIEW.md](/RNBT_architecture/DesignComponentSystem/docs/SYSTEM_READINESS_REVIEW.md)를 참조한다.
+- 이전 점검 결과와 비교하려면 [SYSTEM_READINESS_REVIEW.md](/RNBT_architecture/DesignComponentSystem/docs/reports/SYSTEM_READINESS_REVIEW.md)를 참조한다.
 
 ---

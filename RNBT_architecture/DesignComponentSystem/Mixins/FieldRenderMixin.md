@@ -6,7 +6,7 @@
 
 하나의 데이터 객체가 여러 DOM 요소에 각각 반영되는 **1:N 매핑** 패턴이다. HTML에 이미 존재하는 요소에 값을 채우는 것이 핵심이며, DOM을 생성하지 않는다.
 
-> **설계 원칙**: [COMPONENT_SYSTEM_DESIGN.md](../../docs/COMPONENT_SYSTEM_DESIGN.md) 참조
+> **설계 원칙**: [COMPONENT_SYSTEM_DESIGN.md](../../docs/architecture/COMPONENT_SYSTEM_DESIGN.md) 참조
 > **구독/이벤트/정리 패턴**: 설계 문서의 "라이프사이클" 참조
 
 ---

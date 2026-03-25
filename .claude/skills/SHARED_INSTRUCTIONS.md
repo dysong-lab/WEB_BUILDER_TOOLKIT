@@ -11,8 +11,8 @@
 | 스킬 단계 | 필수 확인 문서 |
 |-----------|---------------|
 | 1-figma (정적 퍼블리싱) | [/Figma_Conversion/README.md](/Figma_Conversion/README.md), [/Figma_Conversion/CLAUDE.md](/Figma_Conversion/CLAUDE.md), [CODING_STYLE.md](/.claude/guides/CODING_STYLE.md) |
-| 2-component (동적 변환) | [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md), [CODING_STYLE.md](/.claude/guides/CODING_STYLE.md), **사용할 Mixin의 .md 파일** (아래 참조) |
-| 3-page (프로젝트 생성) | [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md), [CODING_STYLE.md](/.claude/guides/CODING_STYLE.md), **사용할 Mixin의 .md 파일** (아래 참조) |
+| 2-component (동적 변환) | [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md), [CODING_STYLE.md](/.claude/guides/CODING_STYLE.md), **사용할 Mixin의 .md 파일** (아래 참조) |
+| 3-page (프로젝트 생성) | [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md), [CODING_STYLE.md](/.claude/guides/CODING_STYLE.md), **사용할 Mixin의 .md 파일** (아래 참조) |
 
 ### Mixin 문서 확인 규칙 (2-component, 3-page 공통)
 

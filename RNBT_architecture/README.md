@@ -189,7 +189,7 @@ class MyChart extends WVDOMComponent {
 
 라이프사이클에 대해 정리하였다. 라이프사이클에 대해 정리한 이유는 작업자가 RENOBIT에서 코드를 작업하는 영역에 대해 이해할 수 있어야 자신이 원하는 코드 작업을 원하는 위치에 작성할 수 있기 때문이다. 이러한 라이프사이클을 기반으로 다음의 아키텍쳐에 따라 코드를 작업할 수 있다.
 
-> **참고:** 컴포넌트의 register.js 내부 구조는 **Mixin 기반**으로 전환되었다. register.js는 조립 코드(Mixin 적용, 구독 연결, 이벤트 매핑)만 포함하며, 렌더링 로직은 Mixin이 담당한다. 상세는 [컴포넌트 라이프사이클 패턴](#컴포넌트-라이프사이클-패턴) 및 [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md) 참조.
+> **참고:** 컴포넌트의 register.js 내부 구조는 **Mixin 기반**으로 전환되었다. register.js는 조립 코드(Mixin 적용, 구독 연결, 이벤트 매핑)만 포함하며, 렌더링 로직은 Mixin이 담당한다. 상세는 [컴포넌트 라이프사이클 패턴](#컴포넌트-라이프사이클-패턴) 및 [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md) 참조.
 
 ---
 
@@ -349,7 +349,7 @@ this.startAllIntervals();
 컴포넌트는 register와 beforeDestroy 두 개의 라이프사이클 단계를 활용합니다.
 register.js는 **조립 코드**만 포함하며, 도메인 로직은 Mixin이 담당합니다.
 
-> **설계 문서**: [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md) 참조
+> **설계 문서**: [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md) 참조
 
 ### Register 패턴 (Mixin 기반)
 

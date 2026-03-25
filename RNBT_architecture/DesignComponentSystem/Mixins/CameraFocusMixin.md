@@ -6,7 +6,7 @@
 
 3D 장면에서 특정 메시나 좌표로 카메라를 부드럽게 이동시킨다. 포커스 대상 전환과 애니메이션을 관리한다.
 
-> **설계 원칙**: [COMPONENT_SYSTEM_DESIGN.md](../../docs/COMPONENT_SYSTEM_DESIGN.md) 참조
+> **설계 원칙**: [COMPONENT_SYSTEM_DESIGN.md](../../docs/architecture/COMPONENT_SYSTEM_DESIGN.md) 참조
 
 ---
 

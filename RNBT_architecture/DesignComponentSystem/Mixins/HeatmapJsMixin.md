@@ -6,7 +6,7 @@
 
 heatmap.js(h337) 기반으로 열 분포를 시각화한다. 데이터 포인트의 위치와 값을 받아 히트맵으로 렌더링한다.
 
-> **설계 원칙**: [COMPONENT_SYSTEM_DESIGN.md](../../docs/COMPONENT_SYSTEM_DESIGN.md) 참조
+> **설계 원칙**: [COMPONENT_SYSTEM_DESIGN.md](../../docs/architecture/COMPONENT_SYSTEM_DESIGN.md) 참조
 
 ---
 

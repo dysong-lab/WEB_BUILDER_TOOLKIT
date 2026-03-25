@@ -80,9 +80,9 @@
 
 | 종류 | 파일 | 수량 |
 |------|------|------|
-| 템플릿 | [MIXIN_SPEC_TEMPLATE.md](MIXIN_SPEC_TEMPLATE.md) | 1개 |
+| 템플릿 | [MIXIN_SPEC_TEMPLATE.md](../specs/MIXIN_SPEC_TEMPLATE.md) | 1개 |
 | 모범답안 | MIXIN_SPEC_EXAMPLE_*.md | 9개 |
-| 설계 근거 | [COMPONENT_SYSTEM_DESIGN.md](COMPONENT_SYSTEM_DESIGN.md), [FUNCTION_PATTERN.md](FUNCTION_PATTERN.md) | 2개 |
+| 설계 근거 | [COMPONENT_SYSTEM_DESIGN.md](../architecture/COMPONENT_SYSTEM_DESIGN.md), [FUNCTION_PATTERN.md](../architecture/FUNCTION_PATTERN.md) | 2개 |
 
 ### A. 일관성 — 높음
 
@@ -129,7 +129,7 @@
 
 **"기능의 정의" 프레임워크:**
 
-[COMPONENT_SYSTEM_DESIGN.md](COMPONENT_SYSTEM_DESIGN.md)에서 정의한 "기능 = 목적 + 수단" 프레임워크가 [FUNCTION_PATTERN.md](FUNCTION_PATTERN.md)에서 순수 함수(map, filter, debounce, throttle)로 검증되어 있다.
+[COMPONENT_SYSTEM_DESIGN.md](../architecture/COMPONENT_SYSTEM_DESIGN.md)에서 정의한 "기능 = 목적 + 수단" 프레임워크가 [FUNCTION_PATTERN.md](../architecture/FUNCTION_PATTERN.md)에서 순수 함수(map, filter, debounce, throttle)로 검증되어 있다.
 
 팀이 "왜 이렇게 나누는가?"라고 질문했을 때 즉시 답변할 수 있는 근거 문서가 있다.
 
@@ -188,10 +188,10 @@
 | 문서 | 역할 |
 |------|------|
 | [EXECUTIVE_REPORT.md](EXECUTIVE_REPORT.md) | 경영진용 — 왜 이 구조인가 |
-| [COMPONENT_SYSTEM_DESIGN.md](COMPONENT_SYSTEM_DESIGN.md) | 설계자용 — 어떻게 동작하는가 |
-| [FUNCTION_PATTERN.md](FUNCTION_PATTERN.md) | 설계 근거 — 왜 이렇게 나누는가 |
+| [COMPONENT_SYSTEM_DESIGN.md](../architecture/COMPONENT_SYSTEM_DESIGN.md) | 설계자용 — 어떻게 동작하는가 |
+| [FUNCTION_PATTERN.md](../architecture/FUNCTION_PATTERN.md) | 설계 근거 — 왜 이렇게 나누는가 |
 | [MIXIN_REVIEW.md](MIXIN_REVIEW.md) | 범용성 검토 — 현재 한계와 확장 후보 |
-| [MIXIN_SPEC_TEMPLATE.md](MIXIN_SPEC_TEMPLATE.md) | 팀 배포용 — 명세 작성 양식 |
+| [MIXIN_SPEC_TEMPLATE.md](../specs/MIXIN_SPEC_TEMPLATE.md) | 팀 배포용 — 명세 작성 양식 |
 | MIXIN_SPEC_EXAMPLE_*.md (9개) | 팀 배포용 — 작성 모범답안 |
 
 ---

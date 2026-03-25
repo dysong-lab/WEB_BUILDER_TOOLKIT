@@ -7,7 +7,7 @@ description: 기능 중심 컴포넌트 시스템(Mixin 기반)에 맞는 대시
 
 Mixin 기반 컴포넌트, 페이지 스크립트, Mock 서버, datasetList.json을 포함한 완전한 프로젝트를 생성합니다.
 
-> 설계 문서: [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md) 참조
+> 설계 문서: [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md) 참조
 > 공통 규칙: [SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md) 참조
 
 ---
@@ -17,7 +17,7 @@ Mixin 기반 컴포넌트, 페이지 스크립트, Mock 서버, datasetList.json
 **코드 작성 전 반드시 다음 파일들을 Read 도구로 읽으세요.**
 **이전에 읽었더라도 매번 다시 읽어야 합니다 - 캐싱하거나 생략하지 마세요.**
 
-1. [/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md) - 시스템 설계
+1. [/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md) - 시스템 설계
 2. [/.claude/skills/SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md) - 공통 규칙
 3. **기존 예제 확인** - SimpleDashboard의 구조와 패턴을 먼저 읽을 것
 
@@ -359,7 +359,7 @@ scripts/
 
 | 참조 | 위치 |
 |------|------|
-| 시스템 설계 문서 | [/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md) |
+| 시스템 설계 문서 | [/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md) |
 | 예제 | [/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/](/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/) |
 | 예제 (DeviceList — 팝업+목록 조합) | [/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/page/components/DeviceList/](/RNBT_architecture/DesignComponentSystem/Examples/SimpleDashboard/page/components/DeviceList/) |
 | FieldRenderMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/FieldRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/FieldRenderMixin.md) |

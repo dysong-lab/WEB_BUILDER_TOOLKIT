@@ -6,7 +6,7 @@
 
 데이터의 상태값에 따라 메시의 색상을 변경한다. 상태 → 색상 매핑은 colorMap으로 정의한다.
 
-> **설계 원칙**: [COMPONENT_SYSTEM_DESIGN.md](../../docs/COMPONENT_SYSTEM_DESIGN.md) 참조
+> **설계 원칙**: [COMPONENT_SYSTEM_DESIGN.md](../../docs/architecture/COMPONENT_SYSTEM_DESIGN.md) 참조
 
 ---
 
