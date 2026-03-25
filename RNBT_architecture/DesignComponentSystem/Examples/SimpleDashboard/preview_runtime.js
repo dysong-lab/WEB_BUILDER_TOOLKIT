@@ -60,7 +60,8 @@ const _datasetRegistry = {
     dashboard_systemInfo:    '/api/system-info',
     dashboard_stats:         '/api/stats',
     dashboard_events:        '/api/events',
-    dashboard_eventBrowser:  '/api/event-browser'
+    dashboard_eventBrowser:  '/api/event-browser',
+    dashboard_devices:       '/api/devices'
 };
 
 // ── GlobalDataPublisher 시뮬레이션 ──
