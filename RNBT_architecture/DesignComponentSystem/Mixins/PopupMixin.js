@@ -39,28 +39,16 @@
 function applyPopupMixin(instance, options) {
     const { cssSelectors = {}, datasetAttrs = {}, onCreated } = options;
 
-    var template = cssSelectors.template;
+    const template = cssSelectors.template;
 
-    var ns = {};
+    const ns = {};
     instance.popup = ns;
 
-    ns.cssSelectors = {};
-    var key;
-    for (key in cssSelectors) {
-        if (cssSelectors.hasOwnProperty(key)) {
-            ns.cssSelectors[key] = cssSelectors[key];
-        }
-    }
+    ns.cssSelectors = { ...cssSelectors };
+    ns.datasetAttrs = { ...datasetAttrs };
 
-    ns.datasetAttrs = {};
-    for (key in datasetAttrs) {
-        if (datasetAttrs.hasOwnProperty(key)) {
-            ns.datasetAttrs[key] = datasetAttrs[key];
-        }
-    }
-
-    var host = null;
-    var shadowRoot = null;
+    let host = null;
+    let shadowRoot = null;
 
     /**
      * Shadow DOM 생성 (lazy init)
@@ -68,7 +56,7 @@ function applyPopupMixin(instance, options) {
     function ensureInstance() {
         if (shadowRoot) return;
 
-        var templateEl = instance.appendElement.querySelector(template);
+        const templateEl = instance.appendElement.querySelector(template);
         if (!templateEl) throw new Error('[PopupMixin] template not found: ' + template);
 
         host = document.createElement('div');
