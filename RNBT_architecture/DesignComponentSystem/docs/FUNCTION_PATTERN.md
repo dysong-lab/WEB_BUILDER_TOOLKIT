@@ -95,7 +95,7 @@ Mixin:
 Mixin:
 - "데이터 객체의 각 필드를 화면 요소에 1:1로 표시한다"는 FieldRenderMixin 하나다. 이 기능을 하는 Mixin이 둘일 이유가 없다.
 
-### 상태 반영 목적의 비교
+### 같은 목적 아래에서의 다수 기능 비교
 
 순수 함수:
 
@@ -108,10 +108,11 @@ Mixin:
 
 | Mixin | 목적 | 기능 |
 |-------|------|------|
-| MeshStateMixin | 상태를 반영한다 | 3D 메시의 색상을 데이터 상태에 따라 변경한다 |
-| StatefulListRenderMixin | (부분) 상태를 반영한다 | 개별 항목의 상태를 변경/조회할 수 있다 |
+| FieldRenderMixin | 데이터를 보여준다 | 기존 DOM 요소의 textContent에 필드값을 넣는다 |
+| ListRenderMixin | 데이터를 보여준다 | template을 복제하여 반복 생성한다 |
+| MeshStateMixin | 데이터를 보여준다 | 3D 메시의 색상을 데이터 상태에 따라 변경한다 |
 
-some/every가 "검사 대상의 범위"로 구분되듯, MeshState/StatefulListRender는 "상태 반영 대상"으로 구분된다.
+some/every가 같은 목적("조건을 검사한다") 아래에서 수단으로 구분되듯, FieldRender/ListRender/MeshState도 같은 목적("데이터를 보여준다") 아래에서 수단으로 구분된다. 대상이 DOM이든 3D 메시든 목적은 동일하다.
 
 ---
 

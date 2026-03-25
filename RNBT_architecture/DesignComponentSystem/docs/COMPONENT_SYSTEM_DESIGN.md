@@ -84,9 +84,9 @@ Class가 메소드를 하나 이상 가질 수 있듯, Mixin도 기능을 하나
 | EChartsMixin | 데이터를 보여준다 | ECharts 인스턴스로 시각화한다 |
 | TabulatorMixin | 데이터를 보여준다 | Tabulator 인스턴스로 테이블을 구성한다 |
 | HeatmapJsMixin | 데이터를 보여준다 | heatmap.js로 열 분포를 시각화한다 |
-| MeshStateMixin | 상태를 반영한다 | 3D 메시의 material 색상을 데이터에 따라 변경한다 |
+| MeshStateMixin | 데이터를 보여준다 (3D 메시의 시각 상태 변경) | 3D 메시의 material 색상을 데이터에 따라 변경한다 |
 | CameraFocusMixin | 보는 위치를 전환한다 | 카메라 위치/타겟을 애니메이션으로 이동시킨다 |
-| StatefulListRenderMixin | 데이터를 보여준다 + 상태를 반영한다 | template 복제로 반복 생성 + 개별 항목의 data 속성 변경 |
+| StatefulListRenderMixin | 데이터를 보여주고, 개별 항목의 상태를 변경한다 | template 복제로 반복 생성 + 개별 항목의 data 속성 변경 |
 
 같은 목적("데이터를 보여준다") 아래에서 수단이 다르면 서로 다른 기능이 된다. 이것은 "전화 기능"과 "이메일 기능"이 같은 목적("의사소통한다") 아래에서 서로 다른 기능인 것과 같다.
 
@@ -94,7 +94,7 @@ Class가 메소드를 하나 이상 가질 수 있듯, Mixin도 기능을 하나
 
 Mixin은 **기능이 다르면** 나눈다. 목적만으로 나누지 않는다.
 
-MeshStateMixin과 StatefulListRenderMixin은 같은 목적("상태를 반영한다")을 공유하지만, 수단이 다르므로(3D material 색상 vs DOM data 속성) 서로 다른 기능이며, 별도 Mixin이다.
+MeshStateMixin과 StatefulListRenderMixin은 같은 목적("데이터를 보여준다")을 공유하지만, 수단이 다르므로(3D material 색상 vs DOM template 복제 + data 속성) 서로 다른 기능이며, 별도 Mixin이다.
 
 목적이 같고 수단도 비슷해 보일 때는, 다른 부분이 설정으로 분리 가능한지를 판단한다. 예를 들어 "상태값에 따라 아이콘을 교체"하는 것과 "상태값에 따라 CSS 클래스를 토글"하는 것은 목적이 같고 수단도 유사하다. 이때 다른 부분(교체 방식)을 옵션으로 넘길 수 있으면 같은 기능이므로 하나의 Mixin이다. 넘길 수 없으면 다른 기능이므로 별도 Mixin이다.
 

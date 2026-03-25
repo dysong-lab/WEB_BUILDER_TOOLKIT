@@ -6,7 +6,7 @@
 
 기능이 기존 Mixin과 다르면 새 Mixin이다. 같으면 기존 Mixin을 사용한다.
 
-기능 = 보편화된 목적(행위)을 특수한 상황과 결합한 단위. **목적이 같아도 수단이 다르면 다른 기능**이다. 예를 들어 MeshStateMixin과 StatefulListRenderMixin은 "상태를 반영한다"는 같은 목적이지만, 수단이 다르므로(3D material 색상 vs DOM data 속성) 별도 Mixin이다.
+기능 = 보편화된 목적(행위)을 특수한 상황과 결합한 단위. **목적이 같아도 수단이 다르면 다른 기능**이다. 예를 들어 FieldRenderMixin과 MeshStateMixin은 "데이터를 보여준다"는 같은 목적이지만, 수단이 다르므로(DOM textContent vs 3D material 색상) 별도 Mixin이다.
 
 목적이 같고 수단도 비슷해 보이는 경우, 다른 부분이 설정으로 분리 가능하면 같은 기능(하나의 Mixin)이고, 불가능하면 다른 기능(별도 Mixin)이다.
 
