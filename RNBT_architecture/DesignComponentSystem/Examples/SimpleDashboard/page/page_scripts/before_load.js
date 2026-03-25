@@ -54,6 +54,36 @@ this.pageEventBusHandlers = {
         }
     },
 
+    // DeviceList에서 항목 클릭 → 팝업 표시 + 상세 데이터 fetch
+    '@deviceClicked': ({ event, targetInstance }) => {
+        const item = event.target.closest(targetInstance.listRender.cssSelectors.item);
+        if (!item) return;
+
+        targetInstance.popup.show();
+
+        const sel = targetInstance.popup.cssSelectors;
+        const titleEl = targetInstance.popup.query(sel.title);
+        if (titleEl) titleEl.textContent = item.querySelector(targetInstance.listRender.cssSelectors.name)?.textContent || '';
+
+        const deviceName = item.querySelector(targetInstance.listRender.cssSelectors.name)?.textContent;
+        fetch('http://localhost:4010/api/device-detail?name=' + encodeURIComponent(deviceName))
+            .then(r => r.json())
+            .then(detail => {
+                const q = (s) => targetInstance.popup.query(s);
+                if (q(sel.type))     q(sel.type).textContent     = detail.type     || '';
+                if (q(sel.status))   q(sel.status).textContent   = detail.status   || '';
+                if (q(sel.location)) q(sel.location).textContent = detail.location || '';
+                if (q(sel.lastSeen)) q(sel.lastSeen).textContent = detail.lastSeen || '';
+                if (q(sel.ip))       q(sel.ip).textContent       = detail.ip       || '';
+            })
+            .catch(err => console.error('[Page] Device detail fetch failed:', err));
+    },
+
+    // DeviceList에서 팝업 닫기
+    '@devicePopupClose': ({ targetInstance }) => {
+        targetInstance.popup.hide();
+    },
+
     // EventBrowser에서 항목 클릭
     '@eventSelected': ({ event, targetInstance }) => {
         const item = event.target.closest(targetInstance.statefulList.cssSelectors.item);

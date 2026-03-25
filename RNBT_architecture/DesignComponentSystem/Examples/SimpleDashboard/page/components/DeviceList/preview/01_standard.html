@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>DeviceList — 01_standard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: #f1f5f9; padding: 40px; }
+        #device-list-container { width: 600px; height: 500px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+<div id="device-list-container"></div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../../../Mixins/ListRenderMixin.js"></script>
+<script src="../../../../../../Mixins/PopupMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('device-list-container', '../views/01_standard.html', '../styles/01_standard.css');
+
+    const instance = { id: 'device-list', appendElement: document.getElementById('device-list-container') };
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container: '.device-list__body',
+            item:      '.device-list__item',
+            template:  '#device-list-item-template',
+            name:      '.device-list__name',
+            type:      '.device-list__type',
+            status:    '.device-list__status'
+        },
+        datasetAttrs: {
+            status: 'status'
+        }
+    });
+
+    applyPopupMixin(instance, {
+        cssSelectors: {
+            template:  '#device-detail-popup-template',
+            closeBtn:  '.popup-close-btn',
+            title:     '.popup-title',
+            type:      '.popup-detail-type',
+            status:    '.popup-detail-status',
+            location:  '.popup-detail-location',
+            lastSeen:  '.popup-detail-lastSeen',
+            ip:        '.popup-detail-ip'
+        }
+    });
+
+    instance.subscriptions = { devices: [instance.listRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.listRender.cssSelectors.item]:  '@deviceClicked',
+            [instance.popup.cssSelectors.closeBtn]:   '@devicePopupClose'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    Wkit.onEventBusHandlers({
+        '@deviceClicked': ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.listRender.cssSelectors.item);
+            if (!item) return;
+
+            targetInstance.popup.show();
+
+            const sel = targetInstance.popup.cssSelectors;
+            const titleEl = targetInstance.popup.query(sel.title);
+            if (titleEl) titleEl.textContent = item.querySelector(targetInstance.listRender.cssSelectors.name)?.textContent || '';
+
+            // 상세 데이터를 API에서 가져와 팝업에 표시
+            const deviceName = item.querySelector(targetInstance.listRender.cssSelectors.name)?.textContent;
+            fetch('http://localhost:4010/api/device-detail?name=' + encodeURIComponent(deviceName))
+                .then(r => r.json())
+                .then(detail => {
+                    const q = (s) => targetInstance.popup.query(s);
+                    if (q(sel.type))     q(sel.type).textContent     = detail.type     || '';
+                    if (q(sel.status))   q(sel.status).textContent   = detail.status   || '';
+                    if (q(sel.location)) q(sel.location).textContent = detail.location || '';
+                    if (q(sel.lastSeen)) q(sel.lastSeen).textContent = detail.lastSeen || '';
+                    if (q(sel.ip))       q(sel.ip).textContent       = detail.ip       || '';
+                })
+                .catch(console.error);
+        },
+        '@devicePopupClose': ({ targetInstance }) => {
+            targetInstance.popup.hide();
+        }
+    });
+
+    GlobalDataPublisher.registerMapping({
+        topic: 'devices',
+        datasetInfo: { datasetName: 'dashboard_devices', param: { baseUrl: 'localhost:4010' } }
+    });
+    GlobalDataPublisher.fetchAndPublish('devices').catch(console.error);
+})();
+</script>
+</body>
+</html>

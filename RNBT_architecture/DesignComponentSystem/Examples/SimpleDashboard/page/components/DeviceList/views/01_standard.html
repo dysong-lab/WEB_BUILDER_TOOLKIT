@@ -1,0 +1,78 @@
+<!-- 01_standard: 장치 목록 + 팝업 -->
+<div class="device-list">
+    <div class="device-list__header">
+        <span class="device-list__title">Devices</span>
+    </div>
+    <div class="device-list__body"></div>
+
+    <template id="device-list-item-template">
+        <div class="device-list__item" data-status="">
+            <span class="device-list__name"></span>
+            <span class="device-list__type"></span>
+            <span class="device-list__status" data-status=""></span>
+        </div>
+    </template>
+
+    <template id="device-detail-popup-template">
+        <style>
+            .popup-overlay {
+                position: fixed; inset: 0;
+                background: rgba(0,0,0,0.4);
+                display: flex; align-items: center; justify-content: center;
+                z-index: 1000;
+            }
+            .popup-panel {
+                background: #ffffff; border-radius: 12px;
+                padding: 0; min-width: 420px; max-width: 520px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+                overflow: hidden;
+            }
+            .popup-header {
+                display: flex; justify-content: space-between; align-items: center;
+                padding: 20px 24px; border-bottom: 1px solid #e2e8f0;
+            }
+            .popup-title { font-size: 16px; font-weight: 600; color: #0f172a; }
+            .popup-close-btn {
+                width: 28px; height: 28px; border: none; background: #f1f5f9;
+                border-radius: 6px; cursor: pointer; font-size: 14px; color: #64748b;
+                display: flex; align-items: center; justify-content: center;
+            }
+            .popup-close-btn:hover { background: #e2e8f0; }
+            .popup-content { padding: 24px; }
+            .popup-field { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
+            .popup-field:last-child { border-bottom: none; }
+            .popup-field__label { color: #64748b; font-size: 13px; }
+            .popup-field__value { color: #0f172a; font-size: 13px; font-weight: 500; }
+        </style>
+        <div class="popup-overlay">
+            <div class="popup-panel">
+                <div class="popup-header">
+                    <span class="popup-title"></span>
+                    <button class="popup-close-btn">&times;</button>
+                </div>
+                <div class="popup-content">
+                    <div class="popup-field">
+                        <span class="popup-field__label">Type</span>
+                        <span class="popup-detail-type popup-field__value"></span>
+                    </div>
+                    <div class="popup-field">
+                        <span class="popup-field__label">Status</span>
+                        <span class="popup-detail-status popup-field__value"></span>
+                    </div>
+                    <div class="popup-field">
+                        <span class="popup-field__label">Location</span>
+                        <span class="popup-detail-location popup-field__value"></span>
+                    </div>
+                    <div class="popup-field">
+                        <span class="popup-field__label">Last Seen</span>
+                        <span class="popup-detail-lastSeen popup-field__value"></span>
+                    </div>
+                    <div class="popup-field">
+                        <span class="popup-field__label">IP Address</span>
+                        <span class="popup-detail-ip popup-field__value"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</div>

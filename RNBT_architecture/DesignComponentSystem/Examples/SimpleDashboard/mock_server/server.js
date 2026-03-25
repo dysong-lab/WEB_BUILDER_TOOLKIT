@@ -129,6 +129,59 @@ app.post('/api/event-browser/ack', (req, res) => {
     res.json({ success: true, eventId: eventId, acknowledged: true });
 });
 
+// ─────────────────────────────────────────
+// GET /api/devices
+// DeviceList 컴포넌트용 (ListRenderMixin)
+//
+// cssSelectors KEY: name, type, status
+// datasetAttrs KEY: status
+// ─────────────────────────────────────────
+const deviceTypes = ['UPS', 'CRAC', 'PDU', 'Sensor', 'Switch'];
+const deviceStatuses = ['online', 'online', 'online', 'warning', 'offline'];
+const deviceLocations = ['1F Server Room A', '2F Server Room B', '1F Network Room', 'B1 Power Room', '3F Control Room'];
+
+const devices = Array.from({ length: 12 }, (_, i) => {
+    const type = deviceTypes[i % deviceTypes.length];
+    const num = String(i + 1).padStart(2, '0');
+    return {
+        name:     `${type}-${num}`,
+        type:     type,
+        status:   deviceStatuses[Math.floor(Math.random() * deviceStatuses.length)],
+        location: deviceLocations[Math.floor(Math.random() * deviceLocations.length)],
+        ip:       `192.168.${Math.floor(Math.random() * 3) + 1}.${10 + i}`,
+    };
+});
+
+app.get('/api/devices', (req, res) => {
+    // 상태를 매번 약간 변동
+    const result = devices.map(d => ({
+        name:   d.name,
+        type:   d.type,
+        status: deviceStatuses[Math.floor(Math.random() * deviceStatuses.length)]
+    }));
+    res.json(result);
+});
+
+// ─────────────────────────────────────────
+// GET /api/device-detail?name=UPS-01
+// DeviceList 팝업용 (PopupMixin)
+// ─────────────────────────────────────────
+app.get('/api/device-detail', (req, res) => {
+    const name = req.query.name;
+    const device = devices.find(d => d.name === name);
+    if (!device) {
+        return res.status(404).json({ error: 'Device not found' });
+    }
+    res.json({
+        name:     device.name,
+        type:     device.type,
+        status:   deviceStatuses[Math.floor(Math.random() * deviceStatuses.length)],
+        location: device.location,
+        lastSeen: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+        ip:       device.ip
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`Mock server running on http://localhost:${PORT}`);
 });

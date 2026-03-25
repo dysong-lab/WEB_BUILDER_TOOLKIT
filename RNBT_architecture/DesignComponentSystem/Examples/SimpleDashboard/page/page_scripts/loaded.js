@@ -42,6 +42,14 @@ this.pageDataMappings = [
             param: { baseUrl: 'localhost:4010' }
         },
         refreshInterval: 15000
+    },
+    {
+        topic: 'devices',
+        datasetInfo: {
+            datasetName: 'dashboard_devices',
+            param: { baseUrl: 'localhost:4010' }
+        },
+        refreshInterval: 30000
     }
 ];
 
