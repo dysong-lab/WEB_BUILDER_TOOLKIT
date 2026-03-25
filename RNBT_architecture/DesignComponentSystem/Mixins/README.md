@@ -25,7 +25,7 @@
 | TabulatorMixin | Tabulator 인스턴스를 생성하고 관리한다 |
 | HeatmapJsMixin | heatmap.js 기반 열 분포를 시각화하고 관리한다 |
 | MeshStateMixin | 3D 메시의 시각 상태를 데이터에 따라 변경한다 |
-| CameraFocusMixin | 카메라를 특정 대상으로 이동시킨다 |
+| CameraFocusMixin | 보는 위치를 전환한다 |
 
 ---
 
