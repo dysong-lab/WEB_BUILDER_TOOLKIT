@@ -2,7 +2,7 @@
  * DeviceList — 조립 코드
  *
  * ListRenderMixin으로 장치 목록을 표시하고,
- * PopupMixin + ListRenderMixin으로 클릭한 장치의 상세 정보를 팝업으로 표시한다.
+ * ShadowPopupMixin + ListRenderMixin으로 클릭한 장치의 상세 정보를 팝업으로 표시한다.
  *
  * 팝업 내부에서도 ListRenderMixin을 사용한다.
  * appendElement를 shadowRoot로 지정하면 Shadow DOM 안에서 동작한다.
@@ -34,7 +34,7 @@ applyListRenderMixin(this, {
 // onCreated에서 팝업 내부용 ListRenderMixin을 적용한다.
 this._popupScope = null;
 
-applyPopupMixin(this, {
+applyShadowPopupMixin(this, {
     cssSelectors: {
         template: '#device-detail-popup-template',
         closeBtn: '.popup-close-btn',

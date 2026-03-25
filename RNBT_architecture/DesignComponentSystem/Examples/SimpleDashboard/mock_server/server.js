@@ -164,7 +164,7 @@ app.get('/api/devices', (req, res) => {
 
 // ─────────────────────────────────────────
 // GET /api/device-detail?name=UPS-01
-// DeviceList 팝업용 (PopupMixin)
+// DeviceList 팝업용 (ShadowPopupMixin)
 // ─────────────────────────────────────────
 app.get('/api/device-detail', (req, res) => {
     const name = req.query.name;

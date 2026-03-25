@@ -1,5 +1,5 @@
 /**
- * PopupMixin
+ * ShadowPopupMixin
  *
  * 콘텐츠를 별도 레이어에 표시한다.
  *
@@ -9,7 +9,7 @@
  * ─────────────────────────────────────────────────────────────
  * 사용 예시:
  *
- *   applyPopupMixin(this, {
+ *   applyShadowPopupMixin(this, {
  *       cssSelectors: {
  *           template: '#asset-popup-template',
  *           closeBtn: '.popup-close-btn',
@@ -44,7 +44,7 @@
  * ─────────────────────────────────────────────────────────────
  */
 
-function applyPopupMixin(instance, options) {
+function applyShadowPopupMixin(instance, options) {
     const { cssSelectors = {}, datasetAttrs = {}, onCreated } = options;
 
     const template = cssSelectors.template;
@@ -93,7 +93,7 @@ function applyPopupMixin(instance, options) {
         if (shadowRoot) return;
 
         const templateEl = instance.appendElement.querySelector(template);
-        if (!templateEl) throw new Error('[PopupMixin] template not found: ' + template);
+        if (!templateEl) throw new Error('[ShadowPopupMixin] template not found: ' + template);
 
         host = document.createElement('div');
         instance.appendElement.appendChild(host);

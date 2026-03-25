@@ -26,7 +26,7 @@
 | HeatmapJsMixin | heatmap.js 기반 열 분포를 시각화하고 관리한다 |
 | MeshStateMixin | 3D 메시의 시각 상태를 데이터에 따라 변경한다 |
 | CameraFocusMixin | 보는 위치를 전환한다 |
-| PopupMixin | Shadow DOM으로 팝업을 생성하고 표시/숨김을 관리한다 |
+| ShadowPopupMixin | Shadow DOM으로 팝업을 생성하고 표시/숨김을 관리한다 |
 
 ---
 
@@ -50,4 +50,4 @@
 | HeatmapJsMixin | [HeatmapJsMixin.md](HeatmapJsMixin.md) |
 | MeshStateMixin | [MeshStateMixin.md](MeshStateMixin.md) |
 | CameraFocusMixin | [CameraFocusMixin.md](CameraFocusMixin.md) |
-| PopupMixin | [PopupMixin.md](PopupMixin.md) |
+| ShadowPopupMixin | [ShadowPopupMixin.md](ShadowPopupMixin.md) |

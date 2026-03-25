@@ -1,4 +1,4 @@
-# PopupMixin
+# ShadowPopupMixin
 
 ## 설계 의도
 
@@ -12,7 +12,7 @@ Shadow DOM으로 팝업을 생성하고, 표시/숨김/정리를 관리한다. `
 
 ## Shadow DOM이란
 
-PopupMixin은 Shadow DOM을 사용한다. 이것이 일반 Mixin과 다른 두 가지 특성을 만든다.
+ShadowPopupMixin은 Shadow DOM을 사용한다. 이것이 일반 Mixin과 다른 두 가지 특성을 만든다.
 
 ### 1. 스타일 격리
 
@@ -126,7 +126,7 @@ this.shadowPopup.bindPopupEvents({
 ```javascript
 this._popupScope = null;
 
-applyPopupMixin(this, {
+applyShadowPopupMixin(this, {
     cssSelectors: {
         template: '#popup-template',
         closeBtn: '.popup-close-btn',
@@ -225,7 +225,7 @@ applyListRenderMixin(this, {
 
 this._popupScope = null;
 
-applyPopupMixin(this, {
+applyShadowPopupMixin(this, {
     cssSelectors: {
         template: '#device-detail-popup-template',
         closeBtn: '.popup-close-btn',

@@ -1,4 +1,4 @@
-# Mixin 명세서: PopupMixin
+# Mixin 명세서: ShadowPopupMixin
 
 > 이 문서는 [MIXIN_SPEC_TEMPLATE.md](MIXIN_SPEC_TEMPLATE.md)의 모범답안이다.
 
@@ -33,7 +33,7 @@
 
 > **규약 KEY**: Mixin 내부에서 `cssSelectors.template`을 직접 참조하여 `<template>`을 찾고, 그 내용을 Shadow DOM에 주입한다. 없으면 show()에서 throw.
 > **사용자 정의 KEY**: 팝업 내부의 어떤 요소에 이름을 붙일지는 디자인에 따라 달라진다.
-> **검색 범위:** 일반 Mixin의 cssSelectors는 `instance.appendElement` 안에서 요소를 찾는다. PopupMixin에서 `template`은 `instance.appendElement` 안에서 찾고, 나머지 사용자 정의 KEY는 `shadowRoot` 안에서 찾는다. 디자인과 기능을 분리하는 역할은 동일하다.
+> **검색 범위:** 일반 Mixin의 cssSelectors는 `instance.appendElement` 안에서 요소를 찾는다. ShadowPopupMixin에서 `template`은 `instance.appendElement` 안에서 찾고, 나머지 사용자 정의 KEY는 `shadowRoot` 안에서 찾는다. 디자인과 기능을 분리하는 역할은 동일하다.
 
 ### datasetAttrs
 
@@ -53,7 +53,7 @@
 
 ## 3. renderData 기대 데이터
 
-해당 없음. PopupMixin은 renderData 패턴을 사용하지 않는다. 대신 show, hide 메서드를 직접 호출하여 사용한다.
+해당 없음. ShadowPopupMixin은 renderData 패턴을 사용하지 않는다. 대신 show, hide 메서드를 직접 호출하여 사용한다.
 
 ### show 파라미터
 
@@ -153,7 +153,7 @@ Shadow DOM은 최초 show() 시 lazy 생성된다.
 ### register.js
 
 ```javascript
-applyPopupMixin(this, {
+applyShadowPopupMixin(this, {
     cssSelectors: {
         template: '#asset-popup-template',
         closeBtn: '.popup-close-btn',
@@ -188,6 +188,6 @@ this.customEvents = {
 }
 ```
 
-> 팝업 내부의 콘텐츠 렌더링(차트, 테이블 등)은 PopupMixin의 범위 밖이다. 컴포넌트의 조립 코드에서 `shadowPopup.query()`와 `popup.cssSelectors`로 요소를 찾아 직접 처리하거나, 별도 Mixin 인스턴스가 팝업 내부 요소를 대상으로 동작한다.
+> 팝업 내부의 콘텐츠 렌더링(차트, 테이블 등)은 ShadowPopupMixin의 범위 밖이다. 컴포넌트의 조립 코드에서 `shadowPopup.query()`와 `popup.cssSelectors`로 요소를 찾아 직접 처리하거나, 별도 Mixin 인스턴스가 팝업 내부 요소를 대상으로 동작한다.
 
 ---

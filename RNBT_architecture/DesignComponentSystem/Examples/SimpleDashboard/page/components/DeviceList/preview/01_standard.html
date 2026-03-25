@@ -15,7 +15,7 @@
 
 <script src="../../../../preview_runtime.js"></script>
 <script src="../../../../../../Mixins/ListRenderMixin.js"></script>
-<script src="../../../../../../Mixins/PopupMixin.js"></script>
+<script src="../../../../../../Mixins/ShadowPopupMixin.js"></script>
 <script>
 (async () => {
     await loadComponentAssets('device-list-container', '../views/01_standard.html', '../styles/01_standard.css');
@@ -40,7 +40,7 @@
     // 상세 팝업 (Shadow DOM) + 내부 ListRenderMixin
     instance._popupScope = null;
 
-    applyPopupMixin(instance, {
+    applyShadowPopupMixin(instance, {
         cssSelectors: {
             template: '#device-detail-popup-template',
             closeBtn: '.popup-close-btn',
