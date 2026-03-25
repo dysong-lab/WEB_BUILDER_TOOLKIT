@@ -11,8 +11,28 @@
 | 스킬 단계 | 필수 확인 문서 |
 |-----------|---------------|
 | 1-figma (정적 퍼블리싱) | [/Figma_Conversion/README.md](/Figma_Conversion/README.md), [/Figma_Conversion/CLAUDE.md](/Figma_Conversion/CLAUDE.md), [CODING_STYLE.md](/.claude/guides/CODING_STYLE.md) |
-| 2-component (동적 변환) | [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md), [CODING_STYLE.md](/.claude/guides/CODING_STYLE.md), 사용할 Mixin의 .md 파일 |
-| 3-page (프로젝트 생성) | [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md), [CODING_STYLE.md](/.claude/guides/CODING_STYLE.md) |
+| 2-component (동적 변환) | [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md), [CODING_STYLE.md](/.claude/guides/CODING_STYLE.md), **사용할 Mixin의 .md 파일** (아래 참조) |
+| 3-page (프로젝트 생성) | [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/COMPONENT_SYSTEM_DESIGN.md), [CODING_STYLE.md](/.claude/guides/CODING_STYLE.md), **사용할 Mixin의 .md 파일** (아래 참조) |
+
+### Mixin 문서 확인 규칙 (2-component, 3-page 공통)
+
+**SKILL은 공통 패턴(register.js 3단계, beforeDestroy 역순 정리)을 안내한다. 각 Mixin의 구체적 사용법(옵션, 메서드, destroy 범위)은 해당 Mixin의 .md 문서가 담당한다.**
+
+코드 작성 전, 사용할 Mixin의 .md를 반드시 읽는다:
+
+| Mixin | 문서 |
+|-------|------|
+| FieldRenderMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/FieldRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/FieldRenderMixin.md) |
+| ListRenderMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/ListRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/ListRenderMixin.md) |
+| StatefulListRenderMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/StatefulListRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/StatefulListRenderMixin.md) |
+| EChartsMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/EChartsMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/EChartsMixin.md) |
+| TabulatorMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/TabulatorMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/TabulatorMixin.md) |
+| HeatmapJsMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/HeatmapJsMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/HeatmapJsMixin.md) |
+| MeshStateMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/MeshStateMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/MeshStateMixin.md) |
+| CameraFocusMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/CameraFocusMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/CameraFocusMixin.md) |
+| ShadowPopupMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/ShadowPopupMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/ShadowPopupMixin.md) |
+
+> 전체 목록 및 생성 기준: [Mixins/README.md](/RNBT_architecture/DesignComponentSystem/Mixins/README.md)
 
 ---
 
