@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard — Minimal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #fcfcfb;
+            font-family: 'Instrument Sans', -apple-system, sans-serif;
+            color: #1d1d1f;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── Layout: same as Corporate/DarkTech ── */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            grid-template-rows: auto 1fr;
+            height: 100vh;
+        }
+
+        #header-container {
+            grid-column: 1 / -1;
+            z-index: 10;
+        }
+
+        #sidebar-container {
+            grid-row: 2;
+            overflow-y: auto;
+            border-right: 1px solid #e8e8ed;
+        }
+
+        .dashboard__content {
+            grid-row: 2;
+            padding: 32px 36px;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px 28px;
+            align-content: start;
+        }
+
+        /* ── Grid placement ── */
+        #line-chart-container    { grid-column: 1; }
+        #bar-chart-container     { grid-column: 2; }
+        #pie-chart-container     { grid-column: 1; }
+        #gauge-chart-container   { grid-column: 2; }
+        #table-container         { grid-column: 1 / -1; }
+        #event-browser-container { grid-column: 1 / -1; }
+
+        /* ── Scrollbar: invisible ── */
+        .dashboard__content::-webkit-scrollbar { width: 0; }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div id="header-container"></div>
+        <div id="sidebar-container"></div>
+        <div class="dashboard__content">
+            <div id="line-chart-container"></div>
+            <div id="bar-chart-container"></div>
+            <div id="pie-chart-container"></div>
+            <div id="gauge-chart-container"></div>
+            <div id="table-container"></div>
+            <div id="event-browser-container"></div>
+        </div>
+    </div>
+
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <script src="https://unpkg.com/tabulator-tables@6.3.1/dist/js/tabulator.min.js"></script>
+    <link href="https://unpkg.com/tabulator-tables@6.3.1/dist/css/tabulator_simple.min.css" rel="stylesheet">
+
+    <!-- Runtime -->
+    <script src="../../preview_runtime.js"></script>
+
+    <!-- Mixins -->
+    <script src="../../Mixins/FieldRenderMixin.js"></script>
+    <script src="../../Mixins/StatefulListRenderMixin.js"></script>
+    <script src="../../Mixins/EChartsMixin.js"></script>
+    <script src="../../Mixins/TabulatorMixin.js"></script>
+    <script src="../../Mixins/ListRenderMixin.js"></script>
+    <script src="../../Mixins/ShadowPopupMixin.js"></script>
+
+    <script>
+    (async () => {
+        await Promise.all([
+            loadComponentAssets('header-container',        '../../Components/Header/views/03_minimal.html',       '../../Components/Header/styles/03_minimal.css'),
+            loadComponentAssets('sidebar-container',       '../../Components/Sidebar/views/03_minimal.html',      '../../Components/Sidebar/styles/03_minimal.css'),
+            loadComponentAssets('line-chart-container',    '../../Components/LineChart/views/03_minimal.html',    '../../Components/LineChart/styles/03_minimal.css'),
+            loadComponentAssets('bar-chart-container',     '../../Components/BarChart/views/03_minimal.html',     '../../Components/BarChart/styles/03_minimal.css'),
+            loadComponentAssets('pie-chart-container',     '../../Components/PieChart/views/03_minimal.html',     '../../Components/PieChart/styles/03_minimal.css'),
+            loadComponentAssets('gauge-chart-container',   '../../Components/GaugeChart/views/03_minimal.html',   '../../Components/GaugeChart/styles/03_minimal.css'),
+            loadComponentAssets('table-container',         '../../Components/Table/views/03_minimal.html',        '../../Components/Table/styles/03_minimal.css'),
+            loadComponentAssets('event-browser-container', '../../Components/EventBrowser/views/03_minimal.html', '../../Components/EventBrowser/styles/03_minimal.css')
+        ]);
+
+        // ── 차트 타이틀 ──
+        document.querySelector('#line-chart-container .chart__title').textContent = 'CPU / Memory';
+        document.querySelector('#bar-chart-container .chart__title').textContent = 'Weekly Traffic';
+        document.querySelector('#pie-chart-container .chart__title').textContent = 'Devices';
+        document.querySelector('#gauge-chart-container .chart__title').textContent = 'CPU';
+
+        // ── 공통 팔레트 ──
+        const c = { dark: '#1d1d1f', mid: '#86868b', light: '#d2d2d7', faint: '#f5f5f7', accent: '#1d1d1f' };
+        const font = { fontFamily: 'Instrument Sans' };
+
+        // ── Header ──
+        const header = { id: 'header', appendElement: document.getElementById('header-container') };
+        applyFieldRenderMixin(header, {
+            cssSelectors: { title: '.header__title', userName: '.header__user-name', time: '.header__time' }
+        });
+        header.fieldRender.renderData({ response: { data: {
+            title: 'ECO Monitoring', userName: 'Admin', time: new Date().toLocaleDateString('ko-KR')
+        }}});
+
+        // ── Sidebar (hidden but loaded) ──
+        const sidebar = { id: 'sidebar', appendElement: document.getElementById('sidebar-container') };
+        applyStatefulListRenderMixin(sidebar, {
+            cssSelectors: { container: '.sidebar__menu', template: '#sidebar-menu-item-template',
+                            icon: '.sidebar__item-icon', label: '.sidebar__item-label', badge: '.sidebar__item-badge' },
+            datasetAttrs: { itemKey: 'menuId', active: 'active' }
+        });
+        sidebar.statefulList.renderData({ response: { data: [
+            { menuId: 'dashboard', icon: '—', label: 'Dashboard',  badge: '',   active: 'true' },
+            { menuId: 'devices',   icon: '—', label: 'Devices',    badge: '12', active: '' },
+            { menuId: 'events',    icon: '—', label: 'Events',     badge: '3',  active: '' },
+            { menuId: 'reports',   icon: '—', label: 'Reports',    badge: '',   active: '' },
+            { menuId: 'settings',  icon: '—', label: 'Settings',   badge: '',   active: '' }
+        ]}});
+
+        // ── LineChart ──
+        const lineChart = { id: 'line-chart', appendElement: document.getElementById('line-chart-container') };
+        applyEChartsMixin(lineChart, {
+            cssSelectors: { container: '.chart__canvas' },
+            option: {
+                grid: { top: 32, right: 8, bottom: 28, left: 40 },
+                xAxis: { type: 'category', axisLine: { show: false },
+                         axisLabel: { color: c.mid, fontSize: 11, ...font }, axisTick: { show: false },
+                         splitLine: { show: false } },
+                yAxis: { type: 'value', splitLine: { lineStyle: { color: c.faint } },
+                         axisLabel: { color: c.light, fontSize: 11, ...font }, axisLine: { show: false }, axisTick: { show: false } },
+                series: [
+                    { name: 'CPU', type: 'line', smooth: 0.5, symbol: 'none', color: c.dark, lineStyle: { width: 2 } },
+                    { name: 'Memory', type: 'line', smooth: 0.5, symbol: 'none', color: c.light, lineStyle: { width: 2 } }
+                ],
+                tooltip: { trigger: 'axis', backgroundColor: c.dark, borderWidth: 0,
+                           textStyle: { color: '#fff', fontSize: 12, ...font } },
+                legend: { data: ['CPU', 'Memory'], right: 0, top: 0, textStyle: { color: c.mid, fontSize: 11, ...font },
+                          icon: 'roundRect', itemWidth: 12, itemHeight: 2 }
+            }
+        });
+        lineChart.echarts.renderData({ response: { data: {
+            categories: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00'],
+            values: [[42, 55, 48, 72, 65, 58], [65, 68, 72, 70, 75, 73]]
+        }}});
+
+        // ── BarChart ──
+        const barChart = { id: 'bar-chart', appendElement: document.getElementById('bar-chart-container') };
+        applyEChartsMixin(barChart, {
+            cssSelectors: { container: '.chart__canvas' },
+            option: {
+                grid: { top: 32, right: 8, bottom: 28, left: 40 },
+                xAxis: { type: 'category', axisLine: { show: false },
+                         axisLabel: { color: c.mid, fontSize: 11, ...font }, axisTick: { show: false } },
+                yAxis: { type: 'value', splitLine: { lineStyle: { color: c.faint } },
+                         axisLabel: { color: c.light, fontSize: 11, ...font }, axisLine: { show: false }, axisTick: { show: false } },
+                series: [
+                    { name: 'Input', type: 'bar', barWidth: '36%', itemStyle: { color: c.dark, borderRadius: [3, 3, 0, 0] } },
+                    { name: 'Output', type: 'bar', barWidth: '36%', itemStyle: { color: c.light, borderRadius: [3, 3, 0, 0] } }
+                ],
+                tooltip: { trigger: 'axis', backgroundColor: c.dark, borderWidth: 0,
+                           textStyle: { color: '#fff', fontSize: 12, ...font } },
+                legend: { data: ['Input', 'Output'], right: 0, top: 0, textStyle: { color: c.mid, fontSize: 11, ...font },
+                          icon: 'roundRect', itemWidth: 12, itemHeight: 2 }
+            }
+        });
+        barChart.echarts.renderData({ response: { data: {
+            categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            values: [[120, 200, 150, 80, 70, 110], [90, 170, 130, 60, 50, 90]]
+        }}});
+
+        // ── PieChart ──
+        const pieChart = { id: 'pie-chart', appendElement: document.getElementById('pie-chart-container') };
+        applyEChartsMixin(pieChart, {
+            cssSelectors: { container: '.chart__canvas' },
+            option: {
+                series: [{
+                    type: 'pie', radius: ['50%', '72%'], center: ['40%', '52%'],
+                    label: { show: true, formatter: '{b}', color: c.mid, fontSize: 11, fontFamily: 'Instrument Sans' },
+                    labelLine: { lineStyle: { color: c.light } },
+                    itemStyle: { borderColor: '#fcfcfb', borderWidth: 3 }
+                }],
+                tooltip: { trigger: 'item', backgroundColor: c.dark, borderWidth: 0,
+                           textStyle: { color: '#fff', fontSize: 12, fontFamily: 'Instrument Sans' } },
+                color: [c.dark, '#86868b', '#aeaeb2', '#d2d2d7', '#e8e8ed']
+            },
+            mapData: function(data, option) { option.series[0].data = data.items; return option; }
+        });
+        pieChart.echarts.renderData({ response: { data: {
+            items: [{ name: 'UPS', value: 35 }, { name: 'CRAC', value: 25 }, { name: 'PDU', value: 20 },
+                    { name: 'Sensor', value: 12 }, { name: 'Switch', value: 8 }]
+        }}});
+
+        // ── GaugeChart ──
+        const gaugeChart = { id: 'gauge-chart', appendElement: document.getElementById('gauge-chart-container') };
+        applyEChartsMixin(gaugeChart, {
+            cssSelectors: { container: '.chart__canvas' },
+            option: {
+                series: [{
+                    type: 'gauge', min: 0, max: 100, startAngle: 200, endAngle: -20,
+                    progress: { show: true, width: 8, itemStyle: { color: c.dark } },
+                    axisLine: { lineStyle: { width: 8, color: [[1, c.faint]] } },
+                    axisTick: { show: false },
+                    splitLine: { show: false },
+                    axisLabel: { distance: 16, color: c.light, fontSize: 10, fontFamily: 'Instrument Sans' },
+                    pointer: { show: false },
+                    title: { show: false },
+                    detail: { valueAnimation: true, offsetCenter: [0, '0%'], formatter: '{value}%',
+                              fontSize: 32, fontWeight: 600, fontFamily: 'Instrument Sans', color: c.dark }
+                }]
+            },
+            mapData: function(data, option) { option.series[0].data = [{ value: data.value, name: data.name }]; return option; }
+        });
+        gaugeChart.echarts.renderData({ response: { data: { value: 72, name: 'CPU' } }});
+
+        // ── Table ──
+        const table = { id: 'table', appendElement: document.getElementById('table-container') };
+        applyTabulatorMixin(table, {
+            cssSelectors: { container: '.table__body' },
+            columns: [
+                { title: 'ID', field: 'id', width: 80 }, { title: 'Name', field: 'name', minWidth: 120 },
+                { title: 'Type', field: 'type', width: 100 }, { title: 'Status', field: 'status', width: 100 },
+                { title: 'Value', field: 'value', width: 100, hozAlign: 'right' }, { title: 'Updated', field: 'updated', width: 160 }
+            ]
+        });
+        table.tabulator.init().on('tableBuilt', function() {
+            table.tabulator.renderData({ response: { data: [
+                { id: 'D-001', name: 'UPS-01',    type: 'UPS',    status: 'Online',  value: '98.2%', updated: '2026-03-26 14:30' },
+                { id: 'D-002', name: 'CRAC-02',   type: 'CRAC',   status: 'Warning', value: '87.5%', updated: '2026-03-26 14:28' },
+                { id: 'D-003', name: 'PDU-03',    type: 'PDU',    status: 'Online',  value: '45.1%', updated: '2026-03-26 14:30' },
+                { id: 'D-004', name: 'Sensor-04', type: 'Sensor', status: 'Offline', value: 'N/A',   updated: '2026-03-26 13:15' },
+                { id: 'D-005', name: 'Switch-05', type: 'Switch', status: 'Online',  value: '72.8%', updated: '2026-03-26 14:29' }
+            ]}});
+        });
+
+        // ── EventBrowser ──
+        const eventBrowser = { id: 'event-browser', appendElement: document.getElementById('event-browser-container') };
+        applyListRenderMixin(eventBrowser, {
+            cssSelectors: { container: '.event-browser__list', template: '#event-browser-item-template',
+                            time: '.event-browser__item-time', level: '.event-browser__item-level',
+                            message: '.event-browser__item-message', source: '.event-browser__item-source' },
+            datasetAttrs: { level: 'level' }
+        });
+        applyShadowPopupMixin(eventBrowser, {
+            cssSelectors: { template: '#event-detail-popup-template', closeBtn: '.popup-close-btn' },
+            onCreated: function(shadowRoot) {
+                eventBrowser._popupScope = { appendElement: shadowRoot };
+                applyListRenderMixin(eventBrowser._popupScope, {
+                    cssSelectors: { container: '.popup-detail-list', template: '#popup-detail-item-template',
+                                    label: '.popup-field__label', value: '.popup-field__value' }
+                });
+            }
+        });
+        eventBrowser.listRender.renderData({ response: { data: [
+            { time: '14:30:05', level: 'error',   message: 'UPS-01 voltage drop detected',        source: 'UPS' },
+            { time: '14:28:12', level: 'warning', message: 'CRAC-02 temperature above threshold', source: 'CRAC' },
+            { time: '14:25:33', level: 'info',    message: 'PDU-03 load balancing completed',     source: 'PDU' },
+            { time: '14:22:01', level: 'info',    message: 'Sensor-04 calibration started',       source: 'Sensor' },
+            { time: '14:20:45', level: 'warning', message: 'Switch-05 port flapping detected',    source: 'Switch' }
+        ]}});
+
+        eventBrowser.appendElement.addEventListener('click', function(e) {
+            const item = e.target.closest('.event-browser__item');
+            if (!item) return;
+            eventBrowser.shadowPopup.show();
+            if (eventBrowser._popupScope && eventBrowser._popupScope.listRender) {
+                eventBrowser._popupScope.listRender.renderData({ response: { data: [
+                    { label: 'Time',    value: item.querySelector('.event-browser__item-time').textContent },
+                    { label: 'Level',   value: item.querySelector('.event-browser__item-level').textContent },
+                    { label: 'Message', value: item.querySelector('.event-browser__item-message').textContent },
+                    { label: 'Source',  value: item.querySelector('.event-browser__item-source').textContent }
+                ]}});
+            }
+        });
+        eventBrowser.shadowPopup.bindPopupEvents({
+            click: { '.popup-close-btn': function() { eventBrowser.shadowPopup.hide(); } }
+        });
+    })();
+    </script>
+</body>
+</html>

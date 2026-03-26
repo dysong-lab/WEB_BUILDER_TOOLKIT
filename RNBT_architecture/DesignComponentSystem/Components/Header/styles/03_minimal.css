@@ -2,17 +2,16 @@
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    padding: 20px 32px;
+    padding: 20px 36px;
     background: transparent;
-    border-bottom: 1px solid #e5e7eb;
-    font-family: 'Inter', -apple-system, sans-serif;
 }
 
 #header-container .header__title {
-    font-size: 18px;
-    font-weight: 400;
-    color: #111827;
-    letter-spacing: -0.02em;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1d1d1f;
+    letter-spacing: -0.03em;
 }
 
 #header-container .header__meta {
@@ -23,16 +22,16 @@
 
 #header-container .header__user-name {
     font-size: 13px;
-    color: #9ca3af;
+    color: #aeaeb2;
 }
 
 #header-container .header__separator {
     font-size: 13px;
-    color: #d1d5db;
+    color: #d2d2d7;
 }
 
 #header-container .header__time {
     font-size: 13px;
-    color: #9ca3af;
+    color: #aeaeb2;
     font-variant-numeric: tabular-nums;
 }

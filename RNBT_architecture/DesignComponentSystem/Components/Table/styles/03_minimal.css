@@ -1,20 +1,17 @@
 #table-container .table {
     background: transparent;
-    padding: 20px 0;
-    font-family: 'Inter', -apple-system, sans-serif;
+    padding: 0;
 }
 
 #table-container .table__title {
     display: block;
+    font-family: 'Instrument Sans', sans-serif;
     font-size: 13px;
-    font-weight: 400;
-    color: #9ca3af;
-    margin-bottom: 16px;
+    font-weight: 500;
+    color: #86868b;
+    margin-bottom: 8px;
 }
 
 #table-container .table__body {
     width: 100%;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    overflow: hidden;
 }

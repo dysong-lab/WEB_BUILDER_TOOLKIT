@@ -90,10 +90,10 @@ function applyEChartsMixin(instance, options) {
      * @param {{ response: { data: Object } }} payload
      */
     ns.renderData = function({ response }) {
-        var data = response.data;
+        const data = response.data;
         if (!data) throw new Error('[EChartsMixin] data is null');
 
-        var merged = JSON.parse(JSON.stringify(option));
+        let merged = JSON.parse(JSON.stringify(option));
 
         if (mapData) {
             // 컴포넌트가 병합 로직을 직접 정의
@@ -105,7 +105,7 @@ function applyEChartsMixin(instance, options) {
             }
 
             if (data.values && merged.series) {
-                for (var i = 0; i < merged.series.length; i++) {
+                for (let i = 0; i < merged.series.length; i++) {
                     if (data.values[i]) {
                         merged.series[i].data = data.values[i];
                     }

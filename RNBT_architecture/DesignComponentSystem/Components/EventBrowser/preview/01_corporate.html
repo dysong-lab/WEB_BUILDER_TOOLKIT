@@ -73,7 +73,7 @@
 
         // 클릭 → 팝업 열기 (직접 이벤트 위임)
         instance.appendElement.addEventListener('click', function(e) {
-            var item = e.target.closest('.event-browser__item');
+            const item = e.target.closest('.event-browser__item');
             if (!item) return;
 
             instance.shadowPopup.show();

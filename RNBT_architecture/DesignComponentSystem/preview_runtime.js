@@ -171,8 +171,12 @@ async function loadComponentAssets(containerId, htmlPath, cssPath) {
     const container = document.getElementById(containerId);
     container.innerHTML = htmlRes;
 
+    // CSS 스코프 ID 치환: CSS 파일의 원래 스코프 ID를 실제 컨테이너 ID로 변환
+    // 예: #chart-container .chart → #line-chart-container .chart
+    const scopedCss = cssRes.replace(/#[\w-]+-container\b/g, '#' + containerId);
+
     const style = document.createElement('style');
-    style.textContent = cssRes;
+    style.textContent = scopedCss;
     document.head.appendChild(style);
 
     return container;

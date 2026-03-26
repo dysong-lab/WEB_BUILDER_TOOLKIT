@@ -2,68 +2,66 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 20px;
-    background: #0f172a;
-    border-bottom: 1px solid #1e3a5f;
-    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    padding: 10px 20px;
+    background: #0d1117;
 }
 
 #header-container .header__left {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
 #header-container .header__indicator {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-    background: #22c55e;
-    box-shadow: 0 0 6px #22c55e80;
-    animation: pulse 2s ease-in-out infinite;
+    background: #4dd0e1;
+    animation: pulse 2.5s ease-in-out infinite;
 }
 
 @keyframes pulse {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+    50% { opacity: 0.3; }
 }
 
 #header-container .header__title {
     margin: 0;
-    font-size: 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
     font-weight: 500;
-    color: #e2e8f0;
-    letter-spacing: 0.5px;
+    color: #c8cdd5;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
 }
 
 #header-container .header__right {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
 }
 
 #header-container .header__user-badge {
-    padding: 4px 12px;
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 4px;
+    padding: 0;
+    background: none;
+    border: none;
 }
 
 #header-container .header__user-name {
-    font-size: 12px;
-    color: #94a3b8;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: #4a5568;
 }
 
 #header-container .header__time-display {
-    padding: 4px 12px;
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 4px;
+    padding: 0;
+    background: none;
+    border: none;
 }
 
 #header-container .header__time {
-    font-size: 12px;
-    color: #22c55e;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: #4dd0e1;
     font-variant-numeric: tabular-nums;
 }

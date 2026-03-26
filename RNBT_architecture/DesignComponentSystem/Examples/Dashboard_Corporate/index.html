@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard — Corporate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #f8f7f4;
+            font-family: 'DM Sans', sans-serif;
+            color: #2c2c2c;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── Layout ── */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            grid-template-rows: auto 1fr;
+            height: 100vh;
+        }
+
+        #header-container {
+            grid-column: 1 / -1;
+            z-index: 10;
+            border-bottom: 1px solid #e8e6e1;
+        }
+
+        #sidebar-container {
+            grid-row: 2;
+            overflow-y: auto;
+            border-right: 1px solid #e8e6e1;
+        }
+
+        .dashboard__content {
+            grid-row: 2;
+            padding: 32px 36px;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto;
+            gap: 28px 24px;
+            align-content: start;
+        }
+
+        /* ── Grid placement (레이아웃만) ── */
+        #line-chart-container    { grid-column: 1; }
+        #bar-chart-container     { grid-column: 2; }
+        #pie-chart-container     { grid-column: 1; }
+        #gauge-chart-container   { grid-column: 2; }
+        #table-container         { grid-column: 1 / -1; }
+        #event-browser-container { grid-column: 1 / -1; }
+
+        /* ── Scrollbar ── */
+        .dashboard__content::-webkit-scrollbar { width: 4px; }
+        .dashboard__content::-webkit-scrollbar-track { background: transparent; }
+        .dashboard__content::-webkit-scrollbar-thumb { background: #d4d0c8; border-radius: 2px; }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div id="header-container"></div>
+        <div id="sidebar-container"></div>
+        <div class="dashboard__content">
+            <div id="line-chart-container"></div>
+            <div id="bar-chart-container"></div>
+            <div id="pie-chart-container"></div>
+            <div id="gauge-chart-container"></div>
+            <div id="table-container"></div>
+            <div id="event-browser-container"></div>
+        </div>
+    </div>
+
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <script src="https://unpkg.com/tabulator-tables@6.3.1/dist/js/tabulator.min.js"></script>
+    <link href="https://unpkg.com/tabulator-tables@6.3.1/dist/css/tabulator.min.css" rel="stylesheet">
+
+    <!-- Runtime -->
+    <script src="../../preview_runtime.js"></script>
+
+    <!-- Mixins -->
+    <script src="../../Mixins/FieldRenderMixin.js"></script>
+    <script src="../../Mixins/StatefulListRenderMixin.js"></script>
+    <script src="../../Mixins/EChartsMixin.js"></script>
+    <script src="../../Mixins/TabulatorMixin.js"></script>
+    <script src="../../Mixins/ListRenderMixin.js"></script>
+    <script src="../../Mixins/ShadowPopupMixin.js"></script>
+
+    <script>
+    (async () => {
+        // ── 컴포넌트 에셋 로드 (01_corporate 디자인) ──
+        await Promise.all([
+            loadComponentAssets('header-container',        '../../Components/Header/views/01_corporate.html',       '../../Components/Header/styles/01_corporate.css'),
+            loadComponentAssets('sidebar-container',       '../../Components/Sidebar/views/01_corporate.html',      '../../Components/Sidebar/styles/01_corporate.css'),
+            loadComponentAssets('line-chart-container',    '../../Components/LineChart/views/01_corporate.html',    '../../Components/LineChart/styles/01_corporate.css'),
+            loadComponentAssets('bar-chart-container',     '../../Components/BarChart/views/01_corporate.html',     '../../Components/BarChart/styles/01_corporate.css'),
+            loadComponentAssets('pie-chart-container',     '../../Components/PieChart/views/01_corporate.html',     '../../Components/PieChart/styles/01_corporate.css'),
+            loadComponentAssets('gauge-chart-container',   '../../Components/GaugeChart/views/01_corporate.html',   '../../Components/GaugeChart/styles/01_corporate.css'),
+            loadComponentAssets('table-container',         '../../Components/Table/views/01_corporate.html',        '../../Components/Table/styles/01_corporate.css'),
+            loadComponentAssets('event-browser-container', '../../Components/EventBrowser/views/01_corporate.html', '../../Components/EventBrowser/styles/01_corporate.css')
+        ]);
+
+        // ── 차트 타이틀 설정 ──
+        document.querySelector('#line-chart-container .chart__title').textContent = 'CPU / Memory Trend';
+        document.querySelector('#bar-chart-container .chart__title').textContent = 'Weekly I/O Traffic';
+        document.querySelector('#pie-chart-container .chart__title').textContent = 'Device Distribution';
+        document.querySelector('#gauge-chart-container .chart__title').textContent = 'CPU Usage';
+
+        // ── Header ──
+        const header = { id: 'header', appendElement: document.getElementById('header-container') };
+        applyFieldRenderMixin(header, {
+            cssSelectors: { title: '.header__title', userName: '.header__user-name', time: '.header__time' }
+        });
+        header.fieldRender.renderData({ response: { data: {
+            title: 'ECO Monitoring Dashboard', userName: 'Admin', time: new Date().toLocaleString('ko-KR')
+        }}});
+
+        // ── Sidebar ──
+        const sidebar = { id: 'sidebar', appendElement: document.getElementById('sidebar-container') };
+        applyStatefulListRenderMixin(sidebar, {
+            cssSelectors: { container: '.sidebar__menu', template: '#sidebar-menu-item-template',
+                            icon: '.sidebar__item-icon', label: '.sidebar__item-label', badge: '.sidebar__item-badge' },
+            datasetAttrs: { itemKey: 'menuId', active: 'active' }
+        });
+        sidebar.statefulList.renderData({ response: { data: [
+            { menuId: 'dashboard', icon: '📊', label: 'Dashboard',  badge: '',   active: 'true' },
+            { menuId: 'devices',   icon: '🖥️', label: 'Devices',    badge: '12', active: '' },
+            { menuId: 'events',    icon: '📋', label: 'Events',     badge: '3',  active: '' },
+            { menuId: 'reports',   icon: '📈', label: 'Reports',    badge: '',   active: '' },
+            { menuId: 'settings',  icon: '⚙️', label: 'Settings',   badge: '',   active: '' }
+        ]}});
+
+        // ── 공통 차트 팔레트 ──
+        const palette = {
+            warm:    '#c4553a',
+            sand:    '#b0926a',
+            olive:   '#7a8b6f',
+            slate:   '#6b7a8d',
+            neutral: '#d4d0c8',
+            text:    '#2c2c2c',
+            muted:   '#b0aa9f',
+            bg:      '#f8f7f4',
+            line:    '#e8e6e1'
+        };
+
+        const chartFont = { fontFamily: 'DM Sans' };
+
+        // ── LineChart ──
+        const lineChart = { id: 'line-chart', appendElement: document.getElementById('line-chart-container') };
+        applyEChartsMixin(lineChart, {
+            cssSelectors: { container: '.chart__canvas' },
+            option: {
+                grid: { top: 40, right: 20, bottom: 32, left: 48 },
+                xAxis: { type: 'category', axisLine: { lineStyle: { color: palette.line } },
+                         axisLabel: { color: palette.muted, fontSize: 11, ...chartFont },
+                         axisTick: { show: false } },
+                yAxis: { type: 'value', splitLine: { lineStyle: { color: palette.line, type: 'dashed' } },
+                         axisLabel: { color: palette.muted, fontSize: 11, ...chartFont },
+                         axisLine: { show: false }, axisTick: { show: false } },
+                series: [
+                    { name: 'CPU', type: 'line', smooth: 0.4, symbol: 'none', color: palette.warm, lineStyle: { width: 2.5 } },
+                    { name: 'Memory', type: 'line', smooth: 0.4, symbol: 'none', color: palette.olive, lineStyle: { width: 2.5 } }
+                ],
+                tooltip: { trigger: 'axis', backgroundColor: palette.text, borderWidth: 0,
+                           textStyle: { color: '#fffffe', fontSize: 12, ...chartFont } },
+                legend: { data: ['CPU', 'Memory'], right: 0, top: 0, textStyle: { color: palette.muted, fontSize: 11, ...chartFont },
+                          icon: 'roundRect', itemWidth: 12, itemHeight: 3 }
+            }
+        });
+        lineChart.echarts.renderData({ response: { data: {
+            categories: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00'],
+            values: [[42, 55, 48, 72, 65, 58], [65, 68, 72, 70, 75, 73]]
+        }}});
+
+        // ── BarChart ──
+        const barChart = { id: 'bar-chart', appendElement: document.getElementById('bar-chart-container') };
+        applyEChartsMixin(barChart, {
+            cssSelectors: { container: '.chart__canvas' },
+            option: {
+                grid: { top: 40, right: 12, bottom: 32, left: 48 },
+                xAxis: { type: 'category', axisLine: { lineStyle: { color: palette.line } },
+                         axisLabel: { color: palette.muted, fontSize: 11, ...chartFont },
+                         axisTick: { show: false } },
+                yAxis: { type: 'value', splitLine: { lineStyle: { color: palette.line, type: 'dashed' } },
+                         axisLabel: { color: palette.muted, fontSize: 11, ...chartFont },
+                         axisLine: { show: false }, axisTick: { show: false } },
+                series: [
+                    { name: 'Input', type: 'bar', barWidth: '32%', itemStyle: { color: palette.sand, borderRadius: [2, 2, 0, 0] } },
+                    { name: 'Output', type: 'bar', barWidth: '32%', itemStyle: { color: palette.neutral, borderRadius: [2, 2, 0, 0] } }
+                ],
+                tooltip: { trigger: 'axis', backgroundColor: palette.text, borderWidth: 0,
+                           textStyle: { color: '#fffffe', fontSize: 12, ...chartFont } },
+                legend: { data: ['Input', 'Output'], right: 0, top: 0, textStyle: { color: palette.muted, fontSize: 11, ...chartFont },
+                          icon: 'roundRect', itemWidth: 12, itemHeight: 3 }
+            }
+        });
+        barChart.echarts.renderData({ response: { data: {
+            categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            values: [[120, 200, 150, 80, 70, 110], [90, 170, 130, 60, 50, 90]]
+        }}});
+
+        // ── PieChart ──
+        const pieChart = { id: 'pie-chart', appendElement: document.getElementById('pie-chart-container') };
+        applyEChartsMixin(pieChart, {
+            cssSelectors: { container: '.chart__canvas' },
+            option: {
+                series: [{
+                    type: 'pie', radius: ['44%', '68%'], center: ['40%', '52%'],
+                    label: { show: true, formatter: '{b}', color: palette.muted, fontSize: 11, fontFamily: 'DM Sans' },
+                    labelLine: { lineStyle: { color: palette.neutral } },
+                    itemStyle: { borderColor: palette.bg, borderWidth: 3 }
+                }],
+                tooltip: { trigger: 'item', backgroundColor: palette.text, borderWidth: 0,
+                           textStyle: { color: '#fffffe', fontSize: 12, fontFamily: 'DM Sans' } },
+                color: [palette.warm, palette.sand, palette.olive, palette.slate, palette.neutral]
+            },
+            mapData: function(data, option) { option.series[0].data = data.items; return option; }
+        });
+        pieChart.echarts.renderData({ response: { data: {
+            items: [{ name: 'UPS', value: 35 }, { name: 'CRAC', value: 25 }, { name: 'PDU', value: 20 },
+                    { name: 'Sensor', value: 12 }, { name: 'Switch', value: 8 }]
+        }}});
+
+        // ── GaugeChart ──
+        const gaugeChart = { id: 'gauge-chart', appendElement: document.getElementById('gauge-chart-container') };
+        applyEChartsMixin(gaugeChart, {
+            cssSelectors: { container: '.chart__canvas' },
+            option: {
+                series: [{
+                    type: 'gauge', min: 0, max: 100, startAngle: 200, endAngle: -20,
+                    progress: { show: true, width: 14, itemStyle: { color: palette.warm } },
+                    axisLine: { lineStyle: { width: 14, color: [[1, palette.line]] } },
+                    axisTick: { show: false },
+                    splitLine: { length: 8, lineStyle: { color: palette.neutral, width: 1 } },
+                    axisLabel: { distance: 20, color: palette.muted, fontSize: 10, fontFamily: 'DM Sans' },
+                    pointer: { show: false },
+                    title: { offsetCenter: [0, '30%'], color: palette.muted, fontSize: 12, fontFamily: 'DM Sans' },
+                    detail: { valueAnimation: true, offsetCenter: [0, '0%'], formatter: '{value}%',
+                              fontSize: 28, fontWeight: 600, fontFamily: 'DM Sans', color: palette.text }
+                }]
+            },
+            mapData: function(data, option) { option.series[0].data = [{ value: data.value, name: data.name }]; return option; }
+        });
+        gaugeChart.echarts.renderData({ response: { data: { value: 72, name: 'CPU Usage' } }});
+
+        // ── Table ──
+        const table = { id: 'table', appendElement: document.getElementById('table-container') };
+        applyTabulatorMixin(table, {
+            cssSelectors: { container: '.table__body' },
+            columns: [
+                { title: 'ID', field: 'id', width: 80 }, { title: 'Name', field: 'name', minWidth: 120 },
+                { title: 'Type', field: 'type', width: 100 }, { title: 'Status', field: 'status', width: 100 },
+                { title: 'Value', field: 'value', width: 100, hozAlign: 'right' }, { title: 'Updated', field: 'updated', width: 160 }
+            ]
+        });
+        table.tabulator.init().on('tableBuilt', function() {
+            table.tabulator.renderData({ response: { data: [
+                { id: 'D-001', name: 'UPS-01',    type: 'UPS',    status: 'Online',  value: '98.2%', updated: '2026-03-26 14:30' },
+                { id: 'D-002', name: 'CRAC-02',   type: 'CRAC',   status: 'Warning', value: '87.5%', updated: '2026-03-26 14:28' },
+                { id: 'D-003', name: 'PDU-03',    type: 'PDU',    status: 'Online',  value: '45.1%', updated: '2026-03-26 14:30' },
+                { id: 'D-004', name: 'Sensor-04', type: 'Sensor', status: 'Offline', value: 'N/A',   updated: '2026-03-26 13:15' },
+                { id: 'D-005', name: 'Switch-05', type: 'Switch', status: 'Online',  value: '72.8%', updated: '2026-03-26 14:29' }
+            ]}});
+        });
+
+        // ── EventBrowser ──
+        const eventBrowser = { id: 'event-browser', appendElement: document.getElementById('event-browser-container') };
+        applyListRenderMixin(eventBrowser, {
+            cssSelectors: { container: '.event-browser__list', template: '#event-browser-item-template',
+                            time: '.event-browser__item-time', level: '.event-browser__item-level',
+                            message: '.event-browser__item-message', source: '.event-browser__item-source' },
+            datasetAttrs: { level: 'level' }
+        });
+        applyShadowPopupMixin(eventBrowser, {
+            cssSelectors: { template: '#event-detail-popup-template', closeBtn: '.popup-close-btn' },
+            onCreated: function(shadowRoot) {
+                eventBrowser._popupScope = { appendElement: shadowRoot };
+                applyListRenderMixin(eventBrowser._popupScope, {
+                    cssSelectors: { container: '.popup-detail-list', template: '#popup-detail-item-template',
+                                    label: '.popup-field__label', value: '.popup-field__value' }
+                });
+            }
+        });
+        eventBrowser.listRender.renderData({ response: { data: [
+            { time: '14:30:05', level: 'error',   message: 'UPS-01 voltage drop detected',        source: 'UPS' },
+            { time: '14:28:12', level: 'warning', message: 'CRAC-02 temperature above threshold', source: 'CRAC' },
+            { time: '14:25:33', level: 'info',    message: 'PDU-03 load balancing completed',     source: 'PDU' },
+            { time: '14:22:01', level: 'info',    message: 'Sensor-04 calibration started',       source: 'Sensor' },
+            { time: '14:20:45', level: 'warning', message: 'Switch-05 port flapping detected',    source: 'Switch' }
+        ]}});
+
+        eventBrowser.appendElement.addEventListener('click', function(e) {
+            const item = e.target.closest('.event-browser__item');
+            if (!item) return;
+            eventBrowser.shadowPopup.show();
+            if (eventBrowser._popupScope && eventBrowser._popupScope.listRender) {
+                eventBrowser._popupScope.listRender.renderData({ response: { data: [
+                    { label: 'Time',    value: item.querySelector('.event-browser__item-time').textContent },
+                    { label: 'Level',   value: item.querySelector('.event-browser__item-level').textContent },
+                    { label: 'Message', value: item.querySelector('.event-browser__item-message').textContent },
+                    { label: 'Source',  value: item.querySelector('.event-browser__item-source').textContent }
+                ]}});
+            }
+        });
+        eventBrowser.shadowPopup.bindPopupEvents({
+            click: { '.popup-close-btn': function() { eventBrowser.shadowPopup.hide(); } }
+        });
+    })();
+    </script>
+</body>
+</html>

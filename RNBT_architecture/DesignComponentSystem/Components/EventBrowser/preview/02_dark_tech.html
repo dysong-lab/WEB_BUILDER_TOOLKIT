@@ -69,7 +69,7 @@
         });
 
         instance.appendElement.addEventListener('click', function(e) {
-            var item = e.target.closest('.event-browser__item');
+            const item = e.target.closest('.event-browser__item');
             if (!item) return;
             instance.shadowPopup.show();
             if (instance._popupScope && instance._popupScope.listRender) {

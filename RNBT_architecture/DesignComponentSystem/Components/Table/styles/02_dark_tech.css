@@ -1,31 +1,30 @@
 #table-container .table {
-    background: #0f172a;
-    border: 1px solid #1e3a5f;
-    border-radius: 4px;
-    padding: 16px;
-    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    background: #0d1117;
+    border: 1px solid #1a2030;
+    border-radius: 3px;
+    padding: 14px 16px 8px;
 }
 
 #table-container .table__header {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
+    gap: 6px;
+    margin-bottom: 8px;
 }
 
 #table-container .table__status-dot {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
-    background: #22c55e;
-    box-shadow: 0 0 4px #22c55e80;
+    background: #4dd0e1;
 }
 
 #table-container .table__title {
-    font-size: 11px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
     font-weight: 500;
-    color: #64748b;
-    letter-spacing: 1px;
+    color: #4a5568;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
 }
 
