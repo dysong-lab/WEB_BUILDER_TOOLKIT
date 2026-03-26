@@ -41,15 +41,13 @@
         // 인스턴스 생성 → tableBuilt 이후 데이터 적용
         instance.tabulator.init().on('tableBuilt', function() {
             instance.tabulator.renderData({
-                response: {
-                    data: [
-                        { id: 'D-001', name: 'UPS-01',      type: 'UPS',    status: 'Online',  value: '98.2%', updated: '2026-03-26 14:30' },
-                        { id: 'D-002', name: 'CRAC-02',     type: 'CRAC',   status: 'Warning', value: '87.5%', updated: '2026-03-26 14:28' },
-                        { id: 'D-003', name: 'PDU-03',      type: 'PDU',    status: 'Online',  value: '45.1%', updated: '2026-03-26 14:30' },
-                        { id: 'D-004', name: 'Sensor-04',   type: 'Sensor', status: 'Offline', value: 'N/A',   updated: '2026-03-26 13:15' },
-                        { id: 'D-005', name: 'Switch-05',   type: 'Switch', status: 'Online',  value: '72.8%', updated: '2026-03-26 14:29' }
-                    ]
-                }
+                response: [
+                    { id: 'D-001', name: 'UPS-01',      type: 'UPS',    status: 'Online',  value: '98.2%', updated: '2026-03-26 14:30' },
+                    { id: 'D-002', name: 'CRAC-02',     type: 'CRAC',   status: 'Warning', value: '87.5%', updated: '2026-03-26 14:28' },
+                    { id: 'D-003', name: 'PDU-03',      type: 'PDU',    status: 'Online',  value: '45.1%', updated: '2026-03-26 14:30' },
+                    { id: 'D-004', name: 'Sensor-04',   type: 'Sensor', status: 'Offline', value: 'N/A',   updated: '2026-03-26 13:15' },
+                    { id: 'D-005', name: 'Switch-05',   type: 'Switch', status: 'Online',  value: '72.8%', updated: '2026-03-26 14:29' }
+                ]
             });
         });
     })();

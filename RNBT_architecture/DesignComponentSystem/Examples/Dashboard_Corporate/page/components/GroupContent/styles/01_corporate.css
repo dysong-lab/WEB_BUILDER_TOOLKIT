@@ -1,0 +1,13 @@
+#group-content {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    padding: 24px 32px;
+    gap: 20px;
+    overflow-y: auto;
+}
+
+#group-content::-webkit-scrollbar { width: 4px; }
+#group-content::-webkit-scrollbar-track { background: transparent; }
+#group-content::-webkit-scrollbar-thumb { background: #d4d0c8; border-radius: 2px; }

@@ -66,10 +66,9 @@ function applyStatefulListRenderMixin(instance, options) {
     /**
      * 목록 렌더링
      *
-     * @param {{ response: { data: Array } }} payload
+     * @param {{ response: Array }} payload
      */
-    ns.renderData = function({ response }) {
-        const { data } = response;
+    ns.renderData = function({ response: data }) {
         if (!data) throw new Error('[StatefulListRenderMixin] data is null');
         if (!Array.isArray(data)) throw new Error('[StatefulListRenderMixin] data is not an array');
 

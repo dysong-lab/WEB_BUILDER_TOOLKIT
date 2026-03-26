@@ -56,10 +56,9 @@ function applyFieldRenderMixin(instance, options) {
     /**
      * 데이터 렌더링
      *
-     * @param {{ response: { data: Object } }} payload
+     * @param {{ response: Object }} payload
      */
-    ns.renderData = function({ response }) {
-        const { data } = response;
+    ns.renderData = function({ response: data }) {
         if (!data) throw new Error('[FieldRenderMixin] data is null');
 
         Object.entries(data).forEach(([key, value]) => {

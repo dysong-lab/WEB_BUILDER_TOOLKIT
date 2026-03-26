@@ -55,4 +55,4 @@ this.customEvents = {
         [this.statefulList.cssSelectors.item]:    '@eventSelected'
     }
 };
-bindEvents(this, this.customEvents);
+Wkit.bindEvents(this, this.customEvents);

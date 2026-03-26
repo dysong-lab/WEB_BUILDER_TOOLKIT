@@ -1,0 +1,21 @@
+/* Dashboard DarkTech — Page Layout */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+#page-dashboard-darktech {
+    background: #0a0e17;
+    font-family: 'IBM Plex Sans', sans-serif;
+    color: #c8cdd5;
+    -webkit-font-smoothing: antialiased;
+
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-template-rows: auto 1fr;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+#page-dashboard-darktech::-webkit-scrollbar { width: 4px; }
+#page-dashboard-darktech::-webkit-scrollbar-track { background: transparent; }
+#page-dashboard-darktech::-webkit-scrollbar-thumb { background: #1a2030; border-radius: 2px; }

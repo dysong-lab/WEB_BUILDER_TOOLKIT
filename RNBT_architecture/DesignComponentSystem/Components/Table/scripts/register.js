@@ -7,7 +7,6 @@
  * Mixin: TabulatorMixin
  */
 
-const { applyTabulatorMixin } = Wkit;
 
 // ── 1. Mixin 적용 ──
 applyTabulatorMixin(this, {
@@ -32,6 +31,6 @@ this.subscriptions = {
 // ── 3. 인스턴스 생성 → tableBuilt 이후 구독 활성화 ──
 this.tabulator.init().on('tableBuilt', () => {
     Object.entries(this.subscriptions).forEach(([topic, handlers]) =>
-        handlers.forEach(handler => Wkit.subscribe(topic, this, handler))
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, this, handler))
     );
 });

@@ -7,7 +7,6 @@
  * Mixin: StatefulListRenderMixin
  */
 
-const { applyStatefulListRenderMixin, bindEvents } = Wkit;
 
 // ── 1. Mixin 적용 ──
 applyStatefulListRenderMixin(this, {
@@ -30,7 +29,7 @@ this.subscriptions = {
 };
 
 Object.entries(this.subscriptions).forEach(([topic, handlers]) =>
-    handlers.forEach(handler => Wkit.subscribe(topic, this, handler))
+    handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, this, handler))
 );
 
 // ── 3. 이벤트 ──
@@ -40,4 +39,4 @@ this.customEvents = {
     }
 };
 
-bindEvents(this, this.customEvents);
+Wkit.bindEvents(this, this.customEvents);

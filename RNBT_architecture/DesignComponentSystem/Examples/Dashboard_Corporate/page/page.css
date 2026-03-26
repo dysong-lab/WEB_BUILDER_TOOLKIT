@@ -1,0 +1,15 @@
+/* Dashboard Corporate — Page Layout */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap');
+
+#page-dashboard-corporate {
+    width: 1920px;
+    height: 1080px;
+    background: #f8f7f4;
+    font-family: 'DM Sans', sans-serif;
+    color: #2c2c2c;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}

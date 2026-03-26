@@ -8,7 +8,6 @@
  * 데이터 규약: { value: Number, name: String }
  */
 
-const { applyEChartsMixin } = Wkit;
 
 // ── 1. Mixin 적용 ──
 applyEChartsMixin(this, {
@@ -36,5 +35,5 @@ this.subscriptions = {
 };
 
 Object.entries(this.subscriptions).forEach(([topic, handlers]) =>
-    handlers.forEach(handler => Wkit.subscribe(topic, this, handler))
+    handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, this, handler))
 );

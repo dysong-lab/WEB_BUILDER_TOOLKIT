@@ -1,0 +1,19 @@
+/* Dashboard Minimal — Page Layout */
+
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap');
+
+#page-dashboard-minimal {
+    background: #fcfcfb;
+    font-family: 'Instrument Sans', -apple-system, sans-serif;
+    color: #1d1d1f;
+    -webkit-font-smoothing: antialiased;
+
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-template-rows: auto 1fr;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+#page-dashboard-minimal::-webkit-scrollbar { width: 0; }

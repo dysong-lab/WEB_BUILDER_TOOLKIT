@@ -56,7 +56,7 @@ function applyTabulatorMixin(instance, options) {
         tableInstance = new Tabulator(containerEl, Object.assign({
             columns: columns,
             data: [],
-            layout: 'fitColumns'
+            layout: 'fitDataFill'
         }, tabulatorOptions));
         return tableInstance;
     }
@@ -74,10 +74,9 @@ function applyTabulatorMixin(instance, options) {
     /**
      * 데이터 렌더링 — 행 데이터 배열 적용
      *
-     * @param {{ response: { data: Array } }} payload
+     * @param {{ response: Array }} payload
      */
-    ns.renderData = function({ response }) {
-        const { data } = response;
+    ns.renderData = function({ response: data }) {
         if (!data) throw new Error('[TabulatorMixin] data is null');
         if (!Array.isArray(data)) throw new Error('[TabulatorMixin] data is not an array');
 

@@ -72,10 +72,9 @@ function applyListRenderMixin(instance, options) {
     /**
      * 데이터 렌더링
      *
-     * @param {{ response: { data: Object } }} payload
+     * @param {{ response: Array }} payload
      */
-    ns.renderData = function({ response }) {
-        const { data } = response;
+    ns.renderData = function({ response: data }) {
         if (!data) throw new Error('[ListRenderMixin] data is null');
         if (!Array.isArray(data)) throw new Error('[ListRenderMixin] data is not an array');
 

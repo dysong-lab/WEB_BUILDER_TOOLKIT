@@ -52,4 +52,4 @@ this.customEvents = {
         [this.listRender.cssSelectors.clearBtn]: '@clearClicked'
     }
 };
-bindEvents(this, this.customEvents);
+Wkit.bindEvents(this, this.customEvents);

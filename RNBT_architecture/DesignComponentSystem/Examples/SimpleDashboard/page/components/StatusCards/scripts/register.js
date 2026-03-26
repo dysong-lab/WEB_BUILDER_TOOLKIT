@@ -46,4 +46,4 @@ this.customEvents = {
         [this.fieldRender.cssSelectors.card]: '@cardClicked'
     }
 };
-bindEvents(this, this.customEvents);
+Wkit.bindEvents(this, this.customEvents);

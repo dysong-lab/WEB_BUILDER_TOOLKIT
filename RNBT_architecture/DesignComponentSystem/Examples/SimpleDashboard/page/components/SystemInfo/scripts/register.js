@@ -43,4 +43,4 @@ go(
 // ======================
 
 this.customEvents = {};
-bindEvents(this, this.customEvents);
+Wkit.bindEvents(this, this.customEvents);

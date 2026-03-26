@@ -1,0 +1,21 @@
+#chart-container .chart {
+    background: transparent;
+    padding: 0;
+}
+
+#chart-container .chart__title {
+    display: block;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #86868b;
+    margin-bottom: 8px;
+}
+
+#chart-container .chart__canvas {
+    width: 100%;
+    height: 280px;
+}
+
+/* grid placement */
+#gauge-chart-container { width: calc(50% - 14px);

@@ -72,8 +72,7 @@ function applyHeatmapJsMixin(instance, options) {
      *   data.max — 최대값
      *   data.points — [{ x, y, value }, ...]
      */
-    ns.renderData = function({ response }) {
-        const { data } = response;
+    ns.renderData = function({ response: data }) {
         if (!data) throw new Error('[HeatmapJsMixin] data is null');
 
         ensureInstance().setData({

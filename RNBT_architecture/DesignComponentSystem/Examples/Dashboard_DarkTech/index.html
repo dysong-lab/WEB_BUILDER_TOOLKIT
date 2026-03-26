@@ -126,9 +126,9 @@
         applyFieldRenderMixin(header, {
             cssSelectors: { title: '.header__title', userName: '.header__user-name', time: '.header__time' }
         });
-        header.fieldRender.renderData({ response: { data: {
+        header.fieldRender.renderData({ response: {
             title: 'ECO MONITORING', userName: 'admin', time: new Date().toLocaleTimeString('ko-KR', { hour12: false })
-        }}});
+        }});
 
         // ── Sidebar ──
         const sidebar = { id: 'sidebar', appendElement: document.getElementById('sidebar-container') };
@@ -137,13 +137,13 @@
                             icon: '.sidebar__item-icon', label: '.sidebar__item-label', badge: '.sidebar__item-badge' },
             datasetAttrs: { itemKey: 'menuId', active: 'active' }
         });
-        sidebar.statefulList.renderData({ response: { data: [
+        sidebar.statefulList.renderData({ response: [
             { menuId: 'dashboard', icon: '▣', label: 'Dashboard',  badge: '',   active: 'true' },
             { menuId: 'devices',   icon: '◈', label: 'Devices',    badge: '12', active: '' },
             { menuId: 'events',    icon: '◉', label: 'Events',     badge: '3',  active: '' },
             { menuId: 'reports',   icon: '▤', label: 'Reports',    badge: '',   active: '' },
             { menuId: 'settings',  icon: '⚙', label: 'Settings',   badge: '',   active: '' }
-        ]}});
+        ]});
 
         // ── LineChart ──
         const lineChart = { id: 'line-chart', appendElement: document.getElementById('line-chart-container') };
@@ -167,10 +167,10 @@
                           icon: 'roundRect', itemWidth: 10, itemHeight: 2 }
             }
         });
-        lineChart.echarts.renderData({ response: { data: {
+        lineChart.echarts.renderData({ response: {
             categories: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00'],
             values: [[42, 55, 48, 72, 65, 58], [65, 68, 72, 70, 75, 73]]
-        }}});
+        }});
 
         // ── BarChart ──
         const barChart = { id: 'bar-chart', appendElement: document.getElementById('bar-chart-container') };
@@ -192,10 +192,10 @@
                           icon: 'roundRect', itemWidth: 10, itemHeight: 2 }
             }
         });
-        barChart.echarts.renderData({ response: { data: {
+        barChart.echarts.renderData({ response: {
             categories: ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
             values: [[120, 200, 150, 80, 70, 110], [90, 170, 130, 60, 50, 90]]
-        }}});
+        }});
 
         // ── PieChart ──
         const pieChart = { id: 'pie-chart', appendElement: document.getElementById('pie-chart-container') };
@@ -214,10 +214,10 @@
             },
             mapData: function(data, option) { option.series[0].data = data.items; return option; }
         });
-        pieChart.echarts.renderData({ response: { data: {
+        pieChart.echarts.renderData({ response: {
             items: [{ name: 'UPS', value: 35 }, { name: 'CRAC', value: 25 }, { name: 'PDU', value: 20 },
                     { name: 'Sensor', value: 12 }, { name: 'Switch', value: 8 }]
-        }}});
+        }});
 
         // ── GaugeChart ──
         const gaugeChart = { id: 'gauge-chart', appendElement: document.getElementById('gauge-chart-container') };
@@ -239,7 +239,7 @@
             },
             mapData: function(data, option) { option.series[0].data = [{ value: data.value, name: data.name }]; return option; }
         });
-        gaugeChart.echarts.renderData({ response: { data: { value: 72, name: 'CPU' } }});
+        gaugeChart.echarts.renderData({ response: { value: 72, name: 'CPU' } });
 
         // ── Table ──
         const table = { id: 'table', appendElement: document.getElementById('table-container') };
@@ -252,13 +252,13 @@
             ]
         });
         table.tabulator.init().on('tableBuilt', function() {
-            table.tabulator.renderData({ response: { data: [
+            table.tabulator.renderData({ response: [
                 { id: 'D-001', name: 'UPS-01',    type: 'UPS',    status: 'Online',  value: '98.2%', updated: '2026-03-26 14:30' },
                 { id: 'D-002', name: 'CRAC-02',   type: 'CRAC',   status: 'Warning', value: '87.5%', updated: '2026-03-26 14:28' },
                 { id: 'D-003', name: 'PDU-03',    type: 'PDU',    status: 'Online',  value: '45.1%', updated: '2026-03-26 14:30' },
                 { id: 'D-004', name: 'Sensor-04', type: 'Sensor', status: 'Offline', value: 'N/A',   updated: '2026-03-26 13:15' },
                 { id: 'D-005', name: 'Switch-05', type: 'Switch', status: 'Online',  value: '72.8%', updated: '2026-03-26 14:29' }
-            ]}});
+            ]});
         });
 
         // ── EventBrowser ──
@@ -279,25 +279,25 @@
                 });
             }
         });
-        eventBrowser.listRender.renderData({ response: { data: [
+        eventBrowser.listRender.renderData({ response: [
             { time: '14:30:05', level: 'error',   message: 'UPS-01 voltage drop detected',        source: 'UPS' },
             { time: '14:28:12', level: 'warning', message: 'CRAC-02 temperature above threshold', source: 'CRAC' },
             { time: '14:25:33', level: 'info',    message: 'PDU-03 load balancing completed',     source: 'PDU' },
             { time: '14:22:01', level: 'info',    message: 'Sensor-04 calibration started',       source: 'Sensor' },
             { time: '14:20:45', level: 'warning', message: 'Switch-05 port flapping detected',    source: 'Switch' }
-        ]}});
+        ]});
 
         eventBrowser.appendElement.addEventListener('click', function(e) {
             const item = e.target.closest('.event-browser__item');
             if (!item) return;
             eventBrowser.shadowPopup.show();
             if (eventBrowser._popupScope && eventBrowser._popupScope.listRender) {
-                eventBrowser._popupScope.listRender.renderData({ response: { data: [
+                eventBrowser._popupScope.listRender.renderData({ response: [
                     { label: 'Time',    value: item.querySelector('.event-browser__item-time').textContent },
                     { label: 'Level',   value: item.querySelector('.event-browser__item-level').textContent },
                     { label: 'Message', value: item.querySelector('.event-browser__item-message').textContent },
                     { label: 'Source',  value: item.querySelector('.event-browser__item-source').textContent }
-                ]}});
+                ]});
             }
         });
         eventBrowser.shadowPopup.bindPopupEvents({

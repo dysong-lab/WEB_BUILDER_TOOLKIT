@@ -78,7 +78,7 @@ this.customEvents = {
         [this.listRender.cssSelectors.item]: '@deviceClicked'
     }
 };
-bindEvents(this, this.customEvents);
+Wkit.bindEvents(this, this.customEvents);
 
 // Shadow DOM 내부 이벤트 → Weventbus로 전파
 this.shadowPopup.bindPopupEvents({

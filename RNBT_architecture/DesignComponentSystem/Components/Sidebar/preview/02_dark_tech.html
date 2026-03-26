@@ -39,15 +39,13 @@
         });
 
         instance.statefulList.renderData({
-            response: {
-                data: [
-                    { menuId: 'dashboard', icon: '📊', label: 'Dashboard',  badge: '',   active: 'true' },
-                    { menuId: 'devices',   icon: '🖥️', label: 'Devices',    badge: '12', active: '' },
-                    { menuId: 'events',    icon: '📋', label: 'Events',     badge: '3',  active: '' },
-                    { menuId: 'reports',   icon: '📈', label: 'Reports',    badge: '',   active: '' },
-                    { menuId: 'settings',  icon: '⚙️', label: 'Settings',   badge: '',   active: '' }
-                ]
-            }
+            response: [
+                { menuId: 'dashboard', icon: '📊', label: 'Dashboard',  badge: '',   active: 'true' },
+                { menuId: 'devices',   icon: '🖥️', label: 'Devices',    badge: '12', active: '' },
+                { menuId: 'events',    icon: '📋', label: 'Events',     badge: '3',  active: '' },
+                { menuId: 'reports',   icon: '📈', label: 'Reports',    badge: '',   active: '' },
+                { menuId: 'settings',  icon: '⚙️', label: 'Settings',   badge: '',   active: '' }
+            ]
         });
     })();
     </script>

@@ -59,16 +59,14 @@
 
         // 목록 데이터
         instance.listRender.renderData({
-            response: {
-                data: [
-                    { time: '14:30:05', level: 'error',   message: 'UPS-01 voltage drop detected',     source: 'UPS' },
-                    { time: '14:28:12', level: 'warning', message: 'CRAC-02 temperature above threshold', source: 'CRAC' },
-                    { time: '14:25:33', level: 'info',    message: 'PDU-03 load balancing completed',   source: 'PDU' },
-                    { time: '14:22:01', level: 'info',    message: 'Sensor-04 calibration started',     source: 'Sensor' },
-                    { time: '14:20:45', level: 'warning', message: 'Switch-05 port flapping detected',  source: 'Switch' },
-                    { time: '14:18:30', level: 'error',   message: 'UPS-06 battery replacement required', source: 'UPS' }
-                ]
-            }
+            response: [
+                { time: '14:30:05', level: 'error',   message: 'UPS-01 voltage drop detected',     source: 'UPS' },
+                { time: '14:28:12', level: 'warning', message: 'CRAC-02 temperature above threshold', source: 'CRAC' },
+                { time: '14:25:33', level: 'info',    message: 'PDU-03 load balancing completed',   source: 'PDU' },
+                { time: '14:22:01', level: 'info',    message: 'Sensor-04 calibration started',     source: 'Sensor' },
+                { time: '14:20:45', level: 'warning', message: 'Switch-05 port flapping detected',  source: 'Switch' },
+                { time: '14:18:30', level: 'error',   message: 'UPS-06 battery replacement required', source: 'UPS' }
+            ]
         });
 
         // 클릭 → 팝업 열기 (직접 이벤트 위임)
@@ -80,14 +78,12 @@
 
             if (instance._popupScope && instance._popupScope.listRender) {
                 instance._popupScope.listRender.renderData({
-                    response: {
-                        data: [
-                            { label: 'Time',    value: item.querySelector('.event-browser__item-time').textContent },
-                            { label: 'Level',   value: item.querySelector('.event-browser__item-level').textContent },
-                            { label: 'Message', value: item.querySelector('.event-browser__item-message').textContent },
-                            { label: 'Source',  value: item.querySelector('.event-browser__item-source').textContent }
-                        ]
-                    }
+                    response: [
+                        { label: 'Time',    value: item.querySelector('.event-browser__item-time').textContent },
+                        { label: 'Level',   value: item.querySelector('.event-browser__item-level').textContent },
+                        { label: 'Message', value: item.querySelector('.event-browser__item-message').textContent },
+                        { label: 'Source',  value: item.querySelector('.event-browser__item-source').textContent }
+                    ]
                 });
             }
         });

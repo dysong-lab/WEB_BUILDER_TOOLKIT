@@ -14,62 +14,62 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* ── Layout ── */
-        .dashboard {
-            display: grid;
-            grid-template-columns: 220px 1fr;
-            grid-template-rows: auto 1fr;
-            height: 100vh;
+        /* ── Page ── */
+        #page-dashboard-corporate {
+            width: 1920px;
+            height: 1080px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
-        #header-container {
-            grid-column: 1 / -1;
-            z-index: 10;
-            border-bottom: 1px solid #e8e6e1;
+        /* ── Wrapper: body (header 아래 영역) ── */
+        #group-body {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+            overflow: hidden;
         }
 
-        #sidebar-container {
-            grid-row: 2;
+        /* ── Wrapper: content (사이드바 옆 메인 영역) ── */
+        #group-content {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            padding: 24px 32px;
+            gap: 20px;
             overflow-y: auto;
-            border-right: 1px solid #e8e6e1;
         }
 
-        .dashboard__content {
-            grid-row: 2;
-            padding: 32px 36px;
-            overflow-y: auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: auto;
-            gap: 28px 24px;
-            align-content: start;
-        }
+        /* ── 컴포넌트 배치 ── */
+        #header-container        { width: 100%; border-bottom: 1px solid #e8e6e1; }
+        #sidebar-container       { width: 220px; border-right: 1px solid #e8e6e1; overflow-y: auto; flex-shrink: 0; }
+        #line-chart-container    { width: calc(50% - 10px); }
+        #bar-chart-container     { width: calc(50% - 10px); }
+        #pie-chart-container     { width: calc(50% - 10px); }
+        #gauge-chart-container   { width: calc(50% - 10px); }
+        #table-container         { width: 100%; overflow: hidden; }
+        #event-browser-container { width: 100%; }
 
-        /* ── Grid placement (레이아웃만) ── */
-        #line-chart-container    { grid-column: 1; }
-        #bar-chart-container     { grid-column: 2; }
-        #pie-chart-container     { grid-column: 1; }
-        #gauge-chart-container   { grid-column: 2; }
-        #table-container         { grid-column: 1 / -1; }
-        #event-browser-container { grid-column: 1 / -1; }
-
-        /* ── Scrollbar ── */
-        .dashboard__content::-webkit-scrollbar { width: 4px; }
-        .dashboard__content::-webkit-scrollbar-track { background: transparent; }
-        .dashboard__content::-webkit-scrollbar-thumb { background: #d4d0c8; border-radius: 2px; }
+        #group-content::-webkit-scrollbar { width: 4px; }
+        #group-content::-webkit-scrollbar-track { background: transparent; }
+        #group-content::-webkit-scrollbar-thumb { background: #d4d0c8; border-radius: 2px; }
     </style>
 </head>
 <body>
-    <div class="dashboard">
+    <div id="page-dashboard-corporate">
         <div id="header-container"></div>
-        <div id="sidebar-container"></div>
-        <div class="dashboard__content">
-            <div id="line-chart-container"></div>
-            <div id="bar-chart-container"></div>
-            <div id="pie-chart-container"></div>
-            <div id="gauge-chart-container"></div>
-            <div id="table-container"></div>
-            <div id="event-browser-container"></div>
+        <div id="group-body">
+            <div id="sidebar-container"></div>
+            <div id="group-content">
+                <div id="line-chart-container"></div>
+                <div id="bar-chart-container"></div>
+                <div id="pie-chart-container"></div>
+                <div id="gauge-chart-container"></div>
+                <div id="table-container"></div>
+                <div id="event-browser-container"></div>
+            </div>
         </div>
     </div>
 
@@ -114,9 +114,9 @@
         applyFieldRenderMixin(header, {
             cssSelectors: { title: '.header__title', userName: '.header__user-name', time: '.header__time' }
         });
-        header.fieldRender.renderData({ response: { data: {
+        header.fieldRender.renderData({ response: {
             title: 'ECO Monitoring Dashboard', userName: 'Admin', time: new Date().toLocaleString('ko-KR')
-        }}});
+        }});
 
         // ── Sidebar ──
         const sidebar = { id: 'sidebar', appendElement: document.getElementById('sidebar-container') };
@@ -125,13 +125,13 @@
                             icon: '.sidebar__item-icon', label: '.sidebar__item-label', badge: '.sidebar__item-badge' },
             datasetAttrs: { itemKey: 'menuId', active: 'active' }
         });
-        sidebar.statefulList.renderData({ response: { data: [
+        sidebar.statefulList.renderData({ response: [
             { menuId: 'dashboard', icon: '📊', label: 'Dashboard',  badge: '',   active: 'true' },
             { menuId: 'devices',   icon: '🖥️', label: 'Devices',    badge: '12', active: '' },
             { menuId: 'events',    icon: '📋', label: 'Events',     badge: '3',  active: '' },
             { menuId: 'reports',   icon: '📈', label: 'Reports',    badge: '',   active: '' },
             { menuId: 'settings',  icon: '⚙️', label: 'Settings',   badge: '',   active: '' }
-        ]}});
+        ]});
 
         // ── 공통 차트 팔레트 ──
         const palette = {
@@ -170,10 +170,10 @@
                           icon: 'roundRect', itemWidth: 12, itemHeight: 3 }
             }
         });
-        lineChart.echarts.renderData({ response: { data: {
+        lineChart.echarts.renderData({ response: {
             categories: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00'],
             values: [[42, 55, 48, 72, 65, 58], [65, 68, 72, 70, 75, 73]]
-        }}});
+        }});
 
         // ── BarChart ──
         const barChart = { id: 'bar-chart', appendElement: document.getElementById('bar-chart-container') };
@@ -197,10 +197,10 @@
                           icon: 'roundRect', itemWidth: 12, itemHeight: 3 }
             }
         });
-        barChart.echarts.renderData({ response: { data: {
+        barChart.echarts.renderData({ response: {
             categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
             values: [[120, 200, 150, 80, 70, 110], [90, 170, 130, 60, 50, 90]]
-        }}});
+        }});
 
         // ── PieChart ──
         const pieChart = { id: 'pie-chart', appendElement: document.getElementById('pie-chart-container') };
@@ -219,10 +219,10 @@
             },
             mapData: function(data, option) { option.series[0].data = data.items; return option; }
         });
-        pieChart.echarts.renderData({ response: { data: {
+        pieChart.echarts.renderData({ response: {
             items: [{ name: 'UPS', value: 35 }, { name: 'CRAC', value: 25 }, { name: 'PDU', value: 20 },
                     { name: 'Sensor', value: 12 }, { name: 'Switch', value: 8 }]
-        }}});
+        }});
 
         // ── GaugeChart ──
         const gaugeChart = { id: 'gauge-chart', appendElement: document.getElementById('gauge-chart-container') };
@@ -244,7 +244,7 @@
             },
             mapData: function(data, option) { option.series[0].data = [{ value: data.value, name: data.name }]; return option; }
         });
-        gaugeChart.echarts.renderData({ response: { data: { value: 72, name: 'CPU Usage' } }});
+        gaugeChart.echarts.renderData({ response: { value: 72, name: 'CPU Usage' } });
 
         // ── Table ──
         const table = { id: 'table', appendElement: document.getElementById('table-container') };
@@ -257,13 +257,13 @@
             ]
         });
         table.tabulator.init().on('tableBuilt', function() {
-            table.tabulator.renderData({ response: { data: [
+            table.tabulator.renderData({ response: [
                 { id: 'D-001', name: 'UPS-01',    type: 'UPS',    status: 'Online',  value: '98.2%', updated: '2026-03-26 14:30' },
                 { id: 'D-002', name: 'CRAC-02',   type: 'CRAC',   status: 'Warning', value: '87.5%', updated: '2026-03-26 14:28' },
                 { id: 'D-003', name: 'PDU-03',    type: 'PDU',    status: 'Online',  value: '45.1%', updated: '2026-03-26 14:30' },
                 { id: 'D-004', name: 'Sensor-04', type: 'Sensor', status: 'Offline', value: 'N/A',   updated: '2026-03-26 13:15' },
                 { id: 'D-005', name: 'Switch-05', type: 'Switch', status: 'Online',  value: '72.8%', updated: '2026-03-26 14:29' }
-            ]}});
+            ]});
         });
 
         // ── EventBrowser ──
@@ -284,25 +284,25 @@
                 });
             }
         });
-        eventBrowser.listRender.renderData({ response: { data: [
+        eventBrowser.listRender.renderData({ response: [
             { time: '14:30:05', level: 'error',   message: 'UPS-01 voltage drop detected',        source: 'UPS' },
             { time: '14:28:12', level: 'warning', message: 'CRAC-02 temperature above threshold', source: 'CRAC' },
             { time: '14:25:33', level: 'info',    message: 'PDU-03 load balancing completed',     source: 'PDU' },
             { time: '14:22:01', level: 'info',    message: 'Sensor-04 calibration started',       source: 'Sensor' },
             { time: '14:20:45', level: 'warning', message: 'Switch-05 port flapping detected',    source: 'Switch' }
-        ]}});
+        ]});
 
         eventBrowser.appendElement.addEventListener('click', function(e) {
             const item = e.target.closest('.event-browser__item');
             if (!item) return;
             eventBrowser.shadowPopup.show();
             if (eventBrowser._popupScope && eventBrowser._popupScope.listRender) {
-                eventBrowser._popupScope.listRender.renderData({ response: { data: [
+                eventBrowser._popupScope.listRender.renderData({ response: [
                     { label: 'Time',    value: item.querySelector('.event-browser__item-time').textContent },
                     { label: 'Level',   value: item.querySelector('.event-browser__item-level').textContent },
                     { label: 'Message', value: item.querySelector('.event-browser__item-message').textContent },
                     { label: 'Source',  value: item.querySelector('.event-browser__item-source').textContent }
-                ]}});
+                ]});
             }
         });
         eventBrowser.shadowPopup.bindPopupEvents({

@@ -7,7 +7,6 @@
  * Mixin: FieldRenderMixin
  */
 
-const { applyFieldRenderMixin } = Wkit;
 
 // ── 1. Mixin 적용 ──
 applyFieldRenderMixin(this, {
@@ -24,5 +23,5 @@ this.subscriptions = {
 };
 
 Object.entries(this.subscriptions).forEach(([topic, handlers]) =>
-    handlers.forEach(handler => Wkit.subscribe(topic, this, handler))
+    handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, this, handler))
 );

@@ -62,9 +62,11 @@ function applyEChartsMixin(instance, options) {
     ns.cssSelectors = { ...cssSelectors };
 
     let chartInstance = null;
+    let _resizeHandler = null;
 
     /**
      * 컨테이너에 차트 인스턴스 생성 (lazy init)
+     * window resize 시 자동으로 차트를 리사이즈한다.
      */
     function ensureInstance() {
         if (chartInstance) return chartInstance;
@@ -73,6 +75,17 @@ function applyEChartsMixin(instance, options) {
         if (!containerEl) throw new Error('[EChartsMixin] container not found: ' + container);
 
         chartInstance = echarts.init(containerEl);
+
+        // window resize → 차트 리사이즈 (debounce 150ms)
+        let resizeTimer = null;
+        _resizeHandler = function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                if (chartInstance) chartInstance.resize();
+            }, 150);
+        };
+        window.addEventListener('resize', _resizeHandler);
+
         return chartInstance;
     }
 
@@ -87,10 +100,9 @@ function applyEChartsMixin(instance, options) {
      *   컴포넌트가 정의한 mapData(data, optionCopy)가 병합을 수행한다.
      *   Pie, Gauge, Radar 등 기본 규약에 맞지 않는 차트에 사용한다.
      *
-     * @param {{ response: { data: Object } }} payload
+     * @param {{ response: Object }} payload
      */
-    ns.renderData = function({ response }) {
-        const data = response.data;
+    ns.renderData = function({ response: data }) {
         if (!data) throw new Error('[EChartsMixin] data is null');
 
         let merged = JSON.parse(JSON.stringify(option));
@@ -144,6 +156,10 @@ function applyEChartsMixin(instance, options) {
      * 정리
      */
     ns.destroy = function() {
+        if (_resizeHandler) {
+            window.removeEventListener('resize', _resizeHandler);
+            _resizeHandler = null;
+        }
         if (chartInstance) {
             chartInstance.dispose();
             chartInstance = null;

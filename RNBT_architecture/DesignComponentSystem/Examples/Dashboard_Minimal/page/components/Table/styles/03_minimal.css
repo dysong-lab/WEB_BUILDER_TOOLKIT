@@ -1,0 +1,20 @@
+#table-container .table {
+    background: transparent;
+    padding: 0;
+}
+
+#table-container .table__title {
+    display: block;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #86868b;
+    margin-bottom: 8px;
+}
+
+#table-container .table__body {
+    width: 100%;
+}
+
+/* grid placement */
+#table-container { width: 100%;

@@ -47,8 +47,7 @@ function applyMeshStateMixin(instance, options) {
      * @param {{ response: { data: Array } }} payload
      *   data — [{ meshName, status }, ...]
      */
-    ns.renderData = function({ response }) {
-        const { data } = response;
+    ns.renderData = function({ response: data }) {
         if (!data) throw new Error('[MeshStateMixin] data is null');
         if (!Array.isArray(data)) throw new Error('[MeshStateMixin] data is not an array');
 
