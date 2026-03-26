@@ -1,0 +1,68 @@
+<div class="event-browser">
+    <div class="event-browser__header">
+        <div class="event-browser__status-dot"></div>
+        <span class="event-browser__title">EVENT LOG</span>
+    </div>
+    <div class="event-browser__list"></div>
+
+    <template id="event-browser-item-template">
+        <div class="event-browser__item" data-level="">
+            <span class="event-browser__item-time"></span>
+            <span class="event-browser__item-level"></span>
+            <span class="event-browser__item-message"></span>
+            <span class="event-browser__item-source"></span>
+        </div>
+    </template>
+
+    <template id="event-detail-popup-template">
+        <style>
+            .popup-overlay {
+                position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.6);
+                display: flex; align-items: center; justify-content: center;
+                z-index: 1000;
+            }
+            .popup-panel {
+                background: #1e293b; border: 1px solid #334155; border-radius: 4px;
+                padding: 20px; min-width: 400px; max-width: 500px;
+                font-family: 'JetBrains Mono', 'Consolas', monospace;
+            }
+            .popup-header {
+                display: flex; justify-content: space-between; align-items: center;
+                margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #334155;
+            }
+            .popup-title {
+                font-size: 11px; font-weight: 500; color: #64748b;
+                letter-spacing: 1px; text-transform: uppercase;
+            }
+            .popup-close-btn {
+                width: 24px; height: 24px; border: 1px solid #334155;
+                background: transparent; border-radius: 3px;
+                cursor: pointer; font-size: 12px; color: #64748b;
+            }
+            .popup-close-btn:hover { background: #334155; color: #e2e8f0; }
+            .popup-detail-list { display: flex; flex-direction: column; gap: 4px; }
+            .popup-field {
+                display: flex; justify-content: space-between; padding: 4px 0;
+                border-bottom: 1px solid #1e3a5f30;
+            }
+            .popup-field__label { font-size: 11px; color: #475569; }
+            .popup-field__value { font-size: 11px; color: #e2e8f0; }
+        </style>
+        <div class="popup-overlay">
+            <div class="popup-panel">
+                <div class="popup-header">
+                    <span class="popup-title">EVENT DETAIL</span>
+                    <button class="popup-close-btn">✕</button>
+                </div>
+                <div class="popup-detail-list"></div>
+                <template id="popup-detail-item-template">
+                    <div class="popup-field">
+                        <span class="popup-field__label"></span>
+                        <span class="popup-field__value"></span>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </template>
+</div>

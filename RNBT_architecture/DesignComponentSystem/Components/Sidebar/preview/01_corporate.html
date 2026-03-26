@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Sidebar — 01_corporate</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f1f5f9; padding: 40px; }
+        #sidebar-container { width: 240px; height: 400px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    <div id="sidebar-container"></div>
+
+    <script src="../../../preview_runtime.js"></script>
+    <script src="../../../Mixins/StatefulListRenderMixin.js"></script>
+
+    <script>
+    (async () => {
+        await loadComponentAssets('sidebar-container', '../views/01_corporate.html', '../styles/01_corporate.css');
+
+        const instance = {
+            id: 'sidebar',
+            appendElement: document.getElementById('sidebar-container')
+        };
+
+        applyStatefulListRenderMixin(instance, {
+            cssSelectors: {
+                container: '.sidebar__menu',
+                template:  '#sidebar-menu-item-template',
+                icon:      '.sidebar__item-icon',
+                label:     '.sidebar__item-label',
+                badge:     '.sidebar__item-badge'
+            },
+            datasetAttrs: {
+                itemKey: 'menuId',
+                active:  'active'
+            }
+        });
+
+        instance.statefulList.renderData({
+            response: {
+                data: [
+                    { menuId: 'dashboard', icon: '📊', label: 'Dashboard',  badge: '',   active: 'true' },
+                    { menuId: 'devices',   icon: '🖥️', label: 'Devices',    badge: '12', active: '' },
+                    { menuId: 'events',    icon: '📋', label: 'Events',     badge: '3',  active: '' },
+                    { menuId: 'reports',   icon: '📈', label: 'Reports',    badge: '',   active: '' },
+                    { menuId: 'settings',  icon: '⚙️', label: 'Settings',   badge: '',   active: '' }
+                ]
+            }
+        });
+    })();
+    </script>
+</body>
+</html>

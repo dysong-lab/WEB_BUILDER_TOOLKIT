@@ -1,0 +1,35 @@
+#chart-container .chart {
+    background: #0f172a;
+    border: 1px solid #1e3a5f;
+    border-radius: 4px;
+    padding: 16px;
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+}
+
+#chart-container .chart__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+#chart-container .chart__status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 4px #22c55e80;
+}
+
+#chart-container .chart__title {
+    font-size: 11px;
+    font-weight: 500;
+    color: #64748b;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+#chart-container .chart__canvas {
+    width: 100%;
+    height: 300px;
+}

@@ -1,0 +1,68 @@
+#sidebar-container .sidebar {
+    width: 240px;
+    height: 100%;
+    background: #ffffff;
+    border-right: 1px solid #e2e8f0;
+    padding: 16px 0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+#sidebar-container .sidebar__menu {
+    display: flex;
+    flex-direction: column;
+}
+
+#sidebar-container .sidebar__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border-left: 3px solid transparent;
+}
+
+#sidebar-container .sidebar__item:hover {
+    background: #f8fafc;
+}
+
+#sidebar-container .sidebar__item[data-active="true"] {
+    background: #eff6ff;
+    border-left-color: #2563eb;
+}
+
+#sidebar-container .sidebar__item-icon {
+    font-size: 16px;
+    color: #64748b;
+    width: 20px;
+    text-align: center;
+}
+
+#sidebar-container .sidebar__item[data-active="true"] .sidebar__item-icon {
+    color: #2563eb;
+}
+
+#sidebar-container .sidebar__item-label {
+    font-size: 14px;
+    color: #334155;
+    flex: 1;
+}
+
+#sidebar-container .sidebar__item[data-active="true"] .sidebar__item-label {
+    color: #2563eb;
+    font-weight: 600;
+}
+
+#sidebar-container .sidebar__item-badge {
+    font-size: 11px;
+    color: #ffffff;
+    background: #ef4444;
+    border-radius: 10px;
+    padding: 1px 7px;
+    min-width: 18px;
+    text-align: center;
+}
+
+#sidebar-container .sidebar__item-badge:empty {
+    display: none;
+}

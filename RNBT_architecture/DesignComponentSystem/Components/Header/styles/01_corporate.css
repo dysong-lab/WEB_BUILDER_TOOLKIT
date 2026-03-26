@@ -1,0 +1,39 @@
+#header-container .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    background: #ffffff;
+    border-bottom: 2px solid #2563eb;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+#header-container .header__left {
+    display: flex;
+    align-items: center;
+}
+
+#header-container .header__title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+#header-container .header__right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+#header-container .header__user-name {
+    font-size: 14px;
+    color: #475569;
+    font-weight: 500;
+}
+
+#header-container .header__time {
+    font-size: 13px;
+    color: #94a3b8;
+    font-variant-numeric: tabular-nums;
+}

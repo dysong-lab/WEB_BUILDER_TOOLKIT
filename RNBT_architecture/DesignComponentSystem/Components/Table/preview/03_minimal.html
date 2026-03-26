@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Table — 03_minimal</title>
+    <link href="https://unpkg.com/tabulator-tables@6.3.1/dist/css/tabulator_simple.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #fafafa; padding: 40px; }
+        #table-container { width: 800px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <div id="table-container"></div>
+
+    <script src="https://unpkg.com/tabulator-tables@6.3.1/dist/js/tabulator.min.js"></script>
+    <script src="../../../preview_runtime.js"></script>
+    <script src="../../../Mixins/TabulatorMixin.js"></script>
+
+    <script>
+    (async () => {
+        await loadComponentAssets('table-container', '../views/03_minimal.html', '../styles/03_minimal.css');
+
+        const instance = {
+            id: 'table',
+            appendElement: document.getElementById('table-container')
+        };
+
+        applyTabulatorMixin(instance, {
+            cssSelectors: { container: '.table__body' },
+            columns: [
+                { title: 'ID',      field: 'id',      width: 80 },
+                { title: 'Name',    field: 'name',    minWidth: 120 },
+                { title: 'Type',    field: 'type',    width: 100 },
+                { title: 'Status',  field: 'status',  width: 100 },
+                { title: 'Value',   field: 'value',   width: 100, hozAlign: 'right' },
+                { title: 'Updated', field: 'updated', width: 160 }
+            ]
+        });
+
+        instance.tabulator.init().on('tableBuilt', function() {
+            instance.tabulator.renderData({
+                response: {
+                    data: [
+                        { id: 'D-001', name: 'UPS-01',      type: 'UPS',    status: 'Online',  value: '98.2%', updated: '2026-03-26 14:30' },
+                        { id: 'D-002', name: 'CRAC-02',     type: 'CRAC',   status: 'Warning', value: '87.5%', updated: '2026-03-26 14:28' },
+                        { id: 'D-003', name: 'PDU-03',      type: 'PDU',    status: 'Online',  value: '45.1%', updated: '2026-03-26 14:30' },
+                        { id: 'D-004', name: 'Sensor-04',   type: 'Sensor', status: 'Offline', value: 'N/A',   updated: '2026-03-26 13:15' },
+                        { id: 'D-005', name: 'Switch-05',   type: 'Switch', status: 'Online',  value: '72.8%', updated: '2026-03-26 14:29' }
+                    ]
+                }
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

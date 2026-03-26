@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>BarChart — 03_minimal</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #fafafa; padding: 40px; }
+        #chart-container { width: 700px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <div id="chart-container"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <script src="../../../preview_runtime.js"></script>
+    <script src="../../../Mixins/EChartsMixin.js"></script>
+
+    <script>
+    (async () => {
+        await loadComponentAssets('chart-container', '../views/03_minimal.html', '../styles/03_minimal.css');
+
+        const instance = {
+            id: 'bar-chart',
+            appendElement: document.getElementById('chart-container')
+        };
+
+        applyEChartsMixin(instance, {
+            cssSelectors: { container: '.chart__canvas' },
+            option: {
+                xAxis: {
+                    type: 'category',
+                    axisLine: { lineStyle: { color: '#e5e7eb' } },
+                    axisLabel: { color: '#9ca3af', fontSize: 11 }
+                },
+                yAxis: {
+                    type: 'value',
+                    splitLine: { lineStyle: { color: '#f3f4f6' } },
+                    axisLabel: { color: '#9ca3af', fontSize: 11 }
+                },
+                series: [
+                    { name: 'Input', type: 'bar' },
+                    { name: 'Output', type: 'bar' }
+                ],
+                tooltip: { trigger: 'axis' },
+                legend: { data: ['Input', 'Output'], textStyle: { color: '#9ca3af', fontSize: 11 } },
+                color: ['#6b7280', '#d1d5db']
+            }
+        });
+
+        instance.echarts.renderData({
+            response: {
+                data: {
+                    categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                    values: [
+                        [120, 200, 150, 80, 70, 110],
+                        [90, 170, 130, 60, 50, 90]
+                    ]
+                }
+            }
+        });
+    })();
+    </script>
+</body>
+</html>

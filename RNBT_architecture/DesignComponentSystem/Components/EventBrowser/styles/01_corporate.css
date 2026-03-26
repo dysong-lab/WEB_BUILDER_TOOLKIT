@@ -1,0 +1,77 @@
+#event-browser-container .event-browser {
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    padding: 20px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+#event-browser-container .event-browser__header {
+    margin-bottom: 12px;
+}
+
+#event-browser-container .event-browser__title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0;
+}
+
+#event-browser-container .event-browser__list {
+    display: flex;
+    flex-direction: column;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#event-browser-container .event-browser__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+#event-browser-container .event-browser__item:hover {
+    background: #f8fafc;
+}
+
+#event-browser-container .event-browser__item-time {
+    font-size: 12px;
+    color: #94a3b8;
+    min-width: 70px;
+    font-variant-numeric: tabular-nums;
+}
+
+#event-browser-container .event-browser__item-level {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 3px;
+    min-width: 60px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+#event-browser-container .event-browser__item[data-level="info"] .event-browser__item-level {
+    color: #2563eb; background: #eff6ff;
+}
+#event-browser-container .event-browser__item[data-level="warning"] .event-browser__item-level {
+    color: #d97706; background: #fffbeb;
+}
+#event-browser-container .event-browser__item[data-level="error"] .event-browser__item-level {
+    color: #dc2626; background: #fef2f2;
+}
+
+#event-browser-container .event-browser__item-message {
+    font-size: 13px;
+    color: #334155;
+    flex: 1;
+}
+
+#event-browser-container .event-browser__item-source {
+    font-size: 12px;
+    color: #94a3b8;
+}

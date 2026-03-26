@@ -62,6 +62,16 @@ function applyTabulatorMixin(instance, options) {
     }
 
     /**
+     * 테이블 인스턴스를 명시적으로 생성한다.
+     * tableBuilt 이벤트를 걸기 위해 먼저 호출한다.
+     *
+     * @returns {Tabulator} 인스턴스
+     */
+    ns.init = function() {
+        return ensureInstance();
+    };
+
+    /**
      * 데이터 렌더링 — 행 데이터 배열 적용
      *
      * @param {{ response: { data: Array } }} payload
