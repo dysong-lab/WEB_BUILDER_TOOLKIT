@@ -14,58 +14,60 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* ── Layout: same as Corporate/DarkTech ── */
-        .dashboard {
-            display: grid;
-            grid-template-columns: 200px 1fr;
-            grid-template-rows: auto 1fr;
-            height: 100vh;
+        /* ── Page ── */
+        #page-dashboard-minimal {
+            width: 1920px;
+            height: 1080px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
-        #header-container {
-            grid-column: 1 / -1;
-            z-index: 10;
+        /* ── Wrapper: body ── */
+        #group-body {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+            overflow: hidden;
         }
 
-        #sidebar-container {
-            grid-row: 2;
+        /* ── Wrapper: content ── */
+        #group-content {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            padding: 24px 32px;
+            gap: 20px;
             overflow-y: auto;
-            border-right: 1px solid #e8e8ed;
         }
 
-        .dashboard__content {
-            grid-row: 2;
-            padding: 32px 36px;
-            overflow-y: auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 32px 28px;
-            align-content: start;
-        }
+        /* ── 컴포넌트 배치 ── */
+        #header-container        { width: 100%; border-bottom: 1px solid #f5f5f7; }
+        #sidebar-container       { width: 220px; border-right: 1px solid #f5f5f7; overflow-y: auto; flex-shrink: 0; }
+        #line-chart-container    { width: calc(50% - 10px); }
+        #bar-chart-container     { width: calc(50% - 10px); }
+        #pie-chart-container     { width: calc(50% - 10px); }
+        #gauge-chart-container   { width: calc(50% - 10px); }
+        #table-container         { width: 100%; overflow: hidden; }
+        #event-browser-container { width: 100%; }
 
-        /* ── Grid placement ── */
-        #line-chart-container    { grid-column: 1; }
-        #bar-chart-container     { grid-column: 2; }
-        #pie-chart-container     { grid-column: 1; }
-        #gauge-chart-container   { grid-column: 2; }
-        #table-container         { grid-column: 1 / -1; }
-        #event-browser-container { grid-column: 1 / -1; }
-
-        /* ── Scrollbar: invisible ── */
-        .dashboard__content::-webkit-scrollbar { width: 0; }
+        #group-content::-webkit-scrollbar { width: 0; }
     </style>
 </head>
 <body>
-    <div class="dashboard">
+    <div id="page-dashboard-minimal">
         <div id="header-container"></div>
-        <div id="sidebar-container"></div>
-        <div class="dashboard__content">
-            <div id="line-chart-container"></div>
-            <div id="bar-chart-container"></div>
-            <div id="pie-chart-container"></div>
-            <div id="gauge-chart-container"></div>
-            <div id="table-container"></div>
-            <div id="event-browser-container"></div>
+        <div id="group-body">
+            <div id="sidebar-container"></div>
+            <div id="group-content">
+                <div id="line-chart-container"></div>
+                <div id="bar-chart-container"></div>
+                <div id="pie-chart-container"></div>
+                <div id="gauge-chart-container"></div>
+                <div id="table-container"></div>
+                <div id="event-browser-container"></div>
+            </div>
         </div>
     </div>
 
