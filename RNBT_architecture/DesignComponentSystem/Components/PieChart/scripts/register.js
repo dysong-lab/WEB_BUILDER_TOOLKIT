@@ -34,6 +34,9 @@ this.subscriptions = {
     pieChartData: [this.echarts.renderData]
 };
 
-Object.entries(this.subscriptions).forEach(([topic, handlers]) =>
-    handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, this, handler))
+go(
+    Object.entries(this.subscriptions),
+    each(([topic, handlers]) =>
+        each(handler => GlobalDataPublisher.subscribe(topic, this, handler), handlers)
+    )
 );
