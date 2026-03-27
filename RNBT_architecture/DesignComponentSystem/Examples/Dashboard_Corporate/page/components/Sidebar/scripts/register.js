@@ -6,12 +6,13 @@ applyStatefulListRenderMixin(this, {
     cssSelectors: {
         container: '.sidebar__menu',
         template:  '#sidebar-menu-item-template',
+        item:      '.sidebar__item',
         icon:      '.sidebar__item-icon',
         label:     '.sidebar__item-label',
         badge:     '.sidebar__item-badge'
     },
     datasetAttrs: {
-        itemKey: 'menuId',
+        itemKey: 'menuid',
         active:  'active'
     }
 });
@@ -26,7 +27,7 @@ Object.entries(this.subscriptions).forEach(([topic, handlers]) =>
 
 this.customEvents = {
     click: {
-        [this.statefulList.cssSelectors.template]: '@menuItemClicked'
+        [this.statefulList.cssSelectors.container]: '@menuItemClicked'
     }
 };
 

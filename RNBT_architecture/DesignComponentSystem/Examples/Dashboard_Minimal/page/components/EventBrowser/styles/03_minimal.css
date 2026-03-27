@@ -72,5 +72,8 @@
     color: #d2d2d7;
 }
 
-/* grid placement */
-#event-browser-container { width: 100%;
+/* container */
+#event-browser-container {
+    width: 100%;
+    overflow: hidden;
+}

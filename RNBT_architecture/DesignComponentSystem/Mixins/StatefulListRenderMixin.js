@@ -84,10 +84,10 @@ function applyStatefulListRenderMixin(instance, options) {
             const clone = templateEl.content.cloneNode(true);
 
             // datasetAttrs 반영
-            Object.entries(datasetAttrs).forEach(([key, attr]) => {
+            Object.entries(datasetAttrs).forEach(([, attr]) => {
                 const el = clone.querySelector('[data-' + attr + ']');
-                if (el && itemData[key] != null) {
-                    el.dataset[attr] = itemData[key];
+                if (el && itemData[attr] != null) {
+                    el.setAttribute('data-' + attr, itemData[attr]);
                 }
             });
 
@@ -119,7 +119,7 @@ function applyStatefulListRenderMixin(instance, options) {
         if (!el) return;
 
         Object.entries(state).forEach(([key, value]) => {
-            el.dataset[key] = value;
+            el.setAttribute('data-' + key, value);
         });
     };
 
@@ -135,7 +135,11 @@ function applyStatefulListRenderMixin(instance, options) {
         );
         if (!el) return null;
 
-        return Object.assign({}, el.dataset);
+        const state = {};
+        Array.from(el.attributes).forEach(a => {
+            if (a.name.startsWith('data-')) state[a.name.slice(5)] = a.value;
+        });
+        return state;
     };
 
     /**

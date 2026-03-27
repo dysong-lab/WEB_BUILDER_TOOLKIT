@@ -135,14 +135,14 @@
         applyStatefulListRenderMixin(sidebar, {
             cssSelectors: { container: '.sidebar__menu', template: '#sidebar-menu-item-template',
                             icon: '.sidebar__item-icon', label: '.sidebar__item-label', badge: '.sidebar__item-badge' },
-            datasetAttrs: { itemKey: 'menuId', active: 'active' }
+            datasetAttrs: { itemKey: 'menuid', active: 'active' }
         });
         sidebar.statefulList.renderData({ response: [
-            { menuId: 'dashboard', icon: '▣', label: 'Dashboard',  badge: '',   active: 'true' },
-            { menuId: 'devices',   icon: '◈', label: 'Devices',    badge: '12', active: '' },
-            { menuId: 'events',    icon: '◉', label: 'Events',     badge: '3',  active: '' },
-            { menuId: 'reports',   icon: '▤', label: 'Reports',    badge: '',   active: '' },
-            { menuId: 'settings',  icon: '⚙', label: 'Settings',   badge: '',   active: '' }
+            { menuid: 'dashboard', icon: '▣', label: 'Dashboard',  badge: '',   active: 'true' },
+            { menuid: 'devices',   icon: '◈', label: 'Devices',    badge: '12', active: '' },
+            { menuid: 'events',    icon: '◉', label: 'Events',     badge: '3',  active: '' },
+            { menuid: 'reports',   icon: '▤', label: 'Reports',    badge: '',   active: '' },
+            { menuid: 'settings',  icon: '⚙', label: 'Settings',   badge: '',   active: '' }
         ]});
 
         // ── LineChart ──

@@ -10,14 +10,14 @@ this.pageEventBusHandlers = {
 
     // Sidebar 메뉴 클릭
     '@menuItemClicked': ({ event, targetInstance }) => {
-        const item = event.target.closest(targetInstance.statefulList.cssSelectors.template);
-        const menuId = item?.dataset.menuId;
+        const item = event.target.closest(targetInstance.statefulList.cssSelectors.item);
+        const menuId = item?.getAttribute('data-menuid');
         console.log('[Page] Menu clicked:', menuId);
     },
 
     // EventBrowser 항목 클릭 → 팝업 표시
     '@eventItemClicked': ({ event, targetInstance }) => {
-        const item = event.target.closest(targetInstance.listRender.cssSelectors.template);
+        const item = event.target.closest(targetInstance.listRender.cssSelectors.item);
         if (!item) return;
 
         targetInstance.shadowPopup.show();
@@ -29,7 +29,7 @@ this.pageEventBusHandlers = {
                 { label: 'Message', value: item.querySelector(targetInstance.listRender.cssSelectors.message)?.textContent },
                 { label: 'Source',  value: item.querySelector(targetInstance.listRender.cssSelectors.source)?.textContent }
             ];
-            targetInstance._popupScope.listRender.renderData({ response: { data } });
+            targetInstance._popupScope.listRender.renderData({ response: data });
         }
     },
 

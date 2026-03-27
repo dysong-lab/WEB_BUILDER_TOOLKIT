@@ -23,15 +23,15 @@ app.get('/api/header-info', (req, res) => {
 // GET /api/menu-items
 // Sidebar 컴포넌트용 (StatefulListRenderMixin)
 // cssSelectors KEY: icon, label, badge
-// datasetAttrs KEY: menuId, active
+// datasetAttrs KEY: menuid, active
 // ─────────────────────────────────────────
 app.get('/api/menu-items', (req, res) => {
     res.json([
-        { menuId: 'dashboard', icon: '📊', label: 'Dashboard',  badge: '',   active: 'true' },
-        { menuId: 'devices',   icon: '🖥️', label: 'Devices',    badge: '12', active: '' },
-        { menuId: 'events',    icon: '📋', label: 'Events',     badge: '3',  active: '' },
-        { menuId: 'reports',   icon: '📈', label: 'Reports',    badge: '',   active: '' },
-        { menuId: 'settings',  icon: '⚙️', label: 'Settings',   badge: '',   active: '' }
+        { menuid: 'dashboard', icon: '📊', label: 'Dashboard',  badge: '',   active: 'true' },
+        { menuid: 'devices',   icon: '🖥️', label: 'Devices',    badge: '12', active: '' },
+        { menuid: 'events',    icon: '📋', label: 'Events',     badge: '3',  active: '' },
+        { menuid: 'reports',   icon: '📈', label: 'Reports',    badge: '',   active: '' },
+        { menuid: 'settings',  icon: '⚙️', label: 'Settings',   badge: '',   active: '' }
     ]);
 });
 

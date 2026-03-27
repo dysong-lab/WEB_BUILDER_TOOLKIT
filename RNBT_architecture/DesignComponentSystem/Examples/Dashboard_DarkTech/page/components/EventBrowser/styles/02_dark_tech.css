@@ -96,5 +96,8 @@
     letter-spacing: 0.04em;
 }
 
-/* grid placement */
-#event-browser-container { width: 100%;
+/* container */
+#event-browser-container {
+    width: 100%;
+    overflow: hidden;
+}

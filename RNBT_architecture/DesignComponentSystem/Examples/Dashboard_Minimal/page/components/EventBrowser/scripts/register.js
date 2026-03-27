@@ -7,6 +7,7 @@ applyListRenderMixin(this, {
     cssSelectors: {
         container: '.event-browser__list',
         template:  '#event-browser-item-template',
+        item:      '.event-browser__item',
         time:      '.event-browser__item-time',
         level:     '.event-browser__item-level',
         message:   '.event-browser__item-message',
@@ -44,7 +45,7 @@ Object.entries(this.subscriptions).forEach(([topic, handlers]) =>
 
 this.customEvents = {
     click: {
-        [this.listRender.cssSelectors.template]: '@eventItemClicked'
+        [this.listRender.cssSelectors.container]: '@eventItemClicked'
     }
 };
 
