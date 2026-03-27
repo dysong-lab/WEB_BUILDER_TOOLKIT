@@ -25,8 +25,7 @@ WEB_BUILDER_TOOLKIT/
     ├── README.md               # 아키텍처 가이드 (상세)
     ├── Utils/                  # 공용 유틸리티
     ├── Components/             # 재사용 컴포넌트
-    ├── Examples/               # 예제 프로젝트
-    └── Projects/               # 실제 프로젝트
+    └── Examples/               # 예제 프로젝트
 ```
 
 | 디렉토리 | 역할 | Figma MCP |
@@ -207,7 +206,7 @@ Claude: (라이프사이클 구성 → 데이터 바인딩 → 이벤트 처리)
 
 결과물 위치:
 ```
-RNBT_architecture/Projects/[프로젝트명]/page/components/[컴포넌트명]/
+RNBT_architecture/DesignComponentSystem/Examples/[프로젝트명]/page/components/[컴포넌트명]/
 ├── [컴포넌트명].html
 ├── [컴포넌트명].css
 ├── register.js             # 컴포넌트 등록 스크립트
