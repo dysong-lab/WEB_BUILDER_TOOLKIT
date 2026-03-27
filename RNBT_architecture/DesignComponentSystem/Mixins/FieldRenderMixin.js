@@ -6,21 +6,17 @@
  * ─────────────────────────────────────────────────────────────
  * renderData 반영 규칙:
  *
- *   cssSelectors  → 요소를 찾아 textContent 반영
- *   datasetAttrs → 요소를 찾아 dataset 반영
- *
- * 선택자는 renderData 외에도 이벤트 매핑, 페이지 접근 등에서 활용된다.
+ *   위치는 cssSelectors가 담당한다.
+ *   datasetAttrs에 등록된 키 → data 속성 설정
+ *   등록되지 않은 키          → textContent 설정
  *
  * ─────────────────────────────────────────────────────────────
  * 사용 예시:
  *
- *   HTML:
- *     <span class="system-status" data-status="unknown">-</span>
- *
  *   applyFieldRenderMixin(this, {
  *       cssSelectors: {
  *           name:        '.system-name',
- *           statusLabel: '.system-status',
+ *           status:      '.system-status',
  *           version:     '.system-version'
  *       },
  *       datasetAttrs: {
@@ -28,8 +24,10 @@
  *       }
  *   });
  *
- *   // renderData는 이미 selector KEY에 맞춰진 데이터를 받는다:
- *   // { name: 'server-01', status: 'RUNNING', statusLabel: '정상', version: '1.0' }
+ *   // renderData — cssSelectors KEY에 맞춰진 데이터:
+ *   // { name: 'server-01', status: 'RUNNING', version: '1.0' }
+ *   // → name, version → textContent
+ *   // → status → setAttribute('data-status', 'RUNNING')
  *
  * ─────────────────────────────────────────────────────────────
  * Mixin이 주입하는 것 (네임스페이스: this.fieldRender):
@@ -63,20 +61,17 @@ function applyFieldRenderMixin(instance, options) {
 
         Object.entries(data).forEach(([key, value]) => {
             if (value == null) return;
+            if (!cssSelectors[key]) return;
 
-            // datasetAttrs에 키가 있으면 → dataset 반영
+            const el = instance.appendElement.querySelector(cssSelectors[key]);
+            if (!el) return;
+
+            // datasetAttrs에 등록된 키 → data 속성으로 설정
             if (datasetAttrs[key]) {
-                const attr = datasetAttrs[key];
-                const dataEl = instance.appendElement.querySelector('[data-' + attr + ']');
-                if (dataEl) dataEl.dataset[attr] = value;
+                el.setAttribute('data-' + datasetAttrs[key], value);
+            } else {
+                el.textContent = value;
             }
-
-            // cssSelectors에 키가 있으면 → textContent 반영
-            if (cssSelectors[key]) {
-                const el = instance.appendElement.querySelector(cssSelectors[key]);
-                if (el) el.textContent = value;
-            }
-
         });
     };
 
