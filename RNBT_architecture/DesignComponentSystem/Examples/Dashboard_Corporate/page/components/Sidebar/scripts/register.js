@@ -6,7 +6,8 @@ applyStatefulListRenderMixin(this, {
     cssSelectors: {
         container: '.sidebar__menu',
         template:  '#sidebar-menu-item-template',
-        item:      '.sidebar__item',
+        menuid:    '.sidebar__item',
+        active:    '.sidebar__item',
         icon:      '.sidebar__item-icon',
         label:     '.sidebar__item-label',
         badge:     '.sidebar__item-badge'

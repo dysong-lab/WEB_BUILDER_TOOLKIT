@@ -20,9 +20,6 @@ applyListRenderMixin(this, {
         level:     '.event-browser__item-level',
         message:   '.event-browser__item-message',
         source:    '.event-browser__item-source'
-    },
-    datasetAttrs: {
-        level: 'level'
     }
 });
 

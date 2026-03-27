@@ -1,45 +1,51 @@
 /**
  * StatefulListRenderMixin
  *
- * 이벤트 목록을 template 기반으로 렌더링하고,
- * 개별 항목의 상태(ack, severity 등)를 변경할 수 있다.
+ * 데이터를 상태(속성)로 보여준다.
+ *
+ * 배열 데이터를 template 기반으로 렌더링하며,
+ * datasetAttrs로 지정된 키는 data 속성으로, 나머지는 textContent로 설정한다.
+ * 개별 항목의 상태를 변경/조회할 수 있다.
  *
  * ListRenderMixin과의 차이:
- *   ListRenderMixin  — 배열 렌더링만 (표시)
- *   StatefulListRenderMixin   — 배열 렌더링 + 개별 항목 상태 변경 (표시 + 상호작용)
+ *   ListRenderMixin          — 텍스트로 보여준다 (textContent)
+ *   StatefulListRenderMixin  — 상태로 보여준다 (data 속성) + 상태 변경/조회
  *
  * ─────────────────────────────────────────────────────────────
  * 사용 예시:
  *
  *   applyStatefulListRenderMixin(this, {
  *       cssSelectors: {
- *           container: '.event-list',
- *           item:      '.event-item',
- *           template:  '#event-item-template',
- *           time:      '.event-time',
- *           message:   '.event-message',
- *           source:    '.event-source'
+ *           container: '.sidebar__menu',
+ *           template:  '#sidebar-menu-item-template',
+ *           menuid:    '.sidebar__item',
+ *           active:    '.sidebar__item',
+ *           icon:      '.sidebar__item-icon',
+ *           label:     '.sidebar__item-label',
+ *           badge:     '.sidebar__item-badge'
  *       },
  *       datasetAttrs: {
- *           itemKey:  'id',
- *           severity: 'severity',
- *           ack:      'ack'
+ *           itemKey: 'menuid',
+ *           active:  'active'
  *       }
  *   });
  *
- *   // renderData는 이미 selector KEY에 맞춰진 배열을 받는다:
- *   // [{ itemKey: '1', time: '14:30', message: '...', severity: 'warning', ack: 'false' }, ...]
+ *   // renderData — cssSelectors KEY에 맞춰진 배열:
+ *   // [{ menuid: 'dashboard', active: 'true', icon: '📊', label: 'Dashboard', badge: '' }, ...]
+ *   //
+ *   // datasetAttrs에 등록된 menuid, active → data 속성 (cssSelectors로 위치 결정)
+ *   // 나머지 icon, label, badge → textContent
  *
  * ─────────────────────────────────────────────────────────────
  * Mixin이 주입하는 것 (네임스페이스: this.statefulList):
  *
- *   this.statefulList.cssSelectors      — 선택자 (container, item, template, 데이터/이벤트용)
- *   this.statefulList.datasetAttrs  — dataset용 선택자
- *   this.statefulList.renderData        — { response } → 목록 렌더링
- *   this.statefulList.updateItemState   — (id, state) → 개별 항목 dataset 변경
- *   this.statefulList.getItemState      — (id) → 항목의 dataset 반환
- *   this.statefulList.clear             — 컨테이너 비우기
- *   this.statefulList.destroy           — 자기 정리
+ *   this.statefulList.cssSelectors    — 선택자 (위치 계약)
+ *   this.statefulList.datasetAttrs    — data 속성 매핑
+ *   this.statefulList.renderData      — { response } → 목록 렌더링
+ *   this.statefulList.updateItemState — (id, state) → 개별 항목 상태 변경
+ *   this.statefulList.getItemState    — (id) → 항목의 상태 반환
+ *   this.statefulList.clear           — 컨테이너 비우기
+ *   this.statefulList.destroy         — 자기 정리
  *
  * ─────────────────────────────────────────────────────────────
  */
@@ -49,11 +55,12 @@ function applyStatefulListRenderMixin(instance, options) {
 
     // Mixin이 직접 참조하는 KEY 추출
     const container = cssSelectors.container;
-    const item = cssSelectors.item;
     const template = cssSelectors.template;
 
-    // 항목 식별 속성 추출 (Mixin 정의 KEY)
+    // 항목 식별 속성 추출
     const itemKeyAttr = datasetAttrs.itemKey;
+    // itemKey의 cssSelector → 항목 요소 선택자
+    const itemSelector = cssSelectors[itemKeyAttr];
 
     // 네임스페이스 생성
     const ns = {};
@@ -83,18 +90,15 @@ function applyStatefulListRenderMixin(instance, options) {
         data.forEach(itemData => {
             const clone = templateEl.content.cloneNode(true);
 
-            // datasetAttrs 반영
-            Object.entries(datasetAttrs).forEach(([, attr]) => {
-                const el = clone.querySelector('[data-' + attr + ']');
-                if (el && itemData[attr] != null) {
-                    el.setAttribute('data-' + attr, itemData[attr]);
-                }
-            });
-
-            // cssSelectors 반영
+            // cssSelectors 반영 — 위치는 cssSelectors가 담당
             Object.entries(cssSelectors).forEach(([key, selector]) => {
                 const el = clone.querySelector(selector);
-                if (el && itemData[key] != null) {
+                if (!el || itemData[key] == null) return;
+
+                // datasetAttrs에 등록된 키 → data 속성으로 설정
+                if (datasetAttrs[key]) {
+                    el.setAttribute('data-' + datasetAttrs[key], itemData[key]);
+                } else {
                     el.textContent = itemData[key];
                 }
             });
@@ -104,17 +108,14 @@ function applyStatefulListRenderMixin(instance, options) {
     };
 
     /**
-     * 개별 항목의 상태 변경 (dataset)
-     *
-     * Ack 처리, severity 변경 등 개별 항목의 시각 상태를 변경한다.
-     * DOM의 dataset만 변경하며, API 호출은 페이지가 담당한다.
+     * 개별 항목의 상태 변경
      *
      * @param {string|number} id - itemKey에 해당하는 값
-     * @param {Object} state - 변경할 dataset 키-값 쌍 (예: { ack: 'true' })
+     * @param {Object} state - 변경할 data 속성 키-값 쌍 (예: { active: 'true' })
      */
     ns.updateItemState = function(id, state) {
         const el = instance.appendElement.querySelector(
-            item + '[data-' + itemKeyAttr + '="' + id + '"]'
+            itemSelector + '[data-' + itemKeyAttr + '="' + id + '"]'
         );
         if (!el) return;
 
@@ -127,11 +128,11 @@ function applyStatefulListRenderMixin(instance, options) {
      * 개별 항목의 상태 조회
      *
      * @param {string|number} id - itemKey에 해당하는 값
-     * @returns {Object|null} dataset 객체 (복사본) 또는 null
+     * @returns {Object|null} data 속성 객체 (복사본) 또는 null
      */
     ns.getItemState = function(id) {
         const el = instance.appendElement.querySelector(
-            item + '[data-' + itemKeyAttr + '="' + id + '"]'
+            itemSelector + '[data-' + itemKeyAttr + '="' + id + '"]'
         );
         if (!el) return null;
 

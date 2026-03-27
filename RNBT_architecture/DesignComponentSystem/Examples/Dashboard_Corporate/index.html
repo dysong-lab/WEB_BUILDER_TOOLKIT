@@ -122,6 +122,7 @@
         const sidebar = { id: 'sidebar', appendElement: document.getElementById('sidebar-container') };
         applyStatefulListRenderMixin(sidebar, {
             cssSelectors: { container: '.sidebar__menu', template: '#sidebar-menu-item-template',
+                            menuid: '.sidebar__item', active: '.sidebar__item',
                             icon: '.sidebar__item-icon', label: '.sidebar__item-label', badge: '.sidebar__item-badge' },
             datasetAttrs: { itemKey: 'menuid', active: 'active' }
         });
@@ -272,7 +273,6 @@
             cssSelectors: { container: '.event-browser__list', template: '#event-browser-item-template',
                             time: '.event-browser__item-time', level: '.event-browser__item-level',
                             message: '.event-browser__item-message', source: '.event-browser__item-source' },
-            datasetAttrs: { level: 'level' }
         });
         applyShadowPopupMixin(eventBrowser, {
             cssSelectors: { template: '#event-detail-popup-template', closeBtn: '.popup-close-btn' },

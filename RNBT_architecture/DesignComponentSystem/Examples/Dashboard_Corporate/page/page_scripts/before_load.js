@@ -10,7 +10,7 @@ this.pageEventBusHandlers = {
 
     // Sidebar 메뉴 클릭
     '@menuItemClicked': ({ event, targetInstance }) => {
-        const item = event.target.closest(targetInstance.statefulList.cssSelectors.item);
+        const item = event.target.closest(targetInstance.statefulList.cssSelectors.menuid);
         const menuId = item?.getAttribute('data-menuid');
         console.log('[Page] Menu clicked:', menuId);
     },

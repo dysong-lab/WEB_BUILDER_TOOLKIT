@@ -1,61 +1,41 @@
 /**
  * ListRenderMixin
  *
- * 배열 데이터를 template 기반으로 반복 렌더링한다.
+ * 데이터를 텍스트로 보여준다.
  *
- * ─────────────────────────────────────────────────────────────
- * renderData 반영 규칙:
- *
- *   template     → HTML <template> 태그를 cloneNode하여 항목 생성
- *   cssSelectors → 각 항목 내에서 요소를 찾아 textContent 반영
- *   datasetAttrs → 각 항목 내에서 요소를 찾아 dataset 반영
- *
- * 선택자는 renderData 외에도 이벤트 매핑, 페이지 접근 등에서 활용된다.
+ * 배열 데이터를 template 기반으로 반복 렌더링하며,
+ * cssSelectors로 지정된 위치에 textContent를 설정한다.
  *
  * ─────────────────────────────────────────────────────────────
  * 사용 예시:
  *
- *   HTML:
- *     <div class="event-log__list"></div>
- *     <template id="event-log-item-template">
- *         <div class="event-log__item">
- *             <span class="event-log__level" data-level=""></span>
- *             <span class="event-log__time"></span>
- *             <span class="event-log__message"></span>
- *         </div>
- *     </template>
- *
  *   applyListRenderMixin(this, {
  *       cssSelectors: {
  *           container: '.event-log__list',
- *           item:      '.event-log__item',
  *           template:  '#event-log-item-template',
- *           level:     '.event-log__level',
+ *           item:      '.event-log__item',
  *           time:      '.event-log__time',
+ *           level:     '.event-log__level',
  *           message:   '.event-log__message'
- *       },
- *       datasetAttrs: {
- *           level:   'level'
  *       }
  *   });
  *
- *   // renderData는 이미 selector KEY에 맞춰진 배열을 받는다:
- *   // [{ level: 'ERROR', time: '14:30', message: '...' }, ...]
+ *   // renderData는 cssSelectors KEY에 맞춰진 배열을 받는다:
+ *   // [{ time: '14:30', level: 'ERROR', message: '...' }, ...]
  *
  * ─────────────────────────────────────────────────────────────
  * Mixin이 주입하는 것 (네임스페이스: this.listRender):
  *
- *   this.listRender.cssSelectors      — CSS 선택자 (렌더링, 이벤트 매핑, 페이지 접근)
- *   this.listRender.datasetAttrs  — data-* 속성 선택자 (렌더링, CSS 스타일링)
- *   this.listRender.renderData        — { response } → 리스트 렌더링
- *   this.listRender.clear             — 컨테이너 비우기
- *   this.listRender.destroy           — 자기 정리
+ *   this.listRender.cssSelectors — CSS 선택자 (렌더링, 이벤트 매핑, 페이지 접근)
+ *   this.listRender.renderData  — { response } → 리스트 렌더링
+ *   this.listRender.clear       — 컨테이너 비우기
+ *   this.listRender.destroy     — 자기 정리
  *
  * ─────────────────────────────────────────────────────────────
  */
 
 function applyListRenderMixin(instance, options) {
-    const { cssSelectors = {}, datasetAttrs = {} } = options;
+    const { cssSelectors = {} } = options;
 
     // Mixin이 직접 참조하는 KEY 추출
     const container = cssSelectors.container;
@@ -67,7 +47,6 @@ function applyListRenderMixin(instance, options) {
 
     // 선택자 보존 (외부에서 computed property로 참조 가능)
     ns.cssSelectors = { ...cssSelectors };
-    ns.datasetAttrs = { ...datasetAttrs };
 
     /**
      * 데이터 렌더링
@@ -84,21 +63,12 @@ function applyListRenderMixin(instance, options) {
         const templateEl = instance.appendElement.querySelector(template);
         if (!templateEl) throw new Error('[ListRenderMixin] template not found: ' + template);
 
-        // 컨테이너 비우고 항목 생성
         containerEl.innerHTML = '';
 
         data.forEach(itemData => {
             const clone = templateEl.content.cloneNode(true);
 
-            // datasetAttrs 반영
-            Object.entries(datasetAttrs).forEach(([key, attr]) => {
-                const el = clone.querySelector('[data-' + attr + ']');
-                if (el && itemData[key] != null) {
-                    el.dataset[attr] = itemData[key];
-                }
-            });
-
-            // cssSelectors 반영
+            // cssSelectors 반영 → textContent
             Object.entries(cssSelectors).forEach(([key, selector]) => {
                 const el = clone.querySelector(selector);
                 if (el && itemData[key] != null) {
@@ -125,7 +95,6 @@ function applyListRenderMixin(instance, options) {
         ns.renderData = null;
         ns.clear = null;
         ns.cssSelectors = null;
-        ns.datasetAttrs = null;
         instance.listRender = null;
     };
 }
