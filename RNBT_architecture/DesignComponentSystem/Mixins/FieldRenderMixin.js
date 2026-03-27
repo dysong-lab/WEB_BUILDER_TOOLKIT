@@ -6,7 +6,7 @@
  * ─────────────────────────────────────────────────────────────
  * renderData 반영 규칙:
  *
- *   위치는 cssSelectors가 담당한다.
+ *   대상 요소는 cssSelectors가 결정한다.
  *   datasetAttrs에 등록된 키 → data 속성 설정
  *   등록되지 않은 키          → textContent 설정
  *

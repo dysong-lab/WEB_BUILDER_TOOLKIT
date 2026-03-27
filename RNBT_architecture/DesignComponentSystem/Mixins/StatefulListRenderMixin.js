@@ -34,13 +34,13 @@
  *   // renderData — cssSelectors KEY에 맞춰진 배열:
  *   // [{ menuid: 'dashboard', active: 'true', icon: '📊', label: 'Dashboard', badge: '' }, ...]
  *   //
- *   // datasetAttrs에 등록된 menuid, active → data 속성 (cssSelectors로 위치 결정)
+ *   // datasetAttrs에 등록된 menuid, active → data 속성 (cssSelectors로 대상 요소 결정)
  *   // 나머지 icon, label, badge → textContent
  *
  * ─────────────────────────────────────────────────────────────
  * Mixin이 주입하는 것 (네임스페이스: this.statefulList):
  *
- *   this.statefulList.cssSelectors    — 선택자 (위치 계약)
+ *   this.statefulList.cssSelectors    — 대상 요소 선택자
  *   this.statefulList.datasetAttrs    — data 속성 매핑
  *   this.statefulList.renderData      — { response } → 목록 렌더링
  *   this.statefulList.updateItemState — (id, state) → 개별 항목 상태 변경
@@ -89,7 +89,7 @@ function applyStatefulListRenderMixin(instance, options) {
         data.forEach(itemData => {
             const clone = templateEl.content.cloneNode(true);
 
-            // cssSelectors 반영 — 위치는 cssSelectors가 담당
+            // cssSelectors 반영 — 대상 요소는 cssSelectors가 결정
             Object.entries(cssSelectors).forEach(([key, selector]) => {
                 const el = clone.querySelector(selector);
                 if (!el || itemData[key] == null) return;

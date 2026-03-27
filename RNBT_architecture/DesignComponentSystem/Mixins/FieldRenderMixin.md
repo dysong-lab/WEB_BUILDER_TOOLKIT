@@ -32,7 +32,7 @@ cssSelectors: {
 
 ### datasetAttrs
 
-cssSelectors와 key를 공유하여, 해당 위치의 요소에 data 속성을 설정한다.
+cssSelectors와 key를 공유하여, 대상 요소에 data 속성을 설정한다.
 ([SELECTORS_AS_CONTRACT.md](../docs/architecture/SELECTORS_AS_CONTRACT.md) 참조)
 
 ```javascript
@@ -41,7 +41,7 @@ datasetAttrs: {
 }
 ```
 
-> **KEY의 성격:** 모든 KEY는 사용자가 정의한다. cssSelectors의 같은 KEY로 위치를 결정하고, datasetAttrs의 VALUE가 data 속성명이 된다.
+> **KEY의 성격:** 모든 KEY는 사용자가 정의한다. cssSelectors의 같은 KEY로 대상 요소를 찾고, datasetAttrs의 VALUE가 data 속성명이 된다.
 
 ### renderData가 기대하는 데이터
 

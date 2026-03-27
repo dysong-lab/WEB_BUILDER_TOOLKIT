@@ -134,7 +134,7 @@ N + M 전략이 여전히 유효한지 확인한다.
    - .js 코드에서 datasetAttrs 역할 설명이 실제 동작과 일치하는가 (위치는 cssSelectors가 담당, datasetAttrs는 속성명 지정)
    - .md/.spec에서 순회 대상이 정확한가 (cssSelectors를 순회하는지, datasetAttrs를 순회하는지)
    - itemKey가 datasetAttrs 안이 아닌 options 최상위에 있는가 (StatefulListRenderMixin)
-   - datasetAttrs의 key가 cssSelectors에도 존재하여 위치를 찾을 수 있는가
+   - datasetAttrs의 key가 cssSelectors에도 존재하여 대상 요소를 찾을 수 있는가
 
 ### 보고 형식
 

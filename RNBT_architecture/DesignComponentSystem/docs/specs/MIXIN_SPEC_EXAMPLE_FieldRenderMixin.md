@@ -39,7 +39,7 @@
 |-----|------|------|
 | `status` | 사용자 정의 | cssSelectors['status']가 가리키는 요소에 `data-status` 속성 설정. CSS에서 `[data-status="RUNNING"]` 등으로 스타일링에 활용 |
 
-> 규약 KEY 없음. 모든 KEY는 사용자가 정의한다. cssSelectors와 key를 공유하여 위치를 결정하고, VALUE가 data 속성명이 된다.
+> 규약 KEY 없음. 모든 KEY는 사용자가 정의한다. cssSelectors와 key를 공유하여 대상 요소를 찾고, VALUE가 data 속성명이 된다.
 
 ### 기타 옵션
 

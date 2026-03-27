@@ -65,7 +65,7 @@ itemKey:
 
 ### datasetAttrs
 
-cssSelectors와 key를 공유하여, 해당 위치의 요소에 data 속성을 설정한다.
+cssSelectors와 key를 공유하여, 대상 요소에 data 속성을 설정한다.
 ([SELECTORS_AS_CONTRACT.md](../docs/architecture/SELECTORS_AS_CONTRACT.md) 참조)
 
 ```javascript

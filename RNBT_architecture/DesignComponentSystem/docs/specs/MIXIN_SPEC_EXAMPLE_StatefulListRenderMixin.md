@@ -54,7 +54,7 @@
 | `severity` | 사용자 정의 | CSS가 `[data-severity]`로 스타일링 |
 | `ack` | 사용자 정의 | CSS가 `[data-ack]`로 스타일링 |
 
-> cssSelectors와 key를 공유하여 위치를 결정하고, VALUE가 data 속성명이 된다.
+> cssSelectors와 key를 공유하여 대상 요소를 찾고, VALUE가 data 속성명이 된다.
 
 ### 기타 옵션
 
