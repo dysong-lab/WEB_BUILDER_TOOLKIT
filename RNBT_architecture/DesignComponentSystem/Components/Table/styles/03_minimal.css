@@ -1,9 +1,9 @@
-#table-container .table {
+#table-container .tabular {
     background: transparent;
     padding: 0;
 }
 
-#table-container .table__title {
+#table-container .tabular__title {
     display: block;
     font-family: 'Instrument Sans', sans-serif;
     font-size: 13px;
@@ -12,6 +12,6 @@
     margin-bottom: 8px;
 }
 
-#table-container .table__body {
+#table-container .tabular__body {
     width: 100%;
 }

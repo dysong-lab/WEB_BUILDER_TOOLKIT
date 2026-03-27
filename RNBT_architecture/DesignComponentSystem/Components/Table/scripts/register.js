@@ -11,7 +11,7 @@
 // ── 1. Mixin 적용 ──
 applyTabulatorMixin(this, {
     cssSelectors: {
-        container: '.table__body'
+        container: '.tabular__body'
     },
     columns: [
         { title: 'ID',       field: 'id',       width: 80 },

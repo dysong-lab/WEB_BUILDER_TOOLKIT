@@ -3,7 +3,7 @@
  */
 
 applyTabulatorMixin(this, {
-    cssSelectors: { container: '.table__body' },
+    cssSelectors: { container: '.tabular__body' },
     columns: [
         { title: 'ID',      field: 'id',      width: 80 },
         { title: 'Name',    field: 'name',    minWidth: 120 },
