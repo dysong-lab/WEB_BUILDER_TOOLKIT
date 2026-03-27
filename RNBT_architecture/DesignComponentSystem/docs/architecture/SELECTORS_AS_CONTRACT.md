@@ -1,196 +1,101 @@
 # cssSelectors / datasetAttrs — 규약 틀로서의 이해
 
-## 1. 본질: 바인딩 규약이지 시각적 제약이 아니다
+## 1. 두 객체의 역할
 
-cssSelectors와 datasetAttrs는 **"Mixin이 특정 모양을 가져야 한다"는 의미가 아니다.**
-데이터와 디자인(HTML)을 연결하기 위해 존재하는 **규약 틀**이다.
+- **cssSelectors** — DOM 요소의 위치를 결정한다 (querySelector의 인자)
+- **datasetAttrs** — 어떤 data 속성명으로 값을 설정할지 지정한다
+
+---
+
+## 2. key 공유 메커니즘: cssSelectors와 datasetAttrs의 관계
+
+datasetAttrs는 data 속성명을 지정하지만, 그것만으로는 아무것도 할 수 없다.
+data 속성은 태그에 입력되어야 하고, 그러려면 대상 요소를 찾아야 한다.
+
+그래서 cssSelectors와 **key를 공유**한다.
+같은 key로 cssSelectors에서 위치를 가져와야 비로소 setAttribute가 가능해진다.
 
 ```
-cssSelectors / datasetAttrs가 강제하는 것:
-
-  ✗ 레이아웃, 크기, 색상, 위치
-  ✗ Mixin의 활용 방식
-  ○ "이 이름의 연결점이 존재한다"는 사실만
+cssSelectors  →  위치 (어떤 DOM 요소에)
+datasetAttrs  →  방식 (그 위치에 어떤 data 속성명으로)
 ```
 
-### 근거: renderData의 실제 동작
+### 동작 예시: StatefulListRenderMixin.renderData 내부
 
 ```javascript
-// FieldRenderMixin — cssSelectors로 위치를 결정
-Object.entries(data).forEach(([key, value]) => {
-    if (!cssSelectors[key]) return;
-
-    const el = instance.appendElement.querySelector(cssSelectors[key]);
-    if (!el) return;
+Object.entries(cssSelectors).forEach(([key, selector]) => {
+    const el = clone.querySelector(selector);   // cssSelectors의 value → 위치 결정
+    if (!el || itemData[key] == null) return;    // data에서 같은 key로 값 추출
 
     if (datasetAttrs[key]) {
-        el.setAttribute('data-' + datasetAttrs[key], value);
+        // datasetAttrs에 key가 있으면 → data 속성으로 표출
+        el.setAttribute('data-' + datasetAttrs[key], itemData[key]);
     } else {
-        el.textContent = value;
+        // 없으면 → textContent로 표출
+        el.textContent = itemData[key];
     }
 });
 ```
 
-레이아웃, 크기, 색상에 대한 코드는 없다.
-순수하게 "데이터 → DOM 연결"만 수행한다.
-
-### 실증: 같은 규약, 다른 디자인
-
-EventLog 컴포넌트는 동일한 cssSelectors 정의로
-01_list, 02_timeline, 03_table 세 가지 완전히 다른 시각적 디자인을 구현한다.
-규약이 모양을 결정하지 않는다는 직접적 증거다.
-
----
-
-## 2. 위치는 cssSelectors가 담당한다
-
-모든 요소 탐색은 cssSelectors를 통해 이루어진다.
-`[data-*]` 속성 셀렉터로 위치를 찾지 않는다.
+세 객체가 하나의 key를 축으로 연결된다:
 
 ```
-위치 결정의 단일 경로:
+key = 'active' 일 때:
 
-  cssSelectors → querySelector → 요소 발견
-    → datasetAttrs에 등록된 키? → setAttribute로 data 속성 설정
-    → 등록되지 않은 키?         → textContent 설정
+  cssSelectors['active']  → '.sidebar__item'  → 위치
+  datasetAttrs['active']  → 'active'          → data-active 속성으로 설정
+  itemData['active']      → 'true'            → 설정할 값
 ```
 
-이전에는 datasetAttrs가 `[data-attr]`로 별도의 위치 탐색을 했지만,
-이는 cssSelectors와 다른 경로로 요소를 찾는 것이어서 불일치가 발생했다.
-(예: `dataset` API의 camelCase ↔ kebab-case 자동 변환 문제)
+### 같은 위치, 다른 용도
 
----
-
-## 3. 두 가지 "보여주기": Mixin 역할 분리
-
-데이터를 보여주는 방식이 두 가지이므로, Mixin도 두 가지다.
-
-| Mixin | 보여주는 방식 | datasetAttrs |
-|-------|-------------|-------------|
-| **ListRenderMixin** | 텍스트로 보여준다 (textContent) | 없음 |
-| **StatefulListRenderMixin** | 상태로 보여준다 (data 속성) + 텍스트 | 있음 |
-| **FieldRenderMixin** | 단일 객체를 텍스트/상태로 보여준다 | 있음 (선택) |
-
-- **ListRenderMixin** — 순수 렌더링. cssSelectors → textContent만.
-- **StatefulListRenderMixin** — 상태 관리. datasetAttrs 키는 data 속성, 나머지는 textContent. updateItemState/getItemState로 개별 항목 상태 변경/조회.
-
-둘 다 필요하면 (텍스트 + 상태) 두 Mixin을 함께 적용한다.
-
-### Mixin별 cssSelectors 활용 방식
-
-| 패턴 | Mixin | 활용 방식 |
-|------|-------|----------|
-| cssSelectors 순회 + textContent | ListRender | 텍스트 렌더링 |
-| cssSelectors 순회 + datasetAttrs 분기 | StatefulListRender, FieldRender | 텍스트 + 상태 |
-| container key만 사용 | ECharts, Tabulator, HeatmapJs | 렌더링 대상 위치만 |
-| template key만 사용 | ShadowPopup | Shadow DOM 쿼리용 |
-| 아예 사용 안 함 | CameraFocus, MeshState | 별도 옵션 체계 사용 |
-
----
-
-## 4. cssSelectors의 key가 연결의 축이다
-
-cssSelectors를 순회하며 데이터를 라우팅한다:
-
-```
-cssSelectors의 key를 순회
-  → datasetAttrs에 있으면 → data 속성 설정
-  → datasetAttrs에 없으면 → textContent 설정
-```
-
-**cssSelectors의 key가 데이터 필드명과 일치해야 한다.**
-
-### 패턴 A: textContent만 (ListRenderMixin)
+하나의 DOM 요소에 여러 data 속성이 붙을 수 있다.
+cssSelectors에서 같은 선택자를 여러 key가 공유하면 된다:
 
 ```javascript
 cssSelectors: {
-    time:    '.event-time',
-    level:   '.event-level',
-    message: '.event-message'
-}
-// data: [{ time: '14:30', level: 'ERROR', message: '...' }]
-// → 각 요소에 textContent 설정
-```
-
-### 패턴 B: data 속성 + textContent (StatefulListRenderMixin)
-
-```javascript
-cssSelectors: {
-    menuid:  '.sidebar__item',     // data 속성이 들어갈 위치
-    active:  '.sidebar__item',     // 같은 요소에 여러 data 속성 가능
-    icon:    '.sidebar__item-icon',
-    label:   '.sidebar__item-label'
+    active:  '.sidebar__item',   // 같은 요소
+    menuid:  '.sidebar__item',   // 같은 요소
 }
 datasetAttrs: {
-    itemKey: 'menuid',
-    active:  'active'
+    active: 'active'             // active만 data 속성
 }
-// data: [{ menuid: 'dashboard', active: 'true', icon: '📊', label: 'Dashboard' }]
-// → menuid, active → setAttribute('data-menuid', ...), setAttribute('data-active', ...)
-// → icon, label → textContent
-```
-
-### 패턴 C: 단일 객체 (FieldRenderMixin)
-
-```javascript
-cssSelectors: {
-    title:    '.header__title',
-    userName: '.header__user-name',
-    status:   '.system-status'
-}
-datasetAttrs: {
-    status: 'status'
-}
-// data: { title: 'Dashboard', userName: 'Admin', status: 'online' }
-// → title, userName → textContent
-// → status → setAttribute('data-status', 'online')
+// menuid는 datasetAttrs에 없으므로 → textContent
+// active는 datasetAttrs에 있으므로 → data-active
 ```
 
 ---
 
-## 5. `{ active: 'active' }` — 같은 값 할당의 의의
+## 3. itemKey는 인터페이스 설정이다
 
-datasetAttrs에서 key와 value에 같은 값을 할당하는 패턴:
+StatefulListRenderMixin에서 `itemKey`는 datasetAttrs의 다른 key들과 **성격이 다르다.**
+
+```
+datasetAttrs의 일반 key (active 등):
+  → 렌더링 방식 결정: "이 데이터를 이 위치에 data 속성으로 넣어라"
+  → 데이터 매핑
+
+itemKey:
+  → 믹스인의 동작 방식 결정: "항목을 이 필드로 식별해라"
+  → 인터페이스 설정 (updateItemState, getItemState에서만 사용)
+```
+
+itemKey는 렌더링 분기(`datasetAttrs[key]` 판별)에 관여하지 않는다.
+`updateItemState(id, state)`와 `getItemState(id)`에서
+항목을 찾을 때 사용하는 식별 기준일 뿐이다.
+
+따라서 options 최상위로 분리하는 것이 올바르다:
 
 ```javascript
-datasetAttrs: {
-    active: 'active'
-}
+// 분리 후
+applyStatefulListRenderMixin(this, {
+    cssSelectors: { ... },
+    itemKey: 'menuid',        // 인터페이스 설정 — 최상위
+    datasetAttrs: {
+        active: 'active'      // 순수하게 데이터 매핑만
+    }
+});
 ```
 
-이것은 단순 반복이 아니다. **key와 value가 서로 다른 역할을 하기 때문이다.**
+분리하면 datasetAttrs의 모든 key가 예외 없이 렌더링 분기에 직접 관여한다.
 
-```
-datasetAttrs: { active: 'active' }
-               ───────   ───────
-                  │          │
-                  │          └─ HTML data 속성명: setAttribute('data-active', value)
-                  │
-                  └─ cssSelectors의 key: cssSelectors['active'] → 위치 결정
-                     + 데이터 필드명: itemData['active'] → 값 추출
-```
-
-- **좌변(key)**: cssSelectors에서 위치를 찾고, data에서 값을 꺼내는 key
-- **우변(value)**: HTML의 data-* 속성명
-
-같은 값이면 직통 연결, 다르면 이름 변환이 일어난다.
-
----
-
-## 6. 종합: cssSelectors / datasetAttrs의 정체
-
-```
-cssSelectors / datasetAttrs는:
-
-  ┌─ 디자인에게 → 모양을 강제하지 않는다
-  ├─ Mixin에게  → 활용 방식을 강제하지 않는다
-  └─ 양쪽 사이에서 → 연결점의 이름만 약속한다
-
-  위치 결정은 cssSelectors가 단일 담당한다:
-
-  ┌─ cssSelectors → 요소의 위치 (querySelector)
-  ├─ datasetAttrs → 해당 키의 처리 방식 (textContent 대신 data 속성)
-  └─ 데이터 필드명 = cssSelectors의 key
-
-  = 데이터와 DOM 사이의 라우팅 테이블
-```
