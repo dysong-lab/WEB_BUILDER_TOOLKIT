@@ -41,17 +41,35 @@ cssSelectors: {
 }
 ```
 
+### itemKey
+
+항목을 식별하는 필드명. updateItemState/getItemState에서 이 필드로 항목을 찾는다.
+
+```javascript
+itemKey: 'id'    // itemData의 'id' 필드로 항목을 식별
+```
+
+itemKey는 datasetAttrs와 성격이 다르다:
+
+```
+datasetAttrs의 key (severity, ack 등):
+  → 렌더링 방식 결정: "이 데이터를 이 위치에 data 속성으로 넣어라"
+  → 데이터 매핑
+
+itemKey:
+  → 믹스인의 동작 방식 결정: "항목을 이 필드로 식별해라"
+  → 인터페이스 설정 (updateItemState, getItemState에서만 사용)
+```
+
+따라서 datasetAttrs 안이 아닌 options 최상위에 위치한다.
+
 ### datasetAttrs
 
-data-* 속성으로 HTML 요소를 참조한다.
-
-| KEY | 필수 | 의미 |
-|-----|------|------|
-| `itemKey` | O | 항목을 식별하는 data-* 속성명. updateItemState에서 이 속성으로 항목을 찾는다. |
+cssSelectors와 key를 공유하여, 해당 위치의 요소에 data 속성을 설정한다.
+([SELECTORS_AS_CONTRACT.md](../docs/architecture/SELECTORS_AS_CONTRACT.md) 참조)
 
 ```javascript
 datasetAttrs: {
-    itemKey:  'id',          // HTML의 data-id로 항목 식별
     severity: 'severity',    // CSS가 [data-severity]로 스타일링
     ack:      'ack'          // CSS가 [data-ack]로 스타일링
 }
@@ -64,7 +82,7 @@ datasetAttrs: {
 ```javascript
 [
     {
-        itemKey:  '1',           // → datasetAttrs['itemKey'] → data-id="1"
+        id:       '1',           // → itemKey가 'id'이므로 이 필드로 항목 식별
         severity: 'warning',     // → cssSelectors['severity'] + datasetAttrs['severity']
         time:     '14:30:05',    // → cssSelectors['time']
         source:   'sensor-01',   // → cssSelectors['source']
@@ -110,8 +128,8 @@ applyStatefulListRenderMixin(this, {
         message:   '.event-browser__message',
         ackBtn:    '.event-browser__ack-btn'
     },
+    itemKey: 'id',
     datasetAttrs: {
-        itemKey:  'id',
         severity: 'severity',
         ack:      'ack'
     }
