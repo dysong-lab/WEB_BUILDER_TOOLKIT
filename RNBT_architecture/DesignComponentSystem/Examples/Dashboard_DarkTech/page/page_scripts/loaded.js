@@ -15,21 +15,21 @@ this.pageDataMappings = [
         topic: 'dashboard_headerInfo',
         datasetInfo: {
             datasetName: 'dashboard_headerInfo',
-            param: { baseUrl: 'localhost:4010' }
+            param: { baseUrl: '10.23.128.125:4010' }
         }
     },
     {
         topic: 'dashboard_menuItems',
         datasetInfo: {
             datasetName: 'dashboard_menuItems',
-            param: { baseUrl: 'localhost:4010' }
+            param: { baseUrl: '10.23.128.125:4010' }
         }
     },
     {
         topic: 'dashboard_lineChart',
         datasetInfo: {
             datasetName: 'dashboard_lineChart',
-            param: { baseUrl: 'localhost:4010' }
+            param: { baseUrl: '10.23.128.125:4010' }
         },
         refreshInterval: 30000
     },
@@ -37,7 +37,7 @@ this.pageDataMappings = [
         topic: 'dashboard_barChart',
         datasetInfo: {
             datasetName: 'dashboard_barChart',
-            param: { baseUrl: 'localhost:4010' }
+            param: { baseUrl: '10.23.128.125:4010' }
         },
         refreshInterval: 30000
     },
@@ -45,7 +45,7 @@ this.pageDataMappings = [
         topic: 'dashboard_pieChart',
         datasetInfo: {
             datasetName: 'dashboard_pieChart',
-            param: { baseUrl: 'localhost:4010' }
+            param: { baseUrl: '10.23.128.125:4010' }
         },
         refreshInterval: 30000
     },
@@ -53,7 +53,7 @@ this.pageDataMappings = [
         topic: 'dashboard_gauge',
         datasetInfo: {
             datasetName: 'dashboard_gauge',
-            param: { baseUrl: 'localhost:4010' }
+            param: { baseUrl: '10.23.128.125:4010' }
         },
         refreshInterval: 10000
     },
@@ -61,7 +61,7 @@ this.pageDataMappings = [
         topic: 'dashboard_tableData',
         datasetInfo: {
             datasetName: 'dashboard_tableData',
-            param: { baseUrl: 'localhost:4010' }
+            param: { baseUrl: '10.23.128.125:4010' }
         },
         refreshInterval: 30000
     },
@@ -69,7 +69,7 @@ this.pageDataMappings = [
         topic: 'dashboard_events',
         datasetInfo: {
             datasetName: 'dashboard_events',
-            param: { baseUrl: 'localhost:4010' }
+            param: { baseUrl: '10.23.128.125:4010' }
         },
         refreshInterval: 15000
     }

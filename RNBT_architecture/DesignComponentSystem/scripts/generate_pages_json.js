@@ -102,8 +102,15 @@ function readMixin(name) {
 
 // ── CSS Selector Transform ──
 // #xxx-container → .{instanceId}
+// 컨테이너 블록의 width에 !important 추가 (웹 플랫폼 필수)
 function transformCSS(css, containerIdName, instanceId) {
-    return css.replace(new RegExp('#' + containerIdName, 'g'), '.' + instanceId);
+    let result = css.replace(new RegExp('#' + containerIdName, 'g'), '.' + instanceId);
+    // /* container */ 블록 내 width 값에 !important 추가
+    result = result.replace(
+        new RegExp('(\\.' + instanceId + '\\s*\\{[^}]*?width:\\s*[^;!]+)(;)', 'g'),
+        '$1 !important$2'
+    );
+    return result;
 }
 
 // ── Load Corporate template ──

@@ -3,7 +3,7 @@
   "data": [
     {
       "datasource": "", "mode": "0", "delivery_type": "0",
-      "param_info": [{ "param_name": "baseUrl", "param_type": "string", "default_value": "localhost:4010" }],
+      "param_info": [{ "param_name": "baseUrl", "param_type": "string", "default_value": "10.23.128.125:4010" }],
       "data_type": "1", "interval": "0", "page_id": "PAGE", "query": "", "query_type": "",
       "description": "헤더 정보 (Header 컴포넌트)",
       "dataset_id": "dcs-header-001",
@@ -12,7 +12,7 @@
     },
     {
       "datasource": "", "mode": "0", "delivery_type": "0",
-      "param_info": [{ "param_name": "baseUrl", "param_type": "string", "default_value": "localhost:4010" }],
+      "param_info": [{ "param_name": "baseUrl", "param_type": "string", "default_value": "10.23.128.125:4010" }],
       "data_type": "1", "interval": "0", "page_id": "PAGE", "query": "", "query_type": "",
       "description": "사이드바 메뉴 (Sidebar 컴포넌트)",
       "dataset_id": "dcs-menu-001",
@@ -21,7 +21,7 @@
     },
     {
       "datasource": "", "mode": "0", "delivery_type": "0",
-      "param_info": [{ "param_name": "baseUrl", "param_type": "string", "default_value": "localhost:4010" }],
+      "param_info": [{ "param_name": "baseUrl", "param_type": "string", "default_value": "10.23.128.125:4010" }],
       "data_type": "1", "interval": "30000", "page_id": "PAGE", "query": "", "query_type": "",
       "description": "CPU/Memory 트렌드 (LineChart 컴포넌트)",
       "dataset_id": "dcs-linechart-001",
@@ -30,7 +30,7 @@
     },
     {
       "datasource": "", "mode": "0", "delivery_type": "0",
-      "param_info": [{ "param_name": "baseUrl", "param_type": "string", "default_value": "localhost:4010" }],
+      "param_info": [{ "param_name": "baseUrl", "param_type": "string", "default_value": "10.23.128.125:4010" }],
       "data_type": "1", "interval": "30000", "page_id": "PAGE", "query": "", "query_type": "",
       "description": "I/O 트래픽 (BarChart 컴포넌트)",
       "dataset_id": "dcs-barchart-001",
@@ -39,7 +39,7 @@
     },
     {
       "datasource": "", "mode": "0", "delivery_type": "0",
-      "param_info": [{ "param_name": "baseUrl", "param_type": "string", "default_value": "localhost:4010" }],
+      "param_info": [{ "param_name": "baseUrl", "param_type": "string", "default_value": "10.23.128.125:4010" }],
       "data_type": "1", "interval": "30000", "page_id": "PAGE", "query": "", "query_type": "",
       "description": "장치 분포 (PieChart 컴포넌트)",
       "dataset_id": "dcs-piechart-001",
@@ -48,7 +48,7 @@
     },
     {
       "datasource": "", "mode": "0", "delivery_type": "0",
-      "param_info": [{ "param_name": "baseUrl", "param_type": "string", "default_value": "localhost:4010" }],
+      "param_info": [{ "param_name": "baseUrl", "param_type": "string", "default_value": "10.23.128.125:4010" }],
       "data_type": "1", "interval": "10000", "page_id": "PAGE", "query": "", "query_type": "",
       "description": "CPU 사용률 (GaugeChart 컴포넌트)",
       "dataset_id": "dcs-gauge-001",
@@ -57,7 +57,7 @@
     },
     {
       "datasource": "", "mode": "0", "delivery_type": "0",
-      "param_info": [{ "param_name": "baseUrl", "param_type": "string", "default_value": "localhost:4010" }],
+      "param_info": [{ "param_name": "baseUrl", "param_type": "string", "default_value": "10.23.128.125:4010" }],
       "data_type": "1", "interval": "30000", "page_id": "PAGE", "query": "", "query_type": "",
       "description": "장치 테이블 (Table 컴포넌트)",
       "dataset_id": "dcs-table-001",
@@ -66,7 +66,7 @@
     },
     {
       "datasource": "", "mode": "0", "delivery_type": "0",
-      "param_info": [{ "param_name": "baseUrl", "param_type": "string", "default_value": "localhost:4010" }],
+      "param_info": [{ "param_name": "baseUrl", "param_type": "string", "default_value": "10.23.128.125:4010" }],
       "data_type": "1", "interval": "15000", "page_id": "PAGE", "query": "", "query_type": "",
       "description": "이벤트 로그 (EventBrowser 컴포넌트)",
       "dataset_id": "dcs-events-001",
