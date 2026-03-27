@@ -96,6 +96,7 @@ const { each, go } = fx;
 applyFieldRenderMixin(this, {
     cssSelectors: {
         name:        '.system-info__name',
+        status:      '.system-info__status',
         statusLabel: '.system-info__status',
         version:     '.system-info__version'
     },
@@ -166,9 +167,6 @@ applyListRenderMixin(this, {
         level:     '.event-log__level',
         time:      '.event-log__time',
         message:   '.event-log__message'
-    },
-    datasetAttrs: {
-        level:   'level'
     }
 });
 

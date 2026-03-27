@@ -14,6 +14,7 @@ const { each, go } = fx;
 applyFieldRenderMixin(this, {
     cssSelectors: {
         name:        '.system-info__name',
+        status:      '.system-info__status',
         statusLabel: '.system-info__status',
         version:     '.system-info__version',
         uptime:      '.system-info__uptime'
