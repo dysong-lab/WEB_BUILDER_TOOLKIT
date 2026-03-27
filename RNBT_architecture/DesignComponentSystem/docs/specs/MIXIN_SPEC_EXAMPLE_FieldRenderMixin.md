@@ -37,9 +37,9 @@
 
 | KEY | 종류 | 의미 |
 |-----|------|------|
-| `status` | 사용자 정의 | HTML의 `data-status` 속성을 가진 요소에 값을 반영. CSS에서 `[data-status="RUNNING"]` 등으로 스타일링에 활용 |
+| `status` | 사용자 정의 | cssSelectors['status']가 가리키는 요소에 `data-status` 속성 설정. CSS에서 `[data-status="RUNNING"]` 등으로 스타일링에 활용 |
 
-> 규약 KEY 없음. 모든 KEY는 사용자가 정의한다. cssSelectors와 달리 위치를 지정하지 않는다. "이 데이터를 dataset으로 사용하겠다"는 선언이며, Mixin이 내부에서 `[data-속성명]` 선택자를 조립하여 요소를 찾는다.
+> 규약 KEY 없음. 모든 KEY는 사용자가 정의한다. cssSelectors와 key를 공유하여 위치를 결정하고, VALUE가 data 속성명이 된다.
 
 ### 기타 옵션
 

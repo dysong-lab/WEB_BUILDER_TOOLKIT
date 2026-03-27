@@ -32,17 +32,16 @@ cssSelectors: {
 
 ### datasetAttrs
 
-data-* 속성으로 HTML 요소를 참조한다. VALUE는 속성명만 기술한다.
+cssSelectors와 key를 공유하여, 해당 위치의 요소에 data 속성을 설정한다.
+([SELECTORS_AS_CONTRACT.md](../docs/architecture/SELECTORS_AS_CONTRACT.md) 참조)
 
 ```javascript
 datasetAttrs: {
-    status: 'status'        // HTML의 data-status 속성을 가진 요소
+    status: 'status'        // cssSelectors['status']가 가리키는 요소에 data-status 설정
 }
 ```
 
-데이터의 KEY와 일치하면 해당 요소의 dataset에 값을 반영한다.
-
-> **KEY의 성격:** 모든 KEY는 사용자가 정의한다. cssSelectors와 달리 위치를 지정하지 않는다. "이 데이터를 dataset으로 사용하겠다"는 선언이며, Mixin이 내부에서 `[data-속성명]` 선택자를 조립하여 요소를 찾는다.
+> **KEY의 성격:** 모든 KEY는 사용자가 정의한다. cssSelectors의 같은 KEY로 위치를 결정하고, datasetAttrs의 VALUE가 data 속성명이 된다.
 
 ### renderData가 기대하는 데이터
 

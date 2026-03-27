@@ -39,16 +39,22 @@
 > `cssSelectors.item`은 updateItemState/getItemState에서 `item + '[data-id="..."]'` 선택자를 조립하여 개별 항목을 탐색하는 데 사용한다. ListRenderMixin의 item(사용자 정의)과 달리 Mixin이 직접 참조하므로 규약 KEY이다.
 > **사용자 정의 KEY**: Mixin이 `Object.entries(cssSelectors)`로 순회하며, data의 같은 이름의 KEY와 매칭하여 textContent에 반영한다.
 
+### itemKey
+
+| 종류 | 의미 |
+|------|------|
+| 규약 | 항목을 식별하는 필드명. updateItemState/getItemState에서 이 필드로 항목을 찾는다. |
+
+> `itemKey`는 datasetAttrs와 성격이 다르다. datasetAttrs는 렌더링 방식(data 속성 매핑)을 결정하지만, itemKey는 믹스인의 동작 방식(항목 식별 기준)을 결정하는 인터페이스 설정이다. 따라서 datasetAttrs 안이 아닌 options 최상위에 위치한다.
+
 ### datasetAttrs
 
 | KEY | 종류 | 의미 |
 |-----|------|------|
-| `itemKey` | 규약 | 항목을 식별하는 data-* 속성명. updateItemState/getItemState에서 이 속성으로 항목을 찾는다. |
 | `severity` | 사용자 정의 | CSS가 `[data-severity]`로 스타일링 |
 | `ack` | 사용자 정의 | CSS가 `[data-ack]`로 스타일링 |
 
-> **규약 KEY**: `datasetAttrs.itemKey`는 Mixin이 내부에서 직접 추출하여 `const itemKeyAttr = datasetAttrs.itemKey`로 사용한다. 이 값이 항목 식별의 기준이 된다.
-> **사용자 정의 KEY**: `Object.entries(datasetAttrs)`로 순회하며, data의 같은 이름의 KEY와 매칭하여 dataset에 반영한다.
+> cssSelectors와 key를 공유하여 위치를 결정하고, VALUE가 data 속성명이 된다.
 
 ### 기타 옵션
 
@@ -67,15 +73,15 @@
 ### 예시
 
 ```javascript
-// renderData({ response: { data: ??? } })에 전달되는 data의 형태:
+// renderData({ response: [...] })에 전달되는 data의 형태:
 [
     {
-        itemKey:  '1',           // → datasetAttrs['itemKey'] → data-id="1"
-        severity: 'warning',     // → cssSelectors['severity'] + datasetAttrs['severity']
-        time:     '14:30:05',    // → cssSelectors['time']
-        source:   'sensor-01',   // → cssSelectors['source']
-        message:  'Temp high',   // → cssSelectors['message']
-        ack:      'false'        // → datasetAttrs['ack'] → data-ack="false"
+        id:       '1',           // → itemKey가 'id'이므로 이 필드로 항목 식별
+        severity: 'warning',     // → cssSelectors['severity'] + datasetAttrs['severity'] → data-severity
+        time:     '14:30:05',    // → cssSelectors['time'] → textContent
+        source:   'sensor-01',   // → cssSelectors['source'] → textContent
+        message:  'Temp high',   // → cssSelectors['message'] → textContent
+        ack:      'false'        // → cssSelectors['ack'] + datasetAttrs['ack'] → data-ack
     }
 ]
 ```
@@ -83,17 +89,16 @@
 ### KEY 매칭 규칙
 
 ```
-cssSelectors: Object.entries(cssSelectors)를 순회하며,
-              각 KEY로 itemData[key]를 찾고, 값이 있으면 해당 요소의 textContent에 반영.
+Object.entries(cssSelectors)를 순회하며:
+  각 KEY로 itemData[key]를 찾고, 값이 있으면:
+    → datasetAttrs에 같은 KEY가 있으면 → data 속성 설정
+    → 없으면 → textContent 설정
 
-datasetAttrs: Object.entries(datasetAttrs)를 순회하며,
-              각 KEY로 itemData[key]를 찾고, 값이 있으면 해당 요소의 dataset에 반영.
-
-규약 KEY(container, template, item)도 cssSelectors 순회에 포함되지만,
+규약 KEY(container, template, item)도 순회에 포함되지만,
 template 내부에 해당 선택자 요소가 없으므로 무시된다.
 
-규약 KEY(itemKey)도 datasetAttrs 순회에 포함되며,
-template 내부에 data-id 속성이 있는 요소(item 자체)에 값이 반영된다.
+datasetAttrs는 별도로 순회하지 않는다.
+cssSelectors 순회 중 datasetAttrs[key] 존재 여부로 분기할 뿐이다.
 ```
 
 ---
@@ -166,8 +171,8 @@ applyStatefulListRenderMixin(this, {
         message:   '.event-browser__message',
         ackBtn:    '.event-browser__ack-btn'
     },
+    itemKey: 'id',
     datasetAttrs: {
-        itemKey:  'id',
         severity: 'severity',
         ack:      'ack'
     }

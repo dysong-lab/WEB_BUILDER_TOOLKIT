@@ -77,7 +77,8 @@ app.get('/api/events', (req, res) => {
 // EventBrowser 컴포넌트용 (StatefulListRenderMixin)
 //
 // cssSelectors KEY: severity, time, source, message
-// datasetAttrs KEY: itemKey(→data-id), severity, ack
+// itemKey: 'id'
+// datasetAttrs KEY: severity, ack
 // ─────────────────────────────────────────
 const severities = ['critical', 'warning', 'info'];
 const browserMessages = [
@@ -103,7 +104,7 @@ app.get('/api/event-browser', (req, res) => {
     const events = Array.from({ length: 15 }, (_, i) => {
         const id = 'evt-' + String(1000 + i);
         return {
-            itemKey:  id,
+            id:       id,
             severity: severities[Math.floor(Math.random() * severities.length)],
             time:     new Date(now - i * 120000 - Math.random() * 60000).toLocaleTimeString('ko-KR', {
                 hour: '2-digit', minute: '2-digit', second: '2-digit'

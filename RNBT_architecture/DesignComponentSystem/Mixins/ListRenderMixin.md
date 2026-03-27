@@ -44,21 +44,10 @@ cssSelectors: {
 
 > **KEY의 두 종류:** `container`, `template`은 Mixin이 규약으로 요구하는 KEY다. Mixin 내부에서 직접 참조한다. 나머지(`item`, `level`, `time`, `message`, `clearBtn` 등)는 사용자 정의 KEY다. `item`은 Mixin 내부에서 참조하지 않지만, customEvents에서 항목 클릭 이벤트를 매핑할 때 `[this.listRender.cssSelectors.item]`으로 참조하기 때문에 등록한다. 사용자 정의 KEY가 없으면 template은 복제되지만 값은 채워지지 않는다.
 
-### datasetAttrs
-
-data-* 속성으로 HTML 요소를 참조한다.
-
-```javascript
-datasetAttrs: {
-    level: 'level'      // HTML의 data-level 속성을 가진 요소
-}
-```
-
-> **KEY의 성격:** 모든 KEY는 사용자가 정의한다. cssSelectors와 달리 위치를 지정하지 않는다. "이 데이터를 dataset으로 사용하겠다"는 선언이며, Mixin이 내부에서 `[data-속성명]` 선택자를 조립하여 요소를 찾는다.
-
 ### renderData가 기대하는 데이터
 
-배열. 각 항목의 KEY가 cssSelectors/datasetAttrs의 KEY와 일치해야 한다.
+배열. 각 항목의 KEY가 cssSelectors의 KEY와 일치해야 한다.
+이 Mixin은 datasetAttrs를 사용하지 않는다. 모든 값은 textContent로 설정된다.
 
 ```javascript
 // 이 배열이 renderData에 전달되면:
@@ -104,9 +93,6 @@ applyListRenderMixin(this, {
         time:      '.event-log__time',
         message:   '.event-log__message',
         clearBtn:  '.event-log__clear-btn'
-    },
-    datasetAttrs: {
-        level: 'level'
     }
 });
 
@@ -124,7 +110,6 @@ this.subscriptions = {
 | 속성/메서드 | 역할 |
 |------------|------|
 | `cssSelectors` | 주입된 cssSelectors (customEvents에서 computed property로 참조) |
-| `datasetAttrs` | 주입된 datasetAttrs |
 | `renderData({ response })` | selector KEY에 맞춰진 배열을 받아 항목을 생성하여 렌더링 |
 | `clear()` | 컨테이너의 모든 항목을 제거 |
 | `destroy()` | Mixin이 주입한 모든 속성과 메서드를 정리 |
@@ -133,7 +118,7 @@ this.subscriptions = {
 
 ## template 태그의 약속
 
-template 내부의 HTML 구조는 자유롭지만, **cssSelectors와 datasetAttrs의 VALUE에 해당하는 요소**가 반드시 존재해야 한다.
+template 내부의 HTML 구조는 자유롭지만, **cssSelectors의 VALUE에 해당하는 요소**가 반드시 존재해야 한다.
 
 ```
 01_list:   수직 리스트 (flex row)
