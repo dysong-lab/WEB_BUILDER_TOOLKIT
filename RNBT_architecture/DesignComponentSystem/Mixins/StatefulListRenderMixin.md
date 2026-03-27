@@ -46,7 +46,7 @@ cssSelectors: {
 항목을 식별하는 필드명. updateItemState/getItemState에서 이 필드로 항목을 찾는다.
 
 ```javascript
-itemKey: 'id'    // itemData의 'id' 필드로 항목을 식별
+itemKey: 'id'    // 항목 식별에 사용할 key 이름
 ```
 
 itemKey는 datasetAttrs와 성격이 다르다:
