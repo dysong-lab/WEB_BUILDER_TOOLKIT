@@ -137,7 +137,8 @@
             cssSelectors: { container: '.sidebar__menu', template: '#sidebar-menu-item-template',
                             menuid: '.sidebar__item', active: '.sidebar__item',
                             icon: '.sidebar__item-icon', label: '.sidebar__item-label', badge: '.sidebar__item-badge' },
-            datasetAttrs: { itemKey: 'menuid', active: 'active' }
+            itemKey: 'menuid',
+            datasetAttrs: { menuid: 'menuid', active: 'active' }
         });
         sidebar.statefulList.renderData({ response: [
             { menuid: 'dashboard', icon: '▣', label: 'Dashboard',  badge: '',   active: 'true' },

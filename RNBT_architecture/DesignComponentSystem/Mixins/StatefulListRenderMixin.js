@@ -24,8 +24,9 @@
  *           label:     '.sidebar__item-label',
  *           badge:     '.sidebar__item-badge'
  *       },
+ *       itemKey: 'menuid',
  *       datasetAttrs: {
- *           itemKey: 'menuid',
+ *           menuid:  'menuid',
  *           active:  'active'
  *       }
  *   });
@@ -51,16 +52,14 @@
  */
 
 function applyStatefulListRenderMixin(instance, options) {
-    const { cssSelectors = {}, datasetAttrs = {} } = options;
+    const { cssSelectors = {}, datasetAttrs = {}, itemKey } = options;
 
     // Mixin이 직접 참조하는 KEY 추출
     const container = cssSelectors.container;
     const template = cssSelectors.template;
 
-    // 항목 식별 속성 추출
-    const itemKeyAttr = datasetAttrs.itemKey;
-    // itemKey의 cssSelector → 항목 요소 선택자
-    const itemSelector = cssSelectors[itemKeyAttr];
+    // 항목 식별: itemKey가 가리키는 cssSelector → 항목 요소 선택자
+    const itemSelector = cssSelectors[itemKey];
 
     // 네임스페이스 생성
     const ns = {};
@@ -115,7 +114,7 @@ function applyStatefulListRenderMixin(instance, options) {
      */
     ns.updateItemState = function(id, state) {
         const el = instance.appendElement.querySelector(
-            itemSelector + '[data-' + itemKeyAttr + '="' + id + '"]'
+            itemSelector + '[data-' + itemKey + '="' + id + '"]'
         );
         if (!el) return;
 
@@ -132,7 +131,7 @@ function applyStatefulListRenderMixin(instance, options) {
      */
     ns.getItemState = function(id) {
         const el = instance.appendElement.querySelector(
-            itemSelector + '[data-' + itemKeyAttr + '="' + id + '"]'
+            itemSelector + '[data-' + itemKey + '="' + id + '"]'
         );
         if (!el) return null;
 

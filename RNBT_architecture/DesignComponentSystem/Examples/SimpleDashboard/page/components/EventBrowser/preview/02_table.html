@@ -23,17 +23,21 @@
 
     applyStatefulListRenderMixin(instance, {
         cssSelectors: {
-            container: '.event-browser__list',
-            item:      '.event-browser__item',
-            template:  '#event-browser-item-template',
-            severity:  '.event-browser__severity-label',
-            time:      '.event-browser__time',
-            source:    '.event-browser__source',
-            message:   '.event-browser__message',
-            ackBtn:    '.event-browser__ack-btn'
+            container:     '.event-browser__list',
+            item:          '.event-browser__item',
+            template:      '#event-browser-item-template',
+            id:            '.event-browser__item',
+            severity:      '.event-browser__item',
+            severityLabel: '.event-browser__severity-label',
+            time:          '.event-browser__time',
+            source:        '.event-browser__source',
+            message:       '.event-browser__message',
+            ack:           '.event-browser__item',
+            ackBtn:        '.event-browser__ack-btn'
         },
+        itemKey: 'id',
         datasetAttrs: {
-            itemKey:  'id',
+            id:       'id',
             severity: 'severity',
             ack:      'ack'
         }

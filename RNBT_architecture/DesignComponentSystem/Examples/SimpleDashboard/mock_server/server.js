@@ -101,17 +101,20 @@ const ackedEvents = new Set();
 
 app.get('/api/event-browser', (req, res) => {
     const now = Date.now();
+    const severityLabelMap = { critical: 'CRITICAL', warning: 'WARNING', info: 'INFO' };
     const events = Array.from({ length: 15 }, (_, i) => {
         const id = 'evt-' + String(1000 + i);
+        const severity = severities[Math.floor(Math.random() * severities.length)];
         return {
-            id:       id,
-            severity: severities[Math.floor(Math.random() * severities.length)],
-            time:     new Date(now - i * 120000 - Math.random() * 60000).toLocaleTimeString('ko-KR', {
+            id:            id,
+            severity:      severity,
+            severityLabel: severityLabelMap[severity] || severity,
+            time:          new Date(now - i * 120000 - Math.random() * 60000).toLocaleTimeString('ko-KR', {
                 hour: '2-digit', minute: '2-digit', second: '2-digit'
             }),
-            source:   ['UPS', 'CRAC', 'PDU', 'Sensor', 'Network'][Math.floor(Math.random() * 5)],
-            message:  browserMessages[Math.floor(Math.random() * browserMessages.length)],
-            ack:      String(ackedEvents.has(id))
+            source:        ['UPS', 'CRAC', 'PDU', 'Sensor', 'Network'][Math.floor(Math.random() * 5)],
+            message:       browserMessages[Math.floor(Math.random() * browserMessages.length)],
+            ack:           String(ackedEvents.has(id))
         };
     });
     res.json(events);

@@ -19,8 +19,9 @@ applyStatefulListRenderMixin(this, {
         label:     '.sidebar__item-label',
         badge:     '.sidebar__item-badge'
     },
+    itemKey: 'menuid',
     datasetAttrs: {
-        itemKey: 'menuid',
+        menuid:  'menuid',
         active:  'active'
     }
 });
