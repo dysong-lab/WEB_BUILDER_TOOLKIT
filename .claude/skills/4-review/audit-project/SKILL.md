@@ -130,16 +130,21 @@ N + M 전략이 여전히 유효한지 확인한다.
 3. **네임스페이스 일치**: .js의 `instance.xxx = ns` ↔ 명세서 섹션 4 ↔ .md
 4. **메서드 완비**: .js의 `ns.xxx = function` 전부가 명세서 섹션 4 테이블에 있는가
 5. **destroy 일치**: .js의 destroy 내부 정리 항목 ↔ 명세서 섹션 5 목록
+6. **cssSelectors/datasetAttrs 정합성**: 다음을 확인한다
+   - .js 코드에서 datasetAttrs 역할 설명이 실제 동작과 일치하는가 (위치는 cssSelectors가 담당, datasetAttrs는 속성명 지정)
+   - .md/.spec에서 순회 대상이 정확한가 (cssSelectors를 순회하는지, datasetAttrs를 순회하는지)
+   - itemKey가 datasetAttrs 안이 아닌 options 최상위에 있는가 (StatefulListRenderMixin)
+   - datasetAttrs의 key가 cssSelectors에도 존재하여 위치를 찾을 수 있는가
 
 ### 보고 형식
 
 ```
 ■ 구현-문서 일치
 
-  | Mixin | 파일 | 목적 | NS | 메서드 | destroy | 판정 |
-  |-------|------|------|-----|--------|---------|------|
-  | FieldRender | ✅ | ✅ | ✅ | ✅ | ✅ | PASS |
-  | ...         |    |    |    |    |    |      |
+  | Mixin | 파일 | 목적 | NS | 메서드 | destroy | selectors | 판정 |
+  |-------|------|------|-----|--------|---------|-----------|------|
+  | FieldRender | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | PASS |
+  | ...         |    |    |    |    |    |    |      |
 
   불일치: N건
   (불일치 항목이 있으면 파일:행 수준으로 상세 기술)
@@ -157,18 +162,13 @@ docs/ 디렉토리의 모든 문서가 서로 일관되는지 확인한다.
 
 [docs/](/RNBT_architecture/DesignComponentSystem/docs/) 디렉토리의 모든 .md 파일을 읽고:
 
-1. **폐기 용어 검색**: 다음이 존재하면 안 된다
-   - "상태를 반영한다" (폐기됨)
-   - "1단계 주입 원칙" 또는 "1단계 주입" (→ "조립 코드 주도 원칙"으로 대체됨)
-   - 네이밍 불일치 (과거 이름이 남아있는지)
-
-2. **Mixin 수 일관성**: 모든 문서에서 Mixin 수가 동일한가
+1. **Mixin 수 일관성**: 모든 문서에서 Mixin 수가 동일한가
    - COMPONENT_SYSTEM_DESIGN.md의 테이블들
    - SYSTEM_READINESS_REVIEW.md의 수치
    - MIXIN_REVIEW.md의 항목 수
    - Mixins/README.md의 목록
 
-3. **목적 서술 일관성**: 모든 문서에서 같은 Mixin의 목적이 동일한가
+2. **목적 서술 일관성**: 모든 문서에서 같은 Mixin의 목적이 동일한가
    - COMPONENT_SYSTEM_DESIGN.md (기능 정의 테이블, 카탈로그 테이블)
    - EXECUTIVE_REPORT.md (기능 테이블)
    - FUNCTION_PATTERN.md (비교 테이블)
@@ -177,15 +177,14 @@ docs/ 디렉토리의 모든 문서가 서로 일관되는지 확인한다.
    - 각 Mixin .md (설계 의도)
    - 각 Mixin .js (JSDoc 헤더)
 
-4. **상호 참조 링크**: 마크다운 링크가 실제 존재하는 파일을 가리키는가
+3. **상호 참조 링크**: 마크다운 링크가 실제 존재하는 파일을 가리키는가
 
-5. **날짜**: "최종 업데이트" 또는 "검토일"이 합리적인가
+4. **날짜**: "최종 업데이트" 또는 "검토일"이 합리적인가
 
 ### 보고 형식
 
 ```
 ■ 설계 문서 일관성
-  폐기 용어:       ✅ 잔존 0건 / ⚠️ N건 발견
   Mixin 수:        ✅ 전체 일치 / ⚠️ 불일치 (어디서 몇 개)
   목적 서술:       ✅ 전체 일치 / ⚠️ N건 불일치
   상호 참조 링크:  ✅ 전부 유효 / ⚠️ N건 깨짐
@@ -236,7 +235,7 @@ SKILL 파일들이 현재 시스템 상태와 일치하는지 확인한다.
 1. **Components 디렉토리**: 등록된 컴포넌트가 있으면 register.js/beforeDestroy.js 패턴이 올바른지 확인. README.md가 현재 상태를 반영하는지 확인.
 
 2. **Examples 디렉토리**: SimpleDashboard 등 예제 프로젝트의 구조가 올바른지 확인.
-   - mock_server: 엔드포인트가 컴포넌트와 정합하는가
+   - mock_server: 각 엔드포인트의 응답 구조가 대상 믹스인의 renderData가 기대하는 데이터 형태와 일치하는가
    - preview_runtime.js: _datasetRegistry에 모든 데이터셋이 등록되어 있는가
    - 각 컴포넌트의 register.js/beforeDestroy.js가 3단계 패턴을 따르는가
    - preview HTML이 독립 실행 가능한 구조인가
