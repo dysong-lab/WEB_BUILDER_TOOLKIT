@@ -27,16 +27,17 @@
 | KEY | 종류 | 의미 |
 |-----|------|------|
 | `container` | 규약 | 항목이 추가될 부모 요소 |
-| `item` | 규약 | 각 항목의 루트 요소. updateItemState에서 `item + '[data-' + itemKeyAttr + '="' + id + '"]'`로 항목을 탐색하는 데 사용 |
 | `template` | 규약 | `<template>` 태그 (cloneNode 대상) |
+| `id` | 사용자 정의 | 각 항목의 루트 요소. `itemKey: 'id'`이므로 Mixin이 `cssSelectors[itemKey]`로 이 값을 참조하여 updateItemState/getItemState에서 항목을 탐색한다 |
 | `severity` | 사용자 정의 | 심각도 라벨 표시 요소 |
+| `ack` | 사용자 정의 | 확인 상태. `id`와 같은 요소(`.event-browser__item`)를 가리키며, datasetAttrs에 의해 `data-ack` 속성으로 설정된다 |
 | `time` | 사용자 정의 | 시간 표시 요소 |
 | `source` | 사용자 정의 | 이벤트 출처 표시 요소 |
 | `message` | 사용자 정의 | 메시지 표시 요소 |
 | `ackBtn` | 사용자 정의 | ACK 버튼. 이벤트 매핑 전용 (template 안이지만 데이터 매칭 불필요) |
 
 > **규약 KEY**: Mixin 내부에서 `cssSelectors.container`로 컨테이너를, `cssSelectors.template`으로 template을 직접 참조한다. 없으면 renderData에서 throw.
-> `cssSelectors.item`은 updateItemState/getItemState에서 `item + '[data-id="..."]'` 선택자를 조립하여 개별 항목을 탐색하는 데 사용한다. ListRenderMixin의 item(사용자 정의)과 달리 Mixin이 직접 참조하므로 규약 KEY이다.
+> **itemKey와의 관계**: Mixin은 `cssSelectors[itemKey]`로 항목의 루트 요소 선택자를 얻는다. `itemKey: 'id'`이면 `cssSelectors['id']`의 값(`.event-browser__item`)을 사용하여 `'.event-browser__item[data-id="1"]'` 같은 선택자를 조립한다. 따라서 itemKey 값에 해당하는 KEY가 cssSelectors에 반드시 존재해야 한다.
 > **사용자 정의 KEY**: Mixin이 `Object.entries(cssSelectors)`로 순회하며, data의 같은 이름의 KEY와 매칭하여 textContent에 반영한다.
 
 ### itemKey
@@ -51,6 +52,7 @@
 
 | KEY | 종류 | 의미 |
 |-----|------|------|
+| `id` | 사용자 정의 | renderData가 `data-id` 설정. updateItemState에서 `[data-id="..."]`로 항목 탐색 |
 | `severity` | 사용자 정의 | CSS가 `[data-severity]`로 스타일링 |
 | `ack` | 사용자 정의 | CSS가 `[data-ack]`로 스타일링 |
 
@@ -73,10 +75,10 @@
 ### 예시
 
 ```javascript
-// renderData({ response: [...] })에 전달되는 data의 형태:
+// renderData({ response: [...] })에 전달되는 response의 형태:
 [
     {
-        id:       '1',           // → itemKey가 'id'이므로 이 필드로 항목 식별
+        id:       '1',           // → cssSelectors['id'] + datasetAttrs['id'] → data-id (항목 식별)
         severity: 'warning',     // → cssSelectors['severity'] + datasetAttrs['severity'] → data-severity
         time:     '14:30:05',    // → cssSelectors['time'] → textContent
         source:   'sensor-01',   // → cssSelectors['source'] → textContent
@@ -163,9 +165,10 @@ cssSelectors 순회 중 datasetAttrs[key] 존재 여부로 분기할 뿐이다.
 applyStatefulListRenderMixin(this, {
     cssSelectors: {
         container: '.event-browser__list',
-        item:      '.event-browser__item',
         template:  '#event-browser-item-template',
+        id:        '.event-browser__item',
         severity:  '.event-browser__severity-label',
+        ack:       '.event-browser__item',
         time:      '.event-browser__time',
         source:    '.event-browser__source',
         message:   '.event-browser__message',
@@ -173,6 +176,7 @@ applyStatefulListRenderMixin(this, {
     },
     itemKey: 'id',
     datasetAttrs: {
+        id:       'id',
         severity: 'severity',
         ack:      'ack'
     }

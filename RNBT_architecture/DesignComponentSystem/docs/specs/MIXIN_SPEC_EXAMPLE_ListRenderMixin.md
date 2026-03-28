@@ -39,11 +39,7 @@
 
 ### datasetAttrs
 
-| KEY | 종류 | 의미 |
-|-----|------|------|
-| `level` | 사용자 정의 | HTML의 `data-level` 속성을 가진 요소에 값을 반영. CSS에서 `[data-level="error"]` 등으로 스타일링에 활용 |
-
-> 규약 KEY 없음. 모든 KEY를 `Object.entries(datasetAttrs)`로 순회하여 소비한다.
+해당 없음. 이 Mixin은 datasetAttrs를 사용하지 않는다. 모든 값은 textContent로 설정된다.
 
 ### 기타 옵션
 
@@ -56,13 +52,13 @@
 ### 데이터 형태
 
 ```
-배열. 각 항목은 cssSelectors/datasetAttrs의 KEY와 매칭되는 KEY를 가진 객체.
+배열. 각 항목은 cssSelectors의 KEY와 매칭되는 KEY를 가진 객체.
 ```
 
 ### 예시
 
 ```javascript
-// renderData({ response: { data: ??? } })에 전달되는 data의 형태:
+// renderData({ response: ??? })에 전달되는 response의 형태:
 [
     { level: 'ERROR', time: '14:30', message: 'Connection failed' },
     { level: 'INFO',  time: '14:31', message: 'Reconnected' }
@@ -72,11 +68,10 @@
 ### KEY 매칭 규칙
 
 ```
-cssSelectors: Object.entries(cssSelectors)를 순회하며,
-              각 KEY로 itemData[key]를 찾고, 값이 있으면 해당 요소의 textContent에 반영.
+Object.entries(cssSelectors)를 순회하며,
+각 KEY로 itemData[key]를 찾고, 값이 있으면 해당 요소의 textContent에 반영.
 
-datasetAttrs: Object.entries(datasetAttrs)를 순회하며,
-              각 KEY로 itemData[key]를 찾고, 값이 있으면 해당 요소의 dataset에 반영.
+datasetAttrs는 사용하지 않는다.
 
 규약 KEY(container, template)도 순회에 포함되지만,
 template 내부에 해당 선택자 요소가 없으므로 무시된다.
@@ -95,7 +90,6 @@ template 내부에 해당 선택자 요소가 없으므로 무시된다.
 | 속성/메서드 | 역할 |
 |------------|------|
 | `cssSelectors` | 주입된 cssSelectors. customEvents에서 computed property로 참조 |
-| `datasetAttrs` | 주입된 datasetAttrs |
 | `renderData({ response })` | 배열 데이터를 받아 template 복제로 항목 생성 |
 | `clear()` | 컨테이너의 모든 항목을 제거 (`innerHTML = ''`) |
 | `destroy()` | Mixin이 주입한 모든 속성과 메서드를 null 처리 |
@@ -108,7 +102,6 @@ template 내부에 해당 선택자 요소가 없으므로 무시된다.
 - ns.renderData = null
 - ns.clear = null
 - ns.cssSelectors = null
-- ns.datasetAttrs = null
 - instance.listRender = null
 ```
 
@@ -148,9 +141,6 @@ applyListRenderMixin(this, {
         time:      '.event-log__time',
         message:   '.event-log__message',
         clearBtn:  '.event-log__clear-btn'
-    },
-    datasetAttrs: {
-        level: 'level'
     }
 });
 

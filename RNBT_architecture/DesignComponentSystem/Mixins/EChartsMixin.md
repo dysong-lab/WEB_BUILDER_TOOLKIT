@@ -18,17 +18,39 @@ ECharts 인스턴스의 라이프사이클(생성, 옵션 적용, 리사이즈, 
 |-----|------|------|
 | `container` | O | 차트가 렌더링될 요소 |
 
-### renderData가 기대하는 데이터
+### option (선택)
 
-ECharts 옵션 객체. 그대로 `setOption`에 전달된다.
+차트의 기본 옵션 객체. Mixin 적용 시 전달하며, renderData가 데이터를 이 옵션에 병합한다.
 
 ```javascript
-// 이 데이터가 renderData에 전달되면:
-{
-    xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed'] },
+option: {
+    xAxis: { type: 'category' },
     yAxis: { type: 'value' },
-    series: [{ data: [150, 230, 224], type: 'line' }]
+    series: [{ type: 'line' }]
 }
+```
+
+### mapData (선택)
+
+데이터를 옵션에 병합하는 커스텀 함수. `(data, optionCopy) => mergedOption` 형태. Pie, Gauge, Radar 등 기본 규약에 맞지 않는 차트에 사용한다. 미제공 시 기본 규약이 적용된다.
+
+### renderData가 기대하는 데이터
+
+순수 데이터 객체. option에 병합하여 `setOption`에 전달된다.
+
+**기본 규약** (mapData 미제공 시):
+- `data.categories` → `xAxis.data`
+- `data.values[i]` → `series[i].data`
+
+**커스텀** (mapData 제공 시): mapData 함수가 병합을 수행한다.
+
+```javascript
+// 기본 규약 — 이 데이터가 renderData에 전달되면:
+{
+    categories: ['Mon', 'Tue', 'Wed'],
+    values: [[150, 230, 224]]
+}
+// → option.xAxis.data = categories, option.series[0].data = values[0]
 ```
 
 ---
@@ -49,6 +71,11 @@ ECharts 옵션 객체. 그대로 `setOption`에 전달된다.
 applyEChartsMixin(this, {
     cssSelectors: {
         container: '.chart-panel__chart'
+    },
+    option: {
+        xAxis: { type: 'category' },
+        yAxis: { type: 'value' },
+        series: [{ type: 'line' }]
     }
 });
 

@@ -381,24 +381,21 @@ function applyFieldRenderMixin(instance, options) {
     ns.cssSelectors = { ...cssSelectors };
     ns.datasetAttrs = { ...datasetAttrs };
 
-    ns.renderData = function({ response }) {
-        const { data } = response;
+    ns.renderData = function({ response: data }) {
         if (!data) throw new Error('[FieldRenderMixin] data is null');
 
         Object.entries(data).forEach(([key, value]) => {
-            if (value === undefined || value === null) return;
+            if (value == null) return;
+            if (!cssSelectors[key]) return;
 
-            // datasetAttrs에 키가 있으면 → dataset 반영
+            const el = instance.appendElement.querySelector(cssSelectors[key]);
+            if (!el) return;
+
+            // datasetAttrs에 등록된 키 → data 속성으로 설정
             if (datasetAttrs[key]) {
-                const attr = datasetAttrs[key];
-                const dataEl = instance.appendElement.querySelector('[data-' + attr + ']');
-                if (dataEl) dataEl.dataset[attr] = value;
-            }
-
-            // cssSelectors에 키가 있으면 → textContent 반영
-            if (cssSelectors[key]) {
-                const el = instance.appendElement.querySelector(cssSelectors[key]);
-                if (el) el.textContent = value;
+                el.setAttribute('data-' + datasetAttrs[key], value);
+            } else {
+                el.textContent = value;
             }
         });
     };
@@ -418,7 +415,7 @@ HTML의 `<template>` 태그를 cloneNode하여 항목을 생성한다. HTML 구�
 
 ```javascript
 function applyListRenderMixin(instance, options) {
-    const { cssSelectors = {}, datasetAttrs = {} } = options;
+    const { cssSelectors = {} } = options;
 
     // Mixin이 직접 참조하는 KEY 추출
     const container = cssSelectors.container;
@@ -428,12 +425,9 @@ function applyListRenderMixin(instance, options) {
     instance.listRender = ns;
 
     ns.cssSelectors = { ...cssSelectors };
-    ns.datasetAttrs = { ...datasetAttrs };
 
-    ns.renderData = function({ response }) {
-        const { data } = response;
+    ns.renderData = function({ response: data }) {
         if (!data) throw new Error('[ListRenderMixin] data is null');
-
         if (!Array.isArray(data)) throw new Error('[ListRenderMixin] data is not an array');
 
         const containerEl = instance.appendElement.querySelector(container);
@@ -446,14 +440,12 @@ function applyListRenderMixin(instance, options) {
         data.forEach(itemData => {
             const clone = templateEl.content.cloneNode(true);
 
-            Object.entries(datasetAttrs).forEach(([key, attr]) => {
-                const el = clone.querySelector('[data-' + attr + ']');
-                if (el && itemData[key] != null) el.dataset[attr] = itemData[key];
-            });
-
+            // cssSelectors 반영 → textContent
             Object.entries(cssSelectors).forEach(([key, selector]) => {
                 const el = clone.querySelector(selector);
-                if (el && itemData[key] != null) el.textContent = itemData[key];
+                if (el && itemData[key] != null) {
+                    el.textContent = itemData[key];
+                }
             });
 
             containerEl.appendChild(clone);
@@ -466,7 +458,6 @@ function applyListRenderMixin(instance, options) {
         ns.renderData = null;
         ns.clear = null;
         ns.cssSelectors = null;
-        ns.datasetAttrs = null;
         instance.listRender = null;
     };
 }

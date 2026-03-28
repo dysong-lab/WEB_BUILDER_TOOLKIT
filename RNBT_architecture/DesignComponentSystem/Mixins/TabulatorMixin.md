@@ -101,6 +101,7 @@ this.subscriptions = {
 | 속성/메서드 | 역할 |
 |------------|------|
 | `cssSelectors` | 주입된 cssSelectors |
+| `init()` | 테이블 인스턴스를 명시적으로 생성. `tableBuilt` 이벤트를 걸기 위해 먼저 호출한다. 반환값: Tabulator 인스턴스 |
 | `renderData({ response })` | 행 데이터 배열을 받아 테이블에 적용 |
 | `setData(data)` | 데이터 직접 적용 |
 | `clearData()` | 테이블 데이터 비우기 |

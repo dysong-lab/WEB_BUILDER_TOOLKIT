@@ -61,7 +61,7 @@
 ### 예시
 
 ```javascript
-// renderData({ response: { data: ??? } })에 전달되는 data의 형태:
+// renderData({ response: ??? })에 전달되는 response의 형태:
 
 ```
 

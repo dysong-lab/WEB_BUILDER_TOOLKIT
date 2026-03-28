@@ -36,7 +36,10 @@
 
 ### 기타 옵션
 
-없음.
+| 옵션 | 필수 | 의미 |
+|------|------|------|
+| `option` | X | 차트의 기본 옵션 객체. renderData가 데이터를 이 옵션에 병합하여 setOption에 전달 |
+| `mapData` | X | 커스텀 병합 함수. `(data, optionCopy) => mergedOption`. Pie, Gauge 등 기본 규약에 맞지 않는 차트에 사용 |
 
 ---
 
@@ -45,26 +48,32 @@
 ### 데이터 형태
 
 ```
-ECharts 옵션 객체. Mixin이 해석하지 않고 그대로 setOption에 전달한다 (라이브러리 위임).
+순수 데이터 객체. option에 병합하여 setOption에 전달한다.
+mapData 미제공 시 기본 규약 적용, 제공 시 커스텀 병합.
 ```
 
 ### 예시
 
 ```javascript
-// renderData({ response: { data: ??? } })에 전달되는 data의 형태:
+// 기본 규약 (mapData 미제공) — renderData({ response: ??? })에 전달되는 response의 형태:
 {
-    xAxis: { type: 'category', data: ['Mon', 'Tue', 'Wed'] },
-    yAxis: { type: 'value' },
-    series: [{ data: [150, 230, 224], type: 'line' }]
+    categories: ['Mon', 'Tue', 'Wed'],
+    values: [[150, 230, 224]]
 }
+// → option.xAxis.data = categories, option.series[0].data = values[0]
 ```
 
 ### KEY 매칭 규칙
 
 ```
-Mixin이 data의 KEY를 해석하지 않는다.
-data 객체 전체를 echarts.setOption(data)로 전달한다.
-KEY 매칭은 ECharts 라이브러리가 내부적으로 수행한다.
+기본 규약 (mapData 미제공 시):
+  data.categories → option.xAxis.data (Cartesian 계열)
+  data.values[i]  → option.series[i].data (series 순서와 1:1 대응)
+  병합된 option을 echarts.setOption(merged)으로 전달한다.
+
+커스텀 (mapData 제공 시):
+  컴포넌트가 정의한 mapData(data, optionCopy)가 병합을 수행한다.
+  Pie, Gauge, Radar 등 기본 규약에 맞지 않는 차트에 사용한다.
 ```
 
 ---
@@ -119,6 +128,11 @@ KEY 매칭은 ECharts 라이브러리가 내부적으로 수행한다.
 applyEChartsMixin(this, {
     cssSelectors: {
         container: '.chart-panel__chart'
+    },
+    option: {
+        xAxis: { type: 'category' },
+        yAxis: { type: 'value' },
+        series: [{ type: 'line' }]
     }
 });
 

@@ -63,7 +63,7 @@ points가 없으면 data 자체를 포인트 배열로 사용한다.
 ### 예시
 
 ```javascript
-// renderData({ response: { data: ??? } })에 전달되는 data의 형태:
+// renderData({ response: ??? })에 전달되는 response의 형태:
 {
     max: 100,
     points: [
