@@ -98,7 +98,16 @@ datasetAttrs: "어떻게" (data-* 속성 vs textContent 분기 신호)
 
 **타당한 점:** Mixin이 HTML 구조를 모르고, CSS가 상태 스타일링을 담당하려면 이 분리가 필요합니다. `SELECTORS_AS_CONTRACT.md`와 `REVIEW_SELECTOR_CONTRACT.md`에서 이를 잘 논증했습니다.
 
-**긴장 지점:** `REVIEW_KEY_SHARING_DESIGN.md`에서 지적된 것처럼, cssSelectors의 KEY가 renderData 순회 · customEvents computed property · 내부 직접 참조 세 가지 역할을 겸합니다. 데이터에 `{container: '...'}` 같은 값이 들어오면 Mixin이 container 요소의 textContent를 덮어쓸 수 있습니다. **현재는 관례로 안전하지만, 코드 보호는 없습니다.** 이것은 기록된 알려진 위험입니다.
+**긴장 지점:** `REVIEW_KEY_SHARING_DESIGN.md`에서 지적된 것처럼, cssSelectors의 KEY가 renderData 순회 · customEvents computed property · 내부 직접 참조 세 가지 역할을 겸합니다. 규약 KEY(`container`, `template`)와 사용자 정의 KEY(`time`, `level` 등)가 같은 객체 안에서 코드상 동등하게 소비되는 것이 긴장의 본질입니다.
+
+예를 들어 `ListRenderMixin.js:72`에서 `Object.entries(cssSelectors)`로 전체를 순회하므로, 데이터에 `{container: '...'}` 필드가 있으면 `clone.querySelector(cssSelectors.container)`를 시도합니다. 다만 실제로는:
+
+1. `cssSelectors.container`의 값은 `.event-log__list` 같은 컨테이너 선택자
+2. `clone`은 template에서 복제한 개별 항목
+3. 개별 항목 내부에 `.event-log__list`가 존재할 이유가 없음
+4. 따라서 `querySelector`가 `null`을 반환 → `if (el && ...)` 가드에서 걸림
+
+**코드가 방어하는 것이 아니라 HTML 구조가 우연히 방어하는 상태입니다.** 현실적으로 template 내부에 container와 같은 클래스를 가진 요소를 넣을 이유가 없으므로 안전하지만, 이것은 코드 보호가 아닌 관례에 의존하는 안전입니다. 기록된 알려진 위험입니다.
 
 ---
 
