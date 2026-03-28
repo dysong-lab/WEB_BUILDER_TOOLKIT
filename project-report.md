@@ -191,9 +191,9 @@ Dashboard_Corporate와 SimpleDashboard의 page_scripts를 비교한 결과:
 
 ### 4-4. ⚠️ 발견된 불일치 사항
 
-#### (A) MIXIN_REVIEW.md의 TabulatorMixin layout 기술 부정확
+#### ~~(A) MIXIN_REVIEW.md의 TabulatorMixin layout 기술 부정확~~ → 수정 완료 (`8b108fd`)
 
-`TabulatorMixin.js`의 `Object.assign` 순서상 `tabulatorOptions`가 뒤에 오므로 `layout`을 재정의할 수 **있습니다.** 그러나 `MIXIN_REVIEW.md`는 이를 "layout 하드코딩" 제한사항으로 기록했습니다. **리뷰 문서가 실제 코드 동작과 불일치합니다.**
+`MIXIN_REVIEW.md`가 TabulatorMixin의 `layout: 'fitColumns'` 하드코딩을 제한사항으로 기록했으나, 실제 코드는 `layout: 'fitDataFill'`이고 `tabulatorOptions`로 재정의 가능했음. 리뷰 문서를 실제 코드에 맞게 정정하고, 요약 테이블의 제약 판정도 ⚠️ → ✅로 수정함.
 
 #### (B) Figma 정적 → RNBT 동적 변환 경로의 불연속
 
@@ -213,14 +213,9 @@ Dashboard_Corporate와 SimpleDashboard의 page_scripts를 비교한 결과:
 
 `README.md` 부록에서 `legacy_ref`를 참조하는 링크가 있어 레거시 문서가 아직 참조 체계 안에 살아 있습니다. 레거시 문서와 현행 문서 간의 내용 충돌 여부는 별도 검증이 필요합니다.
 
-#### (E) CLAUDE.md 날짜 불일치
+#### ~~(E) CLAUDE.md 날짜 불일치~~ → 수정 완료 (`8b108fd`)
 
-| 파일 | 기록된 날짜 | 실제 최근 커밋 |
-|------|-----------|--------------|
-| 루트 `CLAUDE.md` | 2026-01-14 | 2026-03-28 |
-| `RNBT_architecture/CLAUDE.md` | 2025-12-19 | 2026-03-28 |
-
-문서 내용이 최근 변경사항을 반영하지만 날짜가 업데이트되지 않았습니다.
+루트 `CLAUDE.md`(`2026-01-14` → `2026-03-28`), `RNBT_architecture/CLAUDE.md`(`2025-12-19` → `2026-03-28`) 날짜를 갱신함.
 
 ---
 
@@ -232,7 +227,7 @@ Dashboard_Corporate와 SimpleDashboard의 page_scripts를 비교한 결과:
 | 논리적 구성 | ◎ 우수 | Mixin 설계 근거, 라이프사이클, pub-sub 흐름 모두 논리적 |
 | 효율적 구성 | ○ 양호 | SKILL 분리, 문서 분류 적절 (약간의 문서 중복 존재) |
 | 코드 정합성 | ◎ 우수 | 8개 컴포넌트 + 5개 커스텀 모두 패턴 완벽 준수 |
-| 문서 정합성 | ○ 양호 | 대부분 일치, MIXIN_REVIEW 부정확 1건, 날짜 미갱신 |
+| 문서 정합성 | ◎ 우수 | MIXIN_REVIEW 부정확 1건 + 날짜 미갱신 → 수정 완료 (`8b108fd`) |
 | 파이프라인 실증성 | △ 미검증 | Figma → 정적 → 동적 end-to-end 경로의 실제 통과 산출물 부재 |
 
 ### 핵심 요약
