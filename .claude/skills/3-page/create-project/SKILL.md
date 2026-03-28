@@ -107,6 +107,7 @@ const { each, go } = fx;
 applyFieldRenderMixin(this, {
     cssSelectors: {
         name:        '.system-info__name',
+        status:      '.system-info__status',
         statusLabel: '.system-info__status'
     },
     datasetAttrs: {

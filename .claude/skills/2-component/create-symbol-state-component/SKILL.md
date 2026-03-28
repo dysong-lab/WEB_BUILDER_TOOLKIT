@@ -58,6 +58,9 @@ const { each, go } = fx;
 // ======================
 
 applyFieldRenderMixin(this, {
+    cssSelectors: {
+        status: '.symbol-container'
+    },
     datasetAttrs: {
         status: 'status'
     }
