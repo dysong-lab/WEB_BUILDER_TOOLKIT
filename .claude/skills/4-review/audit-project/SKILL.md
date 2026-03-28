@@ -170,7 +170,6 @@ docs/ 디렉토리의 모든 문서가 서로 일관되는지 확인한다.
 
 2. **목적 서술 일관성**: 모든 문서에서 같은 Mixin의 목적이 동일한가
    - COMPONENT_SYSTEM_DESIGN.md (기능 정의 테이블, 카탈로그 테이블)
-   - EXECUTIVE_REPORT.md (기능 테이블)
    - FUNCTION_PATTERN.md (비교 테이블)
    - SYSTEM_READINESS_REVIEW.md (목적 테이블)
    - 각 MIXIN_SPEC_EXAMPLE_*.md (섹션 1)

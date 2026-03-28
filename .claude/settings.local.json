@@ -54,7 +54,22 @@
       "Bash(taskkill //F //IM \"chromium.exe\")",
       "Bash(git -C /c/Users/junsungkim/Desktop/work/renobit/front_source/front diff --stat)",
       "Read(//c/Users/junsungkim/Desktop/work/renobit/front_source/WEB_BUILDER_TOOLKIT/RNBT_architecture/Projects/ECO/**)",
-      "Read(//c/Users/junsungkim/Desktop/work/renobit/front_source/WEB_BUILDER_TOOLKIT/RNBT_architecture/Projects/ECO/page/components/ActionPanel//**)"
+      "Read(//c/Users/junsungkim/Desktop/work/renobit/front_source/WEB_BUILDER_TOOLKIT/RNBT_architecture/Projects/ECO/page/components/ActionPanel//**)",
+      "Bash(git checkout:*)",
+      "Bash(grep -E \"\\\\.\\(js|md\\)$\")",
+      "Bash(while read:*)",
+      "Bash(do echo:*)",
+      "Read(//c/Users/82103/Desktop/work/WEB_BUILDER_TOOLKIT/**)",
+      "Bash(ls -la /c/Users/82103/Desktop/work/WEB_BUILDER_TOOLKIT/RNBT_architecture/DesignComponentSystem/Mixins/*.md)",
+      "Bash(grep -o \"instance\\\\.[a-zA-Z]*\\\\s*=\" /c/Users/82103/Desktop/work/WEB_BUILDER_TOOLKIT/RNBT_architecture/DesignComponentSystem/Mixins/*.js)",
+      "Bash(ls -la /c/Users/82103/Desktop/work/WEB_BUILDER_TOOLKIT/RNBT_architecture/DesignComponentSystem/Mixins/*.js)",
+      "Bash(for path:*)",
+      "Bash(grep -r \"Projects/\\\\|tests/\\\\|/tests\\\\|/Projects\" /c/Users/82103/Desktop/work/WEB_BUILDER_TOOLKIT/.claude/skills/ --include=*.md)",
+      "Bash(grep -r Projects/ /c/Users/82103/Desktop/work/WEB_BUILDER_TOOLKIT/*.md)",
+      "Bash(grep -r \"tests/\" /c/Users/82103/Desktop/work/WEB_BUILDER_TOOLKIT/*.md)",
+      "Bash(ls -1 /c/Users/82103/Desktop/work/WEB_BUILDER_TOOLKIT/RNBT_architecture/DesignComponentSystem/Mixins/*.js)",
+      "Bash(/tmp/audit_summary.txt:*)",
+      "Read(//tmp/**)"
     ],
     "deny": [],
     "ask": []

@@ -187,8 +187,7 @@
 
 | 문서 | 역할 |
 |------|------|
-| [EXECUTIVE_REPORT.md](EXECUTIVE_REPORT.md) | 경영진용 — 왜 이 구조인가 |
-| [COMPONENT_SYSTEM_DESIGN.md](../architecture/COMPONENT_SYSTEM_DESIGN.md) | 설계자용 — 어떻게 동작하는가 |
+| [COMPONENT_SYSTEM_DESIGN.md](../architecture/COMPONENT_SYSTEM_DESIGN.md) | 설계 원본 — 기능 정의, 구조, 원칙 |
 | [FUNCTION_PATTERN.md](../architecture/FUNCTION_PATTERN.md) | 설계 근거 — 왜 이렇게 나누는가 |
 | [MIXIN_REVIEW.md](MIXIN_REVIEW.md) | 범용성 검토 — 현재 한계와 확장 후보 |
 | [MIXIN_SPEC_TEMPLATE.md](../specs/MIXIN_SPEC_TEMPLATE.md) | 팀 배포용 — 명세 작성 양식 |
