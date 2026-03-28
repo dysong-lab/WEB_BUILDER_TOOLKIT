@@ -25,20 +25,19 @@ CSS 선택자로 HTML 요소를 참조한다.
 | KEY | 필수 | 의미 |
 |-----|------|------|
 | `container` | O | 항목이 추가될 부모 요소 |
-| `{itemKey}` | O | itemKey가 가리키는 키. 항목의 루트 요소를 참조해야 한다 |
 | `template` | O | `<template>` 태그 (cloneNode 대상) |
 
 ```javascript
 cssSelectors: {
     container: '.event-browser__list',           // 항목이 추가될 부모
     template:  '#event-browser-item-template',   // cloneNode 대상
-    id:        '.event-browser__item',           // itemKey 참조 + data-id 설정
-    severity:  '.event-browser__severity-label', // data-severity 설정
-    ack:       '.event-browser__item',           // data-ack 설정
-    time:      '.event-browser__time',           // 발생 시간 (textContent)
-    source:    '.event-browser__source',         // 이벤트 출처 (textContent)
-    message:   '.event-browser__message',        // 이벤트 메시지 (textContent)
-    ackBtn:    '.event-browser__ack-btn'         // customEvents 전용
+    id:        '.event-browser__item',           // 항목의 루트 요소
+    severity:  '.event-browser__severity-label', // 심각도 라벨
+    ack:       '.event-browser__item',           // 확인 상태
+    time:      '.event-browser__time',           // 발생 시간
+    source:    '.event-browser__source',         // 이벤트 출처
+    message:   '.event-browser__message',        // 이벤트 메시지
+    ackBtn:    '.event-browser__ack-btn'         // ACK 버튼
 }
 ```
 
