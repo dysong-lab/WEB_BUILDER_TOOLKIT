@@ -54,7 +54,7 @@
     font-size: 13px;
     color: #7a756a;
     flex: 1;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.1px;
 }
 
 #sidebar-container .sidebar__item[data-active="true"] .sidebar__item-label {

@@ -56,9 +56,9 @@
 // ❌ 데이터 응답을 직접 사용
 function renderData(response) { ... }
 
-// ✅ 데이터 응답은 { response }로 구조분해
-ns.renderData = function({ response }) {
-    const { data } = response;
+// ✅ 데이터 응답은 { response: data }로 구조분해 (response를 data로 rename)
+ns.renderData = function({ response: data }) {
+    // data가 곧 응답 데이터
 };
 ```
 
@@ -226,15 +226,12 @@ this.subscriptions = {
 // selector KEY: name, status, statusLabel
 // → hostname ≠ name 이므로 변환이 필요
 
-this.updateSystemInfo = function({ response }) {
-    const data = response.data;
+this.updateSystemInfo = function({ response: data }) {
     this.fieldRender.renderData({
         response: {
-            data: {
-                name:        data.hostname,     // API 'hostname' → selector KEY 'name'
-                status:      data.status,       // 일치 → 그대로
-                statusLabel: data.statusLabel   // 일치 → 그대로
-            }
+            name:        data.hostname,     // API 'hostname' → selector KEY 'name'
+            status:      data.status,       // 일치 → 그대로
+            statusLabel: data.statusLabel   // 일치 → 그대로
         }
     });
 };
@@ -290,7 +287,7 @@ body { ... }
 - ❌ 추측하지 않는다 — 데이터 기반으로만 작업
 - ❌ 존재하지 않는 함수를 사용하지 않는다 — grep으로 확인 후 사용
 - ❌ 확인 없이 완료라고 말하지 않는다
-- ❌ datasetName 기반 데이터 응답을 받는 함수에서 `function(response)` 사용 → `function({ response })` 필수
+- ❌ datasetName 기반 데이터 응답을 받는 함수에서 `function(response)` 사용 → `function({ response: data })` 필수
 - ❌ 생성 후 정리 누락 (register ↔ beforeDestroy 쌍)
 - ❌ Mixin 메서드 재정의 (래핑, 덮어쓰기)
 - ❌ register.js에 렌더링 로직 작성 (조립 코드만)

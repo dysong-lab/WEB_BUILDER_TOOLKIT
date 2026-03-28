@@ -245,8 +245,7 @@ clearTimeout(state._timerId);
 ### 패턴 1: 리스트 렌더링
 
 ```javascript
-function renderList(config, { response }) {
-    const { data } = response;
+function renderList(config, { response: data }) {
     if (!data?.items) return;
 
     const container = this.appendElement.querySelector(config.selectors.list);
@@ -279,8 +278,7 @@ function createListItem(template, config, item, index) {
 ### 패턴 2: 필드 렌더링 (Config 기반)
 
 ```javascript
-function renderFields(config, { response }) {
-    const { data } = response;
+function renderFields(config, { response: data }) {
     if (!data) return;
 
     fx.go(
