@@ -148,9 +148,6 @@ applyListRenderMixin(this, {
         level:     '.event-log__level',
         time:      '.event-log__time',
         message:   '.event-log__message'
-    },
-    datasetAttrs: {
-        level:   'level'
     }
 });
 
