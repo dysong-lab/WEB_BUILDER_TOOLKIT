@@ -68,19 +68,19 @@
 
 **하는 일:** Tabulator 인스턴스 lazy init, setData, clearData, destroy
 
-**범용성:** 단순한 데이터 테이블에는 충분.
-
-**제약:** `ensureInstance`에서 `layout: 'fitColumns'`가 하드코딩되어 있다.
+**범용성:** `tabulatorOptions`로 Tabulator의 모든 옵션을 전달할 수 있다.
 
 ```javascript
-tableInstance = new Tabulator(containerEl, {
+tableInstance = new Tabulator(containerEl, Object.assign({
     columns: columns,
     data: [],
-    layout: 'fitColumns'    // ← 하드코딩
-});
+    layout: 'fitDataFill'   // ← 기본값 (tabulatorOptions로 재정의 가능)
+}, tabulatorOptions));
 ```
 
-Tabulator의 고급 옵션(pagination, movableColumns, groupBy 등)을 전달할 수 없다. 사용 시 옵션 확장이 필요할 가능성이 높다.
+`Object.assign`에서 `tabulatorOptions`가 뒤에 오므로, `layout`을 포함한 모든 기본값을 사용자 옵션으로 덮어쓸 수 있다. pagination, movableColumns, groupBy 등 고급 옵션도 `tabulatorOptions`를 통해 전달 가능하다.
+
+**제약:** 없음.
 
 ---
 
@@ -144,7 +144,7 @@ Tabulator의 고급 옵션(pagination, movableColumns, groupBy 등)을 전달할
 | ListRender | ✅ | 전체 교체 방식 (대량 데이터 시 성능/UX) |
 | StatefulListRender | ✅ | updateItemState는 dataset만 |
 | ECharts | ✅ | 없음 |
-| Tabulator | ⚠️ | 초기 옵션 하드코딩 |
+| Tabulator | ✅ | 없음 (tabulatorOptions로 모든 옵션 재정의 가능) |
 | HeatmapJs | ✅ | 없음 |
 | MeshState | ⚠️ | 색상만 변경 |
 | CameraFocus | ✅ | 없음 |
