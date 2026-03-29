@@ -80,14 +80,14 @@ Claude가 Write/Edit 도구 호출
 ```
 SHARED_INSTRUCTIONS.md → "unsubscribe는 2-arg", "{ response } 패턴", "preview.html inline CSS"
 Figma_Conversion/CLAUDE.md → "MCP 도구: get_design_context, get_screenshot"
-CODING_STYLE.md        → CSS 원칙, fx.js 패턴
+CODING_STYLE.md        → CSS 원칙 (px 단위, Flexbox 우선), fx.js 파이프라인 패턴
 ```
 
 각 SKILL은 이 문서들을 참조하도록 지시하고, 고유 내용만 보유한다.
 
 ### 1.2 실제 발생한 문제
 
-SKILL↔예제 일관성 감사에서 **20건의 불일치**가 발견되었다:
+SKILL↔예제 일관성 감사에서 **20건의 불일치**가 발견되었다 (이후 커밋 `364da59`, `7495432`, `821fe4d`로 **전건 수정 완료**):
 
 | 유형 | 건수 | 원인 |
 |------|------|------|
@@ -265,6 +265,10 @@ if [[ "$FILE_PATH" != *.md ]]; then
 fi
 
 DEPRECATED_NAMES="get_metadata|get_code|get_image|get_variable_defs"
+# Hook 문서 자체의 오탐 방지: .claude/docs/ 경로 제외
+if [[ "$FILE_PATH" == *".claude/docs/"* ]]; then
+  exit 0
+fi
 if grep -qE "$DEPRECATED_NAMES" "$FILE_PATH" 2>/dev/null; then
   echo "폐기된 MCP 도구명이 발견되었습니다. 현재 도구: get_design_context, get_screenshot" >&2
   exit 2
@@ -286,7 +290,7 @@ Hook: .md 파일 수정 시 폐기된 도구명 자동 차단
 ### 3.4 `{ response }` 패턴 검증
 
 **문제:** register.js에서 `response` 대신 `{ response }`를 사용해야 하는 규칙
-**현재 방식:** CODING_STYLE.md에 텍스트 규칙
+**현재 방식:** SHARED_INSTRUCTIONS.md에 텍스트 규칙
 **Hook 해결:**
 
 ```
@@ -359,6 +363,11 @@ Hook:   컨텍스트와 무관하게 항상 동작
 ---
 
 ## 5. 구현 계획
+
+> **현재 상태 (2026-03-29):** 설계 완료, 구현 보류.
+> 불일치 20건은 수동 감사 + 커밋으로 전건 수정되었으며,
+> 현재 코드베이스에서 위반 사례 0건 확인됨.
+> Hook의 역할은 과거 문제 수정이 아닌 **재발 방지**.
 
 ### 5.1 파일 구조
 
@@ -513,5 +522,5 @@ Hook은 문서를 대체하지 않는다.
 
 *작성일: 2026-02-20*
 *업데이트: 2026-02-21 — 중복 제거 완료 반영 (Phase 1 → Phase 2 구조로 변경)*
+*업데이트: 2026-03-29 — 규칙 출처 오기재 수정, 불일치 전건 수정 완료 반영, 오탐 방지 로직 추가*
 *관련 커밋: 364da59, 7495432, 821fe4d (불일치 20건 수정), 5a349ad (SKILL 중복 제거)*
-*관련 문서: CLAUDE_CODE_AUDIT.md Issue F*
