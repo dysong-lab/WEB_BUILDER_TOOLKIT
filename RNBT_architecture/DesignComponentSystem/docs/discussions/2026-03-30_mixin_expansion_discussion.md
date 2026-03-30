@@ -231,9 +231,9 @@ RENOBIT 플랫폼의 실제 구축 사례에서 식별된 도메인:
 - 동적 송전용량 산정
 - 구간별 단면도 시각화
 
-### 5-3. 도메인을 관통하는 공통 기능 패턴
+### 5-3. 도메인을 관통하는 기능 패턴
 
-위 도메인별 기능에서 **3개 이상의 도메인에서 반복되는 패턴**을 추출한다.
+위 도메인별 기능에서 반복되는 패턴을 추출한다. 1개 도메인에서만 사용되더라도 기능으로 만든다.
 
 | # | 기능 패턴 | 출현 도메인 | 구체적 행위 |
 |---|----------|-----------|-----------|
@@ -248,7 +248,19 @@ RENOBIT 플랫폼의 실제 구축 사례에서 식별된 도메인:
 | I | **임계값 게이지** | 에너지, DCIM, BMS, 전력구 | 현재값을 정상/주의/위험 구간이 표시된 게이지로 시각화 |
 | J | **설비/장비 상세 패널** | 전 도메인 공통 | 선택한 설비의 상세 정보(속성, 현재 상태, 이력, 관련 알람)를 패널/팝업으로 표시 |
 
-### 5-4. 기존 Mixin 커버리지 매핑
+### 5-4. 추가 기능 패턴 (1~2개 도메인)
+
+5-2에서 열거했지만 A~J에 포함되지 않은 기능을 추가 추출한다.
+
+| # | 기능 패턴 | 출현 도메인 | 구체적 행위 |
+|---|----------|-----------|-----------|
+| P | **영상 스트리밍 표시** | PSIM, 방재 | CCTV/영상 스트림을 video 요소에 재생 |
+| Q | **경로 시각화** | 방재, 유역 | 2D 평면도 위에 피난경로/배관경로를 동적으로 그리고 상태 표시 |
+| R | **값의 CSS 속성 시각화** | 물류, 에너지(ESG), DCIM(PUE) | 프로그레스 바/달성률 바 등 값을 style.width 등으로 표현 |
+| S | **SOP/단계별 프로세스** | 방재 | 순서가 있는 절차의 진행 상태를 단계별로 표시 |
+| T | **토글/스위치 제어** | BMS | 장비의 ON/OFF 상태를 사용자가 직접 변경 |
+
+### 5-5. 기존 Mixin 커버리지 매핑
 
 | 기능 패턴 | 기존 Mixin으로 가능? | 비고 |
 |----------|---------------------|------|
@@ -644,30 +656,139 @@ MeshState에 하이라이트 기능을 추가하면 되는가?
 
 ---
 
-### 6-4. 판별 결과 요약 (2D + 3D 통합)
+### 6-4. 추가 기능 패턴(P~T) — "목적 + 수단" 분해
 
-#### 2D Mixin
+#### P. 영상 스트리밍 표시
 
-| 기능 패턴 | 판정 | 새 Mixin 이름 | 계열 |
-|----------|------|-------------|------|
-| C. 계층 구조 탐색 | **새 Mixin** | TreeRenderMixin | renderData |
-| E. 흐름도/토폴로지 | **새 Mixin** | FlowDiagramMixin | renderData |
-| F. 구역/영역 상태 맵 | **새 Mixin** | ZoneMapMixin | renderData |
-| B. 상태 아이콘/색상 전환 | **새 Mixin** | IconStateMixin | renderData |
-| G. KPI 집계 (달성률 바) | **보류** | (StyleBindMixin?) | 추가 논의 필요 |
-| A. 경보/알람 관리 | 기존 조합 | StatefulListRender + FieldRender | — |
-| H. 이벤트 타임라인 | 기존 조합 | StatefulListRender + CSS | — |
-| D. 시계열 추이 | 기존 조합 | EChartsMixin + 페이지 핸들링 | — |
+| 항목 | 내용 |
+|------|------|
+| 목적 | 실시간 영상을 보여준다 |
+| 수단 | 영상 스트림(HLS/RTSP/WebRTC)을 `<video>` 요소에 바인딩하여 재생한다 |
+| 계열 | renderData (스트림 URL/상태를 받아 재생 제어) |
+| 기존과의 차이 | 기존 Mixin은 텍스트/차트/목록/3D를 다룸. 영상 스트림은 없음 → **새 수단** |
 
-#### 3D Mixin
+**판정: 새 Mixin 필요 → VideoStreamMixin**
 
-| 기능 패턴 | 판정 | 새 Mixin 이름 | 계열 |
-|----------|------|-------------|------|
-| K. 메시 가시성 전환 | **새 Mixin** | MeshVisibilityMixin | 명령/제어 |
-| L. 메시 선택/하이라이트 | **새 Mixin** | MeshHighlightMixin | 명령/제어 |
-| M. 3D 라벨/태그 표시 | **새 Mixin** | MeshLabelMixin | renderData |
-| N. 3D 애니메이션 재생 | **새 Mixin** | AnimationMixin | 명령/제어 |
-| O. 단면 절단 | **새 Mixin** | ClippingPlaneMixin | 명령/제어 |
+핵심 메서드: `renderData`, `play()`, `pause()`, `switchStream(url)`
+옵션: `{ cssSelectors: { container: '.video-wrapper' }, protocol: 'hls' | 'webrtc' }`
+
+```
+기대 데이터:
+{ response: { streamUrl: "wss://...", status: "live", label: "서버실 CCTV #3" } }
+```
+
+---
+
+#### Q. 경로 시각화
+
+| 항목 | 내용 |
+|------|------|
+| 목적 | 공간 위에 경로를 표시한다 |
+| 수단 | 2D SVG 위에 경로(polyline/path)를 동적으로 렌더링하고, 상태에 따라 색상/애니메이션 적용 |
+| 계열 | renderData (경로 데이터를 받아 SVG에 그림) |
+| 기존과의 차이 | ZoneMap은 기존 SVG 영역의 fill 변경(면). 이것은 SVG path를 **동적으로 생성**(선). FlowDiagram은 노드-엣지 다이어그램, 이것은 **지도 위의 좌표 기반 경로** → **다른 수단** |
+
+**판정: 새 Mixin 필요 → PathOverlayMixin**
+
+핵심 메서드: `renderData`, `highlightPath(pathId)`, `clearAll()`
+옵션: `{ cssSelectors: { container: '.floor-plan-svg' }, colorMap: { active: '#22c55e', blocked: '#ef4444' } }`
+
+```
+기대 데이터:
+{
+  response: [
+    { pathId: "route-1", points: [{ x: 100, y: 200 }, { x: 300, y: 400 }], status: "active", label: "피난경로 A" }
+  ]
+}
+```
+
+---
+
+#### R. 값의 CSS 속성 시각화 (보류 해제)
+
+| 항목 | 내용 |
+|------|------|
+| 목적 | 값을 시각적 크기/비율로 보여준다 |
+| 수단 | 값에 비례하여 요소의 style 속성(width, height, transform)을 변경한다 |
+| 계열 | renderData |
+| 기존과의 차이 | FieldRender는 textContent와 data-*만. style 속성 조작은 **다른 수단** |
+
+기존 보류(G. KPI 달성률 바)와 동일 패턴이며, 물류(진행 현황), 에너지(ESG), DCIM(PUE)에서도 필요. **보류를 해제한다.**
+
+**판정: 새 Mixin 확정 → StyleBindMixin**
+
+핵심 메서드: `renderData`
+옵션: `{ cssSelectors: { progress: '.progress-bar' }, styleMap: { progress: { property: 'width', unit: '%' } } }`
+
+```
+기대 데이터:
+{ response: { progress: 72, capacity: 85 } }
+→ .progress-bar의 style.width = "72%"
+```
+
+---
+
+#### S. SOP/단계별 프로세스 표시
+
+| 항목 | 내용 |
+|------|------|
+| 목적 | 순서가 있는 절차의 진행 상태를 보여준다 |
+| 수단 | 단계 목록을 렌더링하고 현재 단계를 강조 |
+| 기존 대안 | StatefulListRenderMixin |
+
+서버/페이지가 각 단계의 상태(완료/진행중/대기)를 계산하여 전달하면, StatefulListRender의 renderData + datasetAttrs로 표현 가능. 원칙 5번: "데이터 변환 = Mixin 바깥".
+
+**결론: 새 Mixin 불필요. StatefulListRender + CSS stepper 시각화**
+
+---
+
+#### T. 토글/스위치 제어
+
+| 항목 | 내용 |
+|------|------|
+| 목적 | 장비의 상태를 사용자가 직접 변경한다 |
+| 수단 | data-* 속성 동기화 + 클릭 시 이벤트 발행 |
+| 기존 대안 | FieldRenderMixin + customEvents |
+
+FieldRender로 data-state 설정 → CSS로 토글 시각화, customEvents로 클릭 이벤트 발행 → 페이지 핸들러에서 처리.
+
+**결론: 새 Mixin 불필요. FieldRender + customEvents + CSS**
+
+---
+
+### 6-5. 판별 결과 요약 (2D + 3D + 추가 통합)
+
+#### 2D Mixin — 새로 만드는 것
+
+| 기능 패턴 | Mixin 이름 | 계열 |
+|----------|-----------|------|
+| C. 계층 구조 탐색 | TreeRenderMixin | renderData |
+| E. 흐름도/토폴로지 | FlowDiagramMixin | renderData |
+| F. 구역/영역 상태 맵 | ZoneMapMixin | renderData |
+| B. 상태 아이콘/색상 전환 | IconStateMixin | renderData |
+| R. 값의 CSS 속성 시각화 | StyleBindMixin | renderData |
+| P. 영상 스트리밍 표시 | VideoStreamMixin | renderData |
+| Q. 경로 시각화 | PathOverlayMixin | renderData |
+
+#### 2D — 기존 조합으로 대응
+
+| 기능 패턴 | 대응 방법 |
+|----------|----------|
+| A. 경보/알람 관리 | StatefulListRender + FieldRender |
+| H. 이벤트 타임라인 | StatefulListRender + CSS |
+| D. 시계열 추이 | EChartsMixin + 페이지 핸들링 |
+| S. SOP/단계별 프로세스 | StatefulListRender + CSS stepper |
+| T. 토글/스위치 제어 | FieldRender + customEvents + CSS |
+
+#### 3D Mixin — 새로 만드는 것
+
+| 기능 패턴 | Mixin 이름 | 계열 |
+|----------|-----------|------|
+| K. 메시 가시성 전환 | MeshVisibilityMixin | 명령/제어 |
+| L. 메시 선택/하이라이트 | MeshHighlightMixin | 명령/제어 |
+| M. 3D 라벨/태그 표시 | MeshLabelMixin | renderData |
+| N. 3D 애니메이션 재생 | AnimationMixin | 명령/제어 |
+| O. 단면 절단 | ClippingPlaneMixin | 명령/제어 |
 
 ---
 
@@ -745,11 +866,37 @@ topic: deviceMetrics → { categories: [...], values: [[...]] }
 
 사용자 행위: 슬롯 선택 → `@deviceSelected` → 하단 차트 전환
 
+#### 컴포넌트 7. SecurityMonitor (보안 관제 모니터)
+
+**사용 도메인:** PSIM, 방재
+**Mixin:** VideoStream(CCTV 영상) + ZoneMap(구역 상태) + PathOverlay(피난경로) + StatefulListRender(이벤트 목록)
+
+```
+topic: cameraStream → { streamUrl, status, label }
+topic: zoneStatus → [{ zoneId, status }, ...]
+topic: evacuationRoutes → [{ pathId, points, status, label }, ...]
+topic: securityEvents → [{ eventId, type, status, time, source }, ...]
+```
+
+사용자 행위: 구역 클릭 → 해당 CCTV 전환, 경보 발생 → 피난경로 자동 표시, 이벤트 클릭 → `@eventSelected`
+
+#### 컴포넌트 8. ProcessProgressPanel (공정 진행 현황)
+
+**사용 도메인:** 물류, 에너지, 설비관제
+**Mixin:** StatefulListRender(단계별 항목) + StyleBind(프로그레스 바) + FieldRender(요약 수치)
+
+```
+topic: processSteps → [{ stepId, label, status, progress }, ...]
+topic: processSummary → { completed: 3, total: 5, overallProgress: 60 }
+```
+
+사용자 행위: 단계 클릭 → `@stepSelected` → 상세 정보 연동
+
 ### 7-2. 3D 컴포넌트
 
 > ModelLoaderMixin은 3D 컴포넌트의 기본 내장. 기존 3D Mixin(MeshState, CameraFocus) + 새 3D Mixin 조합.
 
-#### 컴포넌트 7. FacilityViewer (3D 설비 뷰어)
+#### 컴포넌트 9. FacilityViewer (3D 설비 뷰어)
 
 **사용 도메인:** 설비관제, PSIM, BMS, 에너지, 전력구
 **Mixin:** MeshState(상태 색상) + CameraFocus(카메라 이동) + MeshHighlight(선택 강조) + MeshLabel(실시간 라벨)
@@ -761,7 +908,7 @@ topic: facilityLabels → [{ meshName, label, status }, ...]
 
 사용자 행위: 메시 클릭 → `@meshClicked` → 카메라 이동 + 하이라이트 + 상세 연동
 
-#### 컴포넌트 8. BuildingExplorer (3D 건물 탐색기)
+#### 컴포넌트 10. BuildingExplorer (3D 건물 탐색기)
 
 **사용 도메인:** BMS, PSIM, 방재, DCIM
 **Mixin:** MeshState(구역/층 색상) + MeshVisibility(층별 분리) + ClippingPlane(단면 절단) + CameraFocus(카메라 이동) + MeshHighlight(구역 강조)
@@ -772,7 +919,7 @@ topic: buildingStatus → [{ meshName, status }, ...]
 
 사용자 행위: 층 선택 → 해당 층만 표시 + 카메라 이동, 단면 슬라이더 → 내부 노출, 전체 보기 → 리셋
 
-#### 컴포넌트 9. AnimatedProcessView (3D 공정 애니메이션)
+#### 컴포넌트 11. AnimatedProcessView (3D 공정 애니메이션)
 
 **사용 도메인:** 에너지, 설비관제, 물류
 **Mixin:** Animation(재생/정지/속도) + MeshState(상태 색상) + CameraFocus(카메라 이동) + MeshLabel(실시간 RPM/유량)
@@ -828,22 +975,24 @@ topic: processStatus → [{ meshName, status, rpm, animation, speed }, ...]
 
 #### 2D 컴포넌트
 
-| 컴포넌트 | Field | Stateful | ECharts | Shadow | Tree | Flow | Zone | Icon |
-|----------|:-----:|:--------:|:-------:|:------:|:----:|:----:|:----:|:----:|
-| 1. AlarmPanel | O | O | | | | | | O |
-| 2. EquipmentNavigator | | | | | O | | | O |
-| 3. FloorPlanMonitor | O | | | O | | | O | |
-| 4. PowerFlowDiagram | O | | | | | O | | |
-| 5. EquipmentStatusBoard | O | | | O | | | | O |
-| 6. DataCenterRackView | | O | O | | | | | O |
+| 컴포넌트 | Field | Stateful | ECharts | Shadow | Tree | Flow | Zone | Icon | Video | Path | Style |
+|----------|:-----:|:--------:|:-------:|:------:|:----:|:----:|:----:|:----:|:-----:|:----:|:-----:|
+| 1. AlarmPanel | O | O | | | | | | O | | | |
+| 2. EquipmentNavigator | | | | | O | | | O | | | |
+| 3. FloorPlanMonitor | O | | | O | | | O | | | | |
+| 4. PowerFlowDiagram | O | | | | | O | | | | | |
+| 5. EquipmentStatusBoard | O | | | O | | | | O | | | |
+| 6. DataCenterRackView | | O | O | | | | | O | | | |
+| 7. SecurityMonitor | | O | | | | | O | | O | O | |
+| 8. ProcessProgressPanel | O | O | | | | | | | | | O |
 
 #### 3D 컴포넌트
 
 | 컴포넌트 | MeshState | CameraFocus | Highlight | Visibility | Label | Animation | Clipping |
 |----------|:---------:|:-----------:|:---------:|:----------:|:-----:|:---------:|:--------:|
-| 7. FacilityViewer | O | O | O | | O | | |
-| 8. BuildingExplorer | O | O | O | O | | | O |
-| 9. AnimatedProcessView | O | O | | | O | O | |
+| 9. FacilityViewer | O | O | O | | O | | |
+| 10. BuildingExplorer | O | O | O | O | | | O |
+| 11. AnimatedProcessView | O | O | | | O | O | |
 
 #### 새 Mixin 사용 빈도
 
@@ -852,43 +1001,101 @@ topic: processStatus → [{ meshName, status, rpm, animation, speed }, ...]
 | IconStateMixin | 4 | AlarmPanel, EquipmentNavigator, EquipmentStatusBoard, DataCenterRackView |
 | MeshHighlightMixin | 3 | FacilityViewer, BuildingExplorer, AnimatedProcessView |
 | MeshLabelMixin | 2 | FacilityViewer, AnimatedProcessView |
+| StyleBindMixin | 1 | ProcessProgressPanel |
+| VideoStreamMixin | 1 | SecurityMonitor |
+| PathOverlayMixin | 1 | SecurityMonitor |
 | TreeRenderMixin | 1 | EquipmentNavigator — 통합 대시보드 핵심 네비게이션 |
 | FlowDiagramMixin | 1 | PowerFlowDiagram — 에너지/DCIM 핵심 |
-| ZoneMapMixin | 1 | FloorPlanMonitor — PSIM/BMS/방재 핵심 |
+| ZoneMapMixin | 2 | FloorPlanMonitor, SecurityMonitor |
 | MeshVisibilityMixin | 1 | BuildingExplorer — 층별 분리/X-ray 핵심 |
 | AnimationMixin | 1 | AnimatedProcessView — 공정 시각화 핵심 |
 | ClippingPlaneMixin | 1 | BuildingExplorer — 건물 내부 탐색 핵심 |
 
 ---
 
-## 8. 다음 단계
+## 8. 전수 커버리지 검증
 
-### 새 Mixin 총 9개 확정 + 1개 보류
+5-2의 모든 도메인 기능(36개)이 기존 Mixin(9개) + 새 Mixin(12개) + 기존 조합으로 커버되는지 검증한다.
 
-#### 2D (4개 + 1보류)
+| 도메인 기능 | 대응 | Mixin/조합 |
+|------------|------|-----------|
+| 실시간 상태값 표시 | 기존 | FieldRender |
+| 설비별 가동/정지/고장 상태 | 새 | IconState |
+| 예측 유지보수 | 기존 | ECharts + Tabulator (UI 표현) — AI는 서버 영역 |
+| 3D 설비 상태 오버레이 | 기존 | MeshState |
+| 설비 계층 탐색 | 새 | TreeRender |
+| 이기종 데이터 통합 표시 | 기존 | FieldRender + Tabulator |
+| CCTV 영상 연동 | 새 | VideoStream |
+| 경보 등급 분류/상태 전환 | 기존 조합 | StatefulListRender + FieldRender + IconState |
+| 이벤트 흐름도 | 새 | FlowDiagram |
+| 구역별 상태 표시 | 새 | ZoneMap |
+| 전력 생산/소비 모니터링 | 기존 | FieldRender + ECharts |
+| 에너지 소비 예측 | 기존 | ECharts (UI 표현) — AI는 서버 영역 |
+| 이상 진단 | 기존 조합 | StatefulListRender + ECharts |
+| 터빈/발전기별 상태 | 새 | IconState + FieldRender |
+| 전력 흐름도 시각화 | 새 | FlowDiagram |
+| ESG 탄소배출량 지표 | 새 | StyleBind (달성률 바) + FieldRender |
+| 센서 임계값 경고 | 기존 조합 | StatefulListRender (경보) |
+| 위험구역 출입 감지 | 새 + 기존 | ZoneMap + StatefulListRender (경보) |
+| 대응 시나리오(SOP) | 기존 조합 | StatefulListRender + CSS stepper |
+| CCTV 영상 연동(방재) | 새 | VideoStream |
+| 피난 경로 안내 | 새 | PathOverlay |
+| 도크 상태 관리 | 새 + 기존 | ZoneMap 또는 StatefulListRender |
+| 차량 입출차 현황 | 기존 | ListRender |
+| 물량 처리 현황 | 새 | StyleBind + StatefulListRender |
+| 파이프라인 상태 감시 | 새 | FlowDiagram 또는 ZoneMap |
+| AR 오버레이 | — | 플랫폼 외부 영역 (대상 아님) |
+| 공기흐름도 | 새 | FlowDiagram |
+| 물리적 접근 제어 (출입 이력) | 기존 | ListRender / Tabulator |
+| HVAC/조명 제어 | 기존 조합 | FieldRender + customEvents + CSS |
+| 에너지 사용량 분석 | 기존 | ECharts |
+| 고장 모드 분석(FMECA) | 기존 | Tabulator + ECharts |
+| 상태 기반 유지보수(CBM) | 기존 | ECharts + Tabulator — 데이터/AI는 서버 영역 |
+| 부분방전 위치 추정 | 새 + 기존 | ZoneMap 또는 MeshState (3D) |
+| 동적 송전용량 산정 | 기존 | FieldRender (계산은 서버 영역) |
+| 구간별 단면도 | 새 | ClippingPlane (3D) |
+| 장비별 실시간 지표 | 기존 | FieldRender + ECharts |
 
-| # | Mixin | 계열 | 상태 |
-|---|-------|------|------|
-| 1 | TreeRenderMixin | renderData | 명세 작성 대기 |
-| 2 | FlowDiagramMixin | renderData | 명세 작성 대기 |
-| 3 | ZoneMapMixin | renderData | 명세 작성 대기 |
-| 4 | IconStateMixin | renderData | 명세 작성 대기 |
-| — | (StyleBindMixin?) | — | 보류 |
+**결과: AR 오버레이 1건 제외, 35/36 기능을 커버.**
+
+서버/AI 영역(예측, 이상 진단, CBM 등)은 UI 표현이 기존 Mixin(ECharts, Tabulator)으로 가능하며, 실질적 로직은 서버 측 책임이다.
+
+---
+
+## 9. 다음 단계
+
+### 새 Mixin 총 12개 확정
+
+#### 2D (7개)
+
+| # | Mixin | 계열 |
+|---|-------|------|
+| 1 | TreeRenderMixin | renderData |
+| 2 | FlowDiagramMixin | renderData |
+| 3 | ZoneMapMixin | renderData |
+| 4 | IconStateMixin | renderData |
+| 5 | StyleBindMixin | renderData |
+| 6 | VideoStreamMixin | renderData |
+| 7 | PathOverlayMixin | renderData |
 
 #### 3D (5개)
 
-| # | Mixin | 계열 | 상태 |
-|---|-------|------|------|
-| 5 | MeshVisibilityMixin | 명령/제어 | 명세 작성 대기 |
-| 6 | MeshHighlightMixin | 명령/제어 | 명세 작성 대기 |
-| 7 | MeshLabelMixin | renderData | 명세 작성 대기 |
-| 8 | AnimationMixin | 명령/제어 | 명세 작성 대기 |
-| 9 | ClippingPlaneMixin | 명령/제어 | 명세 작성 대기 |
+| # | Mixin | 계열 |
+|---|-------|------|
+| 8 | MeshVisibilityMixin | 명령/제어 |
+| 9 | MeshHighlightMixin | 명령/제어 |
+| 10 | MeshLabelMixin | renderData |
+| 11 | AnimationMixin | 명령/제어 |
+| 12 | ClippingPlaneMixin | 명령/제어 |
+
+### 새 컴포넌트 11개 + 페이지 구성안 2개
 
 - [ ] 각 Mixin의 상세 명세(입력 계약, 메서드, 라이프사이클) 작성
-- [ ] 보류 항목(G) 결정
 - [x] 컴포넌트 기능 명세 작성 (섹션 7)
-- [ ] 새 컴포넌트 9개 + 페이지 구성안 2개의 구현
+- [x] 전수 커버리지 검증 (섹션 8)
+- [ ] Mixin 구현
+- [ ] 컴포넌트 구현
+- [ ] 페이지 구성안 구현
 
 ---
 
