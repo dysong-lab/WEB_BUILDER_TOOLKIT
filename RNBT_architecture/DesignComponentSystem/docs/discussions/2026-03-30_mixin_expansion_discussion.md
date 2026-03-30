@@ -1170,10 +1170,49 @@ topic: processStatus → [{ meshName, status, rpm, animation, speed }, ...]
 | elementAttrs | 요소 속성 설정 — `el.setAttribute(attr, value)` (src, fill 등) | FieldRender, ListRender, StatefulListRender |
 | styleAttrs | 스타일 속성 설정 — `el.style[prop] = value + unit` (width, height 등) | FieldRender, ListRender, StatefulListRender |
 
+### 추가 논의 필요 사항
+
+#### ListRenderMixin + StatefulListRenderMixin 통합
+
+원칙: "다른 부분이 옵션으로 분리 가능하면 → 같은 Mixin"
+
+StatefulListRender = ListRender + itemKey 옵션 + updateItemState/getItemState.
+itemKey를 넘기면 상태 관리가 활성화되고, 안 넘기면 ListRender와 동일하게 동작한다.
+옵션으로 분리 가능하므로 하나의 Mixin으로 통합하는 것이 원칙에 부합한다.
+
+#### 렌더링 경로 분기 로직의 공유 함수 추출
+
+elementAttrs, styleAttrs 추가 시 FieldRender, ListRender(통합 후 StatefulList 포함) 두 곳에 동일한 분기 로직이 필요하다.
+"요소를 찾은 뒤 값을 적용하는" 부분을 유틸리티 함수로 추출하면 경로 확장을 한 곳에서 관리할 수 있다.
+공유 유틸리티 함수는 Mixin이 아니므로 Mixin 간 비의존 원칙(8번)과 충돌하지 않는다.
+
+```javascript
+// 공유 렌더링 경로 유틸리티
+function applyValue(el, key, value, { datasetAttrs, elementAttrs, styleAttrs }) {
+    if (datasetAttrs[key]) {
+        el.setAttribute('data-' + datasetAttrs[key], value);
+    } else if (elementAttrs[key]) {
+        el.setAttribute(elementAttrs[key], value);
+    } else if (styleAttrs[key]) {
+        const { property, unit = '' } = styleAttrs[key];
+        el.style[property] = value + unit;
+    } else {
+        el.textContent = value;
+    }
+}
+```
+
+#### VideoStreamMixin 재검토
+
+video 태그의 src 설정은 elementAttrs로 가능하다.
+HLS 등 프로토콜 어댑터가 필요한 경우, 그것이 Mixin의 영역인지 조립 코드의 영역인지 판단이 필요하다.
+
 ### 새 컴포넌트 11개 + 페이지 구성안 2개
 
 - [ ] 각 Mixin의 상세 명세(입력 계약, 메서드, 라이프사이클) 작성
 - [ ] 기존 Mixin 렌더링 경로 확장(elementAttrs, styleAttrs) 명세 및 구현
+- [ ] ListRender + StatefulListRender 통합 명세
+- [ ] 렌더링 경로 공유 함수(applyValue) 설계
 - [x] 컴포넌트 기능 명세 작성 (섹션 7)
 - [x] 전수 커버리지 검증 (섹션 8)
 - [ ] Mixin 구현
