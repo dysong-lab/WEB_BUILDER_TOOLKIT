@@ -80,8 +80,21 @@ function readDashboardFile(relPath) {
     return readFile(`Examples/${config.dirName}/${relPath}`);
 }
 
+// 컴포넌트 → 범주 매핑
+const COMPONENT_CATEGORY = {
+    Header: 'AppBars',
+    Sidebar: 'Navigation',
+    BarChart: 'Charts',
+    LineChart: 'Charts',
+    PieChart: 'Charts',
+    GaugeChart: 'Charts',
+    EventBrowser: 'Lists',
+    Table: 'Tables'
+};
+
 function readComponentView(component) {
-    return readFile(`Components/${component}/views/${config.viewSuffix}.html`);
+    const category = COMPONENT_CATEGORY[component] || '';
+    return readFile(`Components/${category}/${component}/views/${config.viewSuffix}.html`);
 }
 
 function readDashboardCSS(component) {

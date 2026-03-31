@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Chart — 01_corporate</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f1f5f9; padding: 40px; }
+        #linechart-container { width: 700px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <div id="linechart-container"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/EChartsMixin.js"></script>
+
+    <script>
+    (async () => {
+        await loadComponentAssets('linechart-container', '../views/01_corporate.html', '../styles/01_corporate.css');
+
+        const instance = {
+            id: 'chart',
+            appendElement: document.getElementById('linechart-container')
+        };
+
+        applyEChartsMixin(instance, {
+            cssSelectors: { container: '.chart__canvas' },
+            option: {
+                xAxis: { type: 'category' },
+                yAxis: { type: 'value' },
+                series: [
+                    { name: 'CPU', type: 'line', smooth: true },
+                    { name: 'Memory', type: 'line', smooth: true }
+                ],
+                tooltip: { trigger: 'axis' },
+                legend: { data: ['CPU', 'Memory'] }
+            }
+        });
+
+        // 순수 데이터만 전달
+        instance.echarts.renderData({
+            response: {
+                categories: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00'],
+                values: [
+                    [42, 55, 48, 72, 65, 58],
+                    [65, 68, 72, 70, 75, 73]
+                ]
+            }
+        });
+    })();
+    </script>
+</body>
+</html>
