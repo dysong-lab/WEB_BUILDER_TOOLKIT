@@ -24,8 +24,11 @@ WEB_BUILDER_TOOLKIT/
     ├── CLAUDE.md               # RNBT 작업 지침
     ├── README.md               # 아키텍처 가이드 (상세)
     ├── Utils/                  # 공용 유틸리티
-    ├── Components/             # 재사용 컴포넌트
-    └── Examples/               # 예제 프로젝트
+    └── DesignComponentSystem/  # 컴포넌트 시스템
+        ├── Components/         # 재사용 컴포넌트
+        ├── Mixins/             # 공용 Mixin
+        ├── Examples/           # 예제 프로젝트
+        └── docs/               # 문서
 ```
 
 | 디렉토리 | 역할 | Figma MCP |
@@ -288,8 +291,8 @@ npx playwright install chromium
 
 ## 라이선스
 
-[라이선스 정보]
+TBD
 
 ---
 
-*최종 업데이트: 2026-01-11*
+*최종 업데이트: 2026-03-31*
