@@ -55,12 +55,6 @@ datasetAttrs — KEY: Mixin 규약 KEY + 사용자 정의 KEY, VALUE: data-* 속
 
 ```
 DesignComponentSystem/Examples/[project_name]/
-├── Mixins/                            # 재사용 Mixin
-│   ├── FieldRenderMixin.js
-│   ├── FieldRenderMixin.md
-│   ├── ListRenderMixin.js
-│   └── ListRenderMixin.md
-│
 ├── mock_server/                       # Express API 서버
 │   ├── server.js
 │   └── package.json
