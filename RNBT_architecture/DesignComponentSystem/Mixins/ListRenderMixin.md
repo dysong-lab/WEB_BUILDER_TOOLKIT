@@ -67,22 +67,54 @@ itemKey: 'menuid'    // → cssSelectors.menuid 선택자로 항목을 찾음
 
 ### renderData가 기대하는 데이터
 
-배열. 각 항목의 KEY가 cssSelectors의 KEY와 일치해야 한다.
+배열. 데이터의 KEY 이름과 cssSelectors의 KEY 이름이 같으면 매칭된다.
+매칭된 KEY의 cssSelectors VALUE(선택자)로 요소를 찾고, 데이터 VALUE를 반영한다.
 
 ```javascript
-// datasetAttrs 없이 — 모든 값이 textContent로 설정:
-[
-    { level: 'ERROR', time: '14:30', message: 'Connection failed' },
-    { level: 'INFO',  time: '14:31', message: 'Reconnected' }
-]
+// cssSelectors 정의:
+cssSelectors: {
+    container: '.event-log__list',     // ← 규약 KEY (Mixin이 내부 참조)
+    template:  '#event-log-item-template', // ← 규약 KEY
+    item:      '.event-log__item',     // ← 이벤트 매핑용
+    level:     '.event-log__level',    // ← 데이터 KEY "level"과 매칭
+    time:      '.event-log__time',     // ← 데이터 KEY "time"과 매칭
+    message:   '.event-log__message'   // ← 데이터 KEY "message"와 매칭
+}
 
+// renderData에 전달되는 데이터:
+[
+    { level: 'ERROR', time: '14:30', message: 'Connection failed' }
+]
+//    ↑ KEY             ↑ KEY           ↑ KEY
+//    ↓ 매칭            ↓ 매칭          ↓ 매칭
+// cssSelectors.level  .time           .message
+//    ↓                ↓               ↓
+// querySelector('.event-log__level').textContent = 'ERROR'
+// querySelector('.event-log__time').textContent = '14:30'
+// querySelector('.event-log__message').textContent = 'Connection failed'
+//
+// container, template, item은 데이터에 없으므로 건너뜀
+```
+
+```javascript
 // datasetAttrs 사용 시 — 등록된 키는 data-* 속성, 나머지는 textContent:
+
+cssSelectors: {
+    menuid: '.sidebar__item',      // ← 데이터 KEY "menuid"와 매칭
+    active: '.sidebar__item',      // ← 데이터 KEY "active"와 매칭
+    icon:   '.sidebar__item-icon', // ← 데이터 KEY "icon"과 매칭
+    label:  '.sidebar__item-label' // ← 데이터 KEY "label"과 매칭
+}
+datasetAttrs: { menuid: 'menuid', active: 'active' }
+
+// 데이터:
 [
     { menuid: 'dashboard', active: 'true', icon: '📊', label: 'Dashboard' }
 ]
-// → menuid → data-menuid="dashboard"
-// → active → data-active="true"
-// → icon, label → textContent
+// → menuid: datasetAttrs에 있음 → data-menuid="dashboard"
+// → active: datasetAttrs에 있음 → data-active="true"
+// → icon:   datasetAttrs에 없음 → textContent = '📊'
+// → label:  datasetAttrs에 없음 → textContent = 'Dashboard'
 ```
 
 ---
