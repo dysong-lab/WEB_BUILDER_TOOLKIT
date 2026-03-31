@@ -81,15 +81,18 @@ function readDashboardFile(relPath) {
 }
 
 // 컴포넌트 → 범주 매핑
+// 컴포넌트 → 범주/폴더명 매핑
 const COMPONENT_CATEGORY = {
-    Header: 'AppBars',
-    Sidebar: 'Navigation',
-    BarChart: 'Charts',
-    LineChart: 'Charts',
-    PieChart: 'Charts',
-    GaugeChart: 'Charts',
+    TopAppBar: 'AppBars',
+    StatusCard: 'Cards',
+    NavigationSidebar: 'Navigation',
+    NavigationDrawer: 'Navigation',
+    EChartsBar: 'Charts',
+    EChartsLine: 'Charts',
+    EChartsPie: 'Charts',
+    EChartsGauge: 'Charts',
     EventBrowser: 'Lists',
-    Table: 'Tables'
+    TabulatorDataTable: 'Tables'
 };
 
 function readComponentView(component) {
@@ -167,35 +170,35 @@ function buildComponent(templateComp, overrides) {
 
 // ── Read & Transform each component ──
 
-// Header
+// Header (Examples에서는 여전히 Header 폴더명 사용)
 const headerCSS = transformCSS(readDashboardCSS('Header'), 'header-container', IDS.header);
-const headerHTML = readComponentView('Header');
+const headerHTML = readComponentView('TopAppBar');
 const headerRegister = readDashboardRegister('Header') + '\n\n' + MIXINS.FieldRenderMixin;
 const headerDestroy = readDashboardBeforeDestroy('Header');
 
-// Sidebar
+// Sidebar (Examples에서는 여전히 Sidebar 폴더명 사용)
 const sidebarCSS = transformCSS(readDashboardCSS('Sidebar'), 'sidebar-container', IDS.sidebar);
-const sidebarHTML = readComponentView('Sidebar');
+const sidebarHTML = readComponentView('NavigationSidebar');
 const sidebarRegister = readDashboardRegister('Sidebar') + '\n\n' + MIXINS.ListRenderMixin;
 const sidebarDestroy = readDashboardBeforeDestroy('Sidebar');
 
 // Charts
-function buildChartData(component, containerName, instanceId) {
+function buildChartData(component, containerName, instanceId, viewComponent) {
     const css = transformCSS(readDashboardCSS(component), containerName, instanceId);
-    const html = readComponentView(component);
+    const html = readComponentView(viewComponent || component);
     const register = readDashboardRegister(component) + '\n\n' + MIXINS.EChartsMixin;
     const destroy = readDashboardBeforeDestroy(component);
     return { css, html, register, destroy };
 }
 
-const lineChart = buildChartData('LineChart', 'line-chart-container', IDS.lineChart);
-const barChart = buildChartData('BarChart', 'bar-chart-container', IDS.barChart);
-const pieChart = buildChartData('PieChart', 'pie-chart-container', IDS.pieChart);
-const gaugeChart = buildChartData('GaugeChart', 'gauge-chart-container', IDS.gaugeChart);
+const lineChart = buildChartData('LineChart', 'line-chart-container', IDS.lineChart, 'EChartsLine');
+const barChart = buildChartData('BarChart', 'bar-chart-container', IDS.barChart, 'EChartsBar');
+const pieChart = buildChartData('PieChart', 'pie-chart-container', IDS.pieChart, 'EChartsPie');
+const gaugeChart = buildChartData('GaugeChart', 'gauge-chart-container', IDS.gaugeChart, 'EChartsGauge');
 
 // Table
 const tableCSS = transformCSS(readDashboardCSS('Table'), 'table-container', IDS.table);
-const tableHTML = readComponentView('Table');
+const tableHTML = readComponentView('TabulatorDataTable');
 const tableRegister = readDashboardRegister('Table') + '\n\n' + MIXINS.TabulatorMixin;
 const tableDestroy = readDashboardBeforeDestroy('Table');
 

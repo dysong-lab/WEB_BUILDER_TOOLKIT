@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>NavigationSidebar — 01_standard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f1f5f9; padding: 40px; }
+        #navsidebar-container { width: 260px; height: 480px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <div id="navsidebar-container"></div>
+
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/ListRenderMixin.js"></script>
+
+    <script>
+    (async () => {
+        await loadComponentAssets('navsidebar-container', '../views/01_standard.html', '../styles/01_standard.css');
+
+        const instance = {
+            id: 'navsidebar',
+            appendElement: document.getElementById('navsidebar-container')
+        };
+
+        applyListRenderMixin(instance, {
+            cssSelectors: {
+                container: '.nav-sidebar__list',
+                template:  '#nav-sidebar-item-template',
+                menuid:    '.nav-sidebar__item',
+                active:    '.nav-sidebar__item',
+                icon:      '.nav-sidebar__item-icon',
+                label:     '.nav-sidebar__item-label',
+                badge:     '.nav-sidebar__item-badge'
+            },
+            itemKey: 'menuid',
+            datasetAttrs: {
+                menuid: 'menuid',
+                active: 'active'
+            }
+        });
+
+        instance.listRender.renderData({
+            response: [
+                { menuid: 'dashboard', active: 'true',  icon: '\u{1F4CA}', label: 'Dashboard', badge: '' },
+                { menuid: 'devices',   active: 'false', icon: '\u{1F527}', label: 'Devices',   badge: '3' },
+                { menuid: 'alerts',    active: 'false', icon: '\u{1F514}', label: 'Alerts',    badge: '7' },
+                { menuid: 'settings',  active: 'false', icon: '\u2699',    label: 'Settings',  badge: '' }
+            ]
+        });
+
+        // 클릭 → 활성 상태 토글 (미리보기용)
+        instance.appendElement.addEventListener('click', function(e) {
+            const item = e.target.closest('.nav-sidebar__item');
+            if (!item) return;
+
+            const items = instance.appendElement.querySelectorAll('.nav-sidebar__item');
+            items.forEach(function(el) { el.dataset.active = 'false'; });
+            item.dataset.active = 'true';
+        });
+    })();
+    </script>
+</body>
+</html>

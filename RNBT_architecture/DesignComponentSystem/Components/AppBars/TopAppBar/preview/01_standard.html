@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>TopAppBar — 01_standard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f1f5f9; padding: 40px; }
+        #topappbar-container { width: 700px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <div id="topappbar-container"></div>
+
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/FieldRenderMixin.js"></script>
+
+    <script>
+    (async () => {
+        await loadComponentAssets('topappbar-container', '../views/01_standard.html', '../styles/01_standard.css');
+
+        const instance = {
+            id: 'top-app-bar',
+            appendElement: document.getElementById('topappbar-container')
+        };
+
+        applyFieldRenderMixin(instance, {
+            cssSelectors: {
+                title:         '.top-app-bar__title',
+                navIcon:       '.top-app-bar__nav-icon',
+                notifications: '.top-app-bar__action[data-action="notifications"]'
+            },
+            datasetAttrs: {
+                notifications: 'badge-count'
+            }
+        });
+
+        instance.fieldRender.renderData({
+            response: {
+                title:         'Dashboard',
+                notifications: '3'
+            }
+        });
+    })();
+    </script>
+</body>
+</html>

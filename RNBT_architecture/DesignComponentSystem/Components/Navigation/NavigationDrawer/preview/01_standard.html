@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>NavigationDrawer — 01_standard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f1f5f9; padding: 40px; }
+        #navdrawer-container { width: 600px; height: 480px; margin: 0 auto; position: relative; overflow: hidden; background: #ffffff; border-radius: 8px; }
+        .demo-toggle-btn { display: block; margin: 0 auto 20px; padding: 10px 24px; font-size: 14px; background: #3b82f6; color: #ffffff; border: none; border-radius: 6px; cursor: pointer; }
+        .demo-toggle-btn:hover { background: #2563eb; }
+    </style>
+</head>
+<body>
+    <button class="demo-toggle-btn" id="open-drawer-btn">Open Drawer</button>
+    <div id="navdrawer-container"></div>
+
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/ListRenderMixin.js"></script>
+
+    <script>
+    (async () => {
+        await loadComponentAssets('navdrawer-container', '../views/01_standard.html', '../styles/01_standard.css');
+
+        const instance = {
+            id: 'navdrawer',
+            appendElement: document.getElementById('navdrawer-container')
+        };
+
+        applyListRenderMixin(instance, {
+            cssSelectors: {
+                container: '.nav-drawer__list',
+                template:  '#nav-drawer-item-template',
+                menuid:    '.nav-drawer__item',
+                active:    '.nav-drawer__item',
+                icon:      '.nav-drawer__item-icon',
+                label:     '.nav-drawer__item-label',
+                drawer:    '.nav-drawer',
+                overlay:   '.nav-drawer__overlay',
+                closeBtn:  '.nav-drawer__close'
+            },
+            itemKey: 'menuid',
+            datasetAttrs: {
+                menuid: 'menuid',
+                active: 'active'
+            }
+        });
+
+        instance.listRender.renderData({
+            response: [
+                { menuid: 'dashboard', active: 'true',  icon: '\u{1F4CA}', label: 'Dashboard' },
+                { menuid: 'devices',   active: 'false', icon: '\u{1F527}', label: 'Devices' },
+                { menuid: 'alerts',    active: 'false', icon: '\u{1F514}', label: 'Alerts' },
+                { menuid: 'settings',  active: 'false', icon: '\u2699',    label: 'Settings' }
+            ]
+        });
+
+        const drawerEl = instance.appendElement.querySelector('.nav-drawer');
+
+        // 열기 버튼
+        document.getElementById('open-drawer-btn').addEventListener('click', function() {
+            drawerEl.dataset.drawerState = 'open';
+        });
+
+        // 닫기: close 버튼 + overlay 클릭
+        instance.appendElement.addEventListener('click', function(e) {
+            if (e.target.closest('.nav-drawer__close') || e.target.classList.contains('nav-drawer__overlay')) {
+                drawerEl.dataset.drawerState = 'closed';
+                return;
+            }
+
+            // 메뉴 아이템 클릭 → 활성 상태 토글
+            const item = e.target.closest('.nav-drawer__item');
+            if (!item) return;
+
+            const items = instance.appendElement.querySelectorAll('.nav-drawer__item');
+            items.forEach(function(el) { el.dataset.active = 'false'; });
+            item.dataset.active = 'true';
+        });
+    })();
+    </script>
+</body>
+</html>

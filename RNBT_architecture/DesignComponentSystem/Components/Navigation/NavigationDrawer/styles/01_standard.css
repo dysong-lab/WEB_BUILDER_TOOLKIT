@@ -1,0 +1,117 @@
+#navdrawer-container .nav-drawer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#navdrawer-container .nav-drawer__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+#navdrawer-container .nav-drawer[data-drawer-state="open"] .nav-drawer__overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#navdrawer-container .nav-drawer__panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100%;
+    background: #111827;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1;
+}
+
+#navdrawer-container .nav-drawer[data-drawer-state="open"] .nav-drawer__panel {
+    transform: translateX(0);
+}
+
+#navdrawer-container .nav-drawer__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 16px 12px;
+}
+
+#navdrawer-container .nav-drawer__title {
+    font-size: 11px;
+    font-weight: 600;
+    color: #9ca3af;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+#navdrawer-container .nav-drawer__close {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #9ca3af;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#navdrawer-container .nav-drawer__close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+#navdrawer-container .nav-drawer__list {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+#navdrawer-container .nav-drawer__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+#navdrawer-container .nav-drawer__item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+#navdrawer-container .nav-drawer__item[data-active="true"] {
+    background: rgba(59, 130, 246, 0.1);
+    border-left-color: #3b82f6;
+}
+
+#navdrawer-container .nav-drawer__item-icon {
+    font-size: 16px;
+    min-width: 20px;
+    text-align: center;
+}
+
+#navdrawer-container .nav-drawer__item-label {
+    font-size: 14px;
+    color: #d1d5db;
+    flex: 1;
+}
+
+#navdrawer-container .nav-drawer__item[data-active="true"] .nav-drawer__item-label {
+    color: #ffffff;
+    font-weight: 500;
+}
