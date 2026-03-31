@@ -856,7 +856,7 @@ run();
 
 ### 추가 자료
 
-**[docs/fail_fast_safe_error.md](/RNBT_architecture/.legacy_ref/docs/fail_fast_safe_error.md)** - Fail-fast vs Fail-safe 에러 전략 상세 가이드
+**[.legacy_ref/docs/fail_fast_safe_error.md](/RNBT_architecture/.legacy_ref/docs/fail_fast_safe_error.md)** - Fail-fast vs Fail-safe 에러 전략 상세 가이드
 
 이 문서는 **"언제 Fail-fast를 쓰고, 언제 Fail-safe(격리)를 써야 하는가"**에 대한 판단 기준과 구체적인 패턴을 제공합니다.
 
@@ -1120,8 +1120,6 @@ ComponentName/
 | `WScript DESTROY` | **접근 불가** | 이미 제거됨 |
 
 > **권장:** `WScript DESTROY` 대신 `WScript BEFORE_DESTROY` 또는 `_onViewerDestroy()`에서 리소스 정리를 수행하세요.
-
----
 
 ---
 

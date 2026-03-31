@@ -41,7 +41,7 @@ go(
 // ── 3. 이벤트 ──
 this.customEvents = {
     click: {
-        [this.statefulList.cssSelectors.template]: '@menuItemClicked'
+        [this.statefulList.cssSelectors.menuid]: '@menuItemClicked'
     }
 };
 

@@ -6,11 +6,11 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #020617; padding: 40px; }
-        #chart-container { width: 700px; margin: 0 auto; }
+        #linechart-container { width: 700px; margin: 0 auto; }
     </style>
 </head>
 <body>
-    <div id="chart-container"></div>
+    <div id="linechart-container"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <script src="../../../preview_runtime.js"></script>
@@ -18,11 +18,11 @@
 
     <script>
     (async () => {
-        await loadComponentAssets('chart-container', '../views/02_dark_tech.html', '../styles/02_dark_tech.css');
+        await loadComponentAssets('linechart-container', '../views/02_dark_tech.html', '../styles/02_dark_tech.css');
 
         const instance = {
             id: 'chart',
-            appendElement: document.getElementById('chart-container')
+            appendElement: document.getElementById('linechart-container')
         };
 
         applyEChartsMixin(instance, {

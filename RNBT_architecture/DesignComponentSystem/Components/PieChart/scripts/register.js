@@ -40,3 +40,8 @@ go(
         each(handler => GlobalDataPublisher.subscribe(topic, this, handler), handlers)
     )
 );
+
+// ── 3. 이벤트 ──
+this.customEvents = {};
+
+Wkit.bindEvents(this, this.customEvents);
