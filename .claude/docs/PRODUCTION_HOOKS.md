@@ -80,6 +80,63 @@ Claude가 생산 파일 작성 (Write/Edit)
 생산된 파일이 품질 기준을 충족하는지 판단하는 전체 체크리스트다.
 이 중 일부는 Hook으로 자동화하고, 나머지는 audit-project나 사람의 리뷰가 담당한다.
 
+### 설계 철학 계약 — 모든 생산물의 전제
+
+파일별 체크리스트보다 먼저, **설계 철학이 지켜지고 있는가**를 확인한다.
+구문이 존재하는 것과 설계 의도대로 사용되는 것은 다르다.
+
+#### Mixin 인터페이스는 실제로 동작해야 한다
+
+```
+설계 철학:
+  HTML = 빈 껍데기 (약속된 선택자만 제공, 데이터는 비어있음)
+  Mixin = 런타임에 데이터를 받아 DOM을 채움 (renderData)
+  데이터 = API에서 옴 → 페이지가 발행 → Mixin이 렌더링
+```
+
+```
+❌ 위반 — 형식만 지키고 설계를 무시:
+
+  HTML에 데이터를 하드코딩:
+    <span class="status" data-status="running">정상</span>
+
+  register.js에 인터페이스를 "규칙을 지키기 위해" 정의:
+    cssSelectors: { status: '.status' }
+    datasetAttrs: { status: 'status' }
+
+  → cssSelectors/datasetAttrs 객체는 존재하지만 장식품
+  → renderData가 호출되어도 이미 있는 값 위에 덮어쓸 뿐
+  → Mixin의 존재 이유가 소멸
+```
+
+```
+✅ 올바른 사용 — 인터페이스가 실제로 데이터 흐름을 매개:
+
+  HTML은 빈 상태 (약속된 선택자만 존재):
+    <span class="status">-</span>
+
+  register.js에서 Mixin이 데이터를 채우도록 연결:
+    cssSelectors: { status: '.status' }
+    datasetAttrs: { status: 'status' }
+    → subscribe(topic, this, this.fieldRender.renderData)
+
+  런타임 데이터 흐름:
+    API 응답 { status: 'running' }
+      → renderData가 호출됨
+      → el.setAttribute('data-status', 'running')
+      → CSS [data-status="running"] { color: green; }
+```
+
+이 계약은 Hook으로 자동 검출할 수 없다. **리뷰 시 가장 먼저 확인해야 할 항목**이다.
+
+| 계약 | 자동화 |
+|------|--------|
+| HTML에 런타임 데이터가 하드코딩되어 있지 않은가 | 리뷰 |
+| cssSelectors/datasetAttrs가 실제 데이터 흐름에 참여하는가 (장식이 아닌가) | 리뷰 |
+| 데이터는 API → 페이지 발행 → Mixin renderData 경로로 흐르는가 | 리뷰 |
+
+---
+
 ### 컴포넌트 생산
 
 #### register.js — 조립 코드
