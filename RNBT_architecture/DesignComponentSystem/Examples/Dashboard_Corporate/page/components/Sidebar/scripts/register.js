@@ -32,7 +32,7 @@ go(
 
 this.customEvents = {
     click: {
-        [this.statefulList.cssSelectors.container]: '@menuItemClicked'
+        [this.statefulList.cssSelectors.menuid]: '@menuItemClicked'
     }
 };
 

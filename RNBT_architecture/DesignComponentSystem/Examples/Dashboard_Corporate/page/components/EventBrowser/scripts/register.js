@@ -47,7 +47,7 @@ go(
 
 this.customEvents = {
     click: {
-        [this.listRender.cssSelectors.container]: '@eventItemClicked'
+        [this.listRender.cssSelectors.item]: '@eventItemClicked'
     }
 };
 
