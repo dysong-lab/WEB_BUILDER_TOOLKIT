@@ -329,7 +329,7 @@ const { chromium } = require('playwright');
 
 **컴포넌트별 폴더 구조** (권장):
 ```
-Static_Components/Component/performance-status/
+Static_Components/[프로젝트명]/performance-status/
 ├── assets/                    # 에셋 (SVG, 이미지)
 ├── screenshots/               # 스크린샷
 │   └── impl.png              # 구현물 스크린샷 (Playwright)

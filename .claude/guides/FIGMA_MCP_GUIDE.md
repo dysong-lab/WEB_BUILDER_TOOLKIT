@@ -145,7 +145,7 @@ https://www.figma.com/design/.../node-id=25-1393
 
 **Claude가 자동으로:**
 1. node-id 추출 (25-1393)
-2. 4가지 도구 모두 호출
+2. MCP 도구 호출
 3. 정확한 코드 생성
 
 ### 방법 2: Figma에서 직접 선택

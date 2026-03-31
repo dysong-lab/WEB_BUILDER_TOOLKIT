@@ -8,8 +8,6 @@ description: Figma 디자인을 정적 HTML/CSS로 변환합니다. Figma 링크
 Figma 디자인을 **정적 HTML/CSS**로 변환하는 Skill입니다.
 스크립트 작업은 하지 않습니다 (순수 퍼블리싱).
 
-> 공통 규칙: [SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md) 참조
-
 ---
 
 ## ⚠️ 작업 전 필수 확인
@@ -17,11 +15,12 @@ Figma 디자인을 **정적 HTML/CSS**로 변환하는 Skill입니다.
 **코드 작성 전 반드시 다음 파일들을 Read 도구로 읽으세요.**
 **이전에 읽었더라도 매번 다시 읽어야 합니다 - 캐싱하거나 생략하지 마세요.**
 
-1. [/.claude/skills/SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md) - 공통 규칙
-2. [/Figma_Conversion/README.md](/Figma_Conversion/README.md) - 프로젝트 구조 및 시작 방법
-3. [/.claude/guides/FIGMA_MCP_GUIDE.md](/.claude/guides/FIGMA_MCP_GUIDE.md) - MCP 도구, 에셋 규칙, dirForAssetWrites
-4. [/.claude/guides/FIGMA_IMPLEMENTATION_GUIDE.md](/.claude/guides/FIGMA_IMPLEMENTATION_GUIDE.md) - 구현 주의사항, 변환 워크플로우, Playwright
-5. [/.claude/guides/CODING_STYLE.md](/.claude/guides/CODING_STYLE.md) - 코딩 스타일 (CSS 원칙: px 단위, Flexbox 우선)
+1. [/Figma_Conversion/CLAUDE.md](/Figma_Conversion/CLAUDE.md) - 핵심 원칙, 구현 체크리스트
+2. [/.claude/guides/FIGMA_MCP_GUIDE.md](/.claude/guides/FIGMA_MCP_GUIDE.md) - MCP 도구, 에셋 규칙, dirForAssetWrites
+3. [/.claude/guides/FIGMA_IMPLEMENTATION_GUIDE.md](/.claude/guides/FIGMA_IMPLEMENTATION_GUIDE.md) - 구현 주의사항, 변환 워크플로우, Playwright
+4. [/.claude/guides/CODING_STYLE.md](/.claude/guides/CODING_STYLE.md) - **CSS 원칙 섹션만** (px 단위, Flexbox 우선)
+
+> **참고:** 이 스킬은 순수 퍼블리싱입니다. JS 패턴(register.js, beforeDestroy, fx.go)은 읽을 필요 없습니다.
 
 ---
 
