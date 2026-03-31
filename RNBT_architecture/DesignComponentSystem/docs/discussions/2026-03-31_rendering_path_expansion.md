@@ -38,7 +38,59 @@ function applyValue(el, key, value, paths) {
 
 ---
 
-## 3. styleAttrs의 현재 규격
+## 3. elementAttrs — 하나의 요소에 여러 속성 바인딩
+
+### 문제
+
+하나의 요소에 여러 속성을 데이터로 제어하고 싶을 때, elementAttrs는 1 데이터 키 → 1 속성(1:1) 매핑이다.
+
+```javascript
+// <img>에 src와 alt를 동시에 설정하고 싶다면?
+elementAttrs: {
+    icon: 'src'    // ← src 하나만 가능
+}
+```
+
+### 해결: 같은 선택자에 여러 키를 등록
+
+cssSelectors에서 여러 키가 같은 요소를 가리킬 수 있다. 각 키에 다른 속성을 매핑하면 된다.
+
+```javascript
+cssSelectors: {
+    icon:    '.equipment__icon',     // 같은 요소
+    iconAlt: '.equipment__icon'      // 같은 요소
+}
+elementAttrs: {
+    icon:    'src',
+    iconAlt: 'alt'
+}
+
+// data: { icon: '/icons/pump.svg', iconAlt: 'Pump' }
+// → querySelector('.equipment__icon').setAttribute('src', '/icons/pump.svg')
+// → querySelector('.equipment__icon').setAttribute('alt', 'Pump')
+```
+
+이 패턴은 이미 기존에 사용되고 있다. Sidebar에서 `menuid`와 `active`가 같은 `.sidebar__item`을 가리키면서 각각 다른 data-* 속성을 설정하는 것과 동일한 원리다.
+
+```javascript
+// 기존 사용 예 (Sidebar):
+cssSelectors: {
+    menuid: '.sidebar__item',     // 같은 요소
+    active: '.sidebar__item'      // 같은 요소
+}
+datasetAttrs: {
+    menuid: 'menuid',             // → data-menuid
+    active: 'active'              // → data-active
+}
+```
+
+### 결론
+
+별도 구현 불필요. cssSelectors의 기존 설계(여러 키 → 같은 선택자)가 이 문제를 자연스럽게 해결한다. 경로(datasetAttrs, elementAttrs, styleAttrs)가 달라도 동일하게 동작한다.
+
+---
+
+## 4. styleAttrs의 현재 규격
 
 ```javascript
 styleAttrs: {
@@ -70,7 +122,7 @@ styleAttrs: {
 
 ---
 
-## 4. 보류된 해결 방향: template 옵션
+## 5. 보류된 해결 방향: template 옵션
 
 ```javascript
 // 현재 (property + unit):
