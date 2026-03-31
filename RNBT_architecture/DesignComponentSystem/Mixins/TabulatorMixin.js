@@ -114,6 +114,7 @@ function applyTabulatorMixin(instance, options) {
             tableInstance.destroy();
             tableInstance = null;
         }
+        ns.init = null;
         ns.renderData = null;
         ns.setData = null;
         ns.clearData = null;

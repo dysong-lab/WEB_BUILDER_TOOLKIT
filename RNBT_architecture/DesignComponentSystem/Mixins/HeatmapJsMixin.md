@@ -87,4 +87,5 @@ this.subscriptions = {
 | `renderData({ response })` | 히트맵 데이터를 받아 서피스에 적용 |
 | `updateConfig(newPreset)` | 프리셋 변경 (radius, opacity, gradient 등) |
 | `clear()` | 히트맵 데이터 초기화 |
+| `getInstance()` | h337 인스턴스 반환 (고급 사용) |
 | `destroy()` | 서피스 정리 + 모든 속성/메서드 정리 |

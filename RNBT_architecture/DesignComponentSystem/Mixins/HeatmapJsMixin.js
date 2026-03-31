@@ -31,6 +31,7 @@
  *   this.heatmapJs.renderData      — { response } → 히트맵 데이터 적용
  *   this.heatmapJs.updateConfig    — 프리셋 변경
  *   this.heatmapJs.clear           — 히트맵 데이터 초기화
+ *   this.heatmapJs.getInstance     — h337 인스턴스 반환
  *   this.heatmapJs.destroy         — 서피스 정리
  *
  * ─────────────────────────────────────────────────────────────
@@ -101,6 +102,13 @@ function applyHeatmapJsMixin(instance, options) {
     };
 
     /**
+     * h337 인스턴스 반환 (고급 사용)
+     */
+    ns.getInstance = function() {
+        return heatmapInstance;
+    };
+
+    /**
      * 정리
      */
     ns.destroy = function() {
@@ -112,6 +120,7 @@ function applyHeatmapJsMixin(instance, options) {
         ns.renderData = null;
         ns.updateConfig = null;
         ns.clear = null;
+        ns.getInstance = null;
         ns.cssSelectors = null;
         instance.heatmapJs = null;
     };

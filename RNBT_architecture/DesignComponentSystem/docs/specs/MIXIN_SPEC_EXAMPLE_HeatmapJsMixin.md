@@ -99,6 +99,7 @@ Mixin이 data에서 max와 points를 추출한다.
 | `renderData({ response })` | 히트맵 데이터를 받아 서피스에 적용 |
 | `updateConfig(newPreset)` | 프리셋 변경 (radius, opacity, gradient 등). 기존 프리셋과 merge |
 | `clear()` | 히트맵 데이터 초기화 (빈 데이터 적용) |
+| `getInstance()` | h337 인스턴스 반환 (고급 사용) |
 | `destroy()` | 서피스 정리 + 모든 속성/메서드 null 처리 |
 
 ---
@@ -112,6 +113,7 @@ Mixin이 data에서 max와 points를 추출한다.
 - ns.renderData = null
 - ns.updateConfig = null
 - ns.clear = null
+- ns.getInstance = null
 - ns.cssSelectors = null
 - instance.heatmapJs = null
 ```
