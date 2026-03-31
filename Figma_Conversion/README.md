@@ -16,7 +16,6 @@ Static_Components/
 │       ├── assets/
 │       ├── screenshots/
 │       └── *.html, *.css
-└── sample_test/            # 테스트용
 ```
 
 ## 시작하기
