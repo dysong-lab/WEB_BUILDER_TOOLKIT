@@ -2,7 +2,7 @@
  * Sidebar — Dashboard Corporate
  */
 
-applyStatefulListRenderMixin(this, {
+applyListRenderMixin(this, {
     cssSelectors: {
         container: '.sidebar__menu',
         template:  '#sidebar-menu-item-template',
@@ -20,7 +20,7 @@ applyStatefulListRenderMixin(this, {
 });
 
 this.subscriptions = {
-    dashboard_menuItems: [this.statefulList.renderData]
+    dashboard_menuItems: [this.listRender.renderData]
 };
 
 go(
@@ -32,7 +32,7 @@ go(
 
 this.customEvents = {
     click: {
-        [this.statefulList.cssSelectors.menuid]: '@menuItemClicked'
+        [this.listRender.cssSelectors.menuid]: '@menuItemClicked'
     }
 };
 

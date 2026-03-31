@@ -41,7 +41,7 @@ datasetAttrs: { severity: 'severity' }
 
 > **해결**: `ack`가 `cssSelectors`에 추가됨 (`ack: '.event-browser__item'`). 설계 원칙과 실제 동작이 일치하는 상태.
 
-~~StatefulListRenderMixin.md의 EventBrowser 예시에서 `ack`가 `datasetAttrs`에 있지만 `cssSelectors`에는 없었음. `renderData`는 `Object.entries(cssSelectors)`를 순회하므로 `ack`는 처리되지 않는 상태였음.~~
+~~ListRenderMixin.md(구 StatefulListRenderMixin.md)의 EventBrowser 예시에서 `ack`가 `datasetAttrs`에 있지만 `cssSelectors`에는 없었음. `renderData`는 `Object.entries(cssSelectors)`를 순회하므로 `ack`는 처리되지 않는 상태였음.~~
 
 ## 3. 더 근본적인 질문: cssSelectors의 key가 너무 많은 역할을 하고 있는가?
 

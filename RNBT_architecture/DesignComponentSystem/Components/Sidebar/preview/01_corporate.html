@@ -13,7 +13,7 @@
     <div id="sidebar-container"></div>
 
     <script src="../../../preview_runtime.js"></script>
-    <script src="../../../Mixins/StatefulListRenderMixin.js"></script>
+    <script src="../../../Mixins/ListRenderMixin.js"></script>
 
     <script>
     (async () => {
@@ -24,7 +24,7 @@
             appendElement: document.getElementById('sidebar-container')
         };
 
-        applyStatefulListRenderMixin(instance, {
+        applyListRenderMixin(instance, {
             cssSelectors: {
                 container: '.sidebar__menu',
                 template:  '#sidebar-menu-item-template',

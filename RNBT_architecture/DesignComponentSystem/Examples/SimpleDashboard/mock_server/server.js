@@ -74,7 +74,7 @@ app.get('/api/events', (req, res) => {
 
 // ─────────────────────────────────────────
 // GET /api/event-browser
-// EventBrowser 컴포넌트용 (StatefulListRenderMixin)
+// EventBrowser 컴포넌트용 (ListRenderMixin)
 //
 // cssSelectors KEY: severity, time, source, message
 // itemKey: 'id'

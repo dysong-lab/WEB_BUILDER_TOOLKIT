@@ -42,15 +42,7 @@
 
 **→ 새 Mixin 후보:** 부분 업데이트(추가/삭제/변경)를 지원하는 목록 Mixin
 
----
-
-## StatefulListRenderMixin
-
-**하는 일:** 배열 반복 생성 + 개별 항목의 상태 변경/조회
-
-**범용성:** "목록 표시 + 개별 항목 상태 변경" 패턴에 적합.
-
-**제약:** `updateItemState`는 dataset만 변경 가능하다. 개별 항목의 textContent를 부분 업데이트하는 것은 지원하지 않는다.
+**참고:** `itemKey` 옵션을 제공하면 `updateItemState`/`getItemState`로 개별 항목의 dataset 상태를 변경/조회할 수 있다 (stateful 모드). `datasetAttrs` 옵션을 제공하면 textContent 대신 data-* 속성으로 값을 설정한다.
 
 ---
 
@@ -141,8 +133,7 @@ tableInstance = new Tabulator(containerEl, Object.assign({
 | Mixin | 범용성 | 제약 |
 |-------|--------|------|
 | FieldRender | ✅ | textContent/dataset만 (속성 변경 미지원) |
-| ListRender | ✅ | 전체 교체 방식 (대량 데이터 시 성능/UX) |
-| StatefulListRender | ✅ | updateItemState는 dataset만 |
+| ListRender | ✅ | 전체 교체 방식 (대량 데이터 시 성능/UX). `itemKey` 옵션 시 stateful 모드 (updateItemState는 dataset만) |
 | ECharts | ✅ | 없음 |
 | Tabulator | ✅ | 없음 (tabulatorOptions로 모든 옵션 재정의 가능) |
 | HeatmapJs | ✅ | 없음 |

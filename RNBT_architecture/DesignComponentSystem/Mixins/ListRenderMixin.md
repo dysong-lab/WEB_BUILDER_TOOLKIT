@@ -6,6 +6,8 @@
 
 배열의 각 항목을 HTML `<template>` 태그의 cloneNode로 생성하는 **N:N 생성** 패턴이다. FieldRenderMixin과 달리 DOM을 생성한다. HTML 구조는 template 태그 안에 정의되므로 JS에 HTML 문자열이 없다.
 
+`itemKey` 옵션을 제공하면 **개별 항목의 상태 변경/조회** 기능이 활성화된다.
+
 > **설계 원칙**: [COMPONENT_SYSTEM_DESIGN.md](../../docs/architecture/COMPONENT_SYSTEM_DESIGN.md) 참조
 > **구독/이벤트/정리 패턴**: 설계 문서의 "라이프사이클" 참조
 
@@ -44,24 +46,52 @@ cssSelectors: {
 
 > **KEY의 두 종류:** `container`, `template`은 Mixin이 규약으로 요구하는 KEY다. Mixin 내부에서 직접 참조한다. 나머지(`item`, `level`, `time`, `message`, `clearBtn` 등)는 사용자 정의 KEY다. `item`은 Mixin 내부에서 참조하지 않지만, customEvents에서 항목 클릭 이벤트를 매핑할 때 `[this.listRender.cssSelectors.item]`으로 참조하기 때문에 등록한다. 사용자 정의 KEY가 없으면 template은 복제되지만 값은 채워지지 않는다.
 
+### datasetAttrs (선택)
+
+data-* 속성으로 설정할 키를 지정한다. 등록되지 않은 키는 textContent로 설정된다.
+
+```javascript
+datasetAttrs: {
+    menuid: 'menuid',    // → el.setAttribute('data-menuid', value)
+    active: 'active'     // → el.setAttribute('data-active', value)
+}
+```
+
+### itemKey (선택)
+
+항목을 식별하는 키 이름. 이 옵션을 제공하면 `updateItemState`, `getItemState` 메서드가 활성화된다.
+
+```javascript
+itemKey: 'menuid'    // → cssSelectors.menuid 선택자로 항목을 찾음
+```
+
 ### renderData가 기대하는 데이터
 
 배열. 각 항목의 KEY가 cssSelectors의 KEY와 일치해야 한다.
-이 Mixin은 datasetAttrs를 사용하지 않는다. 모든 값은 textContent로 설정된다.
 
 ```javascript
-// 이 배열이 renderData에 전달되면:
+// datasetAttrs 없이 — 모든 값이 textContent로 설정:
 [
     { level: 'ERROR', time: '14:30', message: 'Connection failed' },
     { level: 'INFO',  time: '14:31', message: 'Reconnected' }
 ]
+
+// datasetAttrs 사용 시 — 등록된 키는 data-* 속성, 나머지는 textContent:
+[
+    { menuid: 'dashboard', active: 'true', icon: '📊', label: 'Dashboard' }
+]
+// → menuid → data-menuid="dashboard"
+// → active → data-active="true"
+// → icon, label → textContent
 ```
 
 ---
 
 ## 사용 예시
 
-### HTML
+### 기본 사용 (단순 목록)
+
+#### HTML
 
 ```html
 <div class="event-log">
@@ -81,7 +111,7 @@ cssSelectors: {
 </div>
 ```
 
-### register.js
+#### register.js
 
 ```javascript
 applyListRenderMixin(this, {
@@ -101,18 +131,63 @@ this.subscriptions = {
 };
 ```
 
+### 상태 관리 사용 (항목별 상태 변경/조회)
+
+#### register.js
+
+```javascript
+applyListRenderMixin(this, {
+    cssSelectors: {
+        container: '.sidebar__menu',
+        template:  '#sidebar-menu-item-template',
+        menuid:    '.sidebar__item',
+        active:    '.sidebar__item',
+        icon:      '.sidebar__item-icon',
+        label:     '.sidebar__item-label'
+    },
+    itemKey: 'menuid',
+    datasetAttrs: {
+        menuid: 'menuid',
+        active: 'active'
+    }
+});
+
+this.subscriptions = {
+    menuItems: [this.listRender.renderData]
+};
+
+this.customEvents = {
+    click: {
+        [this.listRender.cssSelectors.menuid]: '@menuItemClicked'
+    }
+};
+```
+
+#### 페이지에서 상태 변경
+
+```javascript
+// 이벤트 핸들러에서
+'@menuItemClicked': ({ targetInstance, event }) => {
+    const id = event.target.closest('.sidebar__item')?.dataset.menuid;
+    targetInstance.listRender.updateItemState(id, { active: 'true' });
+}
+```
+
 ---
 
 ## 주입되는 네임스페이스
 
 `this.listRender`
 
-| 속성/메서드 | 역할 |
-|------------|------|
-| `cssSelectors` | 주입된 cssSelectors (customEvents에서 computed property로 참조) |
-| `renderData({ response })` | selector KEY에 맞춰진 배열을 받아 항목을 생성하여 렌더링 |
-| `clear()` | 컨테이너의 모든 항목을 제거 |
-| `destroy()` | Mixin이 주입한 모든 속성과 메서드를 정리 |
+| 속성/메서드 | 역할 | 조건 |
+|------------|------|------|
+| `cssSelectors` | 주입된 cssSelectors (customEvents에서 computed property로 참조) | 항상 |
+| `datasetAttrs` | 주입된 datasetAttrs | 항상 |
+| `renderData({ response })` | selector KEY에 맞춰진 배열을 받아 항목을 생성하여 렌더링 | 항상 |
+| `clear()` | 컨테이너의 모든 항목을 제거 | 항상 |
+| `destroy()` | Mixin이 주입한 모든 속성과 메서드를 정리 | 항상 |
+| `updateItemState(id, state)` | 개별 항목의 data 속성을 변경 | itemKey 사용 시 |
+| `getItemState(id)` | 개별 항목의 data 속성을 조회 (복사본 반환) | itemKey 사용 시 |
 
 ---
 

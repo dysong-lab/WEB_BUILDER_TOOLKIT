@@ -21,7 +21,7 @@ app.get('/api/header-info', (req, res) => {
 
 // ─────────────────────────────────────────
 // GET /api/menu-items
-// Sidebar 컴포넌트용 (StatefulListRenderMixin)
+// Sidebar 컴포넌트용 (ListRenderMixin)
 // cssSelectors KEY: icon, label, badge
 // datasetAttrs KEY: menuid, active
 // ─────────────────────────────────────────

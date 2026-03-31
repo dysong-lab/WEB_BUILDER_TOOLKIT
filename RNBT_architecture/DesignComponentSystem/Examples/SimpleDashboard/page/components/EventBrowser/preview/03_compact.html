@@ -14,14 +14,14 @@
 <div id="event-browser-container"></div>
 
 <script src="../../../../preview_runtime.js"></script>
-<script src="../../../../../../Mixins/StatefulListRenderMixin.js"></script>
+<script src="../../../../../../Mixins/ListRenderMixin.js"></script>
 <script>
 (async () => {
     await loadComponentAssets('event-browser-container', '../views/03_compact.html', '../styles/03_compact.css');
 
     const instance = { id: 'event-browser', appendElement: document.getElementById('event-browser-container') };
 
-    applyStatefulListRenderMixin(instance, {
+    applyListRenderMixin(instance, {
         cssSelectors: {
             container:     '.event-browser__list',
             item:          '.event-browser__item',

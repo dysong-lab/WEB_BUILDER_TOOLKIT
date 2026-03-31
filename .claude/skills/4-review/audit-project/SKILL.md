@@ -197,7 +197,7 @@ WEB_BUILDER_TOOLKIT/
 6. **cssSelectors/datasetAttrs 정합성**: 다음을 확인한다
    - .js 코드에서 datasetAttrs 역할 설명이 실제 동작과 일치하는가
    - .md/.spec에서 순회 대상이 정확한가
-   - itemKey가 datasetAttrs 안이 아닌 options 최상위에 있는가 (StatefulListRenderMixin)
+   - itemKey가 datasetAttrs 안이 아닌 options 최상위에 있는가 (ListRenderMixin의 stateful 모드)
    - datasetAttrs의 key가 cssSelectors에도 존재하여 대상 요소를 찾을 수 있는가
 
 #### 보고 형식

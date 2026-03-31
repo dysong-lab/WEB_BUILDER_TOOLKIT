@@ -186,7 +186,7 @@ SimpleDashboard는 `Components/` 라이브러리가 아닌 자체 컴포넌트(S
 | LineChart | ECharts | `this.echarts` | ✅ | ✅ |
 | PieChart | ECharts | `this.echarts` | ✅ | ✅ |
 | GaugeChart | ECharts | `this.echarts` | ✅ | ✅ |
-| Sidebar | StatefulListRender | `this.statefulList` | ✅ | ✅ |
+| Sidebar | ListRender | `this.listRender` | ✅ | ✅ |
 | Table | Tabulator | `this.tabulator` | ✅ | ✅ |
 | EventBrowser | ListRender + ShadowPopup | `this.listRender` + `this.shadowPopup` | ✅ | ✅ |
 

@@ -121,10 +121,9 @@ const templateContent = corporate.page_info_list[0].content_info;
 // ── Mixin sources ──
 const MIXINS = {
     FieldRenderMixin: readMixin('FieldRenderMixin'),
-    StatefulListRenderMixin: readMixin('StatefulListRenderMixin'),
+    ListRenderMixin: readMixin('ListRenderMixin'),
     EChartsMixin: readMixin('EChartsMixin'),
     TabulatorMixin: readMixin('TabulatorMixin'),
-    ListRenderMixin: readMixin('ListRenderMixin'),
     ShadowPopupMixin: readMixin('ShadowPopupMixin')
 };
 
@@ -164,7 +163,7 @@ const headerDestroy = readDashboardBeforeDestroy('Header');
 // Sidebar
 const sidebarCSS = transformCSS(readDashboardCSS('Sidebar'), 'sidebar-container', IDS.sidebar);
 const sidebarHTML = readComponentView('Sidebar');
-const sidebarRegister = readDashboardRegister('Sidebar') + '\n\n' + MIXINS.StatefulListRenderMixin;
+const sidebarRegister = readDashboardRegister('Sidebar') + '\n\n' + MIXINS.ListRenderMixin;
 const sidebarDestroy = readDashboardBeforeDestroy('Sidebar');
 
 // Charts

@@ -83,7 +83,7 @@
 
     <!-- Mixins -->
     <script src="../../Mixins/FieldRenderMixin.js"></script>
-    <script src="../../Mixins/StatefulListRenderMixin.js"></script>
+    <script src="../../Mixins/ListRenderMixin.js"></script>
     <script src="../../Mixins/EChartsMixin.js"></script>
     <script src="../../Mixins/TabulatorMixin.js"></script>
     <script src="../../Mixins/ListRenderMixin.js"></script>
@@ -120,7 +120,7 @@
 
         // ── Sidebar ──
         const sidebar = { id: 'sidebar', appendElement: document.getElementById('sidebar-container') };
-        applyStatefulListRenderMixin(sidebar, {
+        applyListRenderMixin(sidebar, {
             cssSelectors: { container: '.sidebar__menu', template: '#sidebar-menu-item-template',
                             menuid: '.sidebar__item', active: '.sidebar__item',
                             icon: '.sidebar__item-icon', label: '.sidebar__item-label', badge: '.sidebar__item-badge' },

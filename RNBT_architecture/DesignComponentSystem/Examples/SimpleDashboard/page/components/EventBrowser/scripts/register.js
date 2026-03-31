@@ -1,7 +1,7 @@
 /**
  * EventBrowser — 조립 코드
  *
- * StatefulListRenderMixin을 적용하여 이벤트 목록 + Ack 기능을 제공한다.
+ * ListRenderMixin을 적용하여 이벤트 목록 + Ack 기능을 제공한다.
  * Ack API 호출은 페이지가 담당, Mixin은 DOM 상태 변경만.
  */
 const { subscribe } = GlobalDataPublisher;
@@ -12,7 +12,7 @@ const { each, go } = fx;
 // 1. MIXIN 적용
 // ======================
 
-applyStatefulListRenderMixin(this, {
+applyListRenderMixin(this, {
     cssSelectors: {
         container:     '.event-browser__list',
         item:          '.event-browser__item',
@@ -39,7 +39,7 @@ applyStatefulListRenderMixin(this, {
 // ======================
 
 this.subscriptions = {
-    eventBrowser: [this.statefulList.renderData]
+    eventBrowser: [this.listRender.renderData]
 };
 
 go(
@@ -55,8 +55,8 @@ go(
 
 this.customEvents = {
     click: {
-        [this.statefulList.cssSelectors.ackBtn]: '@ackClicked',
-        [this.statefulList.cssSelectors.item]:    '@eventSelected'
+        [this.listRender.cssSelectors.ackBtn]: '@ackClicked',
+        [this.listRender.cssSelectors.item]:    '@eventSelected'
     }
 };
 Wkit.bindEvents(this, this.customEvents);

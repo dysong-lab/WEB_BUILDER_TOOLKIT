@@ -14,4 +14,4 @@ go(
 this.subscriptions = null;
 
 // 1. Mixin 정리
-this.statefulList.destroy();
+this.listRender.destroy();

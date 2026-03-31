@@ -24,7 +24,6 @@
 |-------|------|
 | FieldRenderMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/FieldRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/FieldRenderMixin.md) |
 | ListRenderMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/ListRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/ListRenderMixin.md) |
-| StatefulListRenderMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/StatefulListRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/StatefulListRenderMixin.md) |
 | EChartsMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/EChartsMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/EChartsMixin.md) |
 | TabulatorMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/TabulatorMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/TabulatorMixin.md) |
 | HeatmapJsMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/HeatmapJsMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/HeatmapJsMixin.md) |

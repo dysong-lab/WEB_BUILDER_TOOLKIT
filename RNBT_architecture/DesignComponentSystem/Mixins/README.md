@@ -19,8 +19,7 @@
 | Mixin | 목적 |
 |-------|------|
 | FieldRenderMixin | 기존 요소에 데이터를 표시한다 |
-| ListRenderMixin | 항목을 반복 생성하여 표시한다 |
-| StatefulListRenderMixin | 항목을 반복 생성하여 표시하고, 개별 항목의 상태를 변경한다 |
+| ListRenderMixin | 항목을 반복 생성하여 표시한다 (`itemKey` 옵션 시 개별 항목 상태 변경/조회 가능) |
 | EChartsMixin | ECharts 인스턴스를 생성하고 관리한다 |
 | TabulatorMixin | Tabulator 인스턴스를 생성하고 관리한다 |
 | HeatmapJsMixin | heatmap.js 기반 열 분포를 시각화하고 관리한다 |
@@ -44,7 +43,6 @@
 |-------|------|
 | FieldRenderMixin | [FieldRenderMixin.md](FieldRenderMixin.md) |
 | ListRenderMixin | [ListRenderMixin.md](ListRenderMixin.md) |
-| StatefulListRenderMixin | [StatefulListRenderMixin.md](StatefulListRenderMixin.md) |
 | EChartsMixin | [EChartsMixin.md](EChartsMixin.md) |
 | TabulatorMixin | [TabulatorMixin.md](TabulatorMixin.md) |
 | HeatmapJsMixin | [HeatmapJsMixin.md](HeatmapJsMixin.md) |
