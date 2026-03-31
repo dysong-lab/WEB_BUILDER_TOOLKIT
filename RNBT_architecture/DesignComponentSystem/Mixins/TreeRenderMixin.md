@@ -66,12 +66,30 @@ datasetAttrs: {
 
 ### renderData가 기대하는 데이터
 
-재귀적 배열. 각 항목의 KEY가 cssSelectors의 KEY와 일치해야 한다.
+재귀적 배열. 데이터의 KEY 이름과 cssSelectors의 KEY 이름이 같으면 매칭된다.
+매칭된 KEY의 cssSelectors VALUE(선택자)로 요소를 찾고, 데이터 VALUE를 반영한다.
 
 ```javascript
+// cssSelectors 정의:
+cssSelectors: {
+    container: '.tree__list',          // ← 규약 KEY (Mixin이 내부 참조)
+    template:  '#tree-node-template',  // ← 규약 KEY
+    node:      '.tree__node',          // ← 규약 KEY (data-node-id 부여 대상)
+    toggle:    '.tree__toggle',        // ← 이벤트 매핑용
+    icon:      '.tree__icon',          // ← 데이터 KEY "icon"과 매칭
+    label:     '.tree__label'          // ← 데이터 KEY "label"과 매칭
+}
+datasetAttrs: { status: 'status' }
+
+// renderData에 전달되는 데이터:
 [
     {
         id: 'site-1', label: '본사', status: 'normal',
+        //             ↑ KEY          ↑ KEY
+        //             ↓ 매칭         ↓ 매칭
+        //  cssSelectors.label       datasetAttrs.status
+        //             ↓              ↓
+        //  .tree__label.textContent  data-status="normal"
         children: [
             {
                 id: 'floor-3', label: '3층',
@@ -86,6 +104,8 @@ datasetAttrs: {
         id: 'site-2', label: '지사', status: 'normal', children: []
     }
 ]
+// container, template, node, toggle은 데이터에 없으므로 건너뜀
+// id, children은 nodeKey/childrenKey로 Mixin이 내부 처리
 ```
 
 ### 자동 부여 속성

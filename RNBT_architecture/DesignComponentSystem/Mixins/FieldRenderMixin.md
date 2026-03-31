@@ -45,16 +45,33 @@ datasetAttrs: {
 
 ### renderData가 기대하는 데이터
 
-플랫 객체. KEY가 cssSelectors/datasetAttrs의 KEY와 일치해야 한다.
+플랫 객체. 데이터의 KEY 이름과 cssSelectors의 KEY 이름이 같으면 매칭된다.
+매칭된 KEY의 cssSelectors VALUE(선택자)로 요소를 찾고, 데이터 VALUE를 반영한다.
 
 ```javascript
-// 이 데이터가 renderData에 전달되면:
-{
-    name:        'RNBT-01',     // → cssSelectors['name'] → textContent
-    status:      'RUNNING',     // → datasetAttrs['status'] → dataset
-    statusLabel: '정상',        // → cssSelectors['statusLabel'] → textContent
-    version:     'v2.4.1'      // → cssSelectors['version'] → textContent
+// cssSelectors 정의:
+cssSelectors: {
+    name:        '.system-info__name',    // ← 데이터 KEY "name"과 매칭
+    statusLabel: '.system-info__status',  // ← 데이터 KEY "statusLabel"과 매칭
+    status:      '.system-info__status',  // ← 데이터 KEY "status"와 매칭
+    version:     '.system-info__version', // ← 데이터 KEY "version"과 매칭
+    card:        '.status-card'           // ← 이벤트 매핑용 (데이터에 없으므로 건너뜀)
 }
+datasetAttrs: { status: 'status' }
+
+// renderData에 전달되는 데이터:
+{
+    name:        'RNBT-01',
+    status:      'RUNNING',
+    statusLabel: '정상',
+    version:     'v2.4.1'
+}
+//  ↓ 매칭 결과:
+// name        → cssSelectors에 있음, datasetAttrs에 없음 → textContent = 'RNBT-01'
+// status      → cssSelectors에 있음, datasetAttrs에 있음 → data-status = 'RUNNING'
+// statusLabel → cssSelectors에 있음, datasetAttrs에 없음 → textContent = '정상'
+// version     → cssSelectors에 있음, datasetAttrs에 없음 → textContent = 'v2.4.1'
+// card        → 데이터에 없으므로 건너뜀
 ```
 
 ---
