@@ -1,9 +1,18 @@
 /**
  * LineChart — Dashboard DarkTech
  *
- * 팔레트: cyan(#4dd0e1), amber(#ffb74d)
- * 폰트: IBM Plex Mono
+ * 목적: 데이터를 line 차트로 시각화한다
+ * 기능: EChartsMixin으로 차트를 렌더링한다
+ *
+ * Mixin: EChartsMixin
  */
+const { subscribe } = GlobalDataPublisher;
+const { bindEvents } = Wkit;
+const { each, go } = fx;
+
+// ======================
+// 1. MIXIN 적용
+// ======================
 
 const p = {
     cyan: '#4dd0e1', amber: '#ffb74d', dimCyan: '#4dd0e130',
@@ -32,10 +41,22 @@ applyEChartsMixin(this, {
     }
 });
 
+// ======================
+// 2. 구독 연결
+// ======================
+
 this.subscriptions = { dashboard_lineChart: [this.echarts.renderData] };
+
 go(
     Object.entries(this.subscriptions),
     each(([topic, handlers]) =>
-        each(handler => GlobalDataPublisher.subscribe(topic, this, handler), handlers)
+        each(handler => subscribe(topic, this, handler), handlers)
     )
 );
+
+// ======================
+// 3. 이벤트 매핑
+// ======================
+
+this.customEvents = {};
+bindEvents(this, this.customEvents);

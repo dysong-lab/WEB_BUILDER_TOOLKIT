@@ -1,8 +1,10 @@
 /**
- * EventBrowser — 조립 코드
+ * EventBrowser — SimpleDashboard
  *
- * ListRenderMixin을 적용하여 이벤트 목록 + Ack 기능을 제공한다.
- * Ack API 호출은 페이지가 담당, Mixin은 DOM 상태 변경만.
+ * 목적: 이벤트 목록을 표시하고 상세 팝업을 제공한다
+ * 기능: ListRenderMixin + ShadowPopupMixin으로 목록과 팝업을 조합한다
+ *
+ * Mixin: ListRenderMixin
  */
 const { subscribe } = GlobalDataPublisher;
 const { bindEvents } = Wkit;
@@ -59,4 +61,4 @@ this.customEvents = {
         [this.listRender.cssSelectors.item]:    '@eventSelected'
     }
 };
-Wkit.bindEvents(this, this.customEvents);
+bindEvents(this, this.customEvents);

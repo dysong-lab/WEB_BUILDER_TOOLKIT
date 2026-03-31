@@ -1,11 +1,10 @@
 /**
- * DeviceList — 조립 코드
+ * DeviceList — SimpleDashboard
  *
- * ListRenderMixin으로 장치 목록을 표시하고,
- * ShadowPopupMixin + ListRenderMixin으로 클릭한 장치의 상세 정보를 팝업으로 표시한다.
+ * 목적: 장비 목록을 표시하고 상세 팝업을 제공한다
+ * 기능: ListRenderMixin + ShadowPopupMixin으로 목록과 팝업을 조합한다
  *
- * 팝업 내부에서도 ListRenderMixin을 사용한다.
- * appendElement를 shadowRoot로 지정하면 Shadow DOM 안에서 동작한다.
+ * Mixin: ListRenderMixin, ShadowPopupMixin
  */
 const { subscribe } = GlobalDataPublisher;
 const { bindEvents } = Wkit;
@@ -78,7 +77,7 @@ this.customEvents = {
         [this.listRender.cssSelectors.item]: '@deviceClicked'
     }
 };
-Wkit.bindEvents(this, this.customEvents);
+bindEvents(this, this.customEvents);
 
 // Shadow DOM 내부 이벤트 → Weventbus로 전파
 this.shadowPopup.bindPopupEvents({

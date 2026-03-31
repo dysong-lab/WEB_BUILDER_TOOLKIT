@@ -13,7 +13,7 @@ go(
 );
 this.subscriptions = null;
 
-// 1. Mixin 정리 (적용 역순)
+// 1. Mixin 정리
 if (this._popupScope && this._popupScope.listRender) {
     this._popupScope.listRender.destroy();
 }

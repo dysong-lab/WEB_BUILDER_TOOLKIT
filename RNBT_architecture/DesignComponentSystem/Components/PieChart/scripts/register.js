@@ -1,15 +1,20 @@
 /**
  * PieChart 컴포넌트
  *
- * 목적: 데이터를 보여준다
- * 기능: EChartsMixin + mapData로 비율 데이터를 파이 차트로 시각화한다
+ * 목적: 데이터를 pie 차트로 시각화한다
+ * 기능: EChartsMixin으로 차트를 렌더링한다
  *
  * Mixin: EChartsMixin
  * 데이터 규약: { items: [{ name: String, value: Number }, ...] }
  */
+const { subscribe } = GlobalDataPublisher;
+const { bindEvents } = Wkit;
+const { each, go } = fx;
 
+// ======================
+// 1. MIXIN 적용
+// ======================
 
-// ── 1. Mixin 적용 ──
 applyEChartsMixin(this, {
     cssSelectors: {
         container: '.chart__canvas'
@@ -29,7 +34,10 @@ applyEChartsMixin(this, {
     }
 });
 
-// ── 2. 구독 ──
+// ======================
+// 2. 구독 연결
+// ======================
+
 this.subscriptions = {
     pieChartData: [this.echarts.renderData]
 };
@@ -37,11 +45,13 @@ this.subscriptions = {
 go(
     Object.entries(this.subscriptions),
     each(([topic, handlers]) =>
-        each(handler => GlobalDataPublisher.subscribe(topic, this, handler), handlers)
+        each(handler => subscribe(topic, this, handler), handlers)
     )
 );
 
-// ── 3. 이벤트 ──
-this.customEvents = {};
+// ======================
+// 3. 이벤트 매핑
+// ======================
 
-Wkit.bindEvents(this, this.customEvents);
+this.customEvents = {};
+bindEvents(this, this.customEvents);

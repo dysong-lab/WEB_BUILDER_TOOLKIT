@@ -2,8 +2,6 @@ const { unsubscribe } = GlobalDataPublisher;
 const { removeCustomEvents } = Wkit;
 const { each, go } = fx;
 
-// 생성의 역순으로 정리
-
 // 3. 이벤트 제거
 removeCustomEvents(this, this.customEvents);
 this.customEvents = null;
@@ -15,7 +13,7 @@ go(
 );
 this.subscriptions = null;
 
-// 1. Mixin 정리 (적용 역순)
+// 1. Mixin 정리
 if (this._popupScope && this._popupScope.listRender) {
     this._popupScope.listRender.destroy();
 }

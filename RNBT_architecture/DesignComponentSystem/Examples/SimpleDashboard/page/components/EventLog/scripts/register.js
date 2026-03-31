@@ -1,8 +1,10 @@
 /**
- * EventLog — 조립 코드
+ * EventLog — SimpleDashboard
  *
- * ListRenderMixin을 적용하여 이벤트 로그를 표시한다.
- * FieldRenderMixin과는 다른 Mixin — 다른 기능.
+ * 목적: 이벤트 로그를 시간순으로 표시한다
+ * 기능: ListRenderMixin으로 로그 항목을 반복 렌더링한다
+ *
+ * Mixin: ListRenderMixin
  */
 const { subscribe } = GlobalDataPublisher;
 const { bindEvents } = Wkit;
@@ -52,4 +54,4 @@ this.customEvents = {
         [this.listRender.cssSelectors.clearBtn]: '@clearClicked'
     }
 };
-Wkit.bindEvents(this, this.customEvents);
+bindEvents(this, this.customEvents);

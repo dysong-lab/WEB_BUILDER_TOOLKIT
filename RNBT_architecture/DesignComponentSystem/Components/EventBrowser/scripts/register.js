@@ -1,21 +1,25 @@
 /**
  * EventBrowser 컴포넌트
  *
- * 목적: 데이터를 보여준다 + 콘텐츠를 별도 레이어에 표시한다
- * 기능: ListRenderMixin으로 이벤트 목록을 표시하고,
- *       ShadowPopupMixin으로 선택한 이벤트의 상세 정보를 팝업으로 보여준다
+ * 목적: 이벤트 목록을 표시하고 상세 팝업을 제공한다
+ * 기능: ListRenderMixin + ShadowPopupMixin으로 목록과 팝업을 조합한다
  *
  * Mixin: ListRenderMixin, ShadowPopupMixin
  */
+const { subscribe } = GlobalDataPublisher;
+const { bindEvents } = Wkit;
+const { each, go } = fx;
 
-
-// ── 1. Mixin 적용 ──
+// ======================
+// 1. MIXIN 적용
+// ======================
 
 // 1-1. 이벤트 목록
 applyListRenderMixin(this, {
     cssSelectors: {
         container: '.event-browser__list',
         template:  '#event-browser-item-template',
+        item:      '.event-browser__item',
         time:      '.event-browser__item-time',
         level:     '.event-browser__item-level',
         message:   '.event-browser__item-message',
@@ -44,7 +48,10 @@ applyShadowPopupMixin(this, {
     }
 });
 
-// ── 2. 구독 ──
+// ======================
+// 2. 구독 연결
+// ======================
+
 this.subscriptions = {
     events: [this.listRender.renderData]
 };
@@ -52,18 +59,21 @@ this.subscriptions = {
 go(
     Object.entries(this.subscriptions),
     each(([topic, handlers]) =>
-        each(handler => GlobalDataPublisher.subscribe(topic, this, handler), handlers)
+        each(handler => subscribe(topic, this, handler), handlers)
     )
 );
 
-// ── 3. 이벤트 ──
+// ======================
+// 3. 이벤트 매핑
+// ======================
+
 this.customEvents = {
     click: {
-        [this.listRender.cssSelectors.template]: '@eventItemClicked'
+        [this.listRender.cssSelectors.item]: '@eventItemClicked'
     }
 };
 
-Wkit.bindEvents(this, this.customEvents);
+bindEvents(this, this.customEvents);
 
 this.shadowPopup.bindPopupEvents({
     click: {

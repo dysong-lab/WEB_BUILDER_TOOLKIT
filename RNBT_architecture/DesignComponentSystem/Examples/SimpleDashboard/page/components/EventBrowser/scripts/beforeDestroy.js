@@ -2,8 +2,6 @@ const { unsubscribe } = GlobalDataPublisher;
 const { removeCustomEvents } = Wkit;
 const { each, go } = fx;
 
-// 생성의 역순으로 정리
-
 // 3. 이벤트 제거
 removeCustomEvents(this, this.customEvents);
 this.customEvents = null;

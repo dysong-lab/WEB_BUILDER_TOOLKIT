@@ -1,6 +1,18 @@
 /**
- * EventBrowser — Dashboard Corporate
+ * EventBrowser — Dashboard Minimal
+ *
+ * 목적: 이벤트 목록을 표시하고 상세 팝업을 제공한다
+ * 기능: ListRenderMixin + ShadowPopupMixin으로 목록과 팝업을 조합한다
+ *
+ * Mixin: ListRenderMixin, ShadowPopupMixin
  */
+const { subscribe } = GlobalDataPublisher;
+const { bindEvents } = Wkit;
+const { each, go } = fx;
+
+// ======================
+// 1. MIXIN 적용
+// ======================
 
 // 이벤트 목록
 applyListRenderMixin(this, {
@@ -34,6 +46,10 @@ applyShadowPopupMixin(this, {
     }
 });
 
+// ======================
+// 2. 구독 연결
+// ======================
+
 this.subscriptions = {
     dashboard_events: [this.listRender.renderData]
 };
@@ -41,17 +57,21 @@ this.subscriptions = {
 go(
     Object.entries(this.subscriptions),
     each(([topic, handlers]) =>
-        each(handler => GlobalDataPublisher.subscribe(topic, this, handler), handlers)
+        each(handler => subscribe(topic, this, handler), handlers)
     )
 );
 
+// ======================
+// 3. 이벤트 매핑
+// ======================
+
 this.customEvents = {
     click: {
-        [this.listRender.cssSelectors.container]: '@eventItemClicked'
+        [this.listRender.cssSelectors.item]: '@eventItemClicked'
     }
 };
 
-Wkit.bindEvents(this, this.customEvents);
+bindEvents(this, this.customEvents);
 
 this.shadowPopup.bindPopupEvents({
     click: {

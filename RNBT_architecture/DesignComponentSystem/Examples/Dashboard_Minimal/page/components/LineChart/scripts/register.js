@@ -1,9 +1,18 @@
 /**
  * LineChart — Dashboard Minimal
  *
- * 팔레트: 흑백 그레이스케일
- * 폰트: Instrument Sans
+ * 목적: 데이터를 line 차트로 시각화한다
+ * 기능: EChartsMixin으로 차트를 렌더링한다
+ *
+ * Mixin: EChartsMixin
  */
+const { subscribe } = GlobalDataPublisher;
+const { bindEvents } = Wkit;
+const { each, go } = fx;
+
+// ======================
+// 1. MIXIN 적용
+// ======================
 
 const c = { dark: '#1d1d1f', mid: '#86868b', light: '#d2d2d7', faint: '#f5f5f7' };
 const font = { fontFamily: 'Instrument Sans' };
@@ -28,10 +37,22 @@ applyEChartsMixin(this, {
     }
 });
 
+// ======================
+// 2. 구독 연결
+// ======================
+
 this.subscriptions = { dashboard_lineChart: [this.echarts.renderData] };
+
 go(
     Object.entries(this.subscriptions),
     each(([topic, handlers]) =>
-        each(handler => GlobalDataPublisher.subscribe(topic, this, handler), handlers)
+        each(handler => subscribe(topic, this, handler), handlers)
     )
 );
+
+// ======================
+// 3. 이벤트 매핑
+// ======================
+
+this.customEvents = {};
+bindEvents(this, this.customEvents);

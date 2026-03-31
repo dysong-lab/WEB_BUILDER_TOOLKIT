@@ -1,6 +1,18 @@
 /**
  * BarChart — Dashboard Corporate
+ *
+ * 목적: 데이터를 bar 차트로 시각화한다
+ * 기능: EChartsMixin으로 차트를 렌더링한다
+ *
+ * Mixin: EChartsMixin
  */
+const { subscribe } = GlobalDataPublisher;
+const { bindEvents } = Wkit;
+const { each, go } = fx;
+
+// ======================
+// 1. MIXIN 적용
+// ======================
 
 const palette = {
     sand: '#b0926a', neutral: '#d4d0c8',
@@ -29,6 +41,10 @@ applyEChartsMixin(this, {
     }
 });
 
+// ======================
+// 2. 구독 연결
+// ======================
+
 this.subscriptions = {
     dashboard_barChart: [this.echarts.renderData]
 };
@@ -36,6 +52,13 @@ this.subscriptions = {
 go(
     Object.entries(this.subscriptions),
     each(([topic, handlers]) =>
-        each(handler => GlobalDataPublisher.subscribe(topic, this, handler), handlers)
+        each(handler => subscribe(topic, this, handler), handlers)
     )
 );
+
+// ======================
+// 3. 이벤트 매핑
+// ======================
+
+this.customEvents = {};
+bindEvents(this, this.customEvents);

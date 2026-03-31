@@ -1,7 +1,10 @@
 /**
- * SystemInfo — 조립 코드
+ * SystemInfo — SimpleDashboard
  *
- * FieldRenderMixin을 적용하여 시스템 정보를 표시한다.
+ * 목적: 시스템 상태 정보를 표시한다
+ * 기능: FieldRenderMixin으로 시스템 정보를 렌더링한다
+ *
+ * Mixin: FieldRenderMixin
  */
 const { subscribe } = GlobalDataPublisher;
 const { bindEvents } = Wkit;
@@ -44,4 +47,4 @@ go(
 // ======================
 
 this.customEvents = {};
-Wkit.bindEvents(this, this.customEvents);
+bindEvents(this, this.customEvents);

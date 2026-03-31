@@ -1,8 +1,10 @@
 /**
- * StatusCards — 조립 코드
+ * StatusCards — SimpleDashboard
  *
- * FieldRenderMixin을 적용하여 4개 메트릭 카드의 값을 표시한다.
- * SystemInfo와 같은 Mixin, 다른 HTML/CSS — 같은 기능의 재사용.
+ * 목적: 핵심 지표를 카드로 표시한다
+ * 기능: FieldRenderMixin으로 카드별 값과 상태를 렌더링한다
+ *
+ * Mixin: FieldRenderMixin
  */
 const { subscribe } = GlobalDataPublisher;
 const { bindEvents } = Wkit;
@@ -46,4 +48,4 @@ this.customEvents = {
         [this.fieldRender.cssSelectors.card]: '@cardClicked'
     }
 };
-Wkit.bindEvents(this, this.customEvents);
+bindEvents(this, this.customEvents);

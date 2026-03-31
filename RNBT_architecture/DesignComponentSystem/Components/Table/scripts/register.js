@@ -1,14 +1,19 @@
 /**
  * Table 컴포넌트
  *
- * 목적: 데이터를 보여준다
- * 기능: TabulatorMixin으로 데이터를 테이블로 표시한다
+ * 목적: 데이터를 테이블로 표시한다
+ * 기능: TabulatorMixin으로 대화형 테이블을 렌더링한다
  *
  * Mixin: TabulatorMixin
  */
+const { subscribe } = GlobalDataPublisher;
+const { bindEvents } = Wkit;
+const { each, go } = fx;
 
+// ======================
+// 1. MIXIN 적용
+// ======================
 
-// ── 1. Mixin 적용 ──
 applyTabulatorMixin(this, {
     cssSelectors: {
         container: '.tabular__body'
@@ -23,17 +28,23 @@ applyTabulatorMixin(this, {
     ]
 });
 
-// ── 2. 구독 선언 ──
+// ======================
+// 2. 구독 연결
+// ======================
+
 this.subscriptions = {
     tableData: [this.tabulator.renderData]
 };
 
-// ── 3. 인스턴스 생성 → tableBuilt 이후 구독 활성화 ──
+// ======================
+// 3. 인스턴스 생성 → tableBuilt 이후 구독 활성화
+// ======================
+
 this.tabulator.init().on('tableBuilt', () => {
     go(
         Object.entries(this.subscriptions),
         each(([topic, handlers]) =>
-            each(handler => GlobalDataPublisher.subscribe(topic, this, handler), handlers)
+            each(handler => subscribe(topic, this, handler), handlers)
         )
     );
 });

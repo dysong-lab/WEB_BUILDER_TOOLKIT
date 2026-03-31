@@ -1,14 +1,19 @@
 /**
  * Header 컴포넌트
  *
- * 목적: 데이터를 보여준다
- * 기능: FieldRenderMixin으로 페이지 타이틀, 사용자명, 현재 시간을 표시한다
+ * 목적: 페이지 상단 정보를 표시한다
+ * 기능: FieldRenderMixin으로 텍스트와 상태를 렌더링한다
  *
  * Mixin: FieldRenderMixin
  */
+const { subscribe } = GlobalDataPublisher;
+const { bindEvents } = Wkit;
+const { each, go } = fx;
 
+// ======================
+// 1. MIXIN 적용
+// ======================
 
-// ── 1. Mixin 적용 ──
 applyFieldRenderMixin(this, {
     cssSelectors: {
         title:    '.header__title',
@@ -17,7 +22,10 @@ applyFieldRenderMixin(this, {
     }
 });
 
-// ── 2. 구독 ──
+// ======================
+// 2. 구독 연결
+// ======================
+
 this.subscriptions = {
     headerInfo: [this.fieldRender.renderData]
 };
@@ -25,6 +33,13 @@ this.subscriptions = {
 go(
     Object.entries(this.subscriptions),
     each(([topic, handlers]) =>
-        each(handler => GlobalDataPublisher.subscribe(topic, this, handler), handlers)
+        each(handler => subscribe(topic, this, handler), handlers)
     )
 );
+
+// ======================
+// 3. 이벤트 매핑
+// ======================
+
+this.customEvents = {};
+bindEvents(this, this.customEvents);

@@ -1,6 +1,18 @@
 /**
  * Sidebar — Dashboard Corporate
+ *
+ * 목적: 메뉴 항목을 표시하고 활성 상태를 관리한다
+ * 기능: ListRenderMixin으로 메뉴 항목을 렌더링하고 상태를 전환한다
+ *
+ * Mixin: ListRenderMixin
  */
+const { subscribe } = GlobalDataPublisher;
+const { bindEvents } = Wkit;
+const { each, go } = fx;
+
+// ======================
+// 1. MIXIN 적용
+// ======================
 
 applyListRenderMixin(this, {
     cssSelectors: {
@@ -19,6 +31,10 @@ applyListRenderMixin(this, {
     }
 });
 
+// ======================
+// 2. 구독 연결
+// ======================
+
 this.subscriptions = {
     dashboard_menuItems: [this.listRender.renderData]
 };
@@ -26,9 +42,13 @@ this.subscriptions = {
 go(
     Object.entries(this.subscriptions),
     each(([topic, handlers]) =>
-        each(handler => GlobalDataPublisher.subscribe(topic, this, handler), handlers)
+        each(handler => subscribe(topic, this, handler), handlers)
     )
 );
+
+// ======================
+// 3. 이벤트 매핑
+// ======================
 
 this.customEvents = {
     click: {
@@ -36,4 +56,4 @@ this.customEvents = {
     }
 };
 
-Wkit.bindEvents(this, this.customEvents);
+bindEvents(this, this.customEvents);

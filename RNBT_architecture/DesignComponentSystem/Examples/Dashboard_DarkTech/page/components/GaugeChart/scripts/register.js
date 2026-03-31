@@ -1,6 +1,18 @@
 /**
  * GaugeChart — Dashboard DarkTech
+ *
+ * 목적: 데이터를 gauge 차트로 시각화한다
+ * 기능: EChartsMixin으로 차트를 렌더링한다
+ *
+ * Mixin: EChartsMixin
  */
+const { subscribe } = GlobalDataPublisher;
+const { bindEvents } = Wkit;
+const { each, go } = fx;
+
+// ======================
+// 1. MIXIN 적용
+// ======================
 
 const p = { cyan: '#4dd0e1', grid: '#1a2030', muted: '#4a5568', text: '#c8cdd5' };
 
@@ -23,10 +35,22 @@ applyEChartsMixin(this, {
     mapData: function(data, option) { option.series[0].data = [{ value: data.value, name: data.name }]; return option; }
 });
 
+// ======================
+// 2. 구독 연결
+// ======================
+
 this.subscriptions = { dashboard_gauge: [this.echarts.renderData] };
+
 go(
     Object.entries(this.subscriptions),
     each(([topic, handlers]) =>
-        each(handler => GlobalDataPublisher.subscribe(topic, this, handler), handlers)
+        each(handler => subscribe(topic, this, handler), handlers)
     )
 );
+
+// ======================
+// 3. 이벤트 매핑
+// ======================
+
+this.customEvents = {};
+bindEvents(this, this.customEvents);
