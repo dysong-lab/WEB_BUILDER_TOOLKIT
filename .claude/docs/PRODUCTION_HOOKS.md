@@ -75,10 +75,87 @@ Claude가 생산 파일 작성 (Write/Edit)
 
 ---
 
-## 4. Hook 목록
+## 4. 생산 계약 (Production Contract)
 
-> **TBD** — 생산 파일 전체(HTML, CSS, JS, Mixin)에 대한 반복 오류 패턴을 분석하여 선정 예정.
-> 선별 기준: "과거에 발견된 모든 오류"가 아니라, **"앞으로 생산할 때 반복될 오류"**만 선별한다.
+생산된 파일이 품질 기준을 충족하는지 판단하는 전체 체크리스트다.
+이 중 일부는 Hook으로 자동화하고, 나머지는 audit-project나 사람의 리뷰가 담당한다.
+
+### 컴포넌트 생산
+
+#### register.js — 조립 코드
+
+| 계약 | 자동화 |
+|------|--------|
+| 3단계가 모두 존재하는가 (Mixin 적용 → 구독 → 이벤트) | Hook |
+| 구독에서 함수 참조를 사용하는가 (문자열이 아닌) | 리뷰 |
+| customEvents에서 computed property를 사용하는가 (하드코딩이 아닌) | 리뷰 |
+| 렌더링 로직이 없는가 (innerHTML, DOM 조작 없음) | Hook |
+| fetch 호출이 없는가 | Hook |
+| var를 사용하지 않는가 | Hook |
+
+#### beforeDestroy.js — 정리 코드
+
+| 계약 | 자동화 |
+|------|--------|
+| register.js의 정확한 역순인가 (이벤트 제거 → 구독 해제 → Mixin destroy) | Hook |
+| register.js에서 생성한 모든 것이 정리되는가 (누락 없음) | 리뷰 |
+| 참조를 null 처리하는가 (customEvents, subscriptions) | Hook |
+
+#### views/*.html — 디자인
+
+| 계약 | 자동화 |
+|------|--------|
+| register.js의 cssSelectors에 선언된 선택자가 HTML에 존재하는가 | 리뷰 |
+| ListRenderMixin 사용 시 `<template>` 태그가 있는가 | 리뷰 |
+| 컨테이너 요소가 있는가 | 리뷰 |
+
+#### styles/*.css — 스타일
+
+| 계약 | 자동화 |
+|------|--------|
+| px 단위만 사용하는가 (rem/em 금지) | Hook |
+| Flexbox를 사용하는가 (Grid/absolute 지양) | 리뷰 |
+| 컨테이너 ID가 컴포넌트별 고유한가 (범용 금지) | 리뷰 |
+
+#### preview/*.html — 독립 테스트
+
+| 계약 | 자동화 |
+|------|--------|
+| CSS가 인라인인가 (로컬 `<link>` 금지) | Hook |
+| 컨테이너에 Figma 치수가 명시되어 있는가 | 리뷰 |
+
+### Mixin 생산
+
+#### MixinName.js — 구현체
+
+| 계약 | 자동화 |
+|------|--------|
+| var를 사용하지 않는가 | Hook |
+| 네임스페이스를 주입하는가 (`instance.[ns] = ns`) | Hook |
+| destroy가 주입한 모든 메서드/속성을 null 처리하는가 | 리뷰 |
+| destroy 마지막에 `instance.[ns] = null`인가 | Hook |
+| 에러를 throw하는가 (catch하지 않는가) | 리뷰 |
+| 다른 Mixin을 참조하지 않는가 | 리뷰 |
+
+---
+
+## 5. Hook 선별
+
+위 생산 계약에서 "Hook"으로 표시된 항목만 추출한 것이다.
+선별 기준: **정규식으로 검출 가능하고, 생산 시 반복될 오류.**
+
+| # | 대상 파일 | 계약 | 검출 방법 |
+|---|----------|------|----------|
+| 1 | `**/register.js` | 3단계 중 bindEvents 누락 | `bindEvents` 존재 확인 |
+| 2 | `**/register.js` | 렌더링 로직 혼입 | `innerHTML` 존재 시 경고 |
+| 3 | `**/register.js` | fetch 호출 | `fetch(` 존재 시 경고 |
+| 4 | `**/beforeDestroy.js` | 역순 중 removeCustomEvents 누락 | `removeCustomEvents` 존재 확인 |
+| 5 | `**/beforeDestroy.js` | 참조 null 미처리 | `= null` 존재 확인 |
+| 6 | `**/*.js` | var 사용 | `\bvar\b` 검출 |
+| 7 | `**/*.css` | rem/em 사용 | `\d+rem\b\|\d+em\b` 검출 |
+| 8 | `**/preview*.html` | 로컬 CSS `<link>` | `<link.*href="styles/` 검출 |
+| 9 | `**/Mixin*.js` | 네임스페이스 미주입 | `instance\.\w+ = ns` 존재 확인 |
+| 10 | `**/Mixin*.js` | destroy 마지막 null 누락 | `instance\.\w+ = null` 존재 확인 |
 
 ---
 
