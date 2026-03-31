@@ -55,6 +55,21 @@
  * ─────────────────────────────────────────────────────────────
  */
 
+function _applyValue(el, key, value, paths) {
+    const { datasetAttrs, elementAttrs, styleAttrs } = paths;
+
+    if (datasetAttrs[key]) {
+        el.setAttribute('data-' + datasetAttrs[key], value);
+    } else if (elementAttrs[key]) {
+        el.setAttribute(elementAttrs[key], value);
+    } else if (styleAttrs[key]) {
+        const { property, unit = '' } = styleAttrs[key];
+        el.style[property] = value + unit;
+    } else {
+        el.textContent = value;
+    }
+}
+
 function applyFieldRenderMixin(instance, options) {
     const {
         cssSelectors = {},
@@ -90,7 +105,7 @@ function applyFieldRenderMixin(instance, options) {
             const el = instance.appendElement.querySelector(cssSelectors[key]);
             if (!el) return;
 
-            applyValue(el, key, value, paths);
+            _applyValue(el, key, value, paths);
         });
     };
 

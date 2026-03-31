@@ -77,6 +77,21 @@
  * ─────────────────────────────────────────────────────────────
  */
 
+function _applyValue(el, key, value, paths) {
+    const { datasetAttrs, elementAttrs, styleAttrs } = paths;
+
+    if (datasetAttrs[key]) {
+        el.setAttribute('data-' + datasetAttrs[key], value);
+    } else if (elementAttrs[key]) {
+        el.setAttribute(elementAttrs[key], value);
+    } else if (styleAttrs[key]) {
+        const { property, unit = '' } = styleAttrs[key];
+        el.style[property] = value + unit;
+    } else {
+        el.textContent = value;
+    }
+}
+
 function applyListRenderMixin(instance, options) {
     const {
         cssSelectors = {},
@@ -130,7 +145,7 @@ function applyListRenderMixin(instance, options) {
                 const el = clone.querySelector(selector);
                 if (!el || itemData[key] == null) return;
 
-                applyValue(el, key, itemData[key], paths);
+                _applyValue(el, key, itemData[key], paths);
             });
 
             containerEl.appendChild(clone);

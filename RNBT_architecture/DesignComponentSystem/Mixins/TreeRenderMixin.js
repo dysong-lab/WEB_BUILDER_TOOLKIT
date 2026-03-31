@@ -61,6 +61,21 @@
  * ─────────────────────────────────────────────────────────────
  */
 
+function _applyValue(el, key, value, paths) {
+    const { datasetAttrs, elementAttrs, styleAttrs } = paths;
+
+    if (datasetAttrs[key]) {
+        el.setAttribute('data-' + datasetAttrs[key], value);
+    } else if (elementAttrs[key]) {
+        el.setAttribute(elementAttrs[key], value);
+    } else if (styleAttrs[key]) {
+        const { property, unit = '' } = styleAttrs[key];
+        el.style[property] = value + unit;
+    } else {
+        el.textContent = value;
+    }
+}
+
 function applyTreeRenderMixin(instance, options) {
     const {
         cssSelectors = {},
@@ -99,7 +114,7 @@ function applyTreeRenderMixin(instance, options) {
             const el = clone.querySelector(selector);
             if (!el || nodeData[key] == null) return;
 
-            applyValue(el, key, nodeData[key], paths);
+            _applyValue(el, key, nodeData[key], paths);
         });
 
         // 자동 속성: node-id, depth, expanded
