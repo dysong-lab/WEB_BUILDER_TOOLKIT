@@ -57,6 +57,26 @@ datasetAttrs: {
 }
 ```
 
+### elementAttrs (선택)
+
+요소 속성(src, fill 등)으로 설정할 키를 지정한다.
+
+```javascript
+elementAttrs: {
+    icon: 'src'     // → el.setAttribute('src', value)
+}
+```
+
+### styleAttrs (선택)
+
+스타일 속성(width, height 등)으로 설정할 키를 지정한다.
+
+```javascript
+styleAttrs: {
+    progress: { property: 'width', unit: '%' }   // → el.style.width = value + '%'
+}
+```
+
 ### itemKey (선택)
 
 항목을 식별하는 키 이름. 이 옵션을 제공하면 `updateItemState`, `getItemState` 메서드가 활성화된다.
@@ -215,6 +235,8 @@ this.customEvents = {
 |------------|------|------|
 | `cssSelectors` | 주입된 cssSelectors (customEvents에서 computed property로 참조) | 항상 |
 | `datasetAttrs` | 주입된 datasetAttrs | 항상 |
+| `elementAttrs` | 주입된 elementAttrs | 항상 |
+| `styleAttrs` | 주입된 styleAttrs | 항상 |
 | `renderData({ response })` | selector KEY에 맞춰진 배열을 받아 항목을 생성하여 렌더링 | 항상 |
 | `clear()` | 컨테이너의 모든 항목을 제거 | 항상 |
 | `destroy()` | Mixin이 주입한 모든 속성과 메서드를 정리 | 항상 |

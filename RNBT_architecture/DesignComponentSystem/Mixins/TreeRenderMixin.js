@@ -4,10 +4,12 @@
  * 계층적 데이터를 트리 구조로 렌더링한다.
  *
  * ─────────────────────────────────────────────────────────────
- * renderData 반영 규칙:
+ * renderData 반영 규칙 (applyValue 4경로):
  *
  *   대상 요소는 cssSelectors가 결정한다.
- *   datasetAttrs에 등록된 키 → data 속성 설정
+ *   datasetAttrs에 등록된 키 → data-* 속성 설정
+ *   elementAttrs에 등록된 키 → 요소 속성 설정 (src, fill 등)
+ *   styleAttrs에 등록된 키   → 스타일 속성 설정 (width, height 등)
  *   등록되지 않은 키          → textContent 설정
  *   각 노드에 data-node-id, data-depth, data-expanded 속성이 자동 부여된다.
  *
@@ -44,6 +46,8 @@
  *
  *   this.treeRender.cssSelectors   — CSS 선택자
  *   this.treeRender.datasetAttrs   — data-* 속성 매핑
+ *   this.treeRender.elementAttrs   — 요소 속성 매핑 (src, fill 등)
+ *   this.treeRender.styleAttrs     — 스타일 속성 매핑 (width, height 등)
  *   this.treeRender.renderData     — { response } → 트리 렌더링
  *   this.treeRender.expand         — (id) → 노드 펼치기
  *   this.treeRender.collapse       — (id) → 노드 접기
@@ -61,9 +65,13 @@ function applyTreeRenderMixin(instance, options) {
     const {
         cssSelectors = {},
         datasetAttrs = {},
+        elementAttrs = {},
+        styleAttrs = {},
         nodeKey = 'id',
         childrenKey = 'children'
     } = options;
+
+    const paths = { datasetAttrs, elementAttrs, styleAttrs };
 
     // Mixin이 직접 참조하는 KEY 추출
     const container = cssSelectors.container;
@@ -74,9 +82,11 @@ function applyTreeRenderMixin(instance, options) {
     const ns = {};
     instance.treeRender = ns;
 
-    // 선택자 보존 (외부에서 computed property로 참조 가능)
+    // 선택자/옵션 보존 (외부에서 computed property로 참조 가능)
     ns.cssSelectors = { ...cssSelectors };
     ns.datasetAttrs = { ...datasetAttrs };
+    ns.elementAttrs = { ...elementAttrs };
+    ns.styleAttrs = { ...styleAttrs };
 
     /**
      * 단일 노드를 template에서 복제하여 생성
@@ -89,11 +99,7 @@ function applyTreeRenderMixin(instance, options) {
             const el = clone.querySelector(selector);
             if (!el || nodeData[key] == null) return;
 
-            if (datasetAttrs[key]) {
-                el.setAttribute('data-' + datasetAttrs[key], nodeData[key]);
-            } else {
-                el.textContent = nodeData[key];
-            }
+            applyValue(el, key, nodeData[key], paths);
         });
 
         // 자동 속성: node-id, depth, expanded
@@ -320,6 +326,8 @@ function applyTreeRenderMixin(instance, options) {
         ns.clear = null;
         ns.cssSelectors = null;
         ns.datasetAttrs = null;
+        ns.elementAttrs = null;
+        ns.styleAttrs = null;
         instance.treeRender = null;
     };
 }

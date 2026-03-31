@@ -43,6 +43,26 @@ datasetAttrs: {
 
 > **KEY의 성격:** 모든 KEY는 사용자가 정의한다. cssSelectors의 같은 KEY로 대상 요소를 찾고, datasetAttrs의 VALUE가 data 속성명이 된다.
 
+### elementAttrs (선택)
+
+요소 속성(src, fill 등)으로 설정할 키를 지정한다.
+
+```javascript
+elementAttrs: {
+    icon: 'src'     // → el.setAttribute('src', value)
+}
+```
+
+### styleAttrs (선택)
+
+스타일 속성(width, height 등)으로 설정할 키를 지정한다.
+
+```javascript
+styleAttrs: {
+    progress: { property: 'width', unit: '%' }   // → el.style.width = value + '%'
+}
+```
+
 ### renderData가 기대하는 데이터
 
 플랫 객체. 데이터의 KEY 이름과 cssSelectors의 KEY 이름이 같으면 매칭된다.
@@ -127,6 +147,8 @@ DOM:
 |------------|------|
 | `cssSelectors` | 주입된 cssSelectors (customEvents에서 computed property로 참조) |
 | `datasetAttrs` | 주입된 datasetAttrs |
+| `elementAttrs` | 주입된 elementAttrs |
+| `styleAttrs` | 주입된 styleAttrs |
 | `renderData({ response })` | selector KEY에 맞춰진 데이터를 받아 DOM에 반영 |
 | `destroy()` | Mixin이 주입한 모든 속성과 메서드를 정리 |
 

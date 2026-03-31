@@ -56,6 +56,26 @@ datasetAttrs: {
 }
 ```
 
+### elementAttrs (선택)
+
+요소 속성(src, fill 등)으로 설정할 키를 지정한다.
+
+```javascript
+elementAttrs: {
+    icon: 'src'     // → el.setAttribute('src', value)
+}
+```
+
+### styleAttrs (선택)
+
+스타일 속성(width, height 등)으로 설정할 키를 지정한다.
+
+```javascript
+styleAttrs: {
+    progress: { property: 'width', unit: '%' }   // → el.style.width = value + '%'
+}
+```
+
 ### nodeKey (기본값: 'id')
 
 각 노드를 고유하게 식별하는 데이터 키. 기본값은 `'id'`.
@@ -228,6 +248,8 @@ bindEvents(this, this.customEvents);
 |------------|------|
 | `cssSelectors` | 주입된 cssSelectors (customEvents에서 computed property로 참조) |
 | `datasetAttrs` | 주입된 datasetAttrs |
+| `elementAttrs` | 주입된 elementAttrs |
+| `styleAttrs` | 주입된 styleAttrs |
 | `renderData({ response })` | 재귀적 배열을 받아 트리를 렌더링 |
 | `expand(id)` | 노드를 펼친다 (직계 자식 표시) |
 | `collapse(id)` | 노드를 접는다 (모든 하위 숨김) |

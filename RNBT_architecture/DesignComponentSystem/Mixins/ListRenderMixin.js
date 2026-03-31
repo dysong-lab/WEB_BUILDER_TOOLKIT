@@ -4,10 +4,12 @@
  * 배열 데이터를 template 기반으로 반복 렌더링한다.
  *
  * ─────────────────────────────────────────────────────────────
- * renderData 반영 규칙:
+ * renderData 반영 규칙 (applyValue 4경로):
  *
  *   대상 요소는 cssSelectors가 결정한다.
- *   datasetAttrs에 등록된 키 → data 속성 설정
+ *   datasetAttrs에 등록된 키 → data-* 속성 설정
+ *   elementAttrs에 등록된 키 → 요소 속성 설정 (src, fill 등)
+ *   styleAttrs에 등록된 키   → 스타일 속성 설정 (width, height 등)
  *   등록되지 않은 키          → textContent 설정
  *
  * ─────────────────────────────────────────────────────────────
@@ -62,6 +64,8 @@
  *
  *   this.listRender.cssSelectors    — CSS 선택자 (렌더링, 이벤트 매핑, 페이지 접근)
  *   this.listRender.datasetAttrs    — data-* 속성 매핑
+ *   this.listRender.elementAttrs    — 요소 속성 매핑 (src, fill 등)
+ *   this.listRender.styleAttrs      — 스타일 속성 매핑 (width, height 등)
  *   this.listRender.renderData      — { response } → 리스트 렌더링
  *   this.listRender.clear           — 컨테이너 비우기
  *   this.listRender.destroy         — 자기 정리
@@ -74,7 +78,15 @@
  */
 
 function applyListRenderMixin(instance, options) {
-    const { cssSelectors = {}, datasetAttrs = {}, itemKey } = options;
+    const {
+        cssSelectors = {},
+        datasetAttrs = {},
+        elementAttrs = {},
+        styleAttrs = {},
+        itemKey
+    } = options;
+
+    const paths = { datasetAttrs, elementAttrs, styleAttrs };
 
     // Mixin이 직접 참조하는 KEY 추출
     const container = cssSelectors.container;
@@ -87,9 +99,11 @@ function applyListRenderMixin(instance, options) {
     const ns = {};
     instance.listRender = ns;
 
-    // 선택자 보존 (외부에서 computed property로 참조 가능)
+    // 선택자/옵션 보존 (외부에서 computed property로 참조 가능)
     ns.cssSelectors = { ...cssSelectors };
     ns.datasetAttrs = { ...datasetAttrs };
+    ns.elementAttrs = { ...elementAttrs };
+    ns.styleAttrs = { ...styleAttrs };
 
     /**
      * 데이터 렌더링
@@ -116,12 +130,7 @@ function applyListRenderMixin(instance, options) {
                 const el = clone.querySelector(selector);
                 if (!el || itemData[key] == null) return;
 
-                // datasetAttrs에 등록된 키 → data 속성으로 설정
-                if (datasetAttrs[key]) {
-                    el.setAttribute('data-' + datasetAttrs[key], itemData[key]);
-                } else {
-                    el.textContent = itemData[key];
-                }
+                applyValue(el, key, itemData[key], paths);
             });
 
             containerEl.appendChild(clone);
@@ -185,6 +194,8 @@ function applyListRenderMixin(instance, options) {
         ns.clear = null;
         ns.cssSelectors = null;
         ns.datasetAttrs = null;
+        ns.elementAttrs = null;
+        ns.styleAttrs = null;
         instance.listRender = null;
     };
 }
