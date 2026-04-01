@@ -1,3 +1,10 @@
+#navsidebar-container {
+    width: 260px;
+    height: 480px;
+    display: block;
+    overflow: hidden;
+}
+
 #navsidebar-container .nav-sidebar {
     display: flex;
     flex-direction: column;

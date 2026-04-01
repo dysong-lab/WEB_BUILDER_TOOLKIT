@@ -1,3 +1,10 @@
+#piechart-container {
+    width: 700px;
+    height: auto;
+    display: block;
+    overflow: hidden;
+}
+
 #piechart-container .chart {
     padding: 0;
 }

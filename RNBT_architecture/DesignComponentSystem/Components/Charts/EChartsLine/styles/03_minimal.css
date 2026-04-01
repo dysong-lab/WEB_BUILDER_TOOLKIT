@@ -1,3 +1,10 @@
+#linechart-container {
+    width: 700px;
+    height: auto;
+    display: block;
+    overflow: hidden;
+}
+
 #linechart-container .chart {
     background: transparent;
     padding: 0;

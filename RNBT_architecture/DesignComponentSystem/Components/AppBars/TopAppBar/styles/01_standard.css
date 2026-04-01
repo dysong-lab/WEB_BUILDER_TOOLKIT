@@ -1,4 +1,8 @@
 #topappbar-container {
+    width: 700px;
+    height: auto;
+    display: block;
+    overflow: hidden;
     font-family: 'Segoe UI', sans-serif;
 }
 

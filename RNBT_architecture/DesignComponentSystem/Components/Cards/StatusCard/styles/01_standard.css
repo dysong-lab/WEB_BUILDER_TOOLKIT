@@ -1,4 +1,8 @@
 #statuscard-container {
+    width: 360px;
+    height: auto;
+    display: block;
+    overflow: hidden;
     font-family: 'Segoe UI', sans-serif;
 }
 

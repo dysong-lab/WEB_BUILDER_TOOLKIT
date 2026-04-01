@@ -1,3 +1,11 @@
+#navdrawer-container {
+    width: 600px;
+    height: 480px;
+    display: block;
+    overflow: hidden;
+    position: relative;
+}
+
 #navdrawer-container .nav-drawer {
     position: absolute;
     top: 0;

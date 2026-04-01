@@ -1,3 +1,10 @@
+#event-browser-container {
+    width: 700px;
+    height: auto;
+    display: block;
+    overflow: hidden;
+}
+
 #event-browser-container .event-browser {
     background: #0d1117;
     border: 1px solid #1a2030;
