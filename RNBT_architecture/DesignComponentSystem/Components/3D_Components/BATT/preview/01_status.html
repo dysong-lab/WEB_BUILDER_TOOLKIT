@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>BATT — 01_standard</title>
+    <title>BATT — 01_status</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #1a1a2e; }
@@ -91,8 +91,7 @@
     controls.target.set(0, 0, 0);
 
     // ── Lighting ──────────────────────────────────────────────
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-    scene.add(ambientLight);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
     directionalLight.position.set(5, 8, 4);
@@ -103,26 +102,21 @@
     scene.add(fillLight);
 
     // ── Grid ──────────────────────────────────────────────────
-    const grid = new THREE.GridHelper(10, 20, 0x2a2a4a, 0x2a2a4a);
-    scene.add(grid);
+    scene.add(new THREE.GridHelper(10, 20, 0x2a2a4a, 0x2a2a4a));
 
-    // ── Mock Instance (런타임 컴포넌트 시뮬레이션) ──────────────
-    const instance = {
-        appendElement: null    // 모델 로드 후 THREE.Group 할당
-    };
+    // ── Mock Instance ─────────────────────────────────────────
+    const instance = { appendElement: null };
 
     // ── Load Model ────────────────────────────────────────────
-    const modelPath = '../../../../models/BATT/BATT.gltf';
     const loader = new GLTFLoader();
 
-    loader.load(modelPath, (gltf) => {
+    loader.load('../../../../models/BATT/BATT.gltf', (gltf) => {
         const model = gltf.scene;
         scene.add(model);
 
-        // 런타임과 동일: appendElement = 모델의 Group
         instance.appendElement = model;
 
-        // MeshStateMixin 적용 (register.js와 동일한 옵션)
+        // MeshStateMixin 적용 (01_status_register.js와 동일)
         applyMeshStateMixin(instance, {
             colorMap: {
                 normal:  0x34d399,
@@ -132,7 +126,7 @@
             }
         });
 
-        // 모델 중심으로 카메라 타겟 조정
+        // 카메라 타겟 조정
         const box = new THREE.Box3().setFromObject(model);
         const center = box.getCenter(new THREE.Vector3());
         controls.target.copy(center);
@@ -148,7 +142,7 @@
     }
     animate();
 
-    // ── Demo: renderData 호출 (런타임 구독 데이터 시뮬레이션) ───
+    // ── Demo: renderData 호출 ─────────────────────────────────
     document.querySelectorAll('.demo-btn').forEach((btn) => {
         btn.addEventListener('click', () => {
             if (!instance.meshState) return;
@@ -156,9 +150,6 @@
             const status = btn.dataset.status;
 
             if (status === 'reset') {
-                instance.meshState.renderData({
-                    response: [{ meshName: 'BATT', status: 'reset' }]
-                });
                 const mesh = instance.appendElement.getObjectByName('BATT');
                 if (mesh) mesh.material.color.setHex(0xffffff);
                 return;
