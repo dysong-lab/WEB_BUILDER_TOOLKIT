@@ -1,0 +1,258 @@
+{
+  "asset": {
+    "version": "2.0",
+    "generator": "babylon.js glTF exporter for 3dsmax 2023 v20240312.5"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0,
+        1
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "translation": [
+        0.165010959,
+        -0.0519915,
+        0.421773
+      ],
+      "name": "Y_main_Spot002.Target"
+    },
+    {
+      "children": [
+        2,
+        3
+      ],
+      "translation": [
+        0.0,
+        0.0,
+        -9.725686E-10
+      ],
+      "name": "CoolingTower"
+    },
+    {
+      "mesh": 0,
+      "translation": [
+        -0.0152850784,
+        0.0107500106,
+        0.005597945
+      ],
+      "rotation": [
+        0.5000003,
+        0.499999583,
+        -0.50000006,
+        0.50000006
+      ],
+      "name": "waterTowerLadder_A"
+    },
+    {
+      "mesh": 1,
+      "translation": [
+        0.00217739586,
+        0.023649998,
+        1.55525059E-09
+      ],
+      "name": "waterTower"
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 1,
+            "NORMAL": 2,
+            "TEXCOORD_0": 3,
+            "TEXCOORD_1": 4
+          },
+          "indices": 0,
+          "material": 0
+        }
+      ],
+      "name": "waterTowerLadder_A"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 6,
+            "NORMAL": 7,
+            "TEXCOORD_0": 8
+          },
+          "indices": 5,
+          "material": 1
+        }
+      ],
+      "name": "waterTower"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5123,
+      "count": 396,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 220,
+      "max": [
+        0.003600174,
+        0.00451257359,
+        0.0105797276
+      ],
+      "min": [
+        -0.003599846,
+        -0.0045128176,
+        -0.0337496065
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 2640,
+      "componentType": 5126,
+      "count": 220,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 220,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 1760,
+      "componentType": 5126,
+      "count": 220,
+      "type": "VEC2",
+      "name": "accessorUV2s"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 792,
+      "componentType": 5123,
+      "count": 4644,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 5280,
+      "componentType": 5126,
+      "count": 1632,
+      "max": [
+        0.01762051,
+        0.0190500021,
+        0.02792505
+      ],
+      "min": [
+        -0.0186382812,
+        -0.0236500576,
+        -0.02792505
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 24864,
+      "componentType": 5126,
+      "count": 1632,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 3520,
+      "componentType": 5126,
+      "count": 1632,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 10080,
+      "name": "bufferViewScalar"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 10080,
+      "byteLength": 44448,
+      "byteStride": 12,
+      "name": "bufferViewFloatVec3"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 54528,
+      "byteLength": 16576,
+      "byteStride": 8,
+      "name": "bufferViewFloatVec2"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "CoolingTower.bin",
+      "byteLength": 71104
+    }
+  ],
+  "materials": [
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.450053632
+      },
+      "name": "waterTowerLadder_A"
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 1
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.450053632
+      },
+      "name": "waterTower"
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0,
+      "name": "waterTowerLadder_A.png"
+    },
+    {
+      "sampler": 0,
+      "source": 1,
+      "name": "waterTower.png"
+    }
+  ],
+  "images": [
+    {
+      "uri": "maps/waterTowerLadder_A.png"
+    },
+    {
+      "uri": "maps/waterTower.png"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987
+    }
+  ]
+}

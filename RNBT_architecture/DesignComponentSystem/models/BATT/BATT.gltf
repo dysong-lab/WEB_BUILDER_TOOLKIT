@@ -1,0 +1,164 @@
+{
+  "asset": {
+    "version": "2.0",
+    "generator": "babylon.js glTF exporter for 3dsmax 2023 v20240312.5"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0,
+        1,
+        2
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "translation": [
+        1.98198128,
+        34.52237,
+        1.9184531
+      ],
+      "name": "Camera002.Target"
+    },
+    {
+      "translation": [
+        -1.71310961,
+        36.9775238,
+        -3.01518178
+      ],
+      "rotation": [
+        0.49999997,
+        -0.50000006,
+        0.5000001,
+        0.49999997
+      ],
+      "name": "Camera003.Target"
+    },
+    {
+      "mesh": 0,
+      "rotation": [
+        0.0,
+        -3.2584137E-07,
+        0.0,
+        1.0
+      ],
+      "name": "BATT"
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 1,
+            "NORMAL": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 0,
+          "material": 0
+        }
+      ],
+      "name": "BATT"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5123,
+      "count": 516,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 309,
+      "max": [
+        0.3,
+        0.9500004,
+        0.325235128
+      ],
+      "min": [
+        -0.3,
+        -0.94999963,
+        -0.325235248
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 3708,
+      "componentType": 5126,
+      "count": 309,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 309,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 1032,
+      "name": "bufferViewScalar"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 1032,
+      "byteLength": 7416,
+      "byteStride": 12,
+      "name": "bufferViewFloatVec3"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 8448,
+      "byteLength": 2472,
+      "byteStride": 8,
+      "name": "bufferViewFloatVec2"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "BATT.bin",
+      "byteLength": 10920
+    }
+  ],
+  "materials": [
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.450053632
+      },
+      "name": "Material #342535235"
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0,
+      "name": "battery.jpg"
+    }
+  ],
+  "images": [
+    {
+      "uri": "maps/battery.jpg"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987
+    }
+  ]
+}
