@@ -25,8 +25,6 @@ Components/
         ├── views/             ← 디자인 변형
         ├── styles/
         ├── scripts/           ← 조립 코드 (불변)
-        │   ├── component/     ← register.js, beforeDestroy.js
-        │   └── page/          ← before_load.js, loaded.js, before_unload.js
         └── preview/
 ```
 
@@ -91,7 +89,7 @@ Components/
 
 ## 디자인 변형의 조건
 
-같은 scripts/component/register.js로 여러 디자인이 동작한다. 조건:
+같은 register.js로 여러 디자인이 동작한다. 조건:
 
 - cssSelectors의 VALUE에 해당하는 요소가 HTML에 존재할 것
 - datasetAttrs의 data 속성은 renderData가 설정하므로 HTML에 미리 적을 필요 없음
