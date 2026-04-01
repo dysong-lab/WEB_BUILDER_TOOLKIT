@@ -25,6 +25,8 @@ Components/
         ├── views/             ← 디자인 변형
         ├── styles/
         ├── scripts/           ← 조립 코드 (불변)
+        │   ├── component/     ← register.js, beforeDestroy.js
+        │   └── page/          ← before_load.js, loaded.js, before_unload.js
         └── preview/
 ```
 
@@ -57,16 +59,16 @@ Components/
 
 | 범주 | 설명 | 주요 Mixin | 구현 컴포넌트 |
 |------|------|-----------|-------------|
-| AppBars | 앱 상단/하단 바 | FieldRender | Header |
+| AppBars | 앱 상단/하단 바 | FieldRender | TopAppBar |
 | Badges | 카운터/알림 표시 | FieldRender | — |
 | Buttons | 사용자 액션 | customEvents + CSS | — |
-| Cards | 정보 카드 | FieldRender | — |
+| Cards | 정보 카드 | FieldRender | StatusCard |
 | Chips | 태그/필터 | ListRender | — |
 | Dialogs | 모달 팝업 | ShadowPopup | — |
 | Lists | 데이터 목록 | ListRender | EventBrowser |
 | Loading | 로딩/진행률 | FieldRender + styleAttrs | — |
 | Menus | 드롭다운 메뉴 | ListRender + itemKey | — |
-| Navigation | 탐색 메뉴 | ListRender + itemKey | Sidebar |
+| Navigation | 탐색 메뉴 | ListRender + itemKey | NavigationDrawer, NavigationSidebar |
 | Search | 검색 입력 | FieldRender + customEvents | — |
 | Sheets | 바텀/사이드 시트 | ShadowPopup | — |
 | Sliders | 범위 선택 | customEvents + styleAttrs | — |
@@ -81,15 +83,15 @@ Components/
 
 | 범주 | 설명 | 주요 Mixin | 구현 컴포넌트 |
 |------|------|-----------|-------------|
-| Charts | 차트 시각화 | EChartsMixin | BarChart, LineChart, PieChart, GaugeChart |
-| Tables | 대화형 테이블 | TabulatorMixin | Table |
+| Charts | 차트 시각화 | EChartsMixin | EChartsBar, EChartsLine, EChartsPie, EChartsGauge |
+| Tables | 대화형 테이블 | TabulatorMixin | TabulatorDataTable |
 | Trees | 트리 구조 | TreeRenderMixin | — |
 
 ---
 
 ## 디자인 변형의 조건
 
-같은 register.js로 여러 디자인이 동작한다. 조건:
+같은 scripts/component/register.js로 여러 디자인이 동작한다. 조건:
 
 - cssSelectors의 VALUE에 해당하는 요소가 HTML에 존재할 것
 - datasetAttrs의 data 속성은 renderData가 설정하므로 HTML에 미리 적을 필요 없음
