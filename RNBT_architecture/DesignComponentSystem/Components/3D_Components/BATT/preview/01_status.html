@@ -6,7 +6,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #1a1a2e; }
-        #batt-container {
+        #batt-pageThreeLayer {
             width: 600px;
             height: 480px;
             display: block;
@@ -48,7 +48,7 @@
         <button class="demo-btn" data-status="reset">Reset</button>
     </div>
 
-    <div id="batt-container"></div>
+    <div id="batt-pageThreeLayer"></div>
 
     <!-- Mixin 로드 -->
     <script src="../../../../Mixins/MeshStateMixin.js"></script>
@@ -68,7 +68,7 @@
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
     // ── Three.js Scene Setup ──────────────────────────────────
-    const container = document.getElementById('batt-container');
+    const container = document.getElementById('batt-pageThreeLayer');
     const width = container.clientWidth;
     const height = container.clientHeight;
 

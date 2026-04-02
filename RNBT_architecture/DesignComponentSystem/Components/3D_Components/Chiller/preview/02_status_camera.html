@@ -6,7 +6,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #1a1a2e; }
-        #chiller-container {
+        #chiller-pageThreeLayer {
             width: 600px;
             height: 480px;
             display: block;
@@ -78,7 +78,7 @@
         </div>
     </div>
 
-    <div id="chiller-container"></div>
+    <div id="chiller-pageThreeLayer"></div>
 
     <!-- Mixin 로드 -->
     <script src="../../../../Mixins/MeshStateMixin.js"></script>
@@ -99,7 +99,7 @@
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
     // ── Three.js Scene Setup ──────────────────────────────────
-    const container = document.getElementById('chiller-container');
+    const container = document.getElementById('chiller-pageThreeLayer');
     const width = container.clientWidth;
     const height = container.clientHeight;
 
