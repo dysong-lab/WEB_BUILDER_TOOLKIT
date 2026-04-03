@@ -49,6 +49,8 @@ This file provides guidance to Claude Code when working in this repository.
 |------|-------|
 | 페이지에서 데이터를 받아 표시 (차트, 테이블, 로그 등) | `create-standard-component` |
 | SVG 심볼의 색상/상태를 런타임에서 제어 | `create-symbol-state-component` |
+| 3D 개별 장비 (1 GLTF = 1 Mesh, meshName 확정) | `create-3d-component` |
+| 3D GLTF 컨테이너 (1 GLTF = N Mesh, 동적 식별) | `create-3d-container-component` |
 
 ### 페이지 생성 (3-page)
 
