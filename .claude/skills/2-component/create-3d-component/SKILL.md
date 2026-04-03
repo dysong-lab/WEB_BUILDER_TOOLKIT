@@ -88,6 +88,16 @@ this.subscriptions = {
     equipmentStatus: [this.meshState.renderData],
 };
 
+const { subscribe } = GlobalDataPublisher;
+const { each, go } = fx;
+
+go(
+    Object.entries(this.subscriptions),
+    each(([topic, handlers]) =>
+        each(handler => subscribe(topic, this, handler), handlers)
+    )
+);
+
 // ======================
 // 3. 이벤트 매핑 (01에서는 없음)
 // ======================
@@ -96,11 +106,18 @@ this.subscriptions = {
 ## 01_status — beforeDestroy.js
 
 ```javascript
+const { unsubscribe } = GlobalDataPublisher;
+const { each, go } = fx;
+
 // 2. 구독 해제
+go(
+    Object.entries(this.subscriptions),
+    each(([topic, _]) => unsubscribe(topic, this))
+);
 this.subscriptions = null;
 
 // 1. Mixin 정리
-this.meshState.destroy();
+this.meshState?.destroy();
 ```
 
 ---
@@ -141,6 +158,16 @@ this.subscriptions = {
     equipmentStatus: [this.meshState.renderData],
 };
 
+const { subscribe } = GlobalDataPublisher;
+const { each, go } = fx;
+
+go(
+    Object.entries(this.subscriptions),
+    each(([topic, handlers]) =>
+        each(handler => subscribe(topic, this, handler), handlers)
+    )
+);
+
 // ======================
 // 3. 이벤트 매핑 (개별 단위 02에서는 없음)
 // ======================
@@ -151,12 +178,19 @@ this.subscriptions = {
 ## 02_status_camera — beforeDestroy.js
 
 ```javascript
+const { unsubscribe } = GlobalDataPublisher;
+const { each, go } = fx;
+
 // 2. 구독 해제
+go(
+    Object.entries(this.subscriptions),
+    each(([topic, _]) => unsubscribe(topic, this))
+);
 this.subscriptions = null;
 
 // 1. Mixin 정리 (적용 역순)
 this.cameraFocus.destroy();
-this.meshState.destroy();
+this.meshState?.destroy();
 ```
 
 ---
@@ -211,6 +245,16 @@ this.subscriptions = {
     equipmentStatus: [this.meshState.renderData],
 };
 
+const { subscribe } = GlobalDataPublisher;
+const { each, go } = fx;
+
+go(
+    Object.entries(this.subscriptions),
+    each(([topic, handlers]) =>
+        each(handler => subscribe(topic, this, handler), handlers)
+    )
+);
+
 // ======================
 // 3. 이벤트 매핑 + showDetail 정의
 // ======================
@@ -246,13 +290,20 @@ const { removeCustomEvents } = Wkit;
 removeCustomEvents(this, this.customEvents);
 this.customEvents = null;
 
+const { unsubscribe } = GlobalDataPublisher;
+const { each, go } = fx;
+
 // 2. 구독 해제
+go(
+    Object.entries(this.subscriptions),
+    each(([topic, _]) => unsubscribe(topic, this))
+);
 this.subscriptions = null;
 
 // 1. Mixin 정리 (적용 역순) + showDetail 정리
 this.showDetail = null;
 this.shadowPopup.destroy();
-this.meshState.destroy();
+this.meshState?.destroy();
 ```
 
 ---
