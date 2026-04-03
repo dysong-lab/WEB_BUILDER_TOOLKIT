@@ -22,10 +22,6 @@
             gap: 8px;
             padding: 16px;
             flex-wrap: wrap;
-        }
-        .demo-controls-group {
-            display: flex;
-            gap: 8px;
             align-items: center;
         }
         .demo-label {
@@ -42,21 +38,14 @@
             background: #2a2a4a;
             margin: 0 8px;
         }
-        .demo-btn {
-            padding: 8px 16px;
+        .demo-interval {
             font-size: 13px;
-            font-weight: 600;
-            border: none;
+            color: #e2e8f0;
+            background: #2a2a4a;
+            padding: 8px 16px;
             border-radius: 4px;
-            cursor: pointer;
-            color: #ffffff;
-            transition: opacity 0.15s;
+            font-family: 'Segoe UI', monospace;
         }
-        .demo-btn:hover { opacity: 0.8; }
-        .demo-btn[data-status="normal"]  { background: #34d399; }
-        .demo-btn[data-status="warning"] { background: #fbbf24; color: #1a1a2e; }
-        .demo-btn[data-status="error"]   { background: #f87171; }
-        .demo-btn[data-status="offline"] { background: #6b7280; }
 
         .demo-clicked-mesh {
             font-size: 13px;
@@ -76,26 +65,41 @@
             padding: 4px;
             font-family: 'Segoe UI', sans-serif;
         }
+
+        .demo-log {
+            width: 800px;
+            margin: 0 auto;
+            max-height: 120px;
+            overflow-y: auto;
+            background: #0f0f1e;
+            border: 1px solid #2a2a4a;
+            border-radius: 4px;
+            padding: 8px 12px;
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+        .demo-log-entry { margin: 2px 0; }
+        .demo-log-entry .mesh { color: #e2e8f0; }
+        .demo-log-entry .status-normal  { color: #34d399; }
+        .demo-log-entry .status-warning { color: #fbbf24; }
+        .demo-log-entry .status-error   { color: #f87171; }
+        .demo-log-entry .status-offline { color: #6b7280; }
     </style>
 </head>
 <body>
     <div class="demo-controls">
-        <div class="demo-controls-group">
-            <span class="demo-label">Clicked</span>
-            <span class="demo-clicked-mesh" id="clickedMesh">-</span>
-        </div>
+        <span class="demo-label">Status Interval</span>
+        <span class="demo-interval" id="intervalDisplay">3s</span>
         <div class="demo-separator"></div>
-        <div class="demo-controls-group">
-            <span class="demo-label">Status</span>
-            <button class="demo-btn" data-status="normal">Normal</button>
-            <button class="demo-btn" data-status="warning">Warning</button>
-            <button class="demo-btn" data-status="error">Error</button>
-            <button class="demo-btn" data-status="offline">Offline</button>
-        </div>
+        <span class="demo-label">Clicked</span>
+        <span class="demo-clicked-mesh" id="clickedMesh">-</span>
     </div>
-    <div class="demo-info">3D 모델을 클릭하면 해당 Mesh의 상세 팝업이 표시됩니다</div>
+    <div class="demo-info">3D 모델을 클릭하면 해당 Mesh의 데이터를 조회하여 팝업을 표시합니다 · 상태 데이터는 3초마다 자동 갱신됩니다</div>
 
     <div id="gltf-container-pageThreeLayer"></div>
+
+    <div class="demo-log" id="log"></div>
 
     <!-- Mixin 로드 -->
     <script src="../../../../Mixins/MeshStateMixin.js"></script>
@@ -129,7 +133,28 @@
         return null;
     }
 
-    // ── Popup HTML/CSS (publishCode 시뮬레이션) ───────────────
+    /**
+     * Mock fetchData — 실제 Wkit.fetchData 시뮬레이션
+     * Promise.resolve로 클릭된 Mesh의 상세 데이터를 반환한다.
+     */
+    function mockFetchData(meshName) {
+        const statuses = ['normal', 'warning', 'error', 'offline'];
+        const types = { HV: 'High Voltage Panel', LV: 'Low Voltage Panel', TR: 'Transformer', SHV: 'Semi-HV Panel', SC: 'SC Panel', G: 'Generator', GP: 'Generator Panel', TIE: 'Tie', MTR: 'Meter', BLK: 'Blank', ATS: 'ATS', ALTS: 'ALTS' };
+
+        const prefix = meshName.split('-')[0];
+        const type = types[prefix] || 'Equipment';
+        const status = statuses[Math.floor(Math.random() * statuses.length)];
+
+        return Promise.resolve({
+            meshName,
+            type,
+            status,
+            location: 'B4F',
+            lastUpdate: new Date().toLocaleTimeString()
+        });
+    }
+
+    // ── Popup HTML/CSS ────────────────────────────────────────
     const popupHTML = `
         <div class="popup-overlay">
             <div class="popup-panel">
@@ -143,7 +168,10 @@
                 <div class="popup-body">
                     <table class="popup-info-table">
                         <tr><th>Mesh</th><td class="popup-mesh-name">-</td></tr>
+                        <tr><th>Type</th><td class="popup-type">-</td></tr>
+                        <tr><th>Location</th><td class="popup-location">-</td></tr>
                         <tr><th>Status</th><td class="popup-status-cell">-</td></tr>
+                        <tr><th>Updated</th><td class="popup-updated">-</td></tr>
                     </table>
                 </div>
             </div>
@@ -276,8 +304,34 @@
         page: { appendElement: container }
     };
 
-    // ── 상태 추적 ─────────────────────────────────────────────
-    const statusMap = {};
+    // ── Mock Data ─────────────────────────────────────────────
+    const statuses = ['normal', 'warning', 'error', 'offline'];
+    let allMeshNames = [];
+
+    function generateMockResponse() {
+        const count = 3 + Math.floor(Math.random() * 6);
+        const shuffled = [...allMeshNames].sort(() => Math.random() - 0.5);
+        const selected = shuffled.slice(0, count);
+
+        return selected.map(meshName => ({
+            meshName,
+            status: statuses[Math.floor(Math.random() * statuses.length)]
+        }));
+    }
+
+    // ── Log ───────────────────────────────────────────────────
+    const logEl = document.getElementById('log');
+
+    function logResponse(response) {
+        const entries = response.map(({ meshName, status }) =>
+            `<span class="demo-log-entry"><span class="mesh">${meshName}</span> → <span class="status-${status}">${status}</span></span>`
+        ).join('  ');
+
+        const line = document.createElement('div');
+        line.innerHTML = `<span style="color:#4a5568">[${new Date().toLocaleTimeString()}]</span> ${entries}`;
+        logEl.appendChild(line);
+        logEl.scrollTop = logEl.scrollHeight;
+    }
 
     // ── Load Model ────────────────────────────────────────────
     const loader = new GLTFLoader();
@@ -287,6 +341,13 @@
         scene.add(model);
 
         instance.appendElement = model;
+
+        // 모든 Mesh 이름 수집
+        model.traverse(child => {
+            if (child.isMesh && child.name) {
+                allMeshNames.push(child.name);
+            }
+        });
 
         // MeshStateMixin 적용
         applyMeshStateMixin(instance, {
@@ -325,6 +386,34 @@
         controls.target.copy(center);
         camera.position.set(center.x + maxDim * 0.8, center.y + maxDim * 0.5, center.z + maxDim * 0.8);
         controls.update();
+
+        // ── Mesh 원본 색상 저장 ──────────────────────────────────
+        const originalColors = new Map();
+        model.traverse(child => {
+            if (child.isMesh && child.name && child.material) {
+                originalColors.set(child.name, child.material.color.getHex());
+            }
+        });
+
+        // ── 주기적 Mock 데이터 발행 ──────────────────────────────
+        let prevMeshNames = [];
+
+        function fetchAndApply() {
+            prevMeshNames.forEach(name => {
+                const mesh = model.getObjectByName(name);
+                if (mesh && mesh.material && originalColors.has(name)) {
+                    mesh.material.color.setHex(originalColors.get(name));
+                }
+            });
+
+            const response = generateMockResponse();
+            instance.meshState.renderData({ response });
+            prevMeshNames = response.map(item => item.meshName);
+            logResponse(response);
+        }
+
+        fetchAndApply();
+        setInterval(fetchAndApply, 3000);
     });
 
     // ── Render Loop ───────────────────────────────────────────
@@ -335,8 +424,8 @@
     }
     animate();
 
-    // ── showDetail ────────────────────────────────────────────
-    function showDetail(meshName) {
+    // ── showDetail — Mesh 클릭 → 데이터 조회 → 팝업 ──────────
+    function showDetail(meshName, data) {
         if (!instance.shadowPopup) return;
 
         instance.shadowPopup.show();
@@ -344,22 +433,25 @@
         const nameEl = instance.shadowPopup.query('.popup-name');
         const statusEl = instance.shadowPopup.query('.popup-status');
         const meshCell = instance.shadowPopup.query('.popup-mesh-name');
+        const typeCell = instance.shadowPopup.query('.popup-type');
+        const locationCell = instance.shadowPopup.query('.popup-location');
         const statusCell = instance.shadowPopup.query('.popup-status-cell');
-
-        const currentStatus = statusMap[meshName] || 'normal';
+        const updatedCell = instance.shadowPopup.query('.popup-updated');
 
         if (nameEl) nameEl.textContent = meshName;
         if (statusEl) {
-            statusEl.textContent = currentStatus;
-            statusEl.dataset.status = currentStatus;
+            statusEl.textContent = data.status;
+            statusEl.dataset.status = data.status;
         }
-        if (meshCell) meshCell.textContent = meshName;
-        if (statusCell) statusCell.textContent = currentStatus;
+        if (meshCell) meshCell.textContent = data.meshName;
+        if (typeCell) typeCell.textContent = data.type;
+        if (locationCell) locationCell.textContent = data.location;
+        if (statusCell) statusCell.textContent = data.status;
+        if (updatedCell) updatedCell.textContent = data.lastUpdate;
     }
 
-    // ── Demo: 클릭 → 팝업 ────────────────────────────────────
+    // ── 클릭 → fetchData → 팝업 ──────────────────────────────
     const clickedMeshEl = document.getElementById('clickedMesh');
-    let selectedMeshName = null;
 
     renderer.domElement.addEventListener('click', (event) => {
         if (!instance.appendElement) return;
@@ -372,22 +464,11 @@
         const meshName = resolveMeshName(intersects);
         if (!meshName) return;
 
-        selectedMeshName = meshName;
         clickedMeshEl.textContent = meshName;
-        showDetail(meshName);
-    });
 
-    // ── Demo: Status ──────────────────────────────────────────
-    document.querySelectorAll('.demo-btn[data-status]').forEach((btn) => {
-        btn.addEventListener('click', () => {
-            if (!instance.meshState || !selectedMeshName) return;
-
-            const status = btn.dataset.status;
-            instance.meshState.renderData({
-                response: [{ meshName: selectedMeshName, status }]
-            });
-            statusMap[selectedMeshName] = status;
-        });
+        // 실제: fetchData(page, 'meshDetail', { meshName })
+        mockFetchData(meshName)
+            .then(data => showDetail(meshName, data));
     });
 
     // ── Resize ────────────────────────────────────────────────

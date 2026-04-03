@@ -21,10 +21,6 @@
             gap: 8px;
             padding: 16px;
             flex-wrap: wrap;
-        }
-        .demo-controls-group {
-            display: flex;
-            gap: 8px;
             align-items: center;
         }
         .demo-label {
@@ -52,11 +48,16 @@
             transition: opacity 0.15s;
         }
         .demo-btn:hover { opacity: 0.8; }
-        .demo-btn[data-status="normal"]  { background: #34d399; }
-        .demo-btn[data-status="warning"] { background: #fbbf24; color: #1a1a2e; }
-        .demo-btn[data-status="error"]   { background: #f87171; }
-        .demo-btn[data-status="offline"] { background: #6b7280; }
         .demo-btn[data-action="reset-camera"] { background: #64748b; }
+
+        .demo-interval {
+            font-size: 13px;
+            color: #e2e8f0;
+            background: #2a2a4a;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-family: 'Segoe UI', monospace;
+        }
 
         .demo-clicked-mesh {
             font-size: 13px;
@@ -76,31 +77,44 @@
             padding: 4px;
             font-family: 'Segoe UI', sans-serif;
         }
+
+        .demo-log {
+            width: 800px;
+            margin: 0 auto;
+            max-height: 120px;
+            overflow-y: auto;
+            background: #0f0f1e;
+            border: 1px solid #2a2a4a;
+            border-radius: 4px;
+            padding: 8px 12px;
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+        .demo-log-entry { margin: 2px 0; }
+        .demo-log-entry .mesh { color: #e2e8f0; }
+        .demo-log-entry .status-normal  { color: #34d399; }
+        .demo-log-entry .status-warning { color: #fbbf24; }
+        .demo-log-entry .status-error   { color: #f87171; }
+        .demo-log-entry .status-offline { color: #6b7280; }
     </style>
 </head>
 <body>
     <div class="demo-controls">
-        <div class="demo-controls-group">
-            <span class="demo-label">Clicked</span>
-            <span class="demo-clicked-mesh" id="clickedMesh">-</span>
-        </div>
+        <span class="demo-label">Status Interval</span>
+        <span class="demo-interval" id="intervalDisplay">3s</span>
         <div class="demo-separator"></div>
-        <div class="demo-controls-group">
-            <span class="demo-label">Status</span>
-            <button class="demo-btn" data-status="normal">Normal</button>
-            <button class="demo-btn" data-status="warning">Warning</button>
-            <button class="demo-btn" data-status="error">Error</button>
-            <button class="demo-btn" data-status="offline">Offline</button>
-        </div>
+        <span class="demo-label">Clicked</span>
+        <span class="demo-clicked-mesh" id="clickedMesh">-</span>
         <div class="demo-separator"></div>
-        <div class="demo-controls-group">
-            <span class="demo-label">Camera</span>
-            <button class="demo-btn" data-action="reset-camera">Reset</button>
-        </div>
+        <span class="demo-label">Camera</span>
+        <button class="demo-btn" data-action="reset-camera">Reset</button>
     </div>
-    <div class="demo-info">3D 모델을 클릭하면 해당 Mesh로 카메라가 이동합니다</div>
+    <div class="demo-info">3D 모델을 클릭하면 해당 Mesh로 카메라가 이동합니다 · 상태 데이터는 3초마다 자동 갱신됩니다</div>
 
     <div id="gltf-container-pageThreeLayer"></div>
+
+    <div class="demo-log" id="log"></div>
 
     <!-- Mixin 로드 -->
     <script src="../../../../Mixins/MeshStateMixin.js"></script>
@@ -177,6 +191,35 @@
     // ── Mock Instance ─────────────────────────────────────────
     const instance = { appendElement: null };
 
+    // ── Mock Data ─────────────────────────────────────────────
+    const statuses = ['normal', 'warning', 'error', 'offline'];
+    let allMeshNames = [];
+
+    function generateMockResponse() {
+        const count = 3 + Math.floor(Math.random() * 6);
+        const shuffled = [...allMeshNames].sort(() => Math.random() - 0.5);
+        const selected = shuffled.slice(0, count);
+
+        return selected.map(meshName => ({
+            meshName,
+            status: statuses[Math.floor(Math.random() * statuses.length)]
+        }));
+    }
+
+    // ── Log ───────────────────────────────────────────────────
+    const logEl = document.getElementById('log');
+
+    function logResponse(response) {
+        const entries = response.map(({ meshName, status }) =>
+            `<span class="demo-log-entry"><span class="mesh">${meshName}</span> → <span class="status-${status}">${status}</span></span>`
+        ).join('  ');
+
+        const line = document.createElement('div');
+        line.innerHTML = `<span style="color:#4a5568">[${new Date().toLocaleTimeString()}]</span> ${entries}`;
+        logEl.appendChild(line);
+        logEl.scrollTop = logEl.scrollHeight;
+    }
+
     // ── Load Model ────────────────────────────────────────────
     const loader = new GLTFLoader();
 
@@ -185,6 +228,13 @@
         scene.add(model);
 
         instance.appendElement = model;
+
+        // 모든 Mesh 이름 수집
+        model.traverse(child => {
+            if (child.isMesh && child.name) {
+                allMeshNames.push(child.name);
+            }
+        });
 
         // MeshStateMixin 적용
         applyMeshStateMixin(instance, {
@@ -212,6 +262,34 @@
         controls.target.copy(center);
         camera.position.set(center.x + maxDim * 0.8, center.y + maxDim * 0.5, center.z + maxDim * 0.8);
         controls.update();
+
+        // ── Mesh 원본 색상 저장 ──────────────────────────────────
+        const originalColors = new Map();
+        model.traverse(child => {
+            if (child.isMesh && child.name && child.material) {
+                originalColors.set(child.name, child.material.color.getHex());
+            }
+        });
+
+        // ── 주기적 Mock 데이터 발행 ──────────────────────────────
+        let prevMeshNames = [];
+
+        function fetchAndApply() {
+            prevMeshNames.forEach(name => {
+                const mesh = model.getObjectByName(name);
+                if (mesh && mesh.material && originalColors.has(name)) {
+                    mesh.material.color.setHex(originalColors.get(name));
+                }
+            });
+
+            const response = generateMockResponse();
+            instance.meshState.renderData({ response });
+            prevMeshNames = response.map(item => item.meshName);
+            logResponse(response);
+        }
+
+        fetchAndApply();
+        setInterval(fetchAndApply, 3000);
     });
 
     // ── Render Loop ───────────────────────────────────────────
@@ -222,9 +300,8 @@
     }
     animate();
 
-    // ── Demo: 클릭 → 카메라 포커스 ────────────────────────────
+    // ── 클릭 → 카메라 포커스 ──────────────────────────────────
     const clickedMeshEl = document.getElementById('clickedMesh');
-    let selectedMeshName = null;
 
     renderer.domElement.addEventListener('click', (event) => {
         if (!instance.appendElement) return;
@@ -237,7 +314,6 @@
         const meshName = resolveMeshName(intersects);
         if (!meshName) return;
 
-        selectedMeshName = meshName;
         clickedMeshEl.textContent = meshName;
 
         if (instance.cameraFocus) {
@@ -249,18 +325,7 @@
         }
     });
 
-    // ── Demo: Status ──────────────────────────────────────────
-    document.querySelectorAll('.demo-btn[data-status]').forEach((btn) => {
-        btn.addEventListener('click', () => {
-            if (!instance.meshState || !selectedMeshName) return;
-
-            instance.meshState.renderData({
-                response: [{ meshName: selectedMeshName, status: btn.dataset.status }]
-            });
-        });
-    });
-
-    // ── Demo: Camera Reset ────────────────────────────────────
+    // ── Camera Reset ──────────────────────────────────────────
     document.querySelector('.demo-btn[data-action="reset-camera"]').addEventListener('click', () => {
         if (instance.cameraFocus) instance.cameraFocus.reset();
     });
