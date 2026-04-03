@@ -22,6 +22,16 @@ this.subscriptions = {
     equipmentStatus: [this.meshState.renderData]
 };
 
+const { subscribe } = GlobalDataPublisher;
+const { each, go } = fx;
+
+go(
+    Object.entries(this.subscriptions),
+    each(([topic, handlers]) =>
+        each(handler => subscribe(topic, this, handler), handlers)
+    )
+);
+
 // ── 3DShadowPopupMixin ────────────────────────────────────────
 
 const { htmlCode, cssCode } = this.properties.publishCode || {};
