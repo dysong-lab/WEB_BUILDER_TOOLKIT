@@ -5,19 +5,21 @@
  */
 
 const { unsubscribe } = GlobalDataPublisher;
+const { removeCustomEvents } = Wkit;
 const { each, go } = fx;
 
-// 구독 해제
+// 3. 이벤트 제거
+removeCustomEvents(this, this.customEvents);
+this.customEvents = null;
+this.showDetail = null;
+
+// 2. 구독 해제
 go(
     Object.entries(this.subscriptions),
     each(([topic, _]) => unsubscribe(topic, this))
 );
 this.subscriptions = null;
 
-
-const { removeCustomEvents } = Wkit;
-
-removeCustomEvents(this, this.customEvents);
-this.meshState?.destroy();
+// 1. Mixin 정리 (적용 역순)
 this.shadowPopup?.destroy();
-this.showDetail = null;
+this.meshState?.destroy();

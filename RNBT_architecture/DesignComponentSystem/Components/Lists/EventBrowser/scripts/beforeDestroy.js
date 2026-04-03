@@ -3,6 +3,7 @@ const { removeCustomEvents } = Wkit;
 const { each, go } = fx;
 
 // 3. 이벤트 제거
+this.shadowPopup.removePopupEvents();
 removeCustomEvents(this, this.customEvents);
 this.customEvents = null;
 
