@@ -26,7 +26,7 @@
 | 문서 | 내용 |
 |------|------|
 | MIXIN_SPEC_TEMPLATE.md | 빈 템플릿 (6개 섹션) |
-| MIXIN_SPEC_EXAMPLE_*.md (9건) | 기존 Mixin별 모범답안 |
+| MIXIN_SPEC_EXAMPLE_*.md (10건) | 기존 Mixin별 모범답안 |
 
 ## reports/ — 검토/평가
 

@@ -37,13 +37,46 @@
 > **규약 KEY**: Mixin 내부에서 `cssSelectors.container`, `cssSelectors.template`으로 직접 참조한다. 없으면 renderData에서 throw.
 > **사용자 정의 KEY**: Mixin이 `Object.entries(cssSelectors)`로 순회하며, data의 같은 이름의 KEY와 매칭하여 textContent에 반영한다.
 
-### datasetAttrs
+### datasetAttrs (선택)
 
-해당 없음. 이 Mixin은 datasetAttrs를 사용하지 않는다. 모든 값은 textContent로 설정된다.
+data-* 속성으로 설정할 키를 지정한다. 등록되지 않은 키는 textContent로 설정된다.
 
-### 기타 옵션
+```javascript
+datasetAttrs: {
+    menuid: 'menuid',    // → el.setAttribute('data-menuid', value)
+    active: 'active'     // → el.setAttribute('data-active', value)
+}
+```
 
-없음.
+> 규약 KEY 없음. 모든 KEY는 사용자가 정의한다. cssSelectors와 key를 공유하여 대상 요소를 찾고, VALUE가 data 속성명이 된다.
+
+### elementAttrs (선택)
+
+요소 속성(src, fill 등)으로 설정할 키를 지정한다.
+
+```javascript
+elementAttrs: {
+    icon: 'src'     // → el.setAttribute('src', value)
+}
+```
+
+### styleAttrs (선택)
+
+스타일 속성(width, height 등)으로 설정할 키를 지정한다.
+
+```javascript
+styleAttrs: {
+    progress: { property: 'width', unit: '%' }   // → el.style.width = value + '%'
+}
+```
+
+### itemKey (선택)
+
+항목을 식별하는 키 이름. 이 옵션을 제공하면 `updateItemState`, `getItemState` 메서드가 활성화된다.
+
+```javascript
+itemKey: 'menuid'    // → cssSelectors.menuid 선택자로 항목을 찾음
+```
 
 ---
 
@@ -69,9 +102,12 @@
 
 ```
 Object.entries(cssSelectors)를 순회하며,
-각 KEY로 itemData[key]를 찾고, 값이 있으면 해당 요소의 textContent에 반영.
+각 KEY로 itemData[key]를 찾고, 값이 있으면 applyValue 4경로로 반영:
 
-datasetAttrs는 사용하지 않는다.
+  datasetAttrs에 등록된 키 → data-* 속성 설정
+  elementAttrs에 등록된 키 → 요소 속성 설정 (src, fill 등)
+  styleAttrs에 등록된 키   → 스타일 속성 설정 (width, height 등)
+  등록되지 않은 키          → textContent 설정
 
 규약 KEY(container, template)도 순회에 포함되지만,
 template 내부에 해당 선택자 요소가 없으므로 무시된다.
@@ -90,9 +126,14 @@ template 내부에 해당 선택자 요소가 없으므로 무시된다.
 | 속성/메서드 | 역할 |
 |------------|------|
 | `cssSelectors` | 주입된 cssSelectors. customEvents에서 computed property로 참조 |
+| `datasetAttrs` | 주입된 datasetAttrs |
+| `elementAttrs` | 주입된 elementAttrs |
+| `styleAttrs` | 주입된 styleAttrs |
 | `renderData({ response })` | 배열 데이터를 받아 template 복제로 항목 생성 |
 | `clear()` | 컨테이너의 모든 항목을 제거 (`innerHTML = ''`) |
 | `destroy()` | Mixin이 주입한 모든 속성과 메서드를 null 처리 |
+| `updateItemState(id, state)` | 개별 항목의 data 속성을 변경 (itemKey 사용 시) |
+| `getItemState(id)` | 개별 항목의 data 속성을 조회, 복사본 반환 (itemKey 사용 시) |
 
 ---
 
@@ -100,8 +141,13 @@ template 내부에 해당 선택자 요소가 없으므로 무시된다.
 
 ```
 - ns.renderData = null
+- ns.updateItemState = null (itemKey 사용 시)
+- ns.getItemState = null (itemKey 사용 시)
 - ns.clear = null
 - ns.cssSelectors = null
+- ns.datasetAttrs = null
+- ns.elementAttrs = null
+- ns.styleAttrs = null
 - instance.listRender = null
 ```
 

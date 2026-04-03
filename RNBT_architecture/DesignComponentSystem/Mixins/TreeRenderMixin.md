@@ -16,7 +16,7 @@
 | 데이터 | flat 배열 | 재귀적 배열 (children) |
 | 렌더링 | 1차원 반복 | 재귀적 중첩 |
 | 상태 관리 | itemKey 기반 항목 상태 | 노드별 확장/축소 상태 |
-| 규약 KEY | container, template | container, template, node, toggle |
+| 규약 KEY | container, template | container, template, node |
 
 ---
 
@@ -31,7 +31,7 @@ CSS 선택자로 HTML 요소를 참조한다.
 | `container` | 규약 | 노드가 추가될 부모 요소 |
 | `template` | 규약 | `<template>` 태그 (cloneNode 대상) |
 | `node` | 규약 | 각 노드의 루트 요소 (data-node-id 부여 대상) |
-| `toggle` | 규약 | 확장/축소 토글 요소 (클릭 이벤트 매핑용) |
+| `toggle` | 사용자 정의 | 확장/축소 토글 요소. Mixin 내부에서 직접 참조하지 않으며, customEvents에서 `[this.treeRender.cssSelectors.toggle]`로 클릭 이벤트를 매핑하기 위해 등록 |
 
 ```javascript
 cssSelectors: {

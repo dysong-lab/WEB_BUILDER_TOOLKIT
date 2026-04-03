@@ -27,6 +27,7 @@
 | MeshStateMixin | 3D 메시의 시각 상태를 데이터에 따라 변경한다 |
 | CameraFocusMixin | 보는 위치를 전환한다 |
 | ShadowPopupMixin | Shadow DOM으로 팝업을 생성하고 표시/숨김을 관리한다 |
+| 3DShadowPopupMixin | 3D 컴포넌트에서 Shadow DOM으로 팝업을 생성하고 표시/숨김을 관리한다 |
 
 ---
 
@@ -51,3 +52,4 @@
 | MeshStateMixin | [MeshStateMixin.md](MeshStateMixin.md) |
 | CameraFocusMixin | [CameraFocusMixin.md](CameraFocusMixin.md) |
 | ShadowPopupMixin | [ShadowPopupMixin.md](ShadowPopupMixin.md) |
+| 3DShadowPopupMixin | [3DShadowPopupMixin.md](3DShadowPopupMixin.md) |

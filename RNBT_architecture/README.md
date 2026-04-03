@@ -17,6 +17,7 @@
 - [Default JS 템플릿 (Mixin 기반)](#default-js-템플릿-mixin-기반)
 - [fx.go 기반 에러 핸들링 가이드](#fxgo-기반-에러-핸들링-가이드)
 - [Component Structure Guide](#component-structure-guide)
+- [Utils 디렉토리](#utils-디렉토리)
 - [부록 A: 라이프사이클 상세](#부록-a-라이프사이클-상세)
 - [부록 F: 인스턴스 스코프, 생명주기, GC 분석](#부록-f-인스턴스-스코프-생명주기-gc-분석)
 
@@ -1087,6 +1088,22 @@ ComponentName/
 
 비주얼 빌더에서는 Figma 스타일 유지와 예측 가능한 구조의 가치가 트레이드오프보다 큽니다.
 일관된 구조를 유지하면 컴포넌트를 자산으로 쌓을 수 있습니다.
+
+---
+
+## Utils 디렉토리
+
+프레임워크 전반에서 사용되는 유틸리티 모듈입니다. 페이지와 컴포넌트의 코드에서 직접 참조됩니다.
+
+| 파일 | 역할 | 주요 API |
+|------|------|----------|
+| `fx.js` | 함수형 유틸리티 라이브러리. `go`, `pipe`, `each`, `map`, `filter`, `reduce` 등 이터러블 기반 파이프라인과 지연 평가(`L.*`)를 제공한다. 비동기(Promise) 파이프라인을 자연스럽게 지원한다. | `fx.go`, `fx.each`, `fx.map`, `fx.filter`, `fx.pipe`, `fx.reduce`, `fx.L.*` |
+| `Wkit.js` | 컴포넌트/페이지 공통 도구 모음. 2D 이벤트 위임(`bindEvents`/`removeCustomEvents`), 3D 레이캐스팅(`initThreeRaycasting`/`bind3DEvents`), 3D 리소스 정리(`dispose3DTree`/`disposeAllThreeResources`), EventBus 일괄 등록/해제(`onEventBusHandlers`/`offEventBusHandlers`), 데이터 fetch(`fetchData`), 인스턴스 조회(`makeIterator`/`getInstanceByName`/`getInstanceById`) 등을 제공한다. | `Wkit.bindEvents`, `Wkit.removeCustomEvents`, `Wkit.fetchData`, `Wkit.dispose3DTree`, `Wkit.onEventBusHandlers`, `Wkit.offEventBusHandlers` |
+| `Weventbus.js` | 경량 이벤트 버스. `on`/`off`/`emit`/`once` 4개 메서드로 컴포넌트 간 느슨한 결합 통신을 제공한다. 컴포넌트에서 DOM 이벤트를 `@` 접두사 커스텀 이벤트로 발행하면, 페이지가 핸들러로 수신하는 구조에서 중개 역할을 한다. | `Weventbus.on`, `Weventbus.off`, `Weventbus.emit`, `Weventbus.once` |
+| `GlobalDataPublisher.js` | Topic 기반 pub-sub 데이터 발행기. 페이지가 topic-dataset 매핑을 등록(`registerMapping`)하고, 컴포넌트가 topic을 구독(`subscribe`)하면, `fetchAndPublish`가 데이터를 fetch하여 모든 구독자에게 분배한다. | `GlobalDataPublisher.registerMapping`, `GlobalDataPublisher.subscribe`, `GlobalDataPublisher.unsubscribe`, `GlobalDataPublisher.fetchAndPublish` |
+| `ComponentMixin.js` | 컴포넌트 기능 확장 Mixin 모음. 뷰어 전용 라이프사이클 훅(`_onViewerReady`/`_onViewerDestroy`)과 3D ModelLoader Mixin(`applyModelLoaderMixin`)을 제공한다. 커스텀 컴포넌트 클래스에서 Mixin을 적용하여 공통 기능을 재사용한다. | `ComponentMixin.applyModelLoaderMixin`, `_onViewerReady`, `_onViewerDestroy` |
+
+> **출처:** fx.js는 [indongyoo/functional-javascript-01](https://github.com/indongyoo/functional-javascript-01) 기반이다.
 
 ---
 

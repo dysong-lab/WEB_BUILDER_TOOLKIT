@@ -1,0 +1,183 @@
+# Mixin 명세서: 3DShadowPopupMixin
+
+---
+
+## 1. 기능 정의
+
+| 항목 | 내용 |
+|------|------|
+| **목적** | 콘텐츠를 별도 레이어에 표시한다 |
+| **기능** | 3D 컴포넌트에서 Shadow DOM으로 팝업을 생성하고, 표시/숨김/정리를 관리한다 |
+
+### 기존 Mixin과의 관계
+
+| 항목 | 내용 |
+|------|------|
+| **목적이 같은 기존 Mixin** | ShadowPopupMixin |
+| **기능의 차이** | ShadowPopupMixin은 DOM `<template>` 태그에서 콘텐츠를 가져와 `instance.appendElement`에 부착한다. 3DShadowPopupMixin은 `getHTML()`/`getStyles()` 문자열로 콘텐츠를 받아 `instance.page.appendElement`에 부착한다. 3D 컴포넌트의 `appendElement`는 `THREE.Group`이므로 DOM을 직접 붙일 수 없기 때문이다. |
+
+---
+
+## 2. 인터페이스
+
+### cssSelectors
+
+해당 없음. 3DShadowPopupMixin은 `<template>` 태그를 사용하지 않으므로 cssSelectors 옵션이 없다. 팝업 내부 요소에 접근할 때는 `query()`에 CSS 선택자를 직접 전달한다.
+
+### datasetAttrs
+
+해당 없음.
+
+### 기타 옵션
+
+| 옵션 | 필수 | 의미 |
+|------|------|------|
+| `getHTML` | O | 팝업 HTML을 반환하는 함수. `this`는 instance로 바인딩된다. `() => string` |
+| `getStyles` | O | 팝업 CSS를 반환하는 함수. `this`는 instance로 바인딩된다. `() => string` |
+| `onCreated` | X | Shadow DOM 생성 완료 후 호출되는 콜백. `(shadowRoot) => void` |
+
+---
+
+## 3. renderData 기대 데이터
+
+해당 없음. 3DShadowPopupMixin은 renderData 패턴을 사용하지 않는다. 대신 show, hide 메서드를 직접 호출하여 사용한다.
+
+### show 파라미터
+
+| 파라미터 | 필수 | 의미 |
+|---------|------|------|
+| 없음 | - | 팝업을 표시한다. 최초 호출 시 Shadow DOM을 생성(lazy init)한다. |
+
+### hide 파라미터
+
+| 파라미터 | 필수 | 의미 |
+|---------|------|------|
+| 없음 | - | 팝업을 숨긴다. Shadow DOM은 유지된다(destroy하지 않음). |
+
+### 사용 흐름
+
+```
+renderData 패턴이 아닌 직접 호출 패턴:
+  - 3D 이벤트 수신 → popup.show() 호출
+  - 닫기 이벤트 수신 → popup.hide() 호출
+
+Shadow DOM은 최초 show() 시 lazy 생성된다.
+  1. host 요소(div)를 생성한다
+  2. instance.page.appendElement에 host를 부착한다
+  3. host에 Shadow DOM을 연결한다
+  4. getHTML()/getStyles()로 콘텐츠를 문자열로 받아 주입한다
+  5. bindPopupEvents가 show() 전에 호출되었으면 여기서 바인딩한다
+  6. onCreated 콜백을 호출한다 (있으면)
+
+이후 show/hide는 display만 토글한다.
+```
+
+---
+
+## 4. 주입 네임스페이스
+
+### 네임스페이스 이름
+
+`this.shadowPopup`
+
+> ⚠️ ShadowPopupMixin과 동일한 네임스페이스를 사용한다. 동일 인스턴스에 두 Mixin을 동시에 적용할 수 없다.
+
+### 메서드/속성
+
+| 속성/메서드 | 역할 |
+|------------|------|
+| `show()` | 팝업 표시. 최초 호출 시 Shadow DOM 생성 (lazy init) |
+| `hide()` | 팝업 숨김 |
+| `query(selector)` | Shadow DOM 내 단일 요소 선택. `shadowRoot.querySelector` |
+| `queryAll(selector)` | Shadow DOM 내 모든 요소 선택. `shadowRoot.querySelectorAll` |
+| `bindPopupEvents(events)` | Shadow DOM 내 이벤트 위임. `'@eventName'`은 Weventbus로 전파. show() 전 호출 가능 (지연 바인딩) |
+| `removePopupEvents()` | `bindPopupEvents`로 바인딩된 이벤트 해제 |
+| `destroy()` | 이벤트 해제 + Shadow DOM 호스트 제거 + 모든 속성/메서드 null 처리 |
+
+---
+
+## 5. destroy 범위
+
+```
+- removePopupEvents() (바인딩된 이벤트 해제)
+- host 요소를 DOM에서 제거 (host.remove())
+- shadowRoot = null
+- host = null
+- _pendingEvents = null
+- ns.show = null
+- ns.hide = null
+- ns.query = null
+- ns.queryAll = null
+- ns.bindPopupEvents = null
+- ns.removePopupEvents = null
+- instance.shadowPopup = null
+```
+
+---
+
+## 6. 사용 예시
+
+### register.js
+
+```javascript
+const { htmlCode, cssCode } = this.properties.publishCode || {};
+
+apply3DShadowPopupMixin(this, {
+    getHTML:   () => htmlCode || '',
+    getStyles: () => cssCode || '',
+    onCreated: (shadowRoot) => {
+        this.shadowPopup.bindPopupEvents({
+            click: {
+                '.popup-close': () => this.shadowPopup.hide()
+            }
+        });
+    }
+});
+
+// 3D 이벤트
+const { bind3DEvents } = Wkit;
+
+this.customEvents = {
+    click: '@battClicked'
+};
+bind3DEvents(this, this.customEvents);
+
+this.showDetail = () => {
+    this.shadowPopup.show();
+
+    const nameEl = this.shadowPopup.query('.popup-name');
+    if (nameEl) nameEl.textContent = this.name || 'BATT';
+
+    const statusEl = this.shadowPopup.query('.popup-status');
+    if (statusEl) {
+        const currentStatus = this.meshState.getMeshState('BATT') || 'normal';
+        statusEl.textContent = currentStatus;
+        statusEl.dataset.status = currentStatus;
+    }
+};
+```
+
+### 페이지 핸들러 (before_load.js)
+
+```javascript
+'@battClicked': ({ event, targetInstance }) => {
+    targetInstance.showDetail();
+}
+```
+
+### beforeDestroy.js
+
+```javascript
+const { remove3DEvents } = Wkit;
+
+// 3. 이벤트 제거
+remove3DEvents(this, this.customEvents);
+this.customEvents = null;
+
+// 1. Mixin 정리
+this.shadowPopup.destroy();
+```
+
+> 팝업 내부의 콘텐츠 렌더링은 3DShadowPopupMixin의 범위 밖이다. `shadowPopup.query()`로 요소를 찾아 직접 처리한다.
+
+---

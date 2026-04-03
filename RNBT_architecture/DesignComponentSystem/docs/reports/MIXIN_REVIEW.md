@@ -128,6 +128,26 @@ tableInstance = new Tabulator(containerEl, Object.assign({
 
 ---
 
+## 3DShadowPopupMixin
+
+**하는 일:** 3D 컴포넌트에서 Shadow DOM으로 팝업을 생성하고, 표시/숨김/정리를 관리한다. `getHTML()`/`getStyles()` 문자열로 콘텐츠를 받아 `instance.page.appendElement`에 부착한다.
+
+**범용성:** ShadowPopupMixin과 동일한 스타일 격리 및 이벤트 전파를 제공하면서, 3D 컴포넌트(`appendElement`가 `THREE.Group`)에서도 사용 가능.
+
+**제약:** ShadowPopupMixin과 동일 (팝업 위치 제어 옵션 없음, CSS 의존).
+
+---
+
+## TreeRenderMixin
+
+**하는 일:** 재귀적 배열(children)을 받아 template 복제로 트리 구조를 렌더링하고, 각 노드의 확장/축소 상태를 관리한다.
+
+**범용성:** 장비 트리, 조직 트리, 파일 트리 등 계층적 데이터 표시에 범용적.
+
+**제약:** ListRenderMixin과 동일하게 매 렌더링마다 `containerEl.innerHTML = ''`로 전체 교체한다. 대규모 트리(수천 노드)에서는 성능 이슈 가능. 들여쓰기가 `paddingLeft`로 고정되어 있으나 CSS로 덮어쓸 수 있다.
+
+---
+
 ## 요약
 
 | Mixin | 범용성 | 제약 |
@@ -140,6 +160,8 @@ tableInstance = new Tabulator(containerEl, Object.assign({
 | MeshState | ⚠️ | 색상만 변경 |
 | CameraFocus | ✅ | 없음 |
 | ShadowPopup | ✅ | 팝업 위치 제어 옵션 없음 (CSS 의존) |
+| 3DShadowPopup | ✅ | 팝업 위치 제어 옵션 없음 (CSS 의존) |
+| TreeRender | ✅ | 전체 교체 방식 (대규모 트리 시 성능) |
 
 ## 새 Mixin 후보
 

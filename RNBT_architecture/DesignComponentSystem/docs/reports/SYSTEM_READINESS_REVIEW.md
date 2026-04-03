@@ -33,7 +33,7 @@
 
 - 선택자 계약(cssSelectors/datasetAttrs)이 인터페이스 역할을 한다
 - 디자인(HTML)이 약속된 선택자를 제공하면, 어떤 시각 구조든 같은 기능 모듈이 동작한다
-- 실제로 InfoCard가 3개 디자인 변형(standard, compact, glass)을 하나의 조립 코드로 공유하고 있다
+- 실제로 SystemInfo가 3개 디자인 변형(bar, card, minimal)을 하나의 조립 코드로 공유하고 있다
 - 기능 모듈은 HTML 구조를 모르고, 디자인은 기능 내부를 모른다
 
 **조립 최소성 — 성립하는 근거:**
@@ -41,7 +41,7 @@
 - 조립 코드(register.js)는 3단계 패턴이 고정되어 있다: (1) 기능 적용 → (2) 구독 연결 → (3) 이벤트 매핑
 - 각 단계에서 변하는 것은 선택자 문자열과 topic 이름뿐이다
 - 실제 조립 코드 크기가 30~50줄로 제한된다
-- 모범답안 8개의 register.js를 대조한 결과, 모두 이 3단계를 벗어나지 않는다
+- 모범답안 10개의 register.js를 대조한 결과, 모두 이 3단계를 벗어나지 않는다
 
 **무수정 확장 — 성립하는 근거:**
 
@@ -81,14 +81,14 @@
 | 종류 | 파일 | 수량 |
 |------|------|------|
 | 템플릿 | [MIXIN_SPEC_TEMPLATE.md](../specs/MIXIN_SPEC_TEMPLATE.md) | 1개 |
-| 모범답안 | MIXIN_SPEC_EXAMPLE_*.md | 8개 |
+| 모범답안 | MIXIN_SPEC_EXAMPLE_*.md | 10개 |
 | 설계 근거 | [COMPONENT_SYSTEM_DESIGN.md](../architecture/COMPONENT_SYSTEM_DESIGN.md), [FUNCTION_PATTERN.md](../architecture/FUNCTION_PATTERN.md) | 2개 |
 
 ### A. 일관성 — 높음
 
 **섹션 구조:**
 
-8개 모범답안 모두 동일한 6개 섹션을 따른다.
+10개 모범답안 모두 동일한 6개 섹션을 따른다.
 
 | 섹션 | 내용 |
 |------|------|
@@ -113,6 +113,8 @@
 | MeshStateMixin | 데이터를 보여준다 (3D 메시의 시각 상태 변경) | 추상 행위 |
 | CameraFocusMixin | 보는 위치를 전환한다 | 추상 행위 |
 | ShadowPopupMixin | 콘텐츠를 별도 레이어에 표시한다 | 추상 행위 |
+| 3DShadowPopupMixin | 콘텐츠를 별도 레이어에 표시한다 (3D 환경) | 추상 행위 |
+| TreeRenderMixin | 데이터를 보여준다 (트리 구조 렌더링) | 추상 행위 |
 
 목적은 모두 "~한다" 형태로, 수단을 포함하지 않는다. 기능은 모두 목적 + 수단을 결합한 한 문장이다.
 
@@ -135,7 +137,7 @@
 - "목적이 같고 기능이 다르면 별도" (debounce ≠ throttle, FieldRender ≠ ListRender)
 - "기능이 같으면 하나로 충분" (map은 하나, FieldRender는 하나)
 
-이 원칙이 모범답안 8개에서 일관되게 적용되어 있다.
+이 원칙이 모범답안 10개에서 일관되게 적용되어 있다.
 
 **2D/3D 공존:**
 
@@ -190,6 +192,6 @@
 | [FUNCTION_PATTERN.md](../architecture/FUNCTION_PATTERN.md) | 설계 근거 — 왜 이렇게 나누는가 |
 | [MIXIN_REVIEW.md](MIXIN_REVIEW.md) | 범용성 검토 — 현재 한계와 확장 후보 |
 | [MIXIN_SPEC_TEMPLATE.md](../specs/MIXIN_SPEC_TEMPLATE.md) | 팀 배포용 — 명세 작성 양식 |
-| MIXIN_SPEC_EXAMPLE_*.md (8개) | 팀 배포용 — 작성 모범답안 |
+| MIXIN_SPEC_EXAMPLE_*.md (10개) | 팀 배포용 — 작성 모범답안 |
 
 ---

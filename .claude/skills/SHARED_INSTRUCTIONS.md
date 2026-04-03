@@ -30,6 +30,8 @@
 | MeshStateMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/MeshStateMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/MeshStateMixin.md) |
 | CameraFocusMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/CameraFocusMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/CameraFocusMixin.md) |
 | ShadowPopupMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/ShadowPopupMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/ShadowPopupMixin.md) |
+| 3DShadowPopupMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/3DShadowPopupMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/3DShadowPopupMixin.md) |
+| TreeRenderMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/TreeRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/TreeRenderMixin.md) |
 
 > 전체 목록 및 생성 기준: [Mixins/README.md](/RNBT_architecture/DesignComponentSystem/Mixins/README.md)
 

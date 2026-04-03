@@ -100,6 +100,8 @@ mapData 미제공 시 기본 규약 적용, 제공 시 커스텀 병합.
 ## 5. destroy 범위
 
 ```
+- window.removeEventListener('resize', _resizeHandler)
+- _resizeHandler = null
 - chartInstance.dispose()
 - chartInstance = null
 - ns.renderData = null

@@ -93,6 +93,8 @@ cssSelectors/datasetAttrs에 없는 data KEY도 건너뛴다.
 |------------|------|
 | `cssSelectors` | 주입된 cssSelectors. customEvents에서 computed property로 참조 |
 | `datasetAttrs` | 주입된 datasetAttrs |
+| `elementAttrs` | 주입된 elementAttrs |
+| `styleAttrs` | 주입된 styleAttrs |
 | `renderData({ response })` | 플랫 객체를 받아 각 필드를 DOM 요소에 반영 |
 | `destroy()` | Mixin이 주입한 모든 속성과 메서드를 null 처리 |
 
@@ -104,6 +106,8 @@ cssSelectors/datasetAttrs에 없는 data KEY도 건너뛴다.
 - ns.renderData = null
 - ns.cssSelectors = null
 - ns.datasetAttrs = null
+- ns.elementAttrs = null
+- ns.styleAttrs = null
 - instance.fieldRender = null
 ```
 
