@@ -66,7 +66,7 @@ this.resolveMeshName = (event) => {
  * 클릭된 Mesh의 상세 팝업 표시
  *
  * @param {string} meshName - Mesh 이름
- * @param {Object} data - fetchAndPublish로 조회된 데이터
+ * @param {Object} data - fetchData로 조회된 데이터
  */
 this.showDetail = (meshName, data) => {
     this.shadowPopup.show();
