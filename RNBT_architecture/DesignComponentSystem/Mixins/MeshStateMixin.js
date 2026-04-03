@@ -68,6 +68,7 @@ function applyMeshStateMixin(instance, options) {
 
         const color = colorMap[status];
         if (color !== undefined && mesh.material) {
+            mesh.material = mesh.material.clone();
             mesh.material.color.setHex(color);
         }
 

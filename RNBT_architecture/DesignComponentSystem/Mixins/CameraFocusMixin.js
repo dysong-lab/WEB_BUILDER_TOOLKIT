@@ -83,7 +83,8 @@ function applyCameraFocusMixin(instance, options) {
 
         saveInitialState(camera, controls);
 
-        const targetPos = mesh.position.clone();
+        const box = new THREE.Box3().setFromObject(mesh);
+        const targetPos = box.getCenter(new THREE.Vector3());
         const cameraPos = targetPos.clone();
 
         if (offset) {
