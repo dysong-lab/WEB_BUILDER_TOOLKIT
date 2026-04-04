@@ -73,19 +73,29 @@ This file provides guidance to Claude Code when working in this repository.
 
 ---
 
-## 디렉토리별 문서
+## 참조 문서
 
-각 디렉토리는 독립적으로 작업 가능하며, 상세 문서를 포함합니다:
+각 디렉토리는 독립적으로 작업 가능하며, 상세 문서를 포함합니다.
+필요할 때 해당 파일을 읽어 참조하세요.
 
-### Figma_Conversion
+### 디렉토리별 지침
 
-- **작업 지침**: `/Figma_Conversion/CLAUDE.md`
-- **컴포넌트 구조**: `/Figma_Conversion/PUBLISHING_COMPONENT_STRUCTURE.md`
+- **Figma 변환 지침**: `/Figma_Conversion/CLAUDE.md`
+- **Figma 컴포넌트 구조**: `/Figma_Conversion/PUBLISHING_COMPONENT_STRUCTURE.md`
+- **RNBT 변환 지침**: `/RNBT_architecture/CLAUDE.md`
+- **RNBT 설계 문서**: `/RNBT_architecture/README.md`
 
-### RNBT_architecture
+### 코딩 & 구현 가이드
 
-- **작업 지침**: `/RNBT_architecture/CLAUDE.md`
-- **설계 문서**: `/RNBT_architecture/README.md`
+- **코딩 스타일**: `/.claude/guides/CODING_STYLE.md`
+- **Figma 구현 가이드**: `/.claude/guides/FIGMA_IMPLEMENTATION_GUIDE.md`
+- **Figma MCP 사용법**: `/.claude/guides/FIGMA_MCP_GUIDE.md`
+
+### 운영 문서
+
+- **프로덕션 Hooks**: `/.claude/docs/PRODUCTION_HOOKS.md`
+- **Claude Code 모드**: `/.claude/docs/claude-code-modes.md`
+- **SKILL 공통 규칙**: `/.claude/skills/SHARED_INSTRUCTIONS.md`
 
 ---
 
@@ -211,4 +221,4 @@ grep "Wkit.functionName" Utils/Wkit.js
 
 ---
 
-*최종 업데이트: 2026-03-28*
+*최종 업데이트: 2026-04-04*
