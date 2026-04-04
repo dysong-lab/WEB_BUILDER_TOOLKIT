@@ -347,42 +347,6 @@ scripts/
 
 ---
 
-## P0 자기 검증 — 작성 완료 후 필수 수행
-
-**모든 파일 작성이 완료된 후, 생성한 파일을 다시 Read로 읽어 아래를 검증한다.**
-이 단계를 생략하지 않는다.
-
-### P0-1: HTML이 데이터를 모르는가?
-
-각 컴포넌트의 `views/*.html`을 읽고 확인:
-
-- ❌ 위반: data-* 속성에 실제 값 (`data-status="running"`, `data-level="critical"`)
-- ❌ 위반: 텍스트 노드에 실제 데이터 (`<span>정상</span>`, `<span>192.168.1.1</span>`)
-- ✅ 정상: 약속된 선택자만 존재하고 값은 비어있음 (`data-status=""`, `<span>-</span>`)
-
-### P0-2: register.js가 조립만 하는가?
-
-각 컴포넌트의 `scripts/register.js`를 읽고 확인:
-
-- ❌ 위반: innerHTML, appendChild, createElement 등 DOM 조작
-- ❌ 위반: fetch, XMLHttpRequest, axios 호출
-- ❌ 위반: 데이터 가공/변환 로직
-- ✅ 정상: applyMixin + subscribe + bindEvents만 존재
-
-### P0-4: 페이지가 렌더링하지 않는가?
-
-`page_scripts/before_load.js`와 `page_scripts/loaded.js`를 읽고 확인:
-
-- ❌ 위반: innerHTML, appendChild, createElement 등 DOM 조작
-- ❌ 위반: CSS 클래스 직접 조작 (classList.add/remove/toggle)
-- ❌ 위반: 스타일 직접 변경 (el.style.xxx = yyy)
-- ✅ 정상: 이벤트 핸들러 등록, 데이터 매핑 정의, interval 관리만 존재
-
-※ 이벤트 핸들러 안에서 Mixin 메서드를 **네임스페이스로 호출**하는 것은 정상이다 (`targetInstance.listRender.clear()`).
-  페이지가 직접 DOM을 조작하는 것이 위반이다.
-
----
-
 ## 관련 자료
 
 | 참조 | 위치 |
