@@ -15,21 +15,47 @@ This file provides guidance to Claude Code when working in this repository.
 
 ## End-to-End Workflow
 
+```mermaid
+flowchart TD
+    A[Figma 디자인] -->|Figma MCP| B[1. Figma_Conversion]
+    B -->|HTML/CSS 추출 + 스크린샷 검증| C[정적 HTML/CSS]
+    C -->|전달| D[2. RNBT_architecture]
+    D -->|Mixin 적용 + 런타임 구성| E[동적 DesignComponent]
+
+    style B fill:#e3f2fd,stroke:#1565c0
+    style D fill:#fce4ec,stroke:#c62828
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│  1. Figma_Conversion                                                 │
-│                                                                      │
-│     Figma MCP로 디자인 정보 추출 → HTML/CSS 생성 → 스크린샷 검증        │
-│                                                                      │
-│     ❌ 스크립트 작업 없음 (순수 퍼블리싱)                               │
-└──────────────────────────────┬──────────────────────────────────────┘
-                               │
-                               ▼  정적 HTML/CSS 전달
-┌─────────────────────────────────────────────────────────────────────┐
-│  2. RNBT_architecture                                                │
-│                                                                      │
-│     정적 HTML/CSS → 동적 컴포넌트 변환 + 런타임 구성                    │
-└─────────────────────────────────────────────────────────────────────┘
+
+```mermaid
+flowchart LR
+    subgraph Skills
+        direction TB
+        S1[1-figma<br/>figma-to-html<br/>figma-to-inline-svg]
+        S2[2-component<br/>create-standard<br/>create-symbol-state<br/>create-3d<br/>create-3d-container]
+        S3[3-page<br/>create-project]
+        S4[4-review<br/>audit-project]
+        S5[5-mixin<br/>create-mixin-spec<br/>implement-mixin]
+    end
+
+    subgraph Agents
+        direction TB
+        A1[figma-reviewer]
+        A2[component-validator]
+        A3[mixin-auditor]
+    end
+
+    subgraph Hooks
+        direction TB
+        H1[P0-2 register.js 렌더링 차단]
+        H2[P3-1 CSS rem/em 차단]
+        H3[P3-2 JS var 차단]
+        H4[P3-3 preview link 차단]
+    end
+
+    S1 --> A1
+    S2 --> A2
+    S5 --> A3
+    S2 --> H1
 ```
 
 ---
