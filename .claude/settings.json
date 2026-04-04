@@ -1,0 +1,43 @@
+{
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -Command \"[console]::beep(800,200)\"",
+            "timeout": 5000
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'FILE=\"$CLAUDE_FILE_PATH\"; if [[ \"$FILE\" == */register.js ]]; then if grep -Pn \"innerHTML|appendChild|createElement|fetch\\(|XMLHttpRequest|axios\" \"$FILE\" 2>/dev/null | grep -v \"^[[:space:]]*/[/*]\"; then echo \"[P0-2 위반] register.js에 렌더링 로직 또는 fetch 호출이 감지되었습니다. register.js는 조립(Mixin 적용, 구독 연결, 이벤트 매핑)만 해야 합니다.\"; exit 2; fi; fi'",
+            "timeout": 10000
+          },
+          {
+            "type": "command",
+            "command": "bash -c 'FILE=\"$CLAUDE_FILE_PATH\"; if [[ \"$FILE\" == *.css ]]; then if grep -Pn \"[0-9]+rem\\b|[0-9]+em\\b\" \"$FILE\" 2>/dev/null | grep -v \"^[[:space:]]*/[/*]\"; then echo \"[P3-1 위반] CSS에 rem/em 단위가 감지되었습니다. RNBT 런타임은 px 단위만 지원합니다.\"; exit 2; fi; fi'",
+            "timeout": 10000
+          },
+          {
+            "type": "command",
+            "command": "bash -c 'FILE=\"$CLAUDE_FILE_PATH\"; if [[ \"$FILE\" == *.js ]] && [[ \"$FILE\" != *.min.js ]]; then if grep -Pn \"\\bvar\\b\" \"$FILE\" 2>/dev/null | grep -v \"^[[:space:]]*/[/*]\" | grep -v \"// *var\"; then echo \"[P3-2 위반] JS에 var 키워드가 감지되었습니다. const 또는 let을 사용하세요.\"; exit 2; fi; fi'",
+            "timeout": 10000
+          },
+          {
+            "type": "command",
+            "command": "bash -c 'FILE=\"$CLAUDE_FILE_PATH\"; if [[ \"$FILE\" == */preview/*.html ]] || [[ \"$FILE\" == */preview.html ]]; then if grep -Pin \"<link.*href=\" \"$FILE\" 2>/dev/null; then echo \"[P3-3 위반] preview.html에 로컬 CSS link가 감지되었습니다. 독립 실행을 위해 인라인 스타일을 사용하세요.\"; exit 2; fi; fi'",
+            "timeout": 10000
+          }
+        ]
+      }
+    ]
+  }
+}
