@@ -274,6 +274,34 @@ scripts/register.js    — 동일 (불변)
 
 ---
 
+## P0 자기 검증 — 작성 완료 후 필수 수행
+
+**모든 파일 작성이 완료된 후, 생성한 파일을 다시 Read로 읽어 아래를 검증한다.**
+이 단계를 생략하지 않는다.
+
+### P0-1: HTML이 데이터를 모르는가?
+
+`views/*.html`을 읽고 확인:
+
+- ❌ 위반: data-* 속성에 실제 값 (`data-status="running"`, `data-level="critical"`)
+- ❌ 위반: 텍스트 노드에 실제 데이터 (`<span>정상</span>`, `<span>192.168.1.1</span>`)
+- ✅ 정상: 약속된 선택자만 존재하고 값은 비어있음 (`data-status=""`, `<span>-</span>`)
+
+위반이 있으면 HTML을 수정하여 데이터를 제거한다.
+
+### P0-2: register.js가 조립만 하는가?
+
+`scripts/register.js`를 읽고 확인:
+
+- ❌ 위반: innerHTML, appendChild, createElement 등 DOM 조작
+- ❌ 위반: fetch, XMLHttpRequest, axios 호출
+- ❌ 위반: 데이터 가공/변환 로직 (조건문으로 값을 변형하는 코드)
+- ✅ 정상: applyMixin + subscribe + bindEvents만 존재
+
+위반이 있으면 해당 로직을 Mixin 또는 인스턴스 메서드로 이동한다.
+
+---
+
 ## 관련 자료
 
 | 문서 | 위치 |

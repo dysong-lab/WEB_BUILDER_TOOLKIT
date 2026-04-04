@@ -172,6 +172,32 @@ function apply[MixinName](instance, options) {
 
 ---
 
+## P0 자기 검증 — 작성 완료 후 필수 수행
+
+**모든 파일 작성이 완료된 후, 생성한 Mixin .js를 다시 Read로 읽어 아래를 검증한다.**
+이 단계를 생략하지 않는다.
+
+### P0-3: Mixin이 HTML 구조를 모르는가?
+
+`Mixins/[MixinName].js`를 읽고 확인:
+
+- ❌ 위반: cssSelectors 계약 밖에서 DOM 탐색 (querySelector, parentNode, children, nextSibling 등을 직접 사용)
+- ❌ 위반: 특정 HTML 태그명에 의존 (`el.tagName === 'DIV'`, `el.closest('table')`)
+- ✅ 정상: cssSelectors/datasetAttrs로만 DOM 요소에 접근
+
+cssSelectors의 VALUE로 `appendElement.querySelector(selector)`를 호출하는 것은 정상이다.
+그 외의 DOM 탐색이 있으면 위반이다.
+
+### P0-5: 다른 Mixin을 모르는가?
+
+같은 파일에서 확인:
+
+- ❌ 위반: `instance.fieldRender`, `instance.listRender` 등 다른 Mixin 네임스페이스 참조
+- ❌ 위반: 다른 Mixin의 메서드를 호출하거나 존재를 가정하는 조건문
+- ✅ 정상: 자신의 네임스페이스(`ns`)만 사용하고 `instance`에는 네임스페이스 주입/제거만 수행
+
+---
+
 ## 관련 자료
 
 | 문서 | 위치 |

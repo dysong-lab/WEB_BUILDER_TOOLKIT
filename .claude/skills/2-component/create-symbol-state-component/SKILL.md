@@ -333,6 +333,31 @@ CSS가 하는 일:
 
 ---
 
+## P0 자기 검증 — 작성 완료 후 필수 수행
+
+**모든 파일 작성이 완료된 후, 생성한 파일을 다시 Read로 읽어 아래를 검증한다.**
+이 단계를 생략하지 않는다.
+
+### P0-1: HTML이 데이터를 모르는가?
+
+`views/*.html`을 읽고 확인:
+
+- ❌ 위반: `data-status`에 실제 상태값이 들어있다 (`data-status="normal"`)
+- ✅ 정상: `data-status=""`로 비어있고, 런타임에 FieldRenderMixin이 값을 채운다
+
+※ SVG `<defs>` 안의 gradient 정의(paintN-green 등)는 **스타일 정의**이므로 데이터 하드코딩이 아니다.
+
+### P0-2: register.js가 조립만 하는가?
+
+`scripts/register.js`를 읽고 확인:
+
+- ❌ 위반: innerHTML, appendChild, createElement 등 DOM 조작
+- ❌ 위반: fetch, XMLHttpRequest, axios 호출
+- ❌ 위반: 데이터 가공/변환 로직
+- ✅ 정상: applyFieldRenderMixin + subscribe + bindEvents만 존재
+
+---
+
 ## 관련 자료
 
 | 참조 | 위치 | 특징 |
