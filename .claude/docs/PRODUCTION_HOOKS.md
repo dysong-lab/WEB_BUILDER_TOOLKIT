@@ -346,6 +346,48 @@ loaded.js          → P0-4만 검사
 
 ---
 
+## 7. 구현 상태 (2026-04-05)
+
+### 구현 완료
+
+| 스크립트 | 커�� 계약 | 대상 파일 | 검증 결과 |
+|----------|----------|----------|----------|
+| `check-p3.sh` | P3-1, P3-2, P3-3 | *.css, *.js, preview.html | 기존 인라인 Hook 3���를 ��합 |
+| `check-register.sh` | P0-2, P1-1 | register.js | 렌더링/fetch 차단 + Mixin·subscribe 존재 확인 |
+| `check-beforeDestroy.sh` | P1-4 | beforeDestroy.js | null 정리 + destroy() + unsubscribe 존재 확인 |
+| `check-page-loaded.sh` | P0-4 | loaded.js (page) | DOM 조작 차단 + 데이터 매핑 존재 확인 |
+| `check-page-before-load.sh` | P0-4 | before_load.js (page) | DOM 조작 차단 + 이벤트 핸들러 등록 확인 |
+| `check-page-before-unload.sh` | P1 | before_unload.js (page) | offEventBus + unregisterMapping + null 확인 |
+| `cross-register-destroy.sh` | P1-2, P1-3, P1-4 | register.js ↔ beforeDestroy.js | Mixin수=destroy수, bind↔remove, 역순, 함수 null |
+| `cross-selectors-html.sh` | P2-1, P2-2 | register.js ↔ views/*.html | cssSelectors↔HTML + ListRender↔template |
+| `cross-page-lifecycle.sh` | P1-2, P1-4 | loaded.js ↔ before_unload.js | 생성-정리 매핑 + 3D raycasting/Three 정리 확인 |
+
+### 전수 테스트 결과
+
+```
+대상: 모든 DesignComponentSystem 라이���사이클 파일
+  - Components/ 2D: 8개 컴포넌트
+  - Components/ 3D: 7개 장비 × 3 변형 = 21개
+  - Examples/ 2D: 4개 프로젝트 = 29개 컴포넌트
+  - 페이지: 25개
+
+오탐: 0건
+진탐: 14건 — 3D 03_status_popup beforeDestroy.js 전수
+  - P1-4: this.customEvents = null 누락
+  - P1-2: removeCustomEvents → unsubscribe 역순 위반
+```
+
+### 미구현
+
+```
+Hook(prompt):   P0-1, P0-2 의미, P0-3, P0-4 의미, P0-5 — Phase 1·2 효과 검증 후 도입
+structural:     P2-3 — Mixin 문서 동시 갱신 정합성
+audit-project:  P2-4, P3-4 — SKILL 완료 후 수동 실행으로 유지
+```
+
+---
+
 *작성일: 2026-03-31*
 *개정일: 2026-04-04 — 선별 기준을 "정규식 가능 여부"에서 "설계 중요도"로 전환*
 *근거: 03-31 전수 검토 22건 분석 — 실제 위반의 95%가 기존 Hook 선별 범위 밖*
+*개정���: 2026-04-05 — Phase 1(단일 파일) + Phase 2(교차 검증) 구현 완료, 9개 스크립트 배��*

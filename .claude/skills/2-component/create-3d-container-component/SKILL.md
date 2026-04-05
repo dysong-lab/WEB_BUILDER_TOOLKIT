@@ -106,7 +106,7 @@ this.resolveMeshName = function (event) {
  * - 01에서는 클릭 이벤트 없음, resolveMeshName 불필요
  */
 
-const { applyMeshStateMixin } = Wkit.loadMixin('MeshStateMixin');
+
 
 // ======================
 // 1. MIXIN 적용
@@ -174,8 +174,7 @@ this.meshState?.destroy();
  * - bind3DEvents로 3D 클릭 이벤트 바인딩
  */
 
-const { applyMeshStateMixin } = Wkit.loadMixin('MeshStateMixin');
-const { applyCameraFocusMixin } = Wkit.loadMixin('CameraFocusMixin');
+
 const { bindCustomEvents, removeCustomEvents } = Wkit;
 
 // ======================
@@ -280,8 +279,7 @@ this.meshState?.destroy();
  * - page before_load.js에서 fetchData로 상세 데이터를 조회한 후 showDetail 호출
  */
 
-const { applyMeshStateMixin } = Wkit.loadMixin('MeshStateMixin');
-const { apply3DShadowPopupMixin } = Wkit.loadMixin('3DShadowPopupMixin');
+
 const { bindCustomEvents, removeCustomEvents } = Wkit;
 
 // ======================
@@ -403,26 +401,75 @@ this.meshState?.destroy();
 ### loaded.js (모든 변형 공통)
 
 ```javascript
-const { GlobalDataPublisher } = Wkit;
+const { registerMapping, fetchAndPublish } = GlobalDataPublisher;
+const { each, go } = fx;
 
-const pageDataMappings = {
-    equipmentStatus: {
-        datasetName: 'containerEquipmentStatus',
-        refreshInterval: 30000,
-    },
+this.pageDataMappings = [
+    {
+        topic: 'equipmentStatus',
+        datasetInfo: {
+            datasetName: 'containerEquipmentStatus',
+            param: {}
+        },
+        refreshInterval: 30000
+    }
+];
+
+this.pageParams = {};
+
+go(
+    this.pageDataMappings,
+    each(registerMapping),
+    each(({ topic }) => this.pageParams[topic] = {}),
+    each(({ topic }) =>
+        fetchAndPublish(topic, this)
+            .catch(err => console.error(`[Page] ${topic}:`, err))
+    )
+);
+
+this.startAllIntervals = () => {
+    this.pageIntervals = {};
+
+    go(
+        this.pageDataMappings,
+        each(({ topic, refreshInterval }) => {
+            if (refreshInterval) {
+                const state = { _stopped: false, _timerId: null };
+                this.pageIntervals[topic] = state;
+
+                const scheduleNext = () => {
+                    if (state._stopped) return;
+                    state._timerId = setTimeout(() => {
+                        fetchAndPublish(topic, this, this.pageParams[topic] || {})
+                            .catch(err => console.error(`[Page] ${topic}:`, err))
+                            .finally(scheduleNext);
+                    }, refreshInterval);
+                };
+                scheduleNext();
+            }
+        })
+    );
 };
 
-GlobalDataPublisher.registerMapping(this, pageDataMappings);
-GlobalDataPublisher.fetchAndPublish(this, 'equipmentStatus');
-GlobalDataPublisher.startAllIntervals(this);
+this.stopAllIntervals = () => {
+    go(
+        Object.values(this.pageIntervals || {}),
+        each(state => {
+            state._stopped = true;
+            clearTimeout(state._timerId);
+        })
+    );
+};
+
+this.startAllIntervals();
 ```
 
 ### before_load.js — 02_status_camera
 
 ```javascript
-const { Weventbus } = Wkit;
+const { onEventBusHandlers } = Wkit;
 
-const pageEventBusHandlers = {
+this.pageEventBusHandlers = {
     '@meshClicked': ({ targetInstance, event }) => {
         const meshName = targetInstance.resolveMeshName(event);
         if (meshName) {
@@ -431,15 +478,16 @@ const pageEventBusHandlers = {
     },
 };
 
-Weventbus.onEventBusHandlers(this, pageEventBusHandlers);
+onEventBusHandlers(this.pageEventBusHandlers);
 ```
 
 ### before_load.js — 03_status_popup
 
 ```javascript
-const { Weventbus, fetchData } = Wkit;
+const { onEventBusHandlers } = Wkit;
+const { fetchData } = GlobalDataPublisher;
 
-const pageEventBusHandlers = {
+this.pageEventBusHandlers = {
     '@meshClicked': ({ targetInstance, event }) => {
         const meshName = targetInstance.resolveMeshName(event);
         if (!meshName) return;
@@ -451,7 +499,7 @@ const pageEventBusHandlers = {
     },
 };
 
-Weventbus.onEventBusHandlers(this, pageEventBusHandlers);
+onEventBusHandlers(this.pageEventBusHandlers);
 ```
 
 > **개별 단위와의 핵심 차이**: before_load.js에서 `fetchData`를 import하여 클릭된 Mesh의 상세 데이터를 비동기로 조회한다. 개별 단위는 `targetInstance.showDetail()`만 호출하면 되지만, 컨테이너는 `resolveMeshName → fetchData → showDetail` 체인이 필요하다.
@@ -459,11 +507,22 @@ Weventbus.onEventBusHandlers(this, pageEventBusHandlers);
 ### before_unload.js (모든 변형 공통)
 
 ```javascript
-const { GlobalDataPublisher, Weventbus } = Wkit;
+const { unregisterMapping } = GlobalDataPublisher;
+const { offEventBusHandlers } = Wkit;
+const { each, go } = fx;
 
-GlobalDataPublisher.stopAllIntervals(this);
-Weventbus.offEventBusHandlers(this, this.pageEventBusHandlers);
-GlobalDataPublisher.unregisterMapping(this);
+if (this.stopAllIntervals) this.stopAllIntervals();
+this.pageIntervals = null;
+
+offEventBusHandlers(this.pageEventBusHandlers);
+this.pageEventBusHandlers = null;
+
+go(
+    this.pageDataMappings,
+    each(({ topic }) => unregisterMapping(topic))
+);
+this.pageDataMappings = null;
+this.pageParams = null;
 ```
 
 ---

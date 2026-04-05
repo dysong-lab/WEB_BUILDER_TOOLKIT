@@ -67,8 +67,6 @@ description: 개별 단위 3D 컴포넌트를 생성합니다. 단일 GLTF 모�
  * - 데이터 수신 시 Mesh 색상을 상태에 따라 변경
  */
 
-const { applyMeshStateMixin } = Wkit.loadMixin('MeshStateMixin');
-
 // ======================
 // 1. MIXIN 적용
 // ======================
@@ -133,9 +131,6 @@ this.meshState?.destroy();
  * resolveMeshName이 불필요하다.
  * page before_load.js에서 하드코딩된 meshName으로 focusOn을 호출한다.
  */
-
-const { applyMeshStateMixin } = Wkit.loadMixin('MeshStateMixin');
-const { applyCameraFocusMixin } = Wkit.loadMixin('CameraFocusMixin');
 
 // ======================
 // 1. MIXIN 적용
@@ -208,8 +203,6 @@ this.meshState?.destroy();
  * - 이벤트 이름이 장비 고유 (예: '@battClicked')
  */
 
-const { applyMeshStateMixin } = Wkit.loadMixin('MeshStateMixin');
-const { apply3DShadowPopupMixin } = Wkit.loadMixin('3DShadowPopupMixin');
 const { bindCustomEvents } = Wkit;
 
 // ======================
@@ -313,42 +306,102 @@ this.meshState?.destroy();
 ### loaded.js (모든 변형 공통)
 
 ```javascript
-const { GlobalDataPublisher } = Wkit;
+const { registerMapping, fetchAndPublish } = GlobalDataPublisher;
+const { each, go } = fx;
 
-const pageDataMappings = {
-    equipmentStatus: {
-        datasetName: '장비명Status',  // ← API 엔드포인트명
-        refreshInterval: 30000,
-    },
+this.pageDataMappings = [
+    {
+        topic: 'equipmentStatus',
+        datasetInfo: {
+            datasetName: '장비명Status',  // ← API 엔드포인트명
+            param: {}
+        },
+        refreshInterval: 30000
+    }
+];
+
+this.pageParams = {};
+
+go(
+    this.pageDataMappings,
+    each(registerMapping),
+    each(({ topic }) => this.pageParams[topic] = {}),
+    each(({ topic }) =>
+        fetchAndPublish(topic, this)
+            .catch(err => console.error(`[Page] ${topic}:`, err))
+    )
+);
+
+this.startAllIntervals = () => {
+    this.pageIntervals = {};
+
+    go(
+        this.pageDataMappings,
+        each(({ topic, refreshInterval }) => {
+            if (refreshInterval) {
+                const state = { _stopped: false, _timerId: null };
+                this.pageIntervals[topic] = state;
+
+                const scheduleNext = () => {
+                    if (state._stopped) return;
+                    state._timerId = setTimeout(() => {
+                        fetchAndPublish(topic, this, this.pageParams[topic] || {})
+                            .catch(err => console.error(`[Page] ${topic}:`, err))
+                            .finally(scheduleNext);
+                    }, refreshInterval);
+                };
+                scheduleNext();
+            }
+        })
+    );
 };
 
-GlobalDataPublisher.registerMapping(this, pageDataMappings);
-GlobalDataPublisher.fetchAndPublish(this, 'equipmentStatus');
-GlobalDataPublisher.startAllIntervals(this);
+this.stopAllIntervals = () => {
+    go(
+        Object.values(this.pageIntervals || {}),
+        each(state => {
+            state._stopped = true;
+            clearTimeout(state._timerId);
+        })
+    );
+};
+
+this.startAllIntervals();
 ```
 
 ### before_load.js — 03_status_popup
 
 ```javascript
-const { Weventbus } = Wkit;
+const { onEventBusHandlers } = Wkit;
 
-const pageEventBusHandlers = {
+this.pageEventBusHandlers = {
     '@장비명Clicked': ({ targetInstance }) => {
         targetInstance.showDetail();  // 인자 없이 호출 (개별 단위 패턴)
     },
 };
 
-Weventbus.onEventBusHandlers(this, pageEventBusHandlers);
+onEventBusHandlers(this.pageEventBusHandlers);
 ```
 
 ### before_unload.js (모든 변형 공통)
 
 ```javascript
-const { GlobalDataPublisher, Weventbus } = Wkit;
+const { unregisterMapping } = GlobalDataPublisher;
+const { offEventBusHandlers } = Wkit;
+const { each, go } = fx;
 
-GlobalDataPublisher.stopAllIntervals(this);
-Weventbus.offEventBusHandlers(this, this.pageEventBusHandlers);
-GlobalDataPublisher.unregisterMapping(this);
+if (this.stopAllIntervals) this.stopAllIntervals();
+this.pageIntervals = null;
+
+offEventBusHandlers(this.pageEventBusHandlers);
+this.pageEventBusHandlers = null;
+
+go(
+    this.pageDataMappings,
+    each(({ topic }) => unregisterMapping(topic))
+);
+this.pageDataMappings = null;
+this.pageParams = null;
 ```
 
 ---

@@ -37,25 +37,15 @@ flowchart LR
         S5[5-mixin<br/>create-mixin-spec<br/>implement-mixin]
     end
 
-    subgraph Agents
-        direction TB
-        A1[figma-reviewer]
-        A2[component-validator]
-        A3[mixin-auditor]
-    end
-
     subgraph Hooks
         direction TB
-        H1[P0-2 register.js 렌더링 차단]
-        H2[P3-1 CSS rem/em 차단]
-        H3[P3-2 JS var 차단]
-        H4[P3-3 preview link 차단]
+        H1[Phase 1: 단일 파일 검사 6개<br/>P0-2, P0-4, P1-1, P1-4, P3-1~3]
+        H2[Phase 2: 교차 검증 3개<br/>P1-2~3, P2-1~2]
     end
 
-    S1 --> A1
-    S2 --> A2
-    S5 --> A3
     S2 --> H1
+    S2 --> H2
+    S3 --> H2
 ```
 
 ---
