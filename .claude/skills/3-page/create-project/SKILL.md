@@ -25,13 +25,11 @@ Mixin 기반 컴포넌트, 페이지 스크립트, Mock 서버, datasetList.json
 
 ## 핵심 원칙
 
-### 컴포넌트 = 껍데기 + 조립 코드
+### 컴포넌트 = HTML/CSS + register.js
 
 ```
-컴포넌트는 HTML/CSS(껍데기)만 소유한다.
-기능은 Mixin이 소유한다.
-register.js는 Mixin 적용 + 구독 연결 + 이벤트 매핑만 한다.
-도메인 로직은 없다.
+컴포넌트는 HTML/CSS + register.js(Mixin + 자체 속성/메서드)로 구성된다.
+공통 규칙: cssSelectors 계약으로 DOM 접근, beforeDestroy.js에서 정리.
 ```
 
 ### 선택자 계약
@@ -87,7 +85,7 @@ DesignComponentSystem/Examples/[project_name]/
 
 ## 컴포넌트 register.js 패턴
 
-register.js는 **조립 코드만** 포함한다. 순서가 중요하다.
+register.js는 Mixin 적용, 자체 메서드 정의, 구독/이벤트 연결을 수행한다. 순서가 중요하다.
 
 ```javascript
 const { subscribe } = GlobalDataPublisher;

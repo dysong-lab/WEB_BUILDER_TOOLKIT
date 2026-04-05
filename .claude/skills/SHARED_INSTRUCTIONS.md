@@ -88,15 +88,17 @@ fx.go(
 
 ---
 
-## register.js 구조 (Mixin 기반)
+## register.js 구조
 
-register.js는 **조립 코드만** 포함한다. 순서가 중요하다.
+register.js는 인스턴스에 기능을 붙이는 코드다. Mixin과 자체 메서드 모두 가능하며, 순서가 중요하다.
 
 ```
-1. Mixin 적용     — 반드시 먼저 (네임스페이스 생성)
-2. 구독 연결      — Mixin 메서드를 함수 참조로 연결
-3. 이벤트 매핑    — Mixin의 선택자를 computed property로 참조
+1. Mixin 적용 / 자체 메서드 정의  — 반드시 먼저 (네임스페이스 및 메서드 생성)
+2. 구독 연결                      — Mixin/자체 메서드를 함수 참조로 연결
+3. 이벤트 매핑                    — cssSelectors를 computed property로 참조
 ```
+
+**공통 규칙:** DOM 접근은 cssSelectors 계약을 통해야 한다 (Mixin이든 자체 메서드든 동일). 생성한 것은 beforeDestroy.js에서 정리한다.
 
 ### subscriptions 패턴
 
@@ -185,12 +187,13 @@ go(
 );
 this.subscriptions = null;
 
-// 1. Mixin 정리 — Mixin이 자기 것만 정리
-this.fieldRender.destroy();
+// 1. Mixin 및 자체 상태 정리
+this._myState = null;             // 자체 상태가 있다면 해제
+this.fieldRender.destroy();       // Mixin 정리
 // this.listRender.destroy();
 ```
 
-**핵심:** Mixin의 destroy가 내부 상태, 메서드, 선택자를 모두 정리한다. 수동 null 처리 불필요.
+**핵심:** Mixin의 destroy가 내부 상태, 메서드, 선택자를 모두 정리한다. 자체 상태는 직접 해제한다.
 
 ---
 
@@ -198,7 +201,7 @@ this.fieldRender.destroy();
 
 ```
 Mixin:        throw (에러를 알림)
-컴포넌트:     에러 처리 없음 (조립 코드만)
+컴포넌트:     에러 처리 없음 (Mixin에 위임)
 페이지:       fetchAndPublish().catch() (에러를 처리)
 ```
 
@@ -292,7 +295,7 @@ body { ... }
 - ❌ datasetName 기반 데이터 응답을 받는 함수에서 `function(response)` 사용 → `function({ response: data })` 필수
 - ❌ 생성 후 정리 누락 (register ↔ beforeDestroy 쌍)
 - ❌ Mixin 메서드 재정의 (래핑, 덮어쓰기)
-- ❌ register.js에 렌더링 로직 작성 (조립 코드만)
+- ❌ cssSelectors 계약을 거치지 않는 DOM 접근
 - ❌ customEvents에서 선택자 하드코딩 (Mixin의 computed property 사용)
 - ❌ HTML 문자열을 JS에 작성 (template 태그 사용)
 - ❌ 컴포넌트에서 직접 fetch

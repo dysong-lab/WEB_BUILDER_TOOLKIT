@@ -101,7 +101,7 @@ Mixin  = 기능 (HTML 구조를 모른다)
 | # | 계약 | 위반하면 | 강제 수단 |
 |---|------|---------|----------|
 | P0-1 | HTML은 데이터를 모른다 (런타임 데이터 하드코딩 금지) | Mixin 인터페이스가 장식품이 됨 | Hook(prompt) |
-| P0-2 | register.js는 조립만 한다 (렌더링 로직, fetch 금지) | 컴포넌트가 껍데기가 아니게 됨 | Hook(command) + Hook(prompt) |
+| P0-2 | register.js에서 fetch 금지, DOM 접근은 cssSelectors 계약 필수 | 데이터 출처 결합, 디자인 변형 호환 불가 | Hook(command) + Hook(prompt) |
 | P0-3 | Mixin은 HTML 구조를 모른다 (선택자 계약으로만 접근) | 디자인 변형이 불가능해짐 | Hook(prompt) |
 | P0-4 | 페이지는 렌더링하지 않는다 (오케스트레이션만) | 역할 경계 붕괴 | Hook(prompt) |
 | P0-5 | Mixin은 다른 Mixin을 모른다 (조립 코드가 조합을 주도) | Mixin 간 의존성 발생 | Hook(prompt) |
@@ -153,8 +153,8 @@ fetch(, XMLHttpRequest, axios          → 데이터 직접 호출
 Hook(command)로 잡을 수 없는 경우:
 
 ```
-register.js 안에서 데이터를 가공/변환하는 로직이 들어간 경우
-→ 구문적으로는 합법이지만 "조립만 한다"를 위반
+register.js 안에서 cssSelectors 계약을 거치지 않고 DOM에 접근하는 경우
+→ 구문적으로는 합법이지만 디자인 변형 호환을 위반
 → Hook(prompt)가 필요
 ```
 
