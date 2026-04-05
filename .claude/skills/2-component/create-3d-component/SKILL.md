@@ -144,7 +144,11 @@ applyMeshStateMixin(this, {
     },
 });
 
-applyCameraFocusMixin(this);
+applyCameraFocusMixin(this, {
+    camera:   wemb.threeElements.camera,
+    controls: wemb.threeElements.mainControls,
+    duration: 1000
+});
 
 // ======================
 // 2. 구독 연결
@@ -203,11 +207,11 @@ this.meshState?.destroy();
  * - 이벤트 이름이 장비 고유 (예: '@battClicked')
  */
 
-const { bindCustomEvents } = Wkit;
-
 // ======================
 // 1. MIXIN 적용
 // ======================
+
+// ── MeshStateMixin ────────────────────────────────────────────
 applyMeshStateMixin(this, {
     colorMap: {
         normal:   0x00C853,
@@ -215,20 +219,6 @@ applyMeshStateMixin(this, {
         critical: 0xFF1744,
         offline:  0x9E9E9E,
     },
-});
-
-apply3DShadowPopupMixin(this, {
-    getHTML: () => `
-        <div class="popup-container">
-            <h3 class="popup-title"></h3>
-            <p class="popup-status"></p>
-        </div>
-    `,
-    getStyles: () => `
-        .popup-container { padding: 16px; color: #fff; }
-        .popup-title { margin: 0 0 8px; font-size: 14px; }
-        .popup-status { margin: 0; font-size: 12px; opacity: 0.8; }
-    `,
 });
 
 // ======================
@@ -248,30 +238,49 @@ go(
     )
 );
 
+// ── 3DShadowPopupMixin ────────────────────────────────────────
+const { htmlCode, cssCode } = this.properties.publishCode || {};
+
+apply3DShadowPopupMixin(this, {
+    getHTML:   () => htmlCode || '',
+    getStyles: () => cssCode || '',
+    onCreated: () => {
+        this.shadowPopup.bindPopupEvents({
+            click: {
+                '.popup-close': () => this.shadowPopup.hide()
+            }
+        });
+    }
+});
+
 // ======================
 // 3. 이벤트 매핑 + showDetail 정의
 // ======================
+
+const { bind3DEvents } = Wkit;
+
+this.customEvents = {
+    click: '@장비명Clicked'   // ← 실제 이벤트 이름으로 교체
+};
+bind3DEvents(this, this.customEvents);
 
 /**
  * showDetail — 인자 없이 호출 (개별 단위 패턴)
  * 내부에서 getMeshState로 자기 자신의 상태를 조회하여 팝업에 표시
  */
-this.showDetail = function () {
-    const meshName = '장비명';  // ← 실제 장비명으로 교체
-    const state = this.meshState.getMeshState(meshName);
-    const status = state ? state.status : 'unknown';
-
-    this.shadowPopup.query('.popup-title').textContent = meshName;
-    this.shadowPopup.query('.popup-status').textContent = status;
+this.showDetail = () => {
     this.shadowPopup.show();
-};
 
-this.customEvents = {
-    '@장비명Clicked': (event) => {  // ← 실제 이벤트 이름으로 교체
-        this.showDetail();
-    },
+    const nameEl = this.shadowPopup.query('.popup-name');
+    const statusEl = this.shadowPopup.query('.popup-status');
+
+    if (nameEl) nameEl.textContent = this.name || '장비명';
+    if (statusEl) {
+        const currentStatus = this.meshState.getMeshState('장비명') || 'normal';
+        statusEl.textContent = currentStatus;
+        statusEl.dataset.status = currentStatus;
+    }
 };
-bindCustomEvents(this, this.customEvents);
 ```
 
 ## 03_status_popup — beforeDestroy.js

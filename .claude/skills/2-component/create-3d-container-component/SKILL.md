@@ -175,8 +175,6 @@ this.meshState?.destroy();
  */
 
 
-const { bindCustomEvents, removeCustomEvents } = Wkit;
-
 // ======================
 // 1. MIXIN 적용
 // ======================
@@ -189,7 +187,11 @@ applyMeshStateMixin(this, {
     },
 });
 
-applyCameraFocusMixin(this);
+applyCameraFocusMixin(this, {
+    camera:   wemb.threeElements.camera,
+    controls: wemb.threeElements.mainControls,
+    duration: 1000
+});
 
 // ======================
 // 2. 구독 연결
@@ -212,31 +214,26 @@ go(
 // 3. 이벤트 매핑 + resolveMeshName 정의
 // ======================
 
+const { bind3DEvents } = Wkit;
+
+this.customEvents = {
+    click: '@meshClicked'
+};
+bind3DEvents(this, this.customEvents);
+
 /**
  * resolveMeshName — intersects에서 Mesh 이름 추출
  */
-this.resolveMeshName = function (event) {
-    if (!event.intersects || event.intersects.length === 0) return null;
+this.resolveMeshName = (event) => {
+    if (!event.intersects || !event.intersects.length) return null;
 
-    let object = event.intersects[0].object;
-    while (object) {
-        if (object.name && object.name !== '' && object.isMesh) {
-            return object.name;
-        }
-        object = object.parent;
+    let current = event.intersects[0].object;
+    while (current) {
+        if (current.name) return current.name;
+        current = current.parent;
     }
     return null;
 };
-
-this.customEvents = {
-    '@meshClicked': (event) => {
-        const meshName = this.resolveMeshName(event);
-        if (meshName) {
-            this.cameraFocus.focusOn({ meshName });
-        }
-    },
-};
-bindCustomEvents(this, this.customEvents);
 ```
 
 ## 02_status_camera — beforeDestroy.js
@@ -280,11 +277,11 @@ this.meshState?.destroy();
  */
 
 
-const { bindCustomEvents, removeCustomEvents } = Wkit;
-
 // ======================
 // 1. MIXIN 적용
 // ======================
+
+// ── MeshStateMixin ────────────────────────────────────────────
 applyMeshStateMixin(this, {
     colorMap: {
         normal:   0x00C853,
@@ -292,20 +289,6 @@ applyMeshStateMixin(this, {
         critical: 0xFF1744,
         offline:  0x9E9E9E,
     },
-});
-
-apply3DShadowPopupMixin(this, {
-    getHTML: () => `
-        <div class="popup-container">
-            <h3 class="popup-title"></h3>
-            <p class="popup-status"></p>
-        </div>
-    `,
-    getStyles: () => `
-        .popup-container { padding: 16px; color: #fff; }
-        .popup-title { margin: 0 0 8px; font-size: 14px; }
-        .popup-status { margin: 0; font-size: 12px; opacity: 0.8; }
-    `,
 });
 
 // ======================
@@ -325,22 +308,42 @@ go(
     )
 );
 
+// ── 3DShadowPopupMixin ────────────────────────────────────────
+const { htmlCode, cssCode } = this.properties.publishCode || {};
+
+apply3DShadowPopupMixin(this, {
+    getHTML:   () => htmlCode || '',
+    getStyles: () => cssCode || '',
+    onCreated: () => {
+        this.shadowPopup.bindPopupEvents({
+            click: {
+                '.popup-close': () => this.shadowPopup.hide()
+            }
+        });
+    }
+});
+
 // ======================
 // 3. 이벤트 매핑 + resolveMeshName/showDetail 정의
 // ======================
 
+const { bind3DEvents } = Wkit;
+
+this.customEvents = {
+    click: '@meshClicked'
+};
+bind3DEvents(this, this.customEvents);
+
 /**
  * resolveMeshName — intersects에서 Mesh 이름 추출
  */
-this.resolveMeshName = function (event) {
-    if (!event.intersects || event.intersects.length === 0) return null;
+this.resolveMeshName = (event) => {
+    if (!event.intersects || !event.intersects.length) return null;
 
-    let object = event.intersects[0].object;
-    while (object) {
-        if (object.name && object.name !== '' && object.isMesh) {
-            return object.name;
-        }
-        object = object.parent;
+    let current = event.intersects[0].object;
+    while (current) {
+        if (current.name) return current.name;
+        current = current.parent;
     }
     return null;
 };
@@ -352,20 +355,19 @@ this.resolveMeshName = function (event) {
  * @param {string} meshName - 클릭된 Mesh 이름
  * @param {Object} data - fetchData로 조회한 상세 데이터
  */
-this.showDetail = function (meshName, data) {
-    const status = data.status || this.meshState.getMeshState(meshName)?.status || 'unknown';
-
-    this.shadowPopup.query('.popup-title').textContent = meshName;
-    this.shadowPopup.query('.popup-status').textContent = status;
+this.showDetail = (meshName, data) => {
     this.shadowPopup.show();
-};
 
-this.customEvents = {
-    '@meshClicked': (event) => {
-        // page before_load.js에서 처리 — resolveMeshName → fetchData → showDetail
-    },
+    const nameEl = this.shadowPopup.query('.popup-name');
+    const statusEl = this.shadowPopup.query('.popup-status');
+
+    if (nameEl) nameEl.textContent = meshName;
+    if (statusEl) {
+        const currentStatus = (data && data.status) || this.meshState.getMeshState(meshName) || 'normal';
+        statusEl.textContent = currentStatus;
+        statusEl.dataset.status = currentStatus;
+    }
 };
-bindCustomEvents(this, this.customEvents);
 ```
 
 ## 03_status_popup — beforeDestroy.js
