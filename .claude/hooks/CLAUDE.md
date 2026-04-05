@@ -146,7 +146,7 @@ Mixin  = 기능 (HTML 구조를 모른다)
 Hook(command)로 잡을 수 있는 표면적 신호:
 
 ```
-fetch(, XMLHttpRequest, axios  → 데이터 직접 호출
+fetch(, XMLHttpRequest, axios, fetchData, fetchAndPublish  → 데이터 직접 호출
 ```
 
 Hook(command)로 잡을 수 없는 경우:
@@ -265,7 +265,7 @@ structural-script 로직:
 
 | 우선순위 | 계약 | 파일 패턴 | 검출 방법 |
 |---------|------|----------|----------|
-| P0-2 | register.js fetch 호출 | `*/register.js` | `fetch(\|XMLHttpRequest\|axios` |
+| P0-2 | register.js fetch 호출 | `*/register.js` | `fetch(\|XMLHttpRequest\|axios\|fetchData\|fetchAndPublish` |
 | P1-1 | register.js 구독 존재 | `*/register.js` | `subscribe(` 존재 확인 |
 | P1-4 | beforeDestroy null 정리 | `*/beforeDestroy.js` | `= null` 존재 확인 |
 | P1-5 | Mixin destroy null 처리 | `*/Mixin*.js` | `instance\.\w+ = null` 존재 |

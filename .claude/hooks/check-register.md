@@ -4,7 +4,7 @@
 
 register.js에서 두 가지를 검사한다.
 
-1. **fetch 키워드 차단** — `fetch(`, `XMLHttpRequest`, `axios`가 있으면 위반
+1. **외부 데이터 호출 차단** — `fetch(`, `XMLHttpRequest`, `axios`, `fetchData`, `fetchAndPublish`가 있으면 위반
 2. **필수 구조 존재 확인** — `subscribe(`가 없으면 위반 (컴포넌트는 구독으로 데이터를 받는다)
 
 ## 왜 fetch가 안 되는가

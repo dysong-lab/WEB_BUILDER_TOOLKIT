@@ -25,7 +25,7 @@ ERRORS=""
 # P0-2: fetch 로직 혼입 차단
 # ─────────────────────────────────────────────
 # 주석 행을 제외하고 검사
-FETCH_VIOLATIONS=$(grep -En 'fetch\(|XMLHttpRequest|axios' "$FILE" 2>/dev/null | grep -v '^\s*/[/*]' | grep -v '// ')
+FETCH_VIOLATIONS=$(grep -En 'fetch\(|XMLHttpRequest|axios|fetchData|fetchAndPublish' "$FILE" 2>/dev/null | grep -v '^\s*/[/*]' | grep -v '// ')
 if [[ -n "$FETCH_VIOLATIONS" ]]; then
     ERRORS+="[P0-2 위반] register.js에 데이터 호출 로직이 감지되었습니다.
 컴포넌트는 직접 fetch하지 않습니다. 페이지가 데이터를 발행하고, 컴포넌트는 구독만 합니다.
