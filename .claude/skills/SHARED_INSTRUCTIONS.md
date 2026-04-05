@@ -200,9 +200,8 @@ this.fieldRender.destroy();       // Mixin 정리
 ## 에러 처리
 
 ```
-Mixin:        throw (에러를 알림)
-컴포넌트:     에러 처리 없음 (Mixin에 위임)
-페이지:       fetchAndPublish().catch() (에러를 처리)
+Mixin/자체 메서드:  throw (에러를 알림)
+페이지:             fetchAndPublish().catch() (에러를 처리)
 ```
 
 ---

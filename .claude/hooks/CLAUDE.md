@@ -146,8 +146,7 @@ Mixin  = 기능 (HTML 구조를 모른다)
 Hook(command)로 잡을 수 있는 표면적 신호:
 
 ```
-innerHTML, appendChild, createElement  → 렌더링 로직 혼입
-fetch(, XMLHttpRequest, axios          → 데이터 직접 호출
+fetch(, XMLHttpRequest, axios  → 데이터 직접 호출
 ```
 
 Hook(command)로 잡을 수 없는 경우:
