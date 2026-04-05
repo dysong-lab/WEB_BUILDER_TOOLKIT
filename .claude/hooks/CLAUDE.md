@@ -165,7 +165,7 @@ register.js에서 생성한 것이 beforeDestroy.js에서 정리되지 않으면
 
 | # | 계약 | 위반하면 | 강제 수단 |
 |---|------|---------|----------|
-| P1-1 | register.js 3단계 모두 존재 (Mixin 적용 → 구독 → 이벤트) | 초기화 불완전 | Hook(command) |
+| P1-1 | register.js에 구독 연결 존재 | 런타임 데이터 수신 불가 | Hook(command) |
 | P1-2 | beforeDestroy.js가 register.js의 정확한 역순 | 정리 누락 → 메모리 누수 | structural-script |
 | P1-3 | register.js에서 생성한 모든 것이 정리되는가 | 이벤트/구독 잔존 | structural-script |
 | P1-4 | beforeDestroy에서 참조를 null 처리 | GC 방해 | Hook(command) |
@@ -265,9 +265,8 @@ structural-script 로직:
 
 | 우선순위 | 계약 | 파일 패턴 | 검출 방법 |
 |---------|------|----------|----------|
-| P0-2 | register.js 렌더링 로직 | `*/register.js` | `innerHTML\|appendChild\|createElement` |
 | P0-2 | register.js fetch 호출 | `*/register.js` | `fetch(\|XMLHttpRequest\|axios` |
-| P1-1 | register.js 3단계 존재 | `*/register.js` | `bindEvents` 존재 확인 |
+| P1-1 | register.js 구독 존재 | `*/register.js` | `subscribe(` 존재 확인 |
 | P1-4 | beforeDestroy null 정리 | `*/beforeDestroy.js` | `= null` 존재 확인 |
 | P1-5 | Mixin destroy null 처리 | `*/Mixin*.js` | `instance\.\w+ = null` 존재 |
 | P1-6 | Mixin 네임스페이스 주입 | `*/Mixin*.js` | `instance\.\w+ = ns` 존재 |
@@ -290,7 +289,7 @@ structural-script 로직:
 | 우선순위 | 계약 | 파일 패턴 | 프롬프트 핵심 |
 |---------|------|----------|-------------|
 | P0-1 | HTML 데이터 하드코딩 | `*/views/*.html` | "이 HTML에 런타임 데이터가 하드코딩되어 있는가? 약속된 선택자만 있고 실제 데이터 값은 비어있어야 한다." |
-| P0-2 | register.js 조립 전용 | `*/register.js` | "이 register.js가 조립(Mixin 적용, 구독 연결, 이벤트 매핑) 외의 로직을 포함하는가? 데이터 가공, 변환, 직접 렌더링이 있으면 위반이다." |
+| P0-2 | register.js cssSelectors 계약 준수 | `*/register.js` | "이 register.js가 cssSelectors 계약을 거치지 않고 DOM에 접근하는가? 직접 fetch를 호출하는가?" |
 | P0-3 | Mixin이 HTML 구조 무지 | `*/Mixin*.js` | "이 Mixin이 특정 HTML 구조에 의존하는가? cssSelectors 계약 외의 DOM 탐색(querySelector, parentNode, children 등)이 있으면 위반이다." |
 | P0-4 | 페이지가 렌더링 안 함 | `*/before_load.js`, `*/loaded.js` | "이 페이지 코드가 직접 DOM을 조작하거나 렌더링하는가? 오케스트레이션(데이터 정의, interval 관리, param 관리)만 해야 한다." |
 | P0-5 | Mixin 간 독립성 | `*/Mixin*.js` | "이 Mixin이 다른 Mixin의 메서드나 네임스페이스를 참조하는가?" |
@@ -352,7 +351,7 @@ loaded.js          → P0-4만 검사
 | 스크립트 | 커�� 계약 | 대상 파일 | 검증 결과 |
 |----------|----------|----------|----------|
 | `check-p3.sh` | P3-1, P3-2, P3-3 | *.css, *.js, preview.html | 기존 인라인 Hook 3���를 ��합 |
-| `check-register.sh` | P0-2, P1-1 | register.js | 렌더링/fetch 차단 + Mixin·subscribe 존재 확인 |
+| `check-register.sh` | P0-2, P1-1 | register.js | fetch 차단 + subscribe 존재 확인 |
 | `check-beforeDestroy.sh` | P1-4 | beforeDestroy.js | null 정리 + destroy() + unsubscribe 존재 확인 |
 | `check-page-loaded.sh` | P0-4 | loaded.js (page) | DOM 조작 차단 + 데이터 매핑 존재 확인 |
 | `check-page-before-load.sh` | P0-4 | before_load.js (page) | DOM 조작 차단 + 이벤트 핸들러 등록 확인 |
