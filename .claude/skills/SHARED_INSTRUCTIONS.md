@@ -12,6 +12,7 @@
 |-----------|---------------|
 | 1-figma (정적 퍼블리싱) | [/Figma_Conversion/README.md](/Figma_Conversion/README.md), [/Figma_Conversion/CLAUDE.md](/Figma_Conversion/CLAUDE.md), [CODING_STYLE.md](/.claude/guides/CODING_STYLE.md) |
 | 2-component (동적 변환) | [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md), [CODING_STYLE.md](/.claude/guides/CODING_STYLE.md), **사용할 Mixin의 .md 파일** (아래 참조) |
+| 2-component (디자인 변형 추가) | **대상 컴포넌트의 register.js** (선택자 계약 추출), [CODING_STYLE.md](/.claude/guides/CODING_STYLE.md), **기존 views/ 파일** (현재 변형 현황) |
 | 3-page (프로젝트 생성) | [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md), [CODING_STYLE.md](/.claude/guides/CODING_STYLE.md), **사용할 Mixin의 .md 파일** (아래 참조) |
 
 ### Mixin 문서 확인 규칙 (2-component, 3-page 공통)
