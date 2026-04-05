@@ -109,8 +109,7 @@ flowchart LR
 
 ### 운영 문서
 
-- **프로덕션 Hooks**: `/.claude/docs/PRODUCTION_HOOKS.md`
-- **Claude Code 모드**: `/.claude/docs/claude-code-modes.md`
+- **Hook 설계 근거**: `/.claude/hooks/CLAUDE.md`
 - **SKILL 공통 규칙**: `/.claude/skills/SHARED_INSTRUCTIONS.md`
 
 ---
