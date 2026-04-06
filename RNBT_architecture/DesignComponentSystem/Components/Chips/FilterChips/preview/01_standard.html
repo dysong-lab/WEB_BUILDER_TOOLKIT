@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>FilterChips — 01_standard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f1f5f9; padding: 40px; }
+        #filterchips-container { margin: 0 auto; max-width: 520px; background: #ffffff; border-radius: 8px; padding: 16px; }
+    </style>
+</head>
+<body>
+    <div id="filterchips-container"></div>
+
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/ListRenderMixin.js"></script>
+
+    <script>
+    (async () => {
+        await loadComponentAssets('filterchips-container', '../views/01_standard.html', '../styles/01_standard.css');
+
+        const instance = {
+            id: 'filterchips',
+            appendElement: document.getElementById('filterchips-container')
+        };
+
+        applyListRenderMixin(instance, {
+            cssSelectors: {
+                container: '.filter-chips__list',
+                template:  '#filter-chip-item-template',
+                chipid:    '.filter-chips__chip',
+                selected:  '.filter-chips__chip',
+                icon:      '.filter-chips__chip-icon',
+                label:     '.filter-chips__chip-label'
+            },
+            itemKey: 'chipid',
+            datasetAttrs: {
+                chipid:   'chipid',
+                selected: 'selected'
+            }
+        });
+
+        instance.listRender.renderData({
+            response: [
+                { chipid: 'all',      selected: 'true',  icon: '', label: 'All' },
+                { chipid: 'warning',  selected: 'false', icon: '⚠', label: 'Warning' },
+                { chipid: 'error',    selected: 'false', icon: '🔴', label: 'Error' },
+                { chipid: 'info',     selected: 'false', icon: 'ℹ', label: 'Info' },
+                { chipid: 'offline',  selected: 'false', icon: '⭘', label: 'Offline' }
+            ]
+        });
+
+        // 칩 클릭 → 선택 토글 (다중 선택 가능)
+        instance.appendElement.addEventListener('click', function(e) {
+            const chip = e.target.closest('.filter-chips__chip');
+            if (!chip) return;
+
+            const current = chip.dataset.selected;
+            chip.dataset.selected = current === 'true' ? 'false' : 'true';
+        });
+    })();
+    </script>
+</body>
+</html>
