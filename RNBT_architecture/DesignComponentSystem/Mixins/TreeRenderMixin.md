@@ -97,7 +97,8 @@ cssSelectors: {
     node:      '.tree__node',          // ← 규약 KEY (data-node-id 부여 대상)
     toggle:    '.tree__toggle',        // ← 이벤트 매핑용
     icon:      '.tree__icon',          // ← 데이터 KEY "icon"과 매칭
-    label:     '.tree__label'          // ← 데이터 KEY "label"과 매칭
+    label:     '.tree__label',         // ← 데이터 KEY "label"과 매칭
+    status:    '.tree__node'           // ← 데이터 KEY "status"과 매칭 (node 요소에 data-status 부여)
 }
 datasetAttrs: { status: 'status' }
 
@@ -107,9 +108,9 @@ datasetAttrs: { status: 'status' }
         id: 'site-1', label: '본사', status: 'normal',
         //             ↑ KEY          ↑ KEY
         //             ↓ 매칭         ↓ 매칭
-        //  cssSelectors.label       datasetAttrs.status
+        //  cssSelectors.label       cssSelectors.status → datasetAttrs.status
         //             ↓              ↓
-        //  .tree__label.textContent  data-status="normal"
+        //  .tree__label.textContent  .tree__node에 data-status="normal"
         children: [
             {
                 id: 'floor-3', label: '3층',
@@ -187,7 +188,8 @@ applyTreeRenderMixin(this, {
         node:      '.tree__node',
         toggle:    '.tree__toggle',
         icon:      '.tree__icon',
-        label:     '.tree__label'
+        label:     '.tree__label',
+        status:    '.tree__node'
     },
     nodeKey: 'id',
     datasetAttrs: {

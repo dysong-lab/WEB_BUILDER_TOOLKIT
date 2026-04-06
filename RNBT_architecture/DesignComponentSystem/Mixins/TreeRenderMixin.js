@@ -23,7 +23,8 @@
  *           node:      '.tree__node',
  *           toggle:    '.tree__toggle',
  *           icon:      '.tree__icon',
- *           label:     '.tree__label'
+ *           label:     '.tree__label',
+ *           status:    '.tree__node'
  *       },
  *       nodeKey: 'id',
  *       childrenKey: 'children',

@@ -1,0 +1,20 @@
+<!-- 01_standard: 표준 트리 뷰 (계층 구조 + 상태 표시) -->
+<div class="tree-view">
+    <div class="tree-view__header">
+        <span class="tree-view__title">Tree View</span>
+        <div class="tree-view__actions">
+            <button class="tree-view__expand-all-btn">Expand All</button>
+            <button class="tree-view__collapse-all-btn">Collapse All</button>
+        </div>
+    </div>
+    <div class="tree-view__list"></div>
+
+    <template id="tree-view-node-template">
+        <div class="tree-view__node">
+            <span class="tree-view__toggle">&#9654;</span>
+            <span class="tree-view__icon"></span>
+            <span class="tree-view__label"></span>
+            <span class="tree-view__badge"></span>
+        </div>
+    </template>
+</div>
