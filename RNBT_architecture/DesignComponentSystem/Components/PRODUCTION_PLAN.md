@@ -128,17 +128,17 @@ applyShadowPopupMixin(this, {
 
 ### 결론: 불필요
 
-| 후보 패턴 | 반복 횟수 | 판단 | 근거 |
-|----------|----------|------|------|
-| 위치 계산 (Tooltip, Menu) | 2~3개 | 유틸리티 함수 | 라이프사이클 없음, 순수 계산 |
-| 입력 처리 (TextField, Search) | 2개 | register.js 커스텀 | Mixin은 data→DOM 방향, 입력은 역방향 |
-| 드래그 (Slider) | 1개 | register.js 커스텀 | 단일 컴포넌트, ���복 기준 미달 |
-| 자동 숨김 (Snackbar) | 1개 | setTimeout | register.js에서 직접 처리 |
+| 후보 패턴 | 판단 | 근거 |
+|----------|------|------|
+| 위치 계산 (Tooltip, Menu) | 유틸리티 함수 | 라이프사이클 없음, 순수 계산. 기능(목적+수단)이 아니라 메커니즘 수준 |
+| 입력 처리 (TextField, Search) | register.js 커스텀 | Mixin은 data→DOM 방향, 입력은 DOM→data 역방향. 수단이 다르므로 기존 Mixin과 다른 기능이나, 아직 여러 프로젝트에서 반복되지 않음 |
+| 드래그 (Slider) | register.js 커스텀 | 단일 컴포넌트에서만 필요. 아직 반복 발생하지 않음 |
+| 자동 숨김 (Snackbar) | setTimeout | register.js에서 직접 처리. 라이프사이클 관리가 필요 없는 단순 타이머 |
 
-**Mixin 신규 기준** (COMPONENT_SYSTEM_DESIGN.md):
-1. data→rendering 패턴이어야 함
-2. 3개 이상 컴포넌트에서 반복
-3. 라이프사이클(create/render/destroy) 관리가 필요
+**Mixin 생성 기준** (COMPONENT_SYSTEM_DESIGN.md 기반):
+1. **기능인가**: 보편화된 목적과 특수한 수단이 결합된 단위여야 함. "어떻게?"에 대한 답이 하나로 특정되어야 함
+2. **여러 프로젝트에서 반복되는가**: 반복 발생 시 Mixin으로 승격. 단일 프로젝트의 단일 컴포넌트에서만 필요하면 register.js 커스텀으로 충분
+3. **라이프사이클 관리가 필요한가**: create/render/destroy 패턴이 있어야 함. 순수 계산은 유틸리티 함수
 
 ### 추가: 유틸리티 함수 1개
 
