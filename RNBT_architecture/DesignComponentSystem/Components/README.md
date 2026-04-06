@@ -55,6 +55,9 @@ Components/
 뱃지다        → Badges/
 텍스트 입력   → TextFields/
 칩이다        → Chips/
+체크박스다    → Checkbox/
+라디오 버튼   → Radio/
+구분선이다    → Divider/
 ```
 
 ---
@@ -69,12 +72,15 @@ Components/
 | Badges | 카운터/알림 표시 | FieldRender | StatusBadge |
 | Buttons | 사용자 액션 | ListRender + itemKey | — |
 | Cards | 정보 카드 | FieldRender | StatusCard |
+| Checkbox | 체크박스 | FieldRender + datasetAttrs | — |
 | Chips | 태그/필터 | ListRender + itemKey | FilterChips |
 | Dialogs | 모달 팝업 | ShadowPopup + FieldRender | InfoDialog |
+| Divider | 구분선 | 없음 (순수 CSS) | — |
 | Lists | 데이터 목록 | ListRender | EventBrowser |
 | Loading | 로딩/진행률 | FieldRender + styleAttrs | — |
 | Menus | 드롭다운 메뉴 | ListRender + itemKey | — |
 | Navigation | 탐색 메뉴 | ListRender + itemKey | NavigationDrawer, NavigationSidebar |
+| Radio | 라디오 버튼 | ListRender + itemKey | — |
 | Search | 검색 입력 | FieldRender + ListRender | — |
 | Sheets | 바텀/사이드 시트 | ShadowPopup | — |
 | Sliders | 범위 선택 | FieldRender + styleAttrs | — |
@@ -120,10 +126,14 @@ Components/
 | 17 | Tabs | PrimaryTabs | ListRender + itemKey |
 | 18 | Trees | TreeView | TreeRender |
 
-### 미구현: 12개 범주
+### 미구현: 14개 범주
 
-Buttons, Loading, Menus, Search, Sheets, Sliders, Snackbar, Switch, TextFields, Toolbars, Tooltips
+Buttons, Checkbox, Divider, Loading, Menus, Radio, Search, Sheets, Sliders, Snackbar, Switch, TextFields, Toolbars, Tooltips
 + Cards/Charts/Lists 범주 확장
+
+### 보류: 2개 범주
+
+Carousel, Date & time pickers (커스텀 인터랙션 과다, 수요 발생 시 추가)
 
 > 대량생산 플랜: [PRODUCTION_PLAN.md](./PRODUCTION_PLAN.md) 참조
 

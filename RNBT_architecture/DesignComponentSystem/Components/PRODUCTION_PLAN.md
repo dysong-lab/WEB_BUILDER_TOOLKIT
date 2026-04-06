@@ -2,11 +2,12 @@
 
 ## 목표
 
-24개 MD3 범주를 기존 Mixin으로 채우고, 범주 확장까지 포함하여 총 40개 2D 컴포넌트 완성.
+26개 MD3 범주를 기존 Mixin으로 채우고, 범주 확장까지 포함하여 총 43개 2D 컴포넌트 완성.
 
 **핵심 판단**:
 - 새 Mixin **불필요** — 기존 10개 Mixin으로 모든 컴포넌트 커버 가능
 - 유틸리티 함수 **1개 추가** — `calcPopupPosition` (Tooltip, Menu용 위치 계산)
+- **보류**: Carousel, Date & time pickers (커스텀 인터랙션 과다, 당장 수요 낮음)
 
 ---
 
@@ -154,7 +155,7 @@ calcPopupPosition(triggerEl, popupEl, { placement, offset })
 
 ## 3. 배치별 빌드 순서
 
-### 배치 1: 순수 FieldRender — 5개 (아키타입 A)
+### 배치 1: 순수 FieldRender — 6개 (아키타입 A)
 
 가장 단순하고 동일한 골격. 병렬 생산 가능.
 
@@ -163,15 +164,17 @@ calcPopupPosition(triggerEl, popupEl, { placement, offset })
 | 19 | StatusToolbar | Toolbars | title, status, action1, action2 | status | — | click: action → @toolbarAction |
 | 20 | LinearProgress | Loading | label, bar | — | bar: { property: 'width', unit: '%' } | — |
 | 21 | ToggleSwitch | Switch | label, track | track: 'checked' | — | click: track → @switchToggled |
-| 22 | MetricCard | Cards | title, value, unit, trend | trend: 'direction' | — | — |
-| 23 | DeviceInfoCard | Cards | name, type, ip, status, location | status: 'level' | — | — |
+| 22 | Checkbox | Checkbox | label, box | box: 'checked' | — | click: box → @checkboxToggled |
+| 23 | MetricCard | Cards | title, value, unit, trend | trend: 'direction' | — | — |
+| 24 | DeviceInfoCard | Cards | name, type, ip, status, location | status: 'level' | — | — |
 
-### 배치 2: ListRender + itemKey — 2개 (아키타입 B)
+### 배치 2: ListRender + itemKey — 3개 (아키타입 B)
 
-| # | 컴포넌트 | ��주 | itemKey | 이벤트 | 특이사항 |
+| # | 컴포넌트 | 범주 | itemKey | 이벤트 | 특이사항 |
 |---|----------|------|--------|--------|---------|
-| 24 | DropdownMenu | Menus | menuid | click: item → @menuItemSelected | 외부 클릭 닫기 (document 이벤트) |
-| 25 | ToggleButtonGroup | Buttons | btnid | click: btn → @buttonToggled | updateItemState로 선택 토글 |
+| 25 | DropdownMenu | Menus | menuid | click: item → @menuItemSelected | 외부 클릭 닫기 (document 이벤트) |
+| 26 | ToggleButtonGroup | Buttons | btnid | click: btn → @buttonToggled | updateItemState로 선택 토글 |
+| 27 | RadioButtonGroup | Radio | radioid | click: item → @radioSelected | 단일 선택 (PrimaryTabs 패턴) |
 
 ### 배�� 3: ShadowPopup 계열 — 3개 + 유틸리티 (아키타입 F, G)
 
@@ -180,19 +183,19 @@ calcPopupPosition(triggerEl, popupEl, { placement, offset })
 | 순서 | # | 컴포넌트 | 범주 | 아키타입 | 특이사항 |
 |------|---|----------|------|---------|---------|
 | 0 | — | calcPopupPosition.js | (유틸리티) | — | 순수 함수 |
-| 1 | 26 | BottomSheet | Sheets | F | CSS 슬라이드 애니메이션 |
-| 2 | 27 | Snackbar | Snackbar | G | inner FieldRender + setTimeout 자동 숨김 |
-| 3 | 28 | RichTooltip | Tooltips | F | calcPopupPosition + mouseenter/leave |
+| 1 | 28 | BottomSheet | Sheets | F | CSS 슬라이드 애니메이션 |
+| 2 | 29 | Snackbar | Snackbar | G | inner FieldRender + setTimeout 자동 숨김 |
+| 3 | 30 | RichTooltip | Tooltips | F | calcPopupPosition + mouseenter/leave |
 
 ### 배치 4: 입력/인터랙션 — 3개 (커스텀 로직)
 
 각각 고유한 인터랙션. 템플릿화 어려움.
 
-| # | 컴포���트 | 범주 | 접근 방식 |
+| # | 컴포넌트 | 범주 | 접근 방식 |
 |---|----------|------|----------|
-| 29 | OutlinedTextField | TextFields | Mixin 없음. input → 검증 → @inputChanged |
-| 30 | SearchBar | Search | FieldRender(상태) + ListRender(결과) + input 이���트 |
-| 31 | ValueSlider | Sliders | FieldRender(styleAttrs: left%) + pointer 이벤트 체인 |
+| 31 | OutlinedTextField | TextFields | Mixin 없음. input → 검증 → @inputChanged |
+| 32 | SearchBar | Search | FieldRender(상태) + ListRender(결과) + input 이벤트 |
+| 33 | ValueSlider | Sliders | FieldRender(styleAttrs: left%) + pointer 이벤트 체인 |
 
 ### 배치 5: 차트 & 리스트 확장 — 9개 (아키타입 C, D, E)
 
@@ -200,15 +203,16 @@ calcPopupPosition(triggerEl, popupEl, { placement, offset })
 
 | # | 컴포넌트 | 범주 | 아키타입 | 참조 대비 차이점 |
 |---|----------|------|---------|----------------|
-| 32 | EChartsStackedBar | Charts | D | series[].stack: 'total' |
-| 33 | EChartsMultiLine | Charts | D | 다중 series + 범례 |
-| 34 | EChartsTreemap | Charts | E | type: 'treemap', 계층 데���터 |
-| 35 | EChartsFunnel | Charts | E | type: 'funnel', items 배열 |
-| 36 | EChartsSankey | Charts | E | type: 'sankey', nodes + links |
-| 37 | EChartsHeatmap | Charts | E | type: 'heatmap', [[x, y, value]] |
-| 38 | AlarmList | Lists | C | 시간/레벨/메시지/소스 |
-| 39 | DeviceList | Lists | G | ListRender + ShadowPopup 상세 |
-| 40 | RankingList | Lists | C | 순위/이름/값/변동 |
+| 34 | EChartsStackedBar | Charts | D | series[].stack: 'total' |
+| 35 | EChartsMultiLine | Charts | D | 다중 series + 범례 |
+| 36 | EChartsTreemap | Charts | E | type: 'treemap', 계층 데이터 |
+| 37 | EChartsFunnel | Charts | E | type: 'funnel', items 배열 |
+| 38 | EChartsSankey | Charts | E | type: 'sankey', nodes + links |
+| 39 | EChartsHeatmap | Charts | E | type: 'heatmap', [[x, y, value]] |
+| 40 | AlarmList | Lists | C | 시간/레벨/메시지/소스 |
+| 41 | DeviceList | Lists | G | ListRender + ShadowPopup 상세 |
+| 42 | RankingList | Lists | C | 순위/이름/값/변동 |
+| 43 | Divider | Divider | — | 순수 CSS, Mixin/register.js 없음 |
 
 ---
 
@@ -288,7 +292,31 @@ customEvents:
 
 **CSS 핵심**: `data-checked="true"` → 트랙 배경색 전환 + 썸 위치 이동.
 
-#### 22. MetricCard (Cards 확장)
+#### 22. Checkbox (Checkbox)
+
+**역할**: 체크박스. ON/OFF 상태 표시 및 전환.
+
+```
+cssSelectors:
+    label: '.checkbox__label'
+    box:   '.checkbox__box'
+
+datasetAttrs:
+    box: 'checked'            → data-checked="true|false"
+
+subscriptions:
+    checkboxState: [this.fieldRender.renderData]
+
+customEvents:
+    click:
+        [this.fieldRender.cssSelectors.box]: '@checkboxToggled'
+```
+
+**mock 데이터**: `{ label: 'Remember me', box: 'true' }`
+
+**CSS 핵심**: `data-checked="true"` → 체크마크 표시 + 배경 전환. ToggleSwitch와 동일 패턴, 시각 형태만 다름.
+
+#### 23. MetricCard (Cards 확장)
 
 **역할**: 단일 KPI 수치 카드 (값 + 단위 + 추세).
 
@@ -312,7 +340,7 @@ customEvents: {} (없음)
 
 **CSS 핵심**: `data-direction="up"` → 초록색 화살표, `"down"` → 빨간색 화살표.
 
-#### 23. DeviceInfoCard (Cards 확장)
+#### 24. DeviceInfoCard (Cards 확장)
 
 **역할**: 장비 상세 정보 카드.
 
@@ -337,7 +365,7 @@ customEvents: {} (없음)
 
 ### 배치 2 상세
 
-#### 24. DropdownMenu (Menus)
+#### 25. DropdownMenu (Menus)
 
 **역할**: 드롭다운 메뉴 목록. 트리거 클릭 시 열림, 외부 클릭 시 닫힘.
 
@@ -369,9 +397,9 @@ customEvents:
 
 **mock 데이터**: `[{ menuid: 'edit', icon: '✏', label: 'Edit' }, { menuid: 'delete', icon: '🗑', label: 'Delete' }]`
 
-#### 25. ToggleButtonGroup (Buttons)
+#### 26. ToggleButtonGroup (Buttons)
 
-**���할**: 토글 버튼 그룹. 여러 버튼 중 하나/다수 선택.
+**역할**: 토글 버튼 그룹. 여러 버튼 중 하나/다수 선택.
 
 ```
 cssSelectors:
@@ -396,6 +424,36 @@ customEvents:
 
 **mock 데이터**: `[{ btnid: 'day', label: 'Day', selected: 'true' }, { btnid: 'week', label: 'Week' }, { btnid: 'month', label: 'Month' }]`
 
+#### 27. RadioButtonGroup (Radio)
+
+**역할**: 라디오 버튼 그룹. 여러 옵션 중 하나만 선택.
+
+```
+cssSelectors:
+    container: '.radio-group__list'
+    template:  '#radio-item-template'
+    radioid:   '.radio-group__item'
+    indicator: '.radio-group__indicator'
+    label:     '.radio-group__label'
+
+itemKey: 'radioid'
+
+datasetAttrs:
+    radioid:  'radioid'
+    selected: 'selected'
+
+subscriptions:
+    radioItems: [this.listRender.renderData]
+
+customEvents:
+    click:
+        [this.listRender.cssSelectors.radioid]: '@radioSelected'
+```
+
+**mock 데이터**: `[{ radioid: 'opt1', label: 'Option A', selected: 'true' }, { radioid: 'opt2', label: 'Option B' }, { radioid: 'opt3', label: 'Option C' }]`
+
+**특징**: PrimaryTabs와 동일한 단일 선택 패턴. 시각 형태만 다름 (원형 인디케이터 + 수직 배치).
+
 ### 배치 3 ��세
 
 #### calcPopupPosition.js (유틸리티)
@@ -417,7 +475,7 @@ customEvents:
 - 뷰포트 경계를 넘으면 반대 방향으로 전환 (flip)
 - Mixin이 아닌 순수 함수, 라이프사이클 없음
 
-#### 26. BottomSheet (Sheets)
+#### 28. BottomSheet (Sheets)
 
 **역할**: 하단에서 슬라이드업되는 시트 패널.
 
@@ -438,7 +496,7 @@ customEvents (Shadow DOM 내부 — bindPopupEvents):
 
 **CSS 핵심**: `transform: translateY(100%)` → `translateY(0)` 애니메이션.
 
-#### 27. Snackbar (Snackbar)
+#### 29. Snackbar (Snackbar)
 
 **역할**: 일시적 토스트 알림. 자동 숨김.
 
@@ -460,7 +518,7 @@ Shadow DOM 이벤트 (bindPopupEvents):
 - `show()` 호출마다 타이머 리셋
 - `beforeDestroy`에서 `clearTimeout(this._autoHideTimer)` 정리
 
-#### 28. RichTooltip (Tooltips)
+#### 30. RichTooltip (Tooltips)
 
 **역할**: 트리거 요소에 호버 시 표시되는 정보 툴팁.
 
@@ -481,7 +539,7 @@ customEvents (메인 DOM — 트리거 이벤트):
 
 ### 배��� 4 상세
 
-#### 29. OutlinedTextField (TextFields)
+#### 31. OutlinedTextField (TextFields)
 
 **역할**: 외곽선 텍스트 입력 필드. Mixin 없이 순수 이벤트 바인딩.
 
@@ -501,7 +559,7 @@ customEvents:
 
 **beforeDestroy**: customEvents 제거만 (Mixin 없음).
 
-#### 30. SearchBar (Search)
+#### 32. SearchBar (Search)
 
 **역할**: 검색 입력 + 결과/제안 드롭다운.
 
@@ -523,7 +581,7 @@ customEvents:
 
 **register.js 특이사항**: `input` 이벤트 debounce 처리.
 
-#### 31. ValueSlider (Sliders)
+#### 33. ValueSlider (Sliders)
 
 **역할**: 값 선택 슬라이더.
 
@@ -559,7 +617,22 @@ customEvents:
 | EChartsSankey | sankey | `{ nodes: [{ name }], links: [{ source, target, value }] }` |
 | EChartsHeatmap | heatmap | `{ xAxis, yAxis, data: [[x, y, value]] }` |
 
-#### 38~40. Lists 확장
+#### 43. Divider (Divider)
+
+**역할**: 콘텐츠 영역 구분선. 순수 CSS 컴포넌트.
+
+```
+(Mixin 없음, register.js/beforeDestroy.js 없음)
+
+파일 구조:
+    views/01_standard.html     ← <hr> 또는 <div class="divider">
+    styles/01_standard.css     ← 수평/수직 스타일
+```
+
+**특이사항**: Mixin이 없고 데이터를 받지 않으므로 scripts/ 폴더 불필요.
+preview는 views + styles 조합으로 충분.
+
+#### 40~42. Lists 확장
 
 | 컴��넌트 | Mixin | 템플릿 필드 | 특이사항 |
 |----------|-------|------------|---------|
@@ -624,15 +697,48 @@ Components/[Category]/[Name]/
 
 ---
 
-## 7. 요약
+## 7. Phase 2: 디자인 변형 (컴포넌트당 5개)
+
+Phase 1 (25개 컴포넌트 구현) 완료 후, 각 컴포넌트에 5개 디자인 변형을 추가한다.
+
+### 원칙
+
+- register.js/beforeDestroy.js는 **건드리지 않음** — cssSelectors 계약만 유지
+- views/styles/preview만 추가
+- 변형 네이밍: `01_standard`, `02_compact`, `03_light`, `04_dark`, `05_minimal` (예시)
+
+### 변형 생산 방식
+
+| 방식 | 설명 | 품질 |
+|------|------|------|
+| Figma 변환 | Figma 디자인 → Figma_Conversion → CSS 추출 | 최고 |
+| 테마 변형 | 기존 CSS 기반 색상/크기/여백 변경 | 중간 |
+| 레이아웃 변형 | 동일 데이터, 다른 배치 (수직↔수평, 카드↔인라인) | 중간 |
+
+### 생산 규모
+
+- 43개 컴포넌트 × 5개 변형 = **215개** views/styles/preview 세트
+- Divider 같은 순수 CSS 컴포넌트도 변형 대상
+- Phase 1에서 만든 `01_standard`는 첫 번째 변형으로 유지
+
+### 진행 조건
+
+- Phase 1 완료 (모든 register.js 안정화)
+- Figma 디자인이 준비되면 우선 Figma 변환 방식으로 진행
+- 없으면 테마/레이아웃 변형으로 선행
+
+---
+
+## 8. 요약
 
 | 항목 | 값 |
 |------|---|
 | 현재 컴포넌트 | 18개 (12/24 범주) |
-| 신규 예정 | 22개 (5배치) |
-| 완료 후 총계 | **40개** (24/24 범주 + 확장) |
+| 신규 예정 | 25개 (5배치) |
+| 완료 후 총계 | **43개** (26/26 범주 + 확장) |
 | 새 Mixin | 0개 |
 | 새 유틸리티 | 1개 (calcPopupPosition) |
-| 아키타입 | 7개 (A~G) |
-| 템플릿 생산 가능 | 16개 (73%) |
-| 커스텀 필요 | 6개 (27%) |
+| 아키타입 | 7개 (A~G) + 순수 CSS 1개 |
+| 템플릿 생산 가능 | 19개 (76%) |
+| 커스텀 필요 | 6개 (24%) |
+| 보류 | 2개 범주 (Carousel, Date & time pickers) |
