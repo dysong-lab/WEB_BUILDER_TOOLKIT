@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>RadarChart — 01_corporate</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f1f5f9; padding: 40px; }
+        #radarchart-container { margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <div id="radarchart-container"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/EChartsMixin.js"></script>
+
+    <script>
+    (async () => {
+        await loadComponentAssets('radarchart-container', '../views/01_corporate.html', '../styles/01_corporate.css');
+
+        const instance = {
+            id: 'radar-chart',
+            appendElement: document.getElementById('radarchart-container')
+        };
+
+        applyEChartsMixin(instance, {
+            cssSelectors: { container: '.chart__canvas' },
+            option: {
+                radar: { indicator: [] },
+                series: [{ type: 'radar', data: [] }],
+                tooltip: {}
+            },
+            mapData: function(data, optionCopy) {
+                optionCopy.radar.indicator = data.indicator;
+                optionCopy.series[0].data = data.series.map(function(s) {
+                    return { name: s.name, value: s.value };
+                });
+                if (data.legend) {
+                    optionCopy.legend = { data: data.legend };
+                }
+                return optionCopy;
+            }
+        });
+
+        instance.echarts.renderData({
+            response: {
+                legend: ['Current', 'Target'],
+                indicator: [
+                    { name: 'CPU', max: 100 },
+                    { name: 'Memory', max: 100 },
+                    { name: 'Disk', max: 100 },
+                    { name: 'Network', max: 100 },
+                    { name: 'Uptime', max: 100 }
+                ],
+                series: [
+                    { name: 'Current', value: [72, 85, 60, 45, 98] },
+                    { name: 'Target', value: [80, 70, 50, 60, 95] }
+                ]
+            }
+        });
+    })();
+    </script>
+</body>
+</html>

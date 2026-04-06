@@ -1,0 +1,28 @@
+#scatterchart-container {
+    width: 700px;
+    height: auto;
+    display: block;
+    overflow: hidden;
+}
+
+#scatterchart-container .chart {
+    padding: 0;
+}
+
+#scatterchart-container .chart__header {
+    margin-bottom: 4px;
+}
+
+#scatterchart-container .chart__title {
+    font-size: 11px;
+    font-weight: 600;
+    color: #b0aa9f;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+#scatterchart-container .chart__canvas {
+    width: 100%;
+    height: 280px;
+}
