@@ -47,6 +47,14 @@ Components/
 검색이다      → Search/
 토글이다      → Switch/
 진행률이다    → Loading/
+도구 바다     → Toolbars/
+메뉴다        → Menus/
+툴팁이다      → Tooltips/
+시트다        → Sheets/
+슬라이더다    → Sliders/
+뱃지다        → Badges/
+텍스트 입력   → TextFields/
+칩이다        → Chips/
 ```
 
 ---
@@ -58,32 +66,66 @@ Components/
 | 범주 | 설명 | 주요 Mixin | 구현 컴포넌트 |
 |------|------|-----------|-------------|
 | AppBars | 앱 상단/하단 바 | FieldRender | TopAppBar |
-| Badges | 카운터/알림 표시 | FieldRender | — |
-| Buttons | 사용자 액션 | customEvents + CSS | — |
+| Badges | 카운터/알림 표시 | FieldRender | StatusBadge |
+| Buttons | 사용자 액션 | ListRender + itemKey | — |
 | Cards | 정보 카드 | FieldRender | StatusCard |
-| Chips | 태그/필터 | ListRender | — |
-| Dialogs | 모달 팝업 | ShadowPopup | — |
+| Chips | 태그/필터 | ListRender + itemKey | FilterChips |
+| Dialogs | 모달 팝업 | ShadowPopup + FieldRender | InfoDialog |
 | Lists | 데이터 목록 | ListRender | EventBrowser |
 | Loading | 로딩/진행률 | FieldRender + styleAttrs | — |
 | Menus | 드롭다운 메뉴 | ListRender + itemKey | — |
 | Navigation | 탐색 메뉴 | ListRender + itemKey | NavigationDrawer, NavigationSidebar |
-| Search | 검색 입력 | FieldRender + customEvents | — |
+| Search | 검색 입력 | FieldRender + ListRender | — |
 | Sheets | 바텀/사이드 시트 | ShadowPopup | — |
-| Sliders | 범위 선택 | customEvents + styleAttrs | — |
-| Snackbar | 토스트 알림 | FieldRender + datasetAttrs | — |
-| Switch | ON/OFF 토글 | customEvents + data-state | — |
-| Tabs | 탭 전환 | ListRender + itemKey | — |
-| TextFields | 텍스트 입력 | FieldRender + customEvents | — |
-| Toolbars | 액션 바 | FieldRender + customEvents | — |
+| Sliders | 범위 선택 | FieldRender + styleAttrs | — |
+| Snackbar | 토스트 알림 | ShadowPopup + FieldRender | — |
+| Switch | ON/OFF 토글 | FieldRender + datasetAttrs | — |
+| Tabs | 탭 전환 | ListRender + itemKey | PrimaryTabs |
+| TextFields | 텍스트 입력 | 없음 (이벤트 바인딩) | — |
+| Toolbars | 액션 바 | FieldRender | — |
 | Tooltips | 호버 정보 | ShadowPopup | — |
 
 ### 데이터 시각화 (도메인 확장)
 
 | 범주 | 설명 | 주요 Mixin | 구현 컴포넌트 |
 |------|------|-----------|-------------|
-| Charts | 차트 시각화 | EChartsMixin | EChartsBar, EChartsLine, EChartsPie, EChartsGauge |
+| Charts | 차트 시각화 | EChartsMixin | EChartsBar, EChartsLine, EChartsPie, EChartsGauge, EChartsArea, EChartsScatter, EChartsRadar |
 | Tables | 대화형 테이블 | TabulatorMixin | TabulatorDataTable |
-| Trees | 트리 구조 | TreeRenderMixin | — |
+| Trees | 트리 구조 | TreeRenderMixin | TreeView |
+
+---
+
+## 구현 현황 (2026-04-06 기준)
+
+### 완료: 12/24 범주, 18개 컴포넌트
+
+| # | 범주 | 컴포넌트 | Mixin |
+|---|------|----------|-------|
+| 1 | AppBars | TopAppBar | FieldRender |
+| 2 | Badges | StatusBadge | FieldRender |
+| 3 | Cards | StatusCard | FieldRender |
+| 4 | Charts | EChartsBar | ECharts |
+| 5 | Charts | EChartsLine | ECharts |
+| 6 | Charts | EChartsPie | ECharts (mapData) |
+| 7 | Charts | EChartsGauge | ECharts (mapData) |
+| 8 | Charts | EChartsArea | ECharts |
+| 9 | Charts | EChartsScatter | ECharts (mapData) |
+| 10 | Charts | EChartsRadar | ECharts (mapData) |
+| 11 | Chips | FilterChips | ListRender + itemKey |
+| 12 | Dialogs | InfoDialog | ShadowPopup + FieldRender |
+| 13 | Lists | EventBrowser | ListRender + ShadowPopup |
+| 14 | Navigation | NavigationDrawer | ListRender + itemKey |
+| 15 | Navigation | NavigationSidebar | ListRender |
+| 16 | Tables | TabulatorDataTable | Tabulator |
+| 17 | Tabs | PrimaryTabs | ListRender + itemKey |
+| 18 | Trees | TreeView | TreeRender |
+
+### 미구현: 12개 범주
+
+Buttons, Loading, Menus, Search, Sheets, Sliders, Snackbar, Switch, TextFields, Toolbars, Tooltips
++ Cards/Charts/Lists 범주 확장
+
+> 대량생산 플랜: [PRODUCTION_PLAN.md](./PRODUCTION_PLAN.md) 참조
 
 ---
 
