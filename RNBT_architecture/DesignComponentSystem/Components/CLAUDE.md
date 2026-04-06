@@ -43,10 +43,26 @@ Figma가 존재하는 경우는 사용자가 별도 요청한다.
 카테고리/
 ├── CLAUDE.md                ← 범주 역할 + 세부 컴포넌트 목록 (기존)
 ├── ComponentA/
-│   └── CLAUDE.md            ← 구현 명세 (Step 2 결과)
+│   ├── CLAUDE.md            ← 구현 명세 (Step 2 결과)
+│   ├── scripts/
+│   │   ├── register.js      ← 불변 (모든 디자인 변형이 공유)
+│   │   └── beforeDestroy.js
+│   ├── views/
+│   │   ├── 01_variant.html  ← 디자인 변형 A
+│   │   └── 02_variant.html  ← 디자인 변형 B
+│   ├── styles/
+│   │   ├── 01_variant.css
+│   │   └── 02_variant.css
+│   └── preview/
+│       ├── 01_variant.html
+│       └── 02_variant.html
 └── ComponentB/
     └── CLAUDE.md
 ```
+
+**하나의 컴포넌트 = 하나의 스크립트 + 여러 디자인 변형.** scripts/는 디자인이 달라져도 변하지 않는다. HTML/CSS만 다르고 약속된 cssSelectors를 유지하면 동일한 register.js로 동작한다.
+
+**컴포넌트 분리 기준:** scripts가 달라져야 하면 별도 컴포넌트다. Mixin 조합, 자체 메서드, 구독 토픽, 이벤트 매핑 중 하나라도 다르면 같은 폴더에 둘 수 없다.
 
 개별 컴포넌트 CLAUDE.md에 포함할 내용:
 
