@@ -1,0 +1,95 @@
+/* 03_with_avatar: 다크 — 개인화 대시보드 맥락 */
+#top-app-bar-container {
+    .top-app-bar {
+        display: flex;
+        align-items: center;
+        height: 64px;
+        padding: 0 12px 0 8px;
+        background: #141820;
+        border-bottom: 1px solid #232830;
+    }
+
+    .top-app-bar__nav-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border: none;
+        background: none;
+        color: #9ba3b0;
+        cursor: pointer;
+        border-radius: 8px;
+    }
+
+    .top-app-bar__nav-icon:hover {
+        color: #d0d4dc;
+        background: #1e2430;
+    }
+
+    .top-app-bar__nav-icon .material-symbols-outlined {
+        font-size: 22px;
+    }
+
+    .top-app-bar__title {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 18px;
+        font-weight: 500;
+        color: #e4e7ed;
+        padding-left: 8px;
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        letter-spacing: -0.2px;
+    }
+
+    .top-app-bar__actions {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .top-app-bar__action {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border: none;
+        background: none;
+        color: #9ba3b0;
+        cursor: pointer;
+        border-radius: 8px;
+    }
+
+    .top-app-bar__action:hover {
+        color: #d0d4dc;
+        background: #1e2430;
+    }
+
+    .top-app-bar__action .material-symbols-outlined {
+        font-size: 22px;
+    }
+
+    .top-app-bar__avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 16px;
+        background: #2a3140;
+        color: #9ba3b0;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        cursor: pointer;
+    }
+
+    .top-app-bar__avatar:hover {
+        background: #343d4f;
+        color: #d0d4dc;
+    }
+}

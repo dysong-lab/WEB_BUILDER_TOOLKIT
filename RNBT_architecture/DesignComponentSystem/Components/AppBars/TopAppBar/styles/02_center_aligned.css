@@ -1,0 +1,73 @@
+/* 02_center_aligned: 라이트 — 브리핑/리포트 맥락 */
+#top-app-bar-container {
+    .top-app-bar {
+        display: flex;
+        align-items: center;
+        height: 64px;
+        padding: 0 4px 0 8px;
+        background: #f7f8fa;
+        border-bottom: 1px solid #e3e5ea;
+    }
+
+    .top-app-bar__nav-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border: none;
+        background: none;
+        color: #5c6370;
+        cursor: pointer;
+        border-radius: 8px;
+    }
+
+    .top-app-bar__nav-icon:hover {
+        color: #1a1d23;
+        background: #ecedf0;
+    }
+
+    .top-app-bar__nav-icon .material-symbols-outlined {
+        font-size: 22px;
+    }
+
+    .top-app-bar__title {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 18px;
+        font-weight: 500;
+        color: #1a1d23;
+        flex: 1;
+        text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        letter-spacing: -0.2px;
+    }
+
+    .top-app-bar__actions {
+        display: flex;
+        gap: 2px;
+    }
+
+    .top-app-bar__action {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border: none;
+        background: none;
+        color: #5c6370;
+        cursor: pointer;
+        border-radius: 8px;
+    }
+
+    .top-app-bar__action:hover {
+        color: #1a1d23;
+        background: #ecedf0;
+    }
+
+    .top-app-bar__action .material-symbols-outlined {
+        font-size: 22px;
+    }
+}
