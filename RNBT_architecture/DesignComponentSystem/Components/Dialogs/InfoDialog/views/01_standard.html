@@ -1,0 +1,109 @@
+<div class="info-dialog">
+    <template id="info-dialog-popup-template">
+        <style>
+            .dialog-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.4);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+            }
+
+            .dialog-panel {
+                background: #ffffff;
+                border-radius: 28px;
+                padding: 24px;
+                min-width: 280px;
+                max-width: 560px;
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            }
+
+            .dialog-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .dialog-icon {
+                font-size: 24px;
+            }
+
+            .dialog-title {
+                font-size: 24px;
+                font-weight: 400;
+                color: #1d1b20;
+            }
+
+            .dialog-close {
+                width: 32px;
+                height: 32px;
+                border: none;
+                background: transparent;
+                cursor: pointer;
+                font-size: 20px;
+                color: #49454f;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .dialog-close:hover {
+                background: rgba(0, 0, 0, 0.08);
+            }
+
+            .dialog-body {
+                font-size: 14px;
+                line-height: 1.5;
+                color: #49454f;
+            }
+
+            .dialog-actions {
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-end;
+                gap: 8px;
+            }
+
+            .dialog-btn {
+                padding: 10px 24px;
+                border: none;
+                border-radius: 20px;
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+                letter-spacing: 0.1px;
+            }
+
+            .dialog-btn--primary {
+                background: #6750a4;
+                color: #ffffff;
+            }
+
+            .dialog-btn--primary:hover {
+                background: #7c6bb0;
+            }
+        </style>
+        <div class="dialog-overlay">
+            <div class="dialog-panel">
+                <div class="dialog-header">
+                    <span class="dialog-icon"></span>
+                    <span class="dialog-title">-</span>
+                    <button class="dialog-close">&times;</button>
+                </div>
+                <div class="dialog-body">-</div>
+                <div class="dialog-actions">
+                    <button class="dialog-btn dialog-btn--primary dialog-confirm">OK</button>
+                </div>
+            </div>
+        </div>
+    </template>
+</div>
