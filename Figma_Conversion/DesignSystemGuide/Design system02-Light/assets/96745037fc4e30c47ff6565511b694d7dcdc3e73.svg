@@ -1,0 +1,9 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 202 202" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Container">
+<path id="Ellipse" d="M30.2893 171.711C24.1098 165.531 18.767 158.568 14.3975 151L101 101L30.2893 171.711Z" fill="var(--fill-0, #6366F1)" stroke="var(--stroke-0, #E8EDFF)" stroke-width="2"/>
+<path id="Ellipse_2" d="M14.3975 151C5.62063 135.798 1 118.554 1 101C0.999999 83.4463 5.62063 66.2019 14.3975 51L101 101L14.3975 151Z" fill="var(--fill-0, #F2A832)" stroke="var(--stroke-0, #E8EDFF)" stroke-width="2"/>
+<path id="Ellipse_3" d="M14.3975 51C23.1743 35.7981 35.7981 23.1743 51 14.3975C66.2019 5.62063 83.4463 1 101 1L101 101L14.3975 51Z" fill="var(--fill-0, #FACC15)" stroke="var(--stroke-0, #E8EDFF)" stroke-width="2"/>
+<path id="Ellipse_4" d="M101 201C74.4783 201 49.043 190.464 30.2893 171.711L101 101L101 201Z" fill="var(--fill-0, #3B82F6)" stroke="var(--stroke-0, #E8EDFF)" stroke-width="2"/>
+<path id="Ellipse_5" d="M101 1C114.132 1 127.136 3.58658 139.268 8.61205C151.401 13.6375 162.425 21.0035 171.711 30.2893C180.997 39.5752 188.362 50.5991 193.388 62.7317C198.413 74.8642 201 87.8678 201 101C201 114.132 198.413 127.136 193.388 139.268C188.362 151.401 180.997 162.425 171.711 171.711C162.425 180.997 151.401 188.362 139.268 193.388C127.136 198.413 114.132 201 101 201L101 101L101 1Z" fill="var(--fill-0, #14B8A6)" stroke="var(--stroke-0, #E8EDFF)" stroke-width="2"/>
+</g>
+</svg>

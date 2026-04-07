@@ -1,0 +1,825 @@
+/* ============================================
+   DESIGN SYSTEM 02 - Light Theme
+   RENOBIT ver.3.0 Design System Guide
+   ============================================ */
+
+/* Fonts */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+@import url('https://fonts.googleapis.com/css2?family=Tomorrow:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+/* Reset */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ============================================
+   Page Container
+   ============================================ */
+.design-system {
+  position: relative;
+  width: 1920px;
+  height: 3150px;
+  background: linear-gradient(to left, #7159d0, #38278e);
+  font-family: 'Pretendard', sans-serif;
+  overflow: hidden;
+}
+
+/* Background Panel */
+.design-system__background {
+  position: absolute;
+  top: 120px;
+  right: -1px;
+  width: 1841px;
+  height: 2938px;
+  background: #e8edff;
+  border-radius: 100px 0 0 100px;
+}
+
+/* Header (Title + Logo) */
+.design-system__header {
+  position: absolute;
+  top: 64px;
+  left: 156px;
+  width: 1668px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+/* Page Title */
+.design-system__title {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 100px;
+  color: rgba(206, 207, 217, 0.2);
+  line-height: normal;
+  white-space: nowrap;
+}
+
+/* Logo */
+.design-system__logo {
+  width: 280px;
+  height: 63px;
+  margin-top: 28px;
+  flex-shrink: 0;
+}
+
+.design-system__logo img {
+  width: 100%;
+  height: 100%;
+}
+
+/* ============================================
+   Sections Container
+   ============================================ */
+.design-system__sections {
+  position: absolute;
+  top: 254px;
+  left: 175px;
+  display: flex;
+  flex-direction: column;
+  width: 1640px;
+}
+
+/* ============================================
+   Section Subtitle
+   ============================================ */
+.section-subtitle {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  width: 1640px;
+  height: 58px;
+  margin-bottom: 50px;
+}
+
+.section-subtitle__text {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  color: #28293d;
+  line-height: normal;
+  white-space: pre-wrap;
+  padding-left: 29px;
+  padding-bottom: 25px;
+}
+
+.section-subtitle__bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 411px;
+  height: 4px;
+  background: #502ee9;
+  border-radius: 5.333px 5.333px 0 0;
+}
+
+.section-subtitle__line {
+  position: absolute;
+  bottom: 1px;
+  left: 410px;
+  width: 1230px;
+  height: 1.333px;
+}
+
+.section-subtitle__line img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ============================================
+   Category Title (with vertical line indicator)
+   ============================================ */
+.category-title {
+  display: flex;
+  align-items: center;
+  gap: 9.333px;
+  margin-bottom: 27px;
+}
+
+.category-title__indicator {
+  width: 2px;
+  height: 18.667px;
+  flex-shrink: 0;
+}
+
+.category-title__indicator img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.category-title__text {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  color: #28293d;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+/* flex 컨테이너(gap 적용) 안에서는 margin-bottom 제거 */
+.chart-group .category-title,
+.header-group .category-title {
+  margin-bottom: 0;
+}
+
+/* ============================================
+   05 / Panel
+   ============================================ */
+.section-panel {
+  margin-bottom: 87px;
+}
+
+.panel-group {
+  /* no special styles */
+}
+
+.panel-items {
+  display: flex;
+  gap: 53px;
+}
+
+.panel-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+  width: 370px;
+}
+
+.panel-item__label {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: #555770;
+  text-align: center;
+  width: 100%;
+}
+
+.panel-item__block {
+  width: 370px;
+  height: 204px;
+  border-radius: 20px;
+  border: 2px solid #d3dbf9;
+}
+
+.panel-item__block--default {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.panel-item__block--secondary {
+  background: #ffffff;
+}
+
+.panel-item__block--sub {
+  background: #d3dbf9;
+  height: 205px;
+}
+
+/* ============================================
+   06 / Grid
+   ============================================ */
+.section-grid {
+  margin-bottom: 104px;
+}
+
+.grid-group {
+  /* no special styles */
+}
+
+.grid-tables {
+  display: flex;
+  justify-content: space-between;
+  width: 1344px;
+}
+
+.grid-table {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  align-items: center;
+  width: 648px;
+}
+
+.grid-table__label {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: #555770;
+  text-align: center;
+  width: 100%;
+}
+
+.grid-table__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+}
+
+.grid-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.grid-cell {
+  height: 25px;
+  display: flex;
+  align-items: center;
+}
+
+.grid-cell--label {
+  width: 120px;
+  background: #ffffff;
+  border-radius: 50px 0 0 0;
+  padding: 5px 18px 5px 20px;
+}
+
+.grid-cell--label span {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  color: #4b5c94;
+}
+
+.grid-cell--label-hover span {
+  color: #0e1130;
+}
+
+.grid-row:first-child .grid-cell--label {
+  border-radius: 50px 0 0 0;
+}
+
+.grid-row:last-child .grid-cell--label,
+.grid-cell--label-last {
+  border-radius: 0 0 0 50px;
+}
+
+/* Only first row gets top-left, only last row gets bottom-left */
+.grid-row:not(:first-child):not(:last-child) .grid-cell--label {
+  border-radius: 0;
+}
+
+.grid-cell--data {
+  width: 126px;
+  justify-content: flex-end;
+  padding: 6px 20px 6px 14px;
+  background: #ffffff;
+}
+
+.grid-cell--data:first-of-type {
+  padding-left: 17px;
+}
+
+.grid-cell--data span {
+  font-family: 'Tomorrow', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  text-align: right;
+}
+
+/* Default gradient + text color */
+.grid-cell--default {
+  background-image: linear-gradient(90deg, rgba(36, 0, 196, 0.04) 0%, rgba(5, 171, 207, 0.02) 100%),
+                     linear-gradient(90deg, #ffffff 0%, #ffffff 100%);
+}
+
+.grid-cell--default span {
+  color: #707eb4;
+}
+
+/* Hover active row (first row) gradient + text color */
+.grid-cell--hover-active {
+  background-image: linear-gradient(90deg, rgba(131, 104, 255, 0.03) 0%, rgba(0, 255, 246, 0.02) 100%),
+                     linear-gradient(90deg, #ffffff 0%, #ffffff 100%);
+}
+
+.grid-cell--hover-active span {
+  color: #0e1130;
+}
+
+/* Hover normal rows gradient + text color */
+.grid-cell--hover {
+  background-image: linear-gradient(90deg, rgba(36, 0, 196, 0.06) 0%, rgba(5, 171, 207, 0.03) 100%),
+                     linear-gradient(90deg, #ffffff 0%, #ffffff 100%);
+}
+
+.grid-cell--hover span {
+  color: #707eb4;
+}
+
+/* Last data cell rounded right */
+.grid-row:first-child .grid-cell--last {
+  border-radius: 0 50px 0 0;
+}
+
+.grid-row:last-child .grid-cell--last {
+  border-radius: 0 0 50px 0;
+}
+
+/* Data cells gap */
+.grid-cell--data + .grid-cell--data {
+  margin-left: 8px;
+}
+
+/* ============================================
+   07 / Chart
+   ============================================ */
+.section-chart {
+  margin-bottom: 157px;
+}
+
+/* Chart group (Type 01 / Type 02) */
+.chart-group {
+  display: flex;
+  flex-direction: column;
+  gap: 27px;
+}
+
+.chart-group--type01 {
+  margin-bottom: 52px;
+}
+
+/* Chart items layout */
+.chart-items--type01 {
+  display: flex;
+  gap: 86px;
+}
+
+.chart-items--type02 {
+  display: flex;
+  gap: 100px;
+}
+
+/* Chart item common */
+.chart-item {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  align-items: center;
+}
+
+.chart-item--line {
+  width: 275px;
+}
+
+.chart-item--area {
+  width: 466px;
+}
+
+.chart-item--linearea {
+  width: 596px;
+}
+
+.chart-item__label {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: #555770;
+  text-align: center;
+  width: 100%;
+}
+
+/* Chart canvas (axis + area) */
+.chart-item__canvas {
+  position: relative;
+  width: 100%;
+}
+
+/* Y-axis labels */
+.chart-axis-y {
+  position: absolute;
+  top: 6px;
+  left: 0;
+  width: 31px;
+  display: flex;
+  flex-direction: column;
+  gap: 46px;
+  text-align: right;
+}
+
+.chart-axis-y--3 {
+  gap: 82px;
+}
+
+.chart-axis-y span {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: #a6a6a6;
+  line-height: 19px;
+}
+
+/* X-axis labels */
+.chart-axis-x {
+  margin-left: 63px;
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+}
+
+.chart-axis-x span {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: #a6a6a6;
+  text-align: center;
+  line-height: 19px;
+}
+
+.chart-axis-x--4 {
+  width: 205px;
+  justify-content: space-between;
+}
+
+.chart-axis-x--7 {
+  width: 402px;
+  justify-content: space-between;
+}
+
+.chart-axis-x--9 {
+  width: 533px;
+  justify-content: space-between;
+}
+
+/* Chart area backgrounds */
+.chart-area {
+  position: relative;
+  margin-left: 42px;
+}
+
+.chart-area--line {
+  width: 233px;
+  height: 227px;
+}
+
+.chart-area--area-chart {
+  width: 424px;
+  height: 216px;
+}
+
+.chart-area--area-chart img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.chart-area--linearea {
+  width: 551px;
+  height: 216px;
+}
+
+.chart-bg {
+  position: absolute;
+}
+
+.chart-bg--line {
+  top: 0;
+  left: 0;
+  width: 233px;
+  height: 216px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.chart-bg--linearea {
+  top: 0;
+  left: 0;
+  width: 551px;
+  height: 216px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Chart data overlays */
+.chart-data {
+  position: absolute;
+}
+
+.chart-data--points {
+  top: 0;
+  left: 86px;
+  width: 10px;
+  height: 227px;
+}
+
+.chart-data--points img {
+  width: 100%;
+  height: 100%;
+}
+
+.chart-data--lines {
+  top: 179px;
+  left: 0;
+  width: 229px;
+  height: 29px;
+}
+
+.chart-data--lines img {
+  width: 100%;
+  height: 100%;
+}
+
+.chart-data--group14 {
+  top: 88px;
+  left: 0;
+  width: 548px;
+  height: 128px;
+}
+
+.chart-data--group14 img {
+  width: 100%;
+  height: 100%;
+}
+
+.chart-data--group13 {
+  top: 108px;
+  left: 0;
+  width: 551px;
+  height: 108px;
+}
+
+.chart-data--group13 img {
+  width: 100%;
+  height: 100%;
+}
+
+/* ============================================
+   Chart Type 02 - Donut & Pie
+   ============================================ */
+.chart-item--donut,
+.chart-item--pie {
+  align-items: flex-start;
+}
+
+.chart-container {
+  display: flex;
+  align-items: center;
+  width: 600px;
+}
+
+/* Donut visual */
+.chart-visual--donut {
+  position: relative;
+  width: 300px;
+  height: 236px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.donut-ring {
+  position: relative;
+  width: 188px;
+  height: 188px;
+}
+
+.donut-ring img {
+  width: 100%;
+  height: 100%;
+}
+
+.donut-total {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  z-index: 1;
+}
+
+.donut-total__label {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  color: #94a3b8;
+}
+
+.donut-total__value {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 32px;
+  color: #0a0a0a;
+}
+
+/* Pie visual */
+.chart-visual--pie {
+  width: 280px;
+  height: 248px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pie-ring {
+  width: 200px;
+  height: 200px;
+}
+
+.pie-ring img {
+  width: 100%;
+  height: 100%;
+}
+
+/* Legend */
+.chart-legend {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100%;
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 8px;
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+.legend-label {
+  flex: 1;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #a6a6a6;
+}
+
+.legend-value {
+  flex: 1;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #a6a6a6;
+  text-align: right;
+}
+
+.legend-percent {
+  flex: 1;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #a6a6a6;
+  text-align: right;
+}
+
+/* ============================================
+   08 / Header
+   ============================================ */
+.section-header {
+  /* last section */
+}
+
+.header-group {
+  display: flex;
+  flex-direction: column;
+  gap: 27px;
+  margin-bottom: 50px;
+}
+
+.header-group:last-child {
+  margin-bottom: 0;
+}
+
+.header-bar {
+  position: relative;
+  width: 1620px;
+  height: 49px;
+  border-bottom: 2px solid #757fbf;
+  background: radial-gradient(ellipse 100% 50% at center, rgba(232, 237, 255, 0.24) 0%, rgba(232, 237, 255, 0.09) 100%), #ffffff;
+  display: flex;
+  align-items: center;
+}
+
+.header-bar__logo {
+  position: absolute;
+  left: 25px;
+  top: 11px;
+  width: 117px;
+  height: 26px;
+}
+
+.header-bar__logo img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.header-bar__menu {
+  position: absolute;
+  left: 314px;
+  top: 0;
+  height: 100%;
+  width: 917px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-menu-item {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 15.188px;
+  color: #a6b3de;
+  white-space: nowrap;
+}
+
+.header-menu-item--active {
+  font-size: 16.875px;
+  color: #8367ec;
+}
+
+.header-bar__datetime {
+  position: absolute;
+  right: 206px;
+  top: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-date {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 15.188px;
+  color: #d3dbf9;
+}
+
+.header-time {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 15.188px;
+  color: #cacaca;
+}
+
+.header-bar__icons {
+  position: absolute;
+  right: 12px;
+  top: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 13.5px;
+}
+
+.header-bar__icons img {
+  width: 19.406px;
+  height: 19.406px;
+  object-fit: cover;
+}
