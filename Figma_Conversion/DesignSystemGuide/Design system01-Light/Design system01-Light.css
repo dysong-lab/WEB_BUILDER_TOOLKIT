@@ -1,0 +1,802 @@
+/* ============================================
+   DESIGN SYSTEM 01 - Light Theme
+   RENOBIT ver.3.0 Design System Guide
+   ============================================ */
+
+/* Fonts */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+@import url('https://fonts.googleapis.com/css2?family=Tomorrow:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@400&display=swap');
+
+/* Reset */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ============================================
+   Page Container
+   ============================================ */
+.design-system {
+  position: relative;
+  width: 1920px;
+  height: 3150px;
+  background: linear-gradient(to left, #7159d0, #38278e);
+  font-family: 'Pretendard', sans-serif;
+  overflow: hidden;
+}
+
+/* Background Panel */
+.design-system__background {
+  position: absolute;
+  top: 120px;
+  right: -1px;
+  width: 1841px;
+  height: 2938px;
+  background: #e8edff;
+  border-radius: 100px 0 0 100px;
+}
+
+/* Header (Title + Logo) */
+.design-system__header {
+  position: absolute;
+  top: 64px;
+  left: 156px;
+  width: 1668px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+/* Page Title */
+.design-system__title {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 100px;
+  color: rgba(206, 207, 217, 0.2);
+  line-height: normal;
+  white-space: nowrap;
+}
+
+/* Logo */
+.design-system__logo {
+  width: 280px;
+  height: 63px;
+  margin-top: 28px;
+  flex-shrink: 0;
+}
+
+.design-system__logo img {
+  width: 100%;
+  height: 100%;
+}
+
+/* ============================================
+   Sections Container
+   ============================================ */
+.design-system__sections {
+  position: absolute;
+  top: 254px;
+  left: 175px;
+  display: flex;
+  flex-direction: column;
+  width: 1640px;
+}
+
+/* ============================================
+   Section Subtitle
+   ============================================ */
+.section-subtitle {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  width: 1640px;
+  height: 58px;
+  margin-bottom: 50px;
+}
+
+.section-subtitle__text {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  color: #28293d;
+  line-height: normal;
+  white-space: pre-wrap;
+  padding-left: 29px;
+  padding-bottom: 25px;
+}
+
+.section-subtitle__bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 411px;
+  height: 4px;
+  background: #502ee9;
+  border-radius: 5.333px 5.333px 0 0;
+}
+
+.section-subtitle__line {
+  position: absolute;
+  bottom: 1px;
+  left: 410px;
+  width: 1230px;
+  height: 1.333px;
+}
+
+.section-subtitle__line img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ============================================
+   Category Title (with vertical line indicator)
+   ============================================ */
+.category-title {
+  display: flex;
+  align-items: center;
+  gap: 9.333px;
+  margin-bottom: 24px;
+}
+
+/* flex 컨테이너(gap 적용) 안에서는 margin-bottom 제거 — gap이 간격 처리 */
+.btn-group .category-title,
+.form-group .category-title {
+  margin-bottom: 0;
+}
+
+.category-title__indicator {
+  width: 2px;
+  height: 18.667px;
+  background: #502ee9;
+  flex-shrink: 0;
+}
+
+.category-title__text {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  color: #28293d;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+/* ============================================
+   01 / Color scheme
+   ============================================ */
+.section-colors {
+  width: 1640px;
+  margin-bottom: 104px;
+}
+
+/* Color Swatches Row */
+.color-groups {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 1621px;
+}
+
+.color-group__items {
+  display: flex;
+  gap: 60px;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.color-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.color-item__color {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.color-item__swatch {
+  width: 63px;
+  height: 63px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.color-item__hex {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  color: #555770;
+  text-align: center;
+  line-height: normal;
+}
+
+.color-item__rgb {
+  font-family: 'Mulish', sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  color: #555770;
+  text-align: center;
+  line-height: normal;
+}
+
+.color-item__rgb p {
+  margin: 0;
+  line-height: normal;
+}
+
+/* Gradient Swatches */
+.gradient-swatch-1 {
+  background: linear-gradient(to bottom, #39288e, #7159d0);
+}
+
+.gradient-swatch-2 {
+  background: linear-gradient(to bottom, #a6b3de, #4b5c94);
+}
+
+/* Event Section */
+.event-section {
+  margin-top: 37px;
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+}
+
+.event-section .category-title {
+  margin-bottom: 0;
+}
+
+.event-items {
+  display: flex;
+  gap: 70px;
+  align-items: center;
+}
+
+.event-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.event-item__symbol {
+  width: 74px;
+  height: 96px;
+  position: relative;
+}
+
+.event-item__symbol img {
+  position: absolute;
+  inset: 0 -8.87% -12.98% -8.93%;
+  width: 117.8%;
+  height: 112.98%;
+}
+
+.event-item__label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 900;
+  font-size: 14px;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.event-item__hex {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 13.333px;
+  color: #555770;
+  text-align: center;
+  line-height: normal;
+}
+
+/* Event Colors */
+.event-item--normal .event-item__label { color: #32d28c; }
+.event-item--warning .event-item__label { color: #2ae3ff; }
+.event-item--major .event-item__label { color: #fd7f04; }
+.event-item--minor .event-item__label { color: #fdd01f; }
+.event-item--critical .event-item__label { color: #f43031; }
+
+/* ============================================
+   02 / Typography
+   ============================================ */
+.section-typography {
+  width: 1640px;
+  margin-bottom: 49px;
+}
+
+.typography-content {
+  display: flex;
+  gap: 133px;
+  align-items: flex-start;
+}
+
+/* Typefaces */
+.typefaces {
+  display: flex;
+  flex-direction: column;
+  gap: 38px;
+}
+
+.typeface-row {
+  display: flex;
+  gap: 52px;
+  align-items: center;
+  padding-left: 40px;
+}
+
+.typeface-row--tomorrow {
+  gap: 52px;
+}
+
+/* Pretendard 가나 preview (text-based for Light theme) */
+.typeface-preview {
+  position: relative;
+  width: 154px;
+  height: 123px;
+}
+
+.typeface-preview__text {
+  position: absolute;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.typeface-char--ga {
+  font-size: 98.4px;
+}
+
+.typeface-char--na {
+  font-size: 67.2px;
+}
+
+.typeface-preview__text--fill {
+  top: 6px;
+  left: 0;
+  color: rgba(80, 46, 233, 0.1);
+}
+
+.typeface-preview__text--stroke {
+  top: 0;
+  left: 4.8px;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(80, 46, 233, 0.15);
+}
+
+/* Tomorrow Aa preview (image-based) */
+.typeface-preview--tomorrow {
+  width: 154px;
+  height: 91px;
+}
+
+.typeface-preview__bg,
+.typeface-preview__stroke {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.typeface-preview__bg {
+  top: 6.7px;
+  left: 0;
+}
+
+.typeface-preview__stroke {
+  top: 0;
+  left: 6.7px;
+}
+
+.typeface-preview img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.typeface-info {
+  background: #f8f8fa;
+  border-radius: 8px;
+  padding: 44px 34px;
+}
+
+.typeface-info__name {
+  font-weight: 600;
+  font-size: 32px;
+  color: #3a3a3c;
+  line-height: 1.3;
+  margin-bottom: 12px;
+}
+
+.typeface-info__name--pretendard {
+  font-family: 'Pretendard', sans-serif;
+}
+
+.typeface-info__name--tomorrow {
+  font-family: 'Tomorrow', sans-serif;
+  font-weight: 700;
+}
+
+.typeface-info__weights {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 16px;
+  color: #666666;
+  line-height: normal;
+}
+
+.typeface-info__weight--regular {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+}
+
+.typeface-info__weight--medium {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+}
+
+.typeface-info__weight--semibold {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+}
+
+.typeface-info__weight--tomorrow-light {
+  font-family: 'Tomorrow', sans-serif;
+  font-weight: 300;
+}
+
+.typeface-info__weight--tomorrow-regular {
+  font-family: 'Tomorrow', sans-serif;
+  font-weight: 400;
+}
+
+.typeface-info__weight--tomorrow-medium {
+  font-family: 'Tomorrow', sans-serif;
+  font-weight: 500;
+}
+
+/* Text Hierarchy Table */
+.text-hierarchy {
+  flex-shrink: 0;
+}
+
+.text-hierarchy__table {
+  width: 996px;
+  border-collapse: separate;
+  border-spacing: 0 12.55px;
+}
+
+.text-hierarchy__table th,
+.text-hierarchy__table td {
+  text-align: left;
+  padding: 0 15px;
+  height: 54.913px;
+  vertical-align: middle;
+}
+
+.text-hierarchy__table thead th {
+  background: #ffffff;
+  border: 0.784px solid #dde5e9;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 15.689px;
+  color: #3a3a3c;
+  line-height: 1.7;
+}
+
+.text-hierarchy__table thead th:first-child {
+  border-radius: 6.276px 0 0 6.276px;
+}
+
+.text-hierarchy__table thead th:last-child {
+  border-radius: 0 6.276px 6.276px 0;
+}
+
+.text-hierarchy__table tbody td {
+  background: #f8f8fa;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 15.689px;
+  color: #3a3a3c;
+  line-height: 1.7;
+}
+
+.text-hierarchy__table tbody td:first-child {
+  border-radius: 6.276px 0 0 6.276px;
+}
+
+.text-hierarchy__table tbody td:last-child {
+  border-radius: 0 6.276px 6.276px 0;
+}
+
+.text-hierarchy__name {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  color: #3a3a3c;
+  line-height: 1.3;
+}
+
+.text-hierarchy__name--display1 { font-size: 38px; }
+.text-hierarchy__name--display2 { font-size: 30px; }
+.text-hierarchy__name--heading1 { font-size: 34px; font-weight: 600; }
+.text-hierarchy__name--heading2 { font-size: 28px; font-weight: 600; }
+.text-hierarchy__name--heading3 { font-size: 20px; font-weight: 600; }
+.text-hierarchy__name--heading4 { font-size: 18px; font-weight: 600; }
+.text-hierarchy__name--heading5 { font-size: 16px; font-weight: 600; }
+.text-hierarchy__name--heading6 { font-size: 13px; font-weight: 600; }
+
+/* ============================================
+   03 / Buttons
+   ============================================ */
+.section-buttons {
+  width: 1640px;
+  margin-bottom: 73px;
+}
+
+.buttons-content {
+  display: flex;
+  flex-direction: column;
+  gap: 73px;
+  width: 1030px;
+}
+
+/* Button Group */
+.btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Button Column Headers */
+.btn-column-headers {
+  display: flex;
+  gap: 64px;
+  padding-left: 134px;
+  margin-bottom: 4px;
+}
+
+.btn-column-header {
+  width: 176px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: #555770;
+  text-align: center;
+  line-height: normal;
+}
+
+/* Button Row */
+.btn-row {
+  display: flex;
+  align-items: center;
+  gap: 64px;
+}
+
+.btn-row__state {
+  width: 70px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  color: #28293d;
+  line-height: normal;
+}
+
+/* Base Button */
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 176px;
+  height: 48px;
+  border-radius: 8px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: normal;
+  white-space: nowrap;
+  border: none;
+  cursor: default;
+}
+
+.btn__icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.btn--icon-left {
+  gap: 10px;
+  padding: 14px 60px;
+}
+
+.btn--icon-right {
+  gap: 10px;
+  padding: 14px 26px;
+}
+
+/* Primary Buttons */
+.btn--primary-default {
+  background: #502ee9;
+  border: 1px solid #502ee9;
+  color: #ffffff;
+}
+
+.btn--primary-hover {
+  background: #92a8f4;
+  color: #ffffff;
+}
+
+.btn--primary-inactive {
+  background: #c8c5d6;
+  color: #ffffff;
+}
+
+/* Primary Outline */
+.btn--primary-outline-default {
+  background: transparent;
+  border: 1px solid #502ee9;
+  color: #502ee9;
+}
+
+.btn--primary-outline-hover {
+  background: rgba(131, 103, 236, 0.2);
+  border: 1px solid #502ee9;
+  color: #502ee9;
+}
+
+.btn--primary-outline-inactive {
+  background: transparent;
+  border: 1px solid #c8c5d6;
+  color: #c8c5d6;
+}
+
+/* Secondary Buttons */
+.btn--secondary-default {
+  background: #373d56;
+  border: 2px solid #92a8f4;
+  color: #ffffff;
+}
+
+.btn--secondary-hover {
+  background: #373d56;
+  border: 2px solid #92a8f4;
+  color: #92a8f4;
+}
+
+.btn--secondary-inactive {
+  background: #e1dfe6;
+  color: #ffffff;
+  border: none;
+}
+
+/* Secondary Outline */
+.btn--secondary-outline-default {
+  background: transparent;
+  border: 1px solid #373d56;
+  color: #373d56;
+}
+
+.btn--secondary-outline-hover {
+  background: rgba(131, 103, 236, 0.1);
+  border: 1px solid #373d56;
+  color: #373d56;
+}
+
+.btn--secondary-outline-inactive {
+  background: transparent;
+  border: 1px solid #e1dfe6;
+  color: #e1dfe6;
+}
+
+/* ============================================
+   04 / Form
+   ============================================ */
+.section-form {
+  width: 1650px;
+}
+
+.form-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px 160px;
+  align-items: flex-start;
+  width: 1617px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 27px;
+  width: 728px;
+}
+
+/* Form Items Row */
+.form-items {
+  display: flex;
+  gap: 64px;
+  align-items: center;
+}
+
+.form-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 200px;
+}
+
+.form-item__label {
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: #555770;
+  text-align: center;
+  width: 100%;
+  line-height: normal;
+}
+
+/* Form Field Base */
+.form-field {
+  display: flex;
+  align-items: center;
+  width: 200px;
+  height: 48px;
+  padding: 14px 30px;
+  border-radius: 30px;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  color: #ffffff;
+  line-height: normal;
+  white-space: nowrap;
+  border: none;
+}
+
+/* Title Label Variants */
+.form-field--title-default {
+  background: #d3dbf9;
+}
+
+.form-field--title-secondary {
+  background: #a6b3de;
+}
+
+.form-field--title-point {
+  background: #a6b3de;
+  border: 2px solid #9edaec;
+}
+
+/* Sub Title Label Variants */
+.form-field--sub01 {
+  background: #92a8f4;
+}
+
+.form-field--sub02 {
+  background: #616d97;
+}
+
+.form-field--sub03 {
+  background: #0c2c5a;
+}
+
+/* Text Field Variants */
+.form-field--textfield-default {
+  background: #ffffff;
+  color: #0e1130;
+}
+
+.form-field--textfield-secondary {
+  background: rgba(255, 255, 255, 0.5);
+  color: #373d56;
+}
+
+.form-field--textfield-sub {
+  background: rgba(255, 255, 255, 0.2);
+  color: #555770;
+}
