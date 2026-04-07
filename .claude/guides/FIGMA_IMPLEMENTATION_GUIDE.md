@@ -229,17 +229,23 @@ Figma MCP가 제공하는 SVG에는 `overflow="visible"` + `preserveAspectRatio=
 5. Playwright 스크린샷 캡처
    └── node로 실행: viewport를 Figma 프레임 크기와 동일하게
 
-6. 시각적 비교
-   ├── get_screenshot (원본)
-   └── Playwright 스크린샷 (구현물)
+6. 정량적 검증 (시각 비교보다 먼저!)
+   ├── Playwright getBoundingClientRect()로 섹션별 높이 측정
+   ├── Figma metadata 프레임 높이와 비교
+   └── diff ±10px 초과 시 내부 요소 세분화 추적
 
-7. 차이점 발견 시
+7. 시각적 비교 (섹션별 크롭)
+   ├── get_screenshot (원본) — 섹션 단위로 캡처
+   ├── Playwright clip 옵션으로 같은 영역 캡처
+   └── 전체 썸네일 비교로 "일치" 판정 금지
+
+8. 차이점 발견 시
    ├── MCP 데이터 다시 확인
    ├── CSS 수정 (추측 금지, 데이터 기반)
-   └── 5-6 반복
+   └── 5-7 반복
 
-8. 완료 판단
-   └── 원본과 구현물이 시각적으로 일치할 때만 완료
+9. 완료 판단
+   └── 정량적 검증 통과 + 시각적 비교 통과일 때만 완료
 ```
 
 ### 실전 예시: 구간별 성능현황 컴포넌트
@@ -321,8 +327,46 @@ const { chromium } = require('playwright');
 ```
 1. Figma MCP: get_screenshot → 디자인 스크린샷 (원본)
 2. Playwright: Node API → 구현 결과 스크린샷
-3. 두 이미지 비교
-4. 차이점 발견 시 수정 후 재캡처
+3. 정량적 검증 (아래 참고) — 시각 비교보다 먼저 수행
+4. 시각적 비교 — 섹션별 크롭으로 비교 (전체 썸네일 비교 금지)
+5. 차이점 발견 시 수정 후 2-4 반복
+```
+
+### 정량적 검증 (필수)
+
+스크린샷 썸네일은 축소되어 차이를 식별하기 어렵다. **반드시 Playwright로 섹션별 렌더링 높이를 측정**하고 Figma metadata의 프레임 높이와 비교한다.
+
+```javascript
+// 섹션별 높이 측정
+const heights = await page.evaluate(() => {
+  const sections = document.querySelectorAll('[class^="section-"]');
+  return [...sections].map(el => ({
+    name: el.className,
+    height: el.getBoundingClientRect().height
+  }));
+});
+
+// Figma metadata 높이와 비교
+heights.forEach(({ name, height }) => {
+  console.log(`${name}: ${height}px (Figma: ???px, diff: ???px)`);
+});
+```
+
+**판정 기준:**
+- diff ±2px 이내: 허용 (서브픽셀 렌더링 차이)
+- diff ±3~10px: 원인 확인 필요
+- diff ±10px 초과: 내부 요소 추적 필수 — 어떤 자식 요소에서 차이가 발생하는지 세분화 측정
+
+**세분화 측정 예시:**
+```javascript
+// 특정 섹션 내 자식 요소 높이 추적
+const details = await page.evaluate(() => {
+  const el = document.querySelector('.section-buttons');
+  return [...el.children].map(child => ({
+    class: child.className,
+    height: child.getBoundingClientRect().height
+  }));
+});
 ```
 
 ### 스크린샷 저장 규칙
