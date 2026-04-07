@@ -5,7 +5,7 @@
 ```
 Figma_Conversion/
 ├── CLAUDE.md                   # 이 문서 (핵심 원칙)
-├── Static_Components/          # 변환된 HTML/CSS 결과물
+├── Static_Components/          # 변환된 HTML/CSS 결과물 (TBD: 경로 재구성 예정)
 │   └── [프로젝트명]/
 │       └── [컴포넌트명]/
 │           ├── assets/         # SVG, 이미지 에셋

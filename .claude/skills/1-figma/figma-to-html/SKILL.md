@@ -39,7 +39,7 @@ claude mcp add --transport http figma-desktop http://127.0.0.1:3845/mcp
 ## 출력 폴더 구조
 
 ```
-Figma_Conversion/Static_Components/
+Figma_Conversion/Static_Components/         # TBD: 경로 재구성 예정
 └── [프로젝트명]/
     └── [컴포넌트명]/
         ├── assets/              # SVG, 이미지 에셋 (자동 다운로드)

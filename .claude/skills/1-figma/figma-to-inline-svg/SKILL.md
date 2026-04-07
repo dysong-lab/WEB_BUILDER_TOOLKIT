@@ -78,7 +78,7 @@ claude mcp add --transport http figma-desktop http://127.0.0.1:3845/mcp
 ## 출력 폴더 구조
 
 ```
-Figma_Conversion/Static_Components/
+Figma_Conversion/Static_Components/         # TBD: 경로 재구성 예정
 └── [프로젝트명]/
     └── [컴포넌트명]/
         ├── assets/              # SVG 에셋 (자동 다운로드)
@@ -250,4 +250,4 @@ create-symbol-state-component (동적)
 
 | 예제 | 참고 시점 | 특징 |
 |------|----------|------|
-| [/Figma_Conversion/Static_Components/Symbol_Test/symbol-1-198/](/Figma_Conversion/Static_Components/Symbol_Test/symbol-1-198/) | 인라인 SVG 예제 | 3D 큐브 심볼 |
+| TBD | 인라인 SVG 예제 | 3D 큐브 심볼 (기존: /Figma_Conversion/Static_Components/Symbol_Test/symbol-1-198/) |

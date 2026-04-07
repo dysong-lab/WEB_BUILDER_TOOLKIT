@@ -15,7 +15,7 @@ WEB_BUILDER_TOOLKIT/
 ├── Figma_Conversion/           # Figma → 정적 HTML/CSS
 │   ├── CLAUDE.md               # Figma 변환 상세 지침
 │   ├── PUBLISHING_COMPONENT_STRUCTURE.md
-│   ├── Static_Components/      # 변환 결과물
+│   ├── Static_Components/      # 변환 결과물 (TBD: 경로 재구성 예정)
 │   └── package.json            # 의존성 (playwright)
 │
 └── RNBT_architecture/          # 정적 → 동적 컴포넌트 + 런타임
@@ -184,7 +184,7 @@ Claude: (MCP로 데이터 추출 → HTML/CSS 생성 → 스크린샷 검증)
 
 결과물 위치:
 ```
-Figma_Conversion/Static_Components/[프로젝트명]/[컴포넌트명]/
+Figma_Conversion/Static_Components/[프로젝트명]/[컴포넌트명]/   # TBD: 경로 재구성 예정
 ├── assets/                 # SVG, 이미지 에셋
 ├── screenshots/            # 구현 스크린샷
 ├── [컴포넌트명].html

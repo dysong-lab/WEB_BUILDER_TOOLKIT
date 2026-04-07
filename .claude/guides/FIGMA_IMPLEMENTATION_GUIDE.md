@@ -250,7 +250,7 @@ Figma MCP가 제공하는 SVG에는 `overflow="visible"` + `preserveAspectRatio=
 1. MCP 호출
    mcp__figma-desktop__get_design_context({
      nodeId: "781:47496",
-     dirForAssetWrites: "./Static_Components/Component/performance-status/assets"
+     dirForAssetWrites: "./Static_Components/[프로젝트명]/[컴포넌트명]/assets"  # TBD: 경로 재구성 예정
    })
    mcp__figma-desktop__get_screenshot({ nodeId: "781:47496" })
 
@@ -329,12 +329,12 @@ const { chromium } = require('playwright');
 
 **컴포넌트별 폴더 구조** (권장):
 ```
-Static_Components/[프로젝트명]/performance-status/
+Static_Components/[프로젝트명]/[컴포넌트명]/       # TBD: 경로 재구성 예정
 ├── assets/                    # 에셋 (SVG, 이미지)
 ├── screenshots/               # 스크린샷
 │   └── impl.png              # 구현물 스크린샷 (Playwright)
-├── performance-status.html
-└── performance-status.css
+├── [컴포넌트명].html
+└── [컴포넌트명].css
 ```
 
 **참고**: Figma 원본 스크린샷(`get_screenshot`)은 파일로 저장할 수 없음.

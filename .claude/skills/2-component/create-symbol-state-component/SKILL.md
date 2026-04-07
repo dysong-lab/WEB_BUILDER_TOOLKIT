@@ -339,4 +339,4 @@ CSS가 하는 일:
 |------|------|------|
 | FieldRenderMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/FieldRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/FieldRenderMixin.md) | datasetAttrs 사용법 |
 | 시스템 설계 문서 | [/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md) | 전체 아키텍처 |
-| 인라인 SVG 예제 | [/Figma_Conversion/Static_Components/Symbol_Test/symbol-1-198/](/Figma_Conversion/Static_Components/Symbol_Test/symbol-1-198/) | 3D 큐브 심볼 + COLOR_REFERENCE.md |
+| 인라인 SVG 예제 | TBD | 3D 큐브 심볼 + COLOR_REFERENCE.md (기존: /Figma_Conversion/Static_Components/Symbol_Test/symbol-1-198/) |

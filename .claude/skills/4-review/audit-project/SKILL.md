@@ -146,7 +146,7 @@ WEB_BUILDER_TOOLKIT/
 
 1. [Figma_Conversion/CLAUDE.md](/Figma_Conversion/CLAUDE.md) 읽기
 2. [Figma_Conversion/PUBLISHING_COMPONENT_STRUCTURE.md](/Figma_Conversion/PUBLISHING_COMPONENT_STRUCTURE.md) 읽기
-3. Static_Components/ 디렉토리에 변환 결과물이 있는가
+3. Static_Components/ 디렉토리에 변환 결과물이 있는가 (TBD: 경로 재구성 예정)
 4. 변환 결과물의 구조가 PUBLISHING_COMPONENT_STRUCTURE.md에서 정의한 형태와 일치하는가
 5. SKILL(figma-to-html, figma-to-inline-svg)에서 참조하는 가이드 파일이 존재하는가
 
@@ -340,7 +340,7 @@ WEB_BUILDER_TOOLKIT/
 
 #### 점검 방법
 
-1. [Static_Components/](/Figma_Conversion/Static_Components/)의 정적 컴포넌트 목록 확인
+1. Static_Components/의 정적 컴포넌트 목록 확인 (TBD: 경로 재구성 예정)
 2. [Components/](/RNBT_architecture/DesignComponentSystem/Components/)의 동적 컴포넌트 목록 확인
 3. 다음을 판단:
    - 정적 컴포넌트 중 동적 컴포넌트로 변환된 것이 있는가 (같은 프로젝트의 같은 컴포넌트가 양쪽에 존재하는가)
