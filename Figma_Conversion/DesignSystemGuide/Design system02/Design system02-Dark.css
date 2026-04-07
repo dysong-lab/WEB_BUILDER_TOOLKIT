@@ -27,18 +27,6 @@
   overflow: hidden;
 }
 
-/* Background Panel */
-.design-system__background {
-  position: absolute;
-  top: 120px;
-  right: -1px;
-  width: 1841px;
-  height: 2938px;
-  background: #191d50;
-  border: 1px solid #0e1130;
-  border-radius: 100px 0 0 100px;
-}
-
 /* Header (Title + Logo) */
 .design-system__header {
   position: absolute;
