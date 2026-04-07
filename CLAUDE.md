@@ -105,7 +105,6 @@ flowchart LR
 ### 코딩 & 구현 가이드
 
 - **코딩 스타일**: `/.claude/guides/CODING_STYLE.md`
-- **디자인 컨텍스트**: `/.impeccable.md`
 - **Figma 구현 가이드**: `/.claude/guides/FIGMA_IMPLEMENTATION_GUIDE.md`
 - **Figma MCP 사용법**: `/.claude/guides/FIGMA_MCP_GUIDE.md`
 

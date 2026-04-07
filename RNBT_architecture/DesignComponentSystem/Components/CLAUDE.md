@@ -7,7 +7,7 @@
 | 조건 | 워크플로우 |
 |------|----------|
 | Figma 디자인 있음 | `figma-to-html` → 정적 HTML/CSS 추출 |
-| Figma 없이 직접 작성 | [/.impeccable.md](/.impeccable.md) 디자인 원칙 참조 → `frontend-design` 스킬 활용 |
+| Figma 없이 직접 작성 | TBD (디자인 시스템 문서 기반 워크플로우 구축 예정) |
 
 Figma가 존재하는 경우는 사용자가 별도 요청한다.
 
@@ -86,5 +86,4 @@ Figma가 존재하는 경우는 사용자가 별도 요청한다.
 | SKILL 공통 규칙 | [/.claude/skills/SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md) |
 | 표준 컴포넌트 SKILL | [/.claude/skills/2-component/create-standard-component/SKILL.md](/.claude/skills/2-component/create-standard-component/SKILL.md) |
 | Mixin 전체 목록 | [/RNBT_architecture/DesignComponentSystem/Mixins/README.md](/RNBT_architecture/DesignComponentSystem/Mixins/README.md) |
-| 디자인 컨텍스트 | [/.impeccable.md](/.impeccable.md) |
 | 시스템 설계 문서 | [/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md) |
