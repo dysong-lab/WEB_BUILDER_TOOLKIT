@@ -35,6 +35,7 @@ flowchart LR
         S3[3-page<br/>create-project]
         S4[4-review<br/>audit-project]
         S5[5-mixin<br/>create-mixin-spec<br/>implement-mixin]
+        S6[6-design<br/>create-html-css]
     end
 
     subgraph Hooks
@@ -87,6 +88,12 @@ flowchart LR
 |------|-------|
 | 새 Mixin이 필요할 때 — 요구사항 분석 → 명세서 작성 | `create-mixin-spec` |
 | 명세서가 승인된 후 — 구현 → 문서 → 동기화 | `implement-mixin` |
+
+### 디자인 (6-design)
+
+| 조건 | SKILL |
+|------|-------|
+| Figma 없이 HTML/CSS를 직접 작성 (디자이너 성향 기반) | `create-html-css` |
 
 ---
 

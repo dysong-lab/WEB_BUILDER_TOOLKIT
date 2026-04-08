@@ -19,14 +19,24 @@ RNBT 컴포넌트 개발을 위한 Skills 사용 가이드입니다.
 │                                       ▼                             │
 │                               인라인 SVG HTML                        │
 └──────────────────────────────────────────────────────────────────────┘
-                    │                               │
-                    ▼                               ▼
+          │                                         │
+          │  ┌──────────────────────────────────┐   │
+          │  │  Figma 없이 직접 디자인            │   │
+          │  │                                   │   │
+          │  │  [create-html-css]                │   │
+          │  │       │                           │   │
+          │  │       ▼                           │   │
+          │  │  Static HTML/CSS                  │   │
+          │  │  (디자이너 성향 기반)              │   │
+          │  └──────────────────────────────────┘   │
+          │         │                               │
+          ▼         ▼                               ▼
 ┌─────────────────────────────────────────────────────────────────────┐
 │  RNBT_architecture (동적 변환)                                       │
 │                                                                      │
 │  [create-standard-component] ◄────────┬──────► [create-symbol-state │
 │       │                               │         -component]         │
-│       │ (Figma 유무 분기)              │               │             │
+│       │                               │               │             │
 │       ▼                               │               ▼             │
 │  표준 컴포넌트                         │        상태 기반 심볼        │
 │       │                               │               │             │
@@ -79,6 +89,12 @@ RNBT 컴포넌트 개발을 위한 Skills 사용 가이드입니다.
 | **create-mixin-spec** | 모호한 요구사항 | 승인용 명세서 | 기능의 정의로 분해 → 중복 확인 → 명세 작성 |
 | **implement-mixin** | 승인된 명세서 | .js + .md + 문서 갱신 | 구현 → 문서 → 관련 파일 동기화 |
 
+### 디자인 (Figma 없이 직접 작성)
+
+| Skill | 입력 | 출력 | 설명 |
+|-------|------|------|------|
+| **create-html-css** | 요구사항 (컴포넌트 종류, 테마) | HTML/CSS | 디자이너 성향 기반 직접 작성 (Figma 불필요) |
+
 ---
 
 ## 상황별 Skill 선택
@@ -98,7 +114,7 @@ Figma 링크/node-id
 ```
 요구사항만 있음
     │
-    └─ create-standard-component (TBD 패턴으로 작성)
+    └─ create-html-css (디자이너 성향 기반) → create-standard-component
 ```
 
 ### "기존 컴포넌트에 새 디자인을 입히고 싶다"
@@ -128,7 +144,9 @@ figma-to-inline-svg
     └─→ create-symbol-state-component
             └─→ create-project
 
-create-standard-component (Figma 없이) ─→ create-project
+create-html-css (Figma 없이, 디자이너 성향 기반)
+    └─→ create-standard-component
+            └─→ create-project
 
 add-design-variant (기존 컴포넌트 + 새 디자인) ─→ 새 views/styles/preview
 ```
