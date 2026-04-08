@@ -84,5 +84,5 @@ Figma_Conversion/Static_Components/         # TBD: 경로 재구성 예정
 
 ## 다음 단계
 
-변환이 완료되면 **create-standard-component** Skill을 사용하여
+변환이 완료되면 **create-2d-component** Skill을 사용하여
 정적 HTML/CSS를 RNBT 동적 컴포넌트로 변환할 수 있습니다.

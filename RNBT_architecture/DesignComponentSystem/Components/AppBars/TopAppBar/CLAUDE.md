@@ -1,5 +1,13 @@
 # TopAppBar
 
+## 기능 정의
+
+1. **페이지 제목 표시** — `appBarInfo` 토픽으로 수신한 데이터를 제목 영역에 렌더
+2. **네비게이션 트리거** — nav-icon 클릭 시 `@navigationClicked` 발행
+3. **액션 트리거** — action 버튼 클릭 시 `@actionClicked` 발행
+
+---
+
 ## 구현 명세
 
 ### Mixin
@@ -13,6 +21,7 @@ FieldRenderMixin
 | title | `.top-app-bar__title` | 제목 텍스트 표시 |
 | bar | `.top-app-bar` | 루트 요소 |
 | navIcon | `.top-app-bar__nav-icon` | 네비게이션 아이콘 클릭 이벤트 |
+| action | `.top-app-bar__action` | 액션 버튼 클릭 이벤트 |
 
 ### 구독 (subscriptions)
 
@@ -25,6 +34,7 @@ FieldRenderMixin
 | 이벤트 | 선택자 | 발행 |
 |--------|--------|------|
 | click | `navIcon` (computed property) | `@navigationClicked` |
+| click | `action` (computed property) | `@actionClicked` |
 
 ### 페이지 연결 사례
 
@@ -32,6 +42,10 @@ FieldRenderMixin
 [TopAppBar] ──@navigationClicked──▶ [페이지] ──▶ NavigationDrawer.open()
                                               또는 history.back()
                                               또는 SideSheet.toggle()
+
+[TopAppBar] ──@actionClicked─────▶ [페이지] ──▶ 검색 열기
+                                              또는 알림 패널 열기
+                                              또는 설정 페이지 이동
 ```
 
 

@@ -6,7 +6,7 @@ description: Figma 없이 디자인 페르소나 기반으로 HTML/CSS를 직접
 # Figma 없이 HTML/CSS 작성 (디자인 페르소나 기반)
 
 Figma 디자인이 없을 때, **디자인 페르소나**를 선택하고 해당 페르소나의 경향에 따라 HTML/CSS를 직접 작성한다.
-이 스킬의 출력은 `figma-to-html`과 동일한 형태이므로, `create-standard-component`가 동일하게 소비한다.
+이 스킬의 출력은 `figma-to-html`과 동일한 형태이므로, `create-2d-component`가 동일하게 소비한다.
 
 **핵심:** 하나의 고정된 미학을 따르는 것이 아니라, **선택된 페르소나의 성격**에 따라 "이 페르소나라면 이렇게 했을 것"이라는 판단을 한다. 같은 컴포넌트도 페르소나가 다르면 완전히 다른 디자인이 나온다.
 
@@ -114,7 +114,7 @@ Material Design 영감의 카드 기반 UI. 깨끗하고 구조적.
 
 ## 출력 구조
 
-`figma-to-html`과 동일한 경로에 출력한다. `create-standard-component`가 동일하게 소비할 수 있도록.
+`figma-to-html`과 동일한 경로에 출력한다. `create-2d-component`가 동일하게 소비할 수 있도록.
 
 ```
 Figma_Conversion/Static_Components/
@@ -777,7 +777,7 @@ Figma 원본이 없으므로, **디자인 경향 체크리스트**로 자체 검
 
 ## 다음 단계
 
-HTML/CSS 작성이 완료되면 **create-standard-component** Skill을 사용하여
+HTML/CSS 작성이 완료되면 **create-2d-component** Skill을 사용하여
 정적 HTML/CSS를 RNBT 동적 컴포넌트로 변환할 수 있다.
 
 ---
@@ -792,6 +792,6 @@ HTML/CSS 작성이 완료되면 **create-standard-component** Skill을 사용하
 | DesignSystemGuide (Light 01) | [/Figma_Conversion/DesignSystemGuide/Design system01-Light/Design system01-Light.css](/Figma_Conversion/DesignSystemGuide/Design%20system01-Light/Design%20system01-Light.css) |
 | DesignSystemGuide (Dark 02) | [/Figma_Conversion/DesignSystemGuide/Design system02-Dark/Design system02-Dark.css](/Figma_Conversion/DesignSystemGuide/Design%20system02-Dark/Design%20system02-Dark.css) |
 | DesignSystemGuide (Light 02) | [/Figma_Conversion/DesignSystemGuide/Design system02-Light/Design system02-Light.css](/Figma_Conversion/DesignSystemGuide/Design%20system02-Light/Design%20system02-Light.css) |
-| 표준 컴포넌트 생성 (다음 단계) | [/.claude/skills/2-component/create-standard-component/SKILL.md](/.claude/skills/2-component/create-standard-component/SKILL.md) |
+| 2D 컴포넌트 생성 (다음 단계) | [/.claude/skills/2-component/create-2d-component/SKILL.md](/.claude/skills/2-component/create-2d-component/SKILL.md) |
 | 디자인 변형 추가 | [/.claude/skills/2-component/add-design-variant/SKILL.md](/.claude/skills/2-component/add-design-variant/SKILL.md) |
 | Figma to HTML (대안 경로) | [/.claude/skills/1-figma/figma-to-html/SKILL.md](/.claude/skills/1-figma/figma-to-html/SKILL.md) |

@@ -18,7 +18,8 @@ applyFieldRenderMixin(this, {
     cssSelectors: {
         title:   '.top-app-bar__title',
         bar:     '.top-app-bar',
-        navIcon: '.top-app-bar__nav-icon'
+        navIcon: '.top-app-bar__nav-icon',
+        action:  '.top-app-bar__action'
     }
 });
 
@@ -43,7 +44,8 @@ go(
 
 this.customEvents = {
     click: {
-        [this.fieldRender.cssSelectors.navIcon]: '@navigationClicked'
+        [this.fieldRender.cssSelectors.navIcon]: '@navigationClicked',
+        [this.fieldRender.cssSelectors.action]:  '@actionClicked'
     }
 };
 bindEvents(this, this.customEvents);

@@ -181,8 +181,9 @@ Step 4에서 도출된 기능
         ├── 이 컴포넌트에서만 필요 → 커스텀 메서드로 처리 → Step 6로
         │
         └── 여러 컴포넌트에서 반복될 패턴
-            → create-mixin-spec → implement-mixin
-            → Step 4로 돌아가 다른 컴포넌트에도 적용 가능성 검토
+            → create-mixin-spec → 승인 → implement-mixin
+            → Mixin 카탈로그 업데이트 완료
+            → Step 5로 복귀하여 새 Mixin으로 매핑 확정 → Step 6로
 ```
 
 **TopAppBar에 대입한 예시**:
@@ -212,7 +213,16 @@ Step 4에서 도출된 기능
 | **출력** | 완성된 컴포넌트 (views/ + styles/ + scripts/ + preview/) |
 | **완료 기준** | register.js가 CLAUDE.md 명세와 일치하고, preview에서 동작 확인 |
 
-**사용 도구**: `create-standard-component` SKILL, `add-design-variant` SKILL
+**사용 도구**:
+
+| 컴포넌트 유형 | SKILL |
+|-------------|-------|
+| 2D (HTML/CSS + Mixin) | `create-2d-component` |
+| 3D 개별 단위 (1 GLTF = 1 Mesh) | `create-3d-component` |
+| 3D GLTF 컨테이너 (1 GLTF = N Mesh) | `create-3d-container-component` |
+| 기존 컴포넌트에 디자인 변형 추가 | `add-design-variant` |
+
+이 시점에서 기능 정의, Mixin 매핑, 커스텀 메서드 정의는 모두 완료되어 있다. 스킬은 CLAUDE.md 명세를 코드로 변환하는 역할만 한다.
 
 ---
 

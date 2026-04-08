@@ -7,9 +7,21 @@ description: GLTF 컨테이너 3D 컴포넌트를 생성합니다. 하나의 GLT
 
 하나의 GLTF 모델 안에 여러 장비(Mesh)가 포함된 컨테이너 컴포넌트를 생성한다. Mesh 이름이 사전에 확정되지 않으며, Raycasting으로 클릭된 Mesh를 동적으로 식별한다.
 
-> **설계 문서**: [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md)
 > **공통 규칙**: [SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md)
 > **단일 Mesh(개별 장비)는**: `create-3d-component` SKILL을 사용
+
+---
+
+## 전제 조건
+
+이 스킬은 `produce-component` 스킬에서 다음이 완료된 후 호출된다:
+
+- **컴포넌트 CLAUDE.md** — 기능 정의 + 구현 명세 (Mixin, 커스텀 메서드, 이벤트) 작성 완료
+- **사용자 승인** — CLAUDE.md 내용이 승인됨
+
+이 스킬은 CLAUDE.md 명세를 코드로 변환하는 역할만 한다. 기능 정의나 Mixin 선택을 다시 하지 않는다.
+
+> Mixin이 존재하지 않는 경우에도, 구현 명세에 커스텀 속성/메서드가 정의되어 있으면 그대로 구현한다. 신규 Mixin이 필요한 경우는 `produce-component` → `create-mixin-spec` → `implement-mixin`에서 이미 처리되어 있다.
 
 ---
 
@@ -18,13 +30,10 @@ description: GLTF 컨테이너 3D 컴포넌트를 생성합니다. 하나의 GLT
 **코드 작성 전 반드시 다음 파일들을 Read 도구로 읽으세요.**
 **이전에 읽었더라도 매번 다시 읽어야 합니다 — 캐싱하거나 생략하지 마세요.**
 
-1. [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md) — 시스템 설계
+1. **대상 컴포넌트 CLAUDE.md** — 기능 정의 + 구현 명세
 2. [SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md) — 공통 규칙
 3. [CODING_STYLE.md](/.claude/guides/CODING_STYLE.md) — 코딩 스타일
-4. **Mixin 문서 확인** — 사용할 Mixin의 .md 파일을 반드시 읽기:
-   - [MeshStateMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/MeshStateMixin.md)
-   - [CameraFocusMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/CameraFocusMixin.md) (02 이상)
-   - [3DShadowPopupMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/3DShadowPopupMixin.md) (03)
+4. **Mixin 문서 확인** — 구현 명세에 명시된 Mixin의 .md 파일
 5. **기존 예제 확인** — 같은 패턴의 기존 컴포넌트를 참조:
    - [gltf_container](/RNBT_architecture/DesignComponentSystem/Components/3D_Components/gltf_container/) — 대표 GLTF 컨테이너 컴포넌트
 
@@ -51,13 +60,17 @@ description: GLTF 컨테이너 3D 컴포넌트를 생성합니다. 하나의 GLT
 
 ## 변형 구조
 
-| 변형 | 기능 | Mixin 조합 |
-|------|------|-----------|
+변형은 CLAUDE.md 구현 명세에서 결정된다. 아래는 자주 사용되는 패턴 예시이다.
+
+| 변형 예시 | 기능 | Mixin 조합 예시 |
+|----------|------|----------------|
 | 01_status | 상태 색상 표시 | MeshStateMixin |
 | 02_status_camera | 상태 + 클릭 → 카메라 포커스 | MeshStateMixin + CameraFocusMixin |
 | 03_status_popup | 상태 + 클릭 → 팝업 상세 | MeshStateMixin + 3DShadowPopupMixin |
 
-> 02부터 resolveMeshName이 필요하다. 01에서는 클릭 이벤트가 없으므로 불필요.
+변형의 종류, 이름, Mixin 조합은 고정이 아니다. 구현 명세에 따라 달라진다.
+
+> 클릭 이벤트가 있는 변형에서는 resolveMeshName이 필요하다.
 
 ---
 

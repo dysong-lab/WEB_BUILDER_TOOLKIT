@@ -30,8 +30,9 @@ flowchart TD
 flowchart LR
     subgraph Skills
         direction TB
+        S0[0-produce<br/>produce-component]
         S1[1-figma<br/>figma-to-html<br/>figma-to-inline-svg]
-        S2[2-component<br/>create-standard<br/>create-symbol-state<br/>create-3d<br/>create-3d-container<br/>add-design-variant]
+        S2[2-component<br/>create-2d<br/>create-symbol-state<br/>create-3d<br/>create-3d-container<br/>add-design-variant]
         S3[3-page<br/>create-project]
         S4[4-review<br/>audit-project]
         S5[5-mixin<br/>create-mixin-spec<br/>implement-mixin]
@@ -53,6 +54,14 @@ flowchart LR
 
 ## SKILL 선택 가이드
 
+### 컴포넌트 생산 (0-produce)
+
+| 조건 | SKILL |
+|------|-------|
+| 새 컴포넌트를 처음부터 생산 (범주 확인 → 기능 분석 → Mixin 매핑 → 개발) | `produce-component` |
+
+`produce-component`는 전체 프로세스를 안내하며, 필요에 따라 아래 스킬들을 호출한다.
+
 ### Figma 변환 (1-figma)
 
 | 조건 | SKILL |
@@ -64,7 +73,7 @@ flowchart LR
 
 | 조건 | SKILL |
 |------|-------|
-| 페이지에서 데이터를 받아 표시 (차트, 테이블, 로그 등) | `create-standard-component` |
+| 페이지에서 데이터를 받아 표시 (차트, 테이블, 로그 등) | `create-2d-component` |
 | SVG 심볼의 색상/상태를 런타임에서 제어 | `create-symbol-state-component` |
 | 3D 개별 장비 (1 GLTF = 1 Mesh, meshName 확정) | `create-3d-component` |
 | 3D GLTF 컨테이너 (1 GLTF = N Mesh, 동적 식별) | `create-3d-container-component` |

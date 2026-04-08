@@ -34,11 +34,11 @@ RNBT 컴포넌트 개발을 위한 Skills 사용 가이드입니다.
 ┌─────────────────────────────────────────────────────────────────────┐
 │  RNBT_architecture (동적 변환)                                       │
 │                                                                      │
-│  [create-standard-component] ◄────────┬──────► [create-symbol-state │
+│  [create-2d-component] ◄────────┬──────► [create-symbol-state │
 │       │                               │         -component]         │
 │       │                               │               │             │
 │       ▼                               │               ▼             │
-│  표준 컴포넌트                         │        상태 기반 심볼        │
+│  2D 컴포넌트                         │        상태 기반 심볼        │
 │       │                               │               │             │
 │       └───────────────────────────────┴───────────────┘             │
 │                               │                                      │
@@ -55,6 +55,14 @@ RNBT 컴포넌트 개발을 위한 Skills 사용 가이드입니다.
 
 ## Skill 목록
 
+### 생산 프로세스 (진입점)
+
+| Skill | 입력 | 출력 | 설명 |
+|-------|------|------|------|
+| **produce-component** | 컴포넌트 요구사항 | 컴포넌트 CLAUDE.md + 완성된 코드 | 범주 확인 → 기능 분석 → Mixin 매핑 → 개발 스킬 호출 |
+
+`produce-component`는 전체 프로세스를 관장하며, 아래 스킬들을 필요에 따라 호출한다.
+
 ### Figma → Static (정적 퍼블리싱)
 
 | Skill | 입력 | 출력 | 설명 |
@@ -66,7 +74,7 @@ RNBT 컴포넌트 개발을 위한 Skills 사용 가이드입니다.
 
 | Skill | 입력 | 출력 | 설명 |
 |-------|------|------|------|
-| **create-standard-component** | Static HTML/CSS 또는 없음 | 표준 컴포넌트 | 페이지가 데이터 제어 (Figma 유무 분기) |
+| **create-2d-component** | Static HTML/CSS 또는 없음 | 2D 컴포넌트 | 페이지가 데이터 제어 (Figma 유무 분기) |
 | **create-symbol-state-component** | 인라인 SVG HTML | 상태 기반 심볼 | CSS 변수로 색상 제어 |
 | **add-design-variant** | 기존 컴포넌트 + 새 디자인 | 새 views/styles/preview 파일 | register.js 불변, 선택자 계약 유지 |
 
@@ -104,7 +112,7 @@ RNBT 컴포넌트 개발을 위한 Skills 사용 가이드입니다.
 ```
 Figma 링크/node-id
     │
-    ├─ 일반 컴포넌트 → figma-to-html → create-standard-component
+    ├─ 일반 컴포넌트 → figma-to-html → create-2d-component
     │
     └─ 심볼/아이콘 (색상 변경 필요) → figma-to-inline-svg → create-symbol-state-component
 ```
@@ -114,7 +122,7 @@ Figma 링크/node-id
 ```
 요구사항만 있음
     │
-    └─ create-html-css (디자이너 성향 기반) → create-standard-component
+    └─ create-html-css (디자이너 성향 기반) → create-2d-component
 ```
 
 ### "기존 컴포넌트에 새 디자인을 입히고 싶다"
@@ -136,17 +144,25 @@ create-project → Master/Page/컴포넌트/Mock서버 전체 구조
 ## Skill 간 연결
 
 ```
-figma-to-html
-    └─→ create-standard-component
-            └─→ create-project
-
-figma-to-inline-svg
-    └─→ create-symbol-state-component
-            └─→ create-project
-
-create-html-css (Figma 없이, 디자이너 성향 기반)
-    └─→ create-standard-component
-            └─→ create-project
+produce-component (진입점)
+    │
+    ├── 범주 확인 → 기능 분석 → Mixin 매핑
+    │       │
+    │       └── 신규 Mixin 필요 시:
+    │           create-mixin-spec → implement-mixin → 복귀
+    │
+    ├── HTML/CSS 확보:
+    │       ├── figma-to-html (Figma 있음)
+    │       ├── figma-to-inline-svg (SVG 심볼)
+    │       └── create-html-css (Figma 없음)
+    │
+    └── 컴포넌트 개발:
+            ├── create-2d-component
+            ├── create-3d-component
+            ├── create-3d-container-component
+            └── create-symbol-state-component
+                    │
+                    └── create-project (페이지 조합)
 
 add-design-variant (기존 컴포넌트 + 새 디자인) ─→ 새 views/styles/preview
 ```
