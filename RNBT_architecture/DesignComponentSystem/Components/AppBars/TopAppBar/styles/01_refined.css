@@ -1,30 +1,33 @@
-/* 01_small: 다크 — 관제실 모니터링 맥락 */
+/* 01_refined: Persona A — Refined Technical
+   퍼플 팔레트 / 그라디언트 깊이 / Pretendard / 다크 */
 #top-app-bar-container {
     .top-app-bar {
         display: flex;
         align-items: center;
-        height: 64px;
-        padding: 0 4px 0 8px;
-        background: #141820;
-        border-bottom: 1px solid #232830;
+        height: 56px;
+        padding: 0 8px;
+        background: linear-gradient(90deg, rgba(80, 46, 233, 0.06) 0%, rgba(146, 168, 244, 0.03) 100%),
+                    #191D50;
+        border-bottom: 1px solid #2A2574;
     }
 
     .top-app-bar__nav-icon {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 48px;
-        height: 48px;
+        width: 40px;
+        height: 40px;
         border: none;
         background: none;
-        color: #9ba3b0;
+        color: #707EB4;
         cursor: pointer;
         border-radius: 8px;
+        transition: background-color 150ms ease-out;
     }
 
     .top-app-bar__nav-icon:hover {
-        color: #d0d4dc;
-        background: #1e2430;
+        color: #A6B3DE;
+        background: rgba(80, 46, 233, 0.12);
     }
 
     .top-app-bar__nav-icon .material-symbols-outlined {
@@ -32,39 +35,39 @@
     }
 
     .top-app-bar__title {
-        font-family: 'DM Sans', sans-serif;
+        font-family: 'Pretendard', sans-serif;
         font-size: 18px;
-        font-weight: 500;
-        color: #e4e7ed;
-        padding-left: 8px;
+        font-weight: 600;
+        color: #E8EDFF;
+        padding-left: 12px;
         flex: 1;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        letter-spacing: -0.2px;
     }
 
     .top-app-bar__actions {
         display: flex;
-        gap: 2px;
+        gap: 4px;
     }
 
     .top-app-bar__action {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 48px;
-        height: 48px;
+        width: 40px;
+        height: 40px;
         border: none;
         background: none;
-        color: #9ba3b0;
+        color: #707EB4;
         cursor: pointer;
         border-radius: 8px;
+        transition: background-color 150ms ease-out;
     }
 
     .top-app-bar__action:hover {
-        color: #d0d4dc;
-        background: #1e2430;
+        color: #A6B3DE;
+        background: rgba(80, 46, 233, 0.12);
     }
 
     .top-app-bar__action .material-symbols-outlined {

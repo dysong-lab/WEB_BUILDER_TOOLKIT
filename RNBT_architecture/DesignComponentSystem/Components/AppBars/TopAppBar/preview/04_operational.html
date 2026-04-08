@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>TopAppBar — 04_operational (Persona D)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #010409; }
+        #top-app-bar-container { width: 600px; margin: 40px auto 0; }
+
+        /* 04_operational: Persona D — Dark Operational */
+        #top-app-bar-container {
+            .top-app-bar {
+                display: flex;
+                align-items: center;
+                height: 48px;
+                padding: 0 8px;
+                background: #0d1117;
+                border-bottom: 1px solid rgba(77, 208, 225, 0.15);
+            }
+
+            .top-app-bar__nav-icon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 36px;
+                height: 36px;
+                border: 1px solid transparent;
+                background: none;
+                color: #7a8fa5;
+                cursor: pointer;
+                border-radius: 3px;
+                transition: border-color 150ms ease-out;
+            }
+
+            .top-app-bar__nav-icon:hover {
+                color: #c9d6e3;
+                border-color: rgba(77, 208, 225, 0.3);
+            }
+
+            .top-app-bar__nav-icon .material-symbols-outlined {
+                font-size: 20px;
+            }
+
+            .top-app-bar__title {
+                font-family: 'IBM Plex Mono', monospace;
+                font-size: 14px;
+                font-weight: 500;
+                color: #c9d6e3;
+                padding-left: 8px;
+                flex: 1;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+            }
+
+            .top-app-bar__status {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                padding: 0 12px;
+            }
+
+            .top-app-bar__status-dot {
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background: #32D28C;
+                animation: pulse-dot 2s ease-in-out infinite;
+            }
+
+            @keyframes pulse-dot {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.3; }
+            }
+
+            .top-app-bar__status-label {
+                font-family: 'IBM Plex Mono', monospace;
+                font-size: 11px;
+                font-weight: 500;
+                color: #32D28C;
+                letter-spacing: 1px;
+            }
+
+            .top-app-bar__actions {
+                display: flex;
+                gap: 2px;
+            }
+
+            .top-app-bar__action {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 36px;
+                height: 36px;
+                border: 1px solid transparent;
+                background: none;
+                color: #7a8fa5;
+                cursor: pointer;
+                border-radius: 3px;
+                transition: border-color 150ms ease-out;
+            }
+
+            .top-app-bar__action:hover {
+                color: #c9d6e3;
+                border-color: rgba(77, 208, 225, 0.3);
+            }
+
+            .top-app-bar__action .material-symbols-outlined {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="top-app-bar-container">
+    <div class="top-app-bar">
+        <button class="top-app-bar__nav-icon" aria-label="Menu">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+        <div class="top-app-bar__title">Control Room</div>
+        <div class="top-app-bar__status">
+            <span class="top-app-bar__status-dot"></span>
+            <span class="top-app-bar__status-label">ONLINE</span>
+        </div>
+        <div class="top-app-bar__actions">
+            <button class="top-app-bar__action" aria-label="Alerts">
+                <span class="material-symbols-outlined">warning</span>
+            </button>
+            <button class="top-app-bar__action" aria-label="Settings">
+                <span class="material-symbols-outlined">settings</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
