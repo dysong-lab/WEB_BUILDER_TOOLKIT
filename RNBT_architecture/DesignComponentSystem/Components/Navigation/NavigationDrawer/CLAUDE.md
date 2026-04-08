@@ -10,14 +10,14 @@
 
 ## 핵심 특성
 
-- Expanded, Large, Extra-large 윈도우 크기에서 Standard 사용
-- Compact, Medium 윈도우 크기에서 Modal 사용
-- 기본적으로 열림 또는 닫힘 상태 가능
-- 2가지 변형: Standard, Modal
+- 기본적으로 열림 또는 닫힘 상태 가능 (드로어의 본질)
+- 대형 화면에서는 항상 열린 상태로 사용 (Standard 모드)
+- 소형 화면에서는 열기/닫기 + scrim으로 사용 (Modal 모드)
+- Standard/Modal은 별도 컴포넌트가 아니라 동일 컴포넌트의 동작 모드
 - 가장 자주 사용하는 목적지를 상단에, 관련 목적지끼리 그룹화
 
 ## 세부 컴포넌트
 
 | 컴포넌트 | 역할 |
 |----------|------|
-| Standard | 대형 화면에서 항상 표시되는 사이드 네비게이션 |
+| Standard | 메뉴 항목 렌더링 + 드로어 열기/닫기 (Standard/Modal 모드 통합) |

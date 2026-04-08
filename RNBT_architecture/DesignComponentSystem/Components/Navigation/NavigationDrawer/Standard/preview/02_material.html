@@ -7,21 +7,33 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #f5f5f5; }
-        #nav-drawer-container { height: 100vh; }
+        body { background: #f5f5f5; display: flex; height: 100vh; }
+        #nav-drawer-container { height: 100vh; display: flex; }
+        .preview-toggle {
+            position: fixed; top: 16px; right: 16px; z-index: 200;
+            padding: 8px 16px; border: 1px solid #bbdefb; background: #ffffff;
+            color: #1565C0; cursor: pointer; border-radius: 8px;
+            font-family: 'Roboto', sans-serif; font-size: 13px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+        .preview-toggle:hover { background: #e3f2fd; }
     </style>
 </head>
 <body>
 
 <div id="nav-drawer-container"></div>
+<button class="preview-toggle" onclick="toggleDrawer()">Toggle Drawer</button>
 
 <script src="../../../../../preview_runtime.js"></script>
 <script src="../../../../../Mixins/ListRenderMixin.js"></script>
 <script>
+let _instance;
+
 (async () => {
     await loadComponentAssets('nav-drawer-container', '../views/02_material.html', '../styles/02_material.css');
 
     const instance = { id: 'navigation-drawer', appendElement: document.getElementById('nav-drawer-container') };
+    _instance = instance;
 
     applyListRenderMixin(instance, {
         cssSelectors: {
@@ -39,6 +51,24 @@
             active: 'active'
         }
     });
+
+    instance._drawerSelector = '.nav-drawer';
+
+    instance.drawerOpen = function() {
+        const drawer = this.appendElement.querySelector(this._drawerSelector);
+        if (drawer) drawer.setAttribute('data-open', 'true');
+    };
+
+    instance.drawerClose = function() {
+        const drawer = this.appendElement.querySelector(this._drawerSelector);
+        if (drawer) drawer.setAttribute('data-open', 'false');
+    };
+
+    instance.drawerToggle = function() {
+        const drawer = this.appendElement.querySelector(this._drawerSelector);
+        const isOpen = drawer?.getAttribute('data-open') === 'true';
+        if (isOpen) { this.drawerClose(); } else { this.drawerOpen(); }
+    };
 
     instance.subscriptions = { navigationMenu: [instance.listRender.renderData] };
     Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
@@ -68,6 +98,8 @@
         { menuid: 'notifications', icon: 'notifications', label: 'Notifications', badge: '3',  active: 'false' }
     ]});
 })();
+
+function toggleDrawer() { if (_instance) _instance.drawerToggle(); }
 </script>
 </body>
 </html>

@@ -9,6 +9,12 @@
     background: #0d1117;
     border-right: 1px solid rgba(77, 208, 225, 0.12);
     flex-shrink: 0;
+    transition: transform 150ms ease-out;
+    z-index: 100;
+}
+
+.nav-drawer[data-open="false"] {
+    transform: translateX(-100%);
 }
 
 .nav-drawer__header {

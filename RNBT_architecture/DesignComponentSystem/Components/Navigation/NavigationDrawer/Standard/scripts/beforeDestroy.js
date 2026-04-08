@@ -13,5 +13,9 @@ go(
 );
 this.subscriptions = null;
 
-// 1. Mixin 정리
+// 1. Mixin + 자체 상태 정리
+this.drawerOpen = null;
+this.drawerClose = null;
+this.drawerToggle = null;
+this._drawerSelector = null;
 this.listRender.destroy();

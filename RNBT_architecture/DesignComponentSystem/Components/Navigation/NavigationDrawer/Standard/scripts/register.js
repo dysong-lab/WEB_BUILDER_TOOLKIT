@@ -1,8 +1,8 @@
 /**
- * NavigationDrawer
+ * NavigationDrawer — Standard
  *
- * 목적: 대형 디바이스에서 메뉴 항목을 표시하고 활성 상태를 관리한다
- * 기능: ListRenderMixin으로 메뉴 항목을 렌더링하고 상태를 전환한다
+ * 목적: 메뉴 항목을 표시하고 활성 상태를 관리한다
+ * 기능: ListRenderMixin으로 메뉴 항목 렌더링 + 드로어 열기/닫기
  *
  * Mixin: ListRenderMixin
  */
@@ -11,7 +11,7 @@ const { bindEvents } = Wkit;
 const { each, go } = fx;
 
 // ======================
-// 1. MIXIN 적용
+// 1. MIXIN 적용 + 자체 메서드 정의
 // ======================
 
 applyListRenderMixin(this, {
@@ -30,6 +30,25 @@ applyListRenderMixin(this, {
         active: 'active'
     }
 });
+
+// 드로어 열기/닫기 커스텀 메서드
+this._drawerSelector = '.nav-drawer';
+
+this.drawerOpen = function() {
+    const drawer = this.appendElement.querySelector(this._drawerSelector);
+    if (drawer) drawer.setAttribute('data-open', 'true');
+};
+
+this.drawerClose = function() {
+    const drawer = this.appendElement.querySelector(this._drawerSelector);
+    if (drawer) drawer.setAttribute('data-open', 'false');
+};
+
+this.drawerToggle = function() {
+    const drawer = this.appendElement.querySelector(this._drawerSelector);
+    const isOpen = drawer?.getAttribute('data-open') === 'true';
+    if (isOpen) { this.drawerClose(); } else { this.drawerOpen(); }
+};
 
 // ======================
 // 2. 구독 연결

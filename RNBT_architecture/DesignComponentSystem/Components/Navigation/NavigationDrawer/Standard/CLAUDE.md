@@ -4,6 +4,7 @@
 
 1. **메뉴 항목 렌더링** — `navigationMenu` 토픽으로 수신한 배열 데이터를 template 반복으로 렌더링하고, 개별 항목의 활성 상태를 관리한다
 2. **항목 클릭 이벤트** — 메뉴 항목 클릭 시 `@menuItemClicked` 발행
+3. **드로어 열기/닫기** — open/close/toggle 메서드로 드로어 표시/숨김
 
 ---
 
@@ -48,11 +49,30 @@ menuid
 |--------|--------|------|
 | click | `menuid` (computed property) | `@menuItemClicked` |
 
+### 자체 속성
+
+| 속성 | 용도 |
+|------|------|
+| `this._drawerSelector` | 드로어 루트 요소 선택자 (open/close 대상) |
+
+### 커스텀 메서드
+
+| 메서드 | 설명 |
+|--------|------|
+| `this.drawerOpen()` | `_drawerSelector`의 data-open을 true로 설정 |
+| `this.drawerClose()` | `_drawerSelector`의 data-open을 false로 설정 |
+| `this.drawerToggle()` | 현재 상태 반전 |
+
 ### 페이지 연결 사례
 
 ```
 [NavigationDrawer] ──@menuItemClicked──> [페이지] ──> 라우팅 / 뷰 전환
                                                     + updateItemState로 활성 항목 변경
+                                                    + drawerClose() (모바일)
+
+[AppBars/Standard] ──@navigationClicked──> [페이지] ──> targetInstance.drawerToggle()
+
+scrim 표시/숨김 및 scrim 클릭 처리는 페이지의 책임
 ```
 
 ### 디자인 변형
