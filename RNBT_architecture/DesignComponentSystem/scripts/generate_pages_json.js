@@ -83,7 +83,7 @@ function readDashboardFile(relPath) {
 // 컴포넌트 → 범주 매핑
 // 컴포넌트 → 범주/폴더명 매핑
 const COMPONENT_CATEGORY = {
-    TopAppBar: 'AppBars',
+    Standard: 'AppBars',
     StatusCard: 'Cards',
     NavigationSidebar: 'Navigation',
     NavigationDrawer: 'Navigation',
@@ -172,7 +172,7 @@ function buildComponent(templateComp, overrides) {
 
 // Header (Examples에서는 여전히 Header 폴더명 사용)
 const headerCSS = transformCSS(readDashboardCSS('Header'), 'header-container', IDS.header);
-const headerHTML = readComponentView('TopAppBar');
+const headerHTML = readComponentView('Standard');
 const headerRegister = readDashboardRegister('Header') + '\n\n' + MIXINS.FieldRenderMixin;
 const headerDestroy = readDashboardBeforeDestroy('Header');
 

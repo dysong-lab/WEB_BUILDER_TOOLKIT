@@ -1,5 +1,5 @@
 /**
- * TopAppBar
+ * AppBars — Standard
  *
  * 목적: 페이지 상단에 제목과 네비게이션을 표시한다
  * 기능: FieldRenderMixin으로 제목을 렌더링 + 스크롤 시 배경색 전환

@@ -1,4 +1,4 @@
-# TopAppBar
+# AppBars — Standard
 
 ## 기능 정의
 
@@ -39,11 +39,11 @@ FieldRenderMixin
 ### 페이지 연결 사례
 
 ```
-[TopAppBar] ──@navigationClicked──▶ [페이지] ──▶ NavigationDrawer.open()
+[AppBars/Standard] ──@navigationClicked──▶ [페이지] ──▶ NavigationDrawer.open()
                                               또는 history.back()
                                               또는 SideSheet.toggle()
 
-[TopAppBar] ──@actionClicked─────▶ [페이지] ──▶ 검색 열기
+[AppBars/Standard] ──@actionClicked─────▶ [페이지] ──▶ 검색 열기
                                               또는 알림 패널 열기
                                               또는 설정 페이지 이동
 ```

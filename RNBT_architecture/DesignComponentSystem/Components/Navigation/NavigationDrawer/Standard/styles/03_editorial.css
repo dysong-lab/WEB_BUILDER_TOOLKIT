@@ -1,0 +1,93 @@
+/* 03_editorial: Persona C — Minimal Editorial
+   웜 그레이 / 배경 색상 차이만 / DM Serif Display + Inter / 라이트 */
+
+.nav-drawer {
+    width: 320px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #faf9f7;
+    border-right: 1px solid #e8e4de;
+    flex-shrink: 0;
+}
+
+.nav-drawer__header {
+    display: flex;
+    align-items: center;
+    padding: 28px 24px 16px;
+}
+
+.nav-drawer__title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: #3d3833;
+    letter-spacing: 0.3px;
+}
+
+.nav-drawer__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0 16px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.nav-drawer__item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 20px;
+    height: 52px;
+    border-radius: 2px;
+    cursor: pointer;
+    border-bottom: 1px solid transparent;
+}
+
+.nav-drawer__item:hover {
+    background: #f0ece6;
+}
+
+.nav-drawer__item[data-active="true"] {
+    background: #ede8e1;
+    border-left: 3px solid #6b6560;
+    padding-left: 17px;
+}
+
+.nav-drawer__icon {
+    font-size: 20px;
+    color: #a09890;
+    width: 24px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.nav-drawer__item[data-active="true"] .nav-drawer__icon {
+    color: #3d3833;
+}
+
+.nav-drawer__label {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #6b6560;
+    flex: 1;
+    line-height: 1.3;
+}
+
+.nav-drawer__item[data-active="true"] .nav-drawer__label {
+    color: #2c2824;
+    font-weight: 500;
+}
+
+.nav-drawer__badge {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #6b6560;
+}
+
+.nav-drawer__badge:empty {
+    display: none;
+}
