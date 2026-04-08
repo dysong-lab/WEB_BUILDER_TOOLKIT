@@ -793,5 +793,4 @@ HTML/CSS 작성이 완료되면 **create-2d-component** Skill을 사용하여
 | DesignSystemGuide (Dark 02) | [/Figma_Conversion/DesignSystemGuide/Design system02-Dark/Design system02-Dark.css](/Figma_Conversion/DesignSystemGuide/Design%20system02-Dark/Design%20system02-Dark.css) |
 | DesignSystemGuide (Light 02) | [/Figma_Conversion/DesignSystemGuide/Design system02-Light/Design system02-Light.css](/Figma_Conversion/DesignSystemGuide/Design%20system02-Light/Design%20system02-Light.css) |
 | 2D 컴포넌트 생성 (다음 단계) | [/.claude/skills/2-component/create-2d-component/SKILL.md](/.claude/skills/2-component/create-2d-component/SKILL.md) |
-| 디자인 변형 추가 | [/.claude/skills/2-component/add-design-variant/SKILL.md](/.claude/skills/2-component/add-design-variant/SKILL.md) |
 | Figma to HTML (대안 경로) | [/.claude/skills/1-figma/figma-to-html/SKILL.md](/.claude/skills/1-figma/figma-to-html/SKILL.md) |

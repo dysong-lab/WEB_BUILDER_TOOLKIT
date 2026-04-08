@@ -220,8 +220,6 @@ Step 4에서 도출된 기능
 | 2D (HTML/CSS + Mixin) | `create-2d-component` |
 | 3D 개별 단위 (1 GLTF = 1 Mesh) | `create-3d-component` |
 | 3D GLTF 컨테이너 (1 GLTF = N Mesh) | `create-3d-container-component` |
-| 기존 컴포넌트에 디자인 변형 추가 | `add-design-variant` |
-
 이 시점에서 기능 정의, Mixin 매핑, 커스텀 메서드 정의는 모두 완료되어 있다. 스킬은 CLAUDE.md 명세를 코드로 변환하는 역할만 한다.
 
 ---

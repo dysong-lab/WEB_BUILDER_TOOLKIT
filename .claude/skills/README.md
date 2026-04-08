@@ -76,8 +76,6 @@ RNBT 컴포넌트 개발을 위한 Skills 사용 가이드입니다.
 |-------|------|------|------|
 | **create-2d-component** | Static HTML/CSS 또는 없음 | 2D 컴포넌트 | 페이지가 데이터 제어 (Figma 유무 분기) |
 | **create-symbol-state-component** | 인라인 SVG HTML | 상태 기반 심볼 | CSS 변수로 색상 제어 |
-| **add-design-variant** | 기존 컴포넌트 + 새 디자인 | 새 views/styles/preview 파일 | register.js 불변, 선택자 계약 유지 |
-
 ### 프로젝트 생성
 
 | Skill | 입력 | 출력 | 설명 |
@@ -125,14 +123,6 @@ Figma 링크/node-id
     └─ create-html-css (디자이너 성향 기반) → create-2d-component
 ```
 
-### "기존 컴포넌트에 새 디자인을 입히고 싶다"
-
-```
-기존 컴포넌트 + 새 Figma 디자인 (또는 직접 작성)
-    │
-    └─ add-design-variant → 새 views/styles/preview 추가 (register.js 불변)
-```
-
 ### "전체 프로젝트를 새로 만든다"
 
 ```
@@ -163,8 +153,6 @@ produce-component (진입점)
             └── create-symbol-state-component
                     │
                     └── create-project (페이지 조합)
-
-add-design-variant (기존 컴포넌트 + 새 디자인) ─→ 새 views/styles/preview
 ```
 
 ---

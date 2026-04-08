@@ -32,7 +32,7 @@ flowchart LR
         direction TB
         S0[0-produce<br/>produce-component]
         S1[1-figma<br/>figma-to-html<br/>figma-to-inline-svg]
-        S2[2-component<br/>create-2d<br/>create-symbol-state<br/>create-3d<br/>create-3d-container<br/>add-design-variant]
+        S2[2-component<br/>create-2d<br/>create-symbol-state<br/>create-3d<br/>create-3d-container]
         S3[3-page<br/>create-project]
         S4[4-review<br/>audit-project]
         S5[5-mixin<br/>create-mixin-spec<br/>implement-mixin]
@@ -77,8 +77,6 @@ flowchart LR
 | SVG 심볼의 색상/상태를 런타임에서 제어 | `create-symbol-state-component` |
 | 3D 개별 장비 (1 GLTF = 1 Mesh, meshName 확정) | `create-3d-component` |
 | 3D GLTF 컨테이너 (1 GLTF = N Mesh, 동적 식별) | `create-3d-container-component` |
-| 기존 컴포넌트에 새로운 디자인 변형 추가 | `add-design-variant` |
-
 ### 페이지 생성 (3-page)
 
 | 조건 | SKILL |
