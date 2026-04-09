@@ -88,13 +88,13 @@ Cards, Badges, Chips, Divider, Charts, Tables 등 — 카테고리 바로 아래
 Components/Cards/Standard/views, styles, scripts, preview
 ```
 
-### 서브 범주 카테고리 (depth 2) — Buttons, Dialogs, Navigation, Sheets
+### 하위 범주 카테고리 (depth 2) — Buttons, Chips, Loading, Navigation, Sheets, Sliders
 
-이 4개 카테고리는 카테고리 아래에 **서브 범주 폴더**가 존재한다. 컴포넌트는 서브 범주 아래에 생성한다.
+이 6개 카테고리는 카테고리 아래에 **하위 범주 폴더**가 존재한다. 컴포넌트는 하위 범주 아래에 생성한다.
 
 ```
 Components/Buttons/IconButtons/Standard/views, styles, scripts, preview
-Components/Dialogs/BasicDialog/Standard/views, styles, scripts, preview
+Components/Chips/Filter/Standard/views, styles, scripts, preview
 Components/Navigation/NavigationDrawer/Standard/views, styles, scripts, preview
 Components/Sheets/BottomSheets/Standard/views, styles, scripts, preview
 ```
