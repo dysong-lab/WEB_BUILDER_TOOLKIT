@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Badges/Standard — 04_operational (Persona D)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #0d1117; display: flex; justify-content: center; padding: 60px 0; }
+        .preview-host { display: flex; gap: 48px; align-items: center; }
+        .preview-item { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        .preview-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #7a8fa5; letter-spacing: 0.5px; }
+        .icon-host { position: relative; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; }
+        .icon-host .material-symbols-outlined { font-size: 24px; color: #c9d6e3; }
+        #badge-container { position: absolute; top: 4px; right: 2px; }
+    </style>
+</head>
+<body>
+
+<div class="preview-host">
+    <div class="preview-item">
+        <div class="icon-host">
+            <span class="material-symbols-outlined">notifications</span>
+            <div id="badge-container"></div>
+        </div>
+        <span class="preview-label">SMALL</span>
+    </div>
+    <div class="preview-item">
+        <div class="icon-host">
+            <span class="material-symbols-outlined">mail</span>
+            <div id="badge-container-large"></div>
+        </div>
+        <span class="preview-label">LARGE (3)</span>
+    </div>
+    <div class="preview-item">
+        <div class="icon-host">
+            <span class="material-symbols-outlined">chat</span>
+            <div id="badge-container-max"></div>
+        </div>
+        <span class="preview-label">LARGE (99+)</span>
+    </div>
+</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/FieldRenderMixin.js"></script>
+<script>
+(async () => {
+    const cssPath = '../styles/04_operational.css';
+
+    // Small badge
+    await loadComponentAssets('badge-container', '../views/04_operational.html', cssPath);
+    const small = { id: 'badge-small', appendElement: document.getElementById('badge-container') };
+    applyFieldRenderMixin(small, { cssSelectors: { badge: '.badge', label: '.badge__label' } });
+
+    // Large badge (count: 3)
+    await loadComponentAssets('badge-container-large', '../views/04_operational.html', cssPath);
+    const large = { id: 'badge-large', appendElement: document.getElementById('badge-container-large') };
+    applyFieldRenderMixin(large, { cssSelectors: { badge: '.badge', label: '.badge__label' } });
+    const largeBadge = large.appendElement.querySelector('.badge');
+    largeBadge.classList.remove('badge--small');
+    largeBadge.classList.add('badge--large');
+    large.fieldRender.renderData({ response: { label: '3' } });
+
+    // Large badge (count: 99+)
+    await loadComponentAssets('badge-container-max', '../views/04_operational.html', cssPath);
+    const max = { id: 'badge-max', appendElement: document.getElementById('badge-container-max') };
+    applyFieldRenderMixin(max, { cssSelectors: { badge: '.badge', label: '.badge__label' } });
+    const maxBadge = max.appendElement.querySelector('.badge');
+    maxBadge.classList.remove('badge--small');
+    maxBadge.classList.add('badge--large');
+    max.fieldRender.renderData({ response: { label: '99+' } });
+})();
+</script>
+</body>
+</html>

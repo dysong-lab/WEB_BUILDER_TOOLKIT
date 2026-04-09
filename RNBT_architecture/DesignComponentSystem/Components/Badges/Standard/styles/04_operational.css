@@ -1,0 +1,45 @@
+/* 04_operational: Persona D — Dark Operational
+   시안 팔레트 / 테두리 + 색상 층 / IBM Plex Mono / 다크 / 펄스 */
+#badge-container {
+    .badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 150ms ease-out;
+    }
+
+    .badge--small {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #FF6B6B;
+        animation: badge-pulse 2s ease-in-out infinite;
+    }
+
+    .badge--small .badge__label {
+        display: none;
+    }
+
+    .badge--large {
+        min-width: 16px;
+        height: 16px;
+        border-radius: 8px;
+        padding: 0 4px;
+        background: #FF6B6B;
+        border: 1px solid rgba(255, 107, 107, 0.3);
+    }
+
+    .badge__label {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 10px;
+        font-weight: 600;
+        color: #FFFFFF;
+        line-height: 1;
+        letter-spacing: 0.5px;
+    }
+
+    @keyframes badge-pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+}

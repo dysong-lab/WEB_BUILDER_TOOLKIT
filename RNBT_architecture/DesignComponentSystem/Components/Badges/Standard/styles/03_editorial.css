@@ -1,0 +1,36 @@
+/* 03_editorial: Persona C — Minimal Editorial
+   웜 그레이 / 세리프 제목 / Inter / 라이트 / 넓은 여백 */
+#badge-container {
+    .badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .badge--small {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #C05746;
+    }
+
+    .badge--small .badge__label {
+        display: none;
+    }
+
+    .badge--large {
+        min-width: 16px;
+        height: 16px;
+        border-radius: 8px;
+        padding: 0 5px;
+        background: #C05746;
+    }
+
+    .badge__label {
+        font-family: 'Inter', sans-serif;
+        font-size: 11px;
+        font-weight: 500;
+        color: #FFFFFF;
+        line-height: 1;
+    }
+}

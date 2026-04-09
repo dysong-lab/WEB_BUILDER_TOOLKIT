@@ -1,0 +1,38 @@
+/* 01_refined: Persona A — Refined Technical
+   퍼플 팔레트 / 그라디언트 깊이 / Pretendard / 다크 */
+#badge-container {
+    .badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 150ms ease-out;
+    }
+
+    .badge--small {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #C77DFF;
+    }
+
+    .badge--small .badge__label {
+        display: none;
+    }
+
+    .badge--large {
+        min-width: 16px;
+        height: 16px;
+        border-radius: 8px;
+        padding: 0 4px;
+        background: linear-gradient(135deg, #9B59B6 0%, #7C3AED 100%);
+    }
+
+    .badge__label {
+        font-family: 'Pretendard', sans-serif;
+        font-size: 11px;
+        font-weight: 600;
+        color: #FFFFFF;
+        line-height: 1;
+        letter-spacing: 0.2px;
+    }
+}
