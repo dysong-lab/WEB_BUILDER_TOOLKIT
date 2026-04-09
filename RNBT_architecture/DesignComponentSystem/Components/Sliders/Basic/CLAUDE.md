@@ -1,4 +1,4 @@
-# Standard
+# Basic
 
 ## MD3 정의
 
