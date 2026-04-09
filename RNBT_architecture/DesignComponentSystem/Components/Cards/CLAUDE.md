@@ -10,7 +10,7 @@
 
 ## 핵심 특성
 
-- 3가지 변형: Elevated, Filled, Outlined
+- MD3 유형: Elevated, Filled, Outlined
 - 이미지, 헤드라인, 보조 텍스트, 버튼, 리스트 등 다양한 콘텐츠 포함 가능
 - 다른 컴포넌트를 내부에 포함할 수 있음
 - 콘텐츠에 따라 유연한 레이아웃과 크기

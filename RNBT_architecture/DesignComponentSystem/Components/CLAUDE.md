@@ -50,7 +50,7 @@ Figma가 존재하는 경우는 사용자가 별도 요청한다.
 
 ```
 카테고리/
-├── CLAUDE.md                ← 범주 역할 + 세부 컴포넌트 목록 (기존)
+├── CLAUDE.md                ← 범주 역할 + 하위 범주 목록 (기존)
 ├── ComponentA/
 │   ├── CLAUDE.md            ← 구현 명세 (Step 2 결과)
 │   ├── scripts/

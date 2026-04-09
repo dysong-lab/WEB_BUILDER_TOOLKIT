@@ -10,7 +10,7 @@
 
 ## 핵심 특성
 
-- 2가지 표현적 변형: Docked toolbar, Floating toolbar
+- MD3 유형: Docked toolbar, Floating toolbar
 - Vibrant color 스타일로 더 큰 강조 가능
 - 버튼, 아이콘 버튼, 텍스트 필드 등 다양한 컨트롤 유형 표시 가능
 - FAB와 페어링하여 특정 액션 강조 가능

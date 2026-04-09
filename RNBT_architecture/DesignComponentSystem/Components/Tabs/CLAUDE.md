@@ -10,6 +10,6 @@
 
 ## 핵심 특성
 
-- 2가지 변형: Primary, Secondary
+- MD3 유형: Primary, Secondary
 - 수평 스크롤 가능하므로 필요한 만큼 탭 추가 가능
 - 탭은 서로 동등한 수준으로 나란히 배치
