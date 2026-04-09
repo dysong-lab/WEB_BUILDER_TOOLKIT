@@ -1,0 +1,83 @@
+/* 04_operational: Persona D — Dark Operational
+   시안 팔레트 / 모노스페이스 / 다크 / Connected (컴팩트 연결) */
+
+.btn-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.btn-group__list {
+    display: flex;
+    flex-direction: row;
+}
+
+.btn-group--connected .btn-group__item {
+    border-right: none;
+}
+
+.btn-group--connected .btn-group__item:last-child {
+    border-right: 1px solid #2A3A3E;
+}
+
+.btn-group--connected .btn-group__item:first-child {
+    border-radius: 4px 0 0 4px;
+}
+
+.btn-group--connected .btn-group__item:last-child {
+    border-radius: 0 4px 4px 0;
+}
+
+.btn-group--connected .btn-group__item:not(:first-child):not(:last-child) {
+    border-radius: 0;
+}
+
+.btn-group__item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 14px;
+    height: 32px;
+    border: 1px solid #2A3A3E;
+    border-radius: 4px;
+    background: #0D1B1E;
+    cursor: pointer;
+    transition: background-color 100ms ease-out;
+}
+
+.btn-group__item:hover {
+    background: rgba(0, 188, 212, 0.08);
+}
+
+.btn-group__item[data-selected="true"] {
+    background: rgba(0, 188, 212, 0.16);
+    border-color: #00BCD4;
+}
+
+.btn-group__icon {
+    font-size: 16px;
+    color: #5A7A80;
+    flex-shrink: 0;
+}
+
+.btn-group__item[data-selected="true"] .btn-group__icon {
+    color: #00BCD4;
+}
+
+.btn-group__icon:empty {
+    display: none;
+}
+
+.btn-group__label {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 12px;
+    font-weight: 400;
+    color: #5A7A80;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-group__item[data-selected="true"] .btn-group__label {
+    color: #B2EBF2;
+    font-weight: 500;
+}

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>ButtonGroups/Standard — 01_refined (Persona A)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #12153D; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        #btn-group-container { padding: 32px; }
+    </style>
+</head>
+<body>
+
+<div id="btn-group-container"></div>
+
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('btn-group-container', '../views/01_refined.html', '../styles/01_refined.css');
+
+    const instance = { id: 'button-groups', appendElement: document.getElementById('btn-group-container') };
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container: '.btn-group__list',
+            template:  '#btn-group-item-template',
+            buttonid:  '.btn-group__item',
+            selected:  '.btn-group__item',
+            label:     '.btn-group__label',
+            icon:      '.btn-group__icon'
+        },
+        itemKey: 'buttonid',
+        datasetAttrs: {
+            buttonid: 'buttonid',
+            selected: 'selected'
+        }
+    });
+
+    instance.subscriptions = { buttonGroupItems: [instance.listRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.listRender.cssSelectors.buttonid]: '@buttonClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    Wkit.onEventBusHandlers({
+        '@buttonClicked': ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.listRender.cssSelectors.buttonid);
+            const buttonid = item?.getAttribute('data-buttonid');
+            const wasSelected = item?.getAttribute('data-selected') === 'true';
+            targetInstance.listRender.updateItemState(buttonid, { selected: wasSelected ? 'false' : 'true' });
+            console.log('[Preview] Button clicked:', buttonid, '→', !wasSelected);
+        }
+    });
+
+    instance.listRender.renderData({ response: [
+        { buttonid: 'day',   icon: 'today',          label: 'Day',   selected: 'true' },
+        { buttonid: 'week',  icon: 'date_range',     label: 'Week',  selected: 'false' },
+        { buttonid: 'month', icon: 'calendar_month',  label: 'Month', selected: 'false' },
+        { buttonid: 'year',  icon: 'calendar_today',  label: 'Year',  selected: 'false' }
+    ]});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>ButtonGroups/Standard — 03_editorial (Persona C)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #FAF8F4; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        #btn-group-container { padding: 32px; }
+    </style>
+</head>
+<body>
+
+<div id="btn-group-container"></div>
+
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('btn-group-container', '../views/03_editorial.html', '../styles/03_editorial.css');
+
+    const instance = { id: 'button-groups', appendElement: document.getElementById('btn-group-container') };
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container: '.btn-group__list',
+            template:  '#btn-group-item-template',
+            buttonid:  '.btn-group__item',
+            selected:  '.btn-group__item',
+            label:     '.btn-group__label',
+            icon:      '.btn-group__icon'
+        },
+        itemKey: 'buttonid',
+        datasetAttrs: {
+            buttonid: 'buttonid',
+            selected: 'selected'
+        }
+    });
+
+    instance.subscriptions = { buttonGroupItems: [instance.listRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.listRender.cssSelectors.buttonid]: '@buttonClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    Wkit.onEventBusHandlers({
+        '@buttonClicked': ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.listRender.cssSelectors.buttonid);
+            const buttonid = item?.getAttribute('data-buttonid');
+            const wasSelected = item?.getAttribute('data-selected') === 'true';
+            targetInstance.listRender.updateItemState(buttonid, { selected: wasSelected ? 'false' : 'true' });
+            console.log('[Preview] Button clicked:', buttonid, '→', !wasSelected);
+        }
+    });
+
+    instance.listRender.renderData({ response: [
+        { buttonid: 'all',      icon: '',           label: 'All',      selected: 'true' },
+        { buttonid: 'articles', icon: '',           label: 'Articles', selected: 'false' },
+        { buttonid: 'essays',   icon: '',           label: 'Essays',   selected: 'false' },
+        { buttonid: 'reviews',  icon: '',           label: 'Reviews',  selected: 'false' }
+    ]});
+})();
+</script>
+</body>
+</html>

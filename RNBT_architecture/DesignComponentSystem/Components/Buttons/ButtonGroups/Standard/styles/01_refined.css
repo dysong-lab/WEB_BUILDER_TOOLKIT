@@ -1,0 +1,62 @@
+/* 01_refined: Persona A — Refined Technical
+   퍼플 팔레트 / 그라디언트 깊이 / Pretendard / 다크 / Standard (간격 있는 개별 버튼) */
+
+.btn-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.btn-group__list {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+}
+
+.btn-group__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 20px;
+    height: 40px;
+    border: 1px solid #2A2574;
+    border-radius: 20px;
+    background: transparent;
+    cursor: pointer;
+    transition: background-color 150ms ease-out, border-color 150ms ease-out;
+}
+
+.btn-group__item:hover {
+    background: rgba(80, 46, 233, 0.12);
+}
+
+.btn-group__item[data-selected="true"] {
+    background: linear-gradient(90deg, rgba(80, 46, 233, 0.24) 0%, rgba(146, 168, 244, 0.12) 100%);
+    border-color: #502EE9;
+}
+
+.btn-group__icon {
+    font-size: 18px;
+    color: #707EB4;
+    flex-shrink: 0;
+}
+
+.btn-group__item[data-selected="true"] .btn-group__icon {
+    color: #92A8F4;
+}
+
+.btn-group__icon:empty {
+    display: none;
+}
+
+.btn-group__label {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #707EB4;
+    white-space: nowrap;
+}
+
+.btn-group__item[data-selected="true"] .btn-group__label {
+    color: #E8EDFF;
+    font-weight: 600;
+}
