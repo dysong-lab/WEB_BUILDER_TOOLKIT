@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Buttons/Standard — 04_operational (Persona D)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #0D1B1E; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        #button-container { margin: auto; }
+    </style>
+</head>
+<body>
+
+<div id="button-container"></div>
+
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/FieldRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('button-container', '../views/04_operational.html', '../styles/04_operational.css');
+
+    const instance = { id: 'button', appendElement: document.getElementById('button-container') };
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            button: '.button',
+            label:  '.button__label',
+            icon:   '.button__icon'
+        }
+    });
+
+    instance.subscriptions = { buttonInfo: [instance.fieldRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.fieldRender.cssSelectors.button]: '@buttonClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    Wkit.onEventBusHandlers({
+        '@buttonClicked': ({ event, targetInstance }) => {
+            console.log('[Preview] Button clicked');
+        }
+    });
+
+    instance.fieldRender.renderData({ response: {
+        label: 'Execute',
+        icon: 'play_arrow'
+    }});
+})();
+</script>
+</body>
+</html>
