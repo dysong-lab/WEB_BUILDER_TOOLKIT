@@ -27,15 +27,26 @@
   border-radius: 0 12px 12px 0;
 }
 .split-button__menu {
-  display: none;
+  display: flex;
   position: absolute;
   top: 48px;
   right: 0;
   flex-direction: column;
   gap: 8px;
+  opacity: 0;
+  transform: translateY(-4px);
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease,
+    visibility 180ms ease;
 }
 .split-button[data-open="true"] .split-button__menu {
-  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  pointer-events: auto;
 }
 .split-button__menu-item {
   min-height: 40px;

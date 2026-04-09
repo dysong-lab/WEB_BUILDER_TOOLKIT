@@ -27,12 +27,23 @@
   cursor: pointer;
 }
 .fab-menu__list {
-  display: none;
+  display: flex;
   flex-direction: column;
   gap: 8px;
+  opacity: 0;
+  transform: translateY(-6px);
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease,
+    visibility 180ms ease;
 }
 .fab-menu[data-open="true"] .fab-menu__list {
-  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  pointer-events: auto;
 }
 .fab-menu__item {
   display: inline-flex;

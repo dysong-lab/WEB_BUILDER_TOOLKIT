@@ -17,10 +17,18 @@
   background: #dce6f8;
   color: #38516d;
   cursor: pointer;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  transform: translateY(0);
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
 }
 .button-group__item[data-selected="true"] {
   background: #005ac1;
   color: #fff;
+  box-shadow: 0 8px 16px rgba(0, 90, 193, 0.22);
 }
 .button-group__label {
   font:

@@ -25,10 +25,18 @@
   background: rgba(215, 233, 255, 0.18);
   color: #d7e9ff;
   cursor: pointer;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  transform: translateY(0);
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
 }
 .segmented-button[data-selected="true"] {
   background: linear-gradient(180deg, #edf6ff 0%, #d7e9ff 100%);
   color: #0b3f79;
+  box-shadow: 0 8px 18px rgba(56, 116, 194, 0.2);
 }
 .segmented-button__label {
   font:

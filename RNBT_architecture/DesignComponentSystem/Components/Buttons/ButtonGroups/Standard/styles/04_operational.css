@@ -19,10 +19,18 @@
   background: rgba(5, 35, 40, 0.92);
   color: #7deeff;
   cursor: pointer;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  transform: translateY(0);
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
 }
 .button-group__item[data-selected="true"] {
   background: #00acc1;
   color: #021316;
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.18);
 }
 .button-group__label {
   font:
