@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Cards/StatusCard — 01_refined (Persona A)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #09111b; }
+        #status-card-container { width: 320px; margin: 40px auto 0; }
+    </style>
+</head>
+<body>
+
+<div id="status-card-container"></div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/FieldRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('status-card-container', '../views/01_refined.html', '../styles/01_refined.css');
+
+    const instance = { id: 'status-card', appendElement: document.getElementById('status-card-container') };
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            card: '.status-card',
+            name: '.status-card__name',
+            status: '.status-card__status',
+            statusLabel: '.status-card__status',
+            version: '.status-card__version',
+            uptime: '.status-card__uptime'
+        },
+        datasetAttrs: {
+            status: 'status'
+        }
+    });
+
+    instance.subscriptions = { systemInfo: [instance.fieldRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.fieldRender.cssSelectors.card]: '@statusCardClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    Wkit.onEventBusHandlers({
+        '@statusCardClicked': ({ targetInstance }) => {
+            const status = targetInstance?.appendElement?.querySelector('.status-card__status')?.dataset.status;
+            console.log('[Preview] Status card clicked:', targetInstance?.id, status);
+        }
+    });
+
+    instance.fieldRender.renderData({
+        response: {
+            name: 'RNBT-01',
+            status: 'RUNNING',
+            statusLabel: '정상',
+            version: 'v2.4.1',
+            uptime: '12d 03h'
+        }
+    });
+})();
+</script>
+</body>
+</html>

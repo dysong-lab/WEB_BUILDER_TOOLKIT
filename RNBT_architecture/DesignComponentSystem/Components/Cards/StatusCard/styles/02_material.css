@@ -1,0 +1,76 @@
+.status-card {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 320px;
+    padding: 24px;
+    border-radius: 24px;
+    cursor: pointer;
+}
+
+.status-card--material {
+    background: linear-gradient(180deg, #ffffff 0%, #f7faff 100%);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.92),
+        0 16px 36px rgba(122, 155, 189, 0.18);
+    color: #16324f;
+}
+
+.status-card__header,
+.status-card__meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.status-card__eyebrow,
+.status-card__meta-label {
+    color: #72839a;
+    font-family: "Roboto", sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.status-card__name {
+    font-family: "Roboto", sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.status-card__status {
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-family: "Roboto", sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.status-card__status[data-status="RUNNING"] {
+    background: #dff7e6;
+    color: #0b6b32;
+}
+
+.status-card__status[data-status="unknown"] {
+    background: #edf2f8;
+    color: #72839a;
+}
+
+.status-card__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 16px;
+    border-top: 1px solid #edf2f8;
+}
+
+.status-card__version,
+.status-card__uptime {
+    font-family: "Roboto", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+}
