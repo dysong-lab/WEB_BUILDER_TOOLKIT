@@ -1,10 +1,14 @@
 /* 04_operational: Persona D — Dark Operational
    시안 팔레트 / 테두리 + 색상 층 / IBM Plex Mono + Inter / 다크 / 펄스 */
 #top-app-bar-container {
+    width: 360px;
+    height: 48px;
+    overflow: auto;
+
     .top-app-bar {
         display: flex;
         align-items: center;
-        height: 48px;
+        height: 100%;
         padding: 0 8px;
         background: #0d1117;
         border-bottom: 1px solid rgba(77, 208, 225, 0.15);

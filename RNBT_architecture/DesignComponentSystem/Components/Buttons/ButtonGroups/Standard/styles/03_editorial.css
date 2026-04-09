@@ -1,81 +1,87 @@
 /* 03_editorial: Persona C — Minimal Editorial
    웜 그레이 / 세리프 제목 / 라이트 / Connected (버튼이 시각적으로 연결) */
 
-.btn-group {
-    display: flex;
-    flex-direction: column;
-}
+#btn-group-container {
+    width: 360px;
+    height: 48px;
+    overflow: auto;
 
-.btn-group__list {
-    display: flex;
-    flex-direction: row;
-}
+    .btn-group {
+        display: flex;
+        flex-direction: column;
+    }
 
-.btn-group--connected .btn-group__item {
-    border-right: none;
-}
+    .btn-group__list {
+        display: flex;
+        flex-direction: row;
+    }
 
-.btn-group--connected .btn-group__item:last-child {
-    border-right: 1px solid #D1CBC3;
-}
+    .btn-group--connected .btn-group__item {
+        border-right: none;
+    }
 
-.btn-group--connected .btn-group__item:first-child {
-    border-radius: 20px 0 0 20px;
-}
+    .btn-group--connected .btn-group__item:last-child {
+        border-right: 1px solid #D1CBC3;
+    }
 
-.btn-group--connected .btn-group__item:last-child {
-    border-radius: 0 20px 20px 0;
-}
+    .btn-group--connected .btn-group__item:first-child {
+        border-radius: 20px 0 0 20px;
+    }
 
-.btn-group--connected .btn-group__item:not(:first-child):not(:last-child) {
-    border-radius: 0;
-}
+    .btn-group--connected .btn-group__item:last-child {
+        border-radius: 0 20px 20px 0;
+    }
 
-.btn-group__item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 0 24px;
-    height: 40px;
-    border: 1px solid #D1CBC3;
-    border-radius: 20px;
-    background: #FDFBF7;
-    cursor: pointer;
-    transition: background-color 150ms ease-out;
-}
+    .btn-group--connected .btn-group__item:not(:first-child):not(:last-child) {
+        border-radius: 0;
+    }
 
-.btn-group__item:hover {
-    background: #F0EDE7;
-}
+    .btn-group__item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 24px;
+        height: 40px;
+        border: 1px solid #D1CBC3;
+        border-radius: 20px;
+        background: #FDFBF7;
+        cursor: pointer;
+        transition: background-color 150ms ease-out;
+    }
 
-.btn-group__item[data-selected="true"] {
-    background: #E8E2D9;
-    border-color: #8C7B6B;
-}
+    .btn-group__item:hover {
+        background: #F0EDE7;
+    }
 
-.btn-group__icon {
-    font-size: 18px;
-    color: #8C7B6B;
-    flex-shrink: 0;
-}
+    .btn-group__item[data-selected="true"] {
+        background: #E8E2D9;
+        border-color: #8C7B6B;
+    }
 
-.btn-group__item[data-selected="true"] .btn-group__icon {
-    color: #4A3F35;
-}
+    .btn-group__icon {
+        font-size: 18px;
+        color: #8C7B6B;
+        flex-shrink: 0;
+    }
 
-.btn-group__icon:empty {
-    display: none;
-}
+    .btn-group__item[data-selected="true"] .btn-group__icon {
+        color: #4A3F35;
+    }
 
-.btn-group__label {
-    font-family: 'Georgia', serif;
-    font-size: 14px;
-    font-weight: 400;
-    color: #8C7B6B;
-    white-space: nowrap;
-}
+    .btn-group__icon:empty {
+        display: none;
+    }
 
-.btn-group__item[data-selected="true"] .btn-group__label {
-    color: #3A3028;
-    font-weight: 700;
+    .btn-group__label {
+        font-family: 'Georgia', serif;
+        font-size: 14px;
+        font-weight: 400;
+        color: #8C7B6B;
+        white-space: nowrap;
+    }
+
+    .btn-group__item[data-selected="true"] .btn-group__label {
+        color: #3A3028;
+        font-weight: 700;
+    }
 }

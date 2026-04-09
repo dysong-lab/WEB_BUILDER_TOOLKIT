@@ -1,10 +1,14 @@
 /* 02_material: Persona B — Material Elevated
    블루 팔레트 / shadow elevation / Roboto / 라이트 */
 #top-app-bar-container {
+    width: 360px;
+    height: 64px;
+    overflow: auto;
+
     .top-app-bar {
         display: flex;
         align-items: center;
-        height: 64px;
+        height: 100%;
         padding: 0 8px;
         background: #ffffff;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);

@@ -1,65 +1,71 @@
 /* 02_material: Persona B — Material Elevated
    블루 팔레트 / shadow elevation / Roboto / 라이트 / Standard (간격 있는 개별 버튼) */
 
-.btn-group {
-    display: flex;
-    flex-direction: column;
-}
+#btn-group-container {
+    width: 380px;
+    height: 48px;
+    overflow: auto;
 
-.btn-group__list {
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-}
+    .btn-group {
+        display: flex;
+        flex-direction: column;
+    }
 
-.btn-group__item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 0 24px;
-    height: 40px;
-    border: 1px solid #C2C7CF;
-    border-radius: 20px;
-    background: #FFFFFF;
-    cursor: pointer;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-    transition: background-color 150ms ease-out, box-shadow 150ms ease-out;
-}
+    .btn-group__list {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+    }
 
-.btn-group__item:hover {
-    background: #F0F3FF;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
-}
+    .btn-group__item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 24px;
+        height: 40px;
+        border: 1px solid #C2C7CF;
+        border-radius: 20px;
+        background: #FFFFFF;
+        cursor: pointer;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+        transition: background-color 150ms ease-out, box-shadow 150ms ease-out;
+    }
 
-.btn-group__item[data-selected="true"] {
-    background: #E0E5FF;
-    border-color: #3B5BDB;
-    box-shadow: 0 1px 4px rgba(59, 91, 219, 0.18);
-}
+    .btn-group__item:hover {
+        background: #F0F3FF;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    }
 
-.btn-group__icon {
-    font-size: 18px;
-    color: #5F6368;
-    flex-shrink: 0;
-}
+    .btn-group__item[data-selected="true"] {
+        background: #E0E5FF;
+        border-color: #3B5BDB;
+        box-shadow: 0 1px 4px rgba(59, 91, 219, 0.18);
+    }
 
-.btn-group__item[data-selected="true"] .btn-group__icon {
-    color: #3B5BDB;
-}
+    .btn-group__icon {
+        font-size: 18px;
+        color: #5F6368;
+        flex-shrink: 0;
+    }
 
-.btn-group__icon:empty {
-    display: none;
-}
+    .btn-group__item[data-selected="true"] .btn-group__icon {
+        color: #3B5BDB;
+    }
 
-.btn-group__label {
-    font-family: 'Roboto', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: #5F6368;
-    white-space: nowrap;
-}
+    .btn-group__icon:empty {
+        display: none;
+    }
 
-.btn-group__item[data-selected="true"] .btn-group__label {
-    color: #1A237E;
-    font-weight: 600;
+    .btn-group__label {
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #5F6368;
+        white-space: nowrap;
+    }
+
+    .btn-group__item[data-selected="true"] .btn-group__label {
+        color: #1A237E;
+        font-weight: 600;
+    }
 }

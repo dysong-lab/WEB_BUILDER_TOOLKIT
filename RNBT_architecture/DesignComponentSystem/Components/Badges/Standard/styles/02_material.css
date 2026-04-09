@@ -1,6 +1,10 @@
 /* 02_material: Persona B — Material Elevated
    블루 팔레트 / shadow elevation / Roboto / 라이트 */
 #badge-container {
+    width: 24px;
+    height: 24px;
+    overflow: auto;
+
     .badge {
         display: flex;
         align-items: center;

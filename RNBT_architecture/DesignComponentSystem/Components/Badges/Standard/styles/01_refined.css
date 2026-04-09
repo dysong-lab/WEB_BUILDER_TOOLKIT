@@ -1,6 +1,10 @@
 /* 01_refined: Persona A — Refined Technical
    퍼플 팔레트 / 그라디언트 깊이 / Pretendard / 다크 */
 #badge-container {
+    width: 24px;
+    height: 24px;
+    overflow: auto;
+
     .badge {
         display: flex;
         align-items: center;

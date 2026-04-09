@@ -1,6 +1,10 @@
 /* 04_operational: Persona D — Dark Operational
    시안 팔레트 / 테두리 + 색상 층 / IBM Plex Mono / 다크 / 펄스 */
 #badge-container {
+    width: 24px;
+    height: 24px;
+    overflow: auto;
+
     .badge {
         display: flex;
         align-items: center;
