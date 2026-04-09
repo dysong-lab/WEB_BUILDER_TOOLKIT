@@ -1,1 +1,118 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>ButtonGroups/Standard — 04_operational</title><script src="../../../../../preview_runtime.js"></script><script src="../../../../../Mixins/ListRenderMixin.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#05090b;display:flex;justify-content:center;padding:40px}.preview-grid{display:flex;gap:24px;flex-wrap:wrap}</style></head><body><div class="preview-grid"><div id="group-1"></div><div id="group-2"></div><div id="group-3"></div></div><script>(async()=>{const ids=['group-1','group-2','group-3'];await Promise.all(ids.map(id=>loadComponentAssets(id,'../views/04_operational.html','../styles/04_operational.css')));const createInstance=id=>{const instance={id,appendElement:document.getElementById(id)};applyListRenderMixin(instance,{cssSelectors:{container:'.button-group',template:'#button-group-item-template',item:'.button-group__item',id:'.button-group__item',selected:'.button-group__item',label:'.button-group__label'},itemKey:'id',datasetAttrs:{id:'id',selected:'selected'}});instance.selectItem=function(targetId){const items=this.appendElement.querySelectorAll(this.listRender.cssSelectors.item);items.forEach(item=>item.setAttribute('data-selected',item.dataset.id===String(targetId)?'true':'false'));};instance.customEvents={click:{[instance.listRender.cssSelectors.item]:'@buttonGroupItemClicked'}};Wkit.bindEvents(instance,instance.customEvents);return instance;};const a=createInstance('group-1');const b=createInstance('group-2');const c=createInstance('group-3');Wkit.onEventBusHandlers({'@buttonGroupItemClicked':({targetInstance,event})=>{const el=event.target.closest('.button-group__item');const id=el?.dataset.id;targetInstance?.selectItem(id);console.log('[Preview] ButtonGroup item clicked:',targetInstance?.id,id);}});a.listRender.renderData({response:[{id:'cpu',selected:'true',label:'CPU'},{id:'ram',selected:'false',label:'RAM'},{id:'net',selected:'false',label:'NET'}]});b.listRender.renderData({response:[{id:'arm',selected:'false',label:'Arm'},{id:'run',selected:'true',label:'Run'},{id:'halt',selected:'false',label:'Halt'}]});c.listRender.renderData({response:[{id:'zone-a',selected:'false',label:'Zone A'},{id:'zone-b',selected:'false',label:'Zone B'},{id:'zone-c',selected:'true',label:'Zone C'}]});})();</script></body></html>
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ButtonGroups/Standard — 04_operational</title>
+    <script src="../../../../../preview_runtime.js"></script>
+    <script src="../../../../../Mixins/ListRenderMixin.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #05090b;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+      }
+      .preview-grid {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-grid">
+      <div id="group-1"></div>
+      <div id="group-2"></div>
+      <div id="group-3"></div>
+    </div>
+    <script>
+      (async () => {
+        const ids = ["group-1", "group-2", "group-3"];
+        await Promise.all(
+          ids.map((id) =>
+            loadComponentAssets(
+              id,
+              "../views/04_operational.html",
+              "../styles/04_operational.css",
+            ),
+          ),
+        );
+        const createInstance = (id) => {
+          const instance = { id, appendElement: document.getElementById(id) };
+          applyListRenderMixin(instance, {
+            cssSelectors: {
+              container: ".button-group",
+              template: "#button-group-item-template",
+              item: ".button-group__item",
+              id: ".button-group__item",
+              selected: ".button-group__item",
+              label: ".button-group__label",
+            },
+            itemKey: "id",
+            datasetAttrs: { id: "id", selected: "selected" },
+          });
+          instance.selectItem = function (targetId) {
+            const items = this.appendElement.querySelectorAll(
+              this.listRender.cssSelectors.item,
+            );
+            items.forEach((item) =>
+              item.setAttribute(
+                "data-selected",
+                item.dataset.id === String(targetId) ? "true" : "false",
+              ),
+            );
+          };
+          instance.customEvents = {
+            click: {
+              [instance.listRender.cssSelectors.item]:
+                "@buttonGroupItemClicked",
+            },
+          };
+          Wkit.bindEvents(instance, instance.customEvents);
+          return instance;
+        };
+        const a = createInstance("group-1");
+        const b = createInstance("group-2");
+        const c = createInstance("group-3");
+        Wkit.onEventBusHandlers({
+          "@buttonGroupItemClicked": ({ targetInstance, event }) => {
+            const el = event.target.closest(".button-group__item");
+            const id = el?.dataset.id;
+            targetInstance?.selectItem(id);
+            console.log(
+              "[Preview] ButtonGroup item clicked:",
+              targetInstance?.id,
+              id,
+            );
+          },
+        });
+        a.listRender.renderData({
+          response: [
+            { id: "cpu", selected: "true", label: "CPU" },
+            { id: "ram", selected: "false", label: "RAM" },
+            { id: "net", selected: "false", label: "NET" },
+          ],
+        });
+        b.listRender.renderData({
+          response: [
+            { id: "arm", selected: "false", label: "Arm" },
+            { id: "run", selected: "true", label: "Run" },
+            { id: "halt", selected: "false", label: "Halt" },
+          ],
+        });
+        c.listRender.renderData({
+          response: [
+            { id: "zone-a", selected: "false", label: "Zone A" },
+            { id: "zone-b", selected: "false", label: "Zone B" },
+            { id: "zone-c", selected: "true", label: "Zone C" },
+          ],
+        });
+      })();
+    </script>
+  </body>
+</html>

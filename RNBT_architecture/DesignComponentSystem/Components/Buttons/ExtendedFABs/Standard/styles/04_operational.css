@@ -1,1 +1,58 @@
-.extended-fab-shell{display:inline-flex;align-items:center;justify-content:center;min-width:220px;min-height:132px;padding:24px;border-radius:32px;background:radial-gradient(circle at top,rgba(0,229,255,.16),transparent 38%),linear-gradient(180deg,#091114 0%,#05090b 100%);box-shadow:inset 0 1px 0 rgba(120,244,255,.08),0 18px 40px rgba(0,0,0,.42)}.extended-fab{display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(0,229,255,.38);background:linear-gradient(180deg,rgba(5,35,40,.92) 0%,rgba(4,21,24,.92) 100%);color:#bfffff;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(0,229,255,.08),0 0 24px rgba(0,229,255,.1)}.extended-fab[data-size="small"]{min-height:44px;padding:0 16px;border-radius:10px}.extended-fab[data-size="medium"]{min-height:56px;padding:0 20px;border-radius:12px}.extended-fab[data-size="large"]{min-height:70px;padding:0 24px;border-radius:14px}.extended-fab__label{font:600 13px/1 "IBM Plex Mono","SFMono-Regular",monospace;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}.extended-fab__icon{font-size:24px}
+.extended-fab-shell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 220px;
+  min-height: 132px;
+  padding: 24px;
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at top, rgba(0, 229, 255, 0.16), transparent 38%),
+    linear-gradient(180deg, #091114 0%, #05090b 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(120, 244, 255, 0.08),
+    0 18px 40px rgba(0, 0, 0, 0.42);
+}
+.extended-fab {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(0, 229, 255, 0.38);
+  background: linear-gradient(
+    180deg,
+    rgba(5, 35, 40, 0.92) 0%,
+    rgba(4, 21, 24, 0.92) 100%
+  );
+  color: #bfffff;
+  cursor: pointer;
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 229, 255, 0.08),
+    0 0 24px rgba(0, 229, 255, 0.1);
+}
+.extended-fab[data-size="small"] {
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 10px;
+}
+.extended-fab[data-size="medium"] {
+  min-height: 56px;
+  padding: 0 20px;
+  border-radius: 12px;
+}
+.extended-fab[data-size="large"] {
+  min-height: 70px;
+  padding: 0 24px;
+  border-radius: 14px;
+}
+.extended-fab__label {
+  font:
+    600 13px/1 "IBM Plex Mono",
+    "SFMono-Regular",
+    monospace;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.extended-fab__icon {
+  font-size: 24px;
+}

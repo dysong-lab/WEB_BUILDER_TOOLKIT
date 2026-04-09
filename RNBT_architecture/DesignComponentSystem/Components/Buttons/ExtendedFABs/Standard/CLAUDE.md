@@ -14,17 +14,17 @@
 
 ### cssSelectors
 
-| KEY | VALUE | 용도 |
-|-----|-------|------|
-| button | `.extended-fab` | 클릭 이벤트 타깃 |
-| icon | `.extended-fab__icon` | 아이콘 텍스트 표시 |
-| label | `.extended-fab__label` | 레이블 표시 |
+| KEY    | VALUE                  | 용도               |
+| ------ | ---------------------- | ------------------ |
+| button | `.extended-fab`        | 클릭 이벤트 타깃   |
+| icon   | `.extended-fab__icon`  | 아이콘 텍스트 표시 |
+| label  | `.extended-fab__label` | 레이블 표시        |
 
 ### 이벤트 (customEvents)
 
-| 이벤트 | 선택자 | 발행 |
-|--------|--------|------|
-| click | `.extended-fab` | `@extendedFabClicked` |
+| 이벤트 | 선택자          | 발행                  |
+| ------ | --------------- | --------------------- |
+| click  | `.extended-fab` | `@extendedFabClicked` |
 
 ### 데이터 계약
 

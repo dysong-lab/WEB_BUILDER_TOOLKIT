@@ -1,1 +1,36 @@
-.button-group-shell{display:inline-flex;padding:24px;border-radius:28px;background:radial-gradient(circle at top left,rgba(154,203,255,.38),transparent 42%),linear-gradient(180deg,#0e1f35 0%,#091523 100%)}.button-group{display:flex;gap:10px}.button-group__item{min-width:92px;min-height:42px;padding:0 16px;border:0;border-radius:999px;background:rgba(215,233,255,.18);color:#d7e9ff;cursor:pointer}.button-group__item[data-selected="true"]{background:linear-gradient(180deg,#edf6ff 0%,#d7e9ff 100%);color:#0b3f79}.button-group__label{font:700 14px/1 "SUIT","Pretendard",sans-serif}
+.button-group-shell {
+  display: inline-flex;
+  padding: 24px;
+  border-radius: 28px;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(154, 203, 255, 0.38),
+      transparent 42%
+    ),
+    linear-gradient(180deg, #0e1f35 0%, #091523 100%);
+}
+.button-group {
+  display: flex;
+  gap: 10px;
+}
+.button-group__item {
+  min-width: 92px;
+  min-height: 42px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(215, 233, 255, 0.18);
+  color: #d7e9ff;
+  cursor: pointer;
+}
+.button-group__item[data-selected="true"] {
+  background: linear-gradient(180deg, #edf6ff 0%, #d7e9ff 100%);
+  color: #0b3f79;
+}
+.button-group__label {
+  font:
+    700 14px/1 "SUIT",
+    "Pretendard",
+    sans-serif;
+}

@@ -14,14 +14,14 @@ ListRenderMixin
 
 ### cssSelectors
 
-| KEY | VALUE | 용도 |
-|-----|-------|------|
-| container | `.button-group` | 항목 컨테이너 |
-| template | `#button-group-item-template` | 항목 템플릿 |
-| item | `.button-group__item` | 클릭 이벤트 타깃 |
-| id | `.button-group__item` | 항목 식별자 |
-| selected | `.button-group__item` | 선택 상태 |
-| label | `.button-group__label` | 버튼 텍스트 |
+| KEY       | VALUE                         | 용도             |
+| --------- | ----------------------------- | ---------------- |
+| container | `.button-group`               | 항목 컨테이너    |
+| template  | `#button-group-item-template` | 항목 템플릿      |
+| item      | `.button-group__item`         | 클릭 이벤트 타깃 |
+| id        | `.button-group__item`         | 항목 식별자      |
+| selected  | `.button-group__item`         | 선택 상태        |
+| label     | `.button-group__label`        | 버튼 텍스트      |
 
 ### datasetAttrs
 
@@ -34,18 +34,18 @@ ListRenderMixin
 
 ### 구독 (subscriptions)
 
-| topic | handler |
-|-------|---------|
+| topic            | handler                      |
+| ---------------- | ---------------------------- |
 | buttonGroupItems | `this.listRender.renderData` |
 
 ### 이벤트 (customEvents)
 
-| 이벤트 | 선택자 | 발행 |
-|--------|--------|------|
-| click | `.button-group__item` | `@buttonGroupItemClicked` |
+| 이벤트 | 선택자                | 발행                      |
+| ------ | --------------------- | ------------------------- |
+| click  | `.button-group__item` | `@buttonGroupItemClicked` |
 
 ### 자체 메서드
 
-| 메서드 | 설명 |
-|--------|------|
+| 메서드                | 설명                                           |
+| --------------------- | ---------------------------------------------- |
 | `this.selectItem(id)` | 전체 항목의 선택을 해제하고 지정된 항목만 선택 |

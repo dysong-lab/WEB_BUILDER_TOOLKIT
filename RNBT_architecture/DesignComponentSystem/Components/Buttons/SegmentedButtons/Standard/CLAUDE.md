@@ -14,15 +14,15 @@ ListRenderMixin
 
 ### cssSelectors
 
-| KEY | VALUE | 용도 |
-|-----|-------|------|
-| container | `.segmented-buttons` | 항목 컨테이너 |
-| template | `#segmented-button-item-template` | 항목 템플릿 |
-| item | `.segmented-button` | 클릭 이벤트 타깃 |
-| id | `.segmented-button` | 항목 식별자 |
-| selected | `.segmented-button` | 선택 상태 |
-| icon | `.segmented-button__icon` | 아이콘 텍스트 |
-| label | `.segmented-button__label` | 레이블 텍스트 |
+| KEY       | VALUE                             | 용도             |
+| --------- | --------------------------------- | ---------------- |
+| container | `.segmented-buttons`              | 항목 컨테이너    |
+| template  | `#segmented-button-item-template` | 항목 템플릿      |
+| item      | `.segmented-button`               | 클릭 이벤트 타깃 |
+| id        | `.segmented-button`               | 항목 식별자      |
+| selected  | `.segmented-button`               | 선택 상태        |
+| icon      | `.segmented-button__icon`         | 아이콘 텍스트    |
+| label     | `.segmented-button__label`        | 레이블 텍스트    |
 
 ### datasetAttrs
 
@@ -35,12 +35,12 @@ ListRenderMixin
 
 ### 구독 (subscriptions)
 
-| topic | handler |
-|-------|---------|
+| topic                | handler                      |
+| -------------------- | ---------------------------- |
 | segmentedButtonItems | `this.listRender.renderData` |
 
 ### 이벤트 (customEvents)
 
-| 이벤트 | 선택자 | 발행 |
-|--------|--------|------|
-| click | `.segmented-button` | `@segmentedButtonClicked` |
+| 이벤트 | 선택자              | 발행                      |
+| ------ | ------------------- | ------------------------- |
+| click  | `.segmented-button` | `@segmentedButtonClicked` |

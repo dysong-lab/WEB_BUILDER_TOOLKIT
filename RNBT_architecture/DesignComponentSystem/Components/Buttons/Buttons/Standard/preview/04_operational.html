@@ -1,83 +1,106 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Buttons/Standard — 04_operational (Persona D)</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: #05090b;
-            display: flex;
-            justify-content: center;
-            padding: 40px;
-        }
-        .preview-grid {
-            display: flex;
-            gap: 24px;
-            flex-wrap: wrap;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #05090b;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+      }
+      .preview-grid {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
+    <div class="preview-grid">
+      <div id="button-primary"></div>
+      <div id="button-secondary"></div>
+      <div id="button-long"></div>
+    </div>
 
-<div class="preview-grid">
-    <div id="button-primary"></div>
-    <div id="button-secondary"></div>
-    <div id="button-long"></div>
-</div>
+    <script src="../../../../../preview_runtime.js"></script>
+    <script>
+      (async () => {
+        const previewIds = [
+          "button-primary",
+          "button-secondary",
+          "button-long",
+        ];
+        await Promise.all(
+          previewIds.map((id) =>
+            loadComponentAssets(
+              id,
+              "../views/04_operational.html",
+              "../styles/04_operational.css",
+            ),
+          ),
+        );
 
-<script src="../../../../../preview_runtime.js"></script>
-<script>
-(async () => {
-    const previewIds = ['button-primary', 'button-secondary', 'button-long'];
-    await Promise.all(previewIds.map(id => loadComponentAssets(id, '../views/04_operational.html', '../styles/04_operational.css')));
+        const createButtonInstance = (id) => {
+          const instance = { id, appendElement: document.getElementById(id) };
 
-    const createButtonInstance = (id) => {
-        const instance = { id, appendElement: document.getElementById(id) };
+          instance.cssSelectors = {
+            button: ".md-button",
+            label: ".md-button__label",
+          };
 
-        instance.cssSelectors = {
-            button: '.md-button',
-            label: '.md-button__label'
-        };
-
-        instance.renderButtonInfo = function(data = {}) {
-            const button = this.appendElement.querySelector(this.cssSelectors.button);
-            const label = this.appendElement.querySelector(this.cssSelectors.label);
+          instance.renderButtonInfo = function (data = {}) {
+            const button = this.appendElement.querySelector(
+              this.cssSelectors.button,
+            );
+            const label = this.appendElement.querySelector(
+              this.cssSelectors.label,
+            );
             if (!button || !label) return;
 
-            const nextLabel = data?.label === null || data?.label === undefined
-                ? ''
+            const nextLabel =
+              data?.label === null || data?.label === undefined
+                ? ""
                 : String(data.label);
 
             label.textContent = nextLabel;
-            button.setAttribute('aria-label', nextLabel);
-        };
+            button.setAttribute("aria-label", nextLabel);
+          };
 
-        instance.customEvents = {
+          instance.customEvents = {
             click: {
-                [instance.cssSelectors.button]: '@buttonClicked'
-            }
+              [instance.cssSelectors.button]: "@buttonClicked",
+            },
+          };
+          Wkit.bindEvents(instance, instance.customEvents);
+
+          return instance;
         };
-        Wkit.bindEvents(instance, instance.customEvents);
 
-        return instance;
-    };
+        const primary = createButtonInstance("button-primary");
+        const secondary = createButtonInstance("button-secondary");
+        const long = createButtonInstance("button-long");
 
-    const primary = createButtonInstance('button-primary');
-    const secondary = createButtonInstance('button-secondary');
-    const long = createButtonInstance('button-long');
+        Wkit.onEventBusHandlers({
+          "@buttonClicked": ({ targetInstance }) => {
+            const label =
+              targetInstance?.appendElement?.querySelector(
+                ".md-button__label",
+              )?.textContent;
+            console.log("[Preview] Button clicked:", targetInstance?.id, label);
+          },
+        });
 
-    Wkit.onEventBusHandlers({
-        '@buttonClicked': ({ targetInstance }) => {
-            const label = targetInstance?.appendElement?.querySelector('.md-button__label')?.textContent;
-            console.log('[Preview] Button clicked:', targetInstance?.id, label);
-        }
-    });
-
-    primary.renderButtonInfo({ label: 'Deploy' });
-    secondary.renderButtonInfo({ label: 'Open logs' });
-    long.renderButtonInfo({ label: 'Sync telemetry status' });
-})();
-</script>
-</body>
+        primary.renderButtonInfo({ label: "Deploy" });
+        secondary.renderButtonInfo({ label: "Open logs" });
+        long.renderButtonInfo({ label: "Sync telemetry status" });
+      })();
+    </script>
+  </body>
 </html>

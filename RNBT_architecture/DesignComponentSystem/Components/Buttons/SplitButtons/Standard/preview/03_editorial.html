@@ -1,1 +1,159 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>SplitButtons/Standard — 03_editorial</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"><script src="../../../../../preview_runtime.js"></script><script src="../../../../../Mixins/ListRenderMixin.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#f1eadf;display:flex;justify-content:center;padding:40px}.preview-grid{display:flex;gap:24px;flex-wrap:wrap}</style></head><body><div class="preview-grid"><div id="split-1"></div><div id="split-2"></div><div id="split-3"></div></div><script>(async()=>{const ids=['split-1','split-2','split-3'];await Promise.all(ids.map(id=>loadComponentAssets(id,'../views/03_editorial.html','../styles/03_editorial.css')));const createInstance=id=>{const instance={id,appendElement:document.getElementById(id)};applyListRenderMixin(instance,{cssSelectors:{root:'.split-button',primary:'.split-button__primary',toggle:'.split-button__toggle',primaryLabel:'.split-button__label',container:'.split-button__menu',template:'#split-button-item-template',item:'.split-button__menu-item',id:'.split-button__menu-item',label:'.split-button__menu-label'},itemKey:'id',datasetAttrs:{id:'id'}});instance.renderSplitButton=function(data={}){const root=this.appendElement.querySelector(this.listRender.cssSelectors.root);const primary=this.appendElement.querySelector(this.listRender.cssSelectors.primary);const label=this.appendElement.querySelector(this.listRender.cssSelectors.primaryLabel);if(!root||!primary||!label)return;const nextLabel=data?.label===null||data?.label===undefined?'Action':String(data.label);label.textContent=nextLabel;primary.setAttribute('aria-label',nextLabel);root.dataset.open='false';this.listRender.renderData({response:Array.isArray(data?.menuItems)?data.menuItems:[]});};instance.toggleMenu=function(force){const root=this.appendElement.querySelector(this.listRender.cssSelectors.root);const nextOpen=typeof force==='boolean'?force:root.dataset.open!=='true';root.dataset.open=nextOpen?'true':'false';};instance.customEvents={click:{[instance.listRender.cssSelectors.primary]:'@splitPrimaryClicked',[instance.listRender.cssSelectors.toggle]:'@splitMenuToggled',[instance.listRender.cssSelectors.item]:'@splitMenuItemClicked'}};Wkit.bindEvents(instance,instance.customEvents);return instance;};const a=createInstance('split-1');const b=createInstance('split-2');const c=createInstance('split-3');Wkit.onEventBusHandlers({'@splitPrimaryClicked':({targetInstance})=>{const label=targetInstance?.appendElement?.querySelector('.split-button__label')?.textContent;console.log('[Preview] Split primary clicked:',targetInstance?.id,label);},'@splitMenuToggled':({targetInstance})=>{targetInstance?.toggleMenu();console.log('[Preview] Split menu toggled:',targetInstance?.id);},'@splitMenuItemClicked':({targetInstance,event})=>{const el=event.target.closest('.split-button__menu-item');targetInstance?.toggleMenu(false);console.log('[Preview] Split menu item clicked:',targetInstance?.id,el?.dataset.id);}});a.renderSplitButton({label:'Export',menuItems:[{id:'folio',label:'Folio'},{id:'issue',label:'Issue'}]});b.renderSplitButton({label:'Share',menuItems:[{id:'editor',label:'Editor'},{id:'reviewer',label:'Reviewer'}]});c.renderSplitButton({label:'Archive',menuItems:[{id:'pdf',label:'PDF'},{id:'print',label:'Print'}]});})();</script></body></html>
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>SplitButtons/Standard — 03_editorial</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <script src="../../../../../preview_runtime.js"></script>
+    <script src="../../../../../Mixins/ListRenderMixin.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #f1eadf;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+      }
+      .preview-grid {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-grid">
+      <div id="split-1"></div>
+      <div id="split-2"></div>
+      <div id="split-3"></div>
+    </div>
+    <script>
+      (async () => {
+        const ids = ["split-1", "split-2", "split-3"];
+        await Promise.all(
+          ids.map((id) =>
+            loadComponentAssets(
+              id,
+              "../views/03_editorial.html",
+              "../styles/03_editorial.css",
+            ),
+          ),
+        );
+        const createInstance = (id) => {
+          const instance = { id, appendElement: document.getElementById(id) };
+          applyListRenderMixin(instance, {
+            cssSelectors: {
+              root: ".split-button",
+              primary: ".split-button__primary",
+              toggle: ".split-button__toggle",
+              primaryLabel: ".split-button__label",
+              container: ".split-button__menu",
+              template: "#split-button-item-template",
+              item: ".split-button__menu-item",
+              id: ".split-button__menu-item",
+              label: ".split-button__menu-label",
+            },
+            itemKey: "id",
+            datasetAttrs: { id: "id" },
+          });
+          instance.renderSplitButton = function (data = {}) {
+            const root = this.appendElement.querySelector(
+              this.listRender.cssSelectors.root,
+            );
+            const primary = this.appendElement.querySelector(
+              this.listRender.cssSelectors.primary,
+            );
+            const label = this.appendElement.querySelector(
+              this.listRender.cssSelectors.primaryLabel,
+            );
+            if (!root || !primary || !label) return;
+            const nextLabel =
+              data?.label === null || data?.label === undefined
+                ? "Action"
+                : String(data.label);
+            label.textContent = nextLabel;
+            primary.setAttribute("aria-label", nextLabel);
+            root.dataset.open = "false";
+            this.listRender.renderData({
+              response: Array.isArray(data?.menuItems) ? data.menuItems : [],
+            });
+          };
+          instance.toggleMenu = function (force) {
+            const root = this.appendElement.querySelector(
+              this.listRender.cssSelectors.root,
+            );
+            const nextOpen =
+              typeof force === "boolean" ? force : root.dataset.open !== "true";
+            root.dataset.open = nextOpen ? "true" : "false";
+          };
+          instance.customEvents = {
+            click: {
+              [instance.listRender.cssSelectors.primary]:
+                "@splitPrimaryClicked",
+              [instance.listRender.cssSelectors.toggle]: "@splitMenuToggled",
+              [instance.listRender.cssSelectors.item]: "@splitMenuItemClicked",
+            },
+          };
+          Wkit.bindEvents(instance, instance.customEvents);
+          return instance;
+        };
+        const a = createInstance("split-1");
+        const b = createInstance("split-2");
+        const c = createInstance("split-3");
+        Wkit.onEventBusHandlers({
+          "@splitPrimaryClicked": ({ targetInstance }) => {
+            const label = targetInstance?.appendElement?.querySelector(
+              ".split-button__label",
+            )?.textContent;
+            console.log(
+              "[Preview] Split primary clicked:",
+              targetInstance?.id,
+              label,
+            );
+          },
+          "@splitMenuToggled": ({ targetInstance }) => {
+            targetInstance?.toggleMenu();
+            console.log("[Preview] Split menu toggled:", targetInstance?.id);
+          },
+          "@splitMenuItemClicked": ({ targetInstance, event }) => {
+            const el = event.target.closest(".split-button__menu-item");
+            targetInstance?.toggleMenu(false);
+            console.log(
+              "[Preview] Split menu item clicked:",
+              targetInstance?.id,
+              el?.dataset.id,
+            );
+          },
+        });
+        a.renderSplitButton({
+          label: "Export",
+          menuItems: [
+            { id: "folio", label: "Folio" },
+            { id: "issue", label: "Issue" },
+          ],
+        });
+        b.renderSplitButton({
+          label: "Share",
+          menuItems: [
+            { id: "editor", label: "Editor" },
+            { id: "reviewer", label: "Reviewer" },
+          ],
+        });
+        c.renderSplitButton({
+          label: "Archive",
+          menuItems: [
+            { id: "pdf", label: "PDF" },
+            { id: "print", label: "Print" },
+          ],
+        });
+      })();
+    </script>
+  </body>
+</html>

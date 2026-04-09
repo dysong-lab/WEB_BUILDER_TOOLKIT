@@ -13,21 +13,20 @@ const { bindEvents } = Wkit;
 // ======================
 
 this.cssSelectors = {
-    button: '.md-button',
-    label: '.md-button__label'
+  button: ".md-button",
+  label: ".md-button__label",
 };
 
-this.renderButtonInfo = function(data = {}) {
-    const button = this.appendElement.querySelector(this.cssSelectors.button);
-    const label = this.appendElement.querySelector(this.cssSelectors.label);
-    if (!button || !label) return;
+this.renderButtonInfo = function (data = {}) {
+  const button = this.appendElement.querySelector(this.cssSelectors.button);
+  const label = this.appendElement.querySelector(this.cssSelectors.label);
+  if (!button || !label) return;
 
-    const nextLabel = data?.label === null || data?.label === undefined
-        ? ''
-        : String(data.label);
+  const nextLabel =
+    data?.label === null || data?.label === undefined ? "" : String(data.label);
 
-    label.textContent = nextLabel;
-    button.setAttribute('aria-label', nextLabel);
+  label.textContent = nextLabel;
+  button.setAttribute("aria-label", nextLabel);
 };
 
 // ======================
@@ -35,8 +34,8 @@ this.renderButtonInfo = function(data = {}) {
 // ======================
 
 this.customEvents = {
-    click: {
-        [this.cssSelectors.button]: '@buttonClicked'
-    }
+  click: {
+    [this.cssSelectors.button]: "@buttonClicked",
+  },
 };
 bindEvents(this, this.customEvents);

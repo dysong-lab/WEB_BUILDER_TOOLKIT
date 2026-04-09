@@ -1,1 +1,48 @@
-.split-button-shell{display:inline-flex;padding:24px;border-radius:28px;background:linear-gradient(180deg,#f8fbff 0%,#eef4fb 100%)}.split-button{display:grid;grid-template-columns:auto 44px;gap:0;position:relative}.split-button__primary,.split-button__toggle{border:0;min-height:40px;background:#005ac1;color:#fff;cursor:pointer}.split-button__primary{padding:0 18px;border-radius:12px 0 0 12px}.split-button__toggle{border-left:1px solid rgba(255,255,255,.24);border-radius:0 12px 12px 0}.split-button__menu{display:none;position:absolute;top:48px;right:0;flex-direction:column;gap:8px}.split-button[data-open="true"] .split-button__menu{display:flex}.split-button__menu-item{min-height:40px;padding:0 14px;border:0;border-radius:12px;background:#dce6f8;color:#38516d;cursor:pointer}
+.split-button-shell {
+  display: inline-flex;
+  padding: 24px;
+  border-radius: 28px;
+  background: linear-gradient(180deg, #f8fbff 0%, #eef4fb 100%);
+}
+.split-button {
+  display: grid;
+  grid-template-columns: auto 44px;
+  gap: 0;
+  position: relative;
+}
+.split-button__primary,
+.split-button__toggle {
+  border: 0;
+  min-height: 40px;
+  background: #005ac1;
+  color: #fff;
+  cursor: pointer;
+}
+.split-button__primary {
+  padding: 0 18px;
+  border-radius: 12px 0 0 12px;
+}
+.split-button__toggle {
+  border-left: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 0 12px 12px 0;
+}
+.split-button__menu {
+  display: none;
+  position: absolute;
+  top: 48px;
+  right: 0;
+  flex-direction: column;
+  gap: 8px;
+}
+.split-button[data-open="true"] .split-button__menu {
+  display: flex;
+}
+.split-button__menu-item {
+  min-height: 40px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 12px;
+  background: #dce6f8;
+  color: #38516d;
+  cursor: pointer;
+}

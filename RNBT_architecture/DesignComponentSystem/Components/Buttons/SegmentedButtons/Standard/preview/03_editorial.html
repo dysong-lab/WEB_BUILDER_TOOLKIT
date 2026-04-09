@@ -1,1 +1,138 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>SegmentedButtons/Standard — 03_editorial</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"><script src="../../../../../preview_runtime.js"></script><script src="../../../../../Mixins/ListRenderMixin.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#f1eadf;display:flex;justify-content:center;padding:40px}.preview-grid{display:flex;gap:24px;flex-wrap:wrap}</style></head><body><div class="preview-grid"><div id="segment-1"></div><div id="segment-2"></div><div id="segment-3"></div></div><script>(async()=>{const ids=['segment-1','segment-2','segment-3'];await Promise.all(ids.map(id=>loadComponentAssets(id,'../views/03_editorial.html','../styles/03_editorial.css')));const createInstance=id=>{const instance={id,appendElement:document.getElementById(id)};applyListRenderMixin(instance,{cssSelectors:{container:'.segmented-buttons',template:'#segmented-button-item-template',item:'.segmented-button',id:'.segmented-button',selected:'.segmented-button',icon:'.segmented-button__icon',label:'.segmented-button__label'},itemKey:'id',datasetAttrs:{id:'id',selected:'selected'}});instance.selectItem=function(targetId){const items=this.appendElement.querySelectorAll(this.listRender.cssSelectors.item);items.forEach(item=>item.setAttribute('data-selected',item.dataset.id===String(targetId)?'true':'false'));};instance.customEvents={click:{[instance.listRender.cssSelectors.item]:'@segmentedButtonClicked'}};Wkit.bindEvents(instance,instance.customEvents);return instance;};const a=createInstance('segment-1');const b=createInstance('segment-2');const c=createInstance('segment-3');Wkit.onEventBusHandlers({'@segmentedButtonClicked':({targetInstance,event})=>{const el=event.target.closest('.segmented-button');const id=el?.dataset.id;targetInstance?.selectItem(id);console.log('[Preview] Segmented button clicked:',targetInstance?.id,id);}});a.listRender.renderData({response:[{id:'essay',selected:'true',icon:'article',label:'Essay'},{id:'brief',selected:'false',icon:'description',label:'Brief'},{id:'issue',selected:'false',icon:'menu_book',label:'Issue'}]});b.listRender.renderData({response:[{id:'rome',selected:'false',icon:'church',label:'Rome'},{id:'seoul',selected:'true',icon:'location_city',label:'Seoul'},{id:'oslo',selected:'false',icon:'landscape',label:'Oslo'}]});c.listRender.renderData({response:[{id:'mono',selected:'false',icon:'contrast',label:'Mono'},{id:'sepia',selected:'true',icon:'palette',label:'Sepia'},{id:'ink',selected:'false',icon:'brush',label:'Ink'}]});})();</script></body></html>
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>SegmentedButtons/Standard — 03_editorial</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <script src="../../../../../preview_runtime.js"></script>
+    <script src="../../../../../Mixins/ListRenderMixin.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #f1eadf;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+      }
+      .preview-grid {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-grid">
+      <div id="segment-1"></div>
+      <div id="segment-2"></div>
+      <div id="segment-3"></div>
+    </div>
+    <script>
+      (async () => {
+        const ids = ["segment-1", "segment-2", "segment-3"];
+        await Promise.all(
+          ids.map((id) =>
+            loadComponentAssets(
+              id,
+              "../views/03_editorial.html",
+              "../styles/03_editorial.css",
+            ),
+          ),
+        );
+        const createInstance = (id) => {
+          const instance = { id, appendElement: document.getElementById(id) };
+          applyListRenderMixin(instance, {
+            cssSelectors: {
+              container: ".segmented-buttons",
+              template: "#segmented-button-item-template",
+              item: ".segmented-button",
+              id: ".segmented-button",
+              selected: ".segmented-button",
+              icon: ".segmented-button__icon",
+              label: ".segmented-button__label",
+            },
+            itemKey: "id",
+            datasetAttrs: { id: "id", selected: "selected" },
+          });
+          instance.selectItem = function (targetId) {
+            const items = this.appendElement.querySelectorAll(
+              this.listRender.cssSelectors.item,
+            );
+            items.forEach((item) =>
+              item.setAttribute(
+                "data-selected",
+                item.dataset.id === String(targetId) ? "true" : "false",
+              ),
+            );
+          };
+          instance.customEvents = {
+            click: {
+              [instance.listRender.cssSelectors.item]:
+                "@segmentedButtonClicked",
+            },
+          };
+          Wkit.bindEvents(instance, instance.customEvents);
+          return instance;
+        };
+        const a = createInstance("segment-1");
+        const b = createInstance("segment-2");
+        const c = createInstance("segment-3");
+        Wkit.onEventBusHandlers({
+          "@segmentedButtonClicked": ({ targetInstance, event }) => {
+            const el = event.target.closest(".segmented-button");
+            const id = el?.dataset.id;
+            targetInstance?.selectItem(id);
+            console.log(
+              "[Preview] Segmented button clicked:",
+              targetInstance?.id,
+              id,
+            );
+          },
+        });
+        a.listRender.renderData({
+          response: [
+            { id: "essay", selected: "true", icon: "article", label: "Essay" },
+            {
+              id: "brief",
+              selected: "false",
+              icon: "description",
+              label: "Brief",
+            },
+            {
+              id: "issue",
+              selected: "false",
+              icon: "menu_book",
+              label: "Issue",
+            },
+          ],
+        });
+        b.listRender.renderData({
+          response: [
+            { id: "rome", selected: "false", icon: "church", label: "Rome" },
+            {
+              id: "seoul",
+              selected: "true",
+              icon: "location_city",
+              label: "Seoul",
+            },
+            { id: "oslo", selected: "false", icon: "landscape", label: "Oslo" },
+          ],
+        });
+        c.listRender.renderData({
+          response: [
+            { id: "mono", selected: "false", icon: "contrast", label: "Mono" },
+            { id: "sepia", selected: "true", icon: "palette", label: "Sepia" },
+            { id: "ink", selected: "false", icon: "brush", label: "Ink" },
+          ],
+        });
+      })();
+    </script>
+  </body>
+</html>

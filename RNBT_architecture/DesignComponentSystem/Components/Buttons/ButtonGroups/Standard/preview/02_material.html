@@ -1,1 +1,122 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>ButtonGroups/Standard — 02_material</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"><script src="../../../../../preview_runtime.js"></script><script src="../../../../../Mixins/ListRenderMixin.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#eef3f8;display:flex;justify-content:center;padding:40px}.preview-grid{display:flex;gap:24px;flex-wrap:wrap}</style></head><body><div class="preview-grid"><div id="group-1"></div><div id="group-2"></div><div id="group-3"></div></div><script>(async()=>{const ids=['group-1','group-2','group-3'];await Promise.all(ids.map(id=>loadComponentAssets(id,'../views/02_material.html','../styles/02_material.css')));const createInstance=id=>{const instance={id,appendElement:document.getElementById(id)};applyListRenderMixin(instance,{cssSelectors:{container:'.button-group',template:'#button-group-item-template',item:'.button-group__item',id:'.button-group__item',selected:'.button-group__item',label:'.button-group__label'},itemKey:'id',datasetAttrs:{id:'id',selected:'selected'}});instance.selectItem=function(targetId){const items=this.appendElement.querySelectorAll(this.listRender.cssSelectors.item);items.forEach(item=>item.setAttribute('data-selected',item.dataset.id===String(targetId)?'true':'false'));};instance.customEvents={click:{[instance.listRender.cssSelectors.item]:'@buttonGroupItemClicked'}};Wkit.bindEvents(instance,instance.customEvents);return instance;};const a=createInstance('group-1');const b=createInstance('group-2');const c=createInstance('group-3');Wkit.onEventBusHandlers({'@buttonGroupItemClicked':({targetInstance,event})=>{const el=event.target.closest('.button-group__item');const id=el?.dataset.id;targetInstance?.selectItem(id);console.log('[Preview] ButtonGroup item clicked:',targetInstance?.id,id);}});a.listRender.renderData({response:[{id:'day',selected:'true',label:'Day'},{id:'week',selected:'false',label:'Week'},{id:'month',selected:'false',label:'Month'}]});b.listRender.renderData({response:[{id:'cpu',selected:'false',label:'CPU'},{id:'memory',selected:'true',label:'Memory'},{id:'net',selected:'false',label:'Network'}]});c.listRender.renderData({response:[{id:'left',selected:'true',label:'Left'},{id:'center',selected:'false',label:'Center'},{id:'right',selected:'false',label:'Right'}]});})();</script></body></html>
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ButtonGroups/Standard — 02_material</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+    />
+    <script src="../../../../../preview_runtime.js"></script>
+    <script src="../../../../../Mixins/ListRenderMixin.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #eef3f8;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+      }
+      .preview-grid {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-grid">
+      <div id="group-1"></div>
+      <div id="group-2"></div>
+      <div id="group-3"></div>
+    </div>
+    <script>
+      (async () => {
+        const ids = ["group-1", "group-2", "group-3"];
+        await Promise.all(
+          ids.map((id) =>
+            loadComponentAssets(
+              id,
+              "../views/02_material.html",
+              "../styles/02_material.css",
+            ),
+          ),
+        );
+        const createInstance = (id) => {
+          const instance = { id, appendElement: document.getElementById(id) };
+          applyListRenderMixin(instance, {
+            cssSelectors: {
+              container: ".button-group",
+              template: "#button-group-item-template",
+              item: ".button-group__item",
+              id: ".button-group__item",
+              selected: ".button-group__item",
+              label: ".button-group__label",
+            },
+            itemKey: "id",
+            datasetAttrs: { id: "id", selected: "selected" },
+          });
+          instance.selectItem = function (targetId) {
+            const items = this.appendElement.querySelectorAll(
+              this.listRender.cssSelectors.item,
+            );
+            items.forEach((item) =>
+              item.setAttribute(
+                "data-selected",
+                item.dataset.id === String(targetId) ? "true" : "false",
+              ),
+            );
+          };
+          instance.customEvents = {
+            click: {
+              [instance.listRender.cssSelectors.item]:
+                "@buttonGroupItemClicked",
+            },
+          };
+          Wkit.bindEvents(instance, instance.customEvents);
+          return instance;
+        };
+        const a = createInstance("group-1");
+        const b = createInstance("group-2");
+        const c = createInstance("group-3");
+        Wkit.onEventBusHandlers({
+          "@buttonGroupItemClicked": ({ targetInstance, event }) => {
+            const el = event.target.closest(".button-group__item");
+            const id = el?.dataset.id;
+            targetInstance?.selectItem(id);
+            console.log(
+              "[Preview] ButtonGroup item clicked:",
+              targetInstance?.id,
+              id,
+            );
+          },
+        });
+        a.listRender.renderData({
+          response: [
+            { id: "day", selected: "true", label: "Day" },
+            { id: "week", selected: "false", label: "Week" },
+            { id: "month", selected: "false", label: "Month" },
+          ],
+        });
+        b.listRender.renderData({
+          response: [
+            { id: "cpu", selected: "false", label: "CPU" },
+            { id: "memory", selected: "true", label: "Memory" },
+            { id: "net", selected: "false", label: "Network" },
+          ],
+        });
+        c.listRender.renderData({
+          response: [
+            { id: "left", selected: "true", label: "Left" },
+            { id: "center", selected: "false", label: "Center" },
+            { id: "right", selected: "false", label: "Right" },
+          ],
+        });
+      })();
+    </script>
+  </body>
+</html>

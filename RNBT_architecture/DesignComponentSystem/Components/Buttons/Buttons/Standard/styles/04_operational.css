@@ -1,45 +1,49 @@
 .button-shell {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 240px;
-    min-height: 120px;
-    padding: 24px;
-    border-radius: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 240px;
+  min-height: 120px;
+  padding: 24px;
+  border-radius: 28px;
 }
 
 .button-shell--operational {
-    background:
-        radial-gradient(circle at top, rgba(0, 229, 255, 0.16), transparent 38%),
-        linear-gradient(180deg, #091114 0%, #05090b 100%);
-    box-shadow:
-        inset 0 1px 0 rgba(120, 244, 255, 0.08),
-        0 18px 40px rgba(0, 0, 0, 0.42);
+  background:
+    radial-gradient(circle at top, rgba(0, 229, 255, 0.16), transparent 38%),
+    linear-gradient(180deg, #091114 0%, #05090b 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(120, 244, 255, 0.08),
+    0 18px 40px rgba(0, 0, 0, 0.42);
 }
 
 .md-button {
-    min-width: 116px;
-    min-height: 42px;
-    padding: 0 20px;
-    border: 1px solid rgba(0, 229, 255, 0.38);
-    border-radius: 10px;
-    background: linear-gradient(180deg, rgba(5, 35, 40, 0.92) 0%, rgba(4, 21, 24, 0.92) 100%);
-    box-shadow:
-        inset 0 0 0 1px rgba(0, 229, 255, 0.08),
-        0 0 24px rgba(0, 229, 255, 0.1);
-    color: #bfffff;
-    cursor: pointer;
+  min-width: 116px;
+  min-height: 42px;
+  padding: 0 20px;
+  border: 1px solid rgba(0, 229, 255, 0.38);
+  border-radius: 10px;
+  background: linear-gradient(
+    180deg,
+    rgba(5, 35, 40, 0.92) 0%,
+    rgba(4, 21, 24, 0.92) 100%
+  );
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 229, 255, 0.08),
+    0 0 24px rgba(0, 229, 255, 0.1);
+  color: #bfffff;
+  cursor: pointer;
 }
 
 .md-button__label {
-    display: inline-block;
-    max-width: 220px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+  display: inline-block;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }

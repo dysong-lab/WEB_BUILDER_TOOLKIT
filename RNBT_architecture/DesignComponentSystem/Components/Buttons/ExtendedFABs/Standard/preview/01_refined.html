@@ -1,1 +1,129 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>ExtendedFABs/Standard — 01_refined</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#09111b;display:flex;justify-content:center;padding:40px}.preview-grid{display:flex;gap:24px;flex-wrap:wrap}</style></head><body><div class="preview-grid"><div id="fab-primary"></div><div id="fab-secondary"></div><div id="fab-large"></div></div><script src="../../../../../preview_runtime.js"></script><script>(async()=>{const ids=['fab-primary','fab-secondary','fab-large'];await Promise.all(ids.map(id=>loadComponentAssets(id,'../views/01_refined.html','../styles/01_refined.css')));const createInstance=id=>{const instance={id,appendElement:document.getElementById(id)};instance.cssSelectors={button:'.extended-fab',icon:'.extended-fab__icon',label:'.extended-fab__label'};instance.renderExtendedFabInfo=function(data={}){const button=this.appendElement.querySelector(this.cssSelectors.button);const icon=this.appendElement.querySelector(this.cssSelectors.icon);const label=this.appendElement.querySelector(this.cssSelectors.label);if(!button||!icon||!label)return;const nextIcon=data?.icon===null||data?.icon===undefined?'':String(data.icon);const nextLabel=data?.label===null||data?.label===undefined?'':String(data.label);const nextAria=data?.ariaLabel===null||data?.ariaLabel===undefined?nextLabel:String(data.ariaLabel);const nextSize=data?.size==='small'||data?.size==='large'?data.size:'medium';icon.textContent=nextIcon;label.textContent=nextLabel;button.setAttribute('aria-label',nextAria);button.dataset.size=nextSize;};instance.customEvents={click:{[instance.cssSelectors.button]:'@extendedFabClicked'}};Wkit.bindEvents(instance,instance.customEvents);return instance;};const a=createInstance('fab-primary');const b=createInstance('fab-secondary');const c=createInstance('fab-large');Wkit.onEventBusHandlers({'@extendedFabClicked':({targetInstance})=>{const button=targetInstance?.appendElement?.querySelector('.extended-fab');console.log('[Preview] Extended FAB clicked:',targetInstance?.id,button?.dataset.size,button?.getAttribute('aria-label'));}});a.renderExtendedFabInfo({icon:'add',label:'Create',ariaLabel:'Create',size:'small'});b.renderExtendedFabInfo({icon:'draw',label:'Sketch flow',ariaLabel:'Sketch flow',size:'medium'});c.renderExtendedFabInfo({icon:'bolt',label:'Run sequence',ariaLabel:'Run sequence',size:'large'});})();</script></body></html>
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ExtendedFABs/Standard — 01_refined</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #09111b;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+      }
+      .preview-grid {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-grid">
+      <div id="fab-primary"></div>
+      <div id="fab-secondary"></div>
+      <div id="fab-large"></div>
+    </div>
+    <script src="../../../../../preview_runtime.js"></script>
+    <script>
+      (async () => {
+        const ids = ["fab-primary", "fab-secondary", "fab-large"];
+        await Promise.all(
+          ids.map((id) =>
+            loadComponentAssets(
+              id,
+              "../views/01_refined.html",
+              "../styles/01_refined.css",
+            ),
+          ),
+        );
+        const createInstance = (id) => {
+          const instance = { id, appendElement: document.getElementById(id) };
+          instance.cssSelectors = {
+            button: ".extended-fab",
+            icon: ".extended-fab__icon",
+            label: ".extended-fab__label",
+          };
+          instance.renderExtendedFabInfo = function (data = {}) {
+            const button = this.appendElement.querySelector(
+              this.cssSelectors.button,
+            );
+            const icon = this.appendElement.querySelector(
+              this.cssSelectors.icon,
+            );
+            const label = this.appendElement.querySelector(
+              this.cssSelectors.label,
+            );
+            if (!button || !icon || !label) return;
+            const nextIcon =
+              data?.icon === null || data?.icon === undefined
+                ? ""
+                : String(data.icon);
+            const nextLabel =
+              data?.label === null || data?.label === undefined
+                ? ""
+                : String(data.label);
+            const nextAria =
+              data?.ariaLabel === null || data?.ariaLabel === undefined
+                ? nextLabel
+                : String(data.ariaLabel);
+            const nextSize =
+              data?.size === "small" || data?.size === "large"
+                ? data.size
+                : "medium";
+            icon.textContent = nextIcon;
+            label.textContent = nextLabel;
+            button.setAttribute("aria-label", nextAria);
+            button.dataset.size = nextSize;
+          };
+          instance.customEvents = {
+            click: { [instance.cssSelectors.button]: "@extendedFabClicked" },
+          };
+          Wkit.bindEvents(instance, instance.customEvents);
+          return instance;
+        };
+        const a = createInstance("fab-primary");
+        const b = createInstance("fab-secondary");
+        const c = createInstance("fab-large");
+        Wkit.onEventBusHandlers({
+          "@extendedFabClicked": ({ targetInstance }) => {
+            const button =
+              targetInstance?.appendElement?.querySelector(".extended-fab");
+            console.log(
+              "[Preview] Extended FAB clicked:",
+              targetInstance?.id,
+              button?.dataset.size,
+              button?.getAttribute("aria-label"),
+            );
+          },
+        });
+        a.renderExtendedFabInfo({
+          icon: "add",
+          label: "Create",
+          ariaLabel: "Create",
+          size: "small",
+        });
+        b.renderExtendedFabInfo({
+          icon: "draw",
+          label: "Sketch flow",
+          ariaLabel: "Sketch flow",
+          size: "medium",
+        });
+        c.renderExtendedFabInfo({
+          icon: "bolt",
+          label: "Run sequence",
+          ariaLabel: "Run sequence",
+          size: "large",
+        });
+      })();
+    </script>
+  </body>
+</html>

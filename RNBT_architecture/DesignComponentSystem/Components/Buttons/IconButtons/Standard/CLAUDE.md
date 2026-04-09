@@ -16,10 +16,10 @@
 
 ### cssSelectors
 
-| KEY | VALUE | 용도 |
-|-----|-------|------|
-| button | `.icon-button` | 클릭 이벤트 타깃 |
-| icon | `.icon-button__icon` | 아이콘 텍스트 표시 |
+| KEY    | VALUE                | 용도               |
+| ------ | -------------------- | ------------------ |
+| button | `.icon-button`       | 클릭 이벤트 타깃   |
+| icon   | `.icon-button__icon` | 아이콘 텍스트 표시 |
 
 ### 구독 (subscriptions)
 
@@ -27,14 +27,14 @@
 
 ### 이벤트 (customEvents)
 
-| 이벤트 | 선택자 | 발행 |
-|--------|--------|------|
-| click | `.icon-button` | `@iconButtonClicked` |
+| 이벤트 | 선택자         | 발행                 |
+| ------ | -------------- | -------------------- |
+| click  | `.icon-button` | `@iconButtonClicked` |
 
 ### 자체 메서드
 
-| 메서드 | 설명 |
-|--------|------|
+| 메서드                            | 설명                               |
+| --------------------------------- | ---------------------------------- |
 | `this.renderIconButtonInfo(data)` | `icon`, `ariaLabel`을 DOM에 동기화 |
 
 ### 데이터 계약
@@ -48,9 +48,9 @@
 
 ### 디자인 변형
 
-| 파일 | 페르소나 | 설명 |
-|------|---------|------|
-| 01_refined | A: Refined Technical | 글래스 질감의 기술적 아이콘 버튼 |
-| 02_material | B: Material Elevated | MD3 Filled tonal icon button |
-| 03_editorial | C: Minimal Editorial | 따뜻한 뉴트럴 기반 아이콘 버튼 |
-| 04_operational | D: Dark Operational | HUD 스타일 다크 아이콘 버튼 |
+| 파일           | 페르소나             | 설명                             |
+| -------------- | -------------------- | -------------------------------- |
+| 01_refined     | A: Refined Technical | 글래스 질감의 기술적 아이콘 버튼 |
+| 02_material    | B: Material Elevated | MD3 Filled tonal icon button     |
+| 03_editorial   | C: Minimal Editorial | 따뜻한 뉴트럴 기반 아이콘 버튼   |
+| 04_operational | D: Dark Operational  | HUD 스타일 다크 아이콘 버튼      |

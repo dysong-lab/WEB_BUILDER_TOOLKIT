@@ -15,23 +15,23 @@ ListRenderMixin
 
 ### cssSelectors
 
-| KEY | VALUE | 용도 |
-|-----|-------|------|
-| root | `.fab-menu` | 열림 상태 루트 |
-| trigger | `.fab-menu__trigger` | 트리거 버튼 |
-| triggerIcon | `.fab-menu__trigger-icon` | 트리거 아이콘 |
-| triggerLabel | `.fab-menu__trigger-label` | 트리거 레이블 |
-| container | `.fab-menu__list` | 메뉴 항목 컨테이너 |
-| template | `#fab-menu-item-template` | 항목 템플릿 |
-| item | `.fab-menu__item` | 항목 클릭 타깃 |
-| id | `.fab-menu__item` | 항목 식별자 |
-| icon | `.fab-menu__item-icon` | 항목 아이콘 |
-| label | `.fab-menu__item-label` | 항목 레이블 |
+| KEY          | VALUE                      | 용도               |
+| ------------ | -------------------------- | ------------------ |
+| root         | `.fab-menu`                | 열림 상태 루트     |
+| trigger      | `.fab-menu__trigger`       | 트리거 버튼        |
+| triggerIcon  | `.fab-menu__trigger-icon`  | 트리거 아이콘      |
+| triggerLabel | `.fab-menu__trigger-label` | 트리거 레이블      |
+| container    | `.fab-menu__list`          | 메뉴 항목 컨테이너 |
+| template     | `#fab-menu-item-template`  | 항목 템플릿        |
+| item         | `.fab-menu__item`          | 항목 클릭 타깃     |
+| id           | `.fab-menu__item`          | 항목 식별자        |
+| icon         | `.fab-menu__item-icon`     | 항목 아이콘        |
+| label        | `.fab-menu__item-label`    | 항목 레이블        |
 
 ### datasetAttrs
 
 ```javascript
 {
-    id: 'id'
+  id: "id";
 }
 ```

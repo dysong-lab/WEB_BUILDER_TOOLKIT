@@ -6,8 +6,8 @@ removeCustomEvents(this, this.customEvents);
 this.customEvents = null;
 
 go(
-    Object.entries(this.subscriptions),
-    each(([topic, _]) => unsubscribe(topic, this))
+  Object.entries(this.subscriptions),
+  each(([topic, _]) => unsubscribe(topic, this)),
 );
 this.subscriptions = null;
 

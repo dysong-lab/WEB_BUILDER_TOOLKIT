@@ -1,17 +1,106 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>IconButtons/Standard — 02_material</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
-    <style>*{margin:0;padding:0;box-sizing:border-box}body{background:#eef3f8;display:flex;justify-content:center;padding:40px}.preview-grid{display:flex;gap:24px;flex-wrap:wrap}</style>
-</head>
-<body>
-<div class="preview-grid"><div id="icon-primary"></div><div id="icon-secondary"></div><div id="icon-alert"></div></div>
-<script src="../../../../../preview_runtime.js"></script>
-<script>
-(async()=>{const ids=['icon-primary','icon-secondary','icon-alert'];await Promise.all(ids.map(id=>loadComponentAssets(id,'../views/02_material.html','../styles/02_material.css')));const createInstance=id=>{const instance={id,appendElement:document.getElementById(id)};instance.cssSelectors={button:'.icon-button',icon:'.icon-button__icon'};instance.renderIconButtonInfo=function(data={}){const button=this.appendElement.querySelector(this.cssSelectors.button);const icon=this.appendElement.querySelector(this.cssSelectors.icon);if(!button||!icon)return;const nextIcon=data?.icon===null||data?.icon===undefined?'':String(data.icon);const nextAria=data?.ariaLabel===null||data?.ariaLabel===undefined?nextIcon:String(data.ariaLabel);icon.textContent=nextIcon;button.setAttribute('aria-label',nextAria);};instance.customEvents={click:{[instance.cssSelectors.button]:'@iconButtonClicked'}};Wkit.bindEvents(instance,instance.customEvents);return instance;};const a=createInstance('icon-primary');const b=createInstance('icon-secondary');const c=createInstance('icon-alert');Wkit.onEventBusHandlers({'@iconButtonClicked':({targetInstance})=>{const button=targetInstance?.appendElement?.querySelector('.icon-button');console.log('[Preview] Icon button clicked:',targetInstance?.id,button?.getAttribute('aria-label'));}});a.renderIconButtonInfo({icon:'settings',ariaLabel:'Settings'});b.renderIconButtonInfo({icon:'search',ariaLabel:'Search'});c.renderIconButtonInfo({icon:'notifications',ariaLabel:'Notifications'});})();
-</script>
-</body>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #eef3f8;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+      }
+      .preview-grid {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-grid">
+      <div id="icon-primary"></div>
+      <div id="icon-secondary"></div>
+      <div id="icon-alert"></div>
+    </div>
+    <script src="../../../../../preview_runtime.js"></script>
+    <script>
+      (async () => {
+        const ids = ["icon-primary", "icon-secondary", "icon-alert"];
+        await Promise.all(
+          ids.map((id) =>
+            loadComponentAssets(
+              id,
+              "../views/02_material.html",
+              "../styles/02_material.css",
+            ),
+          ),
+        );
+        const createInstance = (id) => {
+          const instance = { id, appendElement: document.getElementById(id) };
+          instance.cssSelectors = {
+            button: ".icon-button",
+            icon: ".icon-button__icon",
+          };
+          instance.renderIconButtonInfo = function (data = {}) {
+            const button = this.appendElement.querySelector(
+              this.cssSelectors.button,
+            );
+            const icon = this.appendElement.querySelector(
+              this.cssSelectors.icon,
+            );
+            if (!button || !icon) return;
+            const nextIcon =
+              data?.icon === null || data?.icon === undefined
+                ? ""
+                : String(data.icon);
+            const nextAria =
+              data?.ariaLabel === null || data?.ariaLabel === undefined
+                ? nextIcon
+                : String(data.ariaLabel);
+            icon.textContent = nextIcon;
+            button.setAttribute("aria-label", nextAria);
+          };
+          instance.customEvents = {
+            click: { [instance.cssSelectors.button]: "@iconButtonClicked" },
+          };
+          Wkit.bindEvents(instance, instance.customEvents);
+          return instance;
+        };
+        const a = createInstance("icon-primary");
+        const b = createInstance("icon-secondary");
+        const c = createInstance("icon-alert");
+        Wkit.onEventBusHandlers({
+          "@iconButtonClicked": ({ targetInstance }) => {
+            const button =
+              targetInstance?.appendElement?.querySelector(".icon-button");
+            console.log(
+              "[Preview] Icon button clicked:",
+              targetInstance?.id,
+              button?.getAttribute("aria-label"),
+            );
+          },
+        });
+        a.renderIconButtonInfo({ icon: "settings", ariaLabel: "Settings" });
+        b.renderIconButtonInfo({ icon: "search", ariaLabel: "Search" });
+        c.renderIconButtonInfo({
+          icon: "notifications",
+          ariaLabel: "Notifications",
+        });
+      })();
+    </script>
+  </body>
 </html>

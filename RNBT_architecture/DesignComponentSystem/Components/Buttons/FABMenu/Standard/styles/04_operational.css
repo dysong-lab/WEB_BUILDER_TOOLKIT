@@ -1,1 +1,54 @@
-.fab-menu-shell{display:inline-flex;padding:24px;border-radius:28px;background:radial-gradient(circle at top,rgba(0,229,255,.16),transparent 38%),linear-gradient(180deg,#091114 0%,#05090b 100%)}.fab-menu{display:flex;flex-direction:column;align-items:flex-end;gap:10px}.fab-menu__trigger{display:inline-flex;align-items:center;gap:10px;min-height:56px;padding:0 18px;border:1px solid rgba(0,229,255,.38);border-radius:12px;background:linear-gradient(180deg,rgba(5,35,40,.92) 0%,rgba(4,21,24,.92) 100%);color:#bfffff;cursor:pointer}.fab-menu__list{display:none;flex-direction:column;gap:8px}.fab-menu[data-open="true"] .fab-menu__list{display:flex}.fab-menu__item{display:inline-flex;align-items:center;gap:10px;min-height:40px;padding:0 14px;border:1px solid rgba(0,229,255,.25);border-radius:10px;background:rgba(5,35,40,.92);color:#7deeff;cursor:pointer}.fab-menu__trigger-label,.fab-menu__item-label{white-space:nowrap}
+.fab-menu-shell {
+  display: inline-flex;
+  padding: 24px;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at top, rgba(0, 229, 255, 0.16), transparent 38%),
+    linear-gradient(180deg, #091114 0%, #05090b 100%);
+}
+.fab-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+.fab-menu__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 0 18px;
+  border: 1px solid rgba(0, 229, 255, 0.38);
+  border-radius: 12px;
+  background: linear-gradient(
+    180deg,
+    rgba(5, 35, 40, 0.92) 0%,
+    rgba(4, 21, 24, 0.92) 100%
+  );
+  color: #bfffff;
+  cursor: pointer;
+}
+.fab-menu__list {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+}
+.fab-menu[data-open="true"] .fab-menu__list {
+  display: flex;
+}
+.fab-menu__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  border-radius: 10px;
+  background: rgba(5, 35, 40, 0.92);
+  color: #7deeff;
+  cursor: pointer;
+}
+.fab-menu__trigger-label,
+.fab-menu__item-label {
+  white-space: nowrap;
+}

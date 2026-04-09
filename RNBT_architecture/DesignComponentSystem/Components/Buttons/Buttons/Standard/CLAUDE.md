@@ -16,10 +16,10 @@
 
 ### cssSelectors
 
-| KEY | VALUE | 용도 |
-|-----|-------|------|
-| button | `.md-button` | 클릭 이벤트 타깃 |
-| label | `.md-button__label` | 레이블 텍스트 렌더링 |
+| KEY    | VALUE               | 용도                 |
+| ------ | ------------------- | -------------------- |
+| button | `.md-button`        | 클릭 이벤트 타깃     |
+| label  | `.md-button__label` | 레이블 텍스트 렌더링 |
 
 ### 구독 (subscriptions)
 
@@ -27,9 +27,9 @@
 
 ### 이벤트 (customEvents)
 
-| 이벤트 | 선택자 | 발행 |
-|--------|--------|------|
-| click | `.md-button` | `@buttonClicked` |
+| 이벤트 | 선택자       | 발행             |
+| ------ | ------------ | ---------------- |
+| click  | `.md-button` | `@buttonClicked` |
 
 ### 페이지 연결 사례
 
@@ -41,15 +41,15 @@
 
 ### 자체 메서드
 
-| 메서드 | 설명 |
-|--------|------|
+| 메서드                        | 설명                                             |
+| ----------------------------- | ------------------------------------------------ |
 | `this.renderButtonInfo(data)` | `label` 값을 버튼 텍스트와 `aria-label`에 동기화 |
 
 ### 데이터 계약
 
 ```javascript
 {
-    label: 'Save'
+  label: "Save";
 }
 ```
 
@@ -61,9 +61,9 @@
 
 ### 디자인 변형
 
-| 파일 | 페르소나 | 설명 |
-|------|---------|------|
-| 01_refined | A: Refined Technical | 정제된 블루 계열, 유리질 하이라이트 |
-| 02_material | B: Material Elevated | MD3 기준 라이트 Filled Button |
-| 03_editorial | C: Minimal Editorial | 웜 뉴트럴, 미니멀 에디토리얼 |
-| 04_operational | D: Dark Operational | 다크 HUD, 시안 포인트 |
+| 파일           | 페르소나             | 설명                                |
+| -------------- | -------------------- | ----------------------------------- |
+| 01_refined     | A: Refined Technical | 정제된 블루 계열, 유리질 하이라이트 |
+| 02_material    | B: Material Elevated | MD3 기준 라이트 Filled Button       |
+| 03_editorial   | C: Minimal Editorial | 웜 뉴트럴, 미니멀 에디토리얼        |
+| 04_operational | D: Dark Operational  | 다크 HUD, 시안 포인트               |
