@@ -1,0 +1,43 @@
+.md-divider {
+  --divider-thickness: 1px;
+  display: block;
+  flex-shrink: 0;
+  width: 100%;
+  height: var(--divider-thickness);
+  border-radius: 999px;
+  background: #7b756f;
+  opacity: 0.24;
+}
+
+.md-divider[data-orientation="vertical"] {
+  width: var(--divider-thickness);
+  height: 100%;
+  min-height: 96px;
+}
+
+.md-divider[data-inset="start"] {
+  margin-left: 16px;
+  width: calc(100% - 16px);
+}
+
+.md-divider[data-inset="both"] {
+  margin: 0 16px;
+  width: calc(100% - 32px);
+}
+
+.md-divider[data-orientation="vertical"][data-inset="start"] {
+  margin-left: 0;
+  margin-top: 16px;
+  width: var(--divider-thickness);
+  height: calc(100% - 16px);
+}
+
+.md-divider[data-orientation="vertical"][data-inset="both"] {
+  margin: 16px 0;
+  width: var(--divider-thickness);
+  height: calc(100% - 32px);
+}
+
+.md-divider[data-emphasis="strong"] {
+  opacity: 0.42;
+}

@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Divider/Standard — 04_operational (Persona D)</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #05090c;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+        color: #b8f8fb;
+        font-family: "SUIT", "Pretendard", sans-serif;
+      }
+      .preview-grid {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+        align-items: stretch;
+      }
+      .scene {
+        width: 320px;
+        min-height: 220px;
+        padding: 24px;
+        border-radius: 20px;
+        background:
+          linear-gradient(135deg, rgba(12, 69, 86, 0.34), transparent 40%),
+          linear-gradient(180deg, #081317 0%, #04090b 100%);
+        border: 1px solid rgba(78, 216, 229, 0.12);
+        box-shadow:
+          inset 0 1px 0 rgba(155, 247, 255, 0.08),
+          0 20px 44px rgba(0, 0, 0, 0.48);
+      }
+      .scene h2 {
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: -0.3px;
+      }
+      .stack {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin-top: 18px;
+      }
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13px;
+        color: rgba(184, 248, 251, 0.76);
+      }
+      .vertical-layout {
+        display: flex;
+        align-items: stretch;
+        gap: 18px;
+        margin-top: 18px;
+        min-height: 132px;
+      }
+      .column {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .metric {
+        padding: 12px 0;
+      }
+      .metric strong {
+        display: block;
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: -0.6px;
+      }
+      .metric span {
+        display: block;
+        margin-top: 6px;
+        font-size: 12px;
+        color: rgba(184, 248, 251, 0.54);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-grid">
+      <section class="scene">
+        <h2>Signal Queue</h2>
+        <div class="stack">
+          <div class="row"><span>Inbound</span><span>142</span></div>
+          <div id="divider-horizontal"></div>
+          <div class="row"><span>Escalated</span><span>4</span></div>
+          <div class="row"><span>Suppressed</span><span>11</span></div>
+        </div>
+      </section>
+      <section class="scene">
+        <h2>Command Stack</h2>
+        <div class="stack">
+          <div class="row"><span>Primary route</span><span>Armed</span></div>
+          <div id="divider-inset"></div>
+          <div class="row"><span>Fallback route</span><span>Standby</span></div>
+          <div class="row"><span>Broadcast lock</span><span>Enabled</span></div>
+        </div>
+      </section>
+      <section class="scene">
+        <h2>Telemetry Split</h2>
+        <div class="vertical-layout">
+          <div class="column">
+            <div class="metric"><strong>31ms</strong><span>Latency</span></div>
+            <div class="metric"><strong>6.2TB</strong><span>Buffer</span></div>
+          </div>
+          <div id="divider-vertical"></div>
+          <div class="column">
+            <div class="metric"><strong>97.4%</strong><span>Clean packets</span></div>
+            <div class="metric"><strong>2</strong><span>Fault zones</span></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script src="../../../../preview_runtime.js"></script>
+    <script>
+      (async () => {
+        const previewIds = [
+          "divider-horizontal",
+          "divider-inset",
+          "divider-vertical",
+        ];
+
+        await Promise.all(
+          previewIds.map((id) =>
+            loadComponentAssets(
+              id,
+              "../views/04_operational.html",
+              "../styles/04_operational.css",
+            ),
+          ),
+        );
+
+        const applyDividerInfo = (id, data) => {
+          const root = document.getElementById(id).querySelector(".md-divider");
+          if (!root) return;
+
+          const orientation =
+            data?.orientation === "vertical" ? "vertical" : "horizontal";
+          const inset =
+            data?.inset === "start" || data?.inset === "both"
+              ? data.inset
+              : "full";
+          const thicknessValue = Number(data?.thickness);
+          const thickness =
+            Number.isFinite(thicknessValue) && thicknessValue >= 1
+              ? Math.round(thicknessValue)
+              : 1;
+          const emphasis = data?.emphasis === "strong" ? "strong" : "subtle";
+
+          root.dataset.orientation = orientation;
+          root.dataset.inset = inset;
+          root.dataset.emphasis = emphasis;
+          root.style.setProperty("--divider-thickness", `${thickness}px`);
+          root.setAttribute("aria-orientation", orientation);
+        };
+
+        applyDividerInfo("divider-horizontal", {
+          orientation: "horizontal",
+          inset: "full",
+          thickness: 1,
+          emphasis: "strong",
+        });
+        applyDividerInfo("divider-inset", {
+          orientation: "horizontal",
+          inset: "both",
+          thickness: 2,
+          emphasis: "subtle",
+        });
+        applyDividerInfo("divider-vertical", {
+          orientation: "vertical",
+          inset: "both",
+          thickness: 2,
+          emphasis: "strong",
+        });
+      })();
+    </script>
+  </body>
+</html>
