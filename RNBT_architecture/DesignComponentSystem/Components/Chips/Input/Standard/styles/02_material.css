@@ -1,0 +1,9 @@
+.input-chip-shell { display:inline-flex; padding:24px; border-radius:24px; background:#f7f2fa; }
+.input-chips { display:flex; flex-wrap:wrap; gap:8px; }
+.input-chip { display:inline-flex; align-items:center; gap:8px; min-height:32px; padding:0 8px; border-radius:8px; background:#e8def8; color:#1d192b; }
+.input-chip[data-selected="true"] { background:#d0bcff; color:#231942; }
+.input-chip[data-disabled="true"] { opacity:.38; }
+.input-chip__avatar { display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:999px; background:#d0bcff; font:500 12px/1 "Roboto","Noto Sans KR",sans-serif; }
+.input-chip__label { font:500 14px/1 "Roboto","Noto Sans KR",sans-serif; }
+.input-chip__remove { border:0; background:transparent; color:#4a4458; cursor:pointer; font-size:18px; }
+.input-chip[data-disabled="true"] .input-chip__remove { cursor:not-allowed; }

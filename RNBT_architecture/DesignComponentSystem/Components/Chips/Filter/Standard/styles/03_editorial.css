@@ -1,0 +1,59 @@
+.filter-chip-shell {
+  display: inline-flex;
+  padding: 28px;
+  border: 1px solid #ddd4c8;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(247, 241, 233, 0.92)),
+    #f7f1e9;
+}
+
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 16px;
+  border: 1px solid #cdbfaa;
+  border-radius: 999px;
+  background: rgba(255, 252, 247, 0.92);
+  color: #43362a;
+  cursor: pointer;
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease;
+}
+
+.filter-chip[data-selected="true"] {
+  border-color: #43362a;
+  background: #43362a;
+  color: #f7f1e9;
+}
+
+.filter-chip[data-disabled="true"] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.filter-chip__icon {
+  font-size: 18px;
+}
+
+.filter-chip__icon:empty {
+  display: none;
+}
+
+.filter-chip__label {
+  font:
+    600 14px/1 "Cormorant Garamond",
+    "Noto Serif KR",
+    serif;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}

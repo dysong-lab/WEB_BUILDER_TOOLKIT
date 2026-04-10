@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chips/Assist/Standard — 02_material</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <script src="../../../../../preview_runtime.js"></script>
+    <script src="../../../../../Mixins/ListRenderMixin.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #f4edf7;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="chip-root"></div>
+    <script>
+      (async () => {
+        await loadComponentAssets(
+          "chip-root",
+          "../views/02_material.html",
+          "../styles/02_material.css",
+        );
+        const instance = {
+          id: "chip-root",
+          appendElement: document.getElementById("chip-root"),
+        };
+        applyListRenderMixin(instance, {
+          cssSelectors: {
+            container: ".assist-chips",
+            template: "#assist-chip-item-template",
+            item: ".assist-chip",
+            id: ".assist-chip",
+            disabled: ".assist-chip",
+            leadingIcon: ".assist-chip__icon",
+            label: ".assist-chip__label",
+          },
+          itemKey: "id",
+          datasetAttrs: {
+            id: "id",
+            disabled: "disabled",
+          },
+        });
+        instance.customEvents = {
+          click: {
+            [instance.listRender.cssSelectors.item]: "@assistChipClicked",
+          },
+        };
+        Wkit.bindEvents(instance, instance.customEvents);
+        Wkit.onEventBusHandlers({
+          "@assistChipClicked": ({ targetInstance, event }) => {
+            const el = event.target.closest(".assist-chip");
+            console.log(
+              "[Preview] Assist chip clicked:",
+              targetInstance?.id,
+              el?.dataset.id,
+              el?.dataset.disabled,
+            );
+          },
+        });
+        instance.listRender.renderData({
+          response: [
+            {
+              id: "calendar",
+              disabled: "false",
+              leadingIcon: "calendar_month",
+              label: "Calendar",
+            },
+            {
+              id: "route",
+              disabled: "false",
+              leadingIcon: "map",
+              label: "Route",
+            },
+            {
+              id: "contact",
+              disabled: "false",
+              leadingIcon: "call",
+              label: "Contact",
+            },
+          ],
+        });
+      })();
+    </script>
+  </body>
+</html>

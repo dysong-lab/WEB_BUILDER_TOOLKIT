@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chips/Suggestion/Standard — 03_editorial</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <script src="../../../../../preview_runtime.js"></script>
+    <script src="../../../../../Mixins/ListRenderMixin.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #f3ebe1;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="chip-root"></div>
+    <script>
+      (async () => {
+        await loadComponentAssets(
+          "chip-root",
+          "../views/03_editorial.html",
+          "../styles/03_editorial.css",
+        );
+        const instance = {
+          id: "chip-root",
+          appendElement: document.getElementById("chip-root"),
+        };
+        applyListRenderMixin(instance, {
+          cssSelectors: {
+            container: ".suggestion-chips",
+            template: "#suggestion-chip-item-template",
+            item: ".suggestion-chip",
+            id: ".suggestion-chip",
+            disabled: ".suggestion-chip",
+            leadingIcon: ".suggestion-chip__icon",
+            label: ".suggestion-chip__label",
+          },
+          itemKey: "id",
+          datasetAttrs: {
+            id: "id",
+            disabled: "disabled",
+          },
+        });
+        instance.customEvents = {
+          click: {
+            [instance.listRender.cssSelectors.item]: "@suggestionChipClicked",
+          },
+        };
+        Wkit.bindEvents(instance, instance.customEvents);
+        Wkit.onEventBusHandlers({
+          "@suggestionChipClicked": ({ targetInstance, event }) => {
+            const el = event.target.closest(".suggestion-chip");
+            console.log(
+              "[Preview] Suggestion chip clicked:",
+              targetInstance?.id,
+              el?.dataset.id,
+              el?.dataset.disabled,
+            );
+          },
+        });
+        instance.listRender.renderData({
+          response: [
+            {
+              id: "chapter",
+              disabled: "false",
+              leadingIcon: "menu_book",
+              label: "Related chapter",
+            },
+            {
+              id: "note",
+              disabled: "false",
+              leadingIcon: "sticky_note_2",
+              label: "Author note",
+            },
+          ],
+        });
+      })();
+    </script>
+  </body>
+</html>

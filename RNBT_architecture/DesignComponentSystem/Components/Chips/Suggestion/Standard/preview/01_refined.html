@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chips/Suggestion/Standard — 01_refined</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <script src="../../../../../preview_runtime.js"></script>
+    <script src="../../../../../Mixins/ListRenderMixin.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #09111b;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="chip-root"></div>
+    <script>
+      (async () => {
+        await loadComponentAssets(
+          "chip-root",
+          "../views/01_refined.html",
+          "../styles/01_refined.css",
+        );
+        const instance = {
+          id: "chip-root",
+          appendElement: document.getElementById("chip-root"),
+        };
+        applyListRenderMixin(instance, {
+          cssSelectors: {
+            container: ".suggestion-chips",
+            template: "#suggestion-chip-item-template",
+            item: ".suggestion-chip",
+            id: ".suggestion-chip",
+            selected: ".suggestion-chip",
+            disabled: ".suggestion-chip",
+            leadingIcon: ".suggestion-chip__icon",
+            label: ".suggestion-chip__label",
+          },
+          itemKey: "id",
+          datasetAttrs: {
+            id: "id",
+            selected: "selected",
+            disabled: "disabled",
+          },
+        });
+        instance.acceptSuggestion = function (targetId) {
+          const items = instance.appendElement.querySelectorAll(".suggestion-chip");
+          items.forEach((item) => {
+            if (item.dataset.disabled === "true") return;
+            item.setAttribute(
+              "data-selected",
+              item.dataset.id === String(targetId) ? "true" : "false",
+            );
+          });
+        };
+        instance.customEvents = {
+          click: {
+            [instance.listRender.cssSelectors.item]: "@suggestionChipClicked",
+          },
+        };
+        Wkit.bindEvents(instance, instance.customEvents);
+        Wkit.onEventBusHandlers({
+          "@suggestionChipClicked": ({ targetInstance, event }) => {
+            const el = event.target.closest(".suggestion-chip");
+            targetInstance?.acceptSuggestion(el?.dataset.id);
+            console.log(
+              "[Preview] Suggestion chip clicked:",
+              targetInstance?.id,
+              el?.dataset.id,
+              el?.dataset.selected,
+              el?.dataset.disabled,
+            );
+          },
+        });
+        instance.listRender.renderData({
+          response: [
+            {
+              id: "airflow",
+              selected: "false",
+              disabled: "false",
+              leadingIcon: "air",
+              label: "Show airflow",
+            },
+            {
+              id: "history",
+              selected: "true",
+              disabled: "false",
+              leadingIcon: "history",
+              label: "Open history",
+            },
+            {
+              id: "summary",
+              selected: "false",
+              disabled: "false",
+              leadingIcon: "summarize",
+              label: "Quick summary",
+            },
+          ],
+        });
+      })();
+    </script>
+  </body>
+</html>

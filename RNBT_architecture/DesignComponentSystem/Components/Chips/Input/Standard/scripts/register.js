@@ -1,0 +1,73 @@
+const { subscribe } = GlobalDataPublisher;
+const { bindEvents } = Wkit;
+const { each, go } = fx;
+
+applyListRenderMixin(this, {
+  cssSelectors: {
+    container: ".input-chips",
+    template: "#input-chip-item-template",
+    item: ".input-chip",
+    id: ".input-chip",
+    selected: ".input-chip",
+    disabled: ".input-chip",
+    avatar: ".input-chip__avatar",
+    label: ".input-chip__label",
+    removeBtn: ".input-chip__remove",
+    removeId: ".input-chip__remove",
+  },
+  itemKey: "id",
+  datasetAttrs: {
+    id: "id",
+    removeId: "id",
+    selected: "selected",
+    disabled: "disabled",
+  },
+});
+
+this.toggleSelection = function (id) {
+  const target = this.appendElement.querySelector(
+    `${this.listRender.cssSelectors.item}[data-id="${String(id)}"]`,
+  );
+  if (!target || target.dataset.disabled === "true") return;
+  target.setAttribute(
+    "data-selected",
+    target.dataset.selected === "true" ? "false" : "true",
+  );
+};
+
+this.removeItem = function (id) {
+  const target = this.appendElement.querySelector(
+    `${this.listRender.cssSelectors.item}[data-id="${String(id)}"]`,
+  );
+  if (!target || target.dataset.disabled === "true") return;
+  target.remove();
+};
+
+this.subscriptions = {
+  inputChipItems: [this.listRender.renderData],
+};
+
+go(
+  Object.entries(this.subscriptions),
+  each(([topic, handlers]) =>
+    each((handler) => subscribe(topic, this, handler), handlers),
+  ),
+);
+
+this.customEvents = {
+  click: {
+    [this.listRender.cssSelectors.removeBtn]: "@inputChipRemoveClicked",
+  },
+};
+bindEvents(this, this.customEvents);
+
+this._handleInputChipSelection = (event) => {
+  const removeTarget = event.target.closest(this.listRender.cssSelectors.removeBtn);
+  if (removeTarget) return;
+
+  const target = event.target.closest(this.listRender.cssSelectors.item);
+  if (!target || !this.appendElement.contains(target)) return;
+  this.toggleSelection(target.dataset.id);
+};
+
+this.appendElement.addEventListener("click", this._handleInputChipSelection);

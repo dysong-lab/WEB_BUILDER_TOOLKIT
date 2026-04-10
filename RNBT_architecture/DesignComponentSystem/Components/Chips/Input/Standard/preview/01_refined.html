@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chips/Input/Standard — 01_refined</title>
+    <script src="../../../../../preview_runtime.js"></script>
+    <script src="../../../../../Mixins/ListRenderMixin.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #09111b;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="chip-root"></div>
+    <script>
+      (async () => {
+        await loadComponentAssets(
+          "chip-root",
+          "../views/01_refined.html",
+          "../styles/01_refined.css",
+        );
+        const instance = {
+          id: "chip-root",
+          appendElement: document.getElementById("chip-root"),
+        };
+        applyListRenderMixin(instance, {
+          cssSelectors: {
+            container: ".input-chips",
+            template: "#input-chip-item-template",
+            item: ".input-chip",
+            id: ".input-chip",
+            selected: ".input-chip",
+            disabled: ".input-chip",
+            avatar: ".input-chip__avatar",
+            label: ".input-chip__label",
+            removeBtn: ".input-chip__remove",
+            removeId: ".input-chip__remove",
+          },
+          itemKey: "id",
+          datasetAttrs: {
+            id: "id",
+            removeId: "id",
+            selected: "selected",
+            disabled: "disabled",
+          },
+        });
+        instance.toggleSelection = function (targetId) {
+          const target = this.appendElement.querySelector(
+            `${this.listRender.cssSelectors.item}[data-id="${String(targetId)}"]`,
+          );
+          if (!target || target.dataset.disabled === "true") return;
+          target.setAttribute(
+            "data-selected",
+            target.dataset.selected === "true" ? "false" : "true",
+          );
+        };
+        instance.removeItem = function (targetId) {
+          const target = this.appendElement.querySelector(
+            `${this.listRender.cssSelectors.item}[data-id="${String(targetId)}"]`,
+          );
+          if (!target || target.dataset.disabled === "true") return;
+          target.remove();
+        };
+        instance.customEvents = {
+          click: {
+            [instance.listRender.cssSelectors.removeBtn]:
+              "@inputChipRemoveClicked",
+          },
+        };
+        Wkit.bindEvents(instance, instance.customEvents);
+        instance.appendElement.addEventListener("click", (event) => {
+          if (event.target.closest(".input-chip__remove")) return;
+          const chip = event.target.closest(".input-chip");
+          const id = chip?.dataset.id;
+          if (!id) return;
+          instance.toggleSelection(id);
+          console.log(
+            "[Preview] Input chip toggled:",
+            instance.id,
+            id,
+            chip?.dataset.selected,
+          );
+        });
+        Wkit.onEventBusHandlers({
+          "@inputChipRemoveClicked": ({ targetInstance, event }) => {
+            const el = event.target.closest(".input-chip__remove");
+            const id = el?.dataset.id;
+            targetInstance?.removeItem(id);
+            console.log(
+              "[Preview] Input chip remove clicked:",
+              targetInstance?.id,
+              id,
+            );
+          },
+        });
+        instance.listRender.renderData({
+          response: [
+            {
+              id: "seo",
+              selected: "true",
+              disabled: "false",
+              avatar: "S",
+              label: "SEO",
+            },
+            {
+              id: "ops",
+              selected: "false",
+              disabled: "false",
+              avatar: "O",
+              label: "Ops",
+            },
+            {
+              id: "design",
+              selected: "false",
+              disabled: "false",
+              avatar: "D",
+              label: "Design",
+            },
+            {
+              id: "locked",
+              selected: "false",
+              disabled: "true",
+              avatar: "L",
+              label: "Locked",
+            },
+          ],
+        });
+      })();
+    </script>
+  </body>
+</html>

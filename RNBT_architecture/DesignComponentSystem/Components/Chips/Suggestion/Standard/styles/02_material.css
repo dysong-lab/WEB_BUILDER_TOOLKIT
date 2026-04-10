@@ -1,0 +1,8 @@
+.suggestion-chip-shell { display:inline-flex; padding:24px; border-radius:24px; background:#fff8f0; }
+.suggestion-chips { display:flex; flex-wrap:wrap; gap:8px; }
+.suggestion-chip { display:inline-flex; align-items:center; gap:8px; min-height:32px; padding:0 16px; border:1px solid #d8c2a3; border-radius:8px; background:#fff8f0; color:#5f4332; cursor:pointer; }
+.suggestion-chip[data-selected="true"] { border-color:#f6c17f; background:#ffe0b8; color:#4d2d10; }
+.suggestion-chip[data-disabled="true"] { opacity:.38; cursor:not-allowed; }
+.suggestion-chip__icon { font-size:18px; }
+.suggestion-chip__icon:empty { display:none; }
+.suggestion-chip__label { font:500 14px/1 "Roboto","Noto Sans KR",sans-serif; }

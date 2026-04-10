@@ -1,0 +1,7 @@
+.assist-chip-shell { display: inline-flex; padding: 28px; border: 1px solid #d8c9b6; background: linear-gradient(180deg, rgba(255,255,255,0.66), rgba(247,240,231,0.92)), #f7f0e7; }
+.assist-chips { display: flex; flex-wrap: wrap; gap: 12px; }
+.assist-chip { display: inline-flex; align-items: center; gap: 8px; min-height: 38px; padding: 0 16px; border: 1px solid #c7b39b; border-radius: 999px; background: rgba(255,255,255,0.7); color: #4f3e2d; cursor: pointer; }
+.assist-chip[data-disabled="true"] { opacity: 0.38; cursor: not-allowed; }
+.assist-chip__icon { font-size: 18px; }
+.assist-chip__icon:empty { display: none; }
+.assist-chip__label { font: 600 14px/1 "Cormorant Garamond", "Noto Serif KR", serif; letter-spacing: 0.03em; }
