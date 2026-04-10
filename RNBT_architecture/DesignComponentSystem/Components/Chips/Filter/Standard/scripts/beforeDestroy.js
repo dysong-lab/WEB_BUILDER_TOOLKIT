@@ -11,7 +11,5 @@ go(
 );
 this.subscriptions = null;
 
-this.appendElement.removeEventListener("click", this._handleChipClickLog);
-this._handleChipClickLog = null;
 this.toggleItem = null;
 this.listRender.destroy();

@@ -11,7 +11,5 @@ go(
 );
 this.subscriptions = null;
 
-this.appendElement.removeEventListener("click", this._handleSuggestionSelection);
-this._handleSuggestionSelection = null;
 this.acceptSuggestion = null;
 this.listRender.destroy();

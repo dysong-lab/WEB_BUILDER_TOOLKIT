@@ -47,9 +47,10 @@ ListRenderMixin
 
 ### 이벤트 (customEvents)
 
-| 이벤트 | 선택자               | 발행                       |
-| ------ | -------------------- | -------------------------- |
-| click  | `.input-chip__remove` | `@inputChipRemoveClicked` |
+| 이벤트 | 선택자                | 발행                       |
+| ------ | --------------------- | -------------------------- |
+| click  | `.input-chip`         | `@inputChipClicked`        |
+| click  | `.input-chip__remove` | `@inputChipRemoveClicked`  |
 
 ### 자체 메서드
 

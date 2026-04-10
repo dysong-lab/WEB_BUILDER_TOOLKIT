@@ -5,4 +5,4 @@
 .suggestion-chip[data-disabled="true"] { opacity:.4; cursor:not-allowed; }
 .suggestion-chip__icon { font-size:18px; }
 .suggestion-chip__icon:empty { display:none; }
-.suggestion-chip__label { font:600 14px/1 "Cormorant Garamond","Noto Serif KR",serif; letter-spacing:.03em; }
+.suggestion-chip__label { font:600 14px/1 "Cormorant Garamond","Noto Serif KR",serif; letter-spacing:.4px; }

@@ -51,18 +51,3 @@ this.customEvents = {
 };
 bindEvents(this, this.customEvents);
 
-this._handleChipClickLog = (event) => {
-  const target = event.target.closest(this.listRender.cssSelectors.item);
-  if (!target || !this.appendElement.contains(target)) return;
-
-  console.log("[FilterChip] clicked", {
-    id: target.dataset.id,
-    label:
-      target.querySelector(this.listRender.cssSelectors.label)?.textContent ?? "",
-    selected: target.dataset.selected,
-    nextSelected: target.dataset.selected === "true" ? "false" : "true",
-    disabled: target.dataset.disabled === "true",
-  });
-};
-
-this.appendElement.addEventListener("click", this._handleChipClickLog);

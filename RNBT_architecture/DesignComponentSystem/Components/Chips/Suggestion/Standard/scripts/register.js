@@ -50,11 +50,3 @@ this.customEvents = {
 };
 bindEvents(this, this.customEvents);
 
-this._handleSuggestionSelection = (event) => {
-  const target = event.target.closest(this.listRender.cssSelectors.item);
-  if (!target || !this.appendElement.contains(target)) return;
-  if (target.dataset.disabled === "true") return;
-  this.acceptSuggestion(target.dataset.id);
-};
-
-this.appendElement.addEventListener("click", this._handleSuggestionSelection);

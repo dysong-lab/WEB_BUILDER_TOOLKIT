@@ -4,4 +4,4 @@
 .assist-chip[data-disabled="true"] { opacity: 0.38; cursor: not-allowed; }
 .assist-chip__icon { font-size: 18px; }
 .assist-chip__icon:empty { display: none; }
-.assist-chip__label { font: 600 14px/1 "Cormorant Garamond", "Noto Serif KR", serif; letter-spacing: 0.03em; }
+.assist-chip__label { font: 600 14px/1 "Cormorant Garamond", "Noto Serif KR", serif; letter-spacing: 0.4px; }

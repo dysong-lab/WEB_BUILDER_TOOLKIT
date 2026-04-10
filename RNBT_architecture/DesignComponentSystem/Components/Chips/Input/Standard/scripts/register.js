@@ -56,18 +56,8 @@ go(
 
 this.customEvents = {
   click: {
+    [this.listRender.cssSelectors.item]: "@inputChipClicked",
     [this.listRender.cssSelectors.removeBtn]: "@inputChipRemoveClicked",
   },
 };
 bindEvents(this, this.customEvents);
-
-this._handleInputChipSelection = (event) => {
-  const removeTarget = event.target.closest(this.listRender.cssSelectors.removeBtn);
-  if (removeTarget) return;
-
-  const target = event.target.closest(this.listRender.cssSelectors.item);
-  if (!target || !this.appendElement.contains(target)) return;
-  this.toggleSelection(target.dataset.id);
-};
-
-this.appendElement.addEventListener("click", this._handleInputChipSelection);

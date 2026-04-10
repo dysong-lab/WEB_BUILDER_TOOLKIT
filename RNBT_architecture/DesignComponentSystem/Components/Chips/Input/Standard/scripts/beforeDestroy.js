@@ -11,8 +11,6 @@ go(
 );
 this.subscriptions = null;
 
-this.appendElement.removeEventListener("click", this._handleInputChipSelection);
-this._handleInputChipSelection = null;
 this.toggleSelection = null;
 this.removeItem = null;
 this.listRender.destroy();
