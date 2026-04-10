@@ -20,8 +20,8 @@
 | 07 | animation | Advanced | MeshState + AnimationMixin |
 | 08 | clipping | Advanced | MeshState + ClippingPlaneMixin |
 
-> 기존 생산된 01~03은 `01_status`, `02_status_camera`, `03_status_popup` 폴더명을 유지한다.
-> 신규 생산분(04~)부터 새 명명 규칙을 적용한다.
+> 폴더 명명 규칙: Standard 변형(`status`)은 `Standard/`에, Advanced 변형은 `Advanced/<이름>/`에 배치한다.
+> 예: `Advanced/camera`, `Advanced/popup`, `Advanced/highlight`
 
 ---
 
