@@ -161,7 +161,8 @@ produce-component (진입점)
 
 | 문서 | 위치 | 내용 |
 |------|------|------|
-| **SHARED_INSTRUCTIONS.md** | [/.claude/skills/SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md) | **모든 스킬 공통 규칙** (JS/CSS 패턴, beforeDestroy 순서, 이벤트 이중 구조) |
+| **SHARED_INDEX.md** | [/.claude/skills/SHARED_INDEX.md](/.claude/skills/SHARED_INDEX.md) | 모든 스킬 공통 인덱스 (필수 문서, Mixin 표, 기본 원칙) |
+| **SHARED_PATTERNS.md** | [/.claude/skills/SHARED_PATTERNS.md](/.claude/skills/SHARED_PATTERNS.md) | 코드 작성 공통 패턴 (register, beforeDestroy, 데이터 변환) |
 | CODING_STYLE.md | [/.claude/guides/CODING_STYLE.md](/.claude/guides/CODING_STYLE.md) | 함수형 코딩 지침, CSS 원칙 |
 | RNBT README | [/RNBT_architecture/README.md](/RNBT_architecture/README.md) | 아키텍처 설계 문서 |
 
@@ -169,7 +170,7 @@ produce-component (진입점)
 
 ## 주의사항
 
-1. **공통 규칙 확인**: 모든 스킬은 [SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md)의 공통 규칙을 따름
+1. **공통 규칙 확인**: 모든 스킬은 [SHARED_INDEX.md](/.claude/skills/SHARED_INDEX.md)를 기본으로 따르고, 코드 작성 시 [SHARED_PATTERNS.md](/.claude/skills/SHARED_PATTERNS.md)를 추가로 읽음
 2. **정적/동적 분리**: Figma 단계에서는 스크립트 없이 순수 퍼블리싱만
 3. **Figma MCP 필요**: figma-to-* Skills는 Figma Desktop + MCP 서버 필요
 4. **CODING_STYLE 참조**: 모든 코드 작성 시 [/.claude/guides/CODING_STYLE.md](/.claude/guides/CODING_STYLE.md) 참조

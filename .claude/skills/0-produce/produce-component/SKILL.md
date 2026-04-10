@@ -14,7 +14,7 @@ PRODUCTION_PROCESS.md의 Step 3~7을 따라 컴포넌트를 생산한다.
 
 ## 작업 전 필수 확인
 
-**매번 다시 읽어야 합니다.**
+**세션 시작 시 읽고, 관련 파일이나 작업 유형이 바뀌면 다시 읽으세요.**
 
 1. [PRODUCTION_PROCESS.md](/RNBT_architecture/DesignComponentSystem/docs/PRODUCTION_PROCESS.md) — 전체 프로세스
 2. [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md) — 기능의 정의, 핵심 구조

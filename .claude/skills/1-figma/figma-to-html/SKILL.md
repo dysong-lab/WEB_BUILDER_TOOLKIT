@@ -13,7 +13,7 @@ Figma 디자인을 **정적 HTML/CSS**로 변환하는 Skill입니다.
 ## ⚠️ 작업 전 필수 확인
 
 **코드 작성 전 반드시 다음 파일들을 Read 도구로 읽으세요.**
-**이전에 읽었더라도 매번 다시 읽어야 합니다 - 캐싱하거나 생략하지 마세요.**
+**세션 시작 시 읽고, 관련 파일이나 작업 유형이 바뀌면 다시 읽으세요.**
 
 1. [/Figma_Conversion/CLAUDE.md](/Figma_Conversion/CLAUDE.md) - 핵심 원칙, 구현 체크리스트
 2. [/.claude/guides/FIGMA_MCP_GUIDE.md](/.claude/guides/FIGMA_MCP_GUIDE.md) - MCP 도구, 에셋 규칙, dirForAssetWrites

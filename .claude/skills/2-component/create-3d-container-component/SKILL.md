@@ -7,7 +7,8 @@ description: GLTF 컨테이너 3D 컴포넌트를 생성합니다. 하나의 GLT
 
 하나의 GLTF 모델 안에 여러 장비(Mesh)가 포함된 컨테이너 컴포넌트를 생성한다. Mesh 이름이 사전에 확정되지 않으며, Raycasting으로 클릭된 Mesh를 동적으로 식별한다.
 
-> **공통 규칙**: [SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md)
+> 공통 인덱스: [SHARED_INDEX.md](/.claude/skills/SHARED_INDEX.md)
+> 공통 패턴: [SHARED_PATTERNS.md](/.claude/skills/SHARED_PATTERNS.md)
 > **단일 Mesh(개별 장비)는**: `create-3d-component` SKILL을 사용
 
 ---
@@ -28,13 +29,14 @@ description: GLTF 컨테이너 3D 컴포넌트를 생성합니다. 하나의 GLT
 ## ⚠️ 작업 전 필수 확인
 
 **코드 작성 전 반드시 다음 파일들을 Read 도구로 읽으세요.**
-**이전에 읽었더라도 매번 다시 읽어야 합니다 — 캐싱하거나 생략하지 마세요.**
+**세션 시작 시 읽고, 관련 파일이나 작업 유형이 바뀌면 다시 읽으세요.**
 
 1. **대상 컴포넌트 CLAUDE.md** — 기능 정의 + 구현 명세
-2. [SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md) — 공통 규칙
-3. [CODING_STYLE.md](/.claude/guides/CODING_STYLE.md) — 코딩 스타일
-4. **Mixin 문서 확인** — 구현 명세에 명시된 Mixin의 .md 파일
-5. **기존 예제 확인** — 같은 패턴의 기존 컴포넌트를 참조:
+2. [SHARED_INDEX.md](/.claude/skills/SHARED_INDEX.md) — 공통 인덱스
+3. [SHARED_PATTERNS.md](/.claude/skills/SHARED_PATTERNS.md) — 공통 코드 패턴
+4. [CODING_STYLE.md](/.claude/guides/CODING_STYLE.md) — 코딩 스타일
+5. **Mixin 문서 확인** — 구현 명세에 명시된 Mixin의 .md 파일
+6. **기존 예제 확인** — 같은 패턴의 기존 컴포넌트를 참조:
    - [gltf_container](/RNBT_architecture/DesignComponentSystem/Components/3D_Components/gltf_container/) — 대표 GLTF 컨테이너 컴포넌트
 
 ---
@@ -582,7 +584,7 @@ Components/3D_Components/
 
 ## 금지 사항
 
-> 공통 금지 사항은 [SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md) 참조
+> 공통 금지 사항과 기본 규칙은 [SHARED_INDEX.md](/.claude/skills/SHARED_INDEX.md) 참조
 
 - ❌ meshName을 하드코딩하지 않는다 — 컨테이너는 동적 식별이 핵심
 - ❌ 장비 고유 이벤트 이름('@battClicked' 등)을 사용하지 않는다 — '@meshClicked' 사용

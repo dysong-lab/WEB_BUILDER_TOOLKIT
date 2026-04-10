@@ -8,18 +8,20 @@ description: 기능 중심 컴포넌트 시스템(Mixin 기반)에 맞는 대시
 Mixin 기반 컴포넌트, 페이지 스크립트, Mock 서버, datasetList.json을 포함한 완전한 프로젝트를 생성합니다.
 
 > 설계 문서: [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md) 참조
-> 공통 규칙: [SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md) 참조
+> 공통 인덱스: [SHARED_INDEX.md](/.claude/skills/SHARED_INDEX.md) 참조
+> 공통 패턴: [SHARED_PATTERNS.md](/.claude/skills/SHARED_PATTERNS.md) 참조
 
 ---
 
 ## ⚠️ 작업 전 필수 확인
 
 **코드 작성 전 반드시 다음 파일들을 Read 도구로 읽으세요.**
-**이전에 읽었더라도 매번 다시 읽어야 합니다 - 캐싱하거나 생략하지 마세요.**
+**세션 시작 시 읽고, 관련 파일이나 작업 유형이 바뀌면 다시 읽으세요.**
 
 1. [/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md) - 시스템 설계
-2. [/.claude/skills/SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md) - 공통 규칙
-3. **기존 예제 확인** - SimpleDashboard의 구조와 패턴을 먼저 읽을 것
+2. [/.claude/skills/SHARED_INDEX.md](/.claude/skills/SHARED_INDEX.md) - 공통 인덱스
+3. [/.claude/skills/SHARED_PATTERNS.md](/.claude/skills/SHARED_PATTERNS.md) - 공통 코드 패턴
+4. **기존 예제 확인** - SimpleDashboard의 구조와 패턴을 먼저 읽을 것
 
 ---
 
@@ -335,7 +337,7 @@ scripts/
 
 ## 금지 사항
 
-> 공통 금지 사항: [SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md#금지-사항-전체-공통) 참조
+> 공통 금지 사항과 기본 규칙: [SHARED_INDEX.md](/.claude/skills/SHARED_INDEX.md) 참조
 
 - ❌ datasetList.json 형식 임의 변경
 - ❌ 라이프사이클 순서 위반

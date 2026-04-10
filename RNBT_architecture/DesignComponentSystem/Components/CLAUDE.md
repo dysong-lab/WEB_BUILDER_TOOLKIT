@@ -100,7 +100,7 @@ Figma가 존재하는 경우는 사용자가 별도 요청한다.
 | 문서 | 위치 |
 |------|------|
 | 생산 프로세스 진입점 | [/.claude/skills/0-produce/produce-component/SKILL.md](/.claude/skills/0-produce/produce-component/SKILL.md) |
-| SKILL 공통 규칙 | [/.claude/skills/SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md) |
+| SKILL 공통 규칙 | [/.claude/skills/SHARED_INDEX.md](/.claude/skills/SHARED_INDEX.md), [/.claude/skills/SHARED_PATTERNS.md](/.claude/skills/SHARED_PATTERNS.md) |
 | 2D 컴포넌트 SKILL | [/.claude/skills/2-component/create-2d-component/SKILL.md](/.claude/skills/2-component/create-2d-component/SKILL.md) |
 | Mixin 전체 목록 | [/RNBT_architecture/DesignComponentSystem/Mixins/README.md](/RNBT_architecture/DesignComponentSystem/Mixins/README.md) |
 | 시스템 설계 문서 | [/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md) |
