@@ -622,41 +622,38 @@ this.pageParams = null;
 ```
 Components/3D_Components/
 └── {장비명}/
-    ├── scripts/
-    │   ├── 01_status/
-    │   │   ├── component/
-    │   │   │   ├── register.js
-    │   │   │   └── beforeDestroy.js
-    │   │   └── page/
-    │   │       ├── before_load.js
-    │   │       ├── loaded.js
-    │   │       └── before_unload.js
-    │   ├── 02_status_camera/
-    │   │   ├── component/
-    │   │   │   ├── register.js
-    │   │   │   └── beforeDestroy.js
-    │   │   └── page/
-    │   │       ├── before_load.js
-    │   │       ├── loaded.js
-    │   │       └── before_unload.js
-    │   ├── 03_status_popup/
-    │   │   ├── component/
-    │   │   │   ├── register.js
-    │   │   │   └── beforeDestroy.js
-    │   │   └── page/
-    │   │       ├── before_load.js
-    │   │       ├── loaded.js
-    │   │       └── before_unload.js
-    │   ├── 04_highlight/       # 구현 명세에 따라 선택
-    │   │   └── ...
-    │   └── 05_camera_highlight/
-    │       └── ...
-    └── preview/
-        ├── 01_status.html
-        ├── 02_status_camera.html
-        ├── 03_status_popup.html
-        ├── 04_highlight.html     # 구현 명세에 따라 선택
-        └── 05_camera_highlight.html
+    ├── CLAUDE.md
+    ├── Standard/                          ← 필수 (MeshState only)
+    │   ├── component/
+    │   │   ├── register.js
+    │   │   └── beforeDestroy.js
+    │   ├── page/
+    │   │   ├── before_load.js
+    │   │   ├── loaded.js
+    │   │   └── before_unload.js
+    │   └── preview/
+    │       └── standard.html
+    └── Advanced/                          ← 선택 (Mixin 조합별)
+        ├── camera/
+        │   ├── component/
+        │   │   ├── register.js
+        │   │   └── beforeDestroy.js
+        │   └── page/
+        │       ├── before_load.js
+        │       ├── loaded.js
+        │       └── before_unload.js
+        ├── popup/
+        │   ├── component/...
+        │   └── page/...
+        ├── highlight/                     # 구현 명세에 따라 선택
+        │   └── ...
+        ├── camera_highlight/
+        │   └── ...
+        └── preview/
+            ├── camera.html
+            ├── popup.html
+            ├── highlight.html
+            └── camera_highlight.html
 ```
 
 ---
