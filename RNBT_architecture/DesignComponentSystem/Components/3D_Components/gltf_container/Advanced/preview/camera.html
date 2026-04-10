@@ -117,8 +117,8 @@
     <div class="demo-log" id="log"></div>
 
     <!-- Mixin 로드 -->
-    <script src="../../../../Mixins/MeshStateMixin.js"></script>
-    <script src="../../../../Mixins/CameraFocusMixin.js"></script>
+    <script src="../../../../../Mixins/MeshStateMixin.js"></script>
+    <script src="../../../../../Mixins/CameraFocusMixin.js"></script>
 
     <script type="importmap">
     {
@@ -223,7 +223,7 @@
     // ── Load Model ────────────────────────────────────────────
     const loader = new GLTFLoader();
 
-    loader.load('../../../../models/gltf_container/gltf_container.gltf', (gltf) => {
+    loader.load('../../../../../models/gltf_container/gltf_container.gltf', (gltf) => {
         const model = gltf.scene;
         scene.add(model);
 
