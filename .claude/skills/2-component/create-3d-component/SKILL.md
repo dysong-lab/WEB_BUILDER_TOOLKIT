@@ -624,7 +624,7 @@ Components/3D_Components/
 └── {장비명}/
     ├── CLAUDE.md
     ├── Standard/                          ← 필수 (MeshState only)
-    │   ├── component/
+    │   ├── scripts/
     │   │   ├── register.js
     │   │   └── beforeDestroy.js
     │   ├── page/
@@ -635,7 +635,7 @@ Components/3D_Components/
     │       └── standard.html
     └── Advanced/                          ← 선택 (Mixin 조합별)
         ├── camera/
-        │   ├── component/
+        │   ├── scripts/
         │   │   ├── register.js
         │   │   └── beforeDestroy.js
         │   └── page/
@@ -643,7 +643,7 @@ Components/3D_Components/
         │       ├── loaded.js
         │       └── before_unload.js
         ├── popup/
-        │   ├── component/...
+        │   ├── scripts/...
         │   └── page/...
         ├── highlight/                     # 구현 명세에 따라 선택
         │   └── ...

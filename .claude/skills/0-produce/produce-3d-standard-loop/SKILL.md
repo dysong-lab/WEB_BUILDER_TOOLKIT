@@ -70,8 +70,8 @@ const MESH_NAME = '장비명';
 ```
 
 모델 무관 파일은 100% 작성 가능:
-- component/register.js (meshName만 placeholder)
-- component/beforeDestroy.js
+- scripts/register.js (meshName만 placeholder)
+- scripts/beforeDestroy.js
 - page/loaded.js, before_load.js, before_unload.js
 
 모델 도착 시 `grep -r "MODEL_READY"` 로 전수 교체.
