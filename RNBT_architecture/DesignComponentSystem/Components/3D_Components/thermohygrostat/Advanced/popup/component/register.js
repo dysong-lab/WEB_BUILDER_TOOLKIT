@@ -36,17 +36,13 @@ const { htmlCode, cssCode } = this.properties.publishCode || {};
 
 apply3DShadowPopupMixin(this, {
     getHTML:   () => htmlCode || '',
-    getStyles: () => cssCode || '',
-    onCreated: (shadowRoot) => {
-        this.shadowPopup.bindPopupEvents({
-            click: {
-                '.popup-close': () => this.shadowPopup.hide()
-            }
-        });
-    }
+    getStyles: () => cssCode || ''
 });
 
-// ── 3D 이벤트 → 팝업 표시 ─────────────────────────────────────
+// ── 3D 이벤트 → 외부 전파 ─────────────────────────────────────
+// `@thermohygrostatClicked`를 수신한 쪽(페이지/다른 컴포넌트)이 직접
+// `instance.shadowPopup.show()`를 호출하여 팝업을 띄운다.
+// 팝업 콘텐츠는 publishCode HTML/CSS 자체로 결정된다.
 
 const { bind3DEvents } = Wkit;
 
@@ -54,17 +50,3 @@ this.customEvents = {
     click: '@thermohygrostatClicked'
 };
 bind3DEvents(this, this.customEvents);
-
-this.showDetail = () => {
-    this.shadowPopup.show();
-
-    const statusEl = this.shadowPopup.query('.popup-status');
-    const nameEl = this.shadowPopup.query('.popup-name');
-
-    if (nameEl) nameEl.textContent = this.name || 'thermohygrostat';
-    if (statusEl) {
-        const currentStatus = this.meshState.getMeshState('thermohygrostat') || 'normal';
-        statusEl.textContent = currentStatus;
-        statusEl.dataset.status = currentStatus;
-    }
-};

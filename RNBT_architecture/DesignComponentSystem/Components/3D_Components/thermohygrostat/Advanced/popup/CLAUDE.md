@@ -27,6 +27,4 @@ MeshStateMixin + 3DShadowPopupMixin
 
 ### 커스텀 메서드
 
-| 메서드 | 설명 |
-|--------|------|
-| showDetail() | 팝업 표시 + 현재 상태 데이터 렌더링 (인자 없음, 내부 조회) |
+없음. 팝업 표시는 외부에서 `instance.shadowPopup.show()`를 직접 호출한다 (`@thermohygrostatClicked` 이벤트 수신자가 책임). 콘텐츠는 publishCode HTML/CSS 자체로 결정한다.

@@ -38,17 +38,14 @@ const { htmlCode, cssCode } = this.properties.publishCode || {};
 
 apply3DShadowPopupMixin(this, {
     getHTML:   () => htmlCode || '',
-    getStyles: () => cssCode || '',
-    onCreated: () => {
-        this.shadowPopup.bindPopupEvents({
-            click: {
-                '.popup-close': () => this.shadowPopup.hide()
-            }
-        });
-    }
+    getStyles: () => cssCode || ''
 });
 
-// ── 3D 이벤트 → 팝업 표시 ─────────────────────────────────────
+// ── 3D 이벤트 → 외부 전파 ─────────────────────────────────────
+// `@meshClicked`를 수신한 쪽(페이지/다른 컴포넌트)이 직접
+// `instance.shadowPopup.show()`를 호출하여 팝업을 띄운다.
+// 클릭된 Mesh 이름은 `resolveMeshName(event)`로 추출하여 활용한다.
+// 팝업 콘텐츠는 publishCode HTML/CSS 자체로 결정된다.
 
 const { bind3DEvents } = Wkit;
 
@@ -70,24 +67,4 @@ this.resolveMeshName = (event) => {
         current = current.parent;
     }
     return null;
-};
-
-/**
- * 클릭된 Mesh의 상세 팝업 표시
- *
- * @param {string} meshName - Mesh 이름
- * @param {Object} data - fetchData로 조회된 데이터
- */
-this.showDetail = (meshName, data) => {
-    this.shadowPopup.show();
-
-    const nameEl = this.shadowPopup.query('.popup-name');
-    const statusEl = this.shadowPopup.query('.popup-status');
-
-    if (nameEl) nameEl.textContent = meshName;
-    if (statusEl) {
-        const currentStatus = (data && data.status) || this.meshState.getMeshState(meshName) || 'normal';
-        statusEl.textContent = currentStatus;
-        statusEl.dataset.status = currentStatus;
-    }
 };

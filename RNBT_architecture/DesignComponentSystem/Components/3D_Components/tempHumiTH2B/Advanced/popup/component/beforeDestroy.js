@@ -20,4 +20,3 @@ const { removeCustomEvents } = Wkit;
 removeCustomEvents(this, this.customEvents);
 this.meshState?.destroy();
 this.shadowPopup?.destroy();
-this.showDetail = null;

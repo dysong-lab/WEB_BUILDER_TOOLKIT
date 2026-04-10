@@ -21,4 +21,3 @@ removeCustomEvents(this, this.customEvents);
 this.meshState?.destroy();
 this.shadowPopup?.destroy();
 this.resolveMeshName = null;
-this.showDetail = null;

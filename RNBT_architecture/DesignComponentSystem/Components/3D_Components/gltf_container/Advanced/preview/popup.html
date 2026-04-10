@@ -362,18 +362,18 @@
         // 3DShadowPopupMixin 적용
         apply3DShadowPopupMixin(instance, {
             getHTML:   () => popupHTML,
-            getStyles: () => popupCSS,
-            onCreated: () => {
-                instance.shadowPopup.bindPopupEvents({
-                    click: {
-                        '.popup-close': () => instance.shadowPopup.hide(),
-                        '.popup-overlay': (e) => {
-                            if (e.target.classList.contains('popup-overlay')) {
-                                instance.shadowPopup.hide();
-                            }
-                        }
+            getStyles: () => popupCSS
+        });
+
+        // 시연용 정적 이벤트 — show 전 호출 (Mixin이 큐잉 후 첫 show 시 자동 바인딩)
+        instance.shadowPopup.bindPopupEvents({
+            click: {
+                '.popup-close': () => instance.shadowPopup.hide(),
+                '.popup-overlay': (e) => {
+                    if (e.target.classList.contains('popup-overlay')) {
+                        instance.shadowPopup.hide();
                     }
-                });
+                }
             }
         });
 

@@ -8,25 +8,41 @@
  * HTML/CSS를 문자열(getHTML/getStyles)로 받아 주입한다.
  *
  * ─────────────────────────────────────────────────────────────
- * 2D ShadowPopupMixin과의 차이:
+ * 책임 분리:
  *
- *   | 항목          | 2D (ShadowPopupMixin)       | 3D (3DShadowPopupMixin)       |
- *   |---------------|-----------------------------|-------------------------------|
- *   | 콘텐츠 소스   | DOM <template> 태그 탐색     | getHTML() / getStyles() 문자열 |
- *   | Host 부착     | instance.appendElement      | instance.page.appendElement   |
+ *   - 컴포넌트 register.js : Mixin 적용 + 3D 클릭 이벤트 발행만. publishCode
+ *                             내부 클래스/구조를 알지 못하며 query/bindPopupEvents를
+ *                             직접 호출하지 않는다.
+ *   - publishCode HTML/CSS : 팝업 시각 구조 + 클래스명. 사용자가 에디터에서 작성.
+ *   - 페이지 코드 (loaded.js): publishCode 클래스명을 알고, 정적 이벤트는
+ *                             bindPopupEvents로 한 번 등록, 동적 데이터는 매 클릭마다
+ *                             show() + query()로 매핑.
+ *   - Mixin 본체           : lazy init 동기 보장, 위임 + 큐잉, query, 정리.
  *
  * ─────────────────────────────────────────────────────────────
  * 사용 예시:
  *
+ *   // [컴포넌트 register.js]
+ *   const { htmlCode, cssCode } = this.properties.publishCode || {};
  *   apply3DShadowPopupMixin(this, {
- *       getHTML:   () => '<div class="popup">...</div>',
- *       getStyles: () => '.popup { ... }',
- *       onCreated: (shadowRoot) => { ... }
+ *       getHTML:   () => htmlCode || '',
+ *       getStyles: () => cssCode || ''
  *   });
  *
- *   this.shadowPopup.show();
- *   this.shadowPopup.query('.popup-title').textContent = 'BATT-01';
- *   this.shadowPopup.hide();
+ *   // [페이지 loaded.js]
+ *   instance.shadowPopup.bindPopupEvents({
+ *       click: { '.popup-close': () => instance.shadowPopup.hide() }
+ *   });
+ *   Weventbus.on('@battClicked', async () => {
+ *       const data = await fetchBattStatus();
+ *       instance.shadowPopup.show();
+ *       instance.shadowPopup.query('.popup-name').textContent = data.name;
+ *   });
+ *
+ * ─────────────────────────────────────────────────────────────
+ * lazy init은 완전히 동기다. show() 다음 줄에서 즉시 query/textContent 접근이
+ * 보장된다. 한 번 init되면 hide(display:none) 상태에서도 Shadow DOM이 살아있어
+ * query/bindPopupEvents 모두 동작한다.
  *
  * ─────────────────────────────────────────────────────────────
  * Mixin이 주입하는 것 (네임스페이스: this.shadowPopup):
@@ -35,7 +51,7 @@
  *   this.shadowPopup.hide              — 팝업 숨김
  *   this.shadowPopup.query             — Shadow DOM 내 요소 선택
  *   this.shadowPopup.queryAll          — Shadow DOM 내 모든 요소 선택
- *   this.shadowPopup.bindPopupEvents   — Shadow DOM 내 이벤트 바인딩
+ *   this.shadowPopup.bindPopupEvents   — Shadow DOM 내 이벤트 바인딩 (show 전 호출 가능)
  *   this.shadowPopup.removePopupEvents — Shadow DOM 내 이벤트 해제
  *   this.shadowPopup.destroy           — 정리
  *
@@ -43,7 +59,7 @@
  */
 
 function apply3DShadowPopupMixin(instance, options) {
-    const { getHTML, getStyles, onCreated } = options;
+    const { getHTML, getStyles } = options;
 
     const ns = {};
     instance.shadowPopup = ns;
@@ -105,8 +121,6 @@ function apply3DShadowPopupMixin(instance, options) {
             bindInternal(_pendingEvents);
             _pendingEvents = null;
         }
-
-        if (onCreated) onCreated(shadowRoot);
     }
 
     // ── Public 메서드 ──
