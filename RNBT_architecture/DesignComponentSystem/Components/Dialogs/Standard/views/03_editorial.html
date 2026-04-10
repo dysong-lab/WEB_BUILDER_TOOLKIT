@@ -10,6 +10,8 @@
                 padding: 32px;
                 background: rgba(241, 236, 228, 0.74);
                 backdrop-filter: blur(10px);
+                opacity: 0;
+                transition: opacity 280ms cubic-bezier(0.22, 1, 0.36, 1);
             }
 
             .dialog__surface {
@@ -20,6 +22,27 @@
                 background: #fffdf8;
                 box-shadow: 0 28px 54px rgba(48, 39, 28, 0.12);
                 color: #2f241a;
+                opacity: 0;
+                transform: translateY(20px) scale(0.975);
+                transform-origin: center center;
+                transition:
+                    opacity 280ms cubic-bezier(0.22, 1, 0.36, 1),
+                    transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+                    box-shadow 280ms cubic-bezier(0.22, 1, 0.36, 1);
+            }
+
+            .dialog__overlay[data-state="open"] {
+                opacity: 1;
+            }
+
+            .dialog__overlay[data-state="open"] .dialog__surface {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+
+            .dialog__overlay[data-state="closing"] .dialog__surface {
+                opacity: 0;
+                transform: translateY(10px) scale(0.99);
             }
 
             .dialog__header {
@@ -47,6 +70,19 @@
                 color: #2f241a;
                 font-size: 20px;
                 cursor: pointer;
+                transition:
+                    transform 170ms cubic-bezier(0.22, 1, 0.36, 1),
+                    background-color 170ms ease,
+                    box-shadow 170ms ease;
+            }
+
+            .dialog__close:hover {
+                background: rgba(47, 36, 26, 0.1);
+                box-shadow: 0 8px 18px rgba(48, 39, 28, 0.08);
+            }
+
+            .dialog__close:active {
+                transform: scale(0.94);
             }
 
             .dialog__supporting-text {
@@ -74,6 +110,12 @@
                 letter-spacing: 1px;
                 text-transform: uppercase;
                 cursor: pointer;
+                transition:
+                    transform 170ms cubic-bezier(0.22, 1, 0.36, 1),
+                    background-color 170ms ease,
+                    color 170ms ease,
+                    box-shadow 170ms ease,
+                    border-color 170ms ease;
             }
 
             .dialog__cancel {
@@ -82,14 +124,28 @@
                 color: #2f241a;
             }
 
+            .dialog__cancel:hover {
+                background: rgba(47, 36, 26, 0.06);
+            }
+
             .dialog__confirm {
                 border: 1px solid #2f241a;
                 background: #2f241a;
                 color: #fffaf2;
+                box-shadow: 0 12px 24px rgba(48, 39, 28, 0.12);
+            }
+
+            .dialog__confirm:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 16px 28px rgba(48, 39, 28, 0.16);
+            }
+
+            .dialog__button:active {
+                transform: scale(0.97);
             }
         </style>
 
-        <div class="dialog__overlay">
+        <div class="dialog__overlay" data-state="closed">
             <div class="dialog__surface" role="dialog" aria-modal="true" aria-labelledby="dialog-editorial-title">
                 <div class="dialog__header">
                     <h2 id="dialog-editorial-title" class="dialog__headline">Archive this edition for handoff?</h2>

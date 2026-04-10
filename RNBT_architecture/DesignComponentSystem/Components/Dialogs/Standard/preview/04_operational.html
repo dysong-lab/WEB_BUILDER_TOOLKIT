@@ -80,6 +80,8 @@
     };
 
     instance._popupScope = null;
+    instance._closeTimer = null;
+    instance._dialogMotionDuration = 280;
 
     applyShadowPopupMixin(instance, {
         cssSelectors: {
@@ -107,7 +109,23 @@
 
     instance.openDialog = function(payload = {}) {
         const { response = {} } = payload;
+
+        if (instance._closeTimer) {
+            clearTimeout(instance._closeTimer);
+            instance._closeTimer = null;
+        }
+
         instance.shadowPopup.show();
+
+        const overlay = instance.shadowPopup.query(instance.shadowPopup.cssSelectors.overlay);
+        if (overlay) {
+            overlay.dataset.state = 'closed';
+            void overlay.offsetWidth;
+            requestAnimationFrame(() => {
+                overlay.dataset.state = 'open';
+            });
+        }
+
         instance._popupScope.fieldRender.renderData({
             response: {
                 headline:       response.headline ?? '',
@@ -119,7 +137,22 @@
     };
 
     instance.closeDialog = function() {
-        instance.shadowPopup.hide();
+        const overlay = instance.shadowPopup.query(instance.shadowPopup.cssSelectors.overlay);
+        if (!overlay) {
+            instance.shadowPopup.hide();
+            return;
+        }
+
+        if (instance._closeTimer) {
+            clearTimeout(instance._closeTimer);
+        }
+
+        overlay.dataset.state = 'closing';
+        instance._closeTimer = setTimeout(() => {
+            instance.shadowPopup.hide();
+            overlay.dataset.state = 'closed';
+            instance._closeTimer = null;
+        }, instance._dialogMotionDuration);
     };
 
     instance.shadowPopup.bindPopupEvents({

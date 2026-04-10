@@ -12,6 +12,8 @@
 // ======================
 
 this._popupScope = null;
+this._closeTimer = null;
+this._dialogMotionDuration = 280;
 
 applyShadowPopupMixin(this, {
     cssSelectors: {
@@ -41,7 +43,21 @@ applyShadowPopupMixin(this, {
 this.openDialog = function(payload = {}) {
     const { response = {} } = payload;
 
+    if (this._closeTimer) {
+        clearTimeout(this._closeTimer);
+        this._closeTimer = null;
+    }
+
     this.shadowPopup.show();
+
+    const overlay = this.shadowPopup.query(this.shadowPopup.cssSelectors.overlay);
+    if (overlay) {
+        overlay.dataset.state = 'closed';
+        void overlay.offsetWidth;
+        requestAnimationFrame(() => {
+            overlay.dataset.state = 'open';
+        });
+    }
 
     if (this._popupScope && this._popupScope.fieldRender) {
         this._popupScope.fieldRender.renderData({
@@ -56,7 +72,22 @@ this.openDialog = function(payload = {}) {
 };
 
 this.closeDialog = function() {
-    this.shadowPopup.hide();
+    const overlay = this.shadowPopup.query(this.shadowPopup.cssSelectors.overlay);
+    if (!overlay) {
+        this.shadowPopup.hide();
+        return;
+    }
+
+    if (this._closeTimer) {
+        clearTimeout(this._closeTimer);
+    }
+
+    overlay.dataset.state = 'closing';
+    this._closeTimer = setTimeout(() => {
+        this.shadowPopup.hide();
+        overlay.dataset.state = 'closed';
+        this._closeTimer = null;
+    }, this._dialogMotionDuration);
 };
 
 // ======================

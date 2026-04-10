@@ -11,6 +11,8 @@
                 background:
                     linear-gradient(180deg, rgba(7, 16, 21, 0.76), rgba(7, 16, 21, 0.88));
                 backdrop-filter: blur(8px);
+                opacity: 0;
+                transition: opacity 280ms cubic-bezier(0.16, 1, 0.3, 1);
             }
 
             .dialog__surface {
@@ -21,6 +23,27 @@
                 background: #09161d;
                 box-shadow: 0 20px 48px rgba(0, 0, 0, 0.45);
                 color: #dffbff;
+                opacity: 0;
+                transform: translateY(14px) scale(0.97);
+                transform-origin: center center;
+                transition:
+                    opacity 280ms cubic-bezier(0.16, 1, 0.3, 1),
+                    transform 280ms cubic-bezier(0.16, 1, 0.3, 1),
+                    box-shadow 280ms cubic-bezier(0.16, 1, 0.3, 1);
+            }
+
+            .dialog__overlay[data-state="open"] {
+                opacity: 1;
+            }
+
+            .dialog__overlay[data-state="open"] .dialog__surface {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+
+            .dialog__overlay[data-state="closing"] .dialog__surface {
+                opacity: 0;
+                transform: translateY(8px) scale(0.985);
             }
 
             .dialog__header {
@@ -49,6 +72,20 @@
                 color: #8ce7ff;
                 font-size: 18px;
                 cursor: pointer;
+                transition:
+                    transform 150ms cubic-bezier(0.16, 1, 0.3, 1),
+                    background-color 150ms ease,
+                    box-shadow 150ms ease,
+                    border-color 150ms ease;
+            }
+
+            .dialog__close:hover {
+                background: rgba(84, 218, 255, 0.08);
+                box-shadow: 0 0 20px rgba(84, 218, 255, 0.12);
+            }
+
+            .dialog__close:active {
+                transform: scale(0.94);
             }
 
             .dialog__supporting-text {
@@ -76,6 +113,12 @@
                 letter-spacing: 1px;
                 text-transform: uppercase;
                 cursor: pointer;
+                transition:
+                    transform 150ms cubic-bezier(0.16, 1, 0.3, 1),
+                    background-color 150ms ease,
+                    color 150ms ease,
+                    box-shadow 150ms ease,
+                    border-color 150ms ease;
             }
 
             .dialog__cancel {
@@ -84,14 +127,29 @@
                 color: #8ce7ff;
             }
 
+            .dialog__cancel:hover {
+                background: rgba(84, 218, 255, 0.08);
+                box-shadow: 0 0 20px rgba(84, 218, 255, 0.08);
+            }
+
             .dialog__confirm {
                 border: 1px solid #ff6b57;
                 background: #ff6b57;
                 color: #130605;
+                box-shadow: 0 12px 24px rgba(255, 107, 87, 0.22);
+            }
+
+            .dialog__confirm:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 16px 28px rgba(255, 107, 87, 0.28);
+            }
+
+            .dialog__button:active {
+                transform: scale(0.97);
             }
         </style>
 
-        <div class="dialog__overlay">
+        <div class="dialog__overlay" data-state="closed">
             <div class="dialog__surface" role="dialog" aria-modal="true" aria-labelledby="dialog-operational-title">
                 <div class="dialog__header">
                     <h2 id="dialog-operational-title" class="dialog__headline">Shutdown zone 04 assets?</h2>
