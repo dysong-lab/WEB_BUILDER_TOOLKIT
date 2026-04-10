@@ -4,7 +4,6 @@
 #extended-fab-container {
     width: 180px;
     height: 56px;
-    overflow: auto;
 
     .extended-fab {
         display: flex;

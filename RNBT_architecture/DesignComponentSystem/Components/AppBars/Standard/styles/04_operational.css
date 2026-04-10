@@ -3,7 +3,6 @@
 #top-app-bar-container {
     width: 360px;
     height: 48px;
-    overflow: auto;
 
     .top-app-bar {
         display: flex;

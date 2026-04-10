@@ -4,7 +4,6 @@
 #nav-drawer-container {
     width: 240px;
     height: 480px;
-    overflow: auto;
 
     .nav-drawer {
         width: 100%;

@@ -4,7 +4,6 @@
 #button-container {
     width: 140px;
     height: 40px;
-    overflow: auto;
 
     .button {
         display: flex;

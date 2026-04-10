@@ -4,7 +4,6 @@
 #btn-group-container {
     width: 420px;
     height: 48px;
-    overflow: auto;
 
     .btn-group {
         display: flex;

@@ -3,7 +3,6 @@
 #badge-container {
     width: 24px;
     height: 24px;
-    overflow: auto;
 
     .badge {
         display: flex;
