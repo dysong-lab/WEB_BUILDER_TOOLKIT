@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Checkbox/Standard — 02_material</title>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/ListRenderMixin.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #141218;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+        gap: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="checkbox-1"></div>
+    <div id="checkbox-2"></div>
+    <script>
+      (async () => {
+        const ids = ["checkbox-1", "checkbox-2"];
+        await Promise.all(
+          ids.map((id) =>
+            loadComponentAssets(
+              id,
+              "../views/02_material.html",
+              "../styles/02_material.css",
+            ),
+          ),
+        );
+
+        const createInstance = (id) => {
+          const instance = { id, appendElement: document.getElementById(id) };
+          applyListRenderMixin(instance, {
+            cssSelectors: {
+              container: ".checkbox-group",
+              template: "#checkbox-item-template",
+              item: ".checkbox-item",
+              id: ".checkbox-item",
+              checked: ".checkbox-item",
+              disabled: ".checkbox-item",
+              label: ".checkbox-item__label",
+            },
+            itemKey: "id",
+            datasetAttrs: {
+              id: "id",
+              checked: "checked",
+              disabled: "disabled",
+            },
+          });
+          instance.toggleItem = function (targetId) {
+            const target = this.appendElement.querySelector(
+              `${this.listRender.cssSelectors.item}[data-id="${String(targetId)}"]`,
+            );
+            if (!target || target.dataset.disabled === "true") return;
+            target.setAttribute(
+              "data-checked",
+              target.dataset.checked === "true" ? "false" : "true",
+            );
+          };
+          instance.customEvents = {
+            click: {
+              [instance.listRender.cssSelectors.item]: "@checkboxChanged",
+            },
+          };
+          Wkit.bindEvents(instance, instance.customEvents);
+          return instance;
+        };
+
+        const primary = createInstance("checkbox-1");
+        const secondary = createInstance("checkbox-2");
+
+        Wkit.onEventBusHandlers({
+          "@checkboxChanged": ({ targetInstance, event }) => {
+            const el = event.target.closest(".checkbox-item");
+            const id = el?.dataset.id;
+            targetInstance?.toggleItem(id);
+          },
+        });
+
+        primary.listRender.renderData({
+          response: [
+            { id: "wifi", label: "Wi-Fi", checked: "true", disabled: "false" },
+            { id: "bluetooth", label: "Bluetooth", checked: "true", disabled: "false" },
+            { id: "nfc", label: "NFC", checked: "false", disabled: "false" },
+            { id: "vpn", label: "VPN (사용 불가)", checked: "false", disabled: "true" },
+          ],
+        });
+
+        secondary.listRender.renderData({
+          response: [
+            { id: "dark", label: "다크 모드", checked: "true", disabled: "false" },
+            { id: "notify", label: "알림", checked: "false", disabled: "false" },
+            { id: "sync", label: "자동 동기화", checked: "true", disabled: "false" },
+          ],
+        });
+      })();
+    </script>
+  </body>
+</html>
