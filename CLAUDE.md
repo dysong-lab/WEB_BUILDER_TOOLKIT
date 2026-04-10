@@ -30,7 +30,7 @@ flowchart TD
 flowchart LR
     subgraph Skills
         direction TB
-        S0[0-produce<br/>produce-component]
+        S0[0-produce<br/>produce-component<br/>produce-3d-standard-loop]
         S1[1-figma<br/>figma-to-html<br/>figma-to-inline-svg]
         S2[2-component<br/>create-2d<br/>create-symbol-state<br/>create-3d<br/>create-3d-container]
         S3[3-page<br/>create-project]
@@ -59,6 +59,7 @@ flowchart LR
 | 조건 | SKILL |
 |------|-------|
 | 새 컴포넌트를 처음부터 생산 (범주 확인 → 기능 분석 → Mixin 매핑 → 개발) | `produce-component` |
+| 3D 컴포넌트를 PRODUCTION_QUEUE.md 순서대로 순차 생산 | `produce-3d-standard-loop` |
 
 `produce-component`는 전체 프로세스를 안내하며, 필요에 따라 아래 스킬들을 호출한다.
 

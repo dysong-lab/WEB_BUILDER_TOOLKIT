@@ -67,10 +67,13 @@ description: GLTF 컨테이너 3D 컴포넌트를 생성합니다. 하나의 GLT
 | 01_status | 상태 색상 표시 | MeshStateMixin |
 | 02_status_camera | 상태 + 클릭 → 카메라 포커스 | MeshStateMixin + CameraFocusMixin |
 | 03_status_popup | 상태 + 클릭 → 팝업 상세 | MeshStateMixin + 3DShadowPopupMixin |
+| 04_status_highlight | 상태 + 선택 강조 | MeshStateMixin + MeshHighlightMixin |
+| 05_status_camera_highlight | 상태 + 카메라 + 강조 | MeshStateMixin + CameraFocusMixin + MeshHighlightMixin |
 
 변형의 종류, 이름, Mixin 조합은 고정이 아니다. 구현 명세에 따라 달라진다.
 
 > 클릭 이벤트가 있는 변형에서는 resolveMeshName이 필요하다.
+> AnimationMixin, ClippingPlaneMixin, MeshVisibilityMixin은 특화된 용도이므로 번호 변형보다는 구현 명세에 따라 조합한다.
 
 ---
 
@@ -411,6 +414,205 @@ this.meshState?.destroy();
 
 ---
 
+## 04_status_highlight — register.js
+
+```javascript
+/**
+ * 04_status_highlight: MeshStateMixin + MeshHighlightMixin
+ * - 상태 색상 표시 + 클릭된 Mesh 선택 강조
+ *
+ * 컨테이너에서는:
+ * - resolveMeshName으로 클릭된 Mesh를 동적 식별
+ * - '@meshClicked' 범용 이벤트 사용
+ */
+
+// ======================
+// 1. MIXIN 적용
+// ======================
+applyMeshStateMixin(this, {
+    colorMap: {
+        normal:   0x00C853,
+        warning:  0xFFD600,
+        critical: 0xFF1744,
+        offline:  0x9E9E9E,
+    },
+});
+
+applyMeshHighlightMixin(this, {
+    highlightColor:     0xFFFF00,
+    highlightIntensity: 0.3,
+});
+
+// ======================
+// 2. 구독 연결
+// ======================
+this.subscriptions = {
+    equipmentStatus: [this.meshState.renderData],
+};
+
+const { subscribe } = GlobalDataPublisher;
+const { each, go } = fx;
+
+go(
+    Object.entries(this.subscriptions),
+    each(([topic, handlers]) =>
+        each(handler => subscribe(topic, this, handler), handlers)
+    )
+);
+
+// ======================
+// 3. 이벤트 매핑 + resolveMeshName 정의
+// ======================
+const { bind3DEvents } = Wkit;
+
+this.customEvents = {
+    click: '@meshClicked'
+};
+bind3DEvents(this, this.customEvents);
+
+/**
+ * resolveMeshName — intersects에서 Mesh 이름 추출
+ */
+this.resolveMeshName = (event) => {
+    if (!event.intersects || !event.intersects.length) return null;
+
+    let current = event.intersects[0].object;
+    while (current) {
+        if (current.name) return current.name;
+        current = current.parent;
+    }
+    return null;
+};
+```
+
+## 04_status_highlight — beforeDestroy.js
+
+```javascript
+const { removeCustomEvents } = Wkit;
+
+// 3. 이벤트 제거
+removeCustomEvents(this, this.customEvents);
+this.customEvents = null;
+
+const { unsubscribe } = GlobalDataPublisher;
+const { each, go } = fx;
+
+// 2. 구독 해제
+go(
+    Object.entries(this.subscriptions),
+    each(([topic, _]) => unsubscribe(topic, this))
+);
+this.subscriptions = null;
+
+// 1. Mixin 정리 (적용 역순) + resolveMeshName 정리
+this.resolveMeshName = null;
+this.meshHighlight.destroy();
+this.meshState?.destroy();
+```
+
+---
+
+## 05_status_camera_highlight — register.js
+
+```javascript
+/**
+ * 05_status_camera_highlight: MeshStateMixin + CameraFocusMixin + MeshHighlightMixin
+ * - 상태 색상 + 클릭된 Mesh로 카메라 포커스 + 선택 강조
+ */
+
+// ======================
+// 1. MIXIN 적용
+// ======================
+applyMeshStateMixin(this, {
+    colorMap: {
+        normal:   0x00C853,
+        warning:  0xFFD600,
+        critical: 0xFF1744,
+        offline:  0x9E9E9E,
+    },
+});
+
+applyCameraFocusMixin(this, {
+    camera:   wemb.threeElements.camera,
+    controls: wemb.threeElements.mainControls,
+    duration: 1000
+});
+
+applyMeshHighlightMixin(this, {
+    highlightColor:     0xFFFF00,
+    highlightIntensity: 0.3,
+});
+
+// ======================
+// 2. 구독 연결
+// ======================
+this.subscriptions = {
+    equipmentStatus: [this.meshState.renderData],
+};
+
+const { subscribe } = GlobalDataPublisher;
+const { each, go } = fx;
+
+go(
+    Object.entries(this.subscriptions),
+    each(([topic, handlers]) =>
+        each(handler => subscribe(topic, this, handler), handlers)
+    )
+);
+
+// ======================
+// 3. 이벤트 매핑 + resolveMeshName 정의
+// ======================
+const { bind3DEvents } = Wkit;
+
+this.customEvents = {
+    click: '@meshClicked'
+};
+bind3DEvents(this, this.customEvents);
+
+/**
+ * resolveMeshName — intersects에서 Mesh 이름 추출
+ */
+this.resolveMeshName = (event) => {
+    if (!event.intersects || !event.intersects.length) return null;
+
+    let current = event.intersects[0].object;
+    while (current) {
+        if (current.name) return current.name;
+        current = current.parent;
+    }
+    return null;
+};
+```
+
+## 05_status_camera_highlight — beforeDestroy.js
+
+```javascript
+const { removeCustomEvents } = Wkit;
+
+// 3. 이벤트 제거
+removeCustomEvents(this, this.customEvents);
+this.customEvents = null;
+
+const { unsubscribe } = GlobalDataPublisher;
+const { each, go } = fx;
+
+// 2. 구독 해제
+go(
+    Object.entries(this.subscriptions),
+    each(([topic, _]) => unsubscribe(topic, this))
+);
+this.subscriptions = null;
+
+// 1. Mixin 정리 (적용 역순) + resolveMeshName 정리
+this.resolveMeshName = null;
+this.meshHighlight.destroy();
+this.cameraFocus.destroy();
+this.meshState?.destroy();
+```
+
+---
+
 ## page scripts
 
 ### loaded.js (모든 변형 공통)
@@ -519,6 +721,28 @@ onEventBusHandlers(this.pageEventBusHandlers);
 
 > **개별 단위와의 핵심 차이**: before_load.js에서 `fetchData`를 import하여 클릭된 Mesh의 상세 데이터를 비동기로 조회한다. 개별 단위는 `targetInstance.showDetail()`만 호출하면 되지만, 컨테이너는 `resolveMeshName → fetchData → showDetail` 체인이 필요하다.
 
+### before_load.js — 04_status_highlight / 05_status_camera_highlight
+
+```javascript
+const { onEventBusHandlers } = Wkit;
+
+this.pageEventBusHandlers = {
+    '@meshClicked': ({ targetInstance, event }) => {
+        const meshName = targetInstance.resolveMeshName(event);
+        if (!meshName) return;
+
+        // 이전 강조 해제 + 새 강조 적용
+        targetInstance.meshHighlight.clearAll();
+        targetInstance.meshHighlight.highlight(meshName);
+
+        // 05에서만: 카메라 포커스
+        // targetInstance.cameraFocus.focusOn({ meshName });
+    },
+};
+
+onEventBusHandlers(this.pageEventBusHandlers);
+```
+
 ### before_unload.js (모든 변형 공통)
 
 ```javascript
@@ -564,18 +788,24 @@ Components/3D_Components/
     │   │       ├── before_load.js
     │   │       ├── loaded.js
     │   │       └── before_unload.js
-    │   └── 03_status_popup/
-    │       ├── component/
-    │       │   ├── register.js
-    │       │   └── beforeDestroy.js
-    │       └── page/
-    │           ├── before_load.js
-    │           ├── loaded.js
-    │           └── before_unload.js
+    │   ├── 03_status_popup/
+    │   │   ├── component/
+    │   │   │   ├── register.js
+    │   │   │   └── beforeDestroy.js
+    │   │   └── page/
+    │   │       ├── before_load.js
+    │   │       ├── loaded.js
+    │   │       └── before_unload.js
+    │   ├── 04_status_highlight/       # 구현 명세에 따라 선택
+    │   │   └── ...
+    │   └── 05_status_camera_highlight/
+    │       └── ...
     └── preview/
         ├── 01_status.html
         ├── 02_status_camera.html
-        └── 03_status_popup.html
+        ├── 03_status_popup.html
+        ├── 04_status_highlight.html     # 구현 명세에 따라 선택
+        └── 05_status_camera_highlight.html
 ```
 
 ---
@@ -597,7 +827,11 @@ Components/3D_Components/
 | 문서 | 경로 |
 |------|------|
 | MeshStateMixin | [Mixins/MeshStateMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/MeshStateMixin.md) |
+| MeshHighlightMixin | [Mixins/MeshHighlightMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/MeshHighlightMixin.md) |
+| MeshVisibilityMixin | [Mixins/MeshVisibilityMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/MeshVisibilityMixin.md) |
 | CameraFocusMixin | [Mixins/CameraFocusMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/CameraFocusMixin.md) |
+| AnimationMixin | [Mixins/AnimationMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/AnimationMixin.md) |
+| ClippingPlaneMixin | [Mixins/ClippingPlaneMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/ClippingPlaneMixin.md) |
 | 3DShadowPopupMixin | [Mixins/3DShadowPopupMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/3DShadowPopupMixin.md) |
 | 개별 단위 패턴 | [create-3d-component](/.claude/skills/2-component/create-3d-component/SKILL.md) |
 | gltf_container (참조 구현) | [Components/3D_Components/gltf_container](/RNBT_architecture/DesignComponentSystem/Components/3D_Components/gltf_container/) |
