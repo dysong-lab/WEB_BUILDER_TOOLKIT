@@ -60,20 +60,22 @@ description: GLTF 컨테이너 3D 컴포넌트를 생성합니다. 하나의 GLT
 
 ## 변형 구조
 
-변형은 CLAUDE.md 구현 명세에서 결정된다. 아래는 자주 사용되는 패턴 예시이다.
+변형은 Standard(필수)와 Advanced(선택)로 구분된다. 실제 조합은 CLAUDE.md 구현 명세에서 결정된다.
 
-| 변형 예시 | 기능 | Mixin 조합 예시 |
-|----------|------|----------------|
-| 01_status | 상태 색상 표시 | MeshStateMixin |
-| 02_status_camera | 상태 + 클릭 → 카메라 포커스 | MeshStateMixin + CameraFocusMixin |
-| 03_status_popup | 상태 + 클릭 → 팝업 상세 | MeshStateMixin + 3DShadowPopupMixin |
-| 04_status_highlight | 상태 + 선택 강조 | MeshStateMixin + MeshHighlightMixin |
-| 05_status_camera_highlight | 상태 + 카메라 + 강조 | MeshStateMixin + CameraFocusMixin + MeshHighlightMixin |
+| 세트 | 번호 | 이름 | Mixin 조합 |
+|------|------|------|-----------|
+| Standard | 01 | status | MeshState |
+| Advanced | 02 | camera | MeshState + CameraFocus |
+| Advanced | 03 | popup | MeshState + 3DShadowPopup |
+| Advanced | 04 | highlight | MeshState + MeshHighlight |
+| Advanced | 05 | camera_highlight | MeshState + CameraFocus + MeshHighlight |
+| Advanced | 06 | visibility | MeshState + MeshVisibility |
+| Advanced | 07 | animation | MeshState + AnimationMixin |
+| Advanced | 08 | clipping | MeshState + ClippingPlaneMixin |
 
-변형의 종류, 이름, Mixin 조합은 고정이 아니다. 구현 명세에 따라 달라진다.
-
+> 기존 생산된 01~03은 `01_status`, `02_status_camera`, `03_status_popup` 폴더명을 유지한다.
+> 신규 생산분(04~)부터 새 명명 규칙을 적용한다.
 > 클릭 이벤트가 있는 변형에서는 resolveMeshName이 필요하다.
-> AnimationMixin, ClippingPlaneMixin, MeshVisibilityMixin은 특화된 용도이므로 번호 변형보다는 구현 명세에 따라 조합한다.
 
 ---
 
@@ -414,11 +416,11 @@ this.meshState?.destroy();
 
 ---
 
-## 04_status_highlight — register.js
+## 04_highlight — register.js
 
 ```javascript
 /**
- * 04_status_highlight: MeshStateMixin + MeshHighlightMixin
+ * 04_highlight: MeshStateMixin + MeshHighlightMixin
  * - 상태 색상 표시 + 클릭된 Mesh 선택 강조
  *
  * 컨테이너에서는:
@@ -485,7 +487,7 @@ this.resolveMeshName = (event) => {
 };
 ```
 
-## 04_status_highlight — beforeDestroy.js
+## 04_highlight — beforeDestroy.js
 
 ```javascript
 const { removeCustomEvents } = Wkit;
@@ -512,11 +514,11 @@ this.meshState?.destroy();
 
 ---
 
-## 05_status_camera_highlight — register.js
+## 05_camera_highlight — register.js
 
 ```javascript
 /**
- * 05_status_camera_highlight: MeshStateMixin + CameraFocusMixin + MeshHighlightMixin
+ * 05_camera_highlight: MeshStateMixin + CameraFocusMixin + MeshHighlightMixin
  * - 상태 색상 + 클릭된 Mesh로 카메라 포커스 + 선택 강조
  */
 
@@ -585,7 +587,7 @@ this.resolveMeshName = (event) => {
 };
 ```
 
-## 05_status_camera_highlight — beforeDestroy.js
+## 05_camera_highlight — beforeDestroy.js
 
 ```javascript
 const { removeCustomEvents } = Wkit;
@@ -721,7 +723,7 @@ onEventBusHandlers(this.pageEventBusHandlers);
 
 > **개별 단위와의 핵심 차이**: before_load.js에서 `fetchData`를 import하여 클릭된 Mesh의 상세 데이터를 비동기로 조회한다. 개별 단위는 `targetInstance.showDetail()`만 호출하면 되지만, 컨테이너는 `resolveMeshName → fetchData → showDetail` 체인이 필요하다.
 
-### before_load.js — 04_status_highlight / 05_status_camera_highlight
+### before_load.js — 04_highlight / 05_camera_highlight
 
 ```javascript
 const { onEventBusHandlers } = Wkit;
@@ -796,16 +798,16 @@ Components/3D_Components/
     │   │       ├── before_load.js
     │   │       ├── loaded.js
     │   │       └── before_unload.js
-    │   ├── 04_status_highlight/       # 구현 명세에 따라 선택
+    │   ├── 04_highlight/       # 구현 명세에 따라 선택
     │   │   └── ...
-    │   └── 05_status_camera_highlight/
+    │   └── 05_camera_highlight/
     │       └── ...
     └── preview/
         ├── 01_status.html
         ├── 02_status_camera.html
         ├── 03_status_popup.html
-        ├── 04_status_highlight.html     # 구현 명세에 따라 선택
-        └── 05_status_camera_highlight.html
+        ├── 04_highlight.html     # 구현 명세에 따라 선택
+        └── 05_camera_highlight.html
 ```
 
 ---

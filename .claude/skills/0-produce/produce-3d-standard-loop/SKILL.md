@@ -124,18 +124,29 @@ feat: 3D_Components/{장비명} 컴포넌트 생산 — {한줄 설명}
 
 ---
 
+## 세트 구분
+
+| 세트 | 설명 |
+|------|------|
+| **Standard** | 필수. 모든 3D 컴포넌트의 기본 (MeshState만) |
+| **Advanced** | 선택. 필요에 따라 조합하는 확장 기능 |
+
 ## 변형 번호 참조
 
-| 번호 | 이름 | Mixin 조합 |
-|------|------|-----------|
-| 01 | status | MeshState |
-| 02 | status_camera | MeshState + CameraFocus |
-| 03 | status_popup | MeshState + 3DShadowPopup |
-| 04 | status_highlight | MeshState + MeshHighlight |
-| 05 | status_camera_highlight | MeshState + CameraFocus + MeshHighlight |
+| 번호 | 이름 | 세트 | Mixin 조합 |
+|------|------|------|-----------|
+| 01 | status | Standard | MeshState |
+| 02 | camera | Advanced | MeshState + CameraFocus |
+| 03 | popup | Advanced | MeshState + 3DShadowPopup |
+| 04 | highlight | Advanced | MeshState + MeshHighlight |
+| 05 | camera_highlight | Advanced | MeshState + CameraFocus + MeshHighlight |
+| 06 | visibility | Advanced | MeshState + MeshVisibility |
+| 07 | animation | Advanced | MeshState + AnimationMixin |
+| 08 | clipping | Advanced | MeshState + ClippingPlaneMixin |
 
-> 이 목록은 참조용이다. 실제 변형은 produce-component Step 3에서 결정한다.
-> AnimationMixin, ClippingPlaneMixin, MeshVisibilityMixin은 특화 용도이므로 구현 명세에 따라 조합한다.
+> 기존 생산된 01~03은 `01_status`, `02_status_camera`, `03_status_popup` 폴더명을 유지한다.
+> 신규 생산분(04~)부터 새 명명 규칙을 적용한다.
+> 실제 변형은 produce-component Step 3에서 결정한다.
 
 ---
 
