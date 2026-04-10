@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>ExtendedFABs/Standard — 03_editorial (Persona C)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #FAF7F2; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        #extended-fab-container { margin: auto; }
+    </style>
+</head>
+<body>
+
+<div id="extended-fab-container"></div>
+
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/FieldRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('extended-fab-container', '../views/03_editorial.html', '../styles/03_editorial.css');
+
+    const instance = { id: 'extendedFab', appendElement: document.getElementById('extended-fab-container') };
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            extendedFab: '.extended-fab',
+            icon:        '.extended-fab__icon',
+            label:       '.extended-fab__label'
+        }
+    });
+
+    instance.subscriptions = { extendedFabInfo: [instance.fieldRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.fieldRender.cssSelectors.extendedFab]: '@extendedFabClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    Wkit.onEventBusHandlers({
+        '@extendedFabClicked': ({ event, targetInstance }) => {
+            console.log('[Preview] Extended FAB clicked');
+        }
+    });
+
+    instance.fieldRender.renderData({ response: {
+        label: 'Compose',
+        icon: 'edit'
+    }});
+})();
+</script>
+</body>
+</html>

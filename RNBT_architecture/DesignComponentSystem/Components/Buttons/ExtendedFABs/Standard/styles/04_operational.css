@@ -1,0 +1,60 @@
+/* 04_operational: Persona D — Dark Operational
+   Outlined / 시안 팔레트 / JetBrains Mono / 다크 / 컴팩트 */
+
+#extended-fab-container {
+    width: 180px;
+    height: 56px;
+    overflow: auto;
+
+    .extended-fab {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        height: 44px;
+        padding: 0 16px;
+        border: 1px solid #2A3A3E;
+        border-radius: 4px;
+        background: #0D1B1E;
+        cursor: pointer;
+        transition: background-color 100ms ease-out, border-color 100ms ease-out;
+    }
+
+    .extended-fab:hover {
+        background: rgba(0, 188, 212, 0.10);
+        border-color: #00BCD4;
+    }
+
+    .extended-fab:active {
+        background: rgba(0, 188, 212, 0.20);
+    }
+
+    .extended-fab__icon {
+        font-size: 18px;
+        color: #5A7A80;
+        flex-shrink: 0;
+    }
+
+    .extended-fab__icon:empty {
+        display: none;
+    }
+
+    .extended-fab__label {
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        font-size: 12px;
+        font-weight: 500;
+        color: #5A7A80;
+        white-space: nowrap;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+    }
+
+    .extended-fab:hover .extended-fab__icon {
+        color: #00BCD4;
+    }
+
+    .extended-fab:hover .extended-fab__label {
+        color: #B2EBF2;
+    }
+}
