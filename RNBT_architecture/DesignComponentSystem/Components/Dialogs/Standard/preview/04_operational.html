@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Dialogs/Standard — 04_operational (Persona D)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            background:
+                linear-gradient(180deg, rgba(10, 30, 38, 0.94), rgba(6, 17, 21, 0.98)),
+                #071015;
+            font-family: 'IBM Plex Mono', 'SFMono-Regular', monospace;
+            color: #dffbff;
+        }
+        .preview-shell {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+        .preview-card {
+            width: min(100%, 560px);
+            padding: 32px;
+            border: 1px solid rgba(84, 218, 255, 0.18);
+            border-radius: 20px;
+            background: rgba(9, 22, 29, 0.88);
+            box-shadow: 0 24px 54px rgba(0, 0, 0, 0.3);
+        }
+        .preview-card h1 {
+            font-size: 28px;
+            font-weight: 600;
+            line-height: 1.15;
+            text-transform: uppercase;
+        }
+        .preview-card p {
+            margin-top: 14px;
+            font-size: 13px;
+            line-height: 1.75;
+            color: rgba(223, 251, 255, 0.74);
+        }
+        .preview-trigger {
+            margin-top: 22px;
+            height: 44px;
+            padding: 0 18px;
+            border: 1px solid #ff6b57;
+            border-radius: 10px;
+            background: #ff6b57;
+            color: #1b0907;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="preview-shell">
+    <div class="preview-card">
+        <h1>Dialogs / Standard</h1>
+        <p>운영형 페르소나에서는 파괴적 액션에 즉시 반응할 수 있도록 경고 컬러와 모노스페이스 정보 밀도를 사용합니다.</p>
+        <button type="button" class="preview-trigger">Open Dialog</button>
+        <div id="dialogs-standard-container"></div>
+    </div>
+</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/ShadowPopupMixin.js"></script>
+<script src="../../../../Mixins/FieldRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('dialogs-standard-container', '../views/04_operational.html', '../styles/04_operational.css');
+
+    const instance = {
+        id: 'dialogs-standard',
+        appendElement: document.getElementById('dialogs-standard-container')
+    };
+
+    instance._popupScope = null;
+
+    applyShadowPopupMixin(instance, {
+        cssSelectors: {
+            template:       '#dialog-popup-template',
+            overlay:        '.dialog__overlay',
+            surface:        '.dialog__surface',
+            headline:       '.dialog__headline',
+            supportingText: '.dialog__supporting-text',
+            closeBtn:       '.dialog__close',
+            cancelBtn:      '.dialog__cancel',
+            confirmBtn:     '.dialog__confirm'
+        },
+        onCreated: (shadowRoot) => {
+            instance._popupScope = { appendElement: shadowRoot };
+            applyFieldRenderMixin(instance._popupScope, {
+                cssSelectors: {
+                    headline:       '.dialog__headline',
+                    supportingText: '.dialog__supporting-text',
+                    confirmLabel:   '.dialog__confirm-label',
+                    cancelLabel:    '.dialog__cancel-label'
+                }
+            });
+        }
+    });
+
+    instance.openDialog = function(payload = {}) {
+        const { response = {} } = payload;
+        instance.shadowPopup.show();
+        instance._popupScope.fieldRender.renderData({
+            response: {
+                headline:       response.headline ?? '',
+                supportingText: response.supportingText ?? '',
+                confirmLabel:   response.confirmLabel ?? 'Confirm',
+                cancelLabel:    response.cancelLabel ?? 'Cancel'
+            }
+        });
+    };
+
+    instance.closeDialog = function() {
+        instance.shadowPopup.hide();
+    };
+
+    instance.shadowPopup.bindPopupEvents({
+        click: {
+            [instance.shadowPopup.cssSelectors.overlay]: (event) => {
+                if (event.target.closest(instance.shadowPopup.cssSelectors.surface)) return;
+                Weventbus.emit('@dialogDismissed', { event, targetInstance: instance });
+            },
+            [instance.shadowPopup.cssSelectors.closeBtn]: '@dialogClosed',
+            [instance.shadowPopup.cssSelectors.cancelBtn]: '@dialogCancelled',
+            [instance.shadowPopup.cssSelectors.confirmBtn]: '@dialogConfirmed'
+        }
+    });
+
+    Wkit.onEventBusHandlers({
+        '@dialogDismissed': ({ targetInstance }) => {
+            console.log('[Preview] dialog dismissed');
+            targetInstance.closeDialog();
+        },
+        '@dialogClosed': ({ targetInstance }) => {
+            console.log('[Preview] dialog closed');
+            targetInstance.closeDialog();
+        },
+        '@dialogCancelled': ({ targetInstance }) => {
+            console.log('[Preview] dialog cancelled');
+            targetInstance.closeDialog();
+        },
+        '@dialogConfirmed': ({ targetInstance }) => {
+            console.log('[Preview] dialog confirmed');
+            targetInstance.closeDialog();
+        }
+    });
+
+    document.querySelector('.preview-trigger').addEventListener('click', () => {
+        instance.openDialog({
+            response: {
+                headline: 'Shutdown zone 04 assets?',
+                supportingText: 'The command will stop active collectors and suspend live updates for the selected zone. Confirm only after the maintenance team is on standby.',
+                confirmLabel: 'Shutdown',
+                cancelLabel: 'Abort'
+            }
+        });
+    });
+})();
+</script>
+</body>
+</html>

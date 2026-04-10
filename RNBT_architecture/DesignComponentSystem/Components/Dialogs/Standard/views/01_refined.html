@@ -1,0 +1,109 @@
+<div class="dialogs dialogs--refined" aria-hidden="true">
+    <template id="dialog-popup-template">
+        <style>
+            .dialog__overlay {
+                position: fixed;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 24px;
+                background:
+                    radial-gradient(circle at top, rgba(122, 92, 255, 0.22), transparent 42%),
+                    rgba(9, 11, 27, 0.78);
+                backdrop-filter: blur(16px);
+            }
+
+            .dialog__surface {
+                width: min(100%, 448px);
+                border: 1px solid rgba(155, 134, 255, 0.26);
+                border-radius: 28px;
+                padding: 28px;
+                background:
+                    linear-gradient(180deg, rgba(42, 46, 88, 0.98), rgba(24, 27, 54, 0.98));
+                box-shadow:
+                    0 28px 64px rgba(4, 6, 20, 0.48),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+                color: #f4f2ff;
+            }
+
+            .dialog__header {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 16px;
+                margin-bottom: 12px;
+            }
+
+            .dialog__headline {
+                font-family: 'Pretendard', -apple-system, sans-serif;
+                font-size: 24px;
+                font-weight: 700;
+                line-height: 1.25;
+                letter-spacing: -0.04em;
+            }
+
+            .dialog__close {
+                width: 40px;
+                height: 40px;
+                border: 0;
+                border-radius: 999px;
+                background: rgba(255, 255, 255, 0.08);
+                color: #f4f2ff;
+                font-size: 22px;
+                cursor: pointer;
+            }
+
+            .dialog__supporting-text {
+                font-family: 'Pretendard', -apple-system, sans-serif;
+                font-size: 15px;
+                line-height: 1.7;
+                color: rgba(232, 228, 255, 0.82);
+            }
+
+            .dialog__actions {
+                display: flex;
+                justify-content: flex-end;
+                gap: 12px;
+                margin-top: 28px;
+            }
+
+            .dialog__button {
+                min-width: 112px;
+                height: 44px;
+                padding: 0 18px;
+                border-radius: 999px;
+                border: 1px solid transparent;
+                font-family: 'Pretendard', -apple-system, sans-serif;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+            }
+
+            .dialog__cancel {
+                background: rgba(255, 255, 255, 0.06);
+                border-color: rgba(255, 255, 255, 0.12);
+                color: #f4f2ff;
+            }
+
+            .dialog__confirm {
+                background: linear-gradient(135deg, #b49cff, #7b61ff);
+                color: #140f2d;
+            }
+        </style>
+
+        <div class="dialog__overlay">
+            <div class="dialog__surface" role="dialog" aria-modal="true" aria-labelledby="dialog-refined-title">
+                <div class="dialog__header">
+                    <h2 id="dialog-refined-title" class="dialog__headline">Delete selected report?</h2>
+                    <button type="button" class="dialog__close" aria-label="Close dialog">×</button>
+                </div>
+                <p class="dialog__supporting-text">The selected report and its shared links will be removed from the workspace. Reviewers will no longer be able to access the audit log.</p>
+                <div class="dialog__actions">
+                    <button type="button" class="dialog__button dialog__cancel"><span class="dialog__cancel-label">Keep</span></button>
+                    <button type="button" class="dialog__button dialog__confirm"><span class="dialog__confirm-label">Delete</span></button>
+                </div>
+            </div>
+        </div>
+    </template>
+</div>
