@@ -40,7 +40,7 @@
 .bar-chart__timestamp,
 .bar-chart__legend-item {
     font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.7px;
     text-transform: uppercase;
 }
 
@@ -54,7 +54,7 @@
     font-family: "SUIT", "Pretendard", sans-serif;
     font-size: 28px;
     font-weight: 700;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.8px;
 }
 
 .bar-chart__status-row {
