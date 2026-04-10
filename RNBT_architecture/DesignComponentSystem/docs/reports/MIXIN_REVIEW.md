@@ -106,6 +106,26 @@ tableInstance = new Tabulator(containerEl, Object.assign({
 
 ---
 
+## MeshHighlightMixin
+
+**하는 일:** 선택한 대상을 시각적으로 강조한다. 3D 메시의 emissive 색상을 적용/해제하여 선택 상태를 피드백한다.
+
+**범용성:** highlight(개별 강조), unhighlight(개별 해제), clearAll(전체 해제), isHighlighted(상태 조회)을 제공. highlightColor, highlightIntensity 옵션으로 발광 색상/강도를 커스터마이즈 가능.
+
+**제약:** 없음. MeshStateMixin과 다른 채널(color vs emissive)을 사용하므로 동시 적용 가능.
+
+---
+
+## MeshVisibilityMixin
+
+**하는 일:** 3D 장면의 특정 부분을 선택적으로 보여준다. 메시의 visible 속성을 토글하여 show/hide를 제어한다.
+
+**범용성:** show, hide, toggle(개별 제어), showOnly(선택적 표시), showAll/hideAll(일괄 제어), isVisible(상태 조회)을 제공. 층별 분리, X-ray 뷰 등 다양한 시나리오에 대응.
+
+**제약:** 없음.
+
+---
+
 ## CameraFocusMixin
 
 **하는 일:** 보는 위치를 전환한다. 카메라를 특정 메시나 좌표로 부드럽게 이동시키고, 초기 위치로 복귀한다.
@@ -158,6 +178,8 @@ tableInstance = new Tabulator(containerEl, Object.assign({
 | Tabulator | ✅ | 없음 (tabulatorOptions로 모든 옵션 재정의 가능) |
 | HeatmapJs | ✅ | 없음 |
 | MeshState | ⚠️ | 색상만 변경 |
+| MeshHighlight | ✅ | 없음 |
+| MeshVisibility | ✅ | 없음 |
 | CameraFocus | ✅ | 없음 |
 | ShadowPopup | ✅ | 팝업 위치 제어 옵션 없음 (CSS 의존) |
 | 3DShadowPopup | ✅ | 팝업 위치 제어 옵션 없음 (CSS 의존) |

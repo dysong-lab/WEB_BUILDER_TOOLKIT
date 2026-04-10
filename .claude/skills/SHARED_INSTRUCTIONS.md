@@ -30,6 +30,8 @@
 | TabulatorMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/TabulatorMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/TabulatorMixin.md) |
 | HeatmapJsMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/HeatmapJsMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/HeatmapJsMixin.md) |
 | MeshStateMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/MeshStateMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/MeshStateMixin.md) |
+| MeshHighlightMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/MeshHighlightMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/MeshHighlightMixin.md) |
+| MeshVisibilityMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/MeshVisibilityMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/MeshVisibilityMixin.md) |
 | CameraFocusMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/CameraFocusMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/CameraFocusMixin.md) |
 | ShadowPopupMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/ShadowPopupMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/ShadowPopupMixin.md) |
 | 3DShadowPopupMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/3DShadowPopupMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/3DShadowPopupMixin.md) |

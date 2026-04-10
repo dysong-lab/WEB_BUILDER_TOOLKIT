@@ -111,6 +111,8 @@
 | TabulatorMixin | 데이터를 보여준다 | 추상 행위 |
 | HeatmapJsMixin | 데이터를 보여준다 | 추상 행위 |
 | MeshStateMixin | 데이터를 보여준다 (3D 메시의 시각 상태 변경) | 추상 행위 |
+| MeshHighlightMixin | 선택한 대상을 시각적으로 강조한다 | 추상 행위 |
+| MeshVisibilityMixin | 3D 장면의 특정 부분을 선택적으로 보여준다 | 추상 행위 |
 | CameraFocusMixin | 보는 위치를 전환한다 | 추상 행위 |
 | ShadowPopupMixin | 콘텐츠를 별도 레이어에 표시한다 | 추상 행위 |
 | 3DShadowPopupMixin | 콘텐츠를 별도 레이어에 표시한다 (3D 환경) | 추상 행위 |
