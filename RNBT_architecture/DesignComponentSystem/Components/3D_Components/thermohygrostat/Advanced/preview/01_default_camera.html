@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>thermohygrostat — 01_status</title>
+    <title>thermohygrostat — 02_status_camera</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #1a1a2e; }
@@ -21,6 +21,25 @@
             gap: 8px;
             padding: 16px;
         }
+        .demo-controls-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .demo-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #8888aa;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-right: 4px;
+        }
+        .demo-separator {
+            width: 1px;
+            height: 24px;
+            background: #2a2a4a;
+            margin: 0 8px;
+        }
         .demo-btn {
             padding: 8px 16px;
             font-size: 13px;
@@ -37,20 +56,32 @@
         .demo-btn[data-status="error"]   { background: #f87171; }
         .demo-btn[data-status="offline"] { background: #6b7280; }
         .demo-btn[data-status="reset"]   { background: #3b82f6; }
+        .demo-btn[data-action="focus"]   { background: #8b5cf6; }
+        .demo-btn[data-action="reset-camera"] { background: #64748b; }
     </style>
 </head>
 <body>
     <div class="demo-controls">
-        <button class="demo-btn" data-status="normal">Normal</button>
-        <button class="demo-btn" data-status="warning">Warning</button>
-        <button class="demo-btn" data-status="error">Error</button>
-        <button class="demo-btn" data-status="offline">Offline</button>
-        <button class="demo-btn" data-status="reset">Reset</button>
+        <div class="demo-controls-group">
+            <span class="demo-label">Status</span>
+            <button class="demo-btn" data-status="normal">Normal</button>
+            <button class="demo-btn" data-status="warning">Warning</button>
+            <button class="demo-btn" data-status="error">Error</button>
+            <button class="demo-btn" data-status="offline">Offline</button>
+            <button class="demo-btn" data-status="reset">Reset</button>
+        </div>
+        <div class="demo-separator"></div>
+        <div class="demo-controls-group">
+            <span class="demo-label">Camera</span>
+            <button class="demo-btn" data-action="focus">Focus</button>
+            <button class="demo-btn" data-action="reset-camera">Reset</button>
+        </div>
     </div>
 
     <div id="thermohygrostat-pageThreeLayer"></div>
 
     <script src="../../../../../Mixins/MeshStateMixin.js"></script>
+    <script src="../../../../../Mixins/CameraFocusMixin.js"></script>
 
     <script type="importmap">
     {
@@ -65,6 +96,8 @@
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+    window.THREE = THREE;
 
     const pageThreeLayer = document.getElementById('thermohygrostat-pageThreeLayer');
     const width = pageThreeLayer.clientWidth;
@@ -101,7 +134,7 @@
     const instance = { appendElement: null };
     const loader = new GLTFLoader();
 
-    loader.load('../../../../../models/thermohygrostat/thermohygrostat.gltf', (gltf) => {
+    loader.load('../../../../../models/thermohygrostat/01_default/thermohygrostat.gltf', (gltf) => {
         const model = gltf.scene;
         scene.add(model);
         instance.appendElement = model;
@@ -115,10 +148,16 @@
             }
         });
 
+        applyCameraFocusMixin(instance, {
+            camera,
+            controls,
+            duration: 1000
+        });
+
         const box = new THREE.Box3().setFromObject(model);
         const center = box.getCenter(new THREE.Vector3());
         controls.target.copy(center);
-        camera.position.set(center.x + 2, center.y + 1, center.z + 3);
+        camera.position.set(center.x + 4, center.y + 2, center.z + 5);
         controls.update();
     });
 
@@ -129,7 +168,7 @@
     }
     animate();
 
-    document.querySelectorAll('.demo-btn').forEach((btn) => {
+    document.querySelectorAll('.demo-btn[data-status]').forEach((btn) => {
         btn.addEventListener('click', () => {
             if (!instance.meshState) return;
             const status = btn.dataset.status;
@@ -141,6 +180,22 @@
             instance.meshState.renderData({
                 response: [{ meshName: 'thermohygrostat', status }]
             });
+        });
+    });
+
+    document.querySelectorAll('.demo-btn[data-action]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            if (!instance.cameraFocus) return;
+            const action = btn.dataset.action;
+            if (action === 'focus') {
+                instance.cameraFocus.focusOn({
+                    container: instance.appendElement,
+                    meshName: 'thermohygrostat',
+                    offset: { x: 1.5, y: 1.0, z: 3.0 }
+                });
+            } else if (action === 'reset-camera') {
+                instance.cameraFocus.reset();
+            }
         });
     });
 

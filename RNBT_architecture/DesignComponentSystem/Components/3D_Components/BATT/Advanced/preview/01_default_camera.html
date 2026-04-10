@@ -2,11 +2,11 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>UPS — 02_status_camera</title>
+    <title>BATT — 02_status_camera</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #1a1a2e; }
-        #ups-pageThreeLayer {
+        #batt-pageThreeLayer {
             width: 600px;
             height: 480px;
             display: block;
@@ -78,8 +78,9 @@
         </div>
     </div>
 
-    <div id="ups-pageThreeLayer"></div>
+    <div id="batt-pageThreeLayer"></div>
 
+    <!-- Mixin 로드 -->
     <script src="../../../../../Mixins/MeshStateMixin.js"></script>
     <script src="../../../../../Mixins/CameraFocusMixin.js"></script>
 
@@ -99,9 +100,10 @@
 
     window.THREE = THREE;
 
-    const pageThreeLayer = document.getElementById('ups-pageThreeLayer');
-    const width = pageThreeLayer.clientWidth;
-    const height = pageThreeLayer.clientHeight;
+    // ── Three.js Scene Setup ──────────────────────────────────
+    const container = document.getElementById('batt-pageThreeLayer');
+    const width = container.clientWidth;
+    const height = container.clientHeight;
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x1a1a2e);
@@ -114,31 +116,40 @@
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.2;
-    pageThreeLayer.appendChild(renderer.domElement);
+    container.appendChild(renderer.domElement);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.08;
     controls.target.set(0, 0, 0);
 
+    // ── Lighting ──────────────────────────────────────────────
     scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
     directionalLight.position.set(5, 8, 4);
     scene.add(directionalLight);
+
     const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
     fillLight.position.set(-3, 2, -2);
     scene.add(fillLight);
 
+    // ── Grid ──────────────────────────────────────────────────
     scene.add(new THREE.GridHelper(10, 20, 0x2a2a4a, 0x2a2a4a));
 
+    // ── Mock Instance ─────────────────────────────────────────
     const instance = { appendElement: null };
+
+    // ── Load Model ────────────────────────────────────────────
     const loader = new GLTFLoader();
 
-    loader.load('../../../../../models/UPS/UPS.gltf', (gltf) => {
+    loader.load('../../../../../models/BATT/01_default/BATT.gltf', (gltf) => {
         const model = gltf.scene;
         scene.add(model);
+
         instance.appendElement = model;
 
+        // MeshStateMixin 적용 (02_status_camera_register.js와 동일)
         applyMeshStateMixin(instance, {
             colorMap: {
                 normal:  0x34d399,
@@ -148,12 +159,14 @@
             }
         });
 
+        // CameraFocusMixin 적용
         applyCameraFocusMixin(instance, {
             camera,
             controls,
             duration: 1000
         });
 
+        // 카메라 타겟 조정
         const box = new THREE.Box3().setFromObject(model);
         const center = box.getCenter(new THREE.Vector3());
         controls.target.copy(center);
@@ -161,6 +174,7 @@
         controls.update();
     });
 
+    // ── Render Loop ───────────────────────────────────────────
     function animate() {
         requestAnimationFrame(animate);
         controls.update();
@@ -168,29 +182,36 @@
     }
     animate();
 
+    // ── Demo: Status (renderData) ─────────────────────────────
     document.querySelectorAll('.demo-btn[data-status]').forEach((btn) => {
         btn.addEventListener('click', () => {
             if (!instance.meshState) return;
+
             const status = btn.dataset.status;
+
             if (status === 'reset') {
-                const mesh = instance.appendElement.getObjectByName('UPS');
+                const mesh = instance.appendElement.getObjectByName('BATT');
                 if (mesh) mesh.material.color.setHex(0xffffff);
                 return;
             }
+
             instance.meshState.renderData({
-                response: [{ meshName: 'UPS', status }]
+                response: [{ meshName: 'BATT', status }]
             });
         });
     });
 
+    // ── Demo: Camera (focusOn / reset) ────────────────────────
     document.querySelectorAll('.demo-btn[data-action]').forEach((btn) => {
         btn.addEventListener('click', () => {
             if (!instance.cameraFocus) return;
+
             const action = btn.dataset.action;
+
             if (action === 'focus') {
                 instance.cameraFocus.focusOn({
                     container: instance.appendElement,
-                    meshName: 'UPS',
+                    meshName: 'BATT',
                     offset: { x: 1.5, y: 1.0, z: 3.0 }
                 });
             } else if (action === 'reset-camera') {
@@ -199,9 +220,10 @@
         });
     });
 
+    // ── Resize ────────────────────────────────────────────────
     window.addEventListener('resize', () => {
-        const w = pageThreeLayer.clientWidth;
-        const h = pageThreeLayer.clientHeight;
+        const w = container.clientWidth;
+        const h = container.clientHeight;
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
         renderer.setSize(w, h);

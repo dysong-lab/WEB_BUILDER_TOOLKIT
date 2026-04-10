@@ -2,11 +2,11 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Panel — 01_status</title>
+    <title>Chiller — 02_status_camera</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #1a1a2e; }
-        #panel-pageThreeLayer {
+        #chiller-pageThreeLayer {
             width: 600px;
             height: 480px;
             display: block;
@@ -20,6 +20,25 @@
             justify-content: center;
             gap: 8px;
             padding: 16px;
+        }
+        .demo-controls-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .demo-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #8888aa;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-right: 4px;
+        }
+        .demo-separator {
+            width: 1px;
+            height: 24px;
+            background: #2a2a4a;
+            margin: 0 8px;
         }
         .demo-btn {
             padding: 8px 16px;
@@ -37,21 +56,33 @@
         .demo-btn[data-status="error"]   { background: #f87171; }
         .demo-btn[data-status="offline"] { background: #6b7280; }
         .demo-btn[data-status="reset"]   { background: #3b82f6; }
+        .demo-btn[data-action="focus"]   { background: #8b5cf6; }
+        .demo-btn[data-action="reset-camera"] { background: #64748b; }
     </style>
 </head>
 <body>
     <div class="demo-controls">
-        <button class="demo-btn" data-status="normal">Normal</button>
-        <button class="demo-btn" data-status="warning">Warning</button>
-        <button class="demo-btn" data-status="error">Error</button>
-        <button class="demo-btn" data-status="offline">Offline</button>
-        <button class="demo-btn" data-status="reset">Reset</button>
+        <div class="demo-controls-group">
+            <span class="demo-label">Status</span>
+            <button class="demo-btn" data-status="normal">Normal</button>
+            <button class="demo-btn" data-status="warning">Warning</button>
+            <button class="demo-btn" data-status="error">Error</button>
+            <button class="demo-btn" data-status="offline">Offline</button>
+            <button class="demo-btn" data-status="reset">Reset</button>
+        </div>
+        <div class="demo-separator"></div>
+        <div class="demo-controls-group">
+            <span class="demo-label">Camera</span>
+            <button class="demo-btn" data-action="focus">Focus</button>
+            <button class="demo-btn" data-action="reset-camera">Reset</button>
+        </div>
     </div>
 
-    <div id="panel-pageThreeLayer"></div>
+    <div id="chiller-pageThreeLayer"></div>
 
     <!-- Mixin 로드 -->
     <script src="../../../../../Mixins/MeshStateMixin.js"></script>
+    <script src="../../../../../Mixins/CameraFocusMixin.js"></script>
 
     <script type="importmap">
     {
@@ -67,10 +98,12 @@
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
+    window.THREE = THREE;
+
     // ── Three.js Scene Setup ──────────────────────────────────
-    const pageThreeLayer = document.getElementById('panel-pageThreeLayer');
-    const width = pageThreeLayer.clientWidth;
-    const height = pageThreeLayer.clientHeight;
+    const container = document.getElementById('chiller-pageThreeLayer');
+    const width = container.clientWidth;
+    const height = container.clientHeight;
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x1a1a2e);
@@ -83,7 +116,7 @@
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.2;
-    pageThreeLayer.appendChild(renderer.domElement);
+    container.appendChild(renderer.domElement);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
@@ -110,13 +143,13 @@
     // ── Load Model ────────────────────────────────────────────
     const loader = new GLTFLoader();
 
-    loader.load('../../../../../models/Panel/Panel.gltf', (gltf) => {
+    loader.load('../../../../../models/Chiller/01_default/Chiller.gltf', (gltf) => {
         const model = gltf.scene;
         scene.add(model);
 
         instance.appendElement = model;
 
-        // MeshStateMixin 적용 (01_status register.js와 동일)
+        // MeshStateMixin 적용
         applyMeshStateMixin(instance, {
             colorMap: {
                 normal:  0x34d399,
@@ -126,11 +159,18 @@
             }
         });
 
+        // CameraFocusMixin 적용
+        applyCameraFocusMixin(instance, {
+            camera,
+            controls,
+            duration: 1000
+        });
+
         // 카메라 타겟 조정
         const box = new THREE.Box3().setFromObject(model);
         const center = box.getCenter(new THREE.Vector3());
         controls.target.copy(center);
-        camera.position.set(center.x + 2, center.y + 1, center.z + 3);
+        camera.position.set(center.x + 4, center.y + 2, center.z + 5);
         controls.update();
     });
 
@@ -142,29 +182,48 @@
     }
     animate();
 
-    // ── Demo: renderData 호출 ─────────────────────────────────
-    document.querySelectorAll('.demo-btn').forEach((btn) => {
+    // ── Demo: Status (renderData) ─────────────────────────────
+    document.querySelectorAll('.demo-btn[data-status]').forEach((btn) => {
         btn.addEventListener('click', () => {
             if (!instance.meshState) return;
 
             const status = btn.dataset.status;
 
             if (status === 'reset') {
-                const mesh = instance.appendElement.getObjectByName('panel');
+                const mesh = instance.appendElement.getObjectByName('chiller');
                 if (mesh) mesh.material.color.setHex(0xffffff);
                 return;
             }
 
             instance.meshState.renderData({
-                response: [{ meshName: 'panel', status }]
+                response: [{ meshName: 'chiller', status }]
             });
+        });
+    });
+
+    // ── Demo: Camera (focusOn / reset) ────────────────────────
+    document.querySelectorAll('.demo-btn[data-action]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            if (!instance.cameraFocus) return;
+
+            const action = btn.dataset.action;
+
+            if (action === 'focus') {
+                instance.cameraFocus.focusOn({
+                    container: instance.appendElement,
+                    meshName: 'chiller',
+                    offset: { x: 1.5, y: 1.0, z: 3.0 }
+                });
+            } else if (action === 'reset-camera') {
+                instance.cameraFocus.reset();
+            }
         });
     });
 
     // ── Resize ────────────────────────────────────────────────
     window.addEventListener('resize', () => {
-        const w = pageThreeLayer.clientWidth;
-        const h = pageThreeLayer.clientHeight;
+        const w = container.clientWidth;
+        const h = container.clientHeight;
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
         renderer.setSize(w, h);

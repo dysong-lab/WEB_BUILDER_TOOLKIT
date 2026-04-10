@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>gltf_container — 02_status_camera</title>
+    <title>gltf_container — 03_status_popup</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #1a1a2e; }
@@ -12,6 +12,7 @@
             display: block;
             overflow: hidden;
             margin: 40px auto;
+            position: relative;
         }
         canvas { display: block; }
 
@@ -37,19 +38,6 @@
             background: #2a2a4a;
             margin: 0 8px;
         }
-        .demo-btn {
-            padding: 8px 16px;
-            font-size: 13px;
-            font-weight: 600;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            color: #ffffff;
-            transition: opacity 0.15s;
-        }
-        .demo-btn:hover { opacity: 0.8; }
-        .demo-btn[data-action="reset-camera"] { background: #64748b; }
-
         .demo-interval {
             font-size: 13px;
             color: #e2e8f0;
@@ -106,11 +94,8 @@
         <div class="demo-separator"></div>
         <span class="demo-label">Clicked</span>
         <span class="demo-clicked-mesh" id="clickedMesh">-</span>
-        <div class="demo-separator"></div>
-        <span class="demo-label">Camera</span>
-        <button class="demo-btn" data-action="reset-camera">Reset</button>
     </div>
-    <div class="demo-info">3D 모델을 클릭하면 해당 Mesh로 카메라가 이동합니다 · 상태 데이터는 3초마다 자동 갱신됩니다</div>
+    <div class="demo-info">3D 모델을 클릭하면 해당 Mesh의 데이터를 조회하여 팝업을 표시합니다 · 상태 데이터는 3초마다 자동 갱신됩니다</div>
 
     <div id="gltf-container-pageThreeLayer"></div>
 
@@ -118,7 +103,7 @@
 
     <!-- Mixin 로드 -->
     <script src="../../../../../Mixins/MeshStateMixin.js"></script>
-    <script src="../../../../../Mixins/CameraFocusMixin.js"></script>
+    <script src="../../../../../Mixins/3DShadowPopupMixin.js"></script>
 
     <script type="importmap">
     {
@@ -134,8 +119,6 @@
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-    window.THREE = THREE;
-
     /**
      * intersects에서 클릭된 Mesh 이름 추출
      */
@@ -149,6 +132,133 @@
         }
         return null;
     }
+
+    /**
+     * Mock fetchData — 실제 Wkit.fetchData 시뮬레이션
+     * Promise.resolve로 클릭된 Mesh의 상세 데이터를 반환한다.
+     */
+    function mockFetchData(meshName) {
+        const statuses = ['normal', 'warning', 'error', 'offline'];
+        const types = { HV: 'High Voltage Panel', LV: 'Low Voltage Panel', TR: 'Transformer', SHV: 'Semi-HV Panel', SC: 'SC Panel', G: 'Generator', GP: 'Generator Panel', TIE: 'Tie', MTR: 'Meter', BLK: 'Blank', ATS: 'ATS', ALTS: 'ALTS' };
+
+        const prefix = meshName.split('-')[0];
+        const type = types[prefix] || 'Equipment';
+        const status = statuses[Math.floor(Math.random() * statuses.length)];
+
+        return Promise.resolve({
+            meshName,
+            type,
+            status,
+            location: 'B4F',
+            lastUpdate: new Date().toLocaleTimeString()
+        });
+    }
+
+    // ── Popup HTML/CSS ────────────────────────────────────────
+    const popupHTML = `
+        <div class="popup-overlay">
+            <div class="popup-panel">
+                <div class="popup-header">
+                    <h3 class="popup-name">-</h3>
+                    <div class="popup-header-right">
+                        <span class="popup-status" data-status="normal">normal</span>
+                        <button class="popup-close" type="button">&times;</button>
+                    </div>
+                </div>
+                <div class="popup-body">
+                    <table class="popup-info-table">
+                        <tr><th>Mesh</th><td class="popup-mesh-name">-</td></tr>
+                        <tr><th>Type</th><td class="popup-type">-</td></tr>
+                        <tr><th>Location</th><td class="popup-location">-</td></tr>
+                        <tr><th>Status</th><td class="popup-status-cell">-</td></tr>
+                        <tr><th>Updated</th><td class="popup-updated">-</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    `;
+
+    const popupCSS = `
+        .popup-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+        .popup-panel {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            width: 320px;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', sans-serif;
+            overflow: hidden;
+        }
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            border-bottom: 1px solid #334155;
+        }
+        .popup-name {
+            font-size: 15px;
+            font-weight: 600;
+            margin: 0;
+        }
+        .popup-header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .popup-status {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            background: #334155;
+            color: #94a3b8;
+        }
+        .popup-status[data-status="normal"]  { background: #0d3b2e; color: #34d399; }
+        .popup-status[data-status="warning"] { background: #3b2e0d; color: #fbbf24; }
+        .popup-status[data-status="error"]   { background: #3b0d0d; color: #f87171; }
+        .popup-status[data-status="offline"] { background: #1e293b; color: #6b7280; }
+        .popup-close {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 20px;
+            cursor: pointer;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+        }
+        .popup-close:hover { background: rgba(255,255,255,0.1); }
+        .popup-body { padding: 16px; }
+        .popup-info-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .popup-info-table th {
+            text-align: left;
+            color: #94a3b8;
+            padding: 6px 0;
+            width: 90px;
+            font-weight: 500;
+        }
+        .popup-info-table td {
+            padding: 6px 0;
+            color: #e2e8f0;
+        }
+    `;
 
     // ── Three.js Scene Setup ──────────────────────────────────
     const container = document.getElementById('gltf-container-pageThreeLayer');
@@ -189,7 +299,10 @@
     const mouse = new THREE.Vector2();
 
     // ── Mock Instance ─────────────────────────────────────────
-    const instance = { appendElement: null };
+    const instance = {
+        appendElement: null,
+        page: { appendElement: container }
+    };
 
     // ── Mock Data ─────────────────────────────────────────────
     const statuses = ['normal', 'warning', 'error', 'offline'];
@@ -223,7 +336,7 @@
     // ── Load Model ────────────────────────────────────────────
     const loader = new GLTFLoader();
 
-    loader.load('../../../../../models/gltf_container/gltf_container.gltf', (gltf) => {
+    loader.load('../../../../../models/gltf_container/01_default/gltf_container.gltf', (gltf) => {
         const model = gltf.scene;
         scene.add(model);
 
@@ -246,11 +359,22 @@
             }
         });
 
-        // CameraFocusMixin 적용
-        applyCameraFocusMixin(instance, {
-            camera,
-            controls,
-            duration: 1000
+        // 3DShadowPopupMixin 적용
+        apply3DShadowPopupMixin(instance, {
+            getHTML:   () => popupHTML,
+            getStyles: () => popupCSS
+        });
+
+        // 시연용 정적 이벤트 — show 전 호출 (Mixin이 큐잉 후 첫 show 시 자동 바인딩)
+        instance.shadowPopup.bindPopupEvents({
+            click: {
+                '.popup-close': () => instance.shadowPopup.hide(),
+                '.popup-overlay': (e) => {
+                    if (e.target.classList.contains('popup-overlay')) {
+                        instance.shadowPopup.hide();
+                    }
+                }
+            }
         });
 
         // 카메라 타겟을 모델 중심으로 조정
@@ -300,7 +424,33 @@
     }
     animate();
 
-    // ── 클릭 → 카메라 포커스 ──────────────────────────────────
+    // ── showDetail — Mesh 클릭 → 데이터 조회 → 팝업 ──────────
+    function showDetail(meshName, data) {
+        if (!instance.shadowPopup) return;
+
+        instance.shadowPopup.show();
+
+        const nameEl = instance.shadowPopup.query('.popup-name');
+        const statusEl = instance.shadowPopup.query('.popup-status');
+        const meshCell = instance.shadowPopup.query('.popup-mesh-name');
+        const typeCell = instance.shadowPopup.query('.popup-type');
+        const locationCell = instance.shadowPopup.query('.popup-location');
+        const statusCell = instance.shadowPopup.query('.popup-status-cell');
+        const updatedCell = instance.shadowPopup.query('.popup-updated');
+
+        if (nameEl) nameEl.textContent = meshName;
+        if (statusEl) {
+            statusEl.textContent = data.status;
+            statusEl.dataset.status = data.status;
+        }
+        if (meshCell) meshCell.textContent = data.meshName;
+        if (typeCell) typeCell.textContent = data.type;
+        if (locationCell) locationCell.textContent = data.location;
+        if (statusCell) statusCell.textContent = data.status;
+        if (updatedCell) updatedCell.textContent = data.lastUpdate;
+    }
+
+    // ── 클릭 → fetchData → 팝업 ──────────────────────────────
     const clickedMeshEl = document.getElementById('clickedMesh');
 
     renderer.domElement.addEventListener('click', (event) => {
@@ -316,18 +466,9 @@
 
         clickedMeshEl.textContent = meshName;
 
-        if (instance.cameraFocus) {
-            instance.cameraFocus.focusOn({
-                container: instance.appendElement,
-                meshName,
-                offset: { x: 0, y: 5, z: 10 }
-            });
-        }
-    });
-
-    // ── Camera Reset ──────────────────────────────────────────
-    document.querySelector('.demo-btn[data-action="reset-camera"]').addEventListener('click', () => {
-        if (instance.cameraFocus) instance.cameraFocus.reset();
+        // 실제: fetchData(page, 'meshDetail', { meshName })
+        mockFetchData(meshName)
+            .then(data => showDetail(meshName, data));
     });
 
     // ── Resize ────────────────────────────────────────────────
