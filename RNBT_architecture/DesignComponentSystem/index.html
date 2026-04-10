@@ -507,8 +507,13 @@ function bindTopTabs() {
 }
 
 // ── Helpers ──────────────────────────────────────────────
+function isSetImplemented(set) {
+    if ((set.previews || []).length > 0) return true;
+    return (set.items || []).some(it => (it.previews || []).length > 0);
+}
+
 function isComponentImplemented(comp) {
-    return (comp.sets || []).some(s => (s.previews || []).length > 0);
+    return (comp.sets || []).some(isSetImplemented);
 }
 
 function isCollapsedCategory(cat) {
@@ -624,6 +629,39 @@ function makeComponentNode(ci, compIdx, comp) {
 }
 
 function makeSetItem(ci, compIdx, si, set) {
+    const hasItems = (set.items || []).length > 0;
+
+    if (hasItems) {
+        const wrap = document.createElement('div');
+        wrap.className = 'tree-node';
+
+        const implemented = isSetImplemented(set);
+        const header = document.createElement('div');
+        header.className = 'tree-comp-header' + (implemented ? '' : ' unimplemented');
+        header.innerHTML = `
+            <span class="tree-cat-arrow">▶</span>
+            <span class="tree-comp-name">${set.name}</span>
+        `;
+        header.addEventListener('click', (ev) => {
+            ev.stopPropagation();
+            const childrenEl = wrap.querySelector(':scope > .tree-children');
+            childrenEl.classList.toggle('expanded');
+            header.querySelector('.tree-cat-arrow').classList.toggle('expanded');
+            activate(header);
+            displaySet(ci, compIdx, si);
+        });
+        wrap.appendChild(header);
+
+        const childrenEl = document.createElement('div');
+        childrenEl.className = 'tree-children';
+        set.items.forEach((item, itemIdx) => {
+            childrenEl.appendChild(makeItemNode(ci, compIdx, si, itemIdx, item));
+        });
+        wrap.appendChild(childrenEl);
+
+        return wrap;
+    }
+
     const el = document.createElement('div');
     const implemented = (set.previews || []).length > 0;
     el.className = 'tree-item' + (implemented ? '' : ' unimplemented');
@@ -632,6 +670,19 @@ function makeSetItem(ci, compIdx, si, set) {
         ev.stopPropagation();
         activate(el);
         displaySet(ci, compIdx, si);
+    });
+    return el;
+}
+
+function makeItemNode(ci, compIdx, si, itemIdx, item) {
+    const el = document.createElement('div');
+    const implemented = (item.previews || []).length > 0;
+    el.className = 'tree-item' + (implemented ? '' : ' unimplemented');
+    el.textContent = item.name;
+    el.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        activate(el);
+        displayItem(ci, compIdx, si, itemIdx);
     });
     return el;
 }
@@ -677,6 +728,17 @@ function displaySet(ci, compIdx, setIdx) {
     const breadcrumb = collapsed
         ? `${cat.name} / ${set.name}`
         : `${cat.name} / ${comp.name} / ${set.name}`;
+
+    const hasItems = (set.items || []).length > 0;
+    if (hasItems) {
+        const subtitle = `${set.items.length}개 구현`;
+        setHeaderTitle(breadcrumb, subtitle);
+        showCompPreview(null, `${set.name} 하위 구현을 좌측 트리에서 선택하세요.`);
+        loadSpec(set.spec || comp.spec);
+        switchCompTab('preview');
+        return;
+    }
+
     const subtitle = (set.previews || []).length
         ? `${set.previews.length}개 변형`
         : '미구현';
@@ -686,6 +748,29 @@ function displaySet(ci, compIdx, setIdx) {
     loadSpec(set.spec || comp.spec);
 
     const implemented = (set.previews || []).length > 0;
+    switchCompTab(implemented ? 'preview' : 'spec');
+}
+
+function displayItem(ci, compIdx, setIdx, itemIdx) {
+    state.selection = { catIdx: ci, compIdx, setIdx, itemIdx };
+    const cat = state.manifest.categories[ci];
+    const comp = cat.components[compIdx];
+    const set = comp.sets[setIdx];
+    const item = set.items[itemIdx];
+    const collapsed = isCollapsedCategory(cat);
+
+    const breadcrumb = collapsed
+        ? `${cat.name} / ${set.name} / ${item.name}`
+        : `${cat.name} / ${comp.name} / ${set.name} / ${item.name}`;
+    const subtitle = (item.previews || []).length
+        ? `${item.previews.length}개 변형`
+        : '미구현';
+    setHeaderTitle(breadcrumb, subtitle);
+
+    showCompPreview(item.previews || []);
+    loadSpec(item.spec || set.spec || comp.spec);
+
+    const implemented = (item.previews || []).length > 0;
     switchCompTab(implemented ? 'preview' : 'spec');
 }
 
@@ -706,7 +791,7 @@ function switchCompTab(tab) {
 }
 
 // ── Preview ───────────────────────────────────────────────
-function showCompPreview(previews) {
+function showCompPreview(previews, emptyMessage) {
     const toolbar = document.getElementById('comp-preview-toolbar');
     const frame = document.getElementById('comp-preview-frame');
     const empty = document.getElementById('comp-preview-empty');
@@ -717,9 +802,8 @@ function showCompPreview(previews) {
         frame.classList.add('hidden');
         frame.src = 'about:blank';
         empty.classList.remove('hidden');
-        empty.textContent = previews
-            ? '미구현 — preview 가 없습니다.'
-            : '좌측 트리에서 컴포넌트를 선택하세요.';
+        empty.textContent = emptyMessage
+            || (previews ? '미구현 — preview 가 없습니다.' : '좌측 트리에서 컴포넌트를 선택하세요.');
         return;
     }
 

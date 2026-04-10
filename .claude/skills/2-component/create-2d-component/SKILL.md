@@ -99,19 +99,33 @@ Components/Navigation/NavigationDrawer/Standard/views, styles, scripts, preview
 Components/Sheets/BottomSheets/Standard/views, styles, scripts, preview
 ```
 
-컴포넌트 변형은 `Standard`, `Advanced_01`, `Advanced_02` … 순으로 확장된다. 각 변형의 상세 명세는 해당 폴더의 CLAUDE.md에 기입된다.
+컴포넌트 변형은 `Standard`(필수)와 `Advanced`(선택)로 구분된다. `Advanced`는 여러 구현을 담는 컨테이너 폴더이며, 그 안에 구현별 하위 폴더(`camera/`, `popup/` 등)를 둔다. 각 구현의 상세 명세는 해당 하위 폴더의 CLAUDE.md에 기입된다.
 
 **실제 예시:**
 ```
-Components/Navigation/NavigationDrawer/Standard/
-├── CLAUDE.md          ← 이 변형의 상세 명세
-├── views/
-├── styles/
-├── scripts/
-└── preview/
+Components/Navigation/NavigationDrawer/
+├── Standard/
+│   ├── CLAUDE.md          ← Standard 명세
+│   ├── views/
+│   ├── styles/
+│   ├── scripts/
+│   └── preview/
+└── Advanced/              ← 선택 (다중 구현 컨테이너)
+    ├── {구현명1}/
+    │   ├── CLAUDE.md      ← 이 구현의 상세 명세
+    │   ├── views/
+    │   ├── styles/
+    │   └── scripts/
+    ├── {구현명2}/
+    │   └── ...
+    └── preview/
+        ├── {구현명1}.html
+        └── {구현명2}.html
 ```
 
-> ⚠️ 잘못된 예: `Components/Navigation/Standard/` — 서브 범주(NavigationDrawer)를 건너뛰면 안 된다.
+> ⚠️ 잘못된 예
+> - `Components/Navigation/Standard/` — 서브 범주(NavigationDrawer)를 건너뛰면 안 된다.
+> - `Components/Navigation/NavigationDrawer/Advanced_01/` — `Advanced_01`, `Advanced_02` 같은 형제 폴더는 사용하지 않는다. 반드시 `Advanced/{구현명}/` 중첩 구조를 사용한다.
 
 ### 확인 방법
 
@@ -124,9 +138,11 @@ ls Components/[카테고리]/    # 서브 범주 폴더가 있는지 확인
 
 ## 출력 구조
 
+### Standard (필수)
+
 ```
-[Standard 또는 Advanced_NN]/
-├── CLAUDE.md                  # 변형별 상세 명세
+Standard/
+├── CLAUDE.md                  # Standard 명세
 ├── views/
 │   ├── 01_[name].html         # 디자인 변형 A
 │   └── 02_[name].html         # 디자인 변형 B
@@ -139,6 +155,26 @@ ls Components/[카테고리]/    # 서브 범주 폴더가 있는지 확인
 └── preview/
     ├── 01_[name].html
     └── 02_[name].html
+```
+
+### Advanced (선택, 다중 구현 컨테이너)
+
+```
+Advanced/
+├── {구현명1}/                 # 예: carousel, expandable …
+│   ├── CLAUDE.md              # 이 구현의 상세 명세
+│   ├── views/
+│   │   └── 01_[name].html
+│   ├── styles/
+│   │   └── 01_[name].css
+│   └── scripts/
+│       ├── register.js
+│       └── beforeDestroy.js
+├── {구현명2}/
+│   └── ...
+└── preview/
+    ├── {구현명1}.html
+    └── {구현명2}.html
 ```
 
 scripts/는 디자인이 달라져도 변하지 않는다. 약속된 선택자만 HTML에 유지하면 된다.
