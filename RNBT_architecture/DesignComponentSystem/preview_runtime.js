@@ -140,6 +140,25 @@ const Wkit = {
     },
     offEventBusHandlers: (handlers) => {
         Object.keys(handlers).forEach(k => delete _eventHandlers[k]);
+    },
+    /**
+     * 3D 이벤트 바인딩 시뮬레이션.
+     * 실제 Wkit.bind3DEvents와 동일하게 instance.appendElement.eventListener[type]에
+     * 이벤트 버스 발행 핸들러를 등록한다. 실제 raycasting은 프리뷰 쪽에서 수행하고
+     * hit된 객체(또는 부모)의 eventListener[type](event) 를 호출하면 된다.
+     *
+     * 3D customEvents 구조는 2D와 다르다:
+     *   2D: { click: { '.selector': '@topic' } }
+     *   3D: { click: '@topic' }  (selector 없음 — 전체 mesh 대상)
+     */
+    bind3DEvents: (instance, customEvents) => {
+        instance.appendElement.eventListener = instance.appendElement.eventListener || {};
+        Object.keys(customEvents).forEach(browserEvent => {
+            instance.appendElement.eventListener[browserEvent] = (event) => {
+                const topic = customEvents[event.type];
+                Weventbus.emit(topic, { event, targetInstance: instance });
+            };
+        });
     }
 };
 
@@ -181,3 +200,13 @@ async function loadComponentAssets(containerId, htmlPath, cssPath) {
 
     return container;
 }
+
+// ── window 노출 ──
+// 3D 프리뷰는 <script type="module">에서 THREE를 import하는데,
+// module scope에서는 classic script의 top-level const/let에 접근할 수 없다.
+// window에 붙여야 module script에서 접근 가능하다.
+window.GlobalDataPublisher = GlobalDataPublisher;
+window.Weventbus = Weventbus;
+window.Wkit = Wkit;
+window.fx = fx;
+window.loadComponentAssets = loadComponentAssets;

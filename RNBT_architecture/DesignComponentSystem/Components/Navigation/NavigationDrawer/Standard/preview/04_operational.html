@@ -16,12 +16,36 @@
             letter-spacing: 0.5px; text-transform: uppercase;
         }
         .preview-toggle:hover { border-color: rgba(77, 208, 225, 0.6); }
+        .demo-log {
+            position: fixed;
+            top: 60px;
+            right: 16px;
+            width: 320px;
+            padding: 10px 14px;
+            background: #0d1117;
+            border: 1px solid #1f3a4a;
+            border-radius: 2px;
+            color: #7dc7d9;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            line-height: 1.6;
+            max-height: 240px;
+            overflow-y: auto;
+            z-index: 200;
+        }
+        .demo-log strong {
+            color: #22d3ee;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
     </style>
 </head>
 <body>
 
 <div id="nav-drawer-container"></div>
 <button class="preview-toggle" onclick="toggleDrawer()">Toggle Drawer</button>
+<div class="demo-log" id="demo-log"><strong>event log</strong><br>—</div>
 
 <script src="../../../../../preview_runtime.js"></script>
 <script src="../../../../../Mixins/ListRenderMixin.js"></script>
@@ -81,11 +105,26 @@ let _instance;
     };
     Wkit.bindEvents(instance, instance.customEvents);
 
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>event log</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>event log</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    let activeMenuid = 'dashboard';
     Wkit.onEventBusHandlers({
         '@menuItemClicked': ({ event, targetInstance }) => {
             const item = event.target.closest(targetInstance.listRender.cssSelectors.menuid);
             const menuid = item?.getAttribute('data-menuid');
-            console.log('[Preview] Menu item clicked:', menuid);
+            if (!menuid || menuid === activeMenuid) {
+                log(`menuItemClicked "${menuid}" (already active)`);
+                return;
+            }
+            targetInstance.listRender.updateItemState(activeMenuid, { active: 'false' });
+            targetInstance.listRender.updateItemState(menuid,       { active: 'true' });
+            activeMenuid = menuid;
+            log(`menuItemClicked "${menuid}" → activated`);
         }
     });
 

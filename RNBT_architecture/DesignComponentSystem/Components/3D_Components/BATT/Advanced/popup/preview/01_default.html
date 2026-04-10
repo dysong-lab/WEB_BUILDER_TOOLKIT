@@ -58,6 +58,31 @@
         .demo-btn[data-status="offline"] { background: #6b7280; }
         .demo-btn[data-status="reset"]   { background: #3b82f6; }
         .demo-btn[data-action="popup"]   { background: #8b5cf6; }
+
+        .demo-log {
+            width: 600px;
+            margin: 16px auto 0;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid #2a2a4a;
+            border-radius: 6px;
+            color: #8888aa;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 12px;
+            line-height: 1.6;
+            max-height: 160px;
+            overflow-y: auto;
+        }
+        .demo-log strong { color: #e2e8f0; }
+        .demo-hint {
+            width: 600px;
+            margin: 8px auto 0;
+            text-align: center;
+            color: #5a5a7a;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 11px;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -78,7 +103,11 @@
     </div>
 
     <div id="batt-pageThreeLayer"></div>
+    <div class="demo-hint">※ 3D 모델을 직접 클릭하면 @battClicked 이벤트가 발행됩니다</div>
+    <div class="demo-log" id="demo-log"><strong>이벤트 로그</strong><br>—</div>
 
+    <!-- preview_runtime.js: Wkit.bind3DEvents / onEventBusHandlers / Weventbus 시뮬레이션 -->
+    <script src="../../../../../../preview_runtime.js"></script>
     <!-- Mixin 로드 -->
     <script src="../../../../../../Mixins/MeshStateMixin.js"></script>
     <script src="../../../../../../Mixins/3DShadowPopupMixin.js"></script>
@@ -283,12 +312,37 @@
             }
         });
 
+        // ── 3D 이벤트 바인딩 (register.js 재현) ──────────────────
+        instance.customEvents = { click: '@battClicked' };
+        Wkit.bind3DEvents(instance, instance.customEvents);
+
         // 카메라 타겟 조정
         const box = new THREE.Box3().setFromObject(model);
         const center = box.getCenter(new THREE.Vector3());
         controls.target.copy(center);
         camera.position.set(center.x + 4, center.y + 2, center.z + 5);
         controls.update();
+    });
+
+    // ── Raycasting: DOM click → hit test → eventListener 호출 ──
+    // 실제 런타임은 Wkit.initThreeRaycasting이 wemb.threeElements에서
+    // scene/camera를 읽어 수행하지만, preview에서는 직접 수행한다.
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    renderer.domElement.addEventListener('click', (event) => {
+        const rect = renderer.domElement.getBoundingClientRect();
+        mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(scene.children, true);
+        for (const inter of intersects) {
+            let current = inter.object;
+            while (current && !current.eventListener) current = current.parent;
+            if (current?.eventListener?.click) {
+                current.eventListener.click(Object.assign(event, { intersects }));
+                break;
+            }
+        }
     });
 
     // ── Render Loop ───────────────────────────────────────────
@@ -298,6 +352,34 @@
         renderer.render(scene, camera);
     }
     animate();
+
+    // ── Demo Log ─────────────────────────────────────────────
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>이벤트 로그</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>이벤트 로그</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    // ── 이벤트 버스 구독 (페이지 측 반응 재현) ────────────────
+    // 실제 런타임에서는 페이지 코드가 @battClicked를 구독하여
+    // instance.shadowPopup.show()를 호출한다. preview에서도 동일 경로로 검증.
+    Wkit.onEventBusHandlers({
+        '@battClicked': ({ event, targetInstance }) => {
+            const meshName = event.intersects?.[0]?.object?.name || '(unknown)';
+            log(`@battClicked mesh="${meshName}" → shadowPopup.show()`);
+            targetInstance.shadowPopup.show();
+            const statusEl = targetInstance.shadowPopup.query('.popup-status');
+            const statusCell = targetInstance.shadowPopup.query('.popup-status-cell');
+            const nameEl = targetInstance.shadowPopup.query('.popup-name');
+            if (nameEl) nameEl.textContent = targetInstance.name;
+            if (statusEl) {
+                statusEl.textContent = currentStatus;
+                statusEl.dataset.status = currentStatus;
+            }
+            if (statusCell) statusCell.textContent = currentStatus;
+        }
+    });
 
     // ── Demo: Status (renderData) ─────────────────────────────
     let currentStatus = 'normal';

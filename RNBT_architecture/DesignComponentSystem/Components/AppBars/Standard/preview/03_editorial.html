@@ -7,13 +7,33 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #f2efe9; }
+        body { background: #f2efe9; font-family: 'Inter', sans-serif; }
         #top-app-bar-container { margin: 40px auto 0; }
+        .demo-log {
+            width: 360px;
+            margin: 24px auto 0;
+            padding: 14px 18px;
+            background: #faf8f3;
+            border: 1px solid #d4c9b5;
+            border-radius: 2px;
+            color: #5c544a;
+            font-size: 12px;
+            line-height: 1.7;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .demo-log strong {
+            color: #2a2520;
+            font-family: 'DM Serif Display', serif;
+            font-weight: 400;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
 
 <div id="top-app-bar-container"></div>
+<div class="demo-log" id="demo-log"><strong>이벤트 로그</strong><br>—</div>
 
 <script src="../../../../preview_runtime.js"></script>
 <script src="../../../../Mixins/FieldRenderMixin.js"></script>
@@ -45,12 +65,19 @@
     };
     Wkit.bindEvents(instance, instance.customEvents);
 
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>이벤트 로그</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>이벤트 로그</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
     Wkit.onEventBusHandlers({
-        '@navigationClicked': () => console.log('[Preview] Navigation clicked'),
+        '@navigationClicked': () => log('navigationClicked → drawer.toggle()'),
         '@actionClicked': ({ event }) => {
             const btn = event.target.closest('.top-app-bar__action');
-            const label = btn?.getAttribute('aria-label');
-            console.log('[Preview] Action clicked:', label);
+            const label = btn?.getAttribute('aria-label') || '(unknown)';
+            log(`actionClicked "${label}"`);
         }
     });
 

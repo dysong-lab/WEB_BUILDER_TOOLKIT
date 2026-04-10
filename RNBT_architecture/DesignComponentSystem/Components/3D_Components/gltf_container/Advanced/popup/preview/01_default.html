@@ -85,6 +85,22 @@
         .demo-log-entry .status-warning { color: #fbbf24; }
         .demo-log-entry .status-error   { color: #f87171; }
         .demo-log-entry .status-offline { color: #6b7280; }
+
+        .event-log {
+            width: 800px;
+            margin: 0 auto 8px;
+            padding: 10px 14px;
+            background: rgba(139, 92, 246, 0.08);
+            border: 1px solid #3d2c66;
+            border-radius: 4px;
+            color: #a78bfa;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 12px;
+            line-height: 1.6;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+        .event-log strong { color: #e9d5ff; }
     </style>
 </head>
 <body>
@@ -97,10 +113,13 @@
     </div>
     <div class="demo-info">3D 모델을 클릭하면 해당 Mesh의 데이터를 조회하여 팝업을 표시합니다 · 상태 데이터는 3초마다 자동 갱신됩니다</div>
 
+    <div class="event-log" id="event-log"><strong>이벤트 로그</strong><br>—</div>
     <div id="gltf-container-pageThreeLayer"></div>
 
     <div class="demo-log" id="log"></div>
 
+    <!-- preview_runtime.js: Wkit.bind3DEvents / onEventBusHandlers / Weventbus 시뮬레이션 -->
+    <script src="../../../../../../preview_runtime.js"></script>
     <!-- Mixin 로드 -->
     <script src="../../../../../../Mixins/MeshStateMixin.js"></script>
     <script src="../../../../../../Mixins/3DShadowPopupMixin.js"></script>
@@ -377,6 +396,10 @@
             }
         });
 
+        // ── 3D 이벤트 바인딩 (register.js 재현) ──────────────────
+        instance.customEvents = { click: '@meshClicked' };
+        Wkit.bind3DEvents(instance, instance.customEvents);
+
         // 카메라 타겟을 모델 중심으로 조정
         const box = new THREE.Box3().setFromObject(model);
         const center = box.getCenter(new THREE.Vector3());
@@ -450,9 +473,34 @@
         if (updatedCell) updatedCell.textContent = data.lastUpdate;
     }
 
-    // ── 클릭 → fetchData → 팝업 ──────────────────────────────
-    const clickedMeshEl = document.getElementById('clickedMesh');
+    // ── 이벤트 로그 ────────────────────────────────────────────
+    const eventLogEl = document.getElementById('event-log');
+    let eventLogHtml = '<strong>이벤트 로그</strong><br>—';
+    const logEvent = (msg) => {
+        eventLogHtml = '<strong>이벤트 로그</strong><br>' + msg + '<br>' + eventLogHtml.split('<br>').slice(1).join('<br>');
+        eventLogEl.innerHTML = eventLogHtml;
+    };
 
+    // ── 이벤트 버스 구독 (페이지 측 반응 재현) ────────────────
+    // @meshClicked 수신 → fetchData → 팝업 표시 + 로그
+    const clickedMeshEl = document.getElementById('clickedMesh');
+    Wkit.onEventBusHandlers({
+        '@meshClicked': ({ event, targetInstance }) => {
+            const meshName = resolveMeshName(event.intersects);
+            if (!meshName) {
+                logEvent('@meshClicked (빈 hit)');
+                return;
+            }
+            clickedMeshEl.textContent = meshName;
+            logEvent(`@meshClicked mesh="${meshName}" → fetchData → shadowPopup.show()`);
+            // 실제: fetchData(page, 'meshDetail', { meshName })
+            mockFetchData(meshName)
+                .then(data => showDetail(meshName, data));
+        }
+    });
+
+    // ── 클릭 → Raycasting → eventListener 호출 ───────────────
+    // 기존 직접 호출을 이벤트 버스 경로로 전환.
     renderer.domElement.addEventListener('click', (event) => {
         if (!instance.appendElement) return;
 
@@ -461,14 +509,14 @@
         raycaster.setFromCamera(mouse, camera);
 
         const intersects = raycaster.intersectObjects(scene.children, true);
-        const meshName = resolveMeshName(intersects);
-        if (!meshName) return;
-
-        clickedMeshEl.textContent = meshName;
-
-        // 실제: fetchData(page, 'meshDetail', { meshName })
-        mockFetchData(meshName)
-            .then(data => showDetail(meshName, data));
+        for (const inter of intersects) {
+            let current = inter.object;
+            while (current && !current.eventListener) current = current.parent;
+            if (current?.eventListener?.click) {
+                current.eventListener.click(Object.assign(event, { intersects }));
+                break;
+            }
+        }
     });
 
     // ── Resize ────────────────────────────────────────────────

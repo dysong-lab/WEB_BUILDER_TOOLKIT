@@ -4,15 +4,44 @@
     <meta charset="UTF-8">
     <title>Buttons/Standard — 03_editorial (Persona C)</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500&display=swap">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #FDFBF7; display: flex; align-items: center; justify-content: center; height: 100vh; }
-        #button-container { margin: auto; }
+        body {
+            background: #FDFBF7;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 24px;
+            padding: 40px 20px;
+        }
+        .demo-log {
+            width: 360px;
+            padding: 14px 18px;
+            background: #faf8f3;
+            border: 1px solid #d4c9b5;
+            border-radius: 2px;
+            color: #5c544a;
+            font-size: 12px;
+            line-height: 1.7;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .demo-log strong {
+            color: #2a2520;
+            font-family: 'DM Serif Display', serif;
+            font-weight: 400;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
 
 <div id="button-container"></div>
+<div class="demo-log" id="demo-log"><strong>이벤트 로그</strong><br>—</div>
 
 <script src="../../../../../preview_runtime.js"></script>
 <script src="../../../../../Mixins/FieldRenderMixin.js"></script>
@@ -42,9 +71,18 @@
     };
     Wkit.bindEvents(instance, instance.customEvents);
 
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>이벤트 로그</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>이벤트 로그</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
     Wkit.onEventBusHandlers({
-        '@buttonClicked': ({ event, targetInstance }) => {
-            console.log('[Preview] Button clicked');
+        '@buttonClicked': ({ event }) => {
+            const btn = event.target.closest('.button');
+            const label = btn?.querySelector('.button__label')?.textContent || '(no label)';
+            log(`buttonClicked "${label}"`);
         }
     });
 

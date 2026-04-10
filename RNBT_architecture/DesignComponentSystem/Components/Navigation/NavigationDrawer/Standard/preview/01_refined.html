@@ -17,12 +17,31 @@
             font-family: 'Pretendard', sans-serif; font-size: 13px;
         }
         .preview-toggle:hover { background: rgba(80, 46, 233, 0.2); }
+        .demo-log {
+            position: fixed;
+            top: 64px;
+            right: 16px;
+            width: 320px;
+            padding: 12px 16px;
+            background: rgba(25, 29, 80, 0.9);
+            border: 1px solid #2A2574;
+            border-radius: 8px;
+            color: #A6B3DE;
+            font-family: 'Pretendard', sans-serif;
+            font-size: 12px;
+            line-height: 1.6;
+            max-height: 240px;
+            overflow-y: auto;
+            z-index: 200;
+        }
+        .demo-log strong { color: #E8EDFF; }
     </style>
 </head>
 <body>
 
 <div id="nav-drawer-container"></div>
 <button class="preview-toggle" onclick="toggleDrawer()">Toggle Drawer</button>
+<div class="demo-log" id="demo-log"><strong>이벤트 로그</strong><br>—</div>
 
 <script src="../../../../../preview_runtime.js"></script>
 <script src="../../../../../Mixins/ListRenderMixin.js"></script>
@@ -83,11 +102,26 @@ let _instance;
     };
     Wkit.bindEvents(instance, instance.customEvents);
 
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>이벤트 로그</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>이벤트 로그</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    let activeMenuid = 'dashboard';
     Wkit.onEventBusHandlers({
         '@menuItemClicked': ({ event, targetInstance }) => {
             const item = event.target.closest(targetInstance.listRender.cssSelectors.menuid);
             const menuid = item?.getAttribute('data-menuid');
-            console.log('[Preview] Menu item clicked:', menuid);
+            if (!menuid || menuid === activeMenuid) {
+                log(`menuItemClicked "${menuid}" (이미 활성)`);
+                return;
+            }
+            targetInstance.listRender.updateItemState(activeMenuid, { active: 'false' });
+            targetInstance.listRender.updateItemState(menuid,       { active: 'true' });
+            activeMenuid = menuid;
+            log(`menuItemClicked "${menuid}" → 활성 전환`);
         }
     });
 
