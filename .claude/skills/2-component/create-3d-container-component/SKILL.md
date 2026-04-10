@@ -775,39 +775,34 @@ Components/3D_Components/
 └── {컨테이너명}/
     ├── CLAUDE.md
     ├── Standard/                          ← 필수 (MeshState only)
+    │   ├── CLAUDE.md
     │   ├── scripts/
     │   │   ├── register.js
     │   │   └── beforeDestroy.js
-    │   ├── page/
-    │   │   ├── before_load.js
-    │   │   ├── loaded.js
-    │   │   └── before_unload.js
     │   └── preview/
     │       └── 01_default.html            ← 모델 변종 1개당 1 파일
-    └── Advanced/                          ← 선택 (Mixin 조합별)
-        ├── camera/
+    └── Advanced/                          ← 선택 (Mixin 조합별, 다중 구현 컨테이너)
+        ├── camera/                        ← 각 구현은 Standard와 동일한 4요소를 자기 안에 갖는다
+        │   ├── CLAUDE.md
         │   ├── scripts/
         │   │   ├── register.js
         │   │   └── beforeDestroy.js
-        │   └── page/
-        │       ├── before_load.js
-        │       ├── loaded.js
-        │       └── before_unload.js
+        │   └── preview/
+        │       └── 01_default.html        ← 구현명은 경로에 있으므로 파일명은 변종명만
         ├── popup/
+        │   ├── CLAUDE.md
         │   ├── scripts/...
-        │   └── page/...
+        │   └── preview/
+        │       └── 01_default.html
         ├── highlight/                     # 구현 명세에 따라 선택
-        │   └── ...
+        │   └── ... (동일 4요소)
         ├── camera_highlight/
-        │   └── ...
-        ├── visibility/
-        │   └── ...
-        └── preview/
-            ├── 01_default_camera.html     ← {NN_변종명}_{구현명}.html
-            ├── 01_default_popup.html
-            ├── 01_default_highlight.html
-            └── 01_default_visibility.html
+        │   └── ... (동일 4요소)
+        └── visibility/
+            └── ... (동일 4요소)
 ```
+
+> 페이지 라이프사이클 훅(`before_load.js`, `loaded.js`, `before_unload.js`)은 컴포넌트가 아니라 **페이지**가 가진다 (`Examples/{Dashboard}/page/page_scripts/`). 컴포넌트 폴더 안에 두지 않는다.
 
 ```
 models/
@@ -829,13 +824,13 @@ models/
 | 불변 (공유) | register.js | register.js (resolveMeshName 포함) |
 | 변형의 축 | 디자인 페르소나 | 3D 모델 변종 |
 | 변형의 자산 | `views/01_refined.html` + `styles/01_refined.css` | `models/{컨테이너명}/01_default/{컨테이너명}.gltf` (+ .bin, 텍스처) |
-| preview wrapper | `preview/01_refined.html` | `preview/01_default.html` (Standard) / `preview/01_default_camera.html` (Advanced) |
+| preview wrapper | `preview/01_refined.html` (Standard·Advanced 모두 자기 폴더 안) | `preview/01_default.html` (Standard·Advanced 모두 자기 폴더 안) |
 
 ### 폴더/파일 명명 규칙
 
 - 모델 변종은 `models/{컨테이너명}/NN_변종명/` 폴더로 격리한다 (예: `models/gltf_container/01_default/`)
 - 폴더 안의 GLTF·.bin·텍스처 파일은 원래 이름을 유지한다 (GLTF 내부 상대 참조가 그대로 유효해야 한다)
-- preview HTML은 `NN_변종명` 또는 `NN_변종명_{구현명}` 접두사를 사용한다
+- preview HTML은 항상 `{Standard 또는 Advanced/{구현명}}/preview/NN_변종명.html` 위치에 둔다 (구현명은 경로에 있으므로 파일명은 변종명만)
 - manifest 라벨은 `"NN 변종명"` (공백 구분)으로 표기하여 2D 형식과 정합
 
 ### 컨테이너 특수 고려사항

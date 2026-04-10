@@ -1,0 +1,118 @@
+/* 01_refined: Persona A — Refined Technical
+   퍼플 팔레트 / 그라디언트 깊이 / Pretendard / 다크 */
+#top-app-bar-container {
+    width: 360px;
+    height: 56px;
+
+    .top-app-bar {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        padding: 0 8px;
+        gap: 8px;
+        background: linear-gradient(90deg, rgba(80, 46, 233, 0.06) 0%, rgba(146, 168, 244, 0.03) 100%),
+                    #191D50;
+        border-bottom: 1px solid #2A2574;
+    }
+
+    .top-app-bar__nav-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border: none;
+        background: none;
+        color: #707EB4;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: background-color 150ms ease-out, color 150ms ease-out;
+        flex-shrink: 0;
+    }
+
+    .top-app-bar__nav-icon:hover {
+        color: #A6B3DE;
+        background: rgba(80, 46, 233, 0.12);
+    }
+
+    .top-app-bar__nav-icon .material-symbols-outlined {
+        font-size: 22px;
+    }
+
+    .top-app-bar__search {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        min-width: 0;
+        height: 40px;
+        padding: 0 8px;
+        background: rgba(146, 168, 244, 0.06);
+        border: 1px solid #2A2574;
+        border-radius: 10px;
+        transition: border-color 150ms ease-out, background-color 150ms ease-out;
+    }
+
+    .top-app-bar__search:focus-within {
+        border-color: #502EE9;
+        background: rgba(80, 46, 233, 0.10);
+    }
+
+    .top-app-bar__search-icon {
+        font-size: 18px;
+        color: #707EB4;
+        flex-shrink: 0;
+    }
+
+    .top-app-bar__search-input {
+        flex: 1;
+        min-width: 0;
+        height: 100%;
+        padding: 0 8px;
+        border: none;
+        outline: none;
+        background: transparent;
+        font-family: 'Pretendard', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #E8EDFF;
+    }
+
+    .top-app-bar__search-input::placeholder {
+        color: #5F6CA0;
+        font-weight: 400;
+    }
+
+    .top-app-bar__clear {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        border: none;
+        background: none;
+        color: #5F6CA0;
+        cursor: pointer;
+        border-radius: 6px;
+        transition: background-color 150ms ease-out, color 150ms ease-out;
+        flex-shrink: 0;
+    }
+
+    .top-app-bar__clear:hover {
+        color: #A6B3DE;
+        background: rgba(80, 46, 233, 0.18);
+    }
+
+    .top-app-bar__clear .material-symbols-outlined {
+        font-size: 16px;
+    }
+
+    .top-app-bar__count {
+        font-family: 'Pretendard', sans-serif;
+        font-size: 11px;
+        font-weight: 500;
+        color: #707EB4;
+        padding: 0 4px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+}

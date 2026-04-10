@@ -99,7 +99,7 @@ Components/Navigation/NavigationDrawer/Standard/views, styles, scripts, preview
 Components/Sheets/BottomSheets/Standard/views, styles, scripts, preview
 ```
 
-컴포넌트 변형은 `Standard`(필수)와 `Advanced`(선택)로 구분된다. `Advanced`는 여러 구현을 담는 컨테이너 폴더이며, 그 안에 구현별 하위 폴더(`camera/`, `popup/` 등)를 둔다. 각 구현의 상세 명세는 해당 하위 폴더의 CLAUDE.md에 기입된다.
+컴포넌트 변형은 `Standard`(필수)와 `Advanced`(선택)로 구분된다. `Advanced`는 여러 구현을 담는 컨테이너 폴더이며, 그 안에 구현별 하위 폴더(`searchEmbedded/`, `tabbed/` 등)를 둔다. **각 Advanced 구현은 구조적으로 또 하나의 Standard와 같다** — 자기 CLAUDE.md, views, styles, scripts, **그리고 자기 preview까지** 모두 자기 폴더 안에 둔다.
 
 **실제 예시:**
 ```
@@ -115,17 +115,16 @@ Components/Navigation/NavigationDrawer/
     │   ├── CLAUDE.md      ← 이 구현의 상세 명세
     │   ├── views/
     │   ├── styles/
-    │   └── scripts/
-    ├── {구현명2}/
-    │   └── ...
-    └── preview/
-        ├── {구현명1}.html
-        └── {구현명2}.html
+    │   ├── scripts/
+    │   └── preview/       ← 자기 폴더 안에 자기 preview
+    └── {구현명2}/
+        └── ... (동일 구조)
 ```
 
 > ⚠️ 잘못된 예
 > - `Components/Navigation/Standard/` — 서브 범주(NavigationDrawer)를 건너뛰면 안 된다.
 > - `Components/Navigation/NavigationDrawer/Advanced_01/` — `Advanced_01`, `Advanced_02` 같은 형제 폴더는 사용하지 않는다. 반드시 `Advanced/{구현명}/` 중첩 구조를 사용한다.
+> - `Advanced/preview/{구현명}.html` — preview를 Advanced 레벨로 빼지 않는다. 각 구현 폴더 안에 자기 preview를 둔다.
 
 ### 확인 방법
 
@@ -159,22 +158,23 @@ Standard/
 
 ### Advanced (선택, 다중 구현 컨테이너)
 
+각 구현 폴더는 Standard와 동일한 5요소(CLAUDE.md + views + styles + scripts + preview)를 모두 자기 안에 갖는다.
+
 ```
 Advanced/
-├── {구현명1}/                 # 예: carousel, expandable …
+├── {구현명1}/                 # 예: searchEmbedded, tabbed …
 │   ├── CLAUDE.md              # 이 구현의 상세 명세
 │   ├── views/
 │   │   └── 01_[name].html
 │   ├── styles/
 │   │   └── 01_[name].css
-│   └── scripts/
-│       ├── register.js
-│       └── beforeDestroy.js
-├── {구현명2}/
-│   └── ...
-└── preview/
-    ├── {구현명1}.html
-    └── {구현명2}.html
+│   ├── scripts/
+│   │   ├── register.js
+│   │   └── beforeDestroy.js
+│   └── preview/
+│       └── 01_[name].html     # 파일명은 디자인 변형명만 (구현명은 경로에 이미 있음)
+└── {구현명2}/
+    └── ... (동일 구조)
 ```
 
 scripts/는 디자인이 달라져도 변하지 않는다. 약속된 선택자만 HTML에 유지하면 된다.

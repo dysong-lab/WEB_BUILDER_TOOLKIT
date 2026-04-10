@@ -2,11 +2,11 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>thermohygrostat — 02_status_camera</title>
+    <title>tempHumiTH2B — 02_status_camera</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #1a1a2e; }
-        #thermohygrostat-pageThreeLayer {
+        #tempHumiTH2B-pageThreeLayer {
             width: 600px;
             height: 480px;
             display: block;
@@ -78,10 +78,10 @@
         </div>
     </div>
 
-    <div id="thermohygrostat-pageThreeLayer"></div>
+    <div id="tempHumiTH2B-pageThreeLayer"></div>
 
-    <script src="../../../../../Mixins/MeshStateMixin.js"></script>
-    <script src="../../../../../Mixins/CameraFocusMixin.js"></script>
+    <script src="../../../../../../Mixins/MeshStateMixin.js"></script>
+    <script src="../../../../../../Mixins/CameraFocusMixin.js"></script>
 
     <script type="importmap">
     {
@@ -99,7 +99,7 @@
 
     window.THREE = THREE;
 
-    const pageThreeLayer = document.getElementById('thermohygrostat-pageThreeLayer');
+    const pageThreeLayer = document.getElementById('tempHumiTH2B-pageThreeLayer');
     const width = pageThreeLayer.clientWidth;
     const height = pageThreeLayer.clientHeight;
 
@@ -134,7 +134,7 @@
     const instance = { appendElement: null };
     const loader = new GLTFLoader();
 
-    loader.load('../../../../../models/thermohygrostat/01_default/thermohygrostat.gltf', (gltf) => {
+    loader.load('../../../../../../models/tempHumiTH2B/01_default/tempHumiTH2B.gltf', (gltf) => {
         const model = gltf.scene;
         scene.add(model);
         instance.appendElement = model;
@@ -173,12 +173,12 @@
             if (!instance.meshState) return;
             const status = btn.dataset.status;
             if (status === 'reset') {
-                const mesh = instance.appendElement.getObjectByName('thermohygrostat');
+                const mesh = instance.appendElement.getObjectByName('tempHumiTH2B');
                 if (mesh) mesh.material.color.setHex(0xffffff);
                 return;
             }
             instance.meshState.renderData({
-                response: [{ meshName: 'thermohygrostat', status }]
+                response: [{ meshName: 'tempHumiTH2B', status }]
             });
         });
     });
@@ -190,7 +190,7 @@
             if (action === 'focus') {
                 instance.cameraFocus.focusOn({
                     container: instance.appendElement,
-                    meshName: 'thermohygrostat',
+                    meshName: 'tempHumiTH2B',
                     offset: { x: 1.5, y: 1.0, z: 3.0 }
                 });
             } else if (action === 'reset-camera') {

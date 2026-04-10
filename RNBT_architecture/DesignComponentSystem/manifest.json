@@ -17,6 +17,19 @@
                 { "label": "03 editorial", "path": "Components/AppBars/Standard/preview/03_editorial.html" },
                 { "label": "04 operational", "path": "Components/AppBars/Standard/preview/04_operational.html" }
               ]
+            },
+            {
+              "name": "Advanced",
+              "spec": null,
+              "items": [
+                {
+                  "name": "searchEmbedded",
+                  "spec": "Components/AppBars/Advanced/searchEmbedded/CLAUDE.md",
+                  "previews": [
+                    { "label": "01 refined", "path": "Components/AppBars/Advanced/searchEmbedded/preview/01_refined.html" }
+                  ]
+                }
+              ]
             }
           ]
         }
@@ -270,14 +283,14 @@
                   "name": "camera",
                   "spec": "Components/3D_Components/BATT/Advanced/camera/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/BATT/Advanced/preview/01_default_camera.html" }
+                    { "label": "01 default", "path": "Components/3D_Components/BATT/Advanced/camera/preview/01_default.html" }
                   ]
                 },
                 {
                   "name": "popup",
                   "spec": "Components/3D_Components/BATT/Advanced/popup/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/BATT/Advanced/preview/01_default_popup.html" }
+                    { "label": "01 default", "path": "Components/3D_Components/BATT/Advanced/popup/preview/01_default.html" }
                   ]
                 }
               ]
@@ -303,14 +316,14 @@
                   "name": "camera",
                   "spec": "Components/3D_Components/Chiller/Advanced/camera/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/Chiller/Advanced/preview/01_default_camera.html" }
+                    { "label": "01 default", "path": "Components/3D_Components/Chiller/Advanced/camera/preview/01_default.html" }
                   ]
                 },
                 {
                   "name": "popup",
                   "spec": "Components/3D_Components/Chiller/Advanced/popup/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/Chiller/Advanced/preview/01_default_popup.html" }
+                    { "label": "01 default", "path": "Components/3D_Components/Chiller/Advanced/popup/preview/01_default.html" }
                   ]
                 }
               ]
@@ -336,14 +349,14 @@
                   "name": "camera",
                   "spec": "Components/3D_Components/Panel/Advanced/camera/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/Panel/Advanced/preview/01_default_camera.html" }
+                    { "label": "01 default", "path": "Components/3D_Components/Panel/Advanced/camera/preview/01_default.html" }
                   ]
                 },
                 {
                   "name": "popup",
                   "spec": "Components/3D_Components/Panel/Advanced/popup/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/Panel/Advanced/preview/01_default_popup.html" }
+                    { "label": "01 default", "path": "Components/3D_Components/Panel/Advanced/popup/preview/01_default.html" }
                   ]
                 }
               ]
@@ -369,14 +382,14 @@
                   "name": "camera",
                   "spec": "Components/3D_Components/UPS/Advanced/camera/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/UPS/Advanced/preview/01_default_camera.html" }
+                    { "label": "01 default", "path": "Components/3D_Components/UPS/Advanced/camera/preview/01_default.html" }
                   ]
                 },
                 {
                   "name": "popup",
                   "spec": "Components/3D_Components/UPS/Advanced/popup/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/UPS/Advanced/preview/01_default_popup.html" }
+                    { "label": "01 default", "path": "Components/3D_Components/UPS/Advanced/popup/preview/01_default.html" }
                   ]
                 }
               ]
@@ -402,14 +415,14 @@
                   "name": "camera",
                   "spec": "Components/3D_Components/tempHumiTH2B/Advanced/camera/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/tempHumiTH2B/Advanced/preview/01_default_camera.html" }
+                    { "label": "01 default", "path": "Components/3D_Components/tempHumiTH2B/Advanced/camera/preview/01_default.html" }
                   ]
                 },
                 {
                   "name": "popup",
                   "spec": "Components/3D_Components/tempHumiTH2B/Advanced/popup/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/tempHumiTH2B/Advanced/preview/01_default_popup.html" }
+                    { "label": "01 default", "path": "Components/3D_Components/tempHumiTH2B/Advanced/popup/preview/01_default.html" }
                   ]
                 }
               ]
@@ -435,14 +448,14 @@
                   "name": "camera",
                   "spec": "Components/3D_Components/thermohygrostat/Advanced/camera/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/thermohygrostat/Advanced/preview/01_default_camera.html" }
+                    { "label": "01 default", "path": "Components/3D_Components/thermohygrostat/Advanced/camera/preview/01_default.html" }
                   ]
                 },
                 {
                   "name": "popup",
                   "spec": "Components/3D_Components/thermohygrostat/Advanced/popup/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/thermohygrostat/Advanced/preview/01_default_popup.html" }
+                    { "label": "01 default", "path": "Components/3D_Components/thermohygrostat/Advanced/popup/preview/01_default.html" }
                   ]
                 }
               ]
@@ -468,14 +481,14 @@
                   "name": "camera",
                   "spec": "Components/3D_Components/gltf_container/Advanced/camera/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/gltf_container/Advanced/preview/01_default_camera.html" }
+                    { "label": "01 default", "path": "Components/3D_Components/gltf_container/Advanced/camera/preview/01_default.html" }
                   ]
                 },
                 {
                   "name": "popup",
                   "spec": "Components/3D_Components/gltf_container/Advanced/popup/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/gltf_container/Advanced/preview/01_default_popup.html" }
+                    { "label": "01 default", "path": "Components/3D_Components/gltf_container/Advanced/popup/preview/01_default.html" }
                   ]
                 }
               ]

@@ -624,37 +624,32 @@ Components/3D_Components/
 └── {장비명}/
     ├── CLAUDE.md
     ├── Standard/                          ← 필수 (MeshState only)
+    │   ├── CLAUDE.md
     │   ├── scripts/
     │   │   ├── register.js
     │   │   └── beforeDestroy.js
-    │   ├── page/
-    │   │   ├── before_load.js
-    │   │   ├── loaded.js
-    │   │   └── before_unload.js
     │   └── preview/
     │       └── 01_default.html            ← 모델 변종 1개당 1 파일
-    └── Advanced/                          ← 선택 (Mixin 조합별)
-        ├── camera/
+    └── Advanced/                          ← 선택 (Mixin 조합별, 다중 구현 컨테이너)
+        ├── camera/                        ← 각 구현은 Standard와 동일한 4요소를 자기 안에 갖는다
+        │   ├── CLAUDE.md
         │   ├── scripts/
         │   │   ├── register.js
         │   │   └── beforeDestroy.js
-        │   └── page/
-        │       ├── before_load.js
-        │       ├── loaded.js
-        │       └── before_unload.js
+        │   └── preview/
+        │       └── 01_default.html        ← 구현명은 경로에 있으므로 파일명은 변종명만
         ├── popup/
+        │   ├── CLAUDE.md
         │   ├── scripts/...
-        │   └── page/...
+        │   └── preview/
+        │       └── 01_default.html
         ├── highlight/                     # 구현 명세에 따라 선택
-        │   └── ...
-        ├── camera_highlight/
-        │   └── ...
-        └── preview/
-            ├── 01_default_camera.html     ← {NN_변종명}_{구현명}.html
-            ├── 01_default_popup.html
-            ├── 01_default_highlight.html
-            └── 01_default_camera_highlight.html
+        │   └── ... (동일 4요소)
+        └── camera_highlight/
+            └── ... (동일 4요소)
 ```
+
+> 페이지 라이프사이클 훅(`before_load.js`, `loaded.js`, `before_unload.js`)은 컴포넌트가 아니라 **페이지**가 가진다 (`Examples/{Dashboard}/page/page_scripts/`). 컴포넌트 폴더 안에 두지 않는다.
 
 ```
 models/
@@ -677,19 +672,19 @@ models/
 | 불변 (공유) | register.js | register.js |
 | 변형의 축 | 디자인 페르소나 | 3D 모델 변종 |
 | 변형의 자산 | `views/01_refined.html` + `styles/01_refined.css` | `models/{장비명}/01_default/{장비명}.gltf` (+ .bin, 텍스처) |
-| preview wrapper | `preview/01_refined.html` | `preview/01_default.html` (Standard) / `preview/01_default_camera.html` (Advanced) |
+| preview wrapper | `preview/01_refined.html` (Standard·Advanced 모두 자기 폴더 안) | `preview/01_default.html` (Standard·Advanced 모두 자기 폴더 안) |
 
 ### 폴더/파일 명명 규칙
 
 - 모델 변종은 `models/{장비명}/NN_변종명/` 폴더로 격리한다 (예: `models/BATT/01_default/`)
 - 폴더 안의 GLTF·.bin·텍스처 파일은 원래 이름을 유지한다 (GLTF 내부 상대 참조가 그대로 유효해야 한다)
-- preview HTML은 `NN_변종명` 또는 `NN_변종명_{구현명}` 접두사를 사용한다
+- preview HTML은 항상 `{Standard 또는 Advanced/{구현명}}/preview/NN_변종명.html` 위치에 둔다 (구현명은 경로에 있으므로 파일명은 변종명만)
 - manifest 라벨은 `"NN 변종명"` (공백 구분)으로 표기하여 2D 형식과 정합
 
 ### 변형 추가 절차
 
 1. `models/{장비명}/02_compact/`처럼 새 폴더를 만들고 모델 자산을 넣는다
-2. 새 변종에 대응하는 preview HTML을 추가한다 (`02_compact.html`, `02_compact_camera.html`, …)
+2. Standard 및 각 Advanced/{구현}/preview/ 안에 새 변종에 대응하는 preview HTML(`02_compact.html`)을 추가한다
 3. 새 preview HTML 내부 `loader.load(...)` 경로를 새 폴더로 지정한다
 4. manifest.json의 해당 set/item.previews 배열에 `{ "label": "02 compact", "path": "..." }`를 추가한다
 5. register.js는 절대 수정하지 않는다 — meshName 약속을 새 모델이 지키면 동일한 코드로 동작한다
