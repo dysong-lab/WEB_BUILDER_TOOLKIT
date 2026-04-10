@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Charts/ScatterChart — 01_refined</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        min-height: 100vh;
+        padding: 40px 20px;
+        background:
+          radial-gradient(
+            circle at top,
+            rgba(65, 116, 188, 0.25),
+            transparent 34%
+          ),
+          #07101b;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="scatter-chart-container"></div>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/EChartsMixin.js"></script>
+    <script>
+      (async () => {
+        await loadComponentAssets(
+          "scatter-chart-container",
+          "../views/01_refined.html",
+          "../styles/01_refined.css",
+        );
+        const instance = {
+          id: "scatter-chart",
+          appendElement: document.getElementById("scatter-chart-container"),
+        };
+        applyEChartsMixin(instance, {
+          cssSelectors: { container: ".scatter-chart__canvas" },
+          option: {
+            animationDuration: 500,
+            tooltip: {
+              trigger: "item",
+              backgroundColor: "#08111d",
+              borderWidth: 0,
+              textStyle: { color: "#fff", fontFamily: "SUIT" },
+            },
+            legend: { show: false },
+            xAxis: {
+              type: "value",
+              splitLine: { lineStyle: { color: "rgba(205,225,255,0.12)" } },
+              axisLabel: {
+                color: "rgba(205,225,255,0.62)",
+                fontSize: 11,
+                fontFamily: "SUIT",
+              },
+            },
+            yAxis: {
+              type: "value",
+              splitLine: { lineStyle: { color: "rgba(205,225,255,0.12)" } },
+              axisLabel: {
+                color: "rgba(205,225,255,0.62)",
+                fontSize: 11,
+                fontFamily: "SUIT",
+              },
+            },
+            series: [
+              {
+                name: "Cluster A",
+                type: "scatter",
+                symbolSize: 14,
+                itemStyle: { color: "#78b7ff" },
+              },
+              {
+                name: "Cluster B",
+                type: "scatter",
+                symbolSize: 14,
+                itemStyle: { color: "#53d2a2" },
+              },
+            ],
+          },
+          mapData: function (data, option) {
+            option.series[0].data = data.values[0];
+            option.series[1].data = data.values[1];
+            return option;
+          },
+        });
+        instance.subscriptions = { chartData: [instance.echarts.renderData] };
+        Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+          handlers.forEach((handler) =>
+            GlobalDataPublisher.subscribe(topic, instance, handler),
+          ),
+        );
+        instance.customEvents = {};
+        Wkit.bindEvents(instance, instance.customEvents);
+        instance.echarts.renderData({
+          response: {
+            values: [
+              [
+                [12, 28],
+                [18, 34],
+                [24, 42],
+                [31, 48],
+                [36, 52],
+              ],
+              [
+                [8, 16],
+                [14, 22],
+                [20, 26],
+                [26, 33],
+                [30, 36],
+              ],
+            ],
+          },
+        });
+      })();
+    </script>
+  </body>
+</html>

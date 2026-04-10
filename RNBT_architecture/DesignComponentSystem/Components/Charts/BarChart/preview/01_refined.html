@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charts/BarChart — 01_refined</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            padding: 40px 20px;
+            background:
+                radial-gradient(circle at top, rgba(65, 116, 188, 0.25), transparent 34%),
+                #07101b;
+        }
+    </style>
+</head>
+<body>
+
+<div id="bar-chart-container"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/EChartsMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('bar-chart-container', '../views/01_refined.html', '../styles/01_refined.css');
+
+    const instance = {
+        id: 'bar-chart',
+        appendElement: document.getElementById('bar-chart-container')
+    };
+
+    applyEChartsMixin(instance, {
+        cssSelectors: {
+            container: '.bar-chart__canvas'
+        },
+        option: {
+            animationDuration: 500,
+            grid: { top: 12, right: 8, bottom: 12, left: 8, containLabel: true },
+            tooltip: {
+                trigger: 'axis',
+                backgroundColor: '#08111d',
+                borderWidth: 0,
+                textStyle: { color: '#ffffff', fontFamily: 'SUIT' }
+            },
+            legend: { show: false },
+            xAxis: {
+                type: 'category',
+                axisLine: { lineStyle: { color: 'rgba(205, 225, 255, 0.12)' } },
+                axisTick: { show: false },
+                axisLabel: { color: 'rgba(205, 225, 255, 0.62)', fontSize: 12, fontFamily: 'SUIT' }
+            },
+            yAxis: {
+                type: 'value',
+                splitLine: { lineStyle: { color: 'rgba(205, 225, 255, 0.12)' } },
+                axisLabel: { color: 'rgba(205, 225, 255, 0.62)', fontSize: 11, fontFamily: 'SUIT' }
+            },
+            series: [
+                {
+                    name: 'Inbound',
+                    type: 'bar',
+                    barMaxWidth: 24,
+                    itemStyle: { color: '#78b7ff', borderRadius: [8, 8, 0, 0] }
+                },
+                {
+                    name: 'Outbound',
+                    type: 'bar',
+                    barMaxWidth: 24,
+                    itemStyle: { color: 'rgba(255, 255, 255, 0.4)', borderRadius: [8, 8, 0, 0] }
+                }
+            ]
+        }
+    });
+
+    instance.subscriptions = {
+        chartData: [instance.echarts.renderData]
+    };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {};
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    instance.echarts.renderData({
+        response: {
+            categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            values: [
+                [120, 168, 142, 210, 196, 184],
+                [96, 132, 124, 188, 174, 160]
+            ]
+        }
+    });
+})();
+</script>
+</body>
+</html>

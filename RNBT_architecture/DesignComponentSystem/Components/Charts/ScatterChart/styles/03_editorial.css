@@ -1,0 +1,9 @@
+#scatter-chart-container { width: 100%; max-width: 640px; margin: 0 auto; }
+.scatter-chart { display: flex; flex-direction: column; gap: 18px; padding: 30px; border: 1px solid #d9cfbf; }
+.scatter-chart--editorial { background: linear-gradient(180deg, #f7f1e7 0%, #f1e8dd 100%); color: #2d231c; box-shadow: 0 14px 30px rgba(83,59,40,0.08); }
+.scatter-chart__header { display: flex; flex-direction: column; gap: 12px; }
+.scatter-chart__eyebrow { color: #7f6857; font-family: "Iowan Old Style","Times New Roman",serif; font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.scatter-chart__title { font-family: "Iowan Old Style","Times New Roman",serif; font-size: 34px; font-weight: 600; line-height: 1.1; }
+.scatter-chart__summary,.scatter-chart__status { color: #655447; font-family: "Iowan Old Style","Times New Roman",serif; font-size: 17px; line-height: 1.55; }
+.scatter-chart__canvas { width: 100%; height: 360px; }
+@media (max-width: 768px) { .scatter-chart { padding: 24px; } .scatter-chart__title { font-size: 28px; } .scatter-chart__summary,.scatter-chart__status { font-size: 15px; } .scatter-chart__canvas { height: 300px; } }

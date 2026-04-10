@@ -1,0 +1,12 @@
+#area-chart-container { width: 100%; max-width: 720px; margin: 0 auto; }
+.area-chart { display: flex; flex-direction: column; gap: 22px; padding: 28px; border-radius: 28px; }
+.area-chart--refined { background: radial-gradient(circle at top left, rgba(121,182,255,0.22), transparent 34%), linear-gradient(180deg, #11233b 0%, #0a1422 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 26px 60px rgba(5,11,21,0.34); color: #edf5ff; }
+.area-chart__header, .area-chart__legend, .area-chart__status-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.area-chart__eyebrow { color: rgba(205,225,255,0.68); font-family: "SUIT","Pretendard",sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.area-chart__title { margin-top: 8px; font-family: "SUIT","Pretendard",sans-serif; font-size: 28px; font-weight: 700; letter-spacing: -.03em; }
+.area-chart__legend-item { display: inline-flex; align-items: center; gap: 8px; color: rgba(222,235,255,0.78); font-family: "SUIT","Pretendard",sans-serif; font-size: 13px; font-weight: 600; }
+.area-chart__dot { width: 12px; height: 12px; border-radius: 999px; display: inline-block; }
+.area-chart__dot--primary { background: #78b7ff; }
+.area-chart__dot--secondary { background: #53d2a2; }
+.area-chart__canvas { width: 100%; height: 320px; }
+@media (max-width: 768px) { .area-chart { padding: 22px; border-radius: 24px; } .area-chart__header, .area-chart__legend, .area-chart__status-row { flex-direction: column; align-items: flex-start; } .area-chart__title { font-size: 24px; } .area-chart__canvas { height: 280px; } }

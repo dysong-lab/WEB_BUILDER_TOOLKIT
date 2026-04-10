@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Charts/RadarChart — 04_operational</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        min-height: 100vh;
+        padding: 40px 20px;
+        background:
+          radial-gradient(
+            circle at top,
+            rgba(47, 255, 228, 0.08),
+            transparent 30%
+          ),
+          #020c0f;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="radar-chart-container"></div>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/EChartsMixin.js"></script>
+    <script>
+      (async () => {
+        await loadComponentAssets(
+          "radar-chart-container",
+          "../views/04_operational.html",
+          "../styles/04_operational.css",
+        );
+        const instance = {
+          id: "radar-chart",
+          appendElement: document.getElementById("radar-chart-container"),
+        };
+        applyEChartsMixin(instance, {
+          cssSelectors: { container: ".radar-chart__canvas" },
+          option: {
+            tooltip: {
+              trigger: "item",
+              backgroundColor: "#061519",
+              borderColor: "rgba(47,255,228,0.18)",
+              borderWidth: 1,
+              textStyle: { color: "#d9fff7", fontFamily: "IBM Plex Mono" },
+            },
+            legend: { show: false },
+            radar: {
+              radius: "66%",
+              splitNumber: 4,
+              axisName: {
+                color: "rgba(123,255,240,0.72)",
+                fontSize: 11,
+                fontFamily: "IBM Plex Mono",
+              },
+              splitLine: { lineStyle: { color: "rgba(51,255,231,0.1)" } },
+              splitArea: {
+                areaStyle: {
+                  color: ["rgba(47,255,228,0.02)", "rgba(47,255,228,0.05)"],
+                },
+              },
+              axisLine: { lineStyle: { color: "rgba(51,255,231,0.1)" } },
+            },
+            series: [{ type: "radar", data: [] }],
+          },
+          mapData: function (data, option) {
+            option.radar.indicator = data.indicators;
+            option.series[0].data = [
+              {
+                value: data.values[0],
+                name: "Profile A",
+                lineStyle: { color: "#2fffe4", width: 2 },
+                areaStyle: { color: "rgba(47,255,228,0.16)" },
+                itemStyle: { color: "#2fffe4" },
+              },
+              {
+                value: data.values[1],
+                name: "Profile B",
+                lineStyle: { color: "#ff6d6d", width: 2 },
+                areaStyle: { color: "rgba(255,109,109,0.14)" },
+                itemStyle: { color: "#ff6d6d" },
+              },
+            ];
+            return option;
+          },
+        });
+        instance.subscriptions = { chartData: [instance.echarts.renderData] };
+        Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+          handlers.forEach((handler) =>
+            GlobalDataPublisher.subscribe(topic, instance, handler),
+          ),
+        );
+        instance.customEvents = {};
+        Wkit.bindEvents(instance, instance.customEvents);
+        instance.echarts.renderData({
+          response: {
+            indicators: [
+              { name: "CPU", max: 100 },
+              { name: "Memory", max: 100 },
+              { name: "I/O", max: 100 },
+              { name: "Queue", max: 100 },
+              { name: "Latency", max: 100 },
+            ],
+            values: [
+              [72, 66, 80, 58, 46],
+              [54, 61, 48, 72, 64],
+            ],
+          },
+        });
+      })();
+    </script>
+  </body>
+</html>
