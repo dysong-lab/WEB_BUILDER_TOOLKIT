@@ -158,6 +158,26 @@ tableInstance = new Tabulator(containerEl, Object.assign({
 
 ---
 
+## AnimationMixin
+
+**하는 일:** GLTF AnimationClip을 AnimationMixer로 재생/정지/속도 제어한다.
+
+**범용성:** `instance.animations`에서 클립을 자동 획득하므로 필수 옵션이 없다. play/stop/setSpeed/stopAll로 모든 AnimationClip을 제어할 수 있다. 재생 중인 Action이 있을 때만 내부 RAF 루프를 유지하여 불필요한 연산을 방지한다.
+
+**제약:** 없음.
+
+---
+
+## ClippingPlaneMixin
+
+**하는 일:** ClippingPlane으로 특정 평면 기준 절단면을 표시하고, 절단 위치를 애니메이션으로 이동시킨다.
+
+**범용성:** 축 기반(`setPlane`) 또는 임의 법선 벡터 기반(`setPlaneFromNormal`)으로 절단면을 설정할 수 있다. `animate`로 절단 위치를 부드럽게 이동시킬 수 있어 층별 분리 뷰 등 다양한 시나리오에 대응 가능.
+
+**제약:** `renderer` 옵션이 필수 (`renderer.localClippingEnabled = true` 설정 필요). `renderer`를 공유하는 모든 장면에서 clipping이 활성화된다.
+
+---
+
 ## TreeRenderMixin
 
 **하는 일:** 재귀적 배열(children)을 받아 template 복제로 트리 구조를 렌더링하고, 각 노드의 확장/축소 상태를 관리한다.
@@ -181,6 +201,8 @@ tableInstance = new Tabulator(containerEl, Object.assign({
 | MeshHighlight | ✅ | 없음 |
 | MeshVisibility | ✅ | 없음 |
 | CameraFocus | ✅ | 없음 |
+| Animation | ✅ | 없음 |
+| ClippingPlane | ✅ | renderer 옵션 필수 (localClippingEnabled 전역 설정) |
 | ShadowPopup | ✅ | 팝업 위치 제어 옵션 없음 (CSS 의존) |
 | 3DShadowPopup | ✅ | 팝업 위치 제어 옵션 없음 (CSS 의존) |
 | TreeRender | ✅ | 전체 교체 방식 (대규모 트리 시 성능) |

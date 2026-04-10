@@ -33,6 +33,8 @@
 | MeshHighlightMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/MeshHighlightMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/MeshHighlightMixin.md) |
 | MeshVisibilityMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/MeshVisibilityMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/MeshVisibilityMixin.md) |
 | CameraFocusMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/CameraFocusMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/CameraFocusMixin.md) |
+| AnimationMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/AnimationMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/AnimationMixin.md) |
+| ClippingPlaneMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/ClippingPlaneMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/ClippingPlaneMixin.md) |
 | ShadowPopupMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/ShadowPopupMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/ShadowPopupMixin.md) |
 | 3DShadowPopupMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/3DShadowPopupMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/3DShadowPopupMixin.md) |
 | TreeRenderMixin | [/RNBT_architecture/DesignComponentSystem/Mixins/TreeRenderMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/TreeRenderMixin.md) |
