@@ -255,5 +255,6 @@ this.customEvents = null;
 
 ## 관련 문서
 
+- [EVENT_RUNTIME_ADDITION_3D.md](./EVENT_RUNTIME_ADDITION_3D.md) — 3D `bind3DEvents` 버전. 함정이 "eventListener 통째 리셋"이라 권장 패턴이 정반대("머지된 전체 넘기기").
 - [EVENT_HANDLING.md](./EVENT_HANDLING.md) — 최초 등록 + cleanup 매칭, `_internalHandlers`와의 구분, 페이지가 알아야 하는지 여부에 따른 패턴 선택
 - [WKIT_API.md](./WKIT_API.md) — `bindEvents` / `removeCustomEvents` API 시그니처와 내부 동작
