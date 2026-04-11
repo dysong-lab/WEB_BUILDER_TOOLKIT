@@ -10,6 +10,8 @@
     <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/core.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/javascript.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/markdown.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/xml.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/css.min.js"></script>
 
     <style>
         :root {
@@ -380,6 +382,88 @@
             font-family: "SFMono-Regular", Consolas, monospace;
         }
 
+        /* ===== Code tab ===== */
+        .pane-body > #comp-code-tab {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .code-split {
+            flex: 1;
+            min-height: 0;
+            display: grid;
+            grid-template-columns: 240px 1fr;
+        }
+        .code-tree {
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            background: var(--bg);
+            padding: 8px 0;
+        }
+        .code-tree-section {
+            padding: 8px 16px 4px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .code-tree-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            font-size: 13px;
+            cursor: pointer;
+            color: var(--text);
+        }
+        .code-tree-item:hover { background: var(--panel); }
+        .code-tree-item.active {
+            background: var(--accent-soft);
+            color: var(--accent);
+            font-weight: 500;
+        }
+        .code-tree-item.missing {
+            color: var(--disabled);
+            cursor: default;
+        }
+        .code-tree-item.missing:hover { background: transparent; }
+        .code-tree-icon {
+            display: inline-block;
+            width: 30px;
+            font-size: 10px;
+            font-weight: 700;
+            text-align: center;
+            padding: 1px 4px;
+            border-radius: 3px;
+            background: var(--border);
+            color: var(--text);
+        }
+        .code-tree-item.active .code-tree-icon {
+            background: var(--accent);
+            color: #fff;
+        }
+        .code-tree-icon.html { background: #fdecea; color: #c0392b; }
+        .code-tree-icon.css  { background: #e3f1fd; color: #1565c0; }
+        .code-tree-icon.js   { background: #fff5d6; color: #b58900; }
+
+        .code-pane {
+            min-width: 0;
+            overflow: auto;
+            background: var(--code-bg);
+        }
+        .code-pane pre {
+            margin: 0;
+            padding: 16px;
+            font-size: 12px;
+            line-height: 1.55;
+            font-family: "SFMono-Regular", Consolas, monospace;
+        }
+        .code-pane .empty-state {
+            background: var(--code-bg);
+        }
+
         .hidden { display: none !important; }
 
         .error {
@@ -416,14 +500,15 @@
                 <div class="pane-tabs" id="comp-tabs">
                     <button class="pane-tab active" data-tab="preview">Preview</button>
                     <button class="pane-tab" data-tab="spec">Spec</button>
+                    <button class="pane-tab" data-tab="code">Code</button>
+                </div>
+                <div id="comp-variant-toolbar" class="preview-toolbar hidden">
+                    <label>변형:</label>
+                    <select id="comp-variant-select"></select>
+                    <a id="comp-open-new" target="_blank">새 창에서 열기 ↗</a>
                 </div>
                 <div class="pane-body">
                     <div id="comp-preview-tab">
-                        <div id="comp-preview-toolbar" class="preview-toolbar hidden">
-                            <label>변형:</label>
-                            <select id="comp-variant-select"></select>
-                            <a id="comp-open-new" target="_blank">새 창에서 열기 ↗</a>
-                        </div>
                         <div class="preview-frame-wrap">
                             <iframe id="comp-preview-frame" class="preview-frame hidden"></iframe>
                             <div id="comp-preview-empty" class="empty-state">
@@ -432,6 +517,14 @@
                         </div>
                     </div>
                     <div id="comp-spec-tab" class="md-body hidden"></div>
+                    <div id="comp-code-tab" class="hidden">
+                        <div class="code-split">
+                            <div class="code-tree" id="comp-code-tree"></div>
+                            <div class="code-pane" id="comp-code-pane">
+                                <div class="empty-state">파일을 선택하세요.</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -468,7 +561,15 @@ const state = {
     selection: null,       // { catIdx, compIdx?, setIdx? }
     selectedMixin: null,
     compTab: 'preview',
+    currentPreviews: [],   // 현재 선택된 set/item 의 preview 배열
+    currentVariantIdx: 0,
+    currentBaseDir: null,  // 컴포넌트 디렉토리 (preview 의 부모/부모)
+    currentCodeFile: null, // { kind: 'html'|'css'|'js', path, label }
+    codeFileCache: new Map(), // path → text|null(404)
 };
+
+// 컴포넌트 라이프사이클 후보 (RNBT: register + beforeDestroy 가 표준)
+const LIFECYCLE_FILES = ['register.js', 'beforeDestroy.js'];
 
 // ── Bootstrap ─────────────────────────────────────────────
 async function init() {
@@ -788,14 +889,30 @@ function switchCompTab(tab) {
     });
     document.getElementById('comp-preview-tab').classList.toggle('hidden', tab !== 'preview');
     document.getElementById('comp-spec-tab').classList.toggle('hidden', tab !== 'spec');
+    document.getElementById('comp-code-tab').classList.toggle('hidden', tab !== 'code');
+
+    // 변형 toolbar 는 preview/code 탭에서만, 그리고 previews 가 있을 때만 표시
+    const toolbar = document.getElementById('comp-variant-toolbar');
+    const hasPreviews = (state.currentPreviews || []).length > 0;
+    const showToolbar = hasPreviews && (tab === 'preview' || tab === 'code');
+    toolbar.classList.toggle('hidden', !showToolbar);
+
+    if (tab === 'code') {
+        renderCodeTab();
+    }
 }
 
 // ── Preview ───────────────────────────────────────────────
 function showCompPreview(previews, emptyMessage) {
-    const toolbar = document.getElementById('comp-preview-toolbar');
+    const toolbar = document.getElementById('comp-variant-toolbar');
     const frame = document.getElementById('comp-preview-frame');
     const empty = document.getElementById('comp-preview-empty');
     const select = document.getElementById('comp-variant-select');
+
+    state.currentPreviews = previews || [];
+    state.currentVariantIdx = 0;
+    state.currentBaseDir = inferBaseDir(previews);
+    state.currentCodeFile = null;
 
     if (!previews || previews.length === 0) {
         toolbar.classList.add('hidden');
@@ -818,23 +935,203 @@ function showCompPreview(previews, emptyMessage) {
         opt.textContent = p.label;
         select.appendChild(opt);
     });
-    loadPreviewByIndex(previews, 0);
-    select.dataset.previews = JSON.stringify(previews);
+    select.value = '0';
+    loadPreviewByIndex(0);
 }
 
 function bindVariantSelect() {
     const select = document.getElementById('comp-variant-select');
     select.addEventListener('change', () => {
-        const previews = JSON.parse(select.dataset.previews || '[]');
-        loadPreviewByIndex(previews, parseInt(select.value, 10));
+        const idx = parseInt(select.value, 10);
+        state.currentVariantIdx = idx;
+        loadPreviewByIndex(idx);
+        if (state.compTab === 'code') {
+            // 변형이 바뀌면 HTML/CSS 트리/현재 파일 갱신
+            renderCodeTab();
+        }
     });
 }
 
-function loadPreviewByIndex(previews, idx) {
-    const p = previews[idx];
+function loadPreviewByIndex(idx) {
+    const p = state.currentPreviews[idx];
     if (!p) return;
     document.getElementById('comp-preview-frame').src = p.path;
     document.getElementById('comp-open-new').href = p.path;
+}
+
+// preview path → 컴포넌트 baseDir 추정 (preview 디렉토리의 부모)
+function inferBaseDir(previews) {
+    if (!previews || previews.length === 0) return null;
+    const path = previews[0].path; // e.g. Components/AppBars/Standard/preview/01_refined.html
+    const parts = path.split('/');
+    // 마지막 두 조각 (preview, 파일명) 제거
+    if (parts.length < 3) return null;
+    return parts.slice(0, -2).join('/');
+}
+
+function variantBaseName(idx) {
+    const p = state.currentPreviews[idx];
+    if (!p) return null;
+    const fname = p.path.split('/').pop();      // 01_refined.html
+    return fname.replace(/\.html?$/i, '');      // 01_refined
+}
+
+// ── Code tab ──────────────────────────────────────────────
+// 파일을 fetch 하고 캐시. 404/실패는 null 캐싱.
+async function fetchSource(path) {
+    if (state.codeFileCache.has(path)) return state.codeFileCache.get(path);
+    try {
+        const res = await fetch(path);
+        if (!res.ok) {
+            state.codeFileCache.set(path, null);
+            return null;
+        }
+        const text = await res.text();
+        state.codeFileCache.set(path, text);
+        return text;
+    } catch {
+        state.codeFileCache.set(path, null);
+        return null;
+    }
+}
+
+async function renderCodeTab() {
+    const treeEl = document.getElementById('comp-code-tree');
+    const paneEl = document.getElementById('comp-code-pane');
+
+    if (!state.currentBaseDir || state.currentPreviews.length === 0) {
+        treeEl.innerHTML = '';
+        paneEl.innerHTML = '<div class="empty-state">미구현 — 표시할 소스가 없습니다.</div>';
+        return;
+    }
+
+    const base = state.currentBaseDir;
+    const variantBase = variantBaseName(state.currentVariantIdx);
+    const viewPath  = variantBase ? `${base}/views/${variantBase}.html` : null;
+    const stylePath = variantBase ? `${base}/styles/${variantBase}.css` : null;
+    const scriptPaths = LIFECYCLE_FILES.map(name => ({
+        name,
+        path: `${base}/scripts/${name}`,
+    }));
+
+    // 존재 여부를 미리 확인 (캐시 활용)
+    const [viewText, styleText, ...scriptTexts] = await Promise.all([
+        viewPath  ? fetchSource(viewPath)  : Promise.resolve(null),
+        stylePath ? fetchSource(stylePath) : Promise.resolve(null),
+        ...scriptPaths.map(s => fetchSource(s.path)),
+    ]);
+
+    // 트리 구성
+    treeEl.innerHTML = '';
+
+    const addSection = (title) => {
+        const el = document.createElement('div');
+        el.className = 'code-tree-section';
+        el.textContent = title;
+        treeEl.appendChild(el);
+    };
+
+    const addItem = ({ kind, label, path, text }) => {
+        const el = document.createElement('div');
+        const exists = text !== null;
+        el.className = 'code-tree-item' + (exists ? '' : ' missing');
+        el.innerHTML = `
+            <span class="code-tree-icon ${kind}">${kind.toUpperCase()}</span>
+            <span class="code-tree-label">${label}</span>
+        `;
+        if (exists) {
+            el.addEventListener('click', () => {
+                state.currentCodeFile = { kind, path, label };
+                highlightCodeTreeItem(path);
+                showCodeFile(kind, path, text);
+            });
+        } else {
+            el.title = '파일 없음';
+        }
+        el.dataset.path = path;
+        treeEl.appendChild(el);
+        return { el, exists };
+    };
+
+    addSection('변형 (HTML/CSS)');
+    const htmlItem  = viewPath  ? addItem({ kind: 'html', label: `${variantBase}.html`, path: viewPath,  text: viewText  }) : null;
+    const cssItem   = stylePath ? addItem({ kind: 'css',  label: `${variantBase}.css`,  path: stylePath, text: styleText }) : null;
+    if (!htmlItem && !cssItem) {
+        const empty = document.createElement('div');
+        empty.className = 'code-tree-item missing';
+        empty.innerHTML = '<span class="code-tree-label">변형 파일 없음</span>';
+        treeEl.appendChild(empty);
+    }
+
+    addSection('라이프사이클 (JS)');
+    const jsItems = scriptPaths.map((s, i) => addItem({
+        kind: 'js',
+        label: s.name,
+        path: s.path,
+        text: scriptTexts[i],
+    }));
+    if (jsItems.every(i => !i.exists)) {
+        // 모두 없을 경우 안내
+        const empty = document.createElement('div');
+        empty.className = 'code-tree-item missing';
+        empty.innerHTML = '<span class="code-tree-label">라이프사이클 파일 없음</span>';
+        treeEl.appendChild(empty);
+    }
+
+    // 기본 선택: 이전 선택 복원 → HTML → CSS → 첫 라이프사이클
+    const candidates = [];
+    if (state.currentCodeFile) {
+        // 현재 선택 파일이 있다면 동일 kind 의 새 path 로 매핑
+        if (state.currentCodeFile.kind === 'html' && htmlItem && htmlItem.exists) {
+            candidates.push({ kind: 'html', path: viewPath, text: viewText, label: `${variantBase}.html` });
+        } else if (state.currentCodeFile.kind === 'css' && cssItem && cssItem.exists) {
+            candidates.push({ kind: 'css', path: stylePath, text: styleText, label: `${variantBase}.css` });
+        } else if (state.currentCodeFile.kind === 'js') {
+            const sameJs = scriptPaths.findIndex(s => s.name === state.currentCodeFile.label);
+            if (sameJs >= 0 && scriptTexts[sameJs] !== null) {
+                candidates.push({ kind: 'js', path: scriptPaths[sameJs].path, text: scriptTexts[sameJs], label: scriptPaths[sameJs].name });
+            }
+        }
+    }
+    if (htmlItem && htmlItem.exists) candidates.push({ kind: 'html', path: viewPath, text: viewText, label: `${variantBase}.html` });
+    if (cssItem  && cssItem.exists)  candidates.push({ kind: 'css',  path: stylePath, text: styleText, label: `${variantBase}.css` });
+    scriptPaths.forEach((s, i) => {
+        if (scriptTexts[i] !== null) candidates.push({ kind: 'js', path: s.path, text: scriptTexts[i], label: s.name });
+    });
+
+    if (candidates.length > 0) {
+        const pick = candidates[0];
+        state.currentCodeFile = { kind: pick.kind, path: pick.path, label: pick.label };
+        highlightCodeTreeItem(pick.path);
+        showCodeFile(pick.kind, pick.path, pick.text);
+    } else {
+        paneEl.innerHTML = '<div class="empty-state">표시할 소스 파일이 없습니다.</div>';
+    }
+}
+
+function highlightCodeTreeItem(path) {
+    document.querySelectorAll('#comp-code-tree .code-tree-item').forEach(el => {
+        el.classList.toggle('active', el.dataset.path === path);
+    });
+}
+
+function showCodeFile(kind, path, text) {
+    const paneEl = document.getElementById('comp-code-pane');
+    if (text === null || text === undefined) {
+        paneEl.innerHTML = `<div class="empty-state">${path} — 파일 없음</div>`;
+        return;
+    }
+    const langClass = kind === 'html' ? 'language-xml'
+                    : kind === 'css'  ? 'language-css'
+                    : 'language-javascript';
+    const pre = document.createElement('pre');
+    const code = document.createElement('code');
+    code.className = langClass;
+    code.textContent = text;
+    pre.appendChild(code);
+    paneEl.innerHTML = '';
+    paneEl.appendChild(pre);
+    if (window.hljs) hljs.highlightElement(code);
 }
 
 // ── Spec markdown ─────────────────────────────────────────
