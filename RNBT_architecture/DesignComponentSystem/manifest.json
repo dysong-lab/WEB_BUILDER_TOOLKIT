@@ -28,6 +28,13 @@
                   "previews": [
                     { "label": "01 refined", "path": "Components/AppBars/Advanced/searchEmbedded/preview/01_refined.html" }
                   ]
+                },
+                {
+                  "name": "contextual",
+                  "spec": "Components/AppBars/Advanced/contextual/CLAUDE.md",
+                  "previews": [
+                    { "label": "01 refined", "path": "Components/AppBars/Advanced/contextual/preview/01_refined.html" }
+                  ]
                 }
               ]
             }

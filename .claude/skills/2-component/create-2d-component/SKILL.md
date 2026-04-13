@@ -374,6 +374,14 @@ scripts/register.js    — 동일 (불변)
 
 ---
 
+## 마무리: manifest.json 등록
+
+구현 완료 후 반드시 `Components/CLAUDE.md` Step 5에 따라 `DesignComponentSystem/manifest.json`에 신규 컴포넌트/set/item/preview를 등록한다. 누락 시 `index.html` 카탈로그에 노출되지 않는다.
+
+> 등록 위치/규칙은 [Components/CLAUDE.md Step 5](/RNBT_architecture/DesignComponentSystem/Components/CLAUDE.md) 참조
+
+---
+
 ## 관련 자료
 
 | 문서 | 위치 |
