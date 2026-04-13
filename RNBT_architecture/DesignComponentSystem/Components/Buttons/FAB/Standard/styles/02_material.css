@@ -1,0 +1,41 @@
+/* 02_material: Persona B — Material Elevated
+   Surface container / 블루 팔레트 / Roboto / 라이트 / level 3 shadow */
+
+#fab-container {
+    width: 72px;
+    height: 72px;
+
+    .fab {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 56px;
+        height: 56px;
+        padding: 0;
+        border: none;
+        border-radius: 16px;
+        background: #E0E5FF;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.14), 0 1px 3px rgba(0, 0, 0, 0.10);
+        cursor: pointer;
+        transition: background-color 150ms ease-out, box-shadow 150ms ease-out;
+    }
+
+    .fab:hover {
+        background: #D0D8FF;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18), 0 2px 4px rgba(0, 0, 0, 0.12);
+    }
+
+    .fab:active {
+        background: #C0CAFF;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.14);
+    }
+
+    .fab__icon {
+        font-size: 24px;
+        color: #3B5BDB;
+    }
+
+    .fab__icon:empty {
+        display: none;
+    }
+}

@@ -1,0 +1,42 @@
+/* 01_refined: Persona A — Refined Technical
+   Filled 그라데이션 / 퍼플 팔레트 / Pretendard / 다크 / elevation */
+
+#fab-container {
+    width: 72px;
+    height: 72px;
+
+    .fab {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 56px;
+        height: 56px;
+        padding: 0;
+        border: none;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #502EE9 0%, #7159D0 100%);
+        box-shadow: 0 6px 12px rgba(80, 46, 233, 0.36), 0 2px 4px rgba(80, 46, 233, 0.24);
+        cursor: pointer;
+        transition: background 150ms ease-out, box-shadow 150ms ease-out, transform 150ms ease-out;
+    }
+
+    .fab:hover {
+        background: linear-gradient(135deg, #6344F0 0%, #8570DA 100%);
+        box-shadow: 0 8px 18px rgba(80, 46, 233, 0.44), 0 3px 6px rgba(80, 46, 233, 0.28);
+    }
+
+    .fab:active {
+        background: linear-gradient(135deg, #3E1FD4 0%, #6048C0 100%);
+        box-shadow: 0 4px 8px rgba(80, 46, 233, 0.32);
+        transform: translateY(1px);
+    }
+
+    .fab__icon {
+        font-size: 24px;
+        color: #E8EDFF;
+    }
+
+    .fab__icon:empty {
+        display: none;
+    }
+}
