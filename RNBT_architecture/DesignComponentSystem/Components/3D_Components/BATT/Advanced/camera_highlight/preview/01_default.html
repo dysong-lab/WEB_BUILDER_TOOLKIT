@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>BATT — Advanced/camera_highlight</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #1a1a2e; }
+        #batt-pageThreeLayer {
+            width: 600px;
+            height: 480px;
+            display: block;
+            overflow: hidden;
+            margin: 40px auto;
+        }
+        canvas { display: block; }
+
+        .demo-controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px;
+            flex-wrap: wrap;
+        }
+        .demo-controls-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .demo-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #8888aa;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-right: 4px;
+        }
+        .demo-separator {
+            width: 1px;
+            height: 24px;
+            background: #2a2a4a;
+            margin: 0 8px;
+        }
+        .demo-btn {
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #ffffff;
+            transition: opacity 0.15s;
+        }
+        .demo-btn:hover { opacity: 0.8; }
+        .demo-btn[data-status="normal"]  { background: #34d399; }
+        .demo-btn[data-status="warning"] { background: #fbbf24; color: #1a1a2e; }
+        .demo-btn[data-status="error"]   { background: #f87171; }
+        .demo-btn[data-status="offline"] { background: #6b7280; }
+        .demo-btn[data-status="reset"]   { background: #3b82f6; }
+        .demo-btn[data-action="focus"]        { background: #8b5cf6; }
+        .demo-btn[data-action="reset-camera"] { background: #64748b; }
+        .demo-btn[data-action="highlight"]    { background: #ffaa00; color: #1a1a2e; }
+        .demo-btn[data-action="unhighlight"]  { background: #64748b; }
+
+        .demo-hint {
+            text-align: center;
+            color: #5a5a7a;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 11px;
+            font-style: italic;
+            padding: 8px;
+        }
+        .demo-log {
+            max-width: 600px;
+            margin: 8px auto;
+            padding: 10px 14px;
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 4px;
+            color: #94a3b8;
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+            min-height: 60px;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-controls">
+        <div class="demo-controls-group">
+            <span class="demo-label">Status</span>
+            <button class="demo-btn" data-status="normal">Normal</button>
+            <button class="demo-btn" data-status="warning">Warning</button>
+            <button class="demo-btn" data-status="error">Error</button>
+            <button class="demo-btn" data-status="offline">Offline</button>
+            <button class="demo-btn" data-status="reset">Reset</button>
+        </div>
+        <div class="demo-separator"></div>
+        <div class="demo-controls-group">
+            <span class="demo-label">Camera</span>
+            <button class="demo-btn" data-action="focus">Focus</button>
+            <button class="demo-btn" data-action="reset-camera">Reset</button>
+        </div>
+        <div class="demo-separator"></div>
+        <div class="demo-controls-group">
+            <span class="demo-label">Highlight</span>
+            <button class="demo-btn" data-action="highlight">Highlight</button>
+            <button class="demo-btn" data-action="unhighlight">Clear</button>
+        </div>
+    </div>
+
+    <div id="batt-pageThreeLayer"></div>
+    <div class="demo-hint">※ 3D 모델을 직접 클릭하면 @battClicked 이벤트가 발행되며, 페이지 핸들러가 카메라 포커스 + 강조를 동시에 실행합니다</div>
+    <div class="demo-log" id="demo-log"><strong>이벤트 로그</strong><br>—</div>
+
+    <!-- preview_runtime.js: Wkit.bind3DEvents / onEventBusHandlers / Weventbus 시뮬레이션 -->
+    <script src="../../../../../../preview_runtime.js"></script>
+    <!-- Mixin 로드 -->
+    <script src="../../../../../../Mixins/MeshStateMixin.js"></script>
+    <script src="../../../../../../Mixins/CameraFocusMixin.js"></script>
+    <script src="../../../../../../Mixins/MeshHighlightMixin.js"></script>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+    window.THREE = THREE;
+
+    // ── Three.js Scene Setup ──────────────────────────────────
+    const container = document.getElementById('batt-pageThreeLayer');
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x1a1a2e);
+
+    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+    camera.position.set(2, 2, 3);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.target.set(0, 0, 0);
+
+    // ── Lighting ──────────────────────────────────────────────
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    directionalLight.position.set(5, 8, 4);
+    scene.add(directionalLight);
+
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
+    fillLight.position.set(-3, 2, -2);
+    scene.add(fillLight);
+
+    // ── Grid ──────────────────────────────────────────────────
+    scene.add(new THREE.GridHelper(10, 20, 0x2a2a4a, 0x2a2a4a));
+
+    // ── Mock Instance ─────────────────────────────────────────
+    const instance = { appendElement: null, name: 'BATT-01' };
+
+    // ── Load Model ────────────────────────────────────────────
+    const loader = new GLTFLoader();
+
+    loader.load('../../../../../../models/BATT/01_default/BATT.gltf', (gltf) => {
+        const model = gltf.scene;
+        scene.add(model);
+
+        instance.appendElement = model;
+
+        // MeshStateMixin 적용 (register.js와 동일)
+        applyMeshStateMixin(instance, {
+            colorMap: {
+                normal:  0x34d399,
+                warning: 0xfbbf24,
+                error:   0xf87171,
+                offline: 0x6b7280
+            }
+        });
+
+        // CameraFocusMixin 적용
+        applyCameraFocusMixin(instance, {
+            camera,
+            controls,
+            duration: 1000
+        });
+
+        // MeshHighlightMixin 적용
+        applyMeshHighlightMixin(instance, {
+            highlightColor:     0xffaa00,
+            highlightIntensity: 0.4
+        });
+
+        // ── 3D 이벤트 바인딩 (register.js 재현) ──────────────────
+        instance.customEvents = { click: '@battClicked' };
+        Wkit.bind3DEvents(instance, instance.customEvents);
+
+        // 카메라 타겟 조정
+        const box = new THREE.Box3().setFromObject(model);
+        const center = box.getCenter(new THREE.Vector3());
+        controls.target.copy(center);
+        camera.position.set(center.x + 4, center.y + 2, center.z + 5);
+        controls.update();
+    });
+
+    // ── Raycasting: DOM click → hit test → eventListener 호출 ──
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    renderer.domElement.addEventListener('click', (event) => {
+        const rect = renderer.domElement.getBoundingClientRect();
+        mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(scene.children, true);
+        for (const inter of intersects) {
+            let current = inter.object;
+            while (current && !current.eventListener) current = current.parent;
+            if (current?.eventListener?.click) {
+                current.eventListener.click(Object.assign(event, { intersects }));
+                break;
+            }
+        }
+    });
+
+    // ── Render Loop ───────────────────────────────────────────
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // ── Demo Log ─────────────────────────────────────────────
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>이벤트 로그</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>이벤트 로그</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    // ── 이벤트 버스 구독 (페이지 측 반응 재현) ────────────────
+    // 실제 런타임에서는 페이지 before_load.js가 @battClicked를 구독하여
+    // cameraFocus.focusOn + meshHighlight.highlight를 동시에 호출한다.
+    Wkit.onEventBusHandlers({
+        '@battClicked': ({ targetInstance }) => {
+            targetInstance.cameraFocus.focusOn({
+                container: targetInstance.appendElement,
+                meshName: 'BATT',
+                offset: { x: 1.5, y: 1.0, z: 3.0 }
+            });
+            targetInstance.meshHighlight.clearAll();
+            targetInstance.meshHighlight.highlight('BATT');
+            log(`@battClicked → cameraFocus.focusOn + meshHighlight.highlight('BATT')`);
+        }
+    });
+
+    // ── Demo: Status (renderData) ─────────────────────────────
+    document.querySelectorAll('.demo-btn[data-status]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            if (!instance.meshState) return;
+
+            const status = btn.dataset.status;
+
+            if (status === 'reset') {
+                const mesh = instance.appendElement.getObjectByName('BATT');
+                if (mesh) mesh.material.color.setHex(0xffffff);
+                return;
+            }
+
+            instance.meshState.renderData({
+                response: [{ meshName: 'BATT', status }]
+            });
+        });
+    });
+
+    // ── Demo: Camera (focusOn / reset) ────────────────────────
+    document.querySelectorAll('.demo-btn[data-action]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const action = btn.dataset.action;
+
+            if (action === 'focus' && instance.cameraFocus) {
+                instance.cameraFocus.focusOn({
+                    container: instance.appendElement,
+                    meshName: 'BATT',
+                    offset: { x: 1.5, y: 1.0, z: 3.0 }
+                });
+                log(`demo → cameraFocus.focusOn('BATT')`);
+            } else if (action === 'reset-camera' && instance.cameraFocus) {
+                instance.cameraFocus.reset();
+                log(`demo → cameraFocus.reset()`);
+            } else if (action === 'highlight' && instance.meshHighlight) {
+                instance.meshHighlight.clearAll();
+                instance.meshHighlight.highlight('BATT');
+                log(`demo → meshHighlight.highlight('BATT')`);
+            } else if (action === 'unhighlight' && instance.meshHighlight) {
+                instance.meshHighlight.clearAll();
+                log(`demo → meshHighlight.clearAll()`);
+            }
+        });
+    });
+
+    // ── Resize ────────────────────────────────────────────────
+    window.addEventListener('resize', () => {
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+    });
+    </script>
+</body>
+</html>
