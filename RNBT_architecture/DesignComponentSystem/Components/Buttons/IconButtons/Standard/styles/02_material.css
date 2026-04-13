@@ -1,0 +1,39 @@
+/* 02_material: Persona B — Material Elevated
+   Filled tonal / 블루 팔레트 / Roboto / 라이트 / secondary container */
+
+#icon-button-container {
+    width: 56px;
+    height: 56px;
+
+    .icon-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        border: none;
+        border-radius: 12px;
+        background: #E0E5FF;
+        cursor: pointer;
+        transition: background-color 150ms ease-out, box-shadow 150ms ease-out;
+    }
+
+    .icon-button:hover {
+        background: #D0D8FF;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.10), 0 1px 2px rgba(0, 0, 0, 0.06);
+    }
+
+    .icon-button:active {
+        background: #C0CAFF;
+    }
+
+    .icon-button__icon {
+        font-size: 20px;
+        color: #3B5BDB;
+    }
+
+    .icon-button__icon:empty {
+        display: none;
+    }
+}
