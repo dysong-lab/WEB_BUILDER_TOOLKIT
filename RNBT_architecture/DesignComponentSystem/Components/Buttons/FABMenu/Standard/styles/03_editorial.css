@@ -1,0 +1,104 @@
+/* 03_editorial: Persona C — Minimal Editorial
+   라이트, outline only, 세리프 / 미니멀 */
+
+#fab-menu-container {
+    width: 240px;
+    height: 360px;
+
+    .fab-menu {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: flex-end;
+        gap: 20px;
+        width: 100%;
+        height: 100%;
+    }
+
+    .fab-menu__list {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+        width: 100%;
+        opacity: 0;
+        transform: translateY(4px);
+        pointer-events: none;
+        transition: opacity 180ms ease-out, transform 180ms ease-out;
+    }
+
+    .fab-menu.is-open .fab-menu__list {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+
+    .fab-menu__item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        width: 100%;
+        padding: 12px 4px;
+        border: none;
+        border-bottom: 1px solid #D8D6D0;
+        border-radius: 0;
+        background: transparent;
+        cursor: pointer;
+        transition: color 150ms ease-out, border-color 150ms ease-out;
+    }
+
+    .fab-menu__item:hover {
+        border-bottom-color: #1F1D1B;
+    }
+
+    .fab-menu__item-icon {
+        font-size: 18px;
+        color: #1F1D1B;
+        flex-shrink: 0;
+    }
+
+    .fab-menu__item-icon:empty { display: none; }
+
+    .fab-menu__item-label {
+        font-family: 'Noto Serif KR', 'Playfair Display', serif;
+        font-size: 15px;
+        font-weight: 400;
+        color: #1F1D1B;
+        white-space: nowrap;
+        letter-spacing: 0.2px;
+    }
+
+    .fab-menu__trigger {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 52px;
+        height: 52px;
+        padding: 0;
+        border: 1px solid #1F1D1B;
+        border-radius: 50%;
+        background: #FFFFFF;
+        cursor: pointer;
+        transition: transform 180ms ease-out, background-color 150ms ease-out;
+    }
+
+    .fab-menu__trigger:hover {
+        background: #1F1D1B;
+    }
+
+    .fab-menu.is-open .fab-menu__trigger {
+        transform: rotate(45deg);
+        background: #1F1D1B;
+    }
+
+    .fab-menu__trigger-icon {
+        font-size: 22px;
+        color: #1F1D1B;
+        transition: color 150ms ease-out;
+    }
+
+    .fab-menu__trigger:hover .fab-menu__trigger-icon,
+    .fab-menu.is-open .fab-menu__trigger-icon {
+        color: #FFFFFF;
+    }
+}

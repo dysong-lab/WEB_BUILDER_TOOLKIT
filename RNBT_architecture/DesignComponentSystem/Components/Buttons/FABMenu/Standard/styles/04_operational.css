@@ -1,0 +1,99 @@
+/* 04_operational: Persona D — Dark Operational
+   다크, 컴팩트, 시안 outline / 모노스페이스 */
+
+#fab-menu-container {
+    width: 220px;
+    height: 320px;
+
+    .fab-menu {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: flex-end;
+        gap: 12px;
+        width: 100%;
+        height: 100%;
+    }
+
+    .fab-menu__list {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+        width: 100%;
+        opacity: 0;
+        transform: translateY(4px);
+        pointer-events: none;
+        transition: opacity 150ms ease-out, transform 150ms ease-out;
+    }
+
+    .fab-menu.is-open .fab-menu__list {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+
+    .fab-menu__item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #1E3A4A;
+        border-radius: 4px;
+        background: #0A1520;
+        cursor: pointer;
+        transition: background-color 120ms ease-out, border-color 120ms ease-out;
+    }
+
+    .fab-menu__item:hover {
+        background: #0F2030;
+        border-color: #22D3EE;
+    }
+
+    .fab-menu__item-icon {
+        font-size: 16px;
+        color: #22D3EE;
+        flex-shrink: 0;
+    }
+
+    .fab-menu__item-icon:empty { display: none; }
+
+    .fab-menu__item-label {
+        font-family: 'JetBrains Mono', 'Consolas', monospace;
+        font-size: 12px;
+        font-weight: 500;
+        color: #CBD5E1;
+        white-space: nowrap;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .fab-menu__trigger {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        padding: 0;
+        border: 1px solid #22D3EE;
+        border-radius: 4px;
+        background: #0A1520;
+        cursor: pointer;
+        transition: transform 150ms ease-out, background-color 120ms ease-out;
+    }
+
+    .fab-menu__trigger:hover {
+        background: #0F2030;
+    }
+
+    .fab-menu.is-open .fab-menu__trigger {
+        transform: rotate(45deg);
+        background: #0F2030;
+    }
+
+    .fab-menu__trigger-icon {
+        font-size: 22px;
+        color: #22D3EE;
+    }
+}
