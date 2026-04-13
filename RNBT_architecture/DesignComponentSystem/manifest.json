@@ -390,6 +390,13 @@
                   "previews": [
                     { "label": "01 default", "path": "Components/3D_Components/Chiller/Advanced/camera_highlight/preview/01_default.html" }
                   ]
+                },
+                {
+                  "name": "animation",
+                  "spec": "Components/3D_Components/Chiller/Advanced/animation/CLAUDE.md",
+                  "previews": [
+                    { "label": "01 default", "path": "Components/3D_Components/Chiller/Advanced/animation/preview/01_default.html" }
+                  ]
                 }
               ]
             }

@@ -14,3 +14,4 @@
 | Advanced/popup | 완료 |
 | Advanced/highlight | 완료 |
 | Advanced/camera_highlight | 완료 |
+| Advanced/animation | 완료 |
