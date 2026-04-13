@@ -57,17 +57,25 @@ FieldRenderMixin
 
 ### 페이지 연결 사례
 
+> **전제**: 페이지 초기화 시 `searchInfo` 토픽이 `GlobalDataPublisher.registerMapping`으로 검색 API 데이터셋(예: `datasetName: 'search_devices'`)에 매핑되어 있어야 한다. 검색 결과 갱신은 `fetchAndPublish`가 서버 호출 후 구독자에게 `{ response: { placeholder, count } }` 형태로 전달한다.
+
 ```
 [AppBars/Advanced/searchEmbedded] ──@searchInputChanged──▶ [페이지]
                                        │
                                        ├─ debounce(200ms)
-                                       ├─ search API 호출
-                                       └─ publish('searchInfo', { count: 'N results' })
+                                       └─ GlobalDataPublisher.fetchAndPublish(
+                                            'searchInfo', page, { query: value }
+                                          )
+                                          └─ 서버 fetch → 구독자에 전달
+                                             → fieldRender가 count 영역 갱신
 
 [AppBars/Advanced/searchEmbedded] ──@searchCleared──────▶ [페이지]
                                        │
                                        ├─ input.value = ''
-                                       └─ publish('searchInfo', { count: '' })
+                                       └─ fetchAndPublish('searchInfo', page, { query: '' })
+                                          또는 appBarInstance.fieldRender.renderData(
+                                            { response: { count: '' } }
+                                          ) 로 즉시 비움
 
 [AppBars/Advanced/searchEmbedded] ──@navigationClicked──▶ [페이지]
                                        └─ NavigationDrawer.open() 등

@@ -89,7 +89,8 @@
                     ? FAKE_DEVICES.filter(d => d.includes(value.toLowerCase())).length
                     : FAKE_DEVICES.length;
                 log(`searchInputChanged "${value}" → ${matched} results`);
-                GlobalDataPublisher.publish('searchInfo', { response: { count: matched + ' results' } });
+                // preview 단독 시뮬레이션 — preview_runtime에 publish가 없으므로 구독 핸들러를 직접 호출한다.
+                instance.fieldRender.renderData({ response: { count: matched + ' results' } });
             }, 200);
         },
 
@@ -98,7 +99,7 @@
             if (input) input.value = '';
             clearTimeout(debounceTimer);
             log('searchCleared → input reset');
-            GlobalDataPublisher.publish('searchInfo', { response: { count: FAKE_DEVICES.length + ' results' } });
+            instance.fieldRender.renderData({ response: { count: FAKE_DEVICES.length + ' results' } });
         }
     });
 

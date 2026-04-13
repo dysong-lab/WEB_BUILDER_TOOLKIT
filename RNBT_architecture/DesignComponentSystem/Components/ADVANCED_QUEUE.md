@@ -34,6 +34,7 @@ Components/<범주>/Advanced/<변형이름>/
 | 순번 | 범주 | 변형 이름 | 설명 | 상태 |
 |------|------|----------|------|------|
 | 1 | AppBars | searchEmbedded | 임베디드 검색 입력 AppBar — @searchInputChanged/@searchCleared 발행 | 완료 |
+| 2 | AppBars | contextual | 선택 모드 AppBar — selectionInfo 구독, @selectionActionClicked/@selectionCleared 발행 | 완료 |
 
 ---
 
