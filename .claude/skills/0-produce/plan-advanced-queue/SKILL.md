@@ -33,11 +33,19 @@ description: 2D 컴포넌트 Advanced 변형 후보를 발굴하여 ADVANCED_QUE
 2. 대상 범주별로 다음 확인:
    ```
    Components/{범주}/CLAUDE.md
+   Components/{범주}/Standard/            (존재 여부 확인 — 필터 기준)
    Components/{범주}/Standard/CLAUDE.md   (있으면)
    Components/{범주}/Advanced/             (있으면 하위 변형 이름 수집)
    ```
 
+**Standard 선행 필터** (중요):
+- **Standard 폴더가 없는 범주는 Advanced 후보 발굴 대상에서 제외한다.**
+- Standard 구현 없이 Advanced를 기획하면 분리 정당성(register.js 차이)을 검증할 수 없기 때문.
+- 제외된 범주는 Step 6에서 "Standard 선행 필요 — `produce-standard-loop`로 Standard 생산 후 `plan-advanced-queue` 재실행 권장" 안내와 함께 별도 보고한다.
+- 예외: 계층 범주(예: `Buttons/{Buttons,FAB,...}`)는 하위 범주 단위로 Standard 존재 여부를 판정한다.
+
 **제외 대상**:
+- **Standard 폴더가 존재하지 않는 범주** (위 필터)
 - 이미 `Advanced/{변형}/` 폴더가 존재하는 변형
 - 이미 큐에 "대기"/"진행 중"/"완료"로 등록된 변형
 - `Components/3D_Components/` 하위 범주 (3D 전용 큐 사용)
@@ -112,6 +120,16 @@ Explore 에이전트에 위임하여 Advanced 후보를 발굴한다.
 ```
 {N}개 항목을 ADVANCED_QUEUE.md에 등록했습니다.
 다음 단계: `/produce-advanced-loop`으로 순차 생산 시작.
+```
+
+**Standard 미구현 범주가 있었던 경우** 별도 섹션으로 함께 보고:
+
+```
+Standard 선행 필요 (Advanced 후보 발굴 제외):
+- Cards, Lists, Menus, ...
+
+해당 범주는 `produce-standard-loop`로 Standard를 먼저 생산한 뒤
+`plan-advanced-queue`를 재실행하면 Advanced 후보가 발굴됩니다.
 ```
 
 ---
