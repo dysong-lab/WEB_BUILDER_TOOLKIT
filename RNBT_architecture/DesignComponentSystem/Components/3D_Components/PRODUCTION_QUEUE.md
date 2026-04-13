@@ -47,7 +47,7 @@
 | 순번 | 장비명 | 유형 | 기존 (완료) | 추가 대상 | 상태 |
 |------|--------|------|------------|----------|------|
 | 1 | BATT | 개별 | status, camera, popup, highlight, camera_highlight | — | 완료 |
-| 2 | Chiller | 개별 | status, camera, popup | highlight; camera_highlight | 대기 |
+| 2 | Chiller | 개별 | status, camera, popup, highlight, camera_highlight | — | 완료 |
 | 3 | Panel | 개별 | status, camera, popup | highlight; camera_highlight | 대기 |
 | 4 | UPS | 개별 | status, camera, popup | highlight; camera_highlight | 대기 |
 | 5 | tempHumiTH2B | 개별 | status, camera, popup | highlight; camera_highlight | 대기 |

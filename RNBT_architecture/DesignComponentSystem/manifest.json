@@ -376,6 +376,20 @@
                   "previews": [
                     { "label": "01 default", "path": "Components/3D_Components/Chiller/Advanced/popup/preview/01_default.html" }
                   ]
+                },
+                {
+                  "name": "highlight",
+                  "spec": "Components/3D_Components/Chiller/Advanced/highlight/CLAUDE.md",
+                  "previews": [
+                    { "label": "01 default", "path": "Components/3D_Components/Chiller/Advanced/highlight/preview/01_default.html" }
+                  ]
+                },
+                {
+                  "name": "camera_highlight",
+                  "spec": "Components/3D_Components/Chiller/Advanced/camera_highlight/CLAUDE.md",
+                  "previews": [
+                    { "label": "01 default", "path": "Components/3D_Components/Chiller/Advanced/camera_highlight/preview/01_default.html" }
+                  ]
                 }
               ]
             }
