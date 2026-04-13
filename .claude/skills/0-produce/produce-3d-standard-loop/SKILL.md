@@ -1,14 +1,16 @@
 ---
 name: produce-3d-standard-loop
-description: 3D 컴포넌트를 PRODUCTION_QUEUE.md 순서대로 순차 생산합니다. 한 사이클에 하나의 장비를 생산하고, /compact 후 "계속"으로 다음 장비를 생산합니다.
+description: 3D 컴포넌트의 Standard 변형(01 status)을 PRODUCTION_QUEUE.md 순서대로 순차 생산합니다. 한 사이클에 하나의 장비를 생산하고, /compact 후 "계속"으로 다음 장비를 생산합니다.
 ---
 
 # 3D Standard 컴포넌트 순차 생산
 
 ## 목표
 
-DesignComponentSystem/Components/3D_Components 아래의 3D 컴포넌트를 PRODUCTION_QUEUE.md 순서대로 생산한다.
+DesignComponentSystem/Components/3D_Components 아래의 3D 컴포넌트 **Standard 변형(01 status)** 을 PRODUCTION_QUEUE.md 순서대로 생산한다.
 한 사이클에 하나의 장비를 생산하고, 사용자가 `/compact` 후 "계속"을 입력하면 다음 장비를 생산한다.
+
+> **Advanced 변형(02~08)은 `produce-3d-advanced-loop`을 사용한다.** 이 루프는 "기존 완료" 컬럼에 01이 없는 신규 장비만 대상으로 한다.
 
 ---
 
@@ -32,14 +34,18 @@ DesignComponentSystem/Components/3D_Components 아래의 3D 컴포넌트를 PROD
    경로: RNBT_architecture/DesignComponentSystem/Components/3D_Components/PRODUCTION_QUEUE.md
    ```
 
-2. 상태가 "대기"인 첫 번째 항목 = 다음 대상
+2. "기존(완료)" 컬럼에 01이 포함되지 않고 상태가 "대기"인 첫 번째 항목 = 다음 대상
+   - 현재 큐의 모든 장비(BATT, Chiller, Panel, UPS, tempHumiTH2B, thermohygrostat, gltf_container)는 01이 이미 완료되어 있음
+   - 신규 장비 추가 시에만 이 루프가 작동
 
-3. 완료된 컴포넌트 교차 확인:
+3. Standard 폴더 존재 여부 확인:
    ```bash
-   find RNBT_architecture/DesignComponentSystem/Components/3D_Components -name "register.js" -path "*/scripts/*" | sort
+   ls RNBT_architecture/DesignComponentSystem/Components/3D_Components/{장비명}/Standard/ 2>/dev/null
    ```
 
-4. **사용자에게 보고**: "다음 대상: {장비명}, 유형: {개별/컨테이너}, 변형: {01,02,...}"
+4. **사용자에게 보고**: "다음 대상: {장비명}, 유형: {개별/컨테이너}, Standard(01 status) 생산"
+
+   대기 항목이 없으면: "Standard(01)가 누락된 장비가 없습니다. Advanced 변형은 `produce-3d-advanced-loop`을 사용하세요."
 
 ---
 
@@ -53,6 +59,9 @@ DesignComponentSystem/Components/3D_Components 아래의 3D 컴포넌트를 PROD
 |------|----------|
 | 개별 (1 GLTF = 1 Mesh) | `create-3d-component` |
 | 컨테이너 (1 GLTF = N Mesh) | `create-3d-container-component` |
+
+**출력 경로**: `Components/3D_Components/{장비명}/Standard/`
+**Mixin**: MeshState (01 status 변형만)
 
 **중요 — 승인 없이 진행하지 않는다:**
 - Step 2 기능 분석 결과 → 사용자 승인
@@ -90,12 +99,12 @@ feat: 3D_Components/{장비명} 컴포넌트 생산 — {한줄 설명}
 
 ### Phase 3. PRODUCTION_QUEUE.md 업데이트 + 사이클 종료
 
-1. PRODUCTION_QUEUE.md에서 해당 항목의 상태를 "완료"로 변경
+1. PRODUCTION_QUEUE.md에서 해당 장비의 "기존(완료)" 컬럼에 01 추가. "추가 대상"에 Advanced가 남아 있으면 상태는 "대기" 유지, 남은 항목이 없으면 "완료"로 변경
 2. 사용자에게 안내:
 
 ```
-{장비명} 생산 완료 (변형: {01, 02, ...}).
-다음 대상: {다음 장비명} ({유형})
+{장비명} Standard(01) 생산 완료.
+다음 대상: {다음 장비명} ({유형}) — Standard(01)
 
 `/compact` 실행 후 "계속"을 입력해주세요.
 ```
