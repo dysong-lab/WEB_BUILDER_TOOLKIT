@@ -21,7 +21,7 @@ description: GLTF 컨테이너 3D 컴포넌트를 생성합니다. 하나의 GLT
 
 이 스킬은 CLAUDE.md 명세를 코드로 변환하는 역할만 한다. 기능 정의나 Mixin 선택을 다시 하지 않는다.
 
-> Mixin이 존재하지 않는 경우에도, 구현 명세에 커스텀 속성/메서드가 정의되어 있으면 그대로 구현한다. 신규 Mixin이 필요한 경우는 `produce-component` → `create-mixin-spec` → `implement-mixin`에서 이미 처리되어 있다.
+> Mixin이 존재하지 않는 경우에도, 구현 명세에 커스텀 속성/메서드가 정의되어 있으면 그대로 구현한다. 컴포넌트 생산 루프에서는 **새 Mixin을 만들지 않는다** — 커스텀 메서드로 완결한다. Mixin 추가는 루프와 분리된 별도 수동 작업(`create-mixin-spec` → `implement-mixin`)에서 사용자가 직접 처리한다.
 
 ---
 

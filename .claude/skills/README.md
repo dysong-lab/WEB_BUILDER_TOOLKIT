@@ -137,9 +137,7 @@ create-project → Master/Page/컴포넌트/Mock서버 전체 구조
 produce-component (진입점)
     │
     ├── 범주 확인 → 기능 분석 → Mixin 매핑
-    │       │
-    │       └── 신규 Mixin 필요 시:
-    │           create-mixin-spec → implement-mixin → 복귀
+    │       (기존 Mixin + 커스텀 메서드로 완결 — 루프에서 새 Mixin 만들지 않음)
     │
     ├── HTML/CSS 확보:
     │       ├── figma-to-html (Figma 있음)
@@ -153,6 +151,11 @@ produce-component (진입점)
             └── create-symbol-state-component
                     │
                     └── create-project (페이지 조합)
+
+[별도 수동 워크플로우 — 루프와 분리]
+create-mixin-spec → implement-mixin
+    ※ 반복 패턴이 감지되었을 때 사용자가 직접 호출. 컴포넌트 생산 루프
+      내부에서 자동 진입하지 않는다.
 ```
 
 ---

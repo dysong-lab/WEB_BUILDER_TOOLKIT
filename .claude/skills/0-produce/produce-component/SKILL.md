@@ -85,29 +85,31 @@ PRODUCTION_PROCESS.md의 Step 3~7을 따라 컴포넌트를 생산한다.
 | 3D 모델 애니메이션이 필요한가? | AnimationMixin |
 | 3D 모델 절단면이 필요한가? | ClippingPlaneMixin |
 | 기존 Mixin으로 부족한가? | 커스텀 속성/메서드 정의 |
-| Mixin 자체가 존재하지 않는가? | → Step 3-1로 |
+| Mixin 자체가 존재하지 않는가? | → 커스텀 메서드로 처리 (Step 3-1은 수동 전용) |
 
 **분기**:
 
 ```
 기능별 Mixin 매핑
     │
-    ├── 기존 Mixin으로 충분 → Step 4로
+    ├── 기존 Mixin으로 충분          → Step 4로
     │
-    ├── Mixin + 커스텀 속성/메서드 조합 → Step 4로
-    │
-    └── 신규 Mixin 필요 → Step 3-1
+    └── Mixin + 커스텀 속성/메서드 조합 → Step 4로
 ```
 
-#### Step 3-1. 신규 Mixin 구현 (필요 시)
+> 기존 Mixin으로 완전히 커버되지 않는 새 패턴이어도 이 생산 루프에서는 **커스텀 메서드로 해결**한다. 새 Mixin 생성은 본 SKILL의 대상이 아니다 (Step 3-1 참조).
+
+#### Step 3-1. 신규 Mixin 구현 (수동 전용 — 루프에서 진입하지 않음)
+
+이 단계는 컴포넌트 생산 루프에서 **자동으로 진입하지 않는다**. 반복 패턴이 `audit-project`나 사용자 리뷰로 감지되면, 사용자가 직접 `create-mixin-spec` / `implement-mixin` 스킬을 호출하는 **별도 수동 작업**이다.
 
 ```
 create-mixin-spec → 명세서 작성 → 사용자 승인
     → implement-mixin → 구현 + 문서 + 카탈로그 업데이트
-    → Step 3로 복귀하여 새 Mixin으로 매핑 확정
+    → 필요 시 기존 컴포넌트를 수동으로 새 Mixin에 리팩터 (선택)
 ```
 
-**사용자에게 보고**: 각 기능의 구현 수단 (Mixin / 커스텀 메서드 / 신규 Mixin)을 제시한다.
+**사용자에게 보고**: 각 기능의 구현 수단 (Mixin / 커스텀 메서드)을 제시한다. 반복 패턴 후보가 의심되면 보고에 메모만 남기고 새 Mixin 생성에 진입하지 않는다.
 
 ---
 
