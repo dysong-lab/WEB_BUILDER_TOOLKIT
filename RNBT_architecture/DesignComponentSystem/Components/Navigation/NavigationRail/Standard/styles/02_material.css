@@ -1,0 +1,70 @@
+/* 02_material: Persona B — Material Elevated
+   블루 팔레트 / shadow elevation / Roboto / 라이트 */
+
+.nav-rail {
+    width: 80px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    box-shadow: 1px 0 3px rgba(0, 0, 0, 0.08), 1px 0 2px rgba(0, 0, 0, 0.06);
+    flex-shrink: 0;
+}
+
+.nav-rail__list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 0;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.nav-rail__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 56px;
+    padding: 12px 4px;
+    border-radius: 28px;
+    cursor: pointer;
+    transition: background-color 200ms ease-in-out;
+}
+
+.nav-rail__item:hover {
+    background: rgba(21, 101, 192, 0.06);
+}
+
+.nav-rail__item[data-active="true"] {
+    background: #e3f2fd;
+}
+
+.nav-rail__icon {
+    font-size: 24px;
+    color: #616161;
+    width: 24px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.nav-rail__item[data-active="true"] .nav-rail__icon {
+    color: #1565C0;
+}
+
+.nav-rail__label {
+    font-family: 'Roboto', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: #424242;
+    text-align: center;
+    line-height: 1.2;
+    word-break: keep-all;
+}
+
+.nav-rail__item[data-active="true"] .nav-rail__label {
+    color: #1565C0;
+    font-weight: 700;
+}

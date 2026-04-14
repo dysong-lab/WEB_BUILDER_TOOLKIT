@@ -1,0 +1,81 @@
+/* 03_editorial: Persona C — Minimal Editorial
+   웜 그레이 / 세리프 라벨 / Inter / 라이트 */
+
+.nav-rail {
+    width: 88px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #faf9f7;
+    border-right: 1px solid #e8e4de;
+    flex-shrink: 0;
+}
+
+.nav-rail__list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    padding: 16px 0;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.nav-rail__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 100%;
+    padding: 12px 8px;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 120ms ease;
+}
+
+.nav-rail__item:hover {
+    background: #f0ece6;
+}
+
+.nav-rail__item[data-active="true"] {
+    background: transparent;
+}
+
+.nav-rail__item[data-active="true"]::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 24px;
+    background: #6b6560;
+}
+
+.nav-rail__icon {
+    font-size: 20px;
+    color: #a09890;
+    width: 24px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.nav-rail__item[data-active="true"] .nav-rail__icon {
+    color: #3d3833;
+}
+
+.nav-rail__label {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    color: #6b6560;
+    text-align: center;
+    line-height: 1.2;
+    word-break: keep-all;
+}
+
+.nav-rail__item[data-active="true"] .nav-rail__label {
+    color: #2c2824;
+    font-weight: 500;
+}
