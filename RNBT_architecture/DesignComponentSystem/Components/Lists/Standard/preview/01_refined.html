@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Lists/Standard — 01_refined</title>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/ListRenderMixin.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        padding: 40px 24px;
+        background:
+          radial-gradient(circle at top, rgba(100, 79, 255, 0.22), transparent 38%),
+          linear-gradient(180deg, #090d22, #11193b 48%, #070a18);
+        display: flex;
+        justify-content: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="list-root"></div>
+    <script>
+      const LIST_PREVIEW_DATA = [
+        {
+          id: "security",
+          selected: "true",
+          disabled: "false",
+          selectable: "true",
+          leading: "shield",
+          leadingType: "icon",
+          overline: "Privacy",
+          headline: "Security",
+          supporting: "Face ID, passcode, recovery options",
+          trailingText: "On",
+          trailingAction: "chevron_right",
+          trailingActionLabel: "Open security settings",
+        },
+        {
+          id: "network",
+          selected: "false",
+          disabled: "false",
+          selectable: "true",
+          leading: "wifi",
+          leadingType: "icon",
+          overline: "Connectivity",
+          headline: "Office Wi-Fi",
+          supporting: "Renobit-Lab-5G connected automatically",
+          trailingText: "Strong",
+          trailingAction: "settings",
+          trailingActionLabel: "Manage network",
+        },
+        {
+          id: "alerts",
+          selected: "false",
+          disabled: "false",
+          selectable: "false",
+          leading: "A",
+          leadingType: "avatar",
+          overline: "Inbox",
+          headline: "Alicia Park",
+          supporting: "The staging rollout completed 6 minutes ago.",
+          trailingText: "6m",
+          trailingAction: "more_horiz",
+          trailingActionLabel: "Open message actions",
+        },
+        {
+          id: "handoff",
+          selected: "false",
+          disabled: "false",
+          selectable: "true",
+          leading: "D",
+          leadingType: "avatar",
+          overline: "Inbox",
+          headline: "Design Review",
+          supporting: "Updated navigation mocks are ready for sign-off.",
+          trailingText: "12m",
+          trailingAction: "chevron_right",
+          trailingActionLabel: "Open design review thread",
+        },
+        {
+          id: "backup",
+          selected: "false",
+          disabled: "true",
+          selectable: "true",
+          leading: "cloud_off",
+          leadingType: "icon",
+          overline: "System",
+          headline: "Cloud Backup",
+          supporting: "Paused until admin access is restored.",
+          trailingText: "Blocked",
+          trailingAction: "info",
+          trailingActionLabel: "View backup status",
+        },
+      ];
+
+      (async () => {
+        await loadComponentAssets(
+          "list-root",
+          "../views/01_refined.html",
+          "../styles/01_refined.css",
+        );
+
+        const instance = {
+          id: "lists-standard-preview",
+          appendElement: document.getElementById("list-root"),
+        };
+
+        applyListRenderMixin(instance, {
+          cssSelectors: {
+            container: ".list",
+            template: "#list-item-template",
+            item: ".list-item",
+            id: ".list-item",
+            selected: ".list-item",
+            disabled: ".list-item",
+            selectable: ".list-item",
+            leading: ".list-item__leading",
+            leadingType: ".list-item__leading",
+            overline: ".list-item__overline",
+            headline: ".list-item__headline",
+            supporting: ".list-item__supporting",
+            trailingText: ".list-item__trailing-text",
+            trailingAction: ".list-item__trailing-action",
+            trailingActionLabel: ".list-item__trailing-action",
+          },
+          itemKey: "id",
+          datasetAttrs: {
+            id: "id",
+            selected: "selected",
+            disabled: "disabled",
+            selectable: "selectable",
+            leadingType: "leading-type",
+          },
+          elementAttrs: {
+            trailingActionLabel: "aria-label",
+          },
+        });
+
+        instance.getItemElement = function (id) {
+          return this.appendElement.querySelector(
+            `${this.listRender.cssSelectors.item}[data-id="${String(id)}"]`,
+          );
+        };
+
+        instance.toggleSelection = function (id) {
+          const target = this.getItemElement(id);
+          if (!target || target.dataset.disabled === "true") return;
+          if (target.dataset.selectable === "false") return;
+
+          target.setAttribute(
+            "data-selected",
+            target.dataset.selected === "true" ? "false" : "true",
+          );
+        };
+
+        instance.renderListItems = function ({ response } = {}) {
+          this.listRender.renderData({
+            response: (Array.isArray(response) ? response : []).map((item = {}) => ({
+              id: item.id == null ? "" : String(item.id),
+              selected: item.selected === "true" ? "true" : "false",
+              disabled: item.disabled === "true" ? "true" : "false",
+              selectable: item.selectable === "false" ? "false" : "true",
+              leading: item.leading || "",
+              leadingType: item.leadingType || (item.leading ? "icon" : "none"),
+              overline: item.overline || "",
+              headline: item.headline || "",
+              supporting: item.supporting || "",
+              trailingText: item.trailingText || "",
+              trailingAction: item.trailingAction || "",
+              trailingActionLabel:
+                item.trailingActionLabel || item.headline || String(item.id || ""),
+            })),
+          });
+        };
+
+        instance._clickHandler = (event) => {
+          const trailingAction = event.target.closest(".list-item__trailing-action");
+          if (trailingAction) {
+            const item = trailingAction.closest(".list-item");
+            if (!item || item.dataset.disabled === "true") return;
+            event.stopPropagation();
+            Weventbus.emit("@listTrailingActionClicked", { event, targetInstance: instance });
+            return;
+          }
+
+          const item = event.target.closest(".list-item");
+          if (!item || item.dataset.disabled === "true") return;
+
+          if (item.dataset.selectable !== "false" && item.dataset.id) {
+            instance.toggleSelection(item.dataset.id);
+          }
+
+          Weventbus.emit("@listItemClicked", { event, targetInstance: instance });
+        };
+
+        instance._keydownHandler = (event) => {
+          if (event.key !== "Enter" && event.key !== " ") return;
+          if (event.target.closest(".list-item__trailing-action")) return;
+
+          const item = event.target.closest(".list-item");
+          if (!item) return;
+          event.preventDefault();
+          item.click();
+        };
+
+        instance.appendElement.addEventListener("click", instance._clickHandler);
+        instance.appendElement.addEventListener("keydown", instance._keydownHandler);
+
+        Wkit.onEventBusHandlers({
+          "@listItemClicked": ({ event, targetInstance }) => {
+            const item = event.target.closest(".list-item");
+            console.log(
+              "[Preview] List item clicked:",
+              targetInstance?.id,
+              item?.dataset.id,
+              item?.dataset.selected,
+            );
+          },
+          "@listTrailingActionClicked": ({ event, targetInstance }) => {
+            const item = event.target.closest(".list-item");
+            const action = event.target.closest(".list-item__trailing-action");
+            console.log(
+              "[Preview] List trailing action clicked:",
+              targetInstance?.id,
+              item?.dataset.id,
+              action?.textContent?.trim(),
+            );
+          },
+        });
+
+        instance.renderListItems({ response: LIST_PREVIEW_DATA });
+      })();
+    </script>
+  </body>
+</html>

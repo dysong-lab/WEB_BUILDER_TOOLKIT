@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
+
+.list-shell {
+  width: min(720px, 100%);
+  padding: 16px;
+  border-radius: 28px;
+  background: #fcfcff;
+  box-shadow: 0 18px 48px rgba(40, 52, 86, 0.14);
+  color: #1b1b21;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 72px;
+  padding: 12px 16px;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+  transition: background 140ms ease, border-color 140ms ease;
+}
+
+.list-item:hover {
+  background: #f3f4fb;
+}
+
+.list-item:focus-visible {
+  border-color: #7a7ce6;
+  box-shadow: 0 0 0 3px rgba(122, 124, 230, 0.14);
+}
+
+.list-item[data-selected="true"] {
+  background: #e6e8ff;
+}
+
+.list-item[data-disabled="true"] {
+  opacity: 0.42;
+  cursor: default;
+}
+
+.list-item__leading {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #40456d;
+}
+
+.list-item__leading:empty,
+.list-item__overline:empty,
+.list-item__supporting:empty,
+.list-item__trailing-text:empty,
+.list-item__trailing-action:empty {
+  display: none;
+}
+
+.list-item__leading[data-leading-type="icon"] {
+  font-family: "Material Symbols Outlined";
+  font-size: 24px;
+  background: #eceefe;
+}
+
+.list-item__leading[data-leading-type="avatar"],
+.list-item__leading[data-leading-type="letter"] {
+  background: #d7e3ff;
+  color: #24428f;
+  font: 600 15px/1 "Roboto", sans-serif;
+}
+
+.list-item__body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.list-item__overline {
+  color: #565c85;
+  font: 500 11px/1.2 "Roboto", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.list-item__headline {
+  color: #1c1b1f;
+  font: 500 16px/1.5 "Roboto", sans-serif;
+}
+
+.list-item__supporting {
+  color: #5d5f6d;
+  font: 400 14px/1.4 "Roboto", sans-serif;
+}
+
+.list-item__trailing {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.list-item__trailing-text {
+  color: #4b57a6;
+  font: 500 12px/1.2 "Roboto", sans-serif;
+}
+
+.list-item__trailing-action {
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 17px;
+  background: #eceefe;
+  color: #3a4488;
+  font-family: "Material Symbols Outlined";
+  font-size: 21px;
+  cursor: pointer;
+}

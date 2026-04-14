@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
+
+.list-shell {
+  width: min(760px, 100%);
+  padding: 16px;
+  border: 1px solid rgba(95, 232, 255, 0.18);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(10, 18, 28, 0.96), rgba(5, 11, 18, 0.98)),
+    radial-gradient(circle at top right, rgba(53, 182, 255, 0.18), transparent 45%);
+  color: #dceaf5;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 74px;
+  padding: 14px 16px;
+  border: 1px solid rgba(53, 182, 255, 0.08);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  outline: none;
+}
+
+.list-item:hover,
+.list-item[data-selected="true"] {
+  border-color: rgba(53, 182, 255, 0.28);
+  background: rgba(25, 76, 116, 0.18);
+}
+
+.list-item:focus-visible {
+  box-shadow: 0 0 0 2px rgba(53, 182, 255, 0.22);
+}
+
+.list-item[data-disabled="true"] {
+  opacity: 0.38;
+  cursor: default;
+}
+
+.list-item__leading {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #90f0ff;
+}
+
+.list-item__leading:empty,
+.list-item__overline:empty,
+.list-item__supporting:empty,
+.list-item__trailing-text:empty,
+.list-item__trailing-action:empty {
+  display: none;
+}
+
+.list-item__leading[data-leading-type="icon"] {
+  font-family: "Material Symbols Outlined";
+  font-size: 22px;
+  background: rgba(53, 182, 255, 0.12);
+}
+
+.list-item__leading[data-leading-type="avatar"],
+.list-item__leading[data-leading-type="letter"] {
+  background: rgba(53, 182, 255, 0.18);
+  font: 600 14px/1 "IBM Plex Mono", monospace;
+}
+
+.list-item__body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.list-item__overline {
+  color: #77b7c3;
+  font: 500 10px/1.2 "IBM Plex Mono", monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.list-item__headline {
+  color: #effaff;
+  font: 500 15px/1.35 "IBM Plex Sans", sans-serif;
+}
+
+.list-item__supporting {
+  color: #8ba3b5;
+  font: 400 12px/1.45 "IBM Plex Sans", sans-serif;
+}
+
+.list-item__trailing {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.list-item__trailing-text {
+  color: #68e6ff;
+  font: 500 11px/1.2 "IBM Plex Mono", monospace;
+}
+
+.list-item__trailing-action {
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(53, 182, 255, 0.16);
+  border-radius: 10px;
+  background: rgba(53, 182, 255, 0.08);
+  color: #aff6ff;
+  font-family: "Material Symbols Outlined";
+  font-size: 20px;
+  cursor: pointer;
+}
