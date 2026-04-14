@@ -42,21 +42,22 @@ this.getItemElement = function (id) {
 };
 
 this.setSelected = function (id, selected) {
-  const target = this.getItemElement(id);
-  if (!target || target.dataset.disabled === "true") return;
+  const state = this.listRender.getItemState(String(id));
+  if (!state || state.disabled === "true") return;
 
-  target.setAttribute("data-selected", selected ? "true" : "false");
+  this.listRender.updateItemState(String(id), {
+    selected: selected ? "true" : "false",
+  });
 };
 
 this.toggleSelection = function (id) {
-  const target = this.getItemElement(id);
-  if (!target || target.dataset.disabled === "true") return;
-  if (target.dataset.selectable === "false") return;
+  const state = this.listRender.getItemState(String(id));
+  if (!state || state.disabled === "true") return;
+  if (state.selectable === "false") return;
 
-  target.setAttribute(
-    "data-selected",
-    target.dataset.selected === "true" ? "false" : "true",
-  );
+  this.listRender.updateItemState(String(id), {
+    selected: state.selected === "true" ? "false" : "true",
+  });
 };
 
 this.renderListItems = function ({ response } = {}) {

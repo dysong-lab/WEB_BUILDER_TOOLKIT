@@ -68,8 +68,8 @@ id
 
 | 이벤트 | 트리거 | 발행 |
 |--------|--------|------|
-| click | `.list-item` | `@listItemClicked` |
-| click | `.list-item__trailing-action` | `@listTrailingActionClicked` |
+| click | `.list-item` native listener | `@listItemClicked` |
+| click | `.list-item__trailing-action` native listener | `@listTrailingActionClicked` |
 
 ### 커스텀 메서드
 
@@ -77,8 +77,8 @@ id
 |--------|------|
 | `this.renderListItems({ response })` | 입력 배열을 정규화한 뒤 `ListRenderMixin`으로 렌더링한다 |
 | `this.getItemElement(id)` | id로 항목 루트 요소를 조회한다 |
-| `this.toggleSelection(id)` | 선택 가능한 항목의 `selected` 상태를 토글한다 |
-| `this.setSelected(id, selected)` | 지정한 항목의 `selected` 상태를 명시적으로 설정한다 |
+| `this.toggleSelection(id)` | `ListRenderMixin.getItemState/updateItemState`로 선택 가능한 항목의 `selected` 상태를 토글한다 |
+| `this.setSelected(id, selected)` | `ListRenderMixin.updateItemState`로 지정한 항목의 `selected` 상태를 명시적으로 설정한다 |
 
 ### 페이지 연결 사례
 
