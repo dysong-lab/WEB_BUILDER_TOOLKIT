@@ -335,10 +335,13 @@
         .preview-log-empty {
             color: var(--muted);
         }
-        .preview-log-entry + .preview-log-entry {
+.preview-log-entry + .preview-log-entry {
             margin-top: 8px;
             padding-top: 8px;
             border-top: 1px dashed var(--border);
+        }
+        .preview-log-entry.eventbus {
+            border-top-style: solid;
         }
         .preview-log-source {
             color: var(--accent);
@@ -1087,8 +1090,8 @@ function renderPreviewEventLogs() {
     }
 
     body.innerHTML = state.previewEventLogs.map((entry) => `
-        <div class="preview-log-entry">
-            <div class="preview-log-source">${escapeHtml(entry.source)}</div>
+        <div class="preview-log-entry ${escapeHtml(entry.source)}">
+            ${entry.source === 'eventbus' ? '' : `<div class="preview-log-source">${escapeHtml(entry.source)}</div>`}
             <div class="preview-log-lines">${escapeHtml(entry.lines.join('\n'))}</div>
         </div>
     `).join('');

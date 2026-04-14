@@ -121,11 +121,41 @@ const GlobalDataPublisher = {
 
 // ── Weventbus 시뮬레이션 ──
 const _eventHandlers = {};
+
+function normalizeEventName(name) {
+    return String(name || '').replace(/^@/, '');
+}
+
+function extractEventLabel(event) {
+    const target = event?.target;
+    if (!target || typeof target.closest !== 'function') return null;
+
+    const candidate = target.closest('button, [role="button"], a, label, input, option, .el-button, .el-menu-item');
+    if (!candidate) return null;
+
+    const text = (
+        candidate.getAttribute?.('aria-label')
+        || candidate.getAttribute?.('title')
+        || candidate.innerText
+        || candidate.textContent
+        || candidate.value
+        || ''
+    ).replace(/\s+/g, ' ').trim();
+
+    return text || null;
+}
+
+function formatEventMessage(name, payload) {
+    const eventName = normalizeEventName(name);
+    const label = extractEventLabel(payload?.event);
+    return label ? `${eventName} "${label}"` : eventName;
+}
+
 const Weventbus = {
     emit: (name, payload) => {
         postPreviewEventLog({
             source: 'eventbus',
-            message: name,
+            message: formatEventMessage(name, payload),
             detail: {
                 targetInstanceId: payload?.targetInstance?.id || null,
                 eventType: payload?.event?.type || null,
