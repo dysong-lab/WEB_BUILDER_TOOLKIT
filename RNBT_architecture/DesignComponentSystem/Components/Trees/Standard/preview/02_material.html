@@ -105,7 +105,7 @@
             const nodeId = node?.dataset.nodeId;
             if (nodeId && node?.dataset.hasChildren === "true") {
               instance.treeRender.toggle(nodeId);
-              console.log("[Trees/Standard Preview] toggled:", nodeId, instance.treeRender.getNodeState(nodeId));
+              console.log("[Preview] Tree node toggled:", nodeId, instance.treeRender.getNodeState(nodeId));
             }
             return;
           }
@@ -116,7 +116,7 @@
           const nodeId = node?.dataset.nodeId;
           if (nodeId) {
             setSelectedNode(nodeId);
-            console.log("[Trees/Standard Preview] selected:", nodeId);
+            console.log("[Preview] Tree node selected:", nodeId);
           }
         });
 

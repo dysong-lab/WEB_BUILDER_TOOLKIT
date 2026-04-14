@@ -57,13 +57,6 @@
       #tree-container {
         margin-top: 18px;
       }
-      .preview-log {
-        margin-top: 18px;
-        padding-top: 14px;
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
-        font-size: 12px;
-        color: rgba(210, 226, 255, 0.62);
-      }
     </style>
   </head>
   <body>
@@ -76,7 +69,6 @@
           <button type="button" class="collapse-all">Collapse all</button>
         </div>
         <div id="tree-container"></div>
-        <div class="preview-log">No event yet.</div>
       </section>
     </div>
 
@@ -183,15 +175,13 @@
 
         instance.appendElement.addEventListener("click", (event) => {
           const toggle = event.target.closest(".tree__toggle");
-          const log = document.querySelector(".preview-log");
 
           if (toggle) {
             const node = toggle.closest(".tree__node");
             const nodeId = node?.dataset.nodeId;
             if (!nodeId || node?.dataset.hasChildren !== "true") return;
             instance.treeRender.toggle(nodeId);
-            console.log("[Trees/Standard Preview] toggled:", nodeId, instance.treeRender.getNodeState(nodeId));
-            log.textContent = `Toggled: ${nodeId}`;
+            console.log("[Preview] Tree node toggled:", nodeId, instance.treeRender.getNodeState(nodeId));
             return;
           }
 
@@ -202,8 +192,7 @@
           const nodeId = node?.dataset.nodeId;
           if (!nodeId) return;
           instance.setSelectedNode(nodeId);
-          console.log("[Trees/Standard Preview] selected:", nodeId);
-          log.textContent = `Selected: ${nodeId}`;
+          console.log("[Preview] Tree node selected:", nodeId);
         });
 
         instance.renderTreeData({ response: treeData });
