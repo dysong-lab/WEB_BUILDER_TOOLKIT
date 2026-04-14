@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Trees/Standard — 03_editorial (Persona C)</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        background: #ece3d7;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+        color: #2f241a;
+        font-family: "Instrument Sans", -apple-system, sans-serif;
+      }
+      .preview-card {
+        width: min(100%, 700px);
+        padding: 28px;
+        border-radius: 12px;
+        background:
+          linear-gradient(135deg, rgba(255, 250, 243, 0.72), rgba(255, 250, 243, 0) 44%),
+          linear-gradient(180deg, #f5efe6 0%, #e9decf 100%);
+        box-shadow: 0 14px 28px rgba(98, 74, 49, 0.12);
+      }
+      .preview-card h1 {
+        font-family: "Cormorant Garamond", "Times New Roman", serif;
+        font-size: 36px;
+        font-weight: 600;
+        letter-spacing: -0.8px;
+      }
+      .preview-card p {
+        margin-top: 8px;
+        font-size: 14px;
+        line-height: 1.7;
+        color: rgba(47, 36, 26, 0.7);
+      }
+      #tree-container { margin-top: 18px; }
+    </style>
+  </head>
+  <body>
+    <section class="preview-card">
+      <h1>Trees / Standard</h1>
+      <p>편집 구조나 아카이브 목차처럼 차분한 위계를 보여주는 에디토리얼 변형입니다.</p>
+      <div id="tree-container"></div>
+    </section>
+
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/TreeRenderMixin.js"></script>
+    <script>
+      (async () => {
+        await loadComponentAssets("tree-container", "../views/03_editorial.html", "../styles/03_editorial.css");
+
+        const data = [
+          {
+            id: "book",
+            icon: "◫",
+            label: "Collected Essays",
+            meta: "3 sections",
+            children: [
+              {
+                id: "book-intro",
+                icon: "▣",
+                label: "Introduction",
+                meta: "Draft",
+                children: [
+                  { id: "book-preface", icon: "•", label: "Preface", meta: "2 pages", children: [] },
+                ],
+              },
+              { id: "book-plates", icon: "•", label: "Image Plates", meta: "12 items", children: [] },
+            ],
+          },
+        ];
+
+        const instance = { appendElement: document.getElementById("tree-container") };
+        applyTreeRenderMixin(instance, {
+          cssSelectors: {
+            container: ".tree__list", template: "#tree-node-template", node: ".tree__node",
+            toggle: ".tree__toggle", content: ".tree__content", icon: ".tree__icon",
+            label: ".tree__label", meta: ".tree__meta", tone: ".tree__node", empty: ".tree__empty",
+          },
+          nodeKey: "id", childrenKey: "children", datasetAttrs: { tone: "tone" },
+        });
+
+        instance.treeRender.renderData({ response: data });
+        instance.treeRender.collapseAll();
+
+        instance.appendElement.addEventListener("click", (event) => {
+          const toggle = event.target.closest(".tree__toggle");
+          if (toggle) {
+            const node = toggle.closest(".tree__node");
+            const nodeId = node?.dataset.nodeId;
+            if (nodeId && node?.dataset.hasChildren === "true") {
+              instance.treeRender.toggle(nodeId);
+              console.log("[Trees/Standard Preview] toggled:", nodeId, instance.treeRender.getNodeState(nodeId));
+            }
+            return;
+          }
+
+          const content = event.target.closest(".tree__content");
+          if (!content) return;
+          const node = content.closest(".tree__node");
+          const nodeId = node?.dataset.nodeId;
+          console.log("[Trees/Standard Preview] selected:", nodeId);
+          instance.appendElement.querySelectorAll(".tree__node").forEach((el) => {
+            el.setAttribute("data-selected", el.dataset.nodeId === String(nodeId) ? "true" : "false");
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

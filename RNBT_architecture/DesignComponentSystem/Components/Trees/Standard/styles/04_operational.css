@@ -1,0 +1,123 @@
+.tree {
+  width: 100%;
+  min-width: 280px;
+}
+
+.tree__list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tree__node {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  min-height: 38px;
+  border-radius: 4px;
+  transition: background-color 150ms ease, box-shadow 150ms ease;
+}
+
+.tree__node[data-selected="true"] {
+  background: rgba(84, 218, 255, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(84, 218, 255, 0.14);
+}
+
+.tree__node[data-tone="warning"] .tree__icon,
+.tree__node[data-tone="warning"] .tree__meta {
+  color: #ffcf66;
+}
+
+.tree__node[data-tone="critical"] .tree__icon,
+.tree__node[data-tone="critical"] .tree__meta {
+  color: #ff7b6b;
+}
+
+.tree__toggle,
+.tree__content {
+  border: 0;
+  background: transparent;
+}
+
+.tree__toggle {
+  width: 32px;
+  min-width: 32px;
+  border-radius: 4px;
+  color: #89eeff;
+  cursor: pointer;
+  transition: background-color 150ms ease, transform 150ms ease;
+}
+
+.tree__node[data-selected="false"] .tree__toggle:not(:active):hover {
+  background: rgba(84, 218, 255, 0.08);
+}
+
+.tree__toggle:active {
+  transform: scale(0.94);
+}
+
+.tree__toggle-glyph {
+  display: inline-block;
+  transition: transform 160ms ease;
+}
+
+.tree__node[data-expanded="true"] .tree__toggle-glyph {
+  transform: rotate(90deg);
+}
+
+.tree__node[data-has-children="false"] .tree__toggle {
+  visibility: hidden;
+}
+
+.tree__content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 38px;
+  padding: 6px 10px 6px 0;
+  border-radius: 4px;
+  color: #dffbff;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 150ms ease;
+}
+
+.tree__node[data-selected="false"] .tree__content:not(:active):hover {
+  background: rgba(84, 218, 255, 0.05);
+}
+
+.tree__icon {
+  width: 18px;
+  font-size: 15px;
+  color: #89eeff;
+  text-align: center;
+}
+
+.tree__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.tree__label {
+  font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0px;
+  text-transform: uppercase;
+}
+
+.tree__meta {
+  font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+  font-size: 10px;
+  color: rgba(223, 251, 255, 0.58);
+}
+
+.tree__empty {
+  padding: 14px 0 2px;
+  font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+  font-size: 12px;
+  color: rgba(223, 251, 255, 0.46);
+}

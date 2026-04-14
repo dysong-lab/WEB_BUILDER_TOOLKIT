@@ -1,0 +1,120 @@
+.tree {
+  width: 100%;
+  min-width: 280px;
+}
+
+.tree__list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tree__node {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  min-height: 40px;
+  border-radius: 10px;
+  transition: background-color 150ms ease;
+}
+
+.tree__node[data-selected="true"] {
+  background: rgba(103, 80, 164, 0.12);
+}
+
+.tree__node[data-tone="warning"] .tree__icon,
+.tree__node[data-tone="warning"] .tree__meta {
+  color: #a05a00;
+}
+
+.tree__node[data-tone="critical"] .tree__icon,
+.tree__node[data-tone="critical"] .tree__meta {
+  color: #b3261e;
+}
+
+.tree__toggle,
+.tree__content {
+  border: 0;
+  background: transparent;
+}
+
+.tree__toggle {
+  width: 32px;
+  min-width: 32px;
+  border-radius: 8px;
+  color: #6750a4;
+  cursor: pointer;
+  transition: background-color 150ms ease, transform 150ms ease;
+}
+
+.tree__node[data-selected="false"] .tree__toggle:not(:active):hover {
+  background: rgba(103, 80, 164, 0.08);
+}
+
+.tree__toggle:active {
+  transform: scale(0.94);
+}
+
+.tree__toggle-glyph {
+  display: inline-block;
+  transition: transform 160ms ease;
+}
+
+.tree__node[data-expanded="true"] .tree__toggle-glyph {
+  transform: rotate(90deg);
+}
+
+.tree__node[data-has-children="false"] .tree__toggle {
+  visibility: hidden;
+}
+
+.tree__content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 40px;
+  padding: 8px 12px 8px 0;
+  border-radius: 10px;
+  color: #1b1b1f;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 150ms ease;
+}
+
+.tree__node[data-selected="false"] .tree__content:not(:active):hover {
+  background: rgba(103, 80, 164, 0.06);
+}
+
+.tree__icon {
+  width: 18px;
+  font-size: 15px;
+  color: #6750a4;
+  text-align: center;
+}
+
+.tree__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.tree__label {
+  font-family: "Roboto", -apple-system, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.tree__meta {
+  font-family: "Roboto", -apple-system, sans-serif;
+  font-size: 12px;
+  color: #6f6877;
+}
+
+.tree__empty {
+  padding: 14px 0 2px;
+  font-family: "Roboto", -apple-system, sans-serif;
+  font-size: 13px;
+  color: #6f6877;
+}

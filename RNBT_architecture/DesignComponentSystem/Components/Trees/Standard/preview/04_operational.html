@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Trees/Standard — 04_operational (Persona D)</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        background: #05090c;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+        color: #dffbff;
+        font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+      }
+      .preview-card {
+        width: min(100%, 700px);
+        padding: 24px;
+        border-radius: 20px;
+        background:
+          linear-gradient(135deg, rgba(12, 69, 86, 0.34), transparent 40%),
+          linear-gradient(180deg, #081317 0%, #04090b 100%);
+        border: 1px solid rgba(78, 216, 229, 0.12);
+        box-shadow: 0 20px 44px rgba(0, 0, 0, 0.44);
+      }
+      .preview-card h1 {
+        font-size: 22px;
+        font-weight: 600;
+        letter-spacing: 0px;
+        text-transform: uppercase;
+      }
+      .preview-card p {
+        margin-top: 8px;
+        font-size: 12px;
+        line-height: 1.7;
+        color: rgba(223, 251, 255, 0.68);
+      }
+      #tree-container { margin-top: 18px; }
+    </style>
+  </head>
+  <body>
+    <section class="preview-card">
+      <h1>Trees / Standard</h1>
+      <p>운영 패널용으로 경고 톤과 상태 메타를 강조한 트리 예시입니다.</p>
+      <div id="tree-container"></div>
+    </section>
+
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/TreeRenderMixin.js"></script>
+    <script>
+      (async () => {
+        await loadComponentAssets("tree-container", "../views/04_operational.html", "../styles/04_operational.css");
+
+        const data = [
+          {
+            id: "grid",
+            icon: "◫",
+            label: "GRID CORE",
+            meta: "LIVE",
+            children: [
+              {
+                id: "grid-zone-04",
+                icon: "▣",
+                label: "ZONE 04",
+                meta: "FAULT RISK",
+                tone: "critical",
+                children: [
+                  { id: "grid-zone-04-sensor", icon: "•", label: "SENSOR BUS", meta: "31MS", tone: "warning", children: [] },
+                ],
+              },
+              { id: "grid-zone-08", icon: "•", label: "ZONE 08", meta: "STABLE", children: [] },
+            ],
+          },
+        ];
+
+        const instance = { appendElement: document.getElementById("tree-container") };
+        applyTreeRenderMixin(instance, {
+          cssSelectors: {
+            container: ".tree__list", template: "#tree-node-template", node: ".tree__node",
+            toggle: ".tree__toggle", content: ".tree__content", icon: ".tree__icon",
+            label: ".tree__label", meta: ".tree__meta", tone: ".tree__node", empty: ".tree__empty",
+          },
+          nodeKey: "id", childrenKey: "children", datasetAttrs: { tone: "tone" },
+        });
+
+        instance.treeRender.renderData({ response: data });
+        instance.treeRender.collapseAll();
+
+        instance.appendElement.addEventListener("click", (event) => {
+          const toggle = event.target.closest(".tree__toggle");
+          if (toggle) {
+            const node = toggle.closest(".tree__node");
+            const nodeId = node?.dataset.nodeId;
+            if (nodeId && node?.dataset.hasChildren === "true") {
+              instance.treeRender.toggle(nodeId);
+              console.log("[Trees/Standard Preview] toggled:", nodeId, instance.treeRender.getNodeState(nodeId));
+            }
+            return;
+          }
+
+          const content = event.target.closest(".tree__content");
+          if (!content) return;
+          const node = content.closest(".tree__node");
+          const nodeId = node?.dataset.nodeId;
+          console.log("[Trees/Standard Preview] selected:", nodeId);
+          instance.appendElement.querySelectorAll(".tree__node").forEach((el) => {
+            el.setAttribute("data-selected", el.dataset.nodeId === String(nodeId) ? "true" : "false");
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>
