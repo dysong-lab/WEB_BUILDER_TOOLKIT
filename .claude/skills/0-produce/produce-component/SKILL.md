@@ -186,6 +186,48 @@ CLAUDE.md 명세가 승인되면, 컴포넌트 유형에 따라 개발 스킬을
 
 ---
 
+### Step 5-1. 디자인 페르소나 & CSS 조달 규칙 (HTML/CSS 생성 시 공통)
+
+HTML/CSS를 생성하는 모든 경로에 **공통 적용**된다. 대상:
+
+- 2D 컴포넌트의 4개 페르소나 변형 (`views/0{1..4}_*.html`, `styles/0{1..4}_*.css`)
+- 3D 컴포넌트의 팝업 HTML/CSS (`publishCode` 계열 포함, 팝업이 페르소나 4종을 따르는 경우)
+
+#### 페르소나 4종 — 정의 출처
+
+4개 페르소나의 **유일한 진실 소스**는 [`/.claude/skills/6-design/create-html-css/SKILL.md`](/.claude/skills/6-design/create-html-css/SKILL.md)의 "디자인 페르소나" 섹션이다. 파일명은 루프 약어, 실제 프로파일은 SKILL.md의 Persona A~D:
+
+| 파일명           | SKILL.md 페르소나             |
+|------------------|-------------------------------|
+| `01_refined`     | Persona A: Refined Technical  |
+| `02_material`    | Persona B: Material Elevated  |
+| `03_editorial`   | Persona C: Minimal Editorial  |
+| `04_operational` | Persona D: Dark Operational   |
+
+각 페르소나의 8가지 경향 프로파일(색상 철학 · 타이포그래피 · 간격 리듬 · 상태 표현 · 레이아웃 · 시각적 깊이 · Border Radius · 모션)은 SKILL.md 표를 직접 따른다.
+
+#### CSS 생성 시 필수 참고 문서
+
+매 CSS 작성 사이클마다 다음을 읽는다 (값 복사가 아니라 경향 체감용):
+
+1. [`/.claude/skills/6-design/create-html-css/SKILL.md`](/.claude/skills/6-design/create-html-css/SKILL.md) — Persona A~D 프로파일 표
+2. `/Figma_Conversion/DesignSystemGuide/Design system01-Dark/Design system01-Dark.css`
+3. `/Figma_Conversion/DesignSystemGuide/Design system01-Light/Design system01-Light.css`
+4. `/Figma_Conversion/DesignSystemGuide/Design system02-Dark/Design system02-Dark.css`
+5. `/Figma_Conversion/DesignSystemGuide/Design system02-Light/Design system02-Light.css`
+
+#### 참고 사례 (직전 완성품)의 역할 — 구조적 참고만
+
+기존 완성 컴포넌트의 CSS는 **Mixin 조립 / HTML 구조 / cssSelectors 계약 / 이벤트 패턴**을 참고하기 위한 사례다. 색상·타이포·간격·그림자·모서리 같은 **시각적 토큰은 Persona 프로파일이 최종 근거**이며, 기존 사례 CSS가 프로파일과 어긋나면 새 컴포넌트에서는 프로파일을 따르고 과거 불일치는 무시한다.
+
+#### 제약
+
+- CSS 토큰이 Persona 프로파일과 충돌할 경우 **프로파일을 따른다**.
+- 직전 사례 CSS를 복제하지 않는다 (구조는 복제 허용, 시각 토큰은 재해석).
+- Persona 프로파일을 **의도적으로** 벗어나는 경우, 그 근거를 CLAUDE.md 또는 루프 반환 요약에 명시한다.
+
+---
+
 ### Step 6. 검증
 
 개발 스킬 완료 후:

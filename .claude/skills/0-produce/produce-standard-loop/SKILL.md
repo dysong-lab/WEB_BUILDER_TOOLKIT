@@ -116,6 +116,12 @@ depth 2 (하위 범주 순회):
 
 ---
 
+## 디자인 페르소나 & CSS 조달 규칙
+
+4개 페르소나(`01_refined` ~ `04_operational`)의 정의 · 필수 참고 CSS · 시각 토큰 원칙은 `produce-component/SKILL.md` **Step 5-1 "디자인 페르소나 & CSS 조달 규칙"**이 단일 진실 소스다. HTML/CSS 생성 사이클에서는 이 섹션이 지시하는 문서들을 모두 읽고 그 원칙을 따른다.
+
+---
+
 ## 참조 문서 (매 사이클 읽기)
 
 - `produce-component` SKILL: `/.claude/skills/0-produce/produce-component/SKILL.md`

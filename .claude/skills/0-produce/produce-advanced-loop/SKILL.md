@@ -129,6 +129,12 @@ feat: {범주}/Advanced/{변형이름} 컴포넌트 생산 — {한줄 설명}
 
 ---
 
+## 디자인 페르소나 & CSS 조달 규칙
+
+4개 페르소나(`01_refined` ~ `04_operational`)의 정의 · 필수 참고 CSS · 시각 토큰 원칙은 `produce-component/SKILL.md` **Step 5-1 "디자인 페르소나 & CSS 조달 규칙"**이 단일 진실 소스다. Advanced 변형에서도 페르소나별 HTML/CSS를 생성할 때 동일하게 따른다.
+
+---
+
 ## 참조 문서 (매 사이클 읽기)
 
 - `produce-component` SKILL: `/.claude/skills/0-produce/produce-component/SKILL.md`
