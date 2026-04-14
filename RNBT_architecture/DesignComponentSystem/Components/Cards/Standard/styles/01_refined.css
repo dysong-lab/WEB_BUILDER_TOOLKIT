@@ -1,0 +1,126 @@
+/* 01_refined: Persona A — Refined Technical
+   퍼플 팔레트 / 그라디언트 깊이 / Pretendard / 다크 / Filled Card */
+
+#card-container {
+    width: 360px;
+
+    .card {
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(160deg, #1B1F4E 0%, #141638 100%);
+        border: 1px solid #2A2574;
+        border-radius: 16px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
+    }
+
+    .card:hover {
+        border-color: #502EE9;
+        box-shadow: 0 6px 18px rgba(80, 46, 233, 0.24);
+    }
+
+    .card__media {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 120px;
+        background: linear-gradient(135deg, rgba(80, 46, 233, 0.28) 0%, rgba(146, 168, 244, 0.08) 100%);
+        border-bottom: 1px solid #2A2574;
+    }
+
+    .card__icon {
+        font-size: 48px;
+        color: #92A8F4;
+    }
+
+    .card__icon:empty {
+        display: none;
+    }
+
+    .card__body {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding: 20px 20px 16px;
+    }
+
+    .card__headline {
+        font-family: 'Pretendard', sans-serif;
+        font-size: 18px;
+        font-weight: 600;
+        color: #E8EDFF;
+        line-height: 1.35;
+    }
+
+    .card__subhead {
+        font-family: 'Pretendard', sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        color: #92A8F4;
+        letter-spacing: 0.2px;
+    }
+
+    .card__subhead:empty {
+        display: none;
+    }
+
+    .card__supporting {
+        font-family: 'Pretendard', sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+        color: #A6B3DE;
+        line-height: 1.55;
+        margin-top: 4px;
+    }
+
+    .card__supporting:empty {
+        display: none;
+    }
+
+    .card__actions {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        gap: 8px;
+        padding: 8px 12px 14px;
+    }
+
+    .card__actions:empty {
+        display: none;
+    }
+
+    .card__action {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: 36px;
+        padding: 0 16px;
+        border: 1px solid transparent;
+        border-radius: 18px;
+        background: transparent;
+        color: #92A8F4;
+        cursor: pointer;
+        transition: background-color 150ms ease-out, color 150ms ease-out;
+    }
+
+    .card__action:hover {
+        background: rgba(80, 46, 233, 0.16);
+        color: #E8EDFF;
+    }
+
+    .card__action-icon {
+        font-size: 18px;
+    }
+
+    .card__action-icon:empty {
+        display: none;
+    }
+
+    .card__action-label {
+        font-family: 'Pretendard', sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.2px;
+    }
+}

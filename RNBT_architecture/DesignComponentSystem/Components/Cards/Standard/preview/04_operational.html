@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Cards/Standard — 04_operational (Persona D)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #061316;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            gap: 20px;
+            padding: 40px 20px;
+        }
+        .demo-log {
+            width: 320px;
+            padding: 10px 12px;
+            background: #0D1B1E;
+            border: 1px solid #2A3A3E;
+            border-radius: 4px;
+            color: #7A9AA0;
+            font-size: 11px;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+        .demo-log strong { color: #B2EBF2; }
+    </style>
+</head>
+<body>
+
+<div id="card-container"></div>
+<div class="demo-log" id="demo-log"><strong>EVENT LOG</strong><br>—</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/FieldRenderMixin.js"></script>
+<script src="../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('card-container', '../views/04_operational.html', '../styles/04_operational.css');
+
+    const instance = { id: 'cards', appendElement: document.getElementById('card-container') };
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            card:       '.card',
+            icon:       '.card__icon',
+            headline:   '.card__headline',
+            subhead:    '.card__subhead',
+            supporting: '.card__supporting'
+        }
+    });
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container:   '.card__actions',
+            template:    '#card-action-template',
+            actionid:    '.card__action',
+            actionLabel: '.card__action-label',
+            actionIcon:  '.card__action-icon'
+        },
+        itemKey: 'actionid',
+        datasetAttrs: {
+            actionid: 'actionid'
+        }
+    });
+
+    instance.subscriptions = {
+        cardInfo:    [instance.fieldRender.renderData],
+        cardActions: [instance.listRender.renderData]
+    };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.fieldRender.cssSelectors.card]:     '@cardClicked',
+            [instance.listRender.cssSelectors.actionid]:  '@cardActionClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>EVENT LOG</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>EVENT LOG</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    Wkit.onEventBusHandlers({
+        '@cardActionClicked': ({ event }) => {
+            const item = event.target.closest('.card__action');
+            const actionid = item?.getAttribute('data-actionid');
+            log(`action "${actionid}"`);
+        },
+        '@cardClicked': ({ event }) => {
+            if (event.target.closest('.card__action')) return;
+            log('card body clicked');
+        }
+    });
+
+    GlobalDataPublisher.publish('cardInfo', {
+        icon:       'memory',
+        headline:   'NODE-07 / ALERT',
+        subhead:    'CPU 94% · 12s ago',
+        supporting: 'Threshold exceeded on primary compute node. Auto-mitigation pending operator ack.'
+    });
+
+    instance.listRender.renderData({ response: [
+        { actionid: 'ack',     actionIcon: 'check',   actionLabel: 'ACK' },
+        { actionid: 'mute',    actionIcon: 'notifications_off', actionLabel: 'MUTE' },
+        { actionid: 'details', actionIcon: 'chevron_right', actionLabel: 'DETAILS' }
+    ]});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Cards/Standard — 02_material (Persona B)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #F4F6FB;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            gap: 24px;
+            padding: 40px 20px;
+        }
+        .demo-log {
+            width: 340px;
+            padding: 12px 16px;
+            background: #FFFFFF;
+            border: 1px solid #D0D4E0;
+            border-radius: 8px;
+            color: #5F6368;
+            font-size: 12px;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        }
+        .demo-log strong { color: #1A237E; }
+    </style>
+</head>
+<body>
+
+<div id="card-container"></div>
+<div class="demo-log" id="demo-log"><strong>이벤트 로그</strong><br>—</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/FieldRenderMixin.js"></script>
+<script src="../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('card-container', '../views/02_material.html', '../styles/02_material.css');
+
+    const instance = { id: 'cards', appendElement: document.getElementById('card-container') };
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            card:       '.card',
+            icon:       '.card__icon',
+            headline:   '.card__headline',
+            subhead:    '.card__subhead',
+            supporting: '.card__supporting'
+        }
+    });
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container:   '.card__actions',
+            template:    '#card-action-template',
+            actionid:    '.card__action',
+            actionLabel: '.card__action-label',
+            actionIcon:  '.card__action-icon'
+        },
+        itemKey: 'actionid',
+        datasetAttrs: {
+            actionid: 'actionid'
+        }
+    });
+
+    instance.subscriptions = {
+        cardInfo:    [instance.fieldRender.renderData],
+        cardActions: [instance.listRender.renderData]
+    };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.fieldRender.cssSelectors.card]:     '@cardClicked',
+            [instance.listRender.cssSelectors.actionid]:  '@cardActionClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>이벤트 로그</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>이벤트 로그</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    Wkit.onEventBusHandlers({
+        '@cardActionClicked': ({ event }) => {
+            const item = event.target.closest('.card__action');
+            const actionid = item?.getAttribute('data-actionid');
+            log(`cardActionClicked "${actionid}"`);
+        },
+        '@cardClicked': ({ event }) => {
+            if (event.target.closest('.card__action')) return;
+            log('cardClicked → card body');
+        }
+    });
+
+    GlobalDataPublisher.publish('cardInfo', {
+        icon:       'travel_explore',
+        headline:   'Weekly field report',
+        subhead:    'Operations · 2026',
+        supporting: 'Site inspections completed for the three primary facilities with minor maintenance follow-ups.'
+    });
+
+    instance.listRender.renderData({ response: [
+        { actionid: 'open',   actionIcon: '',        actionLabel: 'Open' },
+        { actionid: 'follow', actionIcon: '',        actionLabel: 'Follow up' }
+    ]});
+})();
+</script>
+</body>
+</html>

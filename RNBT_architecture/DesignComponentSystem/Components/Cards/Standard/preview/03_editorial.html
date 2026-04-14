@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Cards/Standard — 03_editorial (Persona C)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #F7F3EC;
+            font-family: 'Georgia', serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            gap: 24px;
+            padding: 40px 20px;
+        }
+        .demo-log {
+            width: 340px;
+            padding: 12px 16px;
+            background: #FDFBF7;
+            border: 1px solid #D1CBC3;
+            color: #5A4E42;
+            font-size: 12px;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .demo-log strong { color: #3A3028; font-family: 'Georgia', serif; }
+    </style>
+</head>
+<body>
+
+<div id="card-container"></div>
+<div class="demo-log" id="demo-log"><strong>이벤트 로그</strong><br>—</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/FieldRenderMixin.js"></script>
+<script src="../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('card-container', '../views/03_editorial.html', '../styles/03_editorial.css');
+
+    const instance = { id: 'cards', appendElement: document.getElementById('card-container') };
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            card:       '.card',
+            icon:       '.card__icon',
+            headline:   '.card__headline',
+            subhead:    '.card__subhead',
+            supporting: '.card__supporting'
+        }
+    });
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container:   '.card__actions',
+            template:    '#card-action-template',
+            actionid:    '.card__action',
+            actionLabel: '.card__action-label',
+            actionIcon:  '.card__action-icon'
+        },
+        itemKey: 'actionid',
+        datasetAttrs: {
+            actionid: 'actionid'
+        }
+    });
+
+    instance.subscriptions = {
+        cardInfo:    [instance.fieldRender.renderData],
+        cardActions: [instance.listRender.renderData]
+    };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.fieldRender.cssSelectors.card]:     '@cardClicked',
+            [instance.listRender.cssSelectors.actionid]:  '@cardActionClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>이벤트 로그</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>이벤트 로그</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    Wkit.onEventBusHandlers({
+        '@cardActionClicked': ({ event }) => {
+            const item = event.target.closest('.card__action');
+            const actionid = item?.getAttribute('data-actionid');
+            log(`cardActionClicked "${actionid}"`);
+        },
+        '@cardClicked': ({ event }) => {
+            if (event.target.closest('.card__action')) return;
+            log('cardClicked → card body');
+        }
+    });
+
+    GlobalDataPublisher.publish('cardInfo', {
+        icon:       'menu_book',
+        headline:   'Letters from the field',
+        subhead:    'Dispatch No. 04',
+        supporting: 'A quiet morning along the north sector; measurements held within expected tolerances throughout the inspection round.'
+    });
+
+    instance.listRender.renderData({ response: [
+        { actionid: 'read',    actionIcon: '', actionLabel: 'Read' },
+        { actionid: 'archive', actionIcon: '', actionLabel: 'Archive' }
+    ]});
+})();
+</script>
+</body>
+</html>

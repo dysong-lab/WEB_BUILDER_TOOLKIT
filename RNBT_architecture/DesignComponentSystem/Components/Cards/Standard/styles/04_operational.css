@@ -1,0 +1,133 @@
+/* 04_operational: Persona D — Dark Operational
+   시안 팔레트 / JetBrains Mono / 다크 / 컴팩트 바 헤더 */
+
+#card-container {
+    width: 320px;
+
+    .card {
+        display: flex;
+        flex-direction: column;
+        background: #0D1B1E;
+        border: 1px solid #2A3A3E;
+        border-radius: 4px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: border-color 100ms ease-out, box-shadow 100ms ease-out;
+    }
+
+    .card:hover {
+        border-color: #00BCD4;
+        box-shadow: 0 0 0 1px rgba(0, 188, 212, 0.24);
+    }
+
+    .card__media {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        height: 32px;
+        padding: 0 10px;
+        background: #11272B;
+        border-bottom: 1px solid #2A3A3E;
+    }
+
+    .card__icon {
+        font-size: 16px;
+        color: #00BCD4;
+    }
+
+    .card__icon:empty {
+        display: none;
+    }
+
+    .card__body {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding: 12px 14px 10px;
+    }
+
+    .card__headline {
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        font-size: 13px;
+        font-weight: 500;
+        color: #B2EBF2;
+        line-height: 1.4;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+    }
+
+    .card__subhead {
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        font-size: 10px;
+        font-weight: 400;
+        color: #5A7A80;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+
+    .card__subhead:empty {
+        display: none;
+    }
+
+    .card__supporting {
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        font-size: 12px;
+        font-weight: 400;
+        color: #7A9AA0;
+        line-height: 1.55;
+        margin-top: 2px;
+    }
+
+    .card__supporting:empty {
+        display: none;
+    }
+
+    .card__actions {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 4px;
+        padding: 6px 10px 10px;
+        border-top: 1px dashed #2A3A3E;
+    }
+
+    .card__actions:empty {
+        display: none;
+    }
+
+    .card__action {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        height: 24px;
+        padding: 0 8px;
+        border: 1px solid #2A3A3E;
+        border-radius: 2px;
+        background: transparent;
+        color: #5A7A80;
+        cursor: pointer;
+        transition: background-color 100ms ease-out, color 100ms ease-out, border-color 100ms ease-out;
+    }
+
+    .card__action:hover {
+        background: rgba(0, 188, 212, 0.08);
+        border-color: #00BCD4;
+        color: #B2EBF2;
+    }
+
+    .card__action-icon {
+        font-size: 14px;
+    }
+
+    .card__action-icon:empty {
+        display: none;
+    }
+
+    .card__action-label {
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        font-size: 11px;
+        font-weight: 400;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+}
