@@ -322,6 +322,11 @@
             color: var(--text);
             background: var(--bg);
         }
+        .preview-log-clear:focus,
+        .preview-log-clear:focus-visible {
+            outline: none;
+            box-shadow: none;
+        }
         .preview-log-body {
             flex: 1;
             min-height: 0;
@@ -332,16 +337,27 @@
             font-family: "SFMono-Regular", Consolas, monospace;
             color: var(--text);
         }
+        .preview-log-body:focus,
+        .preview-log-body:focus-visible,
+        .preview-log-panel:focus,
+        .preview-log-panel:focus-visible {
+            outline: none;
+            box-shadow: none;
+        }
         .preview-log-empty {
             color: var(--muted);
         }
-.preview-log-entry + .preview-log-entry {
+        .preview-log-entry + .preview-log-entry {
             margin-top: 8px;
             padding-top: 8px;
             border-top: 1px dashed var(--border);
         }
         .preview-log-entry.eventbus {
             border-top-style: solid;
+        }
+        .preview-log-entry.preview-console .preview-log-lines {
+            color: #111827;
+            font-weight: 500;
         }
         .preview-log-source {
             color: var(--accent);
@@ -1091,7 +1107,7 @@ function renderPreviewEventLogs() {
 
     body.innerHTML = state.previewEventLogs.map((entry) => `
         <div class="preview-log-entry ${escapeHtml(entry.source)}">
-            ${entry.source === 'eventbus' ? '' : `<div class="preview-log-source">${escapeHtml(entry.source)}</div>`}
+            ${entry.source === 'eventbus' || entry.source === 'preview-console' ? '' : `<div class="preview-log-source">${escapeHtml(entry.source)}</div>`}
             <div class="preview-log-lines">${escapeHtml(entry.lines.join('\n'))}</div>
         </div>
     `).join('');

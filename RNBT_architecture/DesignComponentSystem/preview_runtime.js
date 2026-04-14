@@ -65,6 +65,7 @@ const _datasetRegistry = {
 };
 
 const PREVIEW_BRIDGE_TYPE = 'RNBT_PREVIEW_EVENT_LOG';
+let _lastPreviewConsoleAt = 0;
 
 function postPreviewEventLog(entry) {
     if (window.parent === window) return;
@@ -153,14 +154,18 @@ function formatEventMessage(name, payload) {
 
 const Weventbus = {
     emit: (name, payload) => {
-        postPreviewEventLog({
+        const eventEntry = {
             source: 'eventbus',
             message: formatEventMessage(name, payload),
             detail: {
                 targetInstanceId: payload?.targetInstance?.id || null,
                 eventType: payload?.event?.type || null,
             },
-        });
+        };
+        setTimeout(() => {
+            if (Date.now() - _lastPreviewConsoleAt < 120) return;
+            postPreviewEventLog(eventEntry);
+        }, 0);
         if (_eventHandlers[name]) _eventHandlers[name](payload);
     }
 };
@@ -310,6 +315,38 @@ function observePreviewLogElements() {
     });
 }
 
+function interceptPreviewConsoleLogs() {
+    if (console.__rnbtPreviewWrapped) return;
+
+    const originalLog = console.log.bind(console);
+    console.__rnbtPreviewWrapped = true;
+
+    console.log = (...args) => {
+        originalLog(...args);
+
+        const first = args[0];
+        if (typeof first !== 'string' || !first.startsWith('[Preview]')) return;
+
+        const rendered = args
+            .map((arg) => {
+                if (typeof arg === 'string') return arg;
+                try {
+                    return JSON.stringify(arg);
+                } catch (_) {
+                    return String(arg);
+                }
+            })
+            .join(' ')
+            .trim();
+
+        _lastPreviewConsoleAt = Date.now();
+        postPreviewEventLog({
+            source: 'preview-console',
+            message: rendered,
+        });
+    };
+}
+
 // ── window 노출 ──
 // 3D 프리뷰는 <script type="module">에서 THREE를 import하는데,
 // module scope에서는 classic script의 top-level const/let에 접근할 수 없다.
@@ -321,4 +358,5 @@ window.fx = fx;
 window.loadComponentAssets = loadComponentAssets;
 window.RNBT_PREVIEW_BRIDGE_TYPE = PREVIEW_BRIDGE_TYPE;
 
+interceptPreviewConsoleLogs();
 observePreviewLogElements();
