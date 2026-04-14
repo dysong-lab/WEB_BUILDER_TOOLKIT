@@ -1,0 +1,113 @@
+<!-- 01_refined: Persona A — Refined Technical -->
+<div class="menus menus--refined" aria-hidden="true">
+    <template id="menu-popup-template">
+        <style>
+            .menu__overlay {
+                position: fixed;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(7, 9, 22, 0.54);
+                backdrop-filter: blur(6px);
+                opacity: 0;
+                transition: opacity 200ms cubic-bezier(0.22, 1, 0.36, 1);
+            }
+
+            .menu__overlay[data-state="open"] {
+                opacity: 1;
+            }
+
+            .menu__overlay[data-state="open"] .menu__surface {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+
+            .menu__overlay[data-state="closing"] .menu__surface {
+                opacity: 0;
+                transform: scale(0.97) translateY(-4px);
+            }
+
+            .menu__surface {
+                min-width: 200px;
+                max-width: 320px;
+                border: 1px solid rgba(155, 134, 255, 0.22);
+                border-radius: 16px;
+                padding: 6px 0;
+                background: linear-gradient(160deg, rgba(34, 38, 74, 0.98), rgba(20, 24, 52, 0.98));
+                box-shadow:
+                    0 20px 48px rgba(4, 6, 20, 0.52),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+                opacity: 0;
+                transform: scale(0.96) translateY(-8px);
+                transform-origin: top center;
+                transition:
+                    opacity 200ms cubic-bezier(0.22, 1, 0.36, 1),
+                    transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+            }
+
+            .menu__list {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .menu__item {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                width: 100%;
+                padding: 10px 16px;
+                border: 0;
+                background: transparent;
+                color: rgba(232, 228, 255, 0.88);
+                font-family: 'Pretendard', -apple-system, sans-serif;
+                font-size: 14px;
+                font-weight: 500;
+                text-align: left;
+                cursor: pointer;
+                transition:
+                    background 140ms ease,
+                    color 140ms ease;
+            }
+
+            .menu__item:hover {
+                background: rgba(179, 156, 255, 0.1);
+                color: #e8e0ff;
+            }
+
+            .menu__item:active {
+                background: rgba(179, 156, 255, 0.18);
+            }
+
+            .menu__item[data-disabled="true"] {
+                opacity: 0.36;
+                cursor: not-allowed;
+                pointer-events: none;
+            }
+
+            .menu__item-icon {
+                flex-shrink: 0;
+                width: 18px;
+                font-size: 15px;
+                color: rgba(179, 156, 255, 0.72);
+                text-align: center;
+            }
+
+            .menu__item-label {
+                flex: 1;
+            }
+        </style>
+
+        <div class="menu__overlay" data-state="closed">
+            <div class="menu__surface" role="menu">
+                <div class="menu__list"></div>
+                <template id="menu-item-template">
+                    <button type="button" class="menu__item" role="menuitem">
+                        <span class="menu__item-icon"></span>
+                        <span class="menu__item-label"></span>
+                    </button>
+                </template>
+            </div>
+        </div>
+    </template>
+</div>

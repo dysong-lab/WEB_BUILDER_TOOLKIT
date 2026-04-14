@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Menus/Standard — 04_operational (Persona D)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            background: #060c18;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            color: #e2e8f0;
+        }
+        .preview-shell {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+        .preview-card {
+            width: min(100%, 480px);
+            padding: 28px;
+            border: 1px solid rgba(251, 191, 36, 0.16);
+            border-radius: 4px;
+            background: #0a0e1a;
+            box-shadow:
+                0 0 0 1px rgba(251, 191, 36, 0.06),
+                0 16px 48px rgba(0, 0, 0, 0.48);
+        }
+        .preview-card h1 {
+            font-size: 16px;
+            font-weight: 500;
+            color: #fbbf24;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+        }
+        .preview-card p {
+            margin-top: 10px;
+            font-size: 12px;
+            line-height: 1.7;
+            color: rgba(226, 232, 240, 0.48);
+            font-family: -apple-system, sans-serif;
+        }
+        .preview-trigger {
+            margin-top: 20px;
+            height: 36px;
+            padding: 0 14px;
+            border: 1px solid rgba(251, 191, 36, 0.36);
+            border-radius: 3px;
+            background: rgba(251, 191, 36, 0.08);
+            color: #fbbf24;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.6px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background 100ms linear;
+        }
+        .preview-trigger:hover {
+            background: rgba(251, 191, 36, 0.14);
+        }
+        .preview-log {
+            margin-top: 14px;
+            padding: 9px 12px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 11px;
+            color: rgba(226, 232, 240, 0.4);
+            min-height: 34px;
+        }
+    </style>
+</head>
+<body>
+<div class="preview-shell">
+    <div class="preview-card">
+        <h1>Menus / Standard</h1>
+        <p>임시 표면에 선택 항목 목록을 표시하는 컨텍스트 메뉴입니다. 아래 버튼으로 컴포넌트 동작과 이벤트를 확인할 수 있습니다.</p>
+        <button type="button" class="preview-trigger">Open Menu</button>
+        <div class="preview-log" id="preview-log">이벤트 로그가 여기에 표시됩니다.</div>
+        <div id="menus-standard-container"></div>
+    </div>
+</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/ShadowPopupMixin.js"></script>
+<script src="../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('menus-standard-container', '../views/04_operational.html', '../styles/04_operational.css');
+
+    const instance = {
+        id: 'menus-standard',
+        appendElement: document.getElementById('menus-standard-container')
+    };
+
+    const log = document.getElementById('preview-log');
+    function logEvent(msg) { log.textContent = msg; }
+
+    instance._popupScope = null;
+    instance._motionDuration = 200;
+    instance._motionTimer = null;
+
+    applyShadowPopupMixin(instance, {
+        cssSelectors: {
+            template: '#menu-popup-template',
+            overlay:  '.menu__overlay',
+            surface:  '.menu__surface',
+            item:     '.menu__item'
+        },
+        onCreated: (shadowRoot) => {
+            instance._popupScope = { appendElement: shadowRoot };
+            applyListRenderMixin(instance._popupScope, {
+                cssSelectors: {
+                    container: '.menu__list',
+                    item:      '.menu__item',
+                    template:  '#menu-item-template',
+                    id:        '.menu__item',
+                    disabled:  '.menu__item',
+                    icon:      '.menu__item-icon',
+                    label:     '.menu__item-label'
+                },
+                itemKey:      'id',
+                datasetAttrs: { id: 'id', disabled: 'disabled' }
+            });
+        }
+    });
+
+    instance.openMenu = function(payload = {}) {
+        const { response = {} } = payload;
+        const items = response.items ?? response.data ?? [];
+
+        if (instance._motionTimer) { clearTimeout(instance._motionTimer); instance._motionTimer = null; }
+
+        instance.shadowPopup.show();
+
+        const overlay = instance.shadowPopup.query(instance.shadowPopup.cssSelectors.overlay);
+        if (overlay) {
+            overlay.dataset.state = 'closed';
+            void overlay.offsetWidth;
+            requestAnimationFrame(() => { overlay.dataset.state = 'open'; });
+        }
+
+        if (instance._popupScope && instance._popupScope.listRender) {
+            instance._popupScope.listRender.renderData({ response: items });
+        }
+    };
+
+    instance.closeMenu = function() {
+        const overlay = instance.shadowPopup.query(instance.shadowPopup.cssSelectors.overlay);
+        if (!overlay) { instance.shadowPopup.hide(); return; }
+
+        if (instance._motionTimer) clearTimeout(instance._motionTimer);
+
+        overlay.dataset.state = 'closing';
+        instance._motionTimer = setTimeout(() => {
+            instance.shadowPopup.hide();
+            overlay.dataset.state = 'closed';
+            instance._motionTimer = null;
+        }, instance._motionDuration);
+    };
+
+    instance.shadowPopup.bindPopupEvents({
+        click: {
+            [instance.shadowPopup.cssSelectors.overlay]: (event) => {
+                if (event.target.closest(instance.shadowPopup.cssSelectors.surface)) return;
+                Weventbus.emit('@menuDismissed', { event, targetInstance: instance });
+            },
+            [instance.shadowPopup.cssSelectors.item]: (event) => {
+                const item = event.target.closest(instance.shadowPopup.cssSelectors.item);
+                if (!item || item.dataset.disabled === 'true') return;
+                const itemId = item.dataset.id;
+                Weventbus.emit('@menuItemSelected', { event, targetInstance: instance, itemId });
+            }
+        }
+    });
+
+    Wkit.onEventBusHandlers({
+        '@menuItemSelected': ({ targetInstance, itemId }) => {
+            logEvent('[Event] @menuItemSelected — id: ' + (itemId ?? '?'));
+            targetInstance.closeMenu();
+        },
+        '@menuDismissed': ({ targetInstance }) => {
+            logEvent('[Event] @menuDismissed');
+            targetInstance.closeMenu();
+        }
+    });
+
+    document.querySelector('.preview-trigger').addEventListener('click', () => {
+        instance.openMenu({
+            response: {
+                items: [
+                    { id: 'edit',      icon: '✎', label: 'Edit',      disabled: false },
+                    { id: 'duplicate', icon: '⧉', label: 'Duplicate', disabled: false },
+                    { id: 'archive',   icon: '⊟', label: 'Archive',   disabled: false },
+                    { id: 'delete',    icon: '⊗', label: 'Delete',    disabled: true  }
+                ]
+            }
+        });
+    });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!-- 04_operational: Persona D — Dark Operational -->
+<div class="menus menus--operational" aria-hidden="true">
+    <template id="menu-popup-template">
+        <style>
+            .menu__overlay {
+                position: fixed;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(4, 8, 18, 0.72);
+                opacity: 0;
+                transition: opacity 160ms linear;
+            }
+
+            .menu__overlay[data-state="open"] {
+                opacity: 1;
+            }
+
+            .menu__overlay[data-state="open"] .menu__surface {
+                opacity: 1;
+                transform: scaleY(1);
+            }
+
+            .menu__overlay[data-state="closing"] .menu__surface {
+                opacity: 0;
+                transform: scaleY(0.97);
+            }
+
+            .menu__surface {
+                min-width: 188px;
+                max-width: 300px;
+                border: 1px solid rgba(251, 191, 36, 0.22);
+                border-radius: 4px;
+                padding: 4px 0;
+                background: #111827;
+                box-shadow:
+                    0 0 0 1px rgba(251, 191, 36, 0.08),
+                    0 16px 40px rgba(0, 0, 0, 0.64);
+                opacity: 0;
+                transform: scaleY(0.94);
+                transform-origin: top center;
+                transition:
+                    opacity 160ms linear,
+                    transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
+            }
+
+            .menu__list {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .menu__item {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                width: 100%;
+                padding: 9px 14px;
+                border: 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+                background: transparent;
+                color: rgba(226, 232, 240, 0.86);
+                font-family: 'JetBrains Mono', 'Courier New', monospace;
+                font-size: 12px;
+                font-weight: 500;
+                letter-spacing: 0.4px;
+                text-align: left;
+                cursor: pointer;
+                transition: background 100ms linear;
+            }
+
+            .menu__item:last-child {
+                border-bottom: 0;
+            }
+
+            .menu__item:hover {
+                background: rgba(251, 191, 36, 0.08);
+                color: #fbbf24;
+            }
+
+            .menu__item:active {
+                background: rgba(251, 191, 36, 0.14);
+            }
+
+            .menu__item[data-disabled="true"] {
+                opacity: 0.3;
+                cursor: not-allowed;
+                pointer-events: none;
+            }
+
+            .menu__item-icon {
+                flex-shrink: 0;
+                width: 16px;
+                font-size: 13px;
+                color: rgba(251, 191, 36, 0.56);
+                text-align: center;
+            }
+
+            .menu__item-label {
+                flex: 1;
+            }
+        </style>
+
+        <div class="menu__overlay" data-state="closed">
+            <div class="menu__surface" role="menu">
+                <div class="menu__list"></div>
+                <template id="menu-item-template">
+                    <button type="button" class="menu__item" role="menuitem">
+                        <span class="menu__item-icon"></span>
+                        <span class="menu__item-label"></span>
+                    </button>
+                </template>
+            </div>
+        </div>
+    </template>
+</div>
