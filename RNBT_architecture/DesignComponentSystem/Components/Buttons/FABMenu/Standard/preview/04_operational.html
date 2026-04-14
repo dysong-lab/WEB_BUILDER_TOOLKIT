@@ -61,11 +61,6 @@
         datasetAttrs: { id: 'id' }
     });
 
-    instance.toggleMenu = function() {
-        const menu = instance.appendElement.querySelector(instance.listRender.cssSelectors.menu);
-        if (menu) menu.classList.toggle('is-open');
-    };
-
     instance.subscriptions = { fabMenuItems: [instance.listRender.renderData] };
     Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
         handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
@@ -73,7 +68,7 @@
 
     instance.customEvents = {
         click: {
-            [instance.listRender.cssSelectors.trigger]: 'toggleMenu',
+            [instance.listRender.cssSelectors.trigger]: '@fabMenuToggled',
             [instance.listRender.cssSelectors.item]:    '@fabMenuItemClicked'
         }
     };
@@ -87,6 +82,11 @@
     };
 
     Wkit.onEventBusHandlers({
+        '@fabMenuToggled': ({ targetInstance }) => {
+            const menu = targetInstance.appendElement.querySelector(targetInstance.listRender.cssSelectors.menu);
+            const next = menu.classList.toggle('is-open');
+            log(`fabMenuToggled → ${next ? 'open' : 'closed'}`);
+        },
         '@fabMenuItemClicked': ({ event }) => {
             const item = event.target.closest('.fab-menu__item');
             const id = item?.getAttribute('data-id') || '?';

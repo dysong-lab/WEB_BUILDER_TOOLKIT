@@ -2,7 +2,7 @@
 
 ## 기능 정의
 
-1. **FAB 토글** — FAB 트리거 클릭 시 메뉴 영역의 열림 상태를 전환한다. `.fab-menu` 컨테이너에 `.is-open` 클래스를 토글한다.
+1. **메뉴 토글 이벤트** — FAB 트리거 클릭 시 `@fabMenuToggled`를 발행한다. 페이지가 `.fab-menu`의 `.is-open` 클래스를 토글한다.
 2. **메뉴 항목 렌더링** — `fabMenuItems` 토픽으로 수신한 배열(`[{ id, icon, label }, ...]`)을 항목 템플릿으로 반복 렌더한다.
 3. **항목 클릭 이벤트** — 각 메뉴 항목 클릭 시 `@fabMenuItemClicked`를 발행한다 (항목의 `data-id` 포함).
 
@@ -18,7 +18,7 @@ ListRenderMixin
 
 | KEY | VALUE | 용도 |
 |-----|-------|------|
-| menu      | `.fab-menu`                | 열림 상태(.is-open) 토글 대상 — `toggleMenu`가 참조 |
+| menu      | `.fab-menu`                | 열림 상태(.is-open) 토글 대상 — 페이지가 참조 |
 | trigger   | `.fab-menu__trigger`       | FAB 트리거 — 토글 클릭 이벤트 매핑 |
 | container | `.fab-menu__list`          | 항목이 추가될 부모 (ListRenderMixin 규약) |
 | template  | `#fab-menu-item-template`  | cloneNode 대상 (ListRenderMixin 규약) |
@@ -41,23 +41,22 @@ ListRenderMixin
 
 ### 이벤트 (customEvents)
 
-| 이벤트 | 선택자 (computed) | 발행 / 핸들러 |
-|--------|------------------|---------------|
-| click | `trigger` (ListRenderMixin cssSelectors) | `toggleMenu` (커스텀 메서드) |
+| 이벤트 | 선택자 (computed) | 발행 |
+|--------|------------------|------|
+| click | `trigger` (ListRenderMixin cssSelectors) | `@fabMenuToggled` |
 | click | `item` (ListRenderMixin cssSelectors)    | `@fabMenuItemClicked` |
 
 ### 커스텀 메서드
 
-| 메서드 | 설명 |
-|--------|------|
-| `toggleMenu` | `.fab-menu` 요소에 `.is-open` 클래스를 토글한다 |
+없음 (메뉴 열림/닫힘 상태는 페이지가 `.fab-menu`의 `.is-open` 클래스로 관리)
 
 ### 페이지 연결 사례
 
 ```
 [페이지] ──fetchAndPublish('fabMenuItems', this)──> [FABMenu] 항목 렌더 ([{ id, icon, label }, ...])
 
-[사용자] ──click .fab-menu__trigger──> [FABMenu] toggleMenu (메뉴 열림)
+[FABMenu] ──@fabMenuToggled──> [페이지] ──> .fab-menu의 .is-open 클래스 토글
+                                           element.classList.toggle('is-open')
 
 [FABMenu] ──@fabMenuItemClicked── e.target.closest('.fab-menu__item').dataset.id
           ──> [페이지] ──> 액션 실행
