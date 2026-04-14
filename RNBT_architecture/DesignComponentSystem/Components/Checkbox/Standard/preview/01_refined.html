@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkbox/Standard — 01_refined (Persona A)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #12153D;
+            font-family: 'Pretendard', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 24px;
+            padding: 40px 20px;
+        }
+        .demo-log {
+            width: 360px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid #2A2574;
+            border-radius: 8px;
+            color: #A6B3DE;
+            font-size: 12px;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .demo-log strong { color: #E8EDFF; }
+    </style>
+</head>
+<body>
+
+<div id="checkbox-container"></div>
+<div class="demo-log" id="demo-log"><strong>이벤트 로그</strong><br>—</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('checkbox-container', '../views/01_refined.html', '../styles/01_refined.css');
+
+    const instance = { id: 'checkbox', appendElement: document.getElementById('checkbox-container') };
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container: '.checkbox__list',
+            template:  '#checkbox-item-template',
+            checkid:   '.checkbox__item',
+            checked:   '.checkbox__item',
+            disabled:  '.checkbox__item',
+            label:     '.checkbox__label'
+        },
+        itemKey: 'checkid',
+        datasetAttrs: {
+            checkid:  'checkid',
+            checked:  'checked',
+            disabled: 'disabled'
+        }
+    });
+
+    instance.subscriptions = { checkboxItems: [instance.listRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.listRender.cssSelectors.checkid]: '@checkboxClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>이벤트 로그</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>이벤트 로그</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    const itemsData = [
+        { checkid: 'notif-email', label: 'Email alerts',            checked: 'true',          disabled: 'false' },
+        { checkid: 'notif-push',  label: 'Push notifications',       checked: 'indeterminate', disabled: 'false' },
+        { checkid: 'notif-sms',   label: 'SMS messages',            checked: 'false',         disabled: 'false' },
+        { checkid: 'notif-trace', label: 'Trace logs (admin only)', checked: 'false',         disabled: 'true' }
+    ];
+
+    Wkit.onEventBusHandlers({
+        '@checkboxClicked': ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.listRender.cssSelectors.checkid);
+            const checkid = item?.getAttribute('data-checkid');
+            if (!checkid) return;
+            const current = itemsData.find(it => it.checkid === checkid);
+            if (!current || current.disabled === 'true') return;
+            const next = current.checked === 'true' ? 'false' : 'true';
+            current.checked = next;
+            targetInstance.listRender.updateItemState(checkid, { checked: next });
+            log(`checkboxClicked "${checkid}" → ${next}`);
+        }
+    });
+
+    instance.listRender.renderData({ response: itemsData });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+/* 03_editorial: Persona C — Minimal Editorial
+   웜 그레이 / 세리프 / 라이트 / 미니멀 사각 */
+
+#checkbox-container {
+    width: 300px;
+    min-height: 200px;
+
+    .checkbox {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .checkbox__list {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .checkbox__item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 10px 4px;
+        border-bottom: 1px solid #ECE6DC;
+        cursor: pointer;
+        transition: background-color 200ms ease-out;
+        user-select: none;
+    }
+
+    .checkbox__item:last-child {
+        border-bottom: none;
+    }
+
+    .checkbox__item:hover {
+        background: #F5F1EA;
+    }
+
+    .checkbox__item[data-disabled="true"] {
+        cursor: not-allowed;
+        opacity: 0.4;
+    }
+
+    .checkbox__box {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        border-radius: 0;
+        border: 1px solid #8C7B6B;
+        background: #FDFBF7;
+        flex-shrink: 0;
+        transition: background 200ms ease-out, border-color 200ms ease-out;
+    }
+
+    .checkbox__item[data-checked="true"] .checkbox__box,
+    .checkbox__item[data-checked="indeterminate"] .checkbox__box {
+        background: #3A3028;
+        border-color: #3A3028;
+    }
+
+    .checkbox__check-mark,
+    .checkbox__indeterminate-mark {
+        display: none;
+        width: 12px;
+        height: 12px;
+        color: #FDFBF7;
+    }
+
+    .checkbox__item[data-checked="true"] .checkbox__check-mark {
+        display: inline-block;
+    }
+
+    .checkbox__item[data-checked="indeterminate"] .checkbox__indeterminate-mark {
+        display: inline-block;
+    }
+
+    .checkbox__label {
+        font-family: 'Georgia', serif;
+        font-size: 14px;
+        font-weight: 400;
+        color: #5C544A;
+        line-height: 1.5;
+    }
+
+    .checkbox__item[data-checked="true"] .checkbox__label,
+    .checkbox__item[data-checked="indeterminate"] .checkbox__label {
+        color: #2A2520;
+        font-weight: 700;
+    }
+}

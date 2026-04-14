@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkbox/Standard — 04_operational (Persona D)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0A1214;
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 24px;
+            padding: 40px 20px;
+        }
+        .demo-log {
+            width: 360px;
+            padding: 10px 14px;
+            background: #0d1117;
+            border: 1px solid #1f3a4a;
+            border-radius: 2px;
+            color: #7dc7d9;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .demo-log strong {
+            color: #22d3ee;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body>
+
+<div id="checkbox-container"></div>
+<div class="demo-log" id="demo-log"><strong>event log</strong><br>—</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('checkbox-container', '../views/04_operational.html', '../styles/04_operational.css');
+
+    const instance = { id: 'checkbox', appendElement: document.getElementById('checkbox-container') };
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container: '.checkbox__list',
+            template:  '#checkbox-item-template',
+            checkid:   '.checkbox__item',
+            checked:   '.checkbox__item',
+            disabled:  '.checkbox__item',
+            label:     '.checkbox__label'
+        },
+        itemKey: 'checkid',
+        datasetAttrs: {
+            checkid:  'checkid',
+            checked:  'checked',
+            disabled: 'disabled'
+        }
+    });
+
+    instance.subscriptions = { checkboxItems: [instance.listRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.listRender.cssSelectors.checkid]: '@checkboxClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>event log</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>event log</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    const itemsData = [
+        { checkid: 'cpu',   label: 'CPU',   checked: 'true',          disabled: 'false' },
+        { checkid: 'mem',   label: 'MEM',   checked: 'true',          disabled: 'false' },
+        { checkid: 'net',   label: 'NET',   checked: 'indeterminate', disabled: 'false' },
+        { checkid: 'disk',  label: 'DISK',  checked: 'false',         disabled: 'false' },
+        { checkid: 'kern',  label: 'KERN',  checked: 'false',         disabled: 'true' }
+    ];
+
+    Wkit.onEventBusHandlers({
+        '@checkboxClicked': ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.listRender.cssSelectors.checkid);
+            const checkid = item?.getAttribute('data-checkid');
+            if (!checkid) return;
+            const current = itemsData.find(it => it.checkid === checkid);
+            if (!current || current.disabled === 'true') return;
+            const next = current.checked === 'true' ? 'false' : 'true';
+            current.checked = next;
+            targetInstance.listRender.updateItemState(checkid, { checked: next });
+            log(`checkboxClicked "${checkid}" → ${next}`);
+        }
+    });
+
+    instance.listRender.renderData({ response: itemsData });
+})();
+</script>
+</body>
+</html>

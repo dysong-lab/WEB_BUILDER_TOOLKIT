@@ -1,0 +1,90 @@
+/* 02_material: Persona B — Material Elevated
+   블루 팔레트 / outlined / Roboto / 라이트 */
+
+#checkbox-container {
+    width: 300px;
+    min-height: 200px;
+
+    .checkbox {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .checkbox__list {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .checkbox__item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 150ms ease-out;
+        user-select: none;
+    }
+
+    .checkbox__item:hover {
+        background: #E8F0FE;
+    }
+
+    .checkbox__item[data-disabled="true"] {
+        cursor: not-allowed;
+        opacity: 0.38;
+    }
+
+    .checkbox__box {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
+        border-radius: 2px;
+        border: 2px solid #49454F;
+        background: #FFFFFF;
+        flex-shrink: 0;
+        transition: background 150ms ease-out, border-color 150ms ease-out;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+
+    .checkbox__item[data-checked="true"] .checkbox__box,
+    .checkbox__item[data-checked="indeterminate"] .checkbox__box {
+        background: #1A73E8;
+        border-color: #1A73E8;
+        box-shadow: 0 1px 3px rgba(26, 115, 232, 0.28);
+    }
+
+    .checkbox__check-mark,
+    .checkbox__indeterminate-mark {
+        display: none;
+        width: 14px;
+        height: 14px;
+        color: #FFFFFF;
+    }
+
+    .checkbox__item[data-checked="true"] .checkbox__check-mark {
+        display: inline-block;
+    }
+
+    .checkbox__item[data-checked="indeterminate"] .checkbox__indeterminate-mark {
+        display: inline-block;
+    }
+
+    .checkbox__label {
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+        color: #3C4043;
+        line-height: 1.4;
+    }
+
+    .checkbox__item[data-checked="true"] .checkbox__label,
+    .checkbox__item[data-checked="indeterminate"] .checkbox__label {
+        color: #1A73E8;
+        font-weight: 500;
+    }
+}

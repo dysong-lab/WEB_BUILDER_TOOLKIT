@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkbox/Standard — 02_material (Persona B)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #F5F5F5;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 24px;
+            padding: 40px 20px;
+        }
+        .demo-log {
+            width: 360px;
+            padding: 12px 16px;
+            background: #ffffff;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            color: #5f6368;
+            font-size: 12px;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+        }
+        .demo-log strong { color: #1a73e8; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+<div id="checkbox-container"></div>
+<div class="demo-log" id="demo-log"><strong>이벤트 로그</strong><br>—</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('checkbox-container', '../views/02_material.html', '../styles/02_material.css');
+
+    const instance = { id: 'checkbox', appendElement: document.getElementById('checkbox-container') };
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container: '.checkbox__list',
+            template:  '#checkbox-item-template',
+            checkid:   '.checkbox__item',
+            checked:   '.checkbox__item',
+            disabled:  '.checkbox__item',
+            label:     '.checkbox__label'
+        },
+        itemKey: 'checkid',
+        datasetAttrs: {
+            checkid:  'checkid',
+            checked:  'checked',
+            disabled: 'disabled'
+        }
+    });
+
+    instance.subscriptions = { checkboxItems: [instance.listRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.listRender.cssSelectors.checkid]: '@checkboxClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>이벤트 로그</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>이벤트 로그</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    const itemsData = [
+        { checkid: 'terms',     label: 'I agree to the Terms of Service', checked: 'false',         disabled: 'false' },
+        { checkid: 'privacy',   label: 'I accept the Privacy Policy',     checked: 'true',          disabled: 'false' },
+        { checkid: 'marketing', label: 'Send me product updates',         checked: 'indeterminate', disabled: 'false' },
+        { checkid: 'beta',      label: 'Join beta program (invite only)', checked: 'false',         disabled: 'true' }
+    ];
+
+    Wkit.onEventBusHandlers({
+        '@checkboxClicked': ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.listRender.cssSelectors.checkid);
+            const checkid = item?.getAttribute('data-checkid');
+            if (!checkid) return;
+            const current = itemsData.find(it => it.checkid === checkid);
+            if (!current || current.disabled === 'true') return;
+            const next = current.checked === 'true' ? 'false' : 'true';
+            current.checked = next;
+            targetInstance.listRender.updateItemState(checkid, { checked: next });
+            log(`checkboxClicked "${checkid}" → ${next}`);
+        }
+    });
+
+    instance.listRender.renderData({ response: itemsData });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+/* 04_operational: Persona D — Dark Operational
+   시안 팔레트 / 모노스페이스 / 다크 / 컴팩트 */
+
+#checkbox-container {
+    width: 260px;
+    min-height: 160px;
+
+    .checkbox {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .checkbox__list {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .checkbox__item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 8px;
+        border-radius: 2px;
+        cursor: pointer;
+        transition: background-color 100ms ease-out;
+        user-select: none;
+    }
+
+    .checkbox__item:hover {
+        background: rgba(0, 188, 212, 0.08);
+    }
+
+    .checkbox__item[data-disabled="true"] {
+        cursor: not-allowed;
+        opacity: 0.4;
+    }
+
+    .checkbox__box {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 14px;
+        height: 14px;
+        border-radius: 2px;
+        border: 1px solid #2A3A3E;
+        background: #0D1B1E;
+        flex-shrink: 0;
+        transition: background 100ms ease-out, border-color 100ms ease-out;
+    }
+
+    .checkbox__item:hover .checkbox__box {
+        border-color: #5A7A80;
+    }
+
+    .checkbox__item[data-checked="true"] .checkbox__box,
+    .checkbox__item[data-checked="indeterminate"] .checkbox__box {
+        background: rgba(0, 188, 212, 0.16);
+        border-color: #00BCD4;
+    }
+
+    .checkbox__check-mark,
+    .checkbox__indeterminate-mark {
+        display: none;
+        width: 12px;
+        height: 12px;
+        color: #00BCD4;
+    }
+
+    .checkbox__item[data-checked="true"] .checkbox__check-mark {
+        display: inline-block;
+    }
+
+    .checkbox__item[data-checked="indeterminate"] .checkbox__indeterminate-mark {
+        display: inline-block;
+    }
+
+    .checkbox__label {
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        font-size: 12px;
+        font-weight: 400;
+        color: #5A7A80;
+        line-height: 1.4;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .checkbox__item[data-checked="true"] .checkbox__label,
+    .checkbox__item[data-checked="indeterminate"] .checkbox__label {
+        color: #B2EBF2;
+        font-weight: 500;
+    }
+}
