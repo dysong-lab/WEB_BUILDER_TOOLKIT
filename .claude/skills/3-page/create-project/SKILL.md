@@ -15,7 +15,6 @@ Mixin 기반 컴포넌트, 페이지 스크립트, Mock 서버, datasetList.json
 ## ⚠️ 작업 전 필수 확인
 
 **코드 작성 전 반드시 다음 파일들을 Read 도구로 읽으세요.**
-**이전에 읽었더라도 매번 다시 읽어야 합니다 - 캐싱하거나 생략하지 마세요.**
 
 1. [/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md) - 시스템 설계
 2. [/.claude/skills/SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md) - 공통 규칙

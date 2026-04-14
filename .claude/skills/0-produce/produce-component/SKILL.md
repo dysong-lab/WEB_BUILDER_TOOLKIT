@@ -14,11 +14,10 @@ PRODUCTION_PROCESS.md의 Step 3~7을 따라 컴포넌트를 생산한다.
 
 ## 작업 전 필수 확인
 
-**매번 다시 읽어야 합니다.**
-
-1. [PRODUCTION_PROCESS.md](/RNBT_architecture/DesignComponentSystem/docs/PRODUCTION_PROCESS.md) — 전체 프로세스
-2. [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md) — 기능의 정의, 핵심 구조
-3. [Mixins/README.md](/RNBT_architecture/DesignComponentSystem/Mixins/README.md) — 현재 Mixin 카탈로그
+1. [SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md) — 공통 규칙
+2. [PRODUCTION_PROCESS.md](/RNBT_architecture/DesignComponentSystem/docs/PRODUCTION_PROCESS.md) — 전체 프로세스
+3. [COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md) — 기능의 정의, 핵심 구조
+4. [Mixins/README.md](/RNBT_architecture/DesignComponentSystem/Mixins/README.md) — 현재 Mixin 카탈로그
 
 ---
 
