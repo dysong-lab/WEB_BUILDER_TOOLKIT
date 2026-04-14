@@ -172,3 +172,12 @@ Generator는 blade 회전 애니메이션을 보유한다. 현재 Mixins/에 Ani
 | 25a80a8 | Equipment3D/BATT 첫 구현 |
 | d24b640 | 3D_Components로 이름 변경 + 변형별 폴더 + component/page 분리 |
 | 60e86a6 | 3DShadowPopupMixin + 03_status_popup 변형 |
+
+---
+
+## 2026-04-10 후기
+
+본 문서에서 사용한 `component/` 폴더명은 2026-04-10에 2D 컴포넌트(`scripts/`)와의
+일관성을 위해 `scripts/`로 통일되었다. 본문의 폴더 구조 도식을 읽을 때는
+`component/` → `scripts/`로 치환해서 본다. component/page 분리라는 결정 자체는
+유지되며, 폴더명만 변경되었다.

@@ -62,16 +62,21 @@ description: GLTF 컨테이너 3D 컴포넌트를 생성합니다. 하나의 GLT
 
 ## 변형 구조
 
-변형은 CLAUDE.md 구현 명세에서 결정된다. 아래는 자주 사용되는 패턴 예시이다.
+변형은 Standard(필수)와 Advanced(선택)로 구분된다. 실제 조합은 CLAUDE.md 구현 명세에서 결정된다.
 
-| 변형 예시 | 기능 | Mixin 조합 예시 |
-|----------|------|----------------|
-| 01_status | 상태 색상 표시 | MeshStateMixin |
-| 02_status_camera | 상태 + 클릭 → 카메라 포커스 | MeshStateMixin + CameraFocusMixin |
-| 03_status_popup | 상태 + 클릭 → 팝업 상세 | MeshStateMixin + 3DShadowPopupMixin |
+| 세트 | 번호 | 이름 | Mixin 조합 |
+|------|------|------|-----------|
+| Standard | 01 | status | MeshState |
+| Advanced | 02 | camera | MeshState + CameraFocus |
+| Advanced | 03 | popup | MeshState + 3DShadowPopup |
+| Advanced | 04 | highlight | MeshState + MeshHighlight |
+| Advanced | 05 | camera_highlight | MeshState + CameraFocus + MeshHighlight |
+| Advanced | 06 | visibility | MeshState + MeshVisibility |
+| Advanced | 07 | animation | MeshState + AnimationMixin |
+| Advanced | 08 | clipping | MeshState + ClippingPlaneMixin |
 
-변형의 종류, 이름, Mixin 조합은 고정이 아니다. 구현 명세에 따라 달라진다.
-
+> 기존 생산된 01~03은 `01_status`, `02_status_camera`, `03_status_popup` 폴더명을 유지한다.
+> 신규 생산분(04~)부터 새 명명 규칙을 적용한다.
 > 클릭 이벤트가 있는 변형에서는 resolveMeshName이 필요하다.
 
 ---
@@ -413,6 +418,205 @@ this.meshState?.destroy();
 
 ---
 
+## 04_highlight — register.js
+
+```javascript
+/**
+ * 04_highlight: MeshStateMixin + MeshHighlightMixin
+ * - 상태 색상 표시 + 클릭된 Mesh 선택 강조
+ *
+ * 컨테이너에서는:
+ * - resolveMeshName으로 클릭된 Mesh를 동적 식별
+ * - '@meshClicked' 범용 이벤트 사용
+ */
+
+// ======================
+// 1. MIXIN 적용
+// ======================
+applyMeshStateMixin(this, {
+    colorMap: {
+        normal:   0x00C853,
+        warning:  0xFFD600,
+        critical: 0xFF1744,
+        offline:  0x9E9E9E,
+    },
+});
+
+applyMeshHighlightMixin(this, {
+    highlightColor:     0xFFFF00,
+    highlightIntensity: 0.3,
+});
+
+// ======================
+// 2. 구독 연결
+// ======================
+this.subscriptions = {
+    equipmentStatus: [this.meshState.renderData],
+};
+
+const { subscribe } = GlobalDataPublisher;
+const { each, go } = fx;
+
+go(
+    Object.entries(this.subscriptions),
+    each(([topic, handlers]) =>
+        each(handler => subscribe(topic, this, handler), handlers)
+    )
+);
+
+// ======================
+// 3. 이벤트 매핑 + resolveMeshName 정의
+// ======================
+const { bind3DEvents } = Wkit;
+
+this.customEvents = {
+    click: '@meshClicked'
+};
+bind3DEvents(this, this.customEvents);
+
+/**
+ * resolveMeshName — intersects에서 Mesh 이름 추출
+ */
+this.resolveMeshName = (event) => {
+    if (!event.intersects || !event.intersects.length) return null;
+
+    let current = event.intersects[0].object;
+    while (current) {
+        if (current.name) return current.name;
+        current = current.parent;
+    }
+    return null;
+};
+```
+
+## 04_highlight — beforeDestroy.js
+
+```javascript
+const { removeCustomEvents } = Wkit;
+
+// 3. 이벤트 제거
+removeCustomEvents(this, this.customEvents);
+this.customEvents = null;
+
+const { unsubscribe } = GlobalDataPublisher;
+const { each, go } = fx;
+
+// 2. 구독 해제
+go(
+    Object.entries(this.subscriptions),
+    each(([topic, _]) => unsubscribe(topic, this))
+);
+this.subscriptions = null;
+
+// 1. Mixin 정리 (적용 역순) + resolveMeshName 정리
+this.resolveMeshName = null;
+this.meshHighlight.destroy();
+this.meshState?.destroy();
+```
+
+---
+
+## 05_camera_highlight — register.js
+
+```javascript
+/**
+ * 05_camera_highlight: MeshStateMixin + CameraFocusMixin + MeshHighlightMixin
+ * - 상태 색상 + 클릭된 Mesh로 카메라 포커스 + 선택 강조
+ */
+
+// ======================
+// 1. MIXIN 적용
+// ======================
+applyMeshStateMixin(this, {
+    colorMap: {
+        normal:   0x00C853,
+        warning:  0xFFD600,
+        critical: 0xFF1744,
+        offline:  0x9E9E9E,
+    },
+});
+
+applyCameraFocusMixin(this, {
+    camera:   wemb.threeElements.camera,
+    controls: wemb.threeElements.mainControls,
+    duration: 1000
+});
+
+applyMeshHighlightMixin(this, {
+    highlightColor:     0xFFFF00,
+    highlightIntensity: 0.3,
+});
+
+// ======================
+// 2. 구독 연결
+// ======================
+this.subscriptions = {
+    equipmentStatus: [this.meshState.renderData],
+};
+
+const { subscribe } = GlobalDataPublisher;
+const { each, go } = fx;
+
+go(
+    Object.entries(this.subscriptions),
+    each(([topic, handlers]) =>
+        each(handler => subscribe(topic, this, handler), handlers)
+    )
+);
+
+// ======================
+// 3. 이벤트 매핑 + resolveMeshName 정의
+// ======================
+const { bind3DEvents } = Wkit;
+
+this.customEvents = {
+    click: '@meshClicked'
+};
+bind3DEvents(this, this.customEvents);
+
+/**
+ * resolveMeshName — intersects에서 Mesh 이름 추출
+ */
+this.resolveMeshName = (event) => {
+    if (!event.intersects || !event.intersects.length) return null;
+
+    let current = event.intersects[0].object;
+    while (current) {
+        if (current.name) return current.name;
+        current = current.parent;
+    }
+    return null;
+};
+```
+
+## 05_camera_highlight — beforeDestroy.js
+
+```javascript
+const { removeCustomEvents } = Wkit;
+
+// 3. 이벤트 제거
+removeCustomEvents(this, this.customEvents);
+this.customEvents = null;
+
+const { unsubscribe } = GlobalDataPublisher;
+const { each, go } = fx;
+
+// 2. 구독 해제
+go(
+    Object.entries(this.subscriptions),
+    each(([topic, _]) => unsubscribe(topic, this))
+);
+this.subscriptions = null;
+
+// 1. Mixin 정리 (적용 역순) + resolveMeshName 정리
+this.resolveMeshName = null;
+this.meshHighlight.destroy();
+this.cameraFocus.destroy();
+this.meshState?.destroy();
+```
+
+---
+
 ## page scripts
 
 ### loaded.js (모든 변형 공통)
@@ -521,6 +725,28 @@ onEventBusHandlers(this.pageEventBusHandlers);
 
 > **개별 단위와의 핵심 차이**: before_load.js에서 `fetchData`를 import하여 클릭된 Mesh의 상세 데이터를 비동기로 조회한다. 개별 단위는 `targetInstance.showDetail()`만 호출하면 되지만, 컨테이너는 `resolveMeshName → fetchData → showDetail` 체인이 필요하다.
 
+### before_load.js — 04_highlight / 05_camera_highlight
+
+```javascript
+const { onEventBusHandlers } = Wkit;
+
+this.pageEventBusHandlers = {
+    '@meshClicked': ({ targetInstance, event }) => {
+        const meshName = targetInstance.resolveMeshName(event);
+        if (!meshName) return;
+
+        // 이전 강조 해제 + 새 강조 적용
+        targetInstance.meshHighlight.clearAll();
+        targetInstance.meshHighlight.highlight(meshName);
+
+        // 05에서만: 카메라 포커스
+        // targetInstance.cameraFocus.focusOn({ meshName });
+    },
+};
+
+onEventBusHandlers(this.pageEventBusHandlers);
+```
+
 ### before_unload.js (모든 변형 공통)
 
 ```javascript
@@ -549,36 +775,76 @@ this.pageParams = null;
 ```
 Components/3D_Components/
 └── {컨테이너명}/
-    ├── scripts/
-    │   ├── 01_status/
-    │   │   ├── component/
-    │   │   │   ├── register.js
-    │   │   │   └── beforeDestroy.js
-    │   │   └── page/
-    │   │       ├── before_load.js
-    │   │       ├── loaded.js
-    │   │       └── before_unload.js
-    │   ├── 02_status_camera/
-    │   │   ├── component/
-    │   │   │   ├── register.js
-    │   │   │   └── beforeDestroy.js
-    │   │   └── page/
-    │   │       ├── before_load.js
-    │   │       ├── loaded.js
-    │   │       └── before_unload.js
-    │   └── 03_status_popup/
-    │       ├── component/
-    │       │   ├── register.js
-    │       │   └── beforeDestroy.js
-    │       └── page/
-    │           ├── before_load.js
-    │           ├── loaded.js
-    │           └── before_unload.js
-    └── preview/
-        ├── 01_status.html
-        ├── 02_status_camera.html
-        └── 03_status_popup.html
+    ├── CLAUDE.md
+    ├── Standard/                          ← 필수 (MeshState only)
+    │   ├── CLAUDE.md
+    │   ├── scripts/
+    │   │   ├── register.js
+    │   │   └── beforeDestroy.js
+    │   └── preview/
+    │       └── 01_default.html            ← 모델 변종 1개당 1 파일
+    └── Advanced/                          ← 선택 (Mixin 조합별, 다중 구현 컨테이너)
+        ├── camera/                        ← 각 구현은 Standard와 동일한 4요소를 자기 안에 갖는다
+        │   ├── CLAUDE.md
+        │   ├── scripts/
+        │   │   ├── register.js
+        │   │   └── beforeDestroy.js
+        │   └── preview/
+        │       └── 01_default.html        ← 구현명은 경로에 있으므로 파일명은 변종명만
+        ├── popup/
+        │   ├── CLAUDE.md
+        │   ├── scripts/...
+        │   └── preview/
+        │       └── 01_default.html
+        ├── highlight/                     # 구현 명세에 따라 선택
+        │   └── ... (동일 4요소)
+        ├── camera_highlight/
+        │   └── ... (동일 4요소)
+        └── visibility/
+            └── ... (동일 4요소)
 ```
+
+> 페이지 라이프사이클 훅(`before_load.js`, `loaded.js`, `before_unload.js`)은 컴포넌트가 아니라 **페이지**가 가진다 (`Examples/{Dashboard}/page/page_scripts/`). 컴포넌트 폴더 안에 두지 않는다.
+
+```
+models/
+└── {컨테이너명}/
+    └── 01_default/                        ← 모델 변종 1개당 1 폴더
+        ├── {컨테이너명}.gltf
+        ├── {컨테이너명}.bin
+        └── textures/ 또는 maps/
+```
+
+---
+
+## 변형(Variant) 규약 — 3D = 모델 변종
+
+3D 컴포넌트의 "변형"은 2D의 디자인 페르소나(refined/material/editorial/operational)에 대응한다. 그러나 3D에는 시각 표현이 페르소나가 아닌 **3D 모델 그 자체**이므로, 변형의 축은 **같은 컨테이너 유형의 서로 다른 실제 모델**이 된다 (예: 같은 전기실 레이아웃의 시기별/지점별 모델).
+
+| 차원 | 2D | 3D 컨테이너 |
+|------|-----|-----|
+| 불변 (공유) | register.js | register.js (resolveMeshName 포함) |
+| 변형의 축 | 디자인 페르소나 | 3D 모델 변종 |
+| 변형의 자산 | `views/01_refined.html` + `styles/01_refined.css` | `models/{컨테이너명}/01_default/{컨테이너명}.gltf` (+ .bin, 텍스처) |
+| preview wrapper | `preview/01_refined.html` (Standard·Advanced 모두 자기 폴더 안) | `preview/01_default.html` (Standard·Advanced 모두 자기 폴더 안) |
+
+### 폴더/파일 명명 규칙
+
+- 모델 변종은 `models/{컨테이너명}/NN_변종명/` 폴더로 격리한다 (예: `models/gltf_container/01_default/`)
+- 폴더 안의 GLTF·.bin·텍스처 파일은 원래 이름을 유지한다 (GLTF 내부 상대 참조가 그대로 유효해야 한다)
+- preview HTML은 항상 `{Standard 또는 Advanced/{구현명}}/preview/NN_변종명.html` 위치에 둔다 (구현명은 경로에 있으므로 파일명은 변종명만)
+- manifest 라벨은 `"NN 변종명"` (공백 구분)으로 표기하여 2D 형식과 정합
+
+### 컨테이너 특수 고려사항
+
+- 새 모델 변종은 **기존 모델과 동일한 mesh 이름 규약**을 따라야 한다. resolveMeshName이 추출하는 이름이 변종마다 달라지면 register.js가 깨진다.
+- 변종에 따라 mesh 집합이 달라지면 (예: 신규 장비 추가) 그것은 변형이 아니라 별도 컨테이너 컴포넌트로 분리한다.
+
+### 금지 사항
+
+- ❌ `models/gltf_container/gltf_container.gltf`처럼 변종 폴더 없이 자산을 두지 않는다 (변형이 1개여도 `01_default/`를 둔다)
+- ❌ preview HTML 라벨을 구현명(`camera`, `popup`)으로 쓰지 않는다 — item 이름과 중복되어 의미가 없다
+- ❌ 모델 변종을 위해 register.js나 resolveMeshName을 수정하지 않는다 (수정해야 한다면 변종이 아니라 별도 컴포넌트다)
 
 ---
 
@@ -594,12 +860,24 @@ Components/3D_Components/
 
 ---
 
+## 마무리: manifest.json 등록
+
+구현 완료 후 반드시 `Components/CLAUDE.md` Step 5에 따라 `DesignComponentSystem/manifest.json`에 신규 컴포넌트/set/item/preview를 등록한다. 누락 시 `index.html` 카탈로그에 노출되지 않는다.
+
+> 등록 위치/규칙은 [Components/CLAUDE.md Step 5](/RNBT_architecture/DesignComponentSystem/Components/CLAUDE.md) 참조
+
+---
+
 ## 관련 자료
 
 | 문서 | 경로 |
 |------|------|
 | MeshStateMixin | [Mixins/MeshStateMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/MeshStateMixin.md) |
+| MeshHighlightMixin | [Mixins/MeshHighlightMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/MeshHighlightMixin.md) |
+| MeshVisibilityMixin | [Mixins/MeshVisibilityMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/MeshVisibilityMixin.md) |
 | CameraFocusMixin | [Mixins/CameraFocusMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/CameraFocusMixin.md) |
+| AnimationMixin | [Mixins/AnimationMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/AnimationMixin.md) |
+| ClippingPlaneMixin | [Mixins/ClippingPlaneMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/ClippingPlaneMixin.md) |
 | 3DShadowPopupMixin | [Mixins/3DShadowPopupMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/3DShadowPopupMixin.md) |
 | 개별 단위 패턴 | [create-3d-component](/.claude/skills/2-component/create-3d-component/SKILL.md) |
 | gltf_container (참조 구현) | [Components/3D_Components/gltf_container](/RNBT_architecture/DesignComponentSystem/Components/3D_Components/gltf_container/) |

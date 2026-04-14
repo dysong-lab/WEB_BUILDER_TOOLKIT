@@ -81,14 +81,14 @@
 | 종류 | 파일 | 수량 |
 |------|------|------|
 | 템플릿 | [MIXIN_SPEC_TEMPLATE.md](../specs/MIXIN_SPEC_TEMPLATE.md) | 1개 |
-| 모범답안 | MIXIN_SPEC_EXAMPLE_*.md | 10개 |
+| 모범답안 | MIXIN_SPEC_EXAMPLE_*.md | 14개 |
 | 설계 근거 | [COMPONENT_SYSTEM_DESIGN.md](../architecture/COMPONENT_SYSTEM_DESIGN.md), [FUNCTION_PATTERN.md](../architecture/FUNCTION_PATTERN.md) | 2개 |
 
 ### A. 일관성 — 높음
 
 **섹션 구조:**
 
-10개 모범답안 모두 동일한 6개 섹션을 따른다.
+14개 모범답안 모두 동일한 6개 섹션을 따른다.
 
 | 섹션 | 내용 |
 |------|------|
@@ -111,7 +111,11 @@
 | TabulatorMixin | 데이터를 보여준다 | 추상 행위 |
 | HeatmapJsMixin | 데이터를 보여준다 | 추상 행위 |
 | MeshStateMixin | 데이터를 보여준다 (3D 메시의 시각 상태 변경) | 추상 행위 |
+| MeshHighlightMixin | 선택한 대상을 시각적으로 강조한다 | 추상 행위 |
+| MeshVisibilityMixin | 3D 장면의 특정 부분을 선택적으로 보여준다 | 추상 행위 |
 | CameraFocusMixin | 보는 위치를 전환한다 | 추상 행위 |
+| AnimationMixin | 3D 모델의 동작을 재현한다 | 추상 행위 |
+| ClippingPlaneMixin | 3D 모델의 내부를 보여준다 | 추상 행위 |
 | ShadowPopupMixin | 콘텐츠를 별도 레이어에 표시한다 | 추상 행위 |
 | 3DShadowPopupMixin | 콘텐츠를 별도 레이어에 표시한다 (3D 환경) | 추상 행위 |
 | TreeRenderMixin | 데이터를 보여준다 (트리 구조 렌더링) | 추상 행위 |
@@ -137,7 +141,7 @@
 - "목적이 같고 기능이 다르면 별도" (debounce ≠ throttle, FieldRender ≠ ListRender)
 - "기능이 같으면 하나로 충분" (map은 하나, FieldRender는 하나)
 
-이 원칙이 모범답안 10개에서 일관되게 적용되어 있다.
+이 원칙이 모범답안 14개에서 일관되게 적용되어 있다.
 
 **2D/3D 공존:**
 
@@ -192,6 +196,6 @@
 | [FUNCTION_PATTERN.md](../architecture/FUNCTION_PATTERN.md) | 설계 근거 — 왜 이렇게 나누는가 |
 | [MIXIN_REVIEW.md](MIXIN_REVIEW.md) | 범용성 검토 — 현재 한계와 확장 후보 |
 | [MIXIN_SPEC_TEMPLATE.md](../specs/MIXIN_SPEC_TEMPLATE.md) | 팀 배포용 — 명세 작성 양식 |
-| MIXIN_SPEC_EXAMPLE_*.md (10개) | 팀 배포용 — 작성 모범답안 |
+| MIXIN_SPEC_EXAMPLE_*.md (14개) | 팀 배포용 — 작성 모범답안 |
 
 ---

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>AppBars/Advanced/contextual — 01_refined (Persona A)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #12153D; font-family: 'Pretendard', sans-serif; padding: 40px 0; }
+
+        .sim-wrap { width: 360px; margin: 0 auto; }
+
+        /* 프리뷰 설명 */
+        .sim-note {
+            padding: 10px 14px;
+            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid #2A2574;
+            border-radius: 8px;
+            color: #A6B3DE;
+            font-size: 11px;
+            line-height: 1.55;
+        }
+        .sim-note strong { color: #E8EDFF; }
+        .sim-note code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: #9FA8DA;
+            background: rgba(80, 46, 233, 0.12);
+            padding: 1px 4px;
+            border-radius: 3px;
+        }
+
+        /* 상단 컨테이너 — contextual AppBar 컴포넌트 */
+        #top-app-bar-container { }
+
+        /* 아래 — 페이지의 List 컴포넌트 시뮬레이션 */
+        .mock-list {
+            margin-top: 8px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid #2A2574;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .mock-list__header {
+            padding: 8px 16px;
+            font-size: 10px;
+            font-weight: 600;
+            color: #707EB4;
+            background: rgba(80, 46, 233, 0.06);
+            border-bottom: 1px solid #2A2574;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .mock-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            border-bottom: 1px solid rgba(42, 37, 116, 0.5);
+            color: #A6B3DE;
+            font-size: 13px;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 150ms ease-out, color 150ms ease-out;
+        }
+        .mock-item:last-child { border-bottom: none; }
+        .mock-item:hover { background: rgba(80, 46, 233, 0.08); }
+        .mock-item--active {
+            background: rgba(80, 46, 233, 0.14);
+            color: #E8EDFF;
+        }
+        .mock-item input[type="checkbox"] {
+            accent-color: #502EE9;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        /* 이벤트 로그 */
+        .demo-log {
+            margin-top: 16px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid #2A2574;
+            border-radius: 8px;
+            color: #A6B3DE;
+            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1.6;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+        .demo-log strong { color: #E8EDFF; font-family: 'Pretendard', sans-serif; }
+    </style>
+</head>
+<body>
+
+<div class="sim-wrap">
+    <div class="sim-note">
+        <strong>시뮬레이션 구성</strong><br>
+        위쪽 = <code>contextual AppBar</code> 컴포넌트 (이 레포의 대상)<br>
+        아래쪽 = 페이지의 <strong>List 컴포넌트</strong>를 대체하는 mock (AppBar의 소유가 아님)<br>
+        List에서 항목을 체크하면 페이지(이 script)가 <code>appBarInstance.renderSelection(...)</code>을 호출해 AppBar를 갱신합니다. 1개 선택 시 Edit이 포함된 액션, 2+개 시 Archive로 교체됩니다.
+    </div>
+
+    <div id="top-app-bar-container"></div>
+
+    <div class="mock-list">
+        <div class="mock-list__header">Devices · List 컴포넌트 (mock)</div>
+        <div id="mock-list-body"></div>
+    </div>
+
+    <div class="demo-log" id="demo-log"><strong>이벤트 로그</strong><br>—</div>
+</div>
+
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/FieldRenderMixin.js"></script>
+<script src="../../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('top-app-bar-container', '../views/01_refined.html', '../styles/01_refined.css');
+
+    // ============================================================
+    // 1. contextual AppBar 컴포넌트 인스턴스 구성 (= register.js)
+    // ============================================================
+
+    const instance = { id: 'top-app-bar', appendElement: document.getElementById('top-app-bar-container') };
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            bar:       '.top-app-bar',
+            count:     '.top-app-bar__count',
+            closeIcon: '.top-app-bar__close'
+        }
+    });
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container: '.top-app-bar__action-list',
+            template:  '#top-app-bar-action-template',
+            item:      '.top-app-bar__action-item',
+            id:        '.top-app-bar__action-item',
+            icon:      '.top-app-bar__action-icon',
+            label:     '.top-app-bar__action-label'
+        },
+        datasetAttrs: { id: 'id' }
+    });
+
+    instance.renderSelection = ({ response }) => {
+        instance.fieldRender.renderData({ response: { count: response.count } });
+        instance.listRender.renderData({ response: response.actions });
+    };
+
+    instance.subscriptions = { selectionInfo: [instance.renderSelection] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.fieldRender.cssSelectors.closeIcon]: '@selectionCleared',
+            [instance.listRender.cssSelectors.item]:       '@selectionActionClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    // ============================================================
+    // 2. 페이지 측 — List 컴포넌트 mock + AppBar 동기화 로직
+    // ============================================================
+
+    const ITEMS = [
+        { id: 'battery-01', label: 'Battery · Bank A' },
+        { id: 'battery-02', label: 'Battery · Bank B' },
+        { id: 'chiller-01', label: 'Chiller · CRAC-1' },
+        { id: 'chiller-02', label: 'Chiller · CRAC-2' },
+        { id: 'panel-01',   label: 'Panel · PDU-North' },
+        { id: 'ups-01',     label: 'UPS · Rack-03' }
+    ];
+
+    const selected = new Set();
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>이벤트 로그</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>이벤트 로그</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).slice(0, 14).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    const listEl = document.getElementById('mock-list-body');
+    const renderMockList = () => {
+        listEl.innerHTML = ITEMS.map(item => {
+            const isActive = selected.has(item.id);
+            return `
+                <label class="mock-item ${isActive ? 'mock-item--active' : ''}">
+                    <input type="checkbox" data-id="${item.id}" ${isActive ? 'checked' : ''}>
+                    <span>${item.label}</span>
+                </label>
+            `;
+        }).join('');
+    };
+
+    // 선택 개수에 따라 액션 구성이 달라진다 — 페이지가 비즈니스 로직으로 판단
+    const computeActions = (count) => {
+        if (count === 0) return [];
+        if (count === 1) return [
+            { id: 'delete', icon: 'delete',       label: 'Delete' },
+            { id: 'edit',   icon: 'edit',         label: 'Edit' },
+            { id: 'share',  icon: 'share',        label: 'Share' }
+        ];
+        return [
+            { id: 'delete',  icon: 'delete',  label: 'Delete' },
+            { id: 'archive', icon: 'archive', label: 'Archive' },
+            { id: 'share',   icon: 'share',   label: 'Share' }
+        ];
+    };
+
+    // 페이지가 AppBar 인스턴스의 메서드를 직접 호출 (클라이언트 상태 → 컴포넌트 푸시)
+    const syncAppBar = () => {
+        const count = selected.size;
+        instance.renderSelection({
+            response: {
+                count:   count > 0 ? `${count} selected` : '',
+                actions: computeActions(count)
+            }
+        });
+    };
+
+    // List의 체크박스 이벤트 (실제 환경에선 List 컴포넌트가 @itemSelectionChanged 같은 이벤트를 발행)
+    listEl.addEventListener('change', (e) => {
+        if (e.target.type !== 'checkbox') return;
+        const id = e.target.dataset.id;
+        if (e.target.checked) selected.add(id);
+        else selected.delete(id);
+        log(`List: ${selected.size} selected → syncAppBar()`);
+        renderMockList();
+        syncAppBar();
+    });
+
+    // ============================================================
+    // 3. AppBar에서 발행된 이벤트 핸들러 (페이지 측)
+    // ============================================================
+
+    Wkit.onEventBusHandlers({
+        '@selectionActionClicked': ({ event }) => {
+            const actionId = event.target.closest('.top-app-bar__action-item')?.dataset.id;
+            const targets  = [...selected].join(', ');
+            log(`AppBar → "${actionId}" applied to [${targets}]`);
+            selected.clear();
+            renderMockList();
+            syncAppBar();
+        },
+        '@selectionCleared': () => {
+            log('AppBar → close: selection cleared');
+            selected.clear();
+            renderMockList();
+            syncAppBar();
+        }
+    });
+
+    // 초기 렌더
+    renderMockList();
+    syncAppBar();
+    log('초기 상태: 선택 없음 — List에서 항목을 체크해 AppBar를 활성화');
+})();
+</script>
+</body>
+</html>

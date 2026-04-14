@@ -1,0 +1,97 @@
+/* 01_refined: Persona A — Refined Technical
+   퍼플 팔레트 / 그라디언트 깊이 / Pretendard / 다크 */
+#top-app-bar-container {
+    width: 360px;
+    height: 56px;
+
+    .top-app-bar {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        padding: 0 8px;
+        gap: 4px;
+        background: linear-gradient(90deg, rgba(80, 46, 233, 0.10) 0%, rgba(146, 168, 244, 0.04) 100%),
+                    #191D50;
+        border-bottom: 1px solid #2A2574;
+    }
+
+    .top-app-bar__close {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border: none;
+        background: none;
+        color: #707EB4;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: background-color 150ms ease-out, color 150ms ease-out;
+        flex-shrink: 0;
+    }
+
+    .top-app-bar__close:hover {
+        color: #A6B3DE;
+        background: rgba(80, 46, 233, 0.12);
+    }
+
+    .top-app-bar__close .material-symbols-outlined {
+        font-size: 22px;
+    }
+
+    .top-app-bar__count {
+        flex: 1;
+        min-width: 0;
+        padding: 0 8px;
+        font-family: 'Pretendard', sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+        color: #E8EDFF;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .top-app-bar__action-list {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        flex-shrink: 0;
+    }
+
+    .top-app-bar__action-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border: none;
+        background: none;
+        color: #707EB4;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: background-color 150ms ease-out, color 150ms ease-out;
+    }
+
+    .top-app-bar__action-item:hover {
+        color: #A6B3DE;
+        background: rgba(80, 46, 233, 0.12);
+    }
+
+    .top-app-bar__action-icon {
+        font-size: 22px;
+        line-height: 1;
+    }
+
+    .top-app-bar__action-label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+}

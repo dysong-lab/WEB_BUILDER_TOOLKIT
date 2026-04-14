@@ -34,7 +34,6 @@
 |------|------|------|
 | `getHTML` | O | 팝업 HTML을 반환하는 함수. `this`는 instance로 바인딩된다. `() => string` |
 | `getStyles` | O | 팝업 CSS를 반환하는 함수. `this`는 instance로 바인딩된다. `() => string` |
-| `onCreated` | X | Shadow DOM 생성 완료 후 호출되는 콜백. `(shadowRoot) => void` |
 
 ---
 
@@ -61,15 +60,14 @@ renderData 패턴이 아닌 직접 호출 패턴:
   - 3D 이벤트 수신 → popup.show() 호출
   - 닫기 이벤트 수신 → popup.hide() 호출
 
-Shadow DOM은 최초 show() 시 lazy 생성된다.
+Shadow DOM은 최초 show() 시 lazy 생성된다 (완전히 동기).
   1. host 요소(div)를 생성한다
   2. instance.page.appendElement에 host를 부착한다
   3. host에 Shadow DOM을 연결한다
-  4. getHTML()/getStyles()로 콘텐츠를 문자열로 받아 주입한다
+  4. getHTML()/getStyles()로 콘텐츠를 문자열로 받아 주입한다 (innerHTML 동기 파싱)
   5. bindPopupEvents가 show() 전에 호출되었으면 여기서 바인딩한다
-  6. onCreated 콜백을 호출한다 (있으면)
 
-이후 show/hide는 display만 토글한다.
+이후 show/hide는 display만 토글한다. show() 다음 줄에서 즉시 query() 접근이 보장된다.
 ```
 
 ---
@@ -117,67 +115,76 @@ Shadow DOM은 최초 show() 시 lazy 생성된다.
 
 ## 6. 사용 예시
 
-### register.js
+### 책임 분리
+
+| 주체 | 책임 |
+|------|------|
+| **컴포넌트 register.js** | Mixin 적용 + 3D 클릭 이벤트 발행만. publishCode 내부 클래스/구조를 알지 못한다 |
+| **publishCode HTML/CSS** | 팝업 시각 구조 + 클래스명 정의 |
+| **페이지 코드 (loaded.js)** | publishCode 클래스명을 알고, 정적 이벤트는 `bindPopupEvents`로 1회 등록, 동적 데이터는 매 클릭마다 `show()` + `query()`로 매핑 |
+
+### register.js (컴포넌트)
 
 ```javascript
 const { htmlCode, cssCode } = this.properties.publishCode || {};
 
 apply3DShadowPopupMixin(this, {
     getHTML:   () => htmlCode || '',
-    getStyles: () => cssCode || '',
-    onCreated: (shadowRoot) => {
-        this.shadowPopup.bindPopupEvents({
-            click: {
-                '.popup-close': () => this.shadowPopup.hide()
-            }
-        });
-    }
+    getStyles: () => cssCode || ''
 });
 
-// 3D 이벤트
+// 3D 이벤트 발행만 — 컴포넌트는 popup 내부를 모른다
 const { bind3DEvents } = Wkit;
 
 this.customEvents = {
     click: '@battClicked'
 };
 bind3DEvents(this, this.customEvents);
-
-this.showDetail = () => {
-    this.shadowPopup.show();
-
-    const nameEl = this.shadowPopup.query('.popup-name');
-    if (nameEl) nameEl.textContent = this.name || 'BATT';
-
-    const statusEl = this.shadowPopup.query('.popup-status');
-    if (statusEl) {
-        const currentStatus = this.meshState.getMeshState('BATT') || 'normal';
-        statusEl.textContent = currentStatus;
-        statusEl.dataset.status = currentStatus;
-    }
-};
 ```
 
-### 페이지 핸들러 (before_load.js)
+### loaded.js (페이지) — 정적 이벤트 + 동적 매핑
 
 ```javascript
-'@battClicked': ({ event, targetInstance }) => {
-    targetInstance.showDetail();
-}
+const battInstance = wemb.findInstance('battComponent');
+
+// (1) 정적 이벤트 — show 전 1회 호출 (Mixin이 큐잉 후 첫 show 시 자동 바인딩)
+battInstance.shadowPopup.bindPopupEvents({
+    click: {
+        '.popup-close': () => battInstance.shadowPopup.hide()
+    }
+});
+
+// (2) 클릭 이벤트 → 데이터 fetch + show + query 매핑
+Weventbus.on('@battClicked', async () => {
+    const data = await fetchBattStatus(battInstance.name);
+
+    const root = battInstance.shadowPopup;
+    root.show();   // lazy init 동기, 다음 줄부터 query 안전
+
+    root.query('.popup-name').textContent      = data.name;
+    root.query('.popup-status').textContent    = data.status;
+    root.query('.popup-status').dataset.status = data.status;
+});
 ```
 
-### beforeDestroy.js
+### before_unload.js (페이지)
+
+```javascript
+const battInstance = wemb.findInstance('battComponent');
+battInstance.shadowPopup.removePopupEvents();
+```
+
+### beforeDestroy.js (컴포넌트)
 
 ```javascript
 const { remove3DEvents } = Wkit;
 
-// 3. 이벤트 제거
 remove3DEvents(this, this.customEvents);
 this.customEvents = null;
 
-// 1. Mixin 정리
 this.shadowPopup.destroy();
 ```
 
-> 팝업 내부의 콘텐츠 렌더링은 3DShadowPopupMixin의 범위 밖이다. `shadowPopup.query()`로 요소를 찾아 직접 처리한다.
+> 팝업 내부의 콘텐츠 렌더링은 3DShadowPopupMixin의 범위 밖이다. **컴포넌트가 아닌 페이지 코드**에서 `shadowPopup.query()`로 요소를 찾아 직접 처리한다.
 
 ---

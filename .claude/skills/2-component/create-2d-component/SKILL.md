@@ -101,19 +101,32 @@ Components/Navigation/NavigationDrawer/Standard/views, styles, scripts, preview
 Components/Sheets/BottomSheets/Standard/views, styles, scripts, preview
 ```
 
-컴포넌트 변형은 `Standard`, `Advanced_01`, `Advanced_02` … 순으로 확장된다. 각 변형의 상세 명세는 해당 폴더의 CLAUDE.md에 기입된다.
+컴포넌트 변형은 `Standard`(필수)와 `Advanced`(선택)로 구분된다. `Advanced`는 여러 구현을 담는 컨테이너 폴더이며, 그 안에 구현별 하위 폴더(`searchEmbedded/`, `tabbed/` 등)를 둔다. **각 Advanced 구현은 구조적으로 또 하나의 Standard와 같다** — 자기 CLAUDE.md, views, styles, scripts, **그리고 자기 preview까지** 모두 자기 폴더 안에 둔다.
 
 **실제 예시:**
 ```
-Components/Navigation/NavigationDrawer/Standard/
-├── CLAUDE.md          ← 이 변형의 상세 명세
-├── views/
-├── styles/
-├── scripts/
-└── preview/
+Components/Navigation/NavigationDrawer/
+├── Standard/
+│   ├── CLAUDE.md          ← Standard 명세
+│   ├── views/
+│   ├── styles/
+│   ├── scripts/
+│   └── preview/
+└── Advanced/              ← 선택 (다중 구현 컨테이너)
+    ├── {구현명1}/
+    │   ├── CLAUDE.md      ← 이 구현의 상세 명세
+    │   ├── views/
+    │   ├── styles/
+    │   ├── scripts/
+    │   └── preview/       ← 자기 폴더 안에 자기 preview
+    └── {구현명2}/
+        └── ... (동일 구조)
 ```
 
-> ⚠️ 잘못된 예: `Components/Navigation/Standard/` — 서브 범주(NavigationDrawer)를 건너뛰면 안 된다.
+> ⚠️ 잘못된 예
+> - `Components/Navigation/Standard/` — 서브 범주(NavigationDrawer)를 건너뛰면 안 된다.
+> - `Components/Navigation/NavigationDrawer/Advanced_01/` — `Advanced_01`, `Advanced_02` 같은 형제 폴더는 사용하지 않는다. 반드시 `Advanced/{구현명}/` 중첩 구조를 사용한다.
+> - `Advanced/preview/{구현명}.html` — preview를 Advanced 레벨로 빼지 않는다. 각 구현 폴더 안에 자기 preview를 둔다.
 
 ### 확인 방법
 
@@ -126,9 +139,11 @@ ls Components/[카테고리]/    # 서브 범주 폴더가 있는지 확인
 
 ## 출력 구조
 
+### Standard (필수)
+
 ```
-[Standard 또는 Advanced_NN]/
-├── CLAUDE.md                  # 변형별 상세 명세
+Standard/
+├── CLAUDE.md                  # Standard 명세
 ├── views/
 │   ├── 01_[name].html         # 디자인 변형 A
 │   └── 02_[name].html         # 디자인 변형 B
@@ -141,6 +156,27 @@ ls Components/[카테고리]/    # 서브 범주 폴더가 있는지 확인
 └── preview/
     ├── 01_[name].html
     └── 02_[name].html
+```
+
+### Advanced (선택, 다중 구현 컨테이너)
+
+각 구현 폴더는 Standard와 동일한 5요소(CLAUDE.md + views + styles + scripts + preview)를 모두 자기 안에 갖는다.
+
+```
+Advanced/
+├── {구현명1}/                 # 예: searchEmbedded, tabbed …
+│   ├── CLAUDE.md              # 이 구현의 상세 명세
+│   ├── views/
+│   │   └── 01_[name].html
+│   ├── styles/
+│   │   └── 01_[name].css
+│   ├── scripts/
+│   │   ├── register.js
+│   │   └── beforeDestroy.js
+│   └── preview/
+│       └── 01_[name].html     # 파일명은 디자인 변형명만 (구현명은 경로에 이미 있음)
+└── {구현명2}/
+    └── ... (동일 구조)
 ```
 
 scripts/는 디자인이 달라져도 변하지 않는다. 약속된 선택자만 HTML에 유지하면 된다.
@@ -337,6 +373,14 @@ scripts/register.js    — 동일 (불변)
 - ❌ customEvents에서 선택자 하드코딩 (Mixin의 computed property 사용)
 - ❌ register.js에 렌더링 로직 작성
 - ❌ HTML 문자열을 JS에 작성 (template 태그 사용)
+
+---
+
+## 마무리: manifest.json 등록
+
+구현 완료 후 반드시 `Components/CLAUDE.md` Step 5에 따라 `DesignComponentSystem/manifest.json`에 신규 컴포넌트/set/item/preview를 등록한다. 누락 시 `index.html` 카탈로그에 노출되지 않는다.
+
+> 등록 위치/규칙은 [Components/CLAUDE.md Step 5](/RNBT_architecture/DesignComponentSystem/Components/CLAUDE.md) 참조
 
 ---
 

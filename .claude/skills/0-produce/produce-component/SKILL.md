@@ -76,9 +76,15 @@ PRODUCTION_PROCESS.md의 Step 3~7을 따라 컴포넌트를 생산한다.
 |------|------|
 | 고정 DOM에 데이터를 매핑하는가? | FieldRenderMixin |
 | 배열을 template으로 반복 렌더하는가? | ListRenderMixin |
+| 계층적 데이터를 트리로 렌더하는가? | TreeRenderMixin |
 | 팝업/오버레이가 필요한가? | ShadowPopupMixin |
+| 3D 팝업/오버레이가 필요한가? | 3DShadowPopupMixin |
 | 3D Mesh 색상을 제어하는가? | MeshStateMixin |
+| 3D Mesh 선택 강조가 필요한가? | MeshHighlightMixin |
+| 3D Mesh 표시/숨김 제어가 필요한가? | MeshVisibilityMixin |
 | 카메라 포커스가 필요한가? | CameraFocusMixin |
+| 3D 모델 애니메이션이 필요한가? | AnimationMixin |
+| 3D 모델 절단면이 필요한가? | ClippingPlaneMixin |
 | 기존 Mixin으로 부족한가? | 커스텀 속성/메서드 정의 |
 | Mixin 자체가 존재하지 않는가? | → Step 3-1로 |
 
@@ -208,6 +214,7 @@ CLAUDE.md 명세가 승인되면, 컴포넌트 유형에 따라 개발 스킬을
 | 2D 컴포넌트 개발 | [create-2d-component](/.claude/skills/2-component/create-2d-component/SKILL.md) |
 | 3D 개별 단위 개발 | [create-3d-component](/.claude/skills/2-component/create-3d-component/SKILL.md) |
 | 3D 컨테이너 개발 | [create-3d-container-component](/.claude/skills/2-component/create-3d-container-component/SKILL.md) |
+| 3D 대량생산 루프 | [produce-3d-standard-loop](/.claude/skills/0-produce/produce-3d-standard-loop/SKILL.md) |
 | Mixin 명세서 작성 | [create-mixin-spec](/.claude/skills/5-mixin/create-mixin-spec/SKILL.md) |
 | Mixin 구현 | [implement-mixin](/.claude/skills/5-mixin/implement-mixin/SKILL.md) |
 

@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>RNBT Design Component System</title>
+
+    <!-- Markdown / Code highlighting -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@12.0.0/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/core.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/javascript.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/markdown.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/xml.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/css.min.js"></script>
+
+    <style>
+        :root {
+            --bg: #f7f7f8;
+            --panel: #ffffff;
+            --border: #e2e2e4;
+            --text: #1f1f23;
+            --muted: #8a8a8f;
+            --accent: #2563eb;
+            --accent-soft: #dbeafe;
+            --disabled: #c4c4c8;
+            --tab-active: #1f1f23;
+            --code-bg: #f6f8fa;
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Pretendard", "Noto Sans KR", sans-serif;
+            font-size: 14px;
+            color: var(--text);
+            background: var(--bg);
+        }
+
+        /* ===== Layout ===== */
+        .app {
+            display: grid;
+            grid-template-rows: 56px 1fr;
+            height: 100vh;
+        }
+
+        header.topbar {
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            background: var(--panel);
+            border-bottom: 1px solid var(--border);
+            gap: 24px;
+        }
+
+        header.topbar h1 {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        .top-tabs { display: flex; gap: 4px; }
+        .top-tab {
+            padding: 6px 14px;
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--muted);
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .top-tab:hover { background: var(--bg); color: var(--text); }
+        .top-tab.active { background: var(--accent-soft); color: var(--accent); }
+
+        main {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            min-height: 0;
+        }
+
+        /* ===== Sidebar ===== */
+        aside.sidebar {
+            background: var(--panel);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            padding: 12px 0;
+        }
+
+        .sidebar-section-title {
+            padding: 8px 16px 4px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tree-cat {
+            user-select: none;
+        }
+        .tree-cat-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .tree-cat-header:hover { background: var(--bg); }
+        .tree-cat-header.active { background: var(--accent-soft); color: var(--accent); }
+        .tree-cat-arrow {
+            display: inline-block;
+            width: 10px;
+            font-size: 10px;
+            color: var(--muted);
+            transition: transform 0.15s ease;
+        }
+        .tree-cat-arrow.expanded { transform: rotate(90deg); }
+        .tree-cat-empty .tree-cat-arrow { visibility: hidden; }
+        .tree-cat-name { flex: 1; }
+        .tree-cat-count {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .tree-children {
+            display: none;
+            margin-left: 22px;
+            border-left: 1px solid var(--border);
+        }
+        .tree-children.expanded { display: block; }
+
+        .tree-comp-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .tree-comp-header:hover { background: var(--bg); }
+        .tree-comp-header.active { background: var(--accent-soft); color: var(--accent); }
+        .tree-comp-header.unimplemented { color: var(--disabled); }
+        .tree-comp-header.unimplemented::after {
+            content: " · 미구현";
+            font-size: 10px;
+            color: var(--disabled);
+        }
+        .tree-comp-name { flex: 1; }
+
+        .tree-item {
+            padding: 5px 12px 5px 24px;
+            cursor: pointer;
+            color: var(--text);
+            font-size: 13px;
+        }
+        .tree-item:hover { background: var(--bg); }
+        .tree-item.active { background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+        .tree-item.unimplemented { color: var(--disabled); }
+        .tree-item.unimplemented::after {
+            content: " · 미구현";
+            font-size: 10px;
+            color: var(--disabled);
+        }
+
+        .mixin-list .tree-item { margin: 0; }
+
+        /* ===== Right Pane ===== */
+        section.pane {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            min-height: 0;
+            background: var(--panel);
+        }
+
+        .pane-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        .pane-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .pane-subtitle {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .pane-tabs {
+            display: flex;
+            gap: 4px;
+            padding: 0 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        .pane-tab {
+            padding: 10px 14px;
+            border: none;
+            background: transparent;
+            font-size: 13px;
+            color: var(--muted);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+        }
+        .pane-tab.active {
+            color: var(--tab-active);
+            border-bottom-color: var(--accent);
+            font-weight: 500;
+        }
+
+        #view-components {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pane-body {
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pane-body > #comp-preview-tab {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .pane-body > #comp-spec-tab {
+            flex: 1;
+            min-height: 0;
+        }
+
+        .empty-state {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        /* ===== Preview ===== */
+        .preview-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg);
+        }
+        .preview-toolbar label {
+            font-size: 12px;
+            color: var(--muted);
+        }
+        .preview-toolbar select {
+            padding: 5px 8px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 13px;
+            background: var(--panel);
+        }
+        .preview-toolbar a {
+            margin-left: auto;
+            font-size: 12px;
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .preview-toolbar a:hover { text-decoration: underline; }
+
+        .preview-frame-wrap {
+            flex: 1;
+            min-height: 0;
+            background: #fafafa;
+        }
+        .preview-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+        }
+
+        /* ===== Markdown ===== */
+        .md-body {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            padding: 24px 32px;
+            line-height: 1.65;
+        }
+        .md-body h1 { font-size: 22px; margin: 0 0 16px; }
+        .md-body h2 { font-size: 17px; margin: 24px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+        .md-body h3 { font-size: 15px; margin: 18px 0 8px; }
+        .md-body h4 { font-size: 14px; margin: 14px 0 6px; }
+        .md-body p { margin: 8px 0; }
+        .md-body ul, .md-body ol { padding-left: 24px; }
+        .md-body li { margin: 3px 0; }
+        .md-body code {
+            background: var(--code-bg);
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-family: "SFMono-Regular", Consolas, monospace;
+        }
+        .md-body pre {
+            background: var(--code-bg);
+            padding: 14px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+        .md-body pre code { background: transparent; padding: 0; }
+        .md-body table {
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 12.5px;
+        }
+        .md-body th, .md-body td {
+            border: 1px solid var(--border);
+            padding: 6px 10px;
+            text-align: left;
+        }
+        .md-body th { background: var(--code-bg); font-weight: 600; }
+        .md-body blockquote {
+            border-left: 3px solid var(--border);
+            padding: 4px 12px;
+            margin: 12px 0;
+            color: var(--muted);
+        }
+        .md-body a { color: var(--accent); }
+
+        /* ===== Mixin split view ===== */
+        .mixin-split {
+            flex: 1;
+            min-height: 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-top: 1px solid var(--border);
+        }
+        .mixin-pane {
+            min-height: 0;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .mixin-pane + .mixin-pane { border-left: 1px solid var(--border); }
+        .mixin-pane-title {
+            padding: 8px 16px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+        }
+        .mixin-pane-body {
+            flex: 1;
+            min-height: 0;
+            overflow: auto;
+        }
+        .mixin-pane-body pre {
+            margin: 0;
+            padding: 16px;
+            font-size: 12px;
+            line-height: 1.5;
+            font-family: "SFMono-Regular", Consolas, monospace;
+        }
+
+        /* ===== Code tab ===== */
+        .pane-body > #comp-code-tab {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .code-split {
+            flex: 1;
+            min-height: 0;
+            display: grid;
+            grid-template-columns: 240px 1fr;
+        }
+        .code-tree {
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            background: var(--bg);
+            padding: 8px 0;
+        }
+        .code-tree-section {
+            padding: 8px 16px 4px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .code-tree-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            font-size: 13px;
+            cursor: pointer;
+            color: var(--text);
+        }
+        .code-tree-item:hover { background: var(--panel); }
+        .code-tree-item.active {
+            background: var(--accent-soft);
+            color: var(--accent);
+            font-weight: 500;
+        }
+        .code-tree-item.missing {
+            color: var(--disabled);
+            cursor: default;
+        }
+        .code-tree-item.missing:hover { background: transparent; }
+        .code-tree-icon {
+            display: inline-block;
+            width: 30px;
+            font-size: 10px;
+            font-weight: 700;
+            text-align: center;
+            padding: 1px 4px;
+            border-radius: 3px;
+            background: var(--border);
+            color: var(--text);
+        }
+        .code-tree-item.active .code-tree-icon {
+            background: var(--accent);
+            color: #fff;
+        }
+        .code-tree-icon.html { background: #fdecea; color: #c0392b; }
+        .code-tree-icon.css  { background: #e3f1fd; color: #1565c0; }
+        .code-tree-icon.js   { background: #fff5d6; color: #b58900; }
+
+        .code-pane {
+            min-width: 0;
+            overflow: auto;
+            background: var(--code-bg);
+        }
+        .code-pane pre {
+            margin: 0;
+            padding: 16px;
+            font-size: 12px;
+            line-height: 1.55;
+            font-family: "SFMono-Regular", Consolas, monospace;
+        }
+        .code-pane .empty-state {
+            background: var(--code-bg);
+        }
+
+        .hidden { display: none !important; }
+
+        .error {
+            color: #b91c1c;
+            padding: 16px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+    <header class="topbar">
+        <h1>RNBT Design Component System</h1>
+        <div class="top-tabs">
+            <button class="top-tab active" data-view="components">Components</button>
+            <button class="top-tab" data-view="mixins">Mixins</button>
+        </div>
+    </header>
+
+    <main>
+        <aside class="sidebar">
+            <div id="sidebar-components"></div>
+            <div id="sidebar-mixins" class="hidden"></div>
+        </aside>
+
+        <section class="pane">
+            <div id="view-components">
+                <div class="pane-header">
+                    <div>
+                        <div class="pane-title" id="comp-title">컴포넌트를 선택하세요</div>
+                        <div class="pane-subtitle" id="comp-subtitle"></div>
+                    </div>
+                </div>
+                <div class="pane-tabs" id="comp-tabs">
+                    <button class="pane-tab active" data-tab="preview">Preview</button>
+                    <button class="pane-tab" data-tab="spec">Spec</button>
+                    <button class="pane-tab" data-tab="code">Code</button>
+                </div>
+                <div id="comp-variant-toolbar" class="preview-toolbar hidden">
+                    <label>변형:</label>
+                    <select id="comp-variant-select"></select>
+                    <a id="comp-open-new" target="_blank">새 창에서 열기 ↗</a>
+                </div>
+                <div class="pane-body">
+                    <div id="comp-preview-tab">
+                        <div class="preview-frame-wrap">
+                            <iframe id="comp-preview-frame" class="preview-frame hidden"></iframe>
+                            <div id="comp-preview-empty" class="empty-state">
+                                좌측 트리에서 컴포넌트를 선택하세요.
+                            </div>
+                        </div>
+                    </div>
+                    <div id="comp-spec-tab" class="md-body hidden"></div>
+                    <div id="comp-code-tab" class="hidden">
+                        <div class="code-split">
+                            <div class="code-tree" id="comp-code-tree"></div>
+                            <div class="code-pane" id="comp-code-pane">
+                                <div class="empty-state">파일을 선택하세요.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-mixins" class="hidden" style="display:flex; flex-direction:column; flex:1; min-height:0;">
+                <div class="pane-header">
+                    <div>
+                        <div class="pane-title" id="mixin-title">Mixin을 선택하세요</div>
+                        <div class="pane-subtitle" id="mixin-subtitle"></div>
+                    </div>
+                </div>
+                <div class="mixin-split">
+                    <div class="mixin-pane">
+                        <div class="mixin-pane-title">📄 문서</div>
+                        <div class="mixin-pane-body md-body" id="mixin-doc"></div>
+                    </div>
+                    <div class="mixin-pane">
+                        <div class="mixin-pane-title">⌨ 코드</div>
+                        <div class="mixin-pane-body">
+                            <pre><code id="mixin-code" class="language-javascript"></code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+'use strict';
+
+const state = {
+    manifest: null,
+    view: 'components',
+    selection: null,       // { catIdx, compIdx?, setIdx? }
+    selectedMixin: null,
+    compTab: 'preview',
+    currentPreviews: [],   // 현재 선택된 set/item 의 preview 배열
+    currentVariantIdx: 0,
+    currentBaseDir: null,  // 컴포넌트 디렉토리 (preview 의 부모/부모)
+    currentCodeFile: null, // { kind: 'html'|'css'|'js', path, label }
+    codeFileCache: new Map(), // path → text|null(404)
+};
+
+// 컴포넌트 라이프사이클 후보 (RNBT: register + beforeDestroy 가 표준)
+const LIFECYCLE_FILES = ['register.js', 'beforeDestroy.js'];
+
+// ── Bootstrap ─────────────────────────────────────────────
+async function init() {
+    try {
+        const res = await fetch('manifest.json');
+        if (!res.ok) throw new Error(`manifest.json HTTP ${res.status}`);
+        state.manifest = await res.json();
+    } catch (e) {
+        document.querySelector('.pane-body').innerHTML =
+            `<div class="error">manifest.json 로드 실패: ${e.message}<br><br>` +
+            `브라우저 보안 정책상 file:// 로 직접 열면 fetch가 차단됩니다. ` +
+            `로컬 HTTP 서버(예: <code>npx http-server</code> 또는 mock_server)에서 열어주세요.</div>`;
+        return;
+    }
+
+    renderComponentsSidebar();
+    renderMixinsSidebar();
+    bindTopTabs();
+    bindCompTabs();
+    bindVariantSelect();
+}
+
+// ── Top Tabs ──────────────────────────────────────────────
+function bindTopTabs() {
+    document.querySelectorAll('.top-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const view = btn.dataset.view;
+            state.view = view;
+            document.querySelectorAll('.top-tab').forEach(b => b.classList.toggle('active', b === btn));
+            document.getElementById('sidebar-components').classList.toggle('hidden', view !== 'components');
+            document.getElementById('sidebar-mixins').classList.toggle('hidden', view !== 'mixins');
+            document.getElementById('view-components').classList.toggle('hidden', view !== 'components');
+            document.getElementById('view-mixins').classList.toggle('hidden', view !== 'mixins');
+        });
+    });
+}
+
+// ── Helpers ──────────────────────────────────────────────
+function isSetImplemented(set) {
+    if ((set.previews || []).length > 0) return true;
+    return (set.items || []).some(it => (it.previews || []).length > 0);
+}
+
+function isComponentImplemented(comp) {
+    return (comp.sets || []).some(isSetImplemented);
+}
+
+function isCollapsedCategory(cat) {
+    // 단일 컴포넌트 카테고리(이름이 카테고리명과 동일)는 컴포넌트 레벨을 생략하고 set 만 표시
+    return cat.components.length === 1 && cat.components[0].name === cat.name;
+}
+
+function activate(el) {
+    document.querySelectorAll('#sidebar-components .active').forEach(e => e.classList.remove('active'));
+    if (el) el.classList.add('active');
+}
+
+// ── Components Sidebar ───────────────────────────────────
+function renderComponentsSidebar() {
+    const root = document.getElementById('sidebar-components');
+    root.innerHTML = '<div class="sidebar-section-title">Categories</div>';
+
+    state.manifest.categories.forEach((cat, ci) => {
+        const total = cat.components.length;
+        const impl = cat.components.filter(isComponentImplemented).length;
+
+        const catEl = document.createElement('div');
+        catEl.className = 'tree-cat' + (total === 0 ? ' tree-cat-empty' : '');
+
+        const header = document.createElement('div');
+        header.className = 'tree-cat-header';
+        header.innerHTML = `
+            <span class="tree-cat-arrow">▶</span>
+            <span class="tree-cat-name">${cat.name}</span>
+            <span class="tree-cat-count">${total > 0 ? `${impl}/${total}` : '미구현'}</span>
+        `;
+        header.addEventListener('click', () => {
+            const childrenEl = catEl.querySelector(':scope > .tree-children');
+            if (childrenEl) {
+                childrenEl.classList.toggle('expanded');
+                header.querySelector('.tree-cat-arrow').classList.toggle('expanded');
+            }
+            activate(header);
+            displayCategory(ci);
+        });
+        catEl.appendChild(header);
+
+        if (total > 0) {
+            const childrenEl = document.createElement('div');
+            childrenEl.className = 'tree-children';
+
+            if (isCollapsedCategory(cat)) {
+                const comp = cat.components[0];
+                if ((comp.sets || []).length > 0) {
+                    comp.sets.forEach((set, si) => {
+                        childrenEl.appendChild(makeSetItem(ci, 0, si, set));
+                    });
+                } else {
+                    // 단일 미구현 컴포넌트 — 컴포넌트 자체를 미구현 leaf 로 표시
+                    const fallback = document.createElement('div');
+                    fallback.className = 'tree-item unimplemented';
+                    fallback.textContent = comp.name;
+                    fallback.addEventListener('click', (ev) => {
+                        ev.stopPropagation();
+                        activate(fallback);
+                        displayComponent(ci, 0);
+                    });
+                    childrenEl.appendChild(fallback);
+                }
+            } else {
+                cat.components.forEach((comp, compIdx) => {
+                    childrenEl.appendChild(makeComponentNode(ci, compIdx, comp));
+                });
+            }
+
+            catEl.appendChild(childrenEl);
+        }
+
+        root.appendChild(catEl);
+    });
+}
+
+function makeComponentNode(ci, compIdx, comp) {
+    const wrap = document.createElement('div');
+    wrap.className = 'tree-node';
+
+    const hasSets = (comp.sets || []).length > 0;
+    const implemented = isComponentImplemented(comp);
+
+    const header = document.createElement('div');
+    header.className = 'tree-comp-header' + (implemented ? '' : ' unimplemented');
+    header.innerHTML = `
+        <span class="tree-cat-arrow">${hasSets ? '▶' : '·'}</span>
+        <span class="tree-comp-name">${comp.name}</span>
+    `;
+    header.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        if (hasSets) {
+            const childrenEl = wrap.querySelector(':scope > .tree-children');
+            childrenEl.classList.toggle('expanded');
+            header.querySelector('.tree-cat-arrow').classList.toggle('expanded');
+        }
+        activate(header);
+        displayComponent(ci, compIdx);
+    });
+    wrap.appendChild(header);
+
+    if (hasSets) {
+        const setsEl = document.createElement('div');
+        setsEl.className = 'tree-children';
+        comp.sets.forEach((set, si) => {
+            setsEl.appendChild(makeSetItem(ci, compIdx, si, set));
+        });
+        wrap.appendChild(setsEl);
+    }
+
+    return wrap;
+}
+
+function makeSetItem(ci, compIdx, si, set) {
+    const hasItems = (set.items || []).length > 0;
+
+    if (hasItems) {
+        const wrap = document.createElement('div');
+        wrap.className = 'tree-node';
+
+        const implemented = isSetImplemented(set);
+        const header = document.createElement('div');
+        header.className = 'tree-comp-header' + (implemented ? '' : ' unimplemented');
+        header.innerHTML = `
+            <span class="tree-cat-arrow">▶</span>
+            <span class="tree-comp-name">${set.name}</span>
+        `;
+        header.addEventListener('click', (ev) => {
+            ev.stopPropagation();
+            const childrenEl = wrap.querySelector(':scope > .tree-children');
+            childrenEl.classList.toggle('expanded');
+            header.querySelector('.tree-cat-arrow').classList.toggle('expanded');
+            activate(header);
+            displaySet(ci, compIdx, si);
+        });
+        wrap.appendChild(header);
+
+        const childrenEl = document.createElement('div');
+        childrenEl.className = 'tree-children';
+        set.items.forEach((item, itemIdx) => {
+            childrenEl.appendChild(makeItemNode(ci, compIdx, si, itemIdx, item));
+        });
+        wrap.appendChild(childrenEl);
+
+        return wrap;
+    }
+
+    const el = document.createElement('div');
+    const implemented = (set.previews || []).length > 0;
+    el.className = 'tree-item' + (implemented ? '' : ' unimplemented');
+    el.textContent = set.name;
+    el.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        activate(el);
+        displaySet(ci, compIdx, si);
+    });
+    return el;
+}
+
+function makeItemNode(ci, compIdx, si, itemIdx, item) {
+    const el = document.createElement('div');
+    const implemented = (item.previews || []).length > 0;
+    el.className = 'tree-item' + (implemented ? '' : ' unimplemented');
+    el.textContent = item.name;
+    el.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        activate(el);
+        displayItem(ci, compIdx, si, itemIdx);
+    });
+    return el;
+}
+
+// ── Display (right pane) ─────────────────────────────────
+function setHeaderTitle(breadcrumb, subtitle) {
+    document.getElementById('comp-title').textContent = breadcrumb;
+    document.getElementById('comp-subtitle').textContent = subtitle;
+}
+
+function displayCategory(ci) {
+    state.selection = { catIdx: ci };
+    const cat = state.manifest.categories[ci];
+    const subtitle = cat.components.length === 0
+        ? '아직 구현된 컴포넌트가 없습니다'
+        : `${cat.components.length}개 컴포넌트`;
+    setHeaderTitle(cat.name, subtitle);
+    showCompPreview(null);
+    loadSpec(cat.spec);
+    switchCompTab('spec');
+}
+
+function displayComponent(ci, compIdx) {
+    state.selection = { catIdx: ci, compIdx };
+    const cat = state.manifest.categories[ci];
+    const comp = cat.components[compIdx];
+    const subtitle = isComponentImplemented(comp)
+        ? `${(comp.sets || []).length}개 set`
+        : '미구현';
+    setHeaderTitle(`${cat.name} / ${comp.name}`, subtitle);
+    showCompPreview(null);
+    loadSpec(comp.spec);
+    switchCompTab('spec');
+}
+
+function displaySet(ci, compIdx, setIdx) {
+    state.selection = { catIdx: ci, compIdx, setIdx };
+    const cat = state.manifest.categories[ci];
+    const comp = cat.components[compIdx];
+    const set = comp.sets[setIdx];
+    const collapsed = isCollapsedCategory(cat);
+
+    const breadcrumb = collapsed
+        ? `${cat.name} / ${set.name}`
+        : `${cat.name} / ${comp.name} / ${set.name}`;
+
+    const hasItems = (set.items || []).length > 0;
+    if (hasItems) {
+        const subtitle = `${set.items.length}개 구현`;
+        setHeaderTitle(breadcrumb, subtitle);
+        showCompPreview(null, `${set.name} 하위 구현을 좌측 트리에서 선택하세요.`);
+        loadSpec(set.spec || comp.spec);
+        switchCompTab('preview');
+        return;
+    }
+
+    const subtitle = (set.previews || []).length
+        ? `${set.previews.length}개 변형`
+        : '미구현';
+    setHeaderTitle(breadcrumb, subtitle);
+
+    showCompPreview(set.previews || []);
+    loadSpec(set.spec || comp.spec);
+
+    const implemented = (set.previews || []).length > 0;
+    switchCompTab(implemented ? 'preview' : 'spec');
+}
+
+function displayItem(ci, compIdx, setIdx, itemIdx) {
+    state.selection = { catIdx: ci, compIdx, setIdx, itemIdx };
+    const cat = state.manifest.categories[ci];
+    const comp = cat.components[compIdx];
+    const set = comp.sets[setIdx];
+    const item = set.items[itemIdx];
+    const collapsed = isCollapsedCategory(cat);
+
+    const breadcrumb = collapsed
+        ? `${cat.name} / ${set.name} / ${item.name}`
+        : `${cat.name} / ${comp.name} / ${set.name} / ${item.name}`;
+    const subtitle = (item.previews || []).length
+        ? `${item.previews.length}개 변형`
+        : '미구현';
+    setHeaderTitle(breadcrumb, subtitle);
+
+    showCompPreview(item.previews || []);
+    loadSpec(item.spec || set.spec || comp.spec);
+
+    const implemented = (item.previews || []).length > 0;
+    switchCompTab(implemented ? 'preview' : 'spec');
+}
+
+// ── Component Tabs ────────────────────────────────────────
+function bindCompTabs() {
+    document.querySelectorAll('#comp-tabs .pane-tab').forEach(btn => {
+        btn.addEventListener('click', () => switchCompTab(btn.dataset.tab));
+    });
+}
+
+function switchCompTab(tab) {
+    state.compTab = tab;
+    document.querySelectorAll('#comp-tabs .pane-tab').forEach(b => {
+        b.classList.toggle('active', b.dataset.tab === tab);
+    });
+    document.getElementById('comp-preview-tab').classList.toggle('hidden', tab !== 'preview');
+    document.getElementById('comp-spec-tab').classList.toggle('hidden', tab !== 'spec');
+    document.getElementById('comp-code-tab').classList.toggle('hidden', tab !== 'code');
+
+    // 변형 toolbar 는 preview/code 탭에서만, 그리고 previews 가 있을 때만 표시
+    const toolbar = document.getElementById('comp-variant-toolbar');
+    const hasPreviews = (state.currentPreviews || []).length > 0;
+    const showToolbar = hasPreviews && (tab === 'preview' || tab === 'code');
+    toolbar.classList.toggle('hidden', !showToolbar);
+
+    if (tab === 'code') {
+        renderCodeTab();
+    }
+}
+
+// ── Preview ───────────────────────────────────────────────
+function showCompPreview(previews, emptyMessage) {
+    const toolbar = document.getElementById('comp-variant-toolbar');
+    const frame = document.getElementById('comp-preview-frame');
+    const empty = document.getElementById('comp-preview-empty');
+    const select = document.getElementById('comp-variant-select');
+
+    state.currentPreviews = previews || [];
+    state.currentVariantIdx = 0;
+    state.currentBaseDir = inferBaseDir(previews);
+    state.currentCodeFile = null;
+
+    if (!previews || previews.length === 0) {
+        toolbar.classList.add('hidden');
+        frame.classList.add('hidden');
+        frame.src = 'about:blank';
+        empty.classList.remove('hidden');
+        empty.textContent = emptyMessage
+            || (previews ? '미구현 — preview 가 없습니다.' : '좌측 트리에서 컴포넌트를 선택하세요.');
+        return;
+    }
+
+    toolbar.classList.remove('hidden');
+    frame.classList.remove('hidden');
+    empty.classList.add('hidden');
+
+    select.innerHTML = '';
+    previews.forEach((p, idx) => {
+        const opt = document.createElement('option');
+        opt.value = idx;
+        opt.textContent = p.label;
+        select.appendChild(opt);
+    });
+    select.value = '0';
+    loadPreviewByIndex(0);
+}
+
+function bindVariantSelect() {
+    const select = document.getElementById('comp-variant-select');
+    select.addEventListener('change', () => {
+        const idx = parseInt(select.value, 10);
+        state.currentVariantIdx = idx;
+        loadPreviewByIndex(idx);
+        if (state.compTab === 'code') {
+            // 변형이 바뀌면 HTML/CSS 트리/현재 파일 갱신
+            renderCodeTab();
+        }
+    });
+}
+
+function loadPreviewByIndex(idx) {
+    const p = state.currentPreviews[idx];
+    if (!p) return;
+    document.getElementById('comp-preview-frame').src = p.path;
+    document.getElementById('comp-open-new').href = p.path;
+}
+
+// preview path → 컴포넌트 baseDir 추정 (preview 디렉토리의 부모)
+function inferBaseDir(previews) {
+    if (!previews || previews.length === 0) return null;
+    const path = previews[0].path; // e.g. Components/AppBars/Standard/preview/01_refined.html
+    const parts = path.split('/');
+    // 마지막 두 조각 (preview, 파일명) 제거
+    if (parts.length < 3) return null;
+    return parts.slice(0, -2).join('/');
+}
+
+function variantBaseName(idx) {
+    const p = state.currentPreviews[idx];
+    if (!p) return null;
+    const fname = p.path.split('/').pop();      // 01_refined.html
+    return fname.replace(/\.html?$/i, '');      // 01_refined
+}
+
+// ── Code tab ──────────────────────────────────────────────
+// 파일을 fetch 하고 캐시. 404/실패는 null 캐싱.
+async function fetchSource(path) {
+    if (state.codeFileCache.has(path)) return state.codeFileCache.get(path);
+    try {
+        const res = await fetch(path);
+        if (!res.ok) {
+            state.codeFileCache.set(path, null);
+            return null;
+        }
+        const text = await res.text();
+        state.codeFileCache.set(path, text);
+        return text;
+    } catch {
+        state.codeFileCache.set(path, null);
+        return null;
+    }
+}
+
+async function renderCodeTab() {
+    const treeEl = document.getElementById('comp-code-tree');
+    const paneEl = document.getElementById('comp-code-pane');
+
+    if (!state.currentBaseDir || state.currentPreviews.length === 0) {
+        treeEl.innerHTML = '';
+        paneEl.innerHTML = '<div class="empty-state">미구현 — 표시할 소스가 없습니다.</div>';
+        return;
+    }
+
+    const base = state.currentBaseDir;
+    const variantBase = variantBaseName(state.currentVariantIdx);
+    const viewPath  = variantBase ? `${base}/views/${variantBase}.html` : null;
+    const stylePath = variantBase ? `${base}/styles/${variantBase}.css` : null;
+    const scriptPaths = LIFECYCLE_FILES.map(name => ({
+        name,
+        path: `${base}/scripts/${name}`,
+    }));
+
+    // 존재 여부를 미리 확인 (캐시 활용)
+    const [viewText, styleText, ...scriptTexts] = await Promise.all([
+        viewPath  ? fetchSource(viewPath)  : Promise.resolve(null),
+        stylePath ? fetchSource(stylePath) : Promise.resolve(null),
+        ...scriptPaths.map(s => fetchSource(s.path)),
+    ]);
+
+    // 트리 구성
+    treeEl.innerHTML = '';
+
+    const addSection = (title) => {
+        const el = document.createElement('div');
+        el.className = 'code-tree-section';
+        el.textContent = title;
+        treeEl.appendChild(el);
+    };
+
+    const addItem = ({ kind, label, path, text }) => {
+        const el = document.createElement('div');
+        const exists = text !== null;
+        el.className = 'code-tree-item' + (exists ? '' : ' missing');
+        el.innerHTML = `
+            <span class="code-tree-icon ${kind}">${kind.toUpperCase()}</span>
+            <span class="code-tree-label">${label}</span>
+        `;
+        if (exists) {
+            el.addEventListener('click', () => {
+                state.currentCodeFile = { kind, path, label };
+                highlightCodeTreeItem(path);
+                showCodeFile(kind, path, text);
+            });
+        } else {
+            el.title = '파일 없음';
+        }
+        el.dataset.path = path;
+        treeEl.appendChild(el);
+        return { el, exists };
+    };
+
+    addSection('변형 (HTML/CSS)');
+    const htmlItem  = viewPath  ? addItem({ kind: 'html', label: `${variantBase}.html`, path: viewPath,  text: viewText  }) : null;
+    const cssItem   = stylePath ? addItem({ kind: 'css',  label: `${variantBase}.css`,  path: stylePath, text: styleText }) : null;
+    if (!htmlItem && !cssItem) {
+        const empty = document.createElement('div');
+        empty.className = 'code-tree-item missing';
+        empty.innerHTML = '<span class="code-tree-label">변형 파일 없음</span>';
+        treeEl.appendChild(empty);
+    }
+
+    addSection('라이프사이클 (JS)');
+    const jsItems = scriptPaths.map((s, i) => addItem({
+        kind: 'js',
+        label: s.name,
+        path: s.path,
+        text: scriptTexts[i],
+    }));
+    if (jsItems.every(i => !i.exists)) {
+        // 모두 없을 경우 안내
+        const empty = document.createElement('div');
+        empty.className = 'code-tree-item missing';
+        empty.innerHTML = '<span class="code-tree-label">라이프사이클 파일 없음</span>';
+        treeEl.appendChild(empty);
+    }
+
+    // 기본 선택: 이전 선택 복원 → HTML → CSS → 첫 라이프사이클
+    const candidates = [];
+    if (state.currentCodeFile) {
+        // 현재 선택 파일이 있다면 동일 kind 의 새 path 로 매핑
+        if (state.currentCodeFile.kind === 'html' && htmlItem && htmlItem.exists) {
+            candidates.push({ kind: 'html', path: viewPath, text: viewText, label: `${variantBase}.html` });
+        } else if (state.currentCodeFile.kind === 'css' && cssItem && cssItem.exists) {
+            candidates.push({ kind: 'css', path: stylePath, text: styleText, label: `${variantBase}.css` });
+        } else if (state.currentCodeFile.kind === 'js') {
+            const sameJs = scriptPaths.findIndex(s => s.name === state.currentCodeFile.label);
+            if (sameJs >= 0 && scriptTexts[sameJs] !== null) {
+                candidates.push({ kind: 'js', path: scriptPaths[sameJs].path, text: scriptTexts[sameJs], label: scriptPaths[sameJs].name });
+            }
+        }
+    }
+    if (htmlItem && htmlItem.exists) candidates.push({ kind: 'html', path: viewPath, text: viewText, label: `${variantBase}.html` });
+    if (cssItem  && cssItem.exists)  candidates.push({ kind: 'css',  path: stylePath, text: styleText, label: `${variantBase}.css` });
+    scriptPaths.forEach((s, i) => {
+        if (scriptTexts[i] !== null) candidates.push({ kind: 'js', path: s.path, text: scriptTexts[i], label: s.name });
+    });
+
+    if (candidates.length > 0) {
+        const pick = candidates[0];
+        state.currentCodeFile = { kind: pick.kind, path: pick.path, label: pick.label };
+        highlightCodeTreeItem(pick.path);
+        showCodeFile(pick.kind, pick.path, pick.text);
+    } else {
+        paneEl.innerHTML = '<div class="empty-state">표시할 소스 파일이 없습니다.</div>';
+    }
+}
+
+function highlightCodeTreeItem(path) {
+    document.querySelectorAll('#comp-code-tree .code-tree-item').forEach(el => {
+        el.classList.toggle('active', el.dataset.path === path);
+    });
+}
+
+function showCodeFile(kind, path, text) {
+    const paneEl = document.getElementById('comp-code-pane');
+    if (text === null || text === undefined) {
+        paneEl.innerHTML = `<div class="empty-state">${path} — 파일 없음</div>`;
+        return;
+    }
+    const langClass = kind === 'html' ? 'language-xml'
+                    : kind === 'css'  ? 'language-css'
+                    : 'language-javascript';
+    const pre = document.createElement('pre');
+    const code = document.createElement('code');
+    code.className = langClass;
+    code.textContent = text;
+    pre.appendChild(code);
+    paneEl.innerHTML = '';
+    paneEl.appendChild(pre);
+    if (window.hljs) hljs.highlightElement(code);
+}
+
+// ── Spec markdown ─────────────────────────────────────────
+async function loadSpec(path) {
+    const target = document.getElementById('comp-spec-tab');
+    if (!path) {
+        target.innerHTML = '<div class="empty-state">스펙 문서가 없습니다.</div>';
+        return;
+    }
+    try {
+        const res = await fetch(path);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const md = await res.text();
+        target.innerHTML = marked.parse(md);
+    } catch (e) {
+        target.innerHTML = `<div class="error">${path} 로드 실패: ${e.message}</div>`;
+    }
+}
+
+// ── Mixins Sidebar ───────────────────────────────────────
+function renderMixinsSidebar() {
+    const root = document.getElementById('sidebar-mixins');
+    root.innerHTML = '<div class="sidebar-section-title">Mixins</div><div class="mixin-list"></div>';
+    const list = root.querySelector('.mixin-list');
+    state.manifest.mixins.forEach((m, idx) => {
+        const el = document.createElement('div');
+        el.className = 'tree-item';
+        el.textContent = m.name;
+        el.title = m.purpose || '';
+        el.addEventListener('click', () => selectMixin(idx));
+        list.appendChild(el);
+    });
+}
+
+async function selectMixin(idx) {
+    document.querySelectorAll('#sidebar-mixins .tree-item').forEach((el, i) =>
+        el.classList.toggle('active', i === idx)
+    );
+    state.selectedMixin = idx;
+    const m = state.manifest.mixins[idx];
+
+    document.getElementById('mixin-title').textContent = m.name;
+    document.getElementById('mixin-subtitle').textContent = m.purpose || '';
+
+    const docEl = document.getElementById('mixin-doc');
+    const codeEl = document.getElementById('mixin-code');
+
+    docEl.innerHTML = '<div class="empty-state">문서 로딩...</div>';
+    codeEl.textContent = '';
+
+    try {
+        const [mdRes, jsRes] = await Promise.all([fetch(m.md), fetch(m.js)]);
+        if (mdRes.ok) {
+            docEl.innerHTML = marked.parse(await mdRes.text());
+        } else {
+            docEl.innerHTML = `<div class="error">${m.md} 로드 실패: HTTP ${mdRes.status}</div>`;
+        }
+        if (jsRes.ok) {
+            codeEl.textContent = await jsRes.text();
+            if (window.hljs) hljs.highlightElement(codeEl);
+        } else {
+            codeEl.textContent = `// ${m.js} 로드 실패: HTTP ${jsRes.status}`;
+        }
+    } catch (e) {
+        docEl.innerHTML = `<div class="error">${e.message}</div>`;
+    }
+}
+
+init();
+</script>
+</body>
+</html>

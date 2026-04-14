@@ -25,7 +25,11 @@
 | TabulatorMixin | Tabulator 인스턴스를 생성하고 관리한다 |
 | HeatmapJsMixin | heatmap.js 기반 열 분포를 시각화하고 관리한다 |
 | MeshStateMixin | 3D 메시의 시각 상태를 데이터에 따라 변경한다 |
+| MeshHighlightMixin | 선택한 대상을 시각적으로 강조한다 |
+| MeshVisibilityMixin | 3D 장면의 특정 부분을 선택적으로 보여준다 |
 | CameraFocusMixin | 보는 위치를 전환한다 |
+| AnimationMixin | 3D 모델의 동작을 재현한다 (GLTF AnimationClip 재생/정지/속도 제어) |
+| ClippingPlaneMixin | 3D 모델의 내부를 보여준다 (ClippingPlane으로 절단면 표시) |
 | ShadowPopupMixin | Shadow DOM으로 팝업을 생성하고 표시/숨김을 관리한다 |
 | 3DShadowPopupMixin | 3D 컴포넌트에서 Shadow DOM으로 팝업을 생성하고 표시/숨김을 관리한다 |
 
@@ -50,6 +54,10 @@
 | TabulatorMixin | [TabulatorMixin.md](TabulatorMixin.md) |
 | HeatmapJsMixin | [HeatmapJsMixin.md](HeatmapJsMixin.md) |
 | MeshStateMixin | [MeshStateMixin.md](MeshStateMixin.md) |
+| MeshHighlightMixin | [MeshHighlightMixin.md](MeshHighlightMixin.md) |
+| MeshVisibilityMixin | [MeshVisibilityMixin.md](MeshVisibilityMixin.md) |
 | CameraFocusMixin | [CameraFocusMixin.md](CameraFocusMixin.md) |
+| AnimationMixin | [AnimationMixin.md](AnimationMixin.md) |
+| ClippingPlaneMixin | [ClippingPlaneMixin.md](ClippingPlaneMixin.md) |
 | ShadowPopupMixin | [ShadowPopupMixin.md](ShadowPopupMixin.md) |
 | 3DShadowPopupMixin | [3DShadowPopupMixin.md](3DShadowPopupMixin.md) |
