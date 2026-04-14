@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chips/Filter/Standard — 01_refined</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <script src="../../../../../preview_runtime.js"></script>
+    <script src="../../../../../Mixins/ListRenderMixin.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #08111a;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+      }
+      .preview-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-grid">
+      <div id="chip-1"></div>
+      <div id="chip-2"></div>
+    </div>
+    <script>
+      (async () => {
+        const ids = ["chip-1", "chip-2"];
+        await Promise.all(
+          ids.map((id) =>
+            loadComponentAssets(
+              id,
+              "../views/01_refined.html",
+              "../styles/01_refined.css",
+            ),
+          ),
+        );
+
+        const createInstance = (id) => {
+          const instance = { id, appendElement: document.getElementById(id) };
+          applyListRenderMixin(instance, {
+            cssSelectors: {
+              container: ".filter-chips",
+              template: "#filter-chip-item-template",
+              item: ".filter-chip",
+              id: ".filter-chip",
+              selected: ".filter-chip",
+              disabled: ".filter-chip",
+              leadingIcon: ".filter-chip__icon",
+              label: ".filter-chip__label",
+            },
+            itemKey: "id",
+            datasetAttrs: {
+              id: "id",
+              selected: "selected",
+              disabled: "disabled",
+            },
+          });
+          instance.toggleItem = function (targetId) {
+            const target = this.appendElement.querySelector(
+              `${this.listRender.cssSelectors.item}[data-id="${String(targetId)}"]`,
+            );
+            if (!target || target.dataset.disabled === "true") return;
+            target.setAttribute(
+              "data-selected",
+              target.dataset.selected === "true" ? "false" : "true",
+            );
+          };
+          instance.customEvents = {
+            click: {
+              [instance.listRender.cssSelectors.item]: "@filterChipClicked",
+            },
+          };
+          Wkit.bindEvents(instance, instance.customEvents);
+          return instance;
+        };
+
+        const primary = createInstance("chip-1");
+        const secondary = createInstance("chip-2");
+
+        Wkit.onEventBusHandlers({
+          "@filterChipClicked": ({ targetInstance, event }) => {
+            const el = event.target.closest(".filter-chip");
+            const id = el?.dataset.id;
+            targetInstance?.toggleItem(id);
+            console.log(
+              "[Preview] Filter chip clicked:",
+              targetInstance?.id,
+              id,
+              el?.dataset.selected,
+            );
+          },
+        });
+
+        primary.listRender.renderData({
+          response: [
+            {
+              id: "critical",
+              selected: "true",
+              disabled: "false",
+              leadingIcon: "priority_high",
+              label: "Critical",
+            },
+            {
+              id: "warning",
+              selected: "false",
+              disabled: "false",
+              leadingIcon: "warning",
+              label: "Warning",
+            },
+            {
+              id: "offline",
+              selected: "false",
+              disabled: "true",
+              leadingIcon: "wifi_off",
+              label: "Offline",
+            },
+          ],
+        });
+
+        secondary.listRender.renderData({
+          response: [
+            {
+              id: "cooling",
+              selected: "false",
+              disabled: "false",
+              leadingIcon: "mode_fan",
+              label: "Cooling",
+            },
+            {
+              id: "power",
+              selected: "true",
+              disabled: "false",
+              leadingIcon: "bolt",
+              label: "Power",
+            },
+            {
+              id: "security",
+              selected: "false",
+              disabled: "false",
+              leadingIcon: "lock",
+              label: "Security",
+            },
+          ],
+        });
+      })();
+    </script>
+  </body>
+</html>

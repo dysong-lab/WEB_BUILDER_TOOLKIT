@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Checkbox/Standard — 01_refined</title>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/ListRenderMixin.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #08111a;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+        gap: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="checkbox-1"></div>
+    <div id="checkbox-2"></div>
+    <script>
+      (async () => {
+        const ids = ["checkbox-1", "checkbox-2"];
+        await Promise.all(
+          ids.map((id) =>
+            loadComponentAssets(
+              id,
+              "../views/01_refined.html",
+              "../styles/01_refined.css",
+            ),
+          ),
+        );
+
+        const createInstance = (id) => {
+          const instance = { id, appendElement: document.getElementById(id) };
+          applyListRenderMixin(instance, {
+            cssSelectors: {
+              container: ".checkbox-group",
+              template: "#checkbox-item-template",
+              item: ".checkbox-item",
+              id: ".checkbox-item",
+              checked: ".checkbox-item",
+              disabled: ".checkbox-item",
+              label: ".checkbox-item__label",
+            },
+            itemKey: "id",
+            datasetAttrs: {
+              id: "id",
+              checked: "checked",
+              disabled: "disabled",
+            },
+          });
+          instance.toggleItem = function (targetId) {
+            const target = this.appendElement.querySelector(
+              `${this.listRender.cssSelectors.item}[data-id="${String(targetId)}"]`,
+            );
+            if (!target || target.dataset.disabled === "true") return;
+            target.setAttribute(
+              "data-checked",
+              target.dataset.checked === "true" ? "false" : "true",
+            );
+          };
+          instance.customEvents = {
+            click: {
+              [instance.listRender.cssSelectors.item]: "@checkboxChanged",
+            },
+          };
+          Wkit.bindEvents(instance, instance.customEvents);
+          return instance;
+        };
+
+        const primary = createInstance("checkbox-1");
+        const secondary = createInstance("checkbox-2");
+
+        Wkit.onEventBusHandlers({
+          "@checkboxChanged": ({ targetInstance, event }) => {
+            const el = event.target.closest(".checkbox-item");
+            const id = el?.dataset.id;
+            targetInstance?.toggleItem(id);
+            console.log(
+              "[Preview] Checkbox changed:",
+              targetInstance?.id,
+              id,
+              el?.dataset.checked,
+            );
+          },
+        });
+
+        primary.listRender.renderData({
+          response: [
+            { id: "cpu", label: "CPU 모니터링", checked: "true", disabled: "false" },
+            { id: "mem", label: "메모리 모니터링", checked: "false", disabled: "false" },
+            { id: "disk", label: "디스크 모니터링", checked: "true", disabled: "false" },
+            { id: "net", label: "네트워크 (점검 중)", checked: "false", disabled: "true" },
+          ],
+        });
+
+        secondary.listRender.renderData({
+          response: [
+            { id: "alert-email", label: "이메일 알림", checked: "true", disabled: "false" },
+            { id: "alert-sms", label: "SMS 알림", checked: "false", disabled: "false" },
+            { id: "alert-slack", label: "Slack 알림", checked: "true", disabled: "false" },
+          ],
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Trees/Standard — 02_material (Persona B)</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        background: #edf1f7;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+        color: #1b1b1f;
+        font-family: "Roboto", -apple-system, sans-serif;
+      }
+      .preview-card {
+        width: min(100%, 640px);
+        padding: 24px;
+        border-radius: 28px;
+        background: #ffffff;
+        box-shadow: 0 20px 44px rgba(40, 46, 54, 0.08);
+      }
+      .preview-card h1 { font-size: 24px; font-weight: 400; }
+      .preview-card p {
+        margin-top: 8px;
+        font-size: 14px;
+        line-height: 1.6;
+        color: #6f6877;
+      }
+      .preview-actions { display: flex; gap: 10px; margin-top: 18px; }
+      .preview-actions button {
+        height: 36px;
+        padding: 0 14px;
+        border: 0;
+        border-radius: 999px;
+        background: #6750a4;
+        color: #ffffff;
+        cursor: pointer;
+      }
+      #tree-container { margin-top: 18px; }
+    </style>
+  </head>
+  <body>
+    <section class="preview-card">
+      <h1>Trees / Standard</h1>
+      <p>설정 구조나 네비게이션 계층에 맞는 밝은 서피스 기반 트리 예시입니다.</p>
+      <div class="preview-actions">
+        <button type="button" class="expand-all">Expand all</button>
+        <button type="button" class="collapse-all">Collapse all</button>
+      </div>
+      <div id="tree-container"></div>
+    </section>
+
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/TreeRenderMixin.js"></script>
+    <script>
+      (async () => {
+        await loadComponentAssets("tree-container", "../views/02_material.html", "../styles/02_material.css");
+
+        const data = [
+          {
+            id: "settings",
+            icon: "◫",
+            label: "Settings",
+            meta: "6 groups",
+            children: [
+              { id: "settings-audio", icon: "•", label: "Audio", meta: "Enabled", children: [] },
+              {
+                id: "settings-notify",
+                icon: "▣",
+                label: "Notifications",
+                meta: "3 channels",
+                tone: "warning",
+                children: [
+                  { id: "settings-notify-mail", icon: "•", label: "Email", meta: "Immediate", children: [] },
+                ],
+              },
+            ],
+          },
+        ];
+
+        const instance = { appendElement: document.getElementById("tree-container") };
+        applyTreeRenderMixin(instance, {
+          cssSelectors: {
+            container: ".tree__list", template: "#tree-node-template", node: ".tree__node",
+            toggle: ".tree__toggle", content: ".tree__content", icon: ".tree__icon",
+            label: ".tree__label", meta: ".tree__meta", tone: ".tree__node", empty: ".tree__empty",
+          },
+          nodeKey: "id", childrenKey: "children", datasetAttrs: { tone: "tone" },
+        });
+
+        const setSelectedNode = (nodeId) => {
+          instance.appendElement.querySelectorAll(".tree__node").forEach((node) => {
+            node.setAttribute("data-selected", node.dataset.nodeId === String(nodeId) ? "true" : "false");
+          });
+        };
+
+        instance.treeRender.renderData({ response: data });
+        instance.treeRender.collapseAll();
+
+        instance.appendElement.addEventListener("click", (event) => {
+          const toggle = event.target.closest(".tree__toggle");
+          if (toggle) {
+            const node = toggle.closest(".tree__node");
+            const nodeId = node?.dataset.nodeId;
+            if (nodeId && node?.dataset.hasChildren === "true") {
+              instance.treeRender.toggle(nodeId);
+              console.log("[Trees/Standard Preview] toggled:", nodeId, instance.treeRender.getNodeState(nodeId));
+            }
+            return;
+          }
+
+          const content = event.target.closest(".tree__content");
+          if (!content) return;
+          const node = content.closest(".tree__node");
+          const nodeId = node?.dataset.nodeId;
+          if (nodeId) {
+            setSelectedNode(nodeId);
+            console.log("[Trees/Standard Preview] selected:", nodeId);
+          }
+        });
+
+        document.querySelector(".expand-all").addEventListener("click", () => instance.treeRender.expandAll());
+        document.querySelector(".collapse-all").addEventListener("click", () => instance.treeRender.collapseAll());
+      })();
+    </script>
+  </body>
+</html>

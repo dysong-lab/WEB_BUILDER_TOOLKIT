@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Dialogs/Standard — 02_material (Persona B)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            background: #eef2f8;
+            font-family: 'Roboto', -apple-system, sans-serif;
+            color: #1b1b1f;
+        }
+        .preview-shell {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+        .preview-card {
+            width: min(100%, 520px);
+            padding: 32px;
+            border-radius: 28px;
+            background: #ffffff;
+            box-shadow: 0 20px 44px rgba(40, 46, 54, 0.08);
+        }
+        .preview-card h1 {
+            font-size: 28px;
+            font-weight: 400;
+        }
+        .preview-card p {
+            margin-top: 12px;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #5f6368;
+        }
+        .preview-trigger {
+            margin-top: 24px;
+            height: 42px;
+            padding: 0 20px;
+            border: 0;
+            border-radius: 999px;
+            background: #6750a4;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="preview-shell">
+    <div class="preview-card">
+        <h1>Dialogs / Standard</h1>
+        <p>MD3 스타일의 기본 다이얼로그입니다. 열린 상태에서 취소, 확인, 바깥 영역 클릭 이벤트를 각각 확인할 수 있습니다.</p>
+        <button type="button" class="preview-trigger">Open Dialog</button>
+        <div id="dialogs-standard-container"></div>
+    </div>
+</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/ShadowPopupMixin.js"></script>
+<script src="../../../../Mixins/FieldRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('dialogs-standard-container', '../views/02_material.html', '../styles/02_material.css');
+
+    const instance = {
+        id: 'dialogs-standard',
+        appendElement: document.getElementById('dialogs-standard-container')
+    };
+
+    instance._popupScope = null;
+    instance._closeTimer = null;
+    instance._dialogMotionDuration = 280;
+
+    applyShadowPopupMixin(instance, {
+        cssSelectors: {
+            template:       '#dialog-popup-template',
+            overlay:        '.dialog__overlay',
+            surface:        '.dialog__surface',
+            headline:       '.dialog__headline',
+            supportingText: '.dialog__supporting-text',
+            closeBtn:       '.dialog__close',
+            cancelBtn:      '.dialog__cancel',
+            confirmBtn:     '.dialog__confirm'
+        },
+        onCreated: (shadowRoot) => {
+            instance._popupScope = { appendElement: shadowRoot };
+            applyFieldRenderMixin(instance._popupScope, {
+                cssSelectors: {
+                    headline:       '.dialog__headline',
+                    supportingText: '.dialog__supporting-text',
+                    confirmLabel:   '.dialog__confirm-label',
+                    cancelLabel:    '.dialog__cancel-label'
+                }
+            });
+        }
+    });
+
+    instance.openDialog = function(payload = {}) {
+        const { response = {} } = payload;
+
+        if (instance._closeTimer) {
+            clearTimeout(instance._closeTimer);
+            instance._closeTimer = null;
+        }
+
+        instance.shadowPopup.show();
+
+        const overlay = instance.shadowPopup.query(instance.shadowPopup.cssSelectors.overlay);
+        if (overlay) {
+            overlay.dataset.state = 'closed';
+            void overlay.offsetWidth;
+            requestAnimationFrame(() => {
+                overlay.dataset.state = 'open';
+            });
+        }
+
+        instance._popupScope.fieldRender.renderData({
+            response: {
+                headline:       response.headline ?? '',
+                supportingText: response.supportingText ?? '',
+                confirmLabel:   response.confirmLabel ?? 'Confirm',
+                cancelLabel:    response.cancelLabel ?? 'Cancel'
+            }
+        });
+    };
+
+    instance.closeDialog = function() {
+        const overlay = instance.shadowPopup.query(instance.shadowPopup.cssSelectors.overlay);
+        if (!overlay) {
+            instance.shadowPopup.hide();
+            return;
+        }
+
+        if (instance._closeTimer) {
+            clearTimeout(instance._closeTimer);
+        }
+
+        overlay.dataset.state = 'closing';
+        instance._closeTimer = setTimeout(() => {
+            instance.shadowPopup.hide();
+            overlay.dataset.state = 'closed';
+            instance._closeTimer = null;
+        }, instance._dialogMotionDuration);
+    };
+
+    instance.shadowPopup.bindPopupEvents({
+        click: {
+            [instance.shadowPopup.cssSelectors.overlay]: (event) => {
+                if (event.target.closest(instance.shadowPopup.cssSelectors.surface)) return;
+                Weventbus.emit('@dialogDismissed', { event, targetInstance: instance });
+            },
+            [instance.shadowPopup.cssSelectors.closeBtn]: '@dialogClosed',
+            [instance.shadowPopup.cssSelectors.cancelBtn]: '@dialogCancelled',
+            [instance.shadowPopup.cssSelectors.confirmBtn]: '@dialogConfirmed'
+        }
+    });
+
+    Wkit.onEventBusHandlers({
+        '@dialogDismissed': ({ targetInstance }) => {
+            console.log('[Preview] dialog dismissed');
+            targetInstance.closeDialog();
+        },
+        '@dialogClosed': ({ targetInstance }) => {
+            console.log('[Preview] dialog closed');
+            targetInstance.closeDialog();
+        },
+        '@dialogCancelled': ({ targetInstance }) => {
+            console.log('[Preview] dialog cancelled');
+            targetInstance.closeDialog();
+        },
+        '@dialogConfirmed': ({ targetInstance }) => {
+            console.log('[Preview] dialog confirmed');
+            targetInstance.closeDialog();
+        }
+    });
+
+    document.querySelector('.preview-trigger').addEventListener('click', () => {
+        instance.openDialog({
+            response: {
+                headline: 'Sync project changes now?',
+                supportingText: 'Recent edits will be published to the shared environment. Team members may see the updated dashboard immediately after the sync finishes.',
+                confirmLabel: 'Sync',
+                cancelLabel: 'Later'
+            }
+        });
+    });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Divider/Standard — 01_refined (Persona A)</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #09111b;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+        color: #d7e9ff;
+        font-family: "SUIT", "Pretendard", sans-serif;
+      }
+      .preview-grid {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+        align-items: stretch;
+      }
+      .scene {
+        width: 320px;
+        min-height: 220px;
+        padding: 24px;
+        border-radius: 24px;
+        background:
+          radial-gradient(circle at top left, rgba(180, 214, 255, 0.18), transparent 42%),
+          linear-gradient(180deg, #0d1827 0%, #09111c 100%);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.1),
+          0 18px 44px rgba(4, 9, 18, 0.42);
+      }
+      .scene h2 {
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: -0.3px;
+      }
+      .stack {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin-top: 18px;
+      }
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13px;
+        color: rgba(215, 233, 255, 0.78);
+      }
+      .vertical-layout {
+        display: flex;
+        align-items: stretch;
+        gap: 18px;
+        margin-top: 18px;
+        min-height: 132px;
+      }
+      .column {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .metric {
+        padding: 12px 0;
+      }
+      .metric strong {
+        display: block;
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: -0.6px;
+      }
+      .metric span {
+        display: block;
+        margin-top: 6px;
+        font-size: 12px;
+        color: rgba(215, 233, 255, 0.62);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-grid">
+      <section class="scene">
+        <h2>Section Break</h2>
+        <div class="stack">
+          <div class="row"><span>Overview</span><span>Ready</span></div>
+          <div id="divider-horizontal"></div>
+          <div class="row"><span>Network Audit</span><span>12 items</span></div>
+          <div class="row"><span>Signal Review</span><span>3 alerts</span></div>
+        </div>
+      </section>
+      <section class="scene">
+        <h2>Inset List</h2>
+        <div class="stack">
+          <div class="row"><span>Cooling Loop</span><span>Stable</span></div>
+          <div id="divider-inset"></div>
+          <div class="row"><span>Voltage Bus</span><span>Nominal</span></div>
+          <div class="row"><span>Failsafe Mesh</span><span>Watching</span></div>
+        </div>
+      </section>
+      <section class="scene">
+        <h2>Split Panel</h2>
+        <div class="vertical-layout">
+          <div class="column">
+            <div class="metric"><strong>24</strong><span>Active nodes</span></div>
+            <div class="metric"><strong>98%</strong><span>Link integrity</span></div>
+          </div>
+          <div id="divider-vertical"></div>
+          <div class="column">
+            <div class="metric"><strong>3</strong><span>Pending checks</span></div>
+            <div class="metric"><strong>0.6s</strong><span>Sync delay</span></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script src="../../../../preview_runtime.js"></script>
+    <script>
+      (async () => {
+        const previewIds = [
+          "divider-horizontal",
+          "divider-inset",
+          "divider-vertical",
+        ];
+
+        await Promise.all(
+          previewIds.map((id) =>
+            loadComponentAssets(
+              id,
+              "../views/01_refined.html",
+              "../styles/01_refined.css",
+            ),
+          ),
+        );
+
+        const applyDividerInfo = (id, data) => {
+          const root = document.getElementById(id).querySelector(".md-divider");
+          if (!root) return;
+
+          const orientation =
+            data?.orientation === "vertical" ? "vertical" : "horizontal";
+          const inset =
+            data?.inset === "start" || data?.inset === "both"
+              ? data.inset
+              : "full";
+          const thicknessValue = Number(data?.thickness);
+          const thickness =
+            Number.isFinite(thicknessValue) && thicknessValue >= 1
+              ? Math.round(thicknessValue)
+              : 1;
+          const emphasis = data?.emphasis === "strong" ? "strong" : "subtle";
+
+          root.dataset.orientation = orientation;
+          root.dataset.inset = inset;
+          root.dataset.emphasis = emphasis;
+          root.style.setProperty("--divider-thickness", `${thickness}px`);
+          root.setAttribute("aria-orientation", orientation);
+        };
+
+        applyDividerInfo("divider-horizontal", {
+          orientation: "horizontal",
+          inset: "full",
+          thickness: 1,
+          emphasis: "subtle",
+        });
+        applyDividerInfo("divider-inset", {
+          orientation: "horizontal",
+          inset: "both",
+          thickness: 2,
+          emphasis: "strong",
+        });
+        applyDividerInfo("divider-vertical", {
+          orientation: "vertical",
+          inset: "start",
+          thickness: 2,
+          emphasis: "subtle",
+        });
+      })();
+    </script>
+  </body>
+</html>

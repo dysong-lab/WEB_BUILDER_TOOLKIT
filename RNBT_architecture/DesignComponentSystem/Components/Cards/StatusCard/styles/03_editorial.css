@@ -1,0 +1,75 @@
+.status-card {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 320px;
+    padding: 26px;
+    border-radius: 28px;
+    cursor: pointer;
+}
+
+.status-card--editorial {
+    background: linear-gradient(180deg, rgba(255, 251, 245, 0.96) 0%, rgba(245, 238, 227, 0.96) 100%);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.88),
+        0 16px 34px rgba(111, 89, 62, 0.16);
+    color: #34261d;
+}
+
+.status-card__header,
+.status-card__meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.status-card__eyebrow,
+.status-card__meta-label {
+    color: #8d7561;
+    font-family: "Iowan Old Style", "Times New Roman", serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.status-card__name {
+    font-family: "Iowan Old Style", "Times New Roman", serif;
+    font-size: 31px;
+    font-weight: 700;
+}
+
+.status-card__status {
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-family: "SUIT", "Pretendard", sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.status-card__status[data-status="RUNNING"] {
+    background: #efe6d4;
+    color: #6b5031;
+}
+
+.status-card__status[data-status="unknown"] {
+    background: rgba(141, 117, 97, 0.12);
+    color: #8d7561;
+}
+
+.status-card__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(141, 117, 97, 0.16);
+}
+
+.status-card__version,
+.status-card__uptime {
+    font-family: "SUIT", "Pretendard", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+}

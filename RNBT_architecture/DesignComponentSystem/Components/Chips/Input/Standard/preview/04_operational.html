@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chips/Input/Standard — 04_operational</title>
+    <script src="../../../../../preview_runtime.js"></script>
+    <script src="../../../../../Mixins/ListRenderMixin.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #050b13;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="chip-root"></div>
+    <script>
+      (async () => {
+        await loadComponentAssets(
+          "chip-root",
+          "../views/04_operational.html",
+          "../styles/04_operational.css",
+        );
+        const instance = {
+          id: "chip-root",
+          appendElement: document.getElementById("chip-root"),
+        };
+        applyListRenderMixin(instance, {
+          cssSelectors: {
+            container: ".input-chips",
+            template: "#input-chip-item-template",
+            item: ".input-chip",
+            id: ".input-chip",
+            disabled: ".input-chip",
+            avatar: ".input-chip__avatar",
+            label: ".input-chip__label",
+            removeBtn: ".input-chip__remove",
+            removeId: ".input-chip__remove",
+          },
+          itemKey: "id",
+          datasetAttrs: {
+            id: "id",
+            removeId: "id",
+            disabled: "disabled",
+          },
+        });
+        instance.removeItem = function (targetId) {
+          const target = this.appendElement.querySelector(
+            `${this.listRender.cssSelectors.item}[data-id="${String(targetId)}"]`,
+          );
+          if (!target || target.dataset.disabled === "true") return;
+          target.remove();
+        };
+        instance.customEvents = {
+          click: {
+            [instance.listRender.cssSelectors.removeBtn]:
+              "@inputChipRemoveClicked",
+          },
+        };
+        Wkit.bindEvents(instance, instance.customEvents);
+        Wkit.onEventBusHandlers({
+          "@inputChipRemoveClicked": ({ targetInstance, event }) => {
+            const el = event.target.closest(".input-chip__remove");
+            const id = el?.dataset.id;
+            targetInstance?.removeItem(id);
+            console.log(
+              "[Preview] Input chip remove clicked:",
+              targetInstance?.id,
+              id,
+            );
+          },
+        });
+        instance.listRender.renderData({
+          response: [
+            { id: "rack-1", disabled: "false", avatar: "R1", label: "Rack-1" },
+            { id: "rack-2", disabled: "false", avatar: "R2", label: "Rack-2" },
+            { id: "rack-3", disabled: "false", avatar: "R3", label: "Rack-3" },
+          ],
+        });
+      })();
+    </script>
+  </body>
+</html>

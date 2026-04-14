@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Charts/LineChart — 04_operational</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        min-height: 100vh;
+        padding: 40px 20px;
+        background:
+          radial-gradient(
+            circle at top,
+            rgba(47, 255, 228, 0.08),
+            transparent 30%
+          ),
+          #020c0f;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="line-chart-container"></div>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/EChartsMixin.js"></script>
+    <script>
+      (async () => {
+        await loadComponentAssets(
+          "line-chart-container",
+          "../views/04_operational.html",
+          "../styles/04_operational.css",
+        );
+        const instance = {
+          id: "line-chart",
+          appendElement: document.getElementById("line-chart-container"),
+        };
+        applyEChartsMixin(instance, {
+          cssSelectors: { container: ".line-chart__canvas" },
+          option: {
+            animationDuration: 500,
+            grid: {
+              top: 16,
+              right: 8,
+              bottom: 12,
+              left: 8,
+              containLabel: true,
+            },
+            tooltip: {
+              trigger: "axis",
+              backgroundColor: "#061519",
+              borderColor: "rgba(47,255,228,0.18)",
+              borderWidth: 1,
+              textStyle: { color: "#d9fff7", fontFamily: "IBM Plex Mono" },
+            },
+            legend: { show: false },
+            xAxis: {
+              type: "category",
+              axisLine: { lineStyle: { color: "rgba(51,255,231,0.18)" } },
+              axisTick: { show: false },
+              axisLabel: {
+                color: "rgba(123,255,240,0.72)",
+                fontSize: 11,
+                fontFamily: "IBM Plex Mono",
+              },
+            },
+            yAxis: {
+              type: "value",
+              splitLine: { lineStyle: { color: "rgba(51,255,231,0.1)" } },
+              axisLabel: {
+                color: "rgba(123,255,240,0.58)",
+                fontSize: 11,
+                fontFamily: "IBM Plex Mono",
+              },
+            },
+            series: [
+              {
+                name: "Inbound",
+                type: "line",
+                smooth: 0.45,
+                symbol: "none",
+                lineStyle: { width: 3, color: "#2fffe4" },
+              },
+              {
+                name: "Outbound",
+                type: "line",
+                smooth: 0.45,
+                symbol: "none",
+                lineStyle: { width: 3, color: "#ff6d6d" },
+              },
+            ],
+          },
+        });
+        instance.subscriptions = { chartData: [instance.echarts.renderData] };
+        Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+          handlers.forEach((handler) =>
+            GlobalDataPublisher.subscribe(topic, instance, handler),
+          ),
+        );
+        instance.customEvents = {};
+        Wkit.bindEvents(instance, instance.customEvents);
+        instance.echarts.renderData({
+          response: {
+            categories: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+            values: [
+              [42, 58, 49, 71, 65, 74],
+              [36, 44, 41, 59, 55, 62],
+            ],
+          },
+        });
+      })();
+    </script>
+  </body>
+</html>

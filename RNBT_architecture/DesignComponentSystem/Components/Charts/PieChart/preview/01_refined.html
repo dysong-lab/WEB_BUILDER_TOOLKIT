@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Charts/PieChart — 01_refined</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        min-height: 100vh;
+        padding: 40px 20px;
+        background:
+          radial-gradient(
+            circle at top,
+            rgba(65, 116, 188, 0.25),
+            transparent 34%
+          ),
+          #07101b;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="pie-chart-container"></div>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/EChartsMixin.js"></script>
+    <script>
+      (async () => {
+        await loadComponentAssets(
+          "pie-chart-container",
+          "../views/01_refined.html",
+          "../styles/01_refined.css",
+        );
+        const instance = {
+          id: "pie-chart",
+          appendElement: document.getElementById("pie-chart-container"),
+        };
+        applyEChartsMixin(instance, {
+          cssSelectors: { container: ".pie-chart__canvas" },
+          option: {
+            tooltip: {
+              trigger: "item",
+              backgroundColor: "#08111d",
+              borderWidth: 0,
+              textStyle: { color: "#fff", fontFamily: "SUIT" },
+            },
+            legend: { show: false },
+            color: ["#78b7ff", "#53d2a2", "#ffd166", "#ff8a65", "#c9d6e8"],
+            series: [
+              {
+                type: "pie",
+                radius: ["52%", "74%"],
+                center: ["50%", "54%"],
+                itemStyle: { borderColor: "#0c1624", borderWidth: 3 },
+                label: {
+                  color: "rgba(205,225,255,0.76)",
+                  fontFamily: "SUIT",
+                  fontSize: 12,
+                },
+                labelLine: { lineStyle: { color: "rgba(205,225,255,0.24)" } },
+              },
+            ],
+          },
+          mapData: function (data, option) {
+            option.series[0].data = data.items;
+            return option;
+          },
+        });
+        instance.subscriptions = { chartData: [instance.echarts.renderData] };
+        Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+          handlers.forEach((handler) =>
+            GlobalDataPublisher.subscribe(topic, instance, handler),
+          ),
+        );
+        instance.customEvents = {};
+        Wkit.bindEvents(instance, instance.customEvents);
+        instance.echarts.renderData({
+          response: {
+            items: [
+              { name: "Core", value: 40 },
+              { name: "Edge", value: 24 },
+              { name: "API", value: 18 },
+              { name: "Batch", value: 12 },
+              { name: "Other", value: 6 },
+            ],
+          },
+        });
+      })();
+    </script>
+  </body>
+</html>

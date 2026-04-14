@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Charts/PieChart — 04_operational</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        min-height: 100vh;
+        padding: 40px 20px;
+        background:
+          radial-gradient(
+            circle at top,
+            rgba(47, 255, 228, 0.08),
+            transparent 30%
+          ),
+          #020c0f;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="pie-chart-container"></div>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/EChartsMixin.js"></script>
+    <script>
+      (async () => {
+        await loadComponentAssets(
+          "pie-chart-container",
+          "../views/04_operational.html",
+          "../styles/04_operational.css",
+        );
+        const instance = {
+          id: "pie-chart",
+          appendElement: document.getElementById("pie-chart-container"),
+        };
+        applyEChartsMixin(instance, {
+          cssSelectors: { container: ".pie-chart__canvas" },
+          option: {
+            tooltip: {
+              trigger: "item",
+              backgroundColor: "#061519",
+              borderColor: "rgba(47,255,228,0.18)",
+              borderWidth: 1,
+              textStyle: { color: "#d9fff7", fontFamily: "IBM Plex Mono" },
+            },
+            legend: { show: false },
+            color: ["#2fffe4", "#ff6d6d", "#ffd166", "#7ab8ff", "#8ff0c6"],
+            series: [
+              {
+                type: "pie",
+                radius: ["52%", "74%"],
+                center: ["50%", "54%"],
+                itemStyle: { borderColor: "#041216", borderWidth: 3 },
+                label: {
+                  color: "rgba(217,255,247,0.72)",
+                  fontFamily: "IBM Plex Mono",
+                  fontSize: 11,
+                },
+                labelLine: { lineStyle: { color: "rgba(51,255,231,0.22)" } },
+              },
+            ],
+          },
+          mapData: function (data, option) {
+            option.series[0].data = data.items;
+            return option;
+          },
+        });
+        instance.subscriptions = { chartData: [instance.echarts.renderData] };
+        Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+          handlers.forEach((handler) =>
+            GlobalDataPublisher.subscribe(topic, instance, handler),
+          ),
+        );
+        instance.customEvents = {};
+        Wkit.bindEvents(instance, instance.customEvents);
+        instance.echarts.renderData({
+          response: {
+            items: [
+              { name: "Core", value: 40 },
+              { name: "Edge", value: 24 },
+              { name: "API", value: 18 },
+              { name: "Batch", value: 12 },
+              { name: "Other", value: 6 },
+            ],
+          },
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,8 @@
+.suggestion-chip-shell { display:inline-flex; padding:28px; border:1px solid #d8c9b6; background:#f7f0e7; }
+.suggestion-chips { display:flex; flex-wrap:wrap; gap:12px; }
+.suggestion-chip { display:inline-flex; align-items:center; gap:8px; min-height:38px; padding:0 16px; border:1px dotted #b99b7f; border-radius:999px; background:rgba(255,255,255,.72); color:#4f3e2d; cursor:pointer; }
+.suggestion-chip[data-selected="true"] { border-style:solid; border-color:#7a5838; background:#7a5838; color:#f8efe4; }
+.suggestion-chip[data-disabled="true"] { opacity:.4; cursor:not-allowed; }
+.suggestion-chip__icon { font-size:18px; }
+.suggestion-chip__icon:empty { display:none; }
+.suggestion-chip__label { font:600 14px/1 "Cormorant Garamond","Noto Serif KR",serif; letter-spacing:.4px; }

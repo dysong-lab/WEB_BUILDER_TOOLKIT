@@ -1,0 +1,8 @@
+.assist-chip-shell { display: inline-flex; padding: 24px; border-radius: 28px; background: radial-gradient(circle at top left, rgba(109, 244, 221, 0.24), transparent 42%), linear-gradient(180deg, #10283a 0%, #08131d 100%); }
+.assist-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.assist-chip { display: inline-flex; align-items: center; gap: 8px; min-height: 38px; padding: 0 16px; border: 1px solid rgba(171, 245, 234, 0.24); border-radius: 999px; background: rgba(133, 223, 212, 0.12); color: #dbfffa; cursor: pointer; transition: background 180ms ease, transform 180ms ease, border-color 180ms ease; }
+.assist-chip:hover { transform: translateY(-1px); border-color: rgba(171, 245, 234, 0.42); }
+.assist-chip[data-disabled="true"] { opacity: 0.4; cursor: not-allowed; transform: none; }
+.assist-chip__icon { font-size: 18px; }
+.assist-chip__icon:empty { display: none; }
+.assist-chip__label { font: 700 14px/1 "SUIT", "Pretendard", sans-serif; }

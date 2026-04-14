@@ -1,12 +1,13 @@
 /**
  * Badges — Standard
  *
- * 목적: 알림 수/카운트/상태 정보를 배지로 표시한다
- * 기능: FieldRenderMixin으로 배지 값 렌더링 + Small/Large 모드 전환
+ * 목적: 카운트와 상태를 배지 형태로 표시한다
+ * 기능: FieldRenderMixin으로 count를 렌더링하고 size/visible 상태를 동기화한다
  *
  * Mixin: FieldRenderMixin
  */
 const { subscribe } = GlobalDataPublisher;
+const { bindEvents } = Wkit;
 const { each, go } = fx;
 
 // ======================
@@ -15,29 +16,55 @@ const { each, go } = fx;
 
 applyFieldRenderMixin(this, {
     cssSelectors: {
+        anchor: '.badge-anchor',
         badge: '.badge',
-        label: '.badge__label'
+        count: '.badge__count'
     }
 });
 
-this.updateBadge = function({ response: data }) {
-    if (!data) return;
+this.normalizeBadgeCount = function(count) {
+    if (count === null || count === undefined || count === '' || count === 0 || count === '0') {
+        return { visible: false, text: '' };
+    }
 
-    const badgeEl = this.appendElement.querySelector(this.fieldRender.cssSelectors.badge);
-    if (!badgeEl) return;
+    const numericCount = Number(count);
+    if (!Number.isNaN(numericCount)) {
+        return {
+            visible: true,
+            text: numericCount > 99 ? '99+' : String(numericCount)
+        };
+    }
 
-    const count = data.count;
-    const hasCount = count !== undefined && count !== null && count > 0;
+    const textCount = String(count).trim();
+    if (!textCount) return { visible: false, text: '' };
 
-    if (hasCount) {
-        badgeEl.classList.remove('badge--small');
-        badgeEl.classList.add('badge--large');
-        const displayValue = count > 99 ? '99+' : String(count);
-        this.fieldRender.renderData({ response: { label: displayValue } });
+    return {
+        visible: true,
+        text: textCount.length > 4 ? textCount.slice(0, 4) : textCount
+    };
+};
+
+this.renderBadgeInfo = function({ response: data }) {
+    const badge = this.appendElement.querySelector(this.fieldRender.cssSelectors.badge);
+    if (!badge) return;
+
+    const normalized = this.normalizeBadgeCount(data?.count);
+    const size = data?.size === 'small' ? 'small' : 'large';
+
+    this.fieldRender.renderData({
+        response: {
+            count: size === 'small' ? '' : normalized.text
+        }
+    });
+
+    badge.dataset.size = size;
+    badge.dataset.visible = normalized.visible ? 'true' : 'false';
+    badge.setAttribute('aria-hidden', normalized.visible ? 'false' : 'true');
+
+    if (normalized.visible) {
+        badge.setAttribute('aria-label', `Badge ${normalized.text}`);
     } else {
-        badgeEl.classList.remove('badge--large');
-        badgeEl.classList.add('badge--small');
-        this.fieldRender.renderData({ response: { label: '' } });
+        badge.removeAttribute('aria-label');
     }
 };
 
@@ -46,7 +73,7 @@ this.updateBadge = function({ response: data }) {
 // ======================
 
 this.subscriptions = {
-    badgeInfo: [this.updateBadge]
+    badgeInfo: [this.renderBadgeInfo]
 };
 
 go(
@@ -60,4 +87,9 @@ go(
 // 3. 이벤트 매핑
 // ======================
 
-// 없음 (정보 표시 전용)
+this.customEvents = {
+    click: {
+        [this.fieldRender.cssSelectors.anchor]: '@badgeClicked'
+    }
+};
+bindEvents(this, this.customEvents);

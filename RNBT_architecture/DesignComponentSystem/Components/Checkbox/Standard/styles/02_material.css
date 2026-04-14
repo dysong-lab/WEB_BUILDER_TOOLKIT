@@ -1,0 +1,88 @@
+/* 02_material — Material Design 3 표준 스타일 */
+
+.checkbox-group-shell--material {
+  display: inline-flex;
+  padding: 24px;
+  border-radius: 16px;
+  background: #1c1b1f;
+}
+
+.checkbox-group-shell--material .checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 200px;
+}
+
+.checkbox-group-shell--material .checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 0 16px;
+  border-radius: 100px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 150ms ease;
+}
+
+.checkbox-group-shell--material .checkbox-item:hover {
+  background: rgba(208, 188, 255, 0.08);
+}
+
+.checkbox-group-shell--material .checkbox-item[data-disabled="true"] {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* 체크박스 박스 */
+.checkbox-group-shell--material .checkbox-item__box {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 2px;
+  border: 2px solid #938f99;
+  position: relative;
+  transition:
+    border-color 150ms ease,
+    background 150ms ease;
+}
+
+/* 체크마크 */
+.checkbox-group-shell--material .checkbox-item__box::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 5px;
+  height: 9px;
+  border: 2px solid transparent;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+  transition: border-color 100ms ease;
+}
+
+/* 체크 상태 */
+.checkbox-group-shell--material .checkbox-item[data-checked="true"] .checkbox-item__box {
+  border-color: #d0bcff;
+  background: #d0bcff;
+}
+
+.checkbox-group-shell--material .checkbox-item[data-checked="true"] .checkbox-item__box::after {
+  border-color: #381e72;
+}
+
+/* 레이블 */
+.checkbox-group-shell--material .checkbox-item__label {
+  font:
+    400 16px/1.5 "Roboto",
+    "SUIT",
+    sans-serif;
+  color: #e6e1e5;
+}
+
+.checkbox-group-shell--material .checkbox-item[data-disabled="true"] .checkbox-item__label {
+  color: rgba(230, 225, 229, 0.38);
+}

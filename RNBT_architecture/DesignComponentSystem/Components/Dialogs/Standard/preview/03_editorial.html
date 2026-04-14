@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Dialogs/Standard — 03_editorial (Persona C)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Instrument+Sans:wght@400;600&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(180deg, #f7f1e8, #efe5d9);
+            font-family: 'Instrument Sans', -apple-system, sans-serif;
+            color: #30251b;
+        }
+        .preview-shell {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+        .preview-card {
+            width: min(100%, 560px);
+            padding: 36px;
+            border: 1px solid rgba(69, 54, 35, 0.1);
+            border-radius: 28px;
+            background: rgba(255, 251, 244, 0.9);
+            box-shadow: 0 22px 48px rgba(69, 54, 35, 0.08);
+        }
+        .preview-card h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 42px;
+            line-height: 0.95;
+        }
+        .preview-card p {
+            margin-top: 16px;
+            font-size: 15px;
+            line-height: 1.75;
+            color: rgba(48, 37, 27, 0.8);
+        }
+        .preview-trigger {
+            margin-top: 24px;
+            height: 48px;
+            padding: 0 22px;
+            border: 1px solid #30251b;
+            border-radius: 999px;
+            background: #30251b;
+            color: #fffaf2;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="preview-shell">
+    <div class="preview-card">
+        <h1>Dialogs</h1>
+        <p>편집형 페르소나에서는 제목의 존재감과 넓은 행간을 중심으로 구성했습니다. 확인 버튼과 취소 버튼은 명확히 분리된 톤을 가집니다.</p>
+        <button type="button" class="preview-trigger">Open Dialog</button>
+        <div id="dialogs-standard-container"></div>
+    </div>
+</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/ShadowPopupMixin.js"></script>
+<script src="../../../../Mixins/FieldRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('dialogs-standard-container', '../views/03_editorial.html', '../styles/03_editorial.css');
+
+    const instance = {
+        id: 'dialogs-standard',
+        appendElement: document.getElementById('dialogs-standard-container')
+    };
+
+    instance._popupScope = null;
+    instance._closeTimer = null;
+    instance._dialogMotionDuration = 280;
+
+    applyShadowPopupMixin(instance, {
+        cssSelectors: {
+            template:       '#dialog-popup-template',
+            overlay:        '.dialog__overlay',
+            surface:        '.dialog__surface',
+            headline:       '.dialog__headline',
+            supportingText: '.dialog__supporting-text',
+            closeBtn:       '.dialog__close',
+            cancelBtn:      '.dialog__cancel',
+            confirmBtn:     '.dialog__confirm'
+        },
+        onCreated: (shadowRoot) => {
+            instance._popupScope = { appendElement: shadowRoot };
+            applyFieldRenderMixin(instance._popupScope, {
+                cssSelectors: {
+                    headline:       '.dialog__headline',
+                    supportingText: '.dialog__supporting-text',
+                    confirmLabel:   '.dialog__confirm-label',
+                    cancelLabel:    '.dialog__cancel-label'
+                }
+            });
+        }
+    });
+
+    instance.openDialog = function(payload = {}) {
+        const { response = {} } = payload;
+
+        if (instance._closeTimer) {
+            clearTimeout(instance._closeTimer);
+            instance._closeTimer = null;
+        }
+
+        instance.shadowPopup.show();
+
+        const overlay = instance.shadowPopup.query(instance.shadowPopup.cssSelectors.overlay);
+        if (overlay) {
+            overlay.dataset.state = 'closed';
+            void overlay.offsetWidth;
+            requestAnimationFrame(() => {
+                overlay.dataset.state = 'open';
+            });
+        }
+
+        instance._popupScope.fieldRender.renderData({
+            response: {
+                headline:       response.headline ?? '',
+                supportingText: response.supportingText ?? '',
+                confirmLabel:   response.confirmLabel ?? 'Confirm',
+                cancelLabel:    response.cancelLabel ?? 'Cancel'
+            }
+        });
+    };
+
+    instance.closeDialog = function() {
+        const overlay = instance.shadowPopup.query(instance.shadowPopup.cssSelectors.overlay);
+        if (!overlay) {
+            instance.shadowPopup.hide();
+            return;
+        }
+
+        if (instance._closeTimer) {
+            clearTimeout(instance._closeTimer);
+        }
+
+        overlay.dataset.state = 'closing';
+        instance._closeTimer = setTimeout(() => {
+            instance.shadowPopup.hide();
+            overlay.dataset.state = 'closed';
+            instance._closeTimer = null;
+        }, instance._dialogMotionDuration);
+    };
+
+    instance.shadowPopup.bindPopupEvents({
+        click: {
+            [instance.shadowPopup.cssSelectors.overlay]: (event) => {
+                if (event.target.closest(instance.shadowPopup.cssSelectors.surface)) return;
+                Weventbus.emit('@dialogDismissed', { event, targetInstance: instance });
+            },
+            [instance.shadowPopup.cssSelectors.closeBtn]: '@dialogClosed',
+            [instance.shadowPopup.cssSelectors.cancelBtn]: '@dialogCancelled',
+            [instance.shadowPopup.cssSelectors.confirmBtn]: '@dialogConfirmed'
+        }
+    });
+
+    Wkit.onEventBusHandlers({
+        '@dialogDismissed': ({ targetInstance }) => {
+            console.log('[Preview] dialog dismissed');
+            targetInstance.closeDialog();
+        },
+        '@dialogClosed': ({ targetInstance }) => {
+            console.log('[Preview] dialog closed');
+            targetInstance.closeDialog();
+        },
+        '@dialogCancelled': ({ targetInstance }) => {
+            console.log('[Preview] dialog cancelled');
+            targetInstance.closeDialog();
+        },
+        '@dialogConfirmed': ({ targetInstance }) => {
+            console.log('[Preview] dialog confirmed');
+            targetInstance.closeDialog();
+        }
+    });
+
+    document.querySelector('.preview-trigger').addEventListener('click', () => {
+        instance.openDialog({
+            response: {
+                headline: 'Archive this edition for handoff?',
+                supportingText: 'A snapshot of the current layout, linked assets, and publishing metadata will be stored for the editorial team. You can restore it later from revision history.',
+                confirmLabel: 'Archive',
+                cancelLabel: 'Review'
+            }
+        });
+    });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+.filter-chip-shell {
+  display: inline-flex;
+  padding: 24px;
+  border-radius: 24px;
+  background: #f7f2fa;
+}
+
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  padding: 0 16px;
+  border: 1px solid #79747e;
+  border-radius: 8px;
+  background: #f7f2fa;
+  color: #49454f;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.filter-chip[data-selected="true"] {
+  border-color: #c2e7ff;
+  background: #c2e7ff;
+  color: #001d35;
+}
+
+.filter-chip[data-disabled="true"] {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+.filter-chip__icon {
+  font-size: 18px;
+}
+
+.filter-chip__icon:empty {
+  display: none;
+}
+
+.filter-chip__label {
+  font:
+    500 14px/1 "Roboto",
+    "Noto Sans KR",
+    sans-serif;
+}

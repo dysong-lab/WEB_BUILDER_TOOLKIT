@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Chiller — 02_status_camera</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #1a1a2e; }
+        #chiller-pageThreeLayer {
+            width: 600px;
+            height: 480px;
+            display: block;
+            overflow: hidden;
+            margin: 40px auto;
+        }
+        canvas { display: block; }
+
+        .demo-controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px;
+        }
+        .demo-controls-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .demo-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #8888aa;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-right: 4px;
+        }
+        .demo-separator {
+            width: 1px;
+            height: 24px;
+            background: #2a2a4a;
+            margin: 0 8px;
+        }
+        .demo-btn {
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #ffffff;
+            transition: opacity 0.15s;
+        }
+        .demo-btn:hover { opacity: 0.8; }
+        .demo-btn[data-status="normal"]  { background: #34d399; }
+        .demo-btn[data-status="warning"] { background: #fbbf24; color: #1a1a2e; }
+        .demo-btn[data-status="error"]   { background: #f87171; }
+        .demo-btn[data-status="offline"] { background: #6b7280; }
+        .demo-btn[data-status="reset"]   { background: #3b82f6; }
+        .demo-btn[data-action="focus"]   { background: #8b5cf6; }
+        .demo-btn[data-action="reset-camera"] { background: #64748b; }
+    </style>
+</head>
+<body>
+    <div class="demo-controls">
+        <div class="demo-controls-group">
+            <span class="demo-label">Status</span>
+            <button class="demo-btn" data-status="normal">Normal</button>
+            <button class="demo-btn" data-status="warning">Warning</button>
+            <button class="demo-btn" data-status="error">Error</button>
+            <button class="demo-btn" data-status="offline">Offline</button>
+            <button class="demo-btn" data-status="reset">Reset</button>
+        </div>
+        <div class="demo-separator"></div>
+        <div class="demo-controls-group">
+            <span class="demo-label">Camera</span>
+            <button class="demo-btn" data-action="focus">Focus</button>
+            <button class="demo-btn" data-action="reset-camera">Reset</button>
+        </div>
+    </div>
+
+    <div id="chiller-pageThreeLayer"></div>
+
+    <!-- Mixin 로드 -->
+    <script src="../../../../Mixins/MeshStateMixin.js"></script>
+    <script src="../../../../Mixins/CameraFocusMixin.js"></script>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+    window.THREE = THREE;
+
+    // ── Three.js Scene Setup ──────────────────────────────────
+    const container = document.getElementById('chiller-pageThreeLayer');
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x1a1a2e);
+
+    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+    camera.position.set(2, 2, 3);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.target.set(0, 0, 0);
+
+    // ── Lighting ──────────────────────────────────────────────
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    directionalLight.position.set(5, 8, 4);
+    scene.add(directionalLight);
+
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
+    fillLight.position.set(-3, 2, -2);
+    scene.add(fillLight);
+
+    // ── Grid ──────────────────────────────────────────────────
+    scene.add(new THREE.GridHelper(10, 20, 0x2a2a4a, 0x2a2a4a));
+
+    // ── Mock Instance ─────────────────────────────────────────
+    const instance = { appendElement: null };
+
+    // ── Load Model ────────────────────────────────────────────
+    const loader = new GLTFLoader();
+
+    loader.load('../../../../models/Chiller/Chiller.gltf', (gltf) => {
+        const model = gltf.scene;
+        scene.add(model);
+
+        instance.appendElement = model;
+
+        // MeshStateMixin 적용
+        applyMeshStateMixin(instance, {
+            colorMap: {
+                normal:  0x34d399,
+                warning: 0xfbbf24,
+                error:   0xf87171,
+                offline: 0x6b7280
+            }
+        });
+
+        // CameraFocusMixin 적용
+        applyCameraFocusMixin(instance, {
+            camera,
+            controls,
+            duration: 1000
+        });
+
+        // 카메라 타겟 조정
+        const box = new THREE.Box3().setFromObject(model);
+        const center = box.getCenter(new THREE.Vector3());
+        controls.target.copy(center);
+        camera.position.set(center.x + 4, center.y + 2, center.z + 5);
+        controls.update();
+    });
+
+    // ── Render Loop ───────────────────────────────────────────
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // ── Demo: Status (renderData) ─────────────────────────────
+    document.querySelectorAll('.demo-btn[data-status]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            if (!instance.meshState) return;
+
+            const status = btn.dataset.status;
+
+            if (status === 'reset') {
+                const mesh = instance.appendElement.getObjectByName('chiller');
+                if (mesh) mesh.material.color.setHex(0xffffff);
+                return;
+            }
+
+            instance.meshState.renderData({
+                response: [{ meshName: 'chiller', status }]
+            });
+        });
+    });
+
+    // ── Demo: Camera (focusOn / reset) ────────────────────────
+    document.querySelectorAll('.demo-btn[data-action]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            if (!instance.cameraFocus) return;
+
+            const action = btn.dataset.action;
+
+            if (action === 'focus') {
+                instance.cameraFocus.focusOn({
+                    container: instance.appendElement,
+                    meshName: 'chiller',
+                    offset: { x: 1.5, y: 1.0, z: 3.0 }
+                });
+            } else if (action === 'reset-camera') {
+                instance.cameraFocus.reset();
+            }
+        });
+    });
+
+    // ── Resize ────────────────────────────────────────────────
+    window.addEventListener('resize', () => {
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+    });
+    </script>
+</body>
+</html>

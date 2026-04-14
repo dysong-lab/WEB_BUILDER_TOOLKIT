@@ -1,86 +1,42 @@
-/* 03_editorial: Persona C — Minimal Editorial
-   웜 그레이 / 세리프 제목 / 라이트 / Connected (버튼이 시각적으로 연결) */
-
-#btn-group-container {
-    width: 360px;
-    height: 48px;
-
-    .btn-group {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .btn-group__list {
-        display: flex;
-        flex-direction: row;
-    }
-
-    .btn-group--connected .btn-group__item {
-        border-right: none;
-    }
-
-    .btn-group--connected .btn-group__item:last-child {
-        border-right: 1px solid #D1CBC3;
-    }
-
-    .btn-group--connected .btn-group__item:first-child {
-        border-radius: 20px 0 0 20px;
-    }
-
-    .btn-group--connected .btn-group__item:last-child {
-        border-radius: 0 20px 20px 0;
-    }
-
-    .btn-group--connected .btn-group__item:not(:first-child):not(:last-child) {
-        border-radius: 0;
-    }
-
-    .btn-group__item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 0 24px;
-        height: 40px;
-        border: 1px solid #D1CBC3;
-        border-radius: 20px;
-        background: #FDFBF7;
-        cursor: pointer;
-        transition: background-color 150ms ease-out;
-    }
-
-    .btn-group__item:hover {
-        background: #F0EDE7;
-    }
-
-    .btn-group__item[data-selected="true"] {
-        background: #E8E2D9;
-        border-color: #8C7B6B;
-    }
-
-    .btn-group__icon {
-        font-size: 18px;
-        color: #8C7B6B;
-        flex-shrink: 0;
-    }
-
-    .btn-group__item[data-selected="true"] .btn-group__icon {
-        color: #4A3F35;
-    }
-
-    .btn-group__icon:empty {
-        display: none;
-    }
-
-    .btn-group__label {
-        font-family: 'Georgia', serif;
-        font-size: 14px;
-        font-weight: 400;
-        color: #8C7B6B;
-        white-space: nowrap;
-    }
-
-    .btn-group__item[data-selected="true"] .btn-group__label {
-        color: #3A3028;
-        font-weight: 700;
-    }
+.button-group-shell {
+  display: inline-flex;
+  padding: 24px;
+  border-radius: 28px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 251, 245, 0.96) 0%,
+    rgba(245, 238, 227, 0.96) 100%
+  );
+}
+.button-group {
+  display: flex;
+  gap: 10px;
+}
+.button-group__item {
+  min-width: 92px;
+  min-height: 42px;
+  padding: 0 16px;
+  border: 1px solid rgba(90, 67, 44, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 248, 239, 0.92);
+  color: #3c2d21;
+  cursor: pointer;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  transform: translateY(0);
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+.button-group__item[data-selected="true"] {
+  background: #6d5237;
+  color: #fff8ef;
+  box-shadow: 0 10px 18px rgba(111, 89, 62, 0.16);
+}
+.button-group__label {
+  font:
+    600 15px/1 "Iowan Old Style",
+    "Times New Roman",
+    serif;
 }

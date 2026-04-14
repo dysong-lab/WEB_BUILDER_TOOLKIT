@@ -1,0 +1,165 @@
+<div class="dialogs dialogs--refined" aria-hidden="true">
+    <template id="dialog-popup-template">
+        <style>
+            .dialog__overlay {
+                position: fixed;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 24px;
+                background:
+                    radial-gradient(circle at top, rgba(122, 92, 255, 0.22), transparent 42%),
+                    rgba(9, 11, 27, 0.78);
+                backdrop-filter: blur(16px);
+                opacity: 0;
+                transition: opacity 280ms cubic-bezier(0.22, 1, 0.36, 1);
+            }
+
+            .dialog__surface {
+                width: min(100%, 448px);
+                border: 1px solid rgba(155, 134, 255, 0.26);
+                border-radius: 28px;
+                padding: 28px;
+                background:
+                    linear-gradient(180deg, rgba(42, 46, 88, 0.98), rgba(24, 27, 54, 0.98));
+                box-shadow:
+                    0 28px 64px rgba(4, 6, 20, 0.48),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+                color: #f4f2ff;
+                opacity: 0;
+                transform: translateY(18px) scale(0.96);
+                transform-origin: center center;
+                transition:
+                    opacity 280ms cubic-bezier(0.22, 1, 0.36, 1),
+                    transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+                    box-shadow 280ms cubic-bezier(0.22, 1, 0.36, 1);
+            }
+
+            .dialog__overlay[data-state="open"] {
+                opacity: 1;
+            }
+
+            .dialog__overlay[data-state="open"] .dialog__surface {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+
+            .dialog__overlay[data-state="closing"] .dialog__surface {
+                opacity: 0;
+                transform: translateY(10px) scale(0.985);
+            }
+
+            .dialog__header {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 16px;
+                margin-bottom: 12px;
+            }
+
+            .dialog__headline {
+                font-family: 'Pretendard', -apple-system, sans-serif;
+                font-size: 24px;
+                font-weight: 700;
+                line-height: 1.25;
+                letter-spacing: -1px;
+            }
+
+            .dialog__close {
+                width: 40px;
+                height: 40px;
+                border: 0;
+                border-radius: 999px;
+                background: rgba(255, 255, 255, 0.08);
+                color: #f4f2ff;
+                font-size: 22px;
+                cursor: pointer;
+                transition:
+                    transform 160ms cubic-bezier(0.22, 1, 0.36, 1),
+                    background-color 160ms ease,
+                    box-shadow 160ms ease;
+            }
+
+            .dialog__close:hover {
+                background: rgba(255, 255, 255, 0.12);
+                box-shadow: 0 8px 18px rgba(7, 10, 24, 0.24);
+            }
+
+            .dialog__close:active {
+                transform: scale(0.94);
+            }
+
+            .dialog__supporting-text {
+                font-family: 'Pretendard', -apple-system, sans-serif;
+                font-size: 15px;
+                line-height: 1.7;
+                color: rgba(232, 228, 255, 0.82);
+            }
+
+            .dialog__actions {
+                display: flex;
+                justify-content: flex-end;
+                gap: 12px;
+                margin-top: 28px;
+            }
+
+            .dialog__button {
+                min-width: 112px;
+                height: 44px;
+                padding: 0 18px;
+                border-radius: 999px;
+                border: 1px solid transparent;
+                font-family: 'Pretendard', -apple-system, sans-serif;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                transition:
+                    transform 170ms cubic-bezier(0.22, 1, 0.36, 1),
+                    box-shadow 170ms ease,
+                    background 170ms ease,
+                    border-color 170ms ease,
+                    color 170ms ease;
+            }
+
+            .dialog__cancel {
+                background: rgba(255, 255, 255, 0.06);
+                border-color: rgba(255, 255, 255, 0.12);
+                color: #f4f2ff;
+            }
+
+            .dialog__cancel:hover {
+                background: rgba(255, 255, 255, 0.1);
+            }
+
+            .dialog__confirm {
+                background: linear-gradient(135deg, #b49cff, #7b61ff);
+                color: #140f2d;
+                box-shadow: 0 12px 24px rgba(123, 97, 255, 0.24);
+            }
+
+            .dialog__confirm:hover {
+                box-shadow: 0 16px 30px rgba(123, 97, 255, 0.3);
+                transform: translateY(-1px);
+            }
+
+            .dialog__button:active {
+                transform: scale(0.97);
+            }
+        </style>
+
+        <div class="dialog__overlay" data-state="closed">
+            <div class="dialog__surface" role="dialog" aria-modal="true" aria-labelledby="dialog-refined-title">
+                <div class="dialog__header">
+                    <h2 id="dialog-refined-title" class="dialog__headline">Delete selected report?</h2>
+                    <button type="button" class="dialog__close" aria-label="Close dialog">×</button>
+                </div>
+                <p class="dialog__supporting-text">The selected report and its shared links will be removed from the workspace. Reviewers will no longer be able to access the audit log.</p>
+                <div class="dialog__actions">
+                    <button type="button" class="dialog__button dialog__cancel"><span class="dialog__cancel-label">Keep</span></button>
+                    <button type="button" class="dialog__button dialog__confirm"><span class="dialog__confirm-label">Delete</span></button>
+                </div>
+            </div>
+        </div>
+    </template>
+</div>

@@ -1,0 +1,88 @@
+/* 03_editorial — 미니멀 에디토리얼 스타일 */
+
+.checkbox-group-shell--editorial {
+  display: inline-flex;
+  padding: 28px 32px;
+  background: #f8f7f4;
+}
+
+.checkbox-group-shell--editorial .checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 220px;
+}
+
+.checkbox-group-shell--editorial .checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-group-shell--editorial .checkbox-item:last-child {
+  border-bottom: none;
+}
+
+.checkbox-group-shell--editorial .checkbox-item[data-disabled="true"] {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* 체크박스 박스 — 원형 스타일 */
+.checkbox-group-shell--editorial .checkbox-item__box {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid #888;
+  position: relative;
+  transition:
+    border-color 200ms ease,
+    background 200ms ease;
+}
+
+/* 체크마크 — 심플 도트 */
+.checkbox-group-shell--editorial .checkbox-item__box::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: transparent;
+  transform: translate(-50%, -50%);
+  transition: background 150ms ease;
+}
+
+/* 체크 상태 */
+.checkbox-group-shell--editorial .checkbox-item[data-checked="true"] .checkbox-item__box {
+  border-color: #111;
+}
+
+.checkbox-group-shell--editorial .checkbox-item[data-checked="true"] .checkbox-item__box::after {
+  background: #111;
+}
+
+/* 레이블 */
+.checkbox-group-shell--editorial .checkbox-item__label {
+  font:
+    400 15px/1.5 "Georgia",
+    "Times New Roman",
+    serif;
+  color: #1a1a1a;
+  letter-spacing: 0;
+}
+
+.checkbox-group-shell--editorial .checkbox-item[data-checked="true"] .checkbox-item__label {
+  font-weight: 600;
+}
+
+.checkbox-group-shell--editorial .checkbox-item[data-disabled="true"] .checkbox-item__label {
+  color: #aaa;
+}

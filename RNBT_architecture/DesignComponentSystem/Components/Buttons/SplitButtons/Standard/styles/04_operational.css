@@ -1,0 +1,65 @@
+.split-button-shell {
+  display: inline-flex;
+  padding: 24px;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at top, rgba(0, 229, 255, 0.16), transparent 38%),
+    linear-gradient(180deg, #091114 0%, #05090b 100%);
+}
+.split-button {
+  display: grid;
+  grid-template-columns: auto 44px;
+  gap: 0;
+  position: relative;
+}
+.split-button__primary,
+.split-button__toggle {
+  min-height: 40px;
+  border: 1px solid rgba(0, 229, 255, 0.38);
+  background: linear-gradient(
+    180deg,
+    rgba(5, 35, 40, 0.92) 0%,
+    rgba(4, 21, 24, 0.92) 100%
+  );
+  color: #bfffff;
+  cursor: pointer;
+}
+.split-button__primary {
+  padding: 0 18px;
+  border-right: 0;
+  border-radius: 10px 0 0 10px;
+}
+.split-button__toggle {
+  border-radius: 0 10px 10px 0;
+}
+.split-button__menu {
+  display: flex;
+  position: absolute;
+  top: 48px;
+  right: 0;
+  flex-direction: column;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(-4px);
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease,
+    visibility 180ms ease;
+}
+.split-button[data-open="true"] .split-button__menu {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  pointer-events: auto;
+}
+.split-button__menu-item {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  border-radius: 10px;
+  background: rgba(5, 35, 40, 0.92);
+  color: #7deeff;
+  cursor: pointer;
+}

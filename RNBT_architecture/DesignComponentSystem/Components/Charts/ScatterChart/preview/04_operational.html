@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Charts/ScatterChart — 04_operational</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        min-height: 100vh;
+        padding: 40px 20px;
+        background:
+          radial-gradient(
+            circle at top,
+            rgba(47, 255, 228, 0.08),
+            transparent 30%
+          ),
+          #020c0f;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="scatter-chart-container"></div>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/EChartsMixin.js"></script>
+    <script>
+      (async () => {
+        await loadComponentAssets(
+          "scatter-chart-container",
+          "../views/04_operational.html",
+          "../styles/04_operational.css",
+        );
+        const instance = {
+          id: "scatter-chart",
+          appendElement: document.getElementById("scatter-chart-container"),
+        };
+        applyEChartsMixin(instance, {
+          cssSelectors: { container: ".scatter-chart__canvas" },
+          option: {
+            animationDuration: 500,
+            tooltip: {
+              trigger: "item",
+              backgroundColor: "#061519",
+              borderColor: "rgba(47,255,228,0.18)",
+              borderWidth: 1,
+              textStyle: { color: "#d9fff7", fontFamily: "IBM Plex Mono" },
+            },
+            legend: { show: false },
+            xAxis: {
+              type: "value",
+              splitLine: { lineStyle: { color: "rgba(51,255,231,0.1)" } },
+              axisLabel: {
+                color: "rgba(123,255,240,0.72)",
+                fontSize: 11,
+                fontFamily: "IBM Plex Mono",
+              },
+            },
+            yAxis: {
+              type: "value",
+              splitLine: { lineStyle: { color: "rgba(51,255,231,0.1)" } },
+              axisLabel: {
+                color: "rgba(123,255,240,0.72)",
+                fontSize: 11,
+                fontFamily: "IBM Plex Mono",
+              },
+            },
+            series: [
+              {
+                name: "Cluster A",
+                type: "scatter",
+                symbolSize: 14,
+                itemStyle: { color: "#2fffe4" },
+              },
+              {
+                name: "Cluster B",
+                type: "scatter",
+                symbolSize: 14,
+                itemStyle: { color: "#ff6d6d" },
+              },
+            ],
+          },
+          mapData: function (data, option) {
+            option.series[0].data = data.values[0];
+            option.series[1].data = data.values[1];
+            return option;
+          },
+        });
+        instance.subscriptions = { chartData: [instance.echarts.renderData] };
+        Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+          handlers.forEach((handler) =>
+            GlobalDataPublisher.subscribe(topic, instance, handler),
+          ),
+        );
+        instance.customEvents = {};
+        Wkit.bindEvents(instance, instance.customEvents);
+        instance.echarts.renderData({
+          response: {
+            values: [
+              [
+                [12, 28],
+                [18, 34],
+                [24, 42],
+                [31, 48],
+                [36, 52],
+              ],
+              [
+                [8, 16],
+                [14, 22],
+                [20, 26],
+                [26, 33],
+                [30, 36],
+              ],
+            ],
+          },
+        });
+      })();
+    </script>
+  </body>
+</html>

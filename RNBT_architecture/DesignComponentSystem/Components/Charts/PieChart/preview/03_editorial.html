@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Charts/PieChart — 03_editorial</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        min-height: 100vh;
+        padding: 40px 20px;
+        background: linear-gradient(180deg, #efe4d6 0%, #e5d6c6 100%);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="pie-chart-container"></div>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/EChartsMixin.js"></script>
+    <script>
+      (async () => {
+        await loadComponentAssets(
+          "pie-chart-container",
+          "../views/03_editorial.html",
+          "../styles/03_editorial.css",
+        );
+        const instance = {
+          id: "pie-chart",
+          appendElement: document.getElementById("pie-chart-container"),
+        };
+        applyEChartsMixin(instance, {
+          cssSelectors: { container: ".pie-chart__canvas" },
+          option: {
+            tooltip: {
+              trigger: "item",
+              backgroundColor: "#4c392d",
+              borderWidth: 0,
+              textStyle: { color: "#fff9f2", fontFamily: "SUIT" },
+            },
+            legend: { show: false },
+            color: ["#9d5a38", "#c9ab86", "#7f6857", "#d6935d", "#8d7564"],
+            series: [
+              {
+                type: "pie",
+                radius: ["52%", "74%"],
+                center: ["50%", "54%"],
+                itemStyle: { borderColor: "#f4ecdf", borderWidth: 3 },
+                label: { color: "#7f6857", fontFamily: "SUIT", fontSize: 12 },
+                labelLine: { lineStyle: { color: "rgba(93,68,51,0.24)" } },
+              },
+            ],
+          },
+          mapData: function (data, option) {
+            option.series[0].data = data.items;
+            return option;
+          },
+        });
+        instance.subscriptions = { chartData: [instance.echarts.renderData] };
+        Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+          handlers.forEach((handler) =>
+            GlobalDataPublisher.subscribe(topic, instance, handler),
+          ),
+        );
+        instance.customEvents = {};
+        Wkit.bindEvents(instance, instance.customEvents);
+        instance.echarts.renderData({
+          response: {
+            items: [
+              { name: "Core", value: 40 },
+              { name: "Edge", value: 24 },
+              { name: "API", value: 18 },
+              { name: "Batch", value: 12 },
+              { name: "Other", value: 6 },
+            ],
+          },
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+#radar-chart-container { width: 100%; max-width: 640px; margin: 0 auto; }
+.radar-chart { display: flex; flex-direction: column; gap: 18px; padding: 30px; border: 1px solid #d9cfbf; }
+.radar-chart--editorial { background: linear-gradient(180deg, #f7f1e7 0%, #f1e8dd 100%); color: #2d231c; box-shadow: 0 14px 30px rgba(83,59,40,0.08); }
+.radar-chart__header { display: flex; flex-direction: column; gap: 12px; }
+.radar-chart__eyebrow { color: #7f6857; font-family: "Iowan Old Style","Times New Roman",serif; font-size: 13px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; }
+.radar-chart__title { font-family: "Iowan Old Style","Times New Roman",serif; font-size: 34px; font-weight: 600; line-height: 1.1; }
+.radar-chart__summary,.radar-chart__status { color: #655447; font-family: "Iowan Old Style","Times New Roman",serif; font-size: 17px; line-height: 1.55; }
+.radar-chart__canvas { width: 100%; height: 360px; }
+@media (max-width: 768px) { .radar-chart { padding: 24px; } .radar-chart__title { font-size: 28px; } .radar-chart__summary,.radar-chart__status { font-size: 15px; } .radar-chart__canvas { height: 300px; } }

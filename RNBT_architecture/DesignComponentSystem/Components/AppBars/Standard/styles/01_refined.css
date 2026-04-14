@@ -1,13 +1,10 @@
 /* 01_refined: Persona A — Refined Technical
    퍼플 팔레트 / 그라디언트 깊이 / Pretendard / 다크 */
 #top-app-bar-container {
-    width: 360px;
-    height: 56px;
-
     .top-app-bar {
         display: flex;
         align-items: center;
-        height: 100%;
+        height: 56px;
         padding: 0 8px;
         background: linear-gradient(90deg, rgba(80, 46, 233, 0.06) 0%, rgba(146, 168, 244, 0.03) 100%),
                     #191D50;

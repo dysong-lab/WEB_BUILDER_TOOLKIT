@@ -1,0 +1,9 @@
+#scatter-chart-container { width: 100%; max-width: 620px; margin: 0 auto; }
+.scatter-chart { display: flex; flex-direction: column; gap: 18px; padding: 28px; border-radius: 28px; }
+.scatter-chart--refined { background: radial-gradient(circle at top left, rgba(121,182,255,0.22), transparent 34%), linear-gradient(180deg, #11233b 0%, #0a1422 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 26px 60px rgba(5,11,21,0.34); color: #edf5ff; }
+.scatter-chart__header { display: flex; flex-direction: column; gap: 10px; }
+.scatter-chart__eyebrow { color: rgba(205,225,255,0.68); font-family: "SUIT","Pretendard",sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.scatter-chart__title { font-family: "SUIT","Pretendard",sans-serif; font-size: 28px; font-weight: 700; letter-spacing: -0.8px; }
+.scatter-chart__summary,.scatter-chart__status { color: rgba(222,235,255,0.78); font-family: "SUIT","Pretendard",sans-serif; font-size: 14px; line-height: 1.6; }
+.scatter-chart__canvas { width: 100%; height: 340px; }
+@media (max-width: 768px) { .scatter-chart { padding: 22px; border-radius: 24px; } .scatter-chart__title { font-size: 24px; } .scatter-chart__canvas { height: 300px; } }

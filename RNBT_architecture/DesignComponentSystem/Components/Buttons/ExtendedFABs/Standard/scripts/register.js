@@ -1,50 +1,37 @@
-/**
- * ExtendedFABs — Standard
- *
- * 목적: Extended FAB의 아이콘/라벨을 표시하고 클릭 이벤트를 발행한다
- * 기능: FieldRenderMixin으로 아이콘/라벨 렌더링 + 클릭 이벤트
- *
- * Mixin: FieldRenderMixin
- */
-const { subscribe } = GlobalDataPublisher;
 const { bindEvents } = Wkit;
-const { each, go } = fx;
 
-// ======================
-// 1. MIXIN 적용
-// ======================
-
-applyFieldRenderMixin(this, {
-    cssSelectors: {
-        extendedFab: '.extended-fab',
-        icon:        '.extended-fab__icon',
-        label:       '.extended-fab__label'
-    }
-});
-
-// ======================
-// 2. 구독 연결
-// ======================
-
-this.subscriptions = {
-    extendedFabInfo: [this.fieldRender.renderData]
+this.cssSelectors = {
+  button: ".extended-fab",
+  icon: ".extended-fab__icon",
+  label: ".extended-fab__label",
 };
 
-go(
-    Object.entries(this.subscriptions),
-    each(([topic, handlers]) =>
-        each(handler => subscribe(topic, this, handler), handlers)
-    )
-);
+this.renderExtendedFabInfo = function (data = {}) {
+  const button = this.appendElement.querySelector(this.cssSelectors.button);
+  const icon = this.appendElement.querySelector(this.cssSelectors.icon);
+  const label = this.appendElement.querySelector(this.cssSelectors.label);
+  if (!button || !icon || !label) return;
 
-// ======================
-// 3. 이벤트 매핑
-// ======================
+  const nextIcon =
+    data?.icon === null || data?.icon === undefined ? "" : String(data.icon);
+  const nextLabel =
+    data?.label === null || data?.label === undefined ? "" : String(data.label);
+  const nextAria =
+    data?.ariaLabel === null || data?.ariaLabel === undefined
+      ? nextLabel
+      : String(data.ariaLabel);
+  const nextSize =
+    data?.size === "small" || data?.size === "large" ? data.size : "medium";
+
+  icon.textContent = nextIcon;
+  label.textContent = nextLabel;
+  button.setAttribute("aria-label", nextAria);
+  button.dataset.size = nextSize;
+};
 
 this.customEvents = {
-    click: {
-        [this.fieldRender.cssSelectors.extendedFab]: '@extendedFabClicked'
-    }
+  click: {
+    [this.cssSelectors.button]: "@extendedFabClicked",
+  },
 };
-
 bindEvents(this, this.customEvents);

@@ -1,111 +1,106 @@
 /* 02_material: Persona B — Material Elevated
    블루 팔레트 / shadow elevation / Roboto / 라이트 */
 
-#nav-drawer-container {
+.nav-drawer {
     width: 280px;
-    height: 480px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    box-shadow: 1px 0 3px rgba(0, 0, 0, 0.08), 1px 0 2px rgba(0, 0, 0, 0.06);
+    flex-shrink: 0;
+    transition: transform 200ms ease-in-out;
+    z-index: 100;
+}
 
-    .nav-drawer {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        background: #ffffff;
-        box-shadow: 1px 0 3px rgba(0, 0, 0, 0.08), 1px 0 2px rgba(0, 0, 0, 0.06);
-        flex-shrink: 0;
-        transition: transform 200ms ease-in-out;
-        z-index: 100;
-    }
+.nav-drawer[data-open="false"] {
+    transform: translateX(-100%);
+}
 
-    .nav-drawer[data-open="false"] {
-        transform: translateX(-100%);
-    }
+.nav-drawer__header {
+    display: flex;
+    align-items: center;
+    padding: 16px 16px 8px;
+}
 
-    .nav-drawer__header {
-        display: flex;
-        align-items: center;
-        padding: 16px 16px 8px;
-    }
+.nav-drawer__title {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #757575;
+    letter-spacing: 0.1px;
+}
 
-    .nav-drawer__title {
-        font-family: 'Roboto', sans-serif;
-        font-size: 14px;
-        font-weight: 500;
-        color: #757575;
-        letter-spacing: 0.1px;
-    }
+.nav-drawer__list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0 12px;
+    flex: 1;
+    overflow-y: auto;
+}
 
-    .nav-drawer__list {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-        padding: 0 12px;
-        flex: 1;
-        overflow-y: auto;
-    }
+.nav-drawer__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 16px;
+    height: 56px;
+    border-radius: 28px;
+    cursor: pointer;
+    transition: background-color 200ms ease-in-out;
+}
 
-    .nav-drawer__item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 0 16px;
-        height: 56px;
-        border-radius: 28px;
-        cursor: pointer;
-        transition: background-color 200ms ease-in-out;
-    }
+.nav-drawer__item:hover {
+    background: rgba(21, 101, 192, 0.06);
+}
 
-    .nav-drawer__item:hover {
-        background: rgba(21, 101, 192, 0.06);
-    }
+.nav-drawer__item[data-active="true"] {
+    background: #e3f2fd;
+}
 
-    .nav-drawer__item[data-active="true"] {
-        background: #e3f2fd;
-    }
+.nav-drawer__icon {
+    font-size: 24px;
+    color: #616161;
+    width: 24px;
+    text-align: center;
+    flex-shrink: 0;
+}
 
-    .nav-drawer__icon {
-        font-size: 24px;
-        color: #616161;
-        width: 24px;
-        text-align: center;
-        flex-shrink: 0;
-    }
+.nav-drawer__item[data-active="true"] .nav-drawer__icon {
+    color: #1565C0;
+}
 
-    .nav-drawer__item[data-active="true"] .nav-drawer__icon {
-        color: #1565C0;
-    }
+.nav-drawer__label {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #424242;
+    flex: 1;
+    line-height: 1.3;
+}
 
-    .nav-drawer__label {
-        font-family: 'Roboto', sans-serif;
-        font-size: 14px;
-        font-weight: 500;
-        color: #424242;
-        flex: 1;
-        line-height: 1.3;
-    }
+.nav-drawer__item[data-active="true"] .nav-drawer__label {
+    color: #1565C0;
+    font-weight: 700;
+}
 
-    .nav-drawer__item[data-active="true"] .nav-drawer__label {
-        color: #1565C0;
-        font-weight: 700;
-    }
+.nav-drawer__badge {
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #1565C0;
+    background: #e3f2fd;
+    padding: 2px 8px;
+    border-radius: 8px;
+    min-width: 20px;
+    text-align: center;
+}
 
-    .nav-drawer__badge {
-        font-family: 'Roboto', sans-serif;
-        font-size: 12px;
-        font-weight: 500;
-        color: #1565C0;
-        background: #e3f2fd;
-        padding: 2px 8px;
-        border-radius: 8px;
-        min-width: 20px;
-        text-align: center;
-    }
+.nav-drawer__item[data-active="true"] .nav-drawer__badge {
+    background: #bbdefb;
+}
 
-    .nav-drawer__item[data-active="true"] .nav-drawer__badge {
-        background: #bbdefb;
-    }
-
-    .nav-drawer__badge:empty {
-        display: none;
-    }
+.nav-drawer__badge:empty {
+    display: none;
 }

@@ -1,12 +1,14 @@
-<div class="fab-menu">
-    <div class="fab-menu__list"></div>
-    <button class="fab-menu__trigger">
-        <span class="fab-menu__trigger-icon material-symbols-outlined">add</span>
+<div class="fab-menu-shell fab-menu-shell--operational">
+  <div class="fab-menu" data-open="false">
+    <button class="fab-menu__trigger" type="button" aria-label="Create">
+      <span class="fab-menu__trigger-icon material-symbols-outlined">add</span
+      ><span class="fab-menu__trigger-label">Create</span>
     </button>
-    <template id="fab-menu-item-template">
-        <button class="fab-menu__item" data-id="">
-            <span class="fab-menu__item-icon material-symbols-outlined"></span>
-            <span class="fab-menu__item-label"></span>
-        </button>
-    </template>
+    <div class="fab-menu__list"></div>
+    <template id="fab-menu-item-template"
+      ><button class="fab-menu__item" type="button" data-id="">
+        <span class="fab-menu__item-icon material-symbols-outlined"></span
+        ><span class="fab-menu__item-label"></span></button
+    ></template>
+  </div>
 </div>

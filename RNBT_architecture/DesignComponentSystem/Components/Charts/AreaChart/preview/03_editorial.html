@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Charts/AreaChart — 03_editorial</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        min-height: 100vh;
+        padding: 40px 20px;
+        background: linear-gradient(180deg, #efe4d6 0%, #e5d6c6 100%);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="area-chart-container"></div>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/EChartsMixin.js"></script>
+    <script>
+      (async () => {
+        await loadComponentAssets(
+          "area-chart-container",
+          "../views/03_editorial.html",
+          "../styles/03_editorial.css",
+        );
+        const instance = {
+          id: "area-chart",
+          appendElement: document.getElementById("area-chart-container"),
+        };
+        applyEChartsMixin(instance, {
+          cssSelectors: { container: ".area-chart__canvas" },
+          option: {
+            animationDuration: 500,
+            grid: {
+              top: 16,
+              right: 8,
+              bottom: 12,
+              left: 8,
+              containLabel: true,
+            },
+            tooltip: {
+              trigger: "axis",
+              backgroundColor: "#4c392d",
+              borderWidth: 0,
+              textStyle: { color: "#fff9f2", fontFamily: "SUIT" },
+            },
+            legend: { show: false },
+            xAxis: {
+              type: "category",
+              axisLine: { lineStyle: { color: "rgba(93,68,51,0.18)" } },
+              axisTick: { show: false },
+              axisLabel: { color: "#7f6857", fontSize: 12, fontFamily: "SUIT" },
+            },
+            yAxis: {
+              type: "value",
+              splitLine: { lineStyle: { color: "rgba(93,68,51,0.12)" } },
+              axisLabel: { color: "#8d7564", fontSize: 11, fontFamily: "SUIT" },
+            },
+            series: [
+              {
+                name: "Capacity",
+                type: "line",
+                smooth: 0.4,
+                symbol: "none",
+                lineStyle: { width: 2.5, color: "#9d5a38" },
+                areaStyle: { color: "rgba(157,90,56,0.18)" },
+              },
+              {
+                name: "Usage",
+                type: "line",
+                smooth: 0.4,
+                symbol: "none",
+                lineStyle: { width: 2.5, color: "#c9ab86" },
+                areaStyle: { color: "rgba(201,171,134,0.2)" },
+              },
+            ],
+          },
+        });
+        instance.subscriptions = { chartData: [instance.echarts.renderData] };
+        Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+          handlers.forEach((handler) =>
+            GlobalDataPublisher.subscribe(topic, instance, handler),
+          ),
+        );
+        instance.customEvents = {};
+        Wkit.bindEvents(instance, instance.customEvents);
+        instance.echarts.renderData({
+          response: {
+            categories: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+            values: [
+              [68, 72, 80, 96, 88, 104],
+              [42, 48, 55, 62, 58, 70],
+            ],
+          },
+        });
+      })();
+    </script>
+  </body>
+</html>

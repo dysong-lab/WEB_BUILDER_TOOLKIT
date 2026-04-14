@@ -1,103 +1,122 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>ButtonGroups/Standard — 02_material (Persona B)</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ButtonGroups/Standard — 02_material</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+    />
+    <script src="../../../../../preview_runtime.js"></script>
+    <script src="../../../../../Mixins/ListRenderMixin.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: #F5F5F5;
-            font-family: 'Roboto', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            gap: 24px;
-            padding: 40px 20px;
-        }
-        .demo-log {
-            width: 360px;
-            padding: 12px 16px;
-            background: #ffffff;
-            border: 1px solid #dadce0;
-            border-radius: 8px;
-            color: #5f6368;
-            font-size: 12px;
-            line-height: 1.6;
-            max-height: 200px;
-            overflow-y: auto;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-        }
-        .demo-log strong { color: #1a73e8; font-weight: 500; }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #eef3f8;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+      }
+      .preview-grid {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
     </style>
-</head>
-<body>
-
-<div id="btn-group-container"></div>
-<div class="demo-log" id="demo-log"><strong>이벤트 로그</strong><br>—</div>
-
-<script src="../../../../../preview_runtime.js"></script>
-<script src="../../../../../Mixins/ListRenderMixin.js"></script>
-<script>
-(async () => {
-    await loadComponentAssets('btn-group-container', '../views/02_material.html', '../styles/02_material.css');
-
-    const instance = { id: 'button-groups', appendElement: document.getElementById('btn-group-container') };
-
-    applyListRenderMixin(instance, {
-        cssSelectors: {
-            container: '.btn-group__list',
-            template:  '#btn-group-item-template',
-            buttonid:  '.btn-group__item',
-            selected:  '.btn-group__item',
-            label:     '.btn-group__label',
-            icon:      '.btn-group__icon'
-        },
-        itemKey: 'buttonid',
-        datasetAttrs: {
-            buttonid: 'buttonid',
-            selected: 'selected'
-        }
-    });
-
-    instance.subscriptions = { buttonGroupItems: [instance.listRender.renderData] };
-    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
-        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
-    );
-
-    instance.customEvents = {
-        click: {
-            [instance.listRender.cssSelectors.buttonid]: '@buttonClicked'
-        }
-    };
-    Wkit.bindEvents(instance, instance.customEvents);
-
-    const logEl = document.getElementById('demo-log');
-    let logHtml = '<strong>이벤트 로그</strong><br>—';
-    const log = (msg) => {
-        logHtml = '<strong>이벤트 로그</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
-        logEl.innerHTML = logHtml;
-    };
-
-    Wkit.onEventBusHandlers({
-        '@buttonClicked': ({ event, targetInstance }) => {
-            const item = event.target.closest(targetInstance.listRender.cssSelectors.buttonid);
-            const buttonid = item?.getAttribute('data-buttonid');
-            const wasSelected = item?.getAttribute('data-selected') === 'true';
-            targetInstance.listRender.updateItemState(buttonid, { selected: wasSelected ? 'false' : 'true' });
-            log(`buttonClicked "${buttonid}" → selected=${!wasSelected}`);
-        }
-    });
-
-    instance.listRender.renderData({ response: [
-        { buttonid: 'list',    icon: 'view_list',    label: 'List',    selected: 'true' },
-        { buttonid: 'grid',    icon: 'grid_view',    label: 'Grid',    selected: 'false' },
-        { buttonid: 'compact', icon: 'view_compact', label: 'Compact', selected: 'false' }
-    ]});
-})();
-</script>
-</body>
+  </head>
+  <body>
+    <div class="preview-grid">
+      <div id="group-1"></div>
+      <div id="group-2"></div>
+      <div id="group-3"></div>
+    </div>
+    <script>
+      (async () => {
+        const ids = ["group-1", "group-2", "group-3"];
+        await Promise.all(
+          ids.map((id) =>
+            loadComponentAssets(
+              id,
+              "../views/02_material.html",
+              "../styles/02_material.css",
+            ),
+          ),
+        );
+        const createInstance = (id) => {
+          const instance = { id, appendElement: document.getElementById(id) };
+          applyListRenderMixin(instance, {
+            cssSelectors: {
+              container: ".button-group",
+              template: "#button-group-item-template",
+              item: ".button-group__item",
+              id: ".button-group__item",
+              selected: ".button-group__item",
+              label: ".button-group__label",
+            },
+            itemKey: "id",
+            datasetAttrs: { id: "id", selected: "selected" },
+          });
+          instance.selectItem = function (targetId) {
+            const items = this.appendElement.querySelectorAll(
+              this.listRender.cssSelectors.item,
+            );
+            items.forEach((item) =>
+              item.setAttribute(
+                "data-selected",
+                item.dataset.id === String(targetId) ? "true" : "false",
+              ),
+            );
+          };
+          instance.customEvents = {
+            click: {
+              [instance.listRender.cssSelectors.item]:
+                "@buttonGroupItemClicked",
+            },
+          };
+          Wkit.bindEvents(instance, instance.customEvents);
+          return instance;
+        };
+        const a = createInstance("group-1");
+        const b = createInstance("group-2");
+        const c = createInstance("group-3");
+        Wkit.onEventBusHandlers({
+          "@buttonGroupItemClicked": ({ targetInstance, event }) => {
+            const el = event.target.closest(".button-group__item");
+            const id = el?.dataset.id;
+            targetInstance?.selectItem(id);
+            console.log(
+              "[Preview] ButtonGroup item clicked:",
+              targetInstance?.id,
+              id,
+            );
+          },
+        });
+        a.listRender.renderData({
+          response: [
+            { id: "day", selected: "true", label: "Day" },
+            { id: "week", selected: "false", label: "Week" },
+            { id: "month", selected: "false", label: "Month" },
+          ],
+        });
+        b.listRender.renderData({
+          response: [
+            { id: "cpu", selected: "false", label: "CPU" },
+            { id: "memory", selected: "true", label: "Memory" },
+            { id: "net", selected: "false", label: "Network" },
+          ],
+        });
+        c.listRender.renderData({
+          response: [
+            { id: "left", selected: "true", label: "Left" },
+            { id: "center", selected: "false", label: "Center" },
+            { id: "right", selected: "false", label: "Right" },
+          ],
+        });
+      })();
+    </script>
+  </body>
 </html>

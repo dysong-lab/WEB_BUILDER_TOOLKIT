@@ -1,88 +1,113 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>FAB/Standard — 03_editorial (Persona C)</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+  <head>
+    <meta charset="UTF-8" />
+    <title>FAB/Standard — 03_editorial</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: #FBF8F3;
-            font-family: 'Georgia', serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            gap: 24px;
-            padding: 40px 20px;
-        }
-        .demo-log {
-            width: 360px;
-            padding: 12px 16px;
-            background: #FFFFFF;
-            border: 1px solid #E5DED1;
-            border-radius: 4px;
-            color: #6B5F54;
-            font-size: 12px;
-            line-height: 1.6;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-        .demo-log strong { color: #4A3F35; font-weight: 400; }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #f1eadf;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+      }
+      .preview-grid {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
     </style>
-</head>
-<body>
-
-<div id="fab-container"></div>
-<div class="demo-log" id="demo-log"><strong>이벤트 로그</strong><br>—</div>
-
-<script src="../../../../../preview_runtime.js"></script>
-<script src="../../../../../Mixins/FieldRenderMixin.js"></script>
-<script>
-(async () => {
-    await loadComponentAssets('fab-container', '../views/03_editorial.html', '../styles/03_editorial.css');
-
-    const instance = { id: 'fab', appendElement: document.getElementById('fab-container') };
-
-    applyFieldRenderMixin(instance, {
-        cssSelectors: {
-            fab:  '.fab',
-            icon: '.fab__icon'
-        }
-    });
-
-    instance.subscriptions = { fabInfo: [instance.fieldRender.renderData] };
-    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
-        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
-    );
-
-    instance.customEvents = {
-        click: {
-            [instance.fieldRender.cssSelectors.fab]: '@fabClicked'
-        }
-    };
-    Wkit.bindEvents(instance, instance.customEvents);
-
-    const logEl = document.getElementById('demo-log');
-    let logHtml = '<strong>이벤트 로그</strong><br>—';
-    const log = (msg) => {
-        logHtml = '<strong>이벤트 로그</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
-        logEl.innerHTML = logHtml;
-    };
-
-    Wkit.onEventBusHandlers({
-        '@fabClicked': ({ event }) => {
-            const fab = event.target.closest('.fab');
-            const icon = fab?.querySelector('.fab__icon')?.textContent || '(no icon)';
-            log(`fabClicked "${icon}"`);
-        }
-    });
-
-    instance.fieldRender.renderData({ response: {
-        icon: 'create'
-    }});
-})();
-</script>
-</body>
+  </head>
+  <body>
+    <div class="preview-grid">
+      <div id="fab-small"></div>
+      <div id="fab-medium"></div>
+      <div id="fab-large"></div>
+    </div>
+    <script src="../../../../../preview_runtime.js"></script>
+    <script>
+      (async () => {
+        const ids = ["fab-small", "fab-medium", "fab-large"];
+        await Promise.all(
+          ids.map((id) =>
+            loadComponentAssets(
+              id,
+              "../views/03_editorial.html",
+              "../styles/03_editorial.css",
+            ),
+          ),
+        );
+        const createInstance = (id) => {
+          const instance = { id, appendElement: document.getElementById(id) };
+          instance.cssSelectors = { button: ".fab", icon: ".fab__icon" };
+          instance.renderFabInfo = function (data = {}) {
+            const button = this.appendElement.querySelector(
+              this.cssSelectors.button,
+            );
+            const icon = this.appendElement.querySelector(
+              this.cssSelectors.icon,
+            );
+            if (!button || !icon) return;
+            const nextIcon =
+              data?.icon === null || data?.icon === undefined
+                ? ""
+                : String(data.icon);
+            const nextAria =
+              data?.ariaLabel === null || data?.ariaLabel === undefined
+                ? nextIcon
+                : String(data.ariaLabel);
+            const nextSize =
+              data?.size === "medium" || data?.size === "large"
+                ? data.size
+                : "fab";
+            icon.textContent = nextIcon;
+            button.setAttribute("aria-label", nextAria);
+            button.dataset.size = nextSize;
+          };
+          instance.customEvents = {
+            click: { [instance.cssSelectors.button]: "@fabClicked" },
+          };
+          Wkit.bindEvents(instance, instance.customEvents);
+          return instance;
+        };
+        const a = createInstance("fab-small");
+        const b = createInstance("fab-medium");
+        const c = createInstance("fab-large");
+        Wkit.onEventBusHandlers({
+          "@fabClicked": ({ targetInstance }) => {
+            const button = targetInstance?.appendElement?.querySelector(".fab");
+            console.log(
+              "[Preview] FAB clicked:",
+              targetInstance?.id,
+              button?.dataset.size,
+              button?.getAttribute("aria-label"),
+            );
+          },
+        });
+        a.renderFabInfo({
+          icon: "bookmark",
+          ariaLabel: "Bookmark",
+          size: "fab",
+        });
+        b.renderFabInfo({
+          icon: "download",
+          ariaLabel: "Download",
+          size: "medium",
+        });
+        c.renderFabInfo({
+          icon: "upload",
+          ariaLabel: "Publish",
+          size: "large",
+        });
+      })();
+    </script>
+  </body>
 </html>

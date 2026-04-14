@@ -1,58 +1,49 @@
-/**
- * ButtonGroups — Standard
- *
- * 목적: 버튼 항목을 그룹으로 표시하고 클릭 이벤트를 발행한다
- * 기능: ListRenderMixin으로 버튼 항목 렌더링 + 클릭 이벤트
- *
- * Mixin: ListRenderMixin
- */
 const { subscribe } = GlobalDataPublisher;
 const { bindEvents } = Wkit;
 const { each, go } = fx;
 
-// ======================
-// 1. MIXIN 적용
-// ======================
-
 applyListRenderMixin(this, {
-    cssSelectors: {
-        container: '.btn-group__list',
-        template:  '#btn-group-item-template',
-        buttonid:  '.btn-group__item',
-        selected:  '.btn-group__item',
-        label:     '.btn-group__label',
-        icon:      '.btn-group__icon'
-    },
-    itemKey: 'buttonid',
-    datasetAttrs: {
-        buttonid: 'buttonid',
-        selected: 'selected'
-    }
+  cssSelectors: {
+    container: ".button-group",
+    template: "#button-group-item-template",
+    item: ".button-group__item",
+    id: ".button-group__item",
+    selected: ".button-group__item",
+    label: ".button-group__label",
+  },
+  itemKey: "id",
+  datasetAttrs: {
+    id: "id",
+    selected: "selected",
+  },
 });
 
-// ======================
-// 2. 구독 연결
-// ======================
+this.selectItem = function (id) {
+  const items = this.appendElement.querySelectorAll(
+    this.listRender.cssSelectors.item,
+  );
+  items.forEach((item) =>
+    item.setAttribute(
+      "data-selected",
+      item.dataset.id === String(id) ? "true" : "false",
+    ),
+  );
+};
 
 this.subscriptions = {
-    buttonGroupItems: [this.listRender.renderData]
+  buttonGroupItems: [this.listRender.renderData],
 };
 
 go(
-    Object.entries(this.subscriptions),
-    each(([topic, handlers]) =>
-        each(handler => subscribe(topic, this, handler), handlers)
-    )
+  Object.entries(this.subscriptions),
+  each(([topic, handlers]) =>
+    each((handler) => subscribe(topic, this, handler), handlers),
+  ),
 );
 
-// ======================
-// 3. 이벤트 매핑
-// ======================
-
 this.customEvents = {
-    click: {
-        [this.listRender.cssSelectors.buttonid]: '@buttonClicked'
-    }
+  click: {
+    [this.listRender.cssSelectors.item]: "@buttonGroupItemClicked",
+  },
 };
-
 bindEvents(this, this.customEvents);

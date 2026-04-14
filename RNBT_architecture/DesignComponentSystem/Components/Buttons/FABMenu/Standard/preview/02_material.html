@@ -1,106 +1,156 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>FABMenu/Standard — 02_material (Persona B)</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+  <head>
+    <meta charset="UTF-8" />
+    <title>FABMenu/Standard — 02_material</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <script src="../../../../../preview_runtime.js"></script>
+    <script src="../../../../../Mixins/ListRenderMixin.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: #F5F7FF;
-            font-family: 'Roboto', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            gap: 24px;
-            padding: 40px 20px;
-        }
-        .demo-log {
-            width: 360px;
-            padding: 12px 16px;
-            background: #FFFFFF;
-            border: 1px solid #D0D8FF;
-            border-radius: 8px;
-            color: #3B5BDB;
-            font-size: 12px;
-            line-height: 1.6;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-        .demo-log strong { color: #1A1B4B; }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #eef3f8;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+      }
+      .preview-grid {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
     </style>
-</head>
-<body>
-
-<div id="fab-menu-container"></div>
-<div class="demo-log" id="demo-log"><strong>이벤트 로그</strong><br>—</div>
-
-<script src="../../../../../preview_runtime.js"></script>
-<script src="../../../../../Mixins/ListRenderMixin.js"></script>
-<script>
-(async () => {
-    await loadComponentAssets('fab-menu-container', '../views/02_material.html', '../styles/02_material.css');
-
-    const instance = { id: 'fab-menu', appendElement: document.getElementById('fab-menu-container') };
-
-    applyListRenderMixin(instance, {
-        cssSelectors: {
-            menu:      '.fab-menu',
-            trigger:   '.fab-menu__trigger',
-            container: '.fab-menu__list',
-            template:  '#fab-menu-item-template',
-            item:      '.fab-menu__item',
-            id:        '.fab-menu__item',
-            icon:      '.fab-menu__item-icon',
-            label:     '.fab-menu__item-label'
-        },
-        datasetAttrs: { id: 'id' }
-    });
-
-    instance.toggleMenu = function() {
-        const menu = instance.appendElement.querySelector(instance.listRender.cssSelectors.menu);
-        if (menu) menu.classList.toggle('is-open');
-    };
-
-    instance.subscriptions = { fabMenuItems: [instance.listRender.renderData] };
-    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
-        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
-    );
-
-    instance.customEvents = {
-        click: {
-            [instance.listRender.cssSelectors.trigger]: 'toggleMenu',
-            [instance.listRender.cssSelectors.item]:    '@fabMenuItemClicked'
-        }
-    };
-    Wkit.bindEvents(instance, instance.customEvents);
-
-    const logEl = document.getElementById('demo-log');
-    let logHtml = '<strong>이벤트 로그</strong><br>—';
-    const log = (msg) => {
-        logHtml = '<strong>이벤트 로그</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
-        logEl.innerHTML = logHtml;
-    };
-
-    Wkit.onEventBusHandlers({
-        '@fabMenuItemClicked': ({ event }) => {
-            const item = event.target.closest('.fab-menu__item');
-            const id = item?.getAttribute('data-id') || '?';
-            const label = item?.querySelector('.fab-menu__item-label')?.textContent || '?';
-            log(`fabMenuItemClicked "${id}" — ${label}`);
-        }
-    });
-
-    instance.listRender.renderData({ response: [
-        { id: 'share',    icon: 'share',    label: 'Share' },
-        { id: 'download', icon: 'download', label: 'Download' },
-        { id: 'edit',     icon: 'edit',     label: 'Edit' },
-        { id: 'print',    icon: 'print',    label: 'Print' }
-    ]});
-})();
-</script>
-</body>
+  </head>
+  <body>
+    <div class="preview-grid">
+      <div id="menu-1"></div>
+      <div id="menu-2"></div>
+      <div id="menu-3"></div>
+    </div>
+    <script>
+      (async () => {
+        const ids = ["menu-1", "menu-2", "menu-3"];
+        await Promise.all(
+          ids.map((id) =>
+            loadComponentAssets(
+              id,
+              "../views/02_material.html",
+              "../styles/02_material.css",
+            ),
+          ),
+        );
+        const createInstance = (id) => {
+          const instance = { id, appendElement: document.getElementById(id) };
+          applyListRenderMixin(instance, {
+            cssSelectors: {
+              root: ".fab-menu",
+              trigger: ".fab-menu__trigger",
+              triggerIcon: ".fab-menu__trigger-icon",
+              triggerLabel: ".fab-menu__trigger-label",
+              container: ".fab-menu__list",
+              template: "#fab-menu-item-template",
+              item: ".fab-menu__item",
+              id: ".fab-menu__item",
+              icon: ".fab-menu__item-icon",
+              label: ".fab-menu__item-label",
+            },
+            itemKey: "id",
+            datasetAttrs: { id: "id" },
+          });
+          instance.renderFabMenu = function (data = {}) {
+            const root = this.appendElement.querySelector(
+              this.listRender.cssSelectors.root,
+            );
+            const trigger = this.appendElement.querySelector(
+              this.listRender.cssSelectors.trigger,
+            );
+            const triggerIcon = this.appendElement.querySelector(
+              this.listRender.cssSelectors.triggerIcon,
+            );
+            const triggerLabel = this.appendElement.querySelector(
+              this.listRender.cssSelectors.triggerLabel,
+            );
+            if (!root || !trigger || !triggerIcon || !triggerLabel) return;
+            triggerIcon.textContent = data?.triggerIcon || "add";
+            triggerLabel.textContent = data?.triggerLabel || "Create";
+            trigger.setAttribute("aria-label", data?.triggerLabel || "Create");
+            root.dataset.open = "false";
+            this.listRender.renderData({
+              response: Array.isArray(data?.items) ? data.items : [],
+            });
+          };
+          instance.toggleMenu = function (force) {
+            const root = this.appendElement.querySelector(
+              this.listRender.cssSelectors.root,
+            );
+            const nextOpen =
+              typeof force === "boolean" ? force : root.dataset.open !== "true";
+            root.dataset.open = nextOpen ? "true" : "false";
+          };
+          instance.customEvents = {
+            click: {
+              [instance.listRender.cssSelectors.trigger]: "@fabMenuToggled",
+              [instance.listRender.cssSelectors.item]: "@fabMenuItemClicked",
+            },
+          };
+          Wkit.bindEvents(instance, instance.customEvents);
+          return instance;
+        };
+        const a = createInstance("menu-1");
+        const b = createInstance("menu-2");
+        const c = createInstance("menu-3");
+        Wkit.onEventBusHandlers({
+          "@fabMenuToggled": ({ targetInstance }) => {
+            targetInstance?.toggleMenu();
+            console.log("[Preview] FABMenu toggled:", targetInstance?.id);
+          },
+          "@fabMenuItemClicked": ({ targetInstance, event }) => {
+            const el = event.target.closest(".fab-menu__item");
+            targetInstance?.toggleMenu(false);
+            console.log(
+              "[Preview] FABMenu item clicked:",
+              targetInstance?.id,
+              el?.dataset.id,
+            );
+          },
+        });
+        a.renderFabMenu({
+          triggerIcon: "add",
+          triggerLabel: "Create",
+          items: [
+            { id: "note", icon: "note_add", label: "New note" },
+            { id: "task", icon: "checklist", label: "New task" },
+          ],
+        });
+        b.renderFabMenu({
+          triggerIcon: "bolt",
+          triggerLabel: "Quick run",
+          items: [
+            { id: "job", icon: "play_arrow", label: "Run job" },
+            { id: "rule", icon: "tune", label: "Adjust rule" },
+          ],
+        });
+        c.renderFabMenu({
+          triggerIcon: "campaign",
+          triggerLabel: "Broadcast",
+          items: [
+            { id: "mail", icon: "mail", label: "Email" },
+            { id: "chat", icon: "chat", label: "Chat" },
+            { id: "push", icon: "notifications", label: "Push" },
+          ],
+        });
+      })();
+    </script>
+  </body>
 </html>

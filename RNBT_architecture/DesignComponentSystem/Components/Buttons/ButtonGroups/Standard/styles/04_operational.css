@@ -1,88 +1,42 @@
-/* 04_operational: Persona D — Dark Operational
-   시안 팔레트 / 모노스페이스 / 다크 / Connected (컴팩트 연결) */
-
-#btn-group-container {
-    width: 320px;
-    height: 40px;
-
-    .btn-group {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .btn-group__list {
-        display: flex;
-        flex-direction: row;
-    }
-
-    .btn-group--connected .btn-group__item {
-        border-right: none;
-    }
-
-    .btn-group--connected .btn-group__item:last-child {
-        border-right: 1px solid #2A3A3E;
-    }
-
-    .btn-group--connected .btn-group__item:first-child {
-        border-radius: 4px 0 0 4px;
-    }
-
-    .btn-group--connected .btn-group__item:last-child {
-        border-radius: 0 4px 4px 0;
-    }
-
-    .btn-group--connected .btn-group__item:not(:first-child):not(:last-child) {
-        border-radius: 0;
-    }
-
-    .btn-group__item {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 0 14px;
-        height: 32px;
-        border: 1px solid #2A3A3E;
-        border-radius: 4px;
-        background: #0D1B1E;
-        cursor: pointer;
-        transition: background-color 100ms ease-out;
-    }
-
-    .btn-group__item:hover {
-        background: rgba(0, 188, 212, 0.08);
-    }
-
-    .btn-group__item[data-selected="true"] {
-        background: rgba(0, 188, 212, 0.16);
-        border-color: #00BCD4;
-    }
-
-    .btn-group__icon {
-        font-size: 16px;
-        color: #5A7A80;
-        flex-shrink: 0;
-    }
-
-    .btn-group__item[data-selected="true"] .btn-group__icon {
-        color: #00BCD4;
-    }
-
-    .btn-group__icon:empty {
-        display: none;
-    }
-
-    .btn-group__label {
-        font-family: 'JetBrains Mono', 'Fira Code', monospace;
-        font-size: 12px;
-        font-weight: 400;
-        color: #5A7A80;
-        white-space: nowrap;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .btn-group__item[data-selected="true"] .btn-group__label {
-        color: #B2EBF2;
-        font-weight: 500;
-    }
+.button-group-shell {
+  display: inline-flex;
+  padding: 24px;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at top, rgba(0, 229, 255, 0.16), transparent 38%),
+    linear-gradient(180deg, #091114 0%, #05090b 100%);
+}
+.button-group {
+  display: flex;
+  gap: 10px;
+}
+.button-group__item {
+  min-width: 92px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  border-radius: 10px;
+  background: rgba(5, 35, 40, 0.92);
+  color: #7deeff;
+  cursor: pointer;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  transform: translateY(0);
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+.button-group__item[data-selected="true"] {
+  background: #00acc1;
+  color: #021316;
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.18);
+}
+.button-group__label {
+  font:
+    600 13px/1 "IBM Plex Mono",
+    "SFMono-Regular",
+    monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }

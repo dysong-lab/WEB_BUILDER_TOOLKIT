@@ -8,6 +8,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #f5f5f5; display: flex; height: 100vh; }
+        #nav-drawer-container { height: 100vh; display: flex; }
         .preview-toggle {
             position: fixed; top: 16px; right: 16px; z-index: 200;
             padding: 8px 16px; border: 1px solid #bbdefb; background: #ffffff;
@@ -16,32 +17,12 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.12);
         }
         .preview-toggle:hover { background: #e3f2fd; }
-        .demo-log {
-            position: fixed;
-            top: 64px;
-            right: 16px;
-            width: 320px;
-            padding: 12px 16px;
-            background: #ffffff;
-            border: 1px solid #dadce0;
-            border-radius: 8px;
-            color: #5f6368;
-            font-family: 'Roboto', sans-serif;
-            font-size: 12px;
-            line-height: 1.6;
-            max-height: 240px;
-            overflow-y: auto;
-            z-index: 200;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-        }
-        .demo-log strong { color: #1a73e8; font-weight: 500; }
     </style>
 </head>
 <body>
 
 <div id="nav-drawer-container"></div>
 <button class="preview-toggle" onclick="toggleDrawer()">Toggle Drawer</button>
-<div class="demo-log" id="demo-log"><strong>이벤트 로그</strong><br>—</div>
 
 <script src="../../../../../preview_runtime.js"></script>
 <script src="../../../../../Mixins/ListRenderMixin.js"></script>
@@ -101,26 +82,11 @@ let _instance;
     };
     Wkit.bindEvents(instance, instance.customEvents);
 
-    const logEl = document.getElementById('demo-log');
-    let logHtml = '<strong>이벤트 로그</strong><br>—';
-    const log = (msg) => {
-        logHtml = '<strong>이벤트 로그</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
-        logEl.innerHTML = logHtml;
-    };
-
-    let activeMenuid = 'dashboard';
     Wkit.onEventBusHandlers({
         '@menuItemClicked': ({ event, targetInstance }) => {
             const item = event.target.closest(targetInstance.listRender.cssSelectors.menuid);
             const menuid = item?.getAttribute('data-menuid');
-            if (!menuid || menuid === activeMenuid) {
-                log(`menuItemClicked "${menuid}" (이미 활성)`);
-                return;
-            }
-            targetInstance.listRender.updateItemState(activeMenuid, { active: 'false' });
-            targetInstance.listRender.updateItemState(menuid,       { active: 'true' });
-            activeMenuid = menuid;
-            log(`menuItemClicked "${menuid}" → 활성 전환`);
+            console.log('[Preview] Menu item clicked:', menuid);
         }
     });
 

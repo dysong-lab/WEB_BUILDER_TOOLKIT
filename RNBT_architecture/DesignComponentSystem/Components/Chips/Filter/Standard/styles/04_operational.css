@@ -1,0 +1,59 @@
+.filter-chip-shell {
+  display: inline-flex;
+  padding: 20px;
+  border: 1px solid #223347;
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(9, 18, 30, 0.92), rgba(5, 10, 18, 0.98)),
+    #08111d;
+}
+
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid #2a4058;
+  border-radius: 6px;
+  background: #0d1b2a;
+  color: #9ab1c9;
+  cursor: pointer;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease,
+    color 120ms ease;
+}
+
+.filter-chip[data-selected="true"] {
+  border-color: #5eead4;
+  background: rgba(94, 234, 212, 0.12);
+  color: #d5fff8;
+}
+
+.filter-chip[data-disabled="true"] {
+  opacity: 0.34;
+  cursor: not-allowed;
+}
+
+.filter-chip__icon {
+  font-size: 16px;
+}
+
+.filter-chip__icon:empty {
+  display: none;
+}
+
+.filter-chip__label {
+  font:
+    600 13px/1 "IBM Plex Sans",
+    "Pretendard",
+    sans-serif;
+  letter-spacing: 0.1px;
+}

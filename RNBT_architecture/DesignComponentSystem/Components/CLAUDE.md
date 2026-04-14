@@ -95,35 +95,12 @@ Figma가 존재하는 경우는 사용자가 별도 요청한다.
 
 ---
 
-### Step 5. manifest.json 등록 (필수 마무리)
-
-신규 컴포넌트, 신규 set(Standard/Advanced), 신규 Advanced item, 또는 신규 디자인/모델 변종 preview를 추가했다면 반드시 `DesignComponentSystem/manifest.json`에 등록한다. **manifest는 `index.html` 카탈로그가 fetch하는 단일 진실 출처이며, 누락되면 카탈로그에 노출되지 않는다.**
-
-대상별 등록 위치:
-
-| 추가 대상 | manifest 위치 |
-|----------|--------------|
-| 새 컴포넌트 | `categories[].components[]` 끝에 추가 |
-| 새 Standard 변형(preview) | `components[].sets[Standard].previews[]` 끝에 `{ label, path }` 추가 |
-| 새 Advanced item (예: `contextual`, `highlight`) | `components[].sets[Advanced].items[]` 끝에 `{ name, spec, previews }` 추가 |
-| 새 Advanced item의 preview 변형 | 해당 item의 `previews[]` 끝에 `{ label, path }` 추가 |
-
-라벨 규칙: `"NN 변종명"` (공백 구분, 2D/3D 동일).
-
-체크리스트:
-1. 해당 set/item에 누락 없이 추가됐는가
-2. spec 경로가 실제 CLAUDE.md 파일을 가리키는가
-3. 모든 preview path가 실제 파일과 일치하는가
-4. JSON 문법(쉼표, 괄호) 오류 없는가
-
----
-
 ## 참조
 
 | 문서 | 위치 |
 |------|------|
 | 생산 프로세스 진입점 | [/.claude/skills/0-produce/produce-component/SKILL.md](/.claude/skills/0-produce/produce-component/SKILL.md) |
-| SKILL 공통 규칙 | [/.claude/skills/SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md) |
+| SKILL 공통 규칙 | [/.claude/skills/SHARED_INDEX.md](/.claude/skills/SHARED_INDEX.md), [/.claude/skills/SHARED_PATTERNS.md](/.claude/skills/SHARED_PATTERNS.md) |
 | 2D 컴포넌트 SKILL | [/.claude/skills/2-component/create-2d-component/SKILL.md](/.claude/skills/2-component/create-2d-component/SKILL.md) |
 | Mixin 전체 목록 | [/RNBT_architecture/DesignComponentSystem/Mixins/README.md](/RNBT_architecture/DesignComponentSystem/Mixins/README.md) |
 | 시스템 설계 문서 | [/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md](/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md) |

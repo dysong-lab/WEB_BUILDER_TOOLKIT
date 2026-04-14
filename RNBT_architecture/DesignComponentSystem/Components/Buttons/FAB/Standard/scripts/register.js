@@ -1,49 +1,32 @@
-/**
- * FAB — Standard
- *
- * 목적: FAB의 아이콘을 표시하고 클릭 이벤트를 발행한다
- * 기능: FieldRenderMixin으로 아이콘 렌더링 + 클릭 이벤트
- *
- * Mixin: FieldRenderMixin
- */
-const { subscribe } = GlobalDataPublisher;
 const { bindEvents } = Wkit;
-const { each, go } = fx;
 
-// ======================
-// 1. MIXIN 적용
-// ======================
-
-applyFieldRenderMixin(this, {
-    cssSelectors: {
-        fab:  '.fab',
-        icon: '.fab__icon'
-    }
-});
-
-// ======================
-// 2. 구독 연결
-// ======================
-
-this.subscriptions = {
-    fabInfo: [this.fieldRender.renderData]
+this.cssSelectors = {
+  button: ".fab",
+  icon: ".fab__icon",
 };
 
-go(
-    Object.entries(this.subscriptions),
-    each(([topic, handlers]) =>
-        each(handler => subscribe(topic, this, handler), handlers)
-    )
-);
+this.renderFabInfo = function (data = {}) {
+  const button = this.appendElement.querySelector(this.cssSelectors.button);
+  const icon = this.appendElement.querySelector(this.cssSelectors.icon);
+  if (!button || !icon) return;
 
-// ======================
-// 3. 이벤트 매핑
-// ======================
+  const nextIcon =
+    data?.icon === null || data?.icon === undefined ? "" : String(data.icon);
+  const nextAria =
+    data?.ariaLabel === null || data?.ariaLabel === undefined
+      ? nextIcon
+      : String(data.ariaLabel);
+  const nextSize =
+    data?.size === "medium" || data?.size === "large" ? data.size : "fab";
+
+  icon.textContent = nextIcon;
+  button.setAttribute("aria-label", nextAria);
+  button.dataset.size = nextSize;
+};
 
 this.customEvents = {
-    click: {
-        [this.fieldRender.cssSelectors.fab]: '@fabClicked'
-    }
+  click: {
+    [this.cssSelectors.button]: "@fabClicked",
+  },
 };
-
 bindEvents(this, this.customEvents);

@@ -1,0 +1,78 @@
+.status-card {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 320px;
+    padding: 24px;
+    border-radius: 18px;
+    cursor: pointer;
+}
+
+.status-card--operational {
+    background:
+        radial-gradient(circle at top, rgba(0, 229, 255, 0.14), transparent 36%),
+        linear-gradient(180deg, #0a1114 0%, #05090b 100%);
+    box-shadow:
+        inset 0 1px 0 rgba(120, 244, 255, 0.08),
+        0 18px 40px rgba(0, 0, 0, 0.42);
+    color: #c8fbff;
+}
+
+.status-card__header,
+.status-card__meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.status-card__eyebrow,
+.status-card__meta-label {
+    color: rgba(125, 238, 255, 0.72);
+    font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.status-card__name {
+    font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+.status-card__status {
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.status-card__status[data-status="RUNNING"] {
+    background: rgba(0, 229, 255, 0.14);
+    color: #7deeff;
+}
+
+.status-card__status[data-status="unknown"] {
+    background: rgba(125, 238, 255, 0.08);
+    color: rgba(125, 238, 255, 0.72);
+}
+
+.status-card__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(125, 238, 255, 0.14);
+}
+
+.status-card__version,
+.status-card__uptime {
+    font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+    font-size: 13px;
+    font-weight: 600;
+}

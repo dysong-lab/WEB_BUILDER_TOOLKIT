@@ -1,0 +1,129 @@
+.tree {
+  width: 100%;
+  min-width: 280px;
+}
+
+.tree__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tree__node {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  min-height: 52px;
+  border-radius: 2px;
+  border-bottom: 1px solid rgba(93, 67, 48, 0.12);
+  transition: border-color 120ms ease, color 120ms ease;
+}
+
+.tree__node[data-selected="true"] {
+  border-bottom-color: rgba(93, 67, 48, 0.34);
+}
+
+.tree__node[data-tone="warning"] .tree__icon,
+.tree__node[data-tone="warning"] .tree__meta {
+  color: #9d6a1f;
+}
+
+.tree__node[data-tone="critical"] .tree__icon,
+.tree__node[data-tone="critical"] .tree__meta {
+  color: #8f3e34;
+}
+
+.tree__toggle,
+.tree__content {
+  border: 0;
+  background: transparent;
+}
+
+.tree__toggle {
+  width: 34px;
+  min-width: 34px;
+  border-radius: 2px;
+  color: #5d4330;
+  cursor: pointer;
+  transition: color 120ms ease, transform 120ms ease;
+}
+
+.tree__node[data-selected="false"] .tree__toggle:not(:active):hover {
+  color: #2f241a;
+}
+
+.tree__toggle:active {
+  transform: scale(0.94);
+}
+
+.tree__toggle-glyph {
+  display: inline-block;
+  transition: transform 170ms ease;
+}
+
+.tree__node[data-expanded="true"] .tree__toggle-glyph {
+  transform: rotate(90deg);
+}
+
+.tree__node[data-has-children="false"] .tree__toggle {
+  visibility: hidden;
+}
+
+.tree__content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 52px;
+  padding: 10px 8px 10px 0;
+  border-radius: 2px;
+  color: #2f241a;
+  cursor: pointer;
+  text-align: left;
+  transition: color 120ms ease;
+}
+
+.tree__node[data-selected="false"] .tree__content:not(:active):hover {
+  color: #5d4330;
+}
+
+.tree__icon {
+  width: 18px;
+  font-size: 15px;
+  color: #5d4330;
+  text-align: center;
+}
+
+.tree__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.tree__label {
+  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.6px;
+  text-decoration: none;
+}
+
+.tree__node[data-selected="true"] .tree__label {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.tree__meta {
+  font-family: "Instrument Sans", -apple-system, sans-serif;
+  font-size: 12px;
+  color: rgba(47, 36, 26, 0.58);
+}
+
+.tree__empty {
+  padding: 20px 0 4px;
+  font-family: "Instrument Sans", -apple-system, sans-serif;
+  font-size: 13px;
+  color: rgba(47, 36, 26, 0.54);
+}

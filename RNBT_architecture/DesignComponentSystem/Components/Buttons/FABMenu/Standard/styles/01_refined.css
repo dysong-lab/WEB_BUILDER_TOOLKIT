@@ -1,97 +1,65 @@
-/* 01_refined: Persona A — Refined Technical
-   다크, 퍼플 그라디언트 FAB, 카드형 리스트 / Pretendard */
-
-#fab-menu-container {
-    width: 240px;
-    height: 360px;
-
-    .fab-menu {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        justify-content: flex-end;
-        gap: 16px;
-        width: 100%;
-        height: 100%;
-    }
-
-    .fab-menu__list {
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 8px;
-        width: 100%;
-        opacity: 0;
-        transform: translateY(8px);
-        pointer-events: none;
-        transition: opacity 180ms ease-out, transform 180ms ease-out;
-    }
-
-    .fab-menu.is-open .fab-menu__list {
-        opacity: 1;
-        transform: translateY(0);
-        pointer-events: auto;
-    }
-
-    .fab-menu__item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        width: 100%;
-        padding: 12px 16px;
-        border: 1px solid #2A2574;
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.04);
-        cursor: pointer;
-        transition: background-color 150ms ease-out, border-color 150ms ease-out;
-    }
-
-    .fab-menu__item:hover {
-        background: rgba(80, 46, 233, 0.16);
-        border-color: #502EE9;
-    }
-
-    .fab-menu__item-icon {
-        font-size: 20px;
-        color: #92A8F4;
-        flex-shrink: 0;
-    }
-
-    .fab-menu__item-icon:empty { display: none; }
-
-    .fab-menu__item-label {
-        font-family: 'Pretendard', sans-serif;
-        font-size: 14px;
-        font-weight: 500;
-        color: #E8EDFF;
-        white-space: nowrap;
-    }
-
-    .fab-menu__trigger {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 56px;
-        height: 56px;
-        padding: 0;
-        border: none;
-        border-radius: 16px;
-        background: linear-gradient(135deg, #502EE9 0%, #7159D0 100%);
-        box-shadow: 0 6px 12px rgba(80, 46, 233, 0.36), 0 2px 4px rgba(80, 46, 233, 0.24);
-        cursor: pointer;
-        transition: transform 180ms ease-out, box-shadow 150ms ease-out;
-    }
-
-    .fab-menu__trigger:hover {
-        box-shadow: 0 8px 18px rgba(80, 46, 233, 0.44), 0 3px 6px rgba(80, 46, 233, 0.28);
-    }
-
-    .fab-menu.is-open .fab-menu__trigger {
-        transform: rotate(45deg);
-    }
-
-    .fab-menu__trigger-icon {
-        font-size: 24px;
-        color: #E8EDFF;
-    }
+.fab-menu-shell {
+  display: inline-flex;
+  padding: 24px;
+  border-radius: 28px;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(154, 203, 255, 0.38),
+      transparent 42%
+    ),
+    linear-gradient(180deg, #0e1f35 0%, #091523 100%);
+}
+.fab-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+.fab-menu__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #edf6ff 0%, #d7e9ff 100%);
+  color: #0b3f79;
+  cursor: pointer;
+}
+.fab-menu__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(-6px);
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease,
+    visibility 180ms ease;
+}
+.fab-menu[data-open="true"] .fab-menu__list {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  pointer-events: auto;
+}
+.fab-menu__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 14px;
+  background: rgba(215, 233, 255, 0.18);
+  color: #d7e9ff;
+  cursor: pointer;
+}
+.fab-menu__trigger-label,
+.fab-menu__item-label {
+  white-space: nowrap;
 }

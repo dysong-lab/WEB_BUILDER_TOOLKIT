@@ -1,50 +1,41 @@
 /**
  * Buttons — Standard
  *
- * 목적: 버튼 라벨/아이콘을 표시하고 클릭 이벤트를 발행한다
- * 기능: FieldRenderMixin으로 라벨/아이콘 렌더링 + 클릭 이벤트
+ * 목적: 기본 액션 버튼을 표시하고 클릭 이벤트를 발행한다
+ * 기능: label을 DOM에 반영하고 버튼 클릭을 페이지 이벤트로 전달한다
  *
- * Mixin: FieldRenderMixin
+ * Mixin: 없음
  */
-const { subscribe } = GlobalDataPublisher;
 const { bindEvents } = Wkit;
-const { each, go } = fx;
 
 // ======================
-// 1. MIXIN 적용
+// 1. selector + 자체 메서드 정의
 // ======================
 
-applyFieldRenderMixin(this, {
-    cssSelectors: {
-        button: '.button',
-        label:  '.button__label',
-        icon:   '.button__icon'
-    }
-});
-
-// ======================
-// 2. 구독 연결
-// ======================
-
-this.subscriptions = {
-    buttonInfo: [this.fieldRender.renderData]
+this.cssSelectors = {
+  button: ".md-button",
+  label: ".md-button__label",
 };
 
-go(
-    Object.entries(this.subscriptions),
-    each(([topic, handlers]) =>
-        each(handler => subscribe(topic, this, handler), handlers)
-    )
-);
+this.renderButtonInfo = function (data = {}) {
+  const button = this.appendElement.querySelector(this.cssSelectors.button);
+  const label = this.appendElement.querySelector(this.cssSelectors.label);
+  if (!button || !label) return;
+
+  const nextLabel =
+    data?.label === null || data?.label === undefined ? "" : String(data.label);
+
+  label.textContent = nextLabel;
+  button.setAttribute("aria-label", nextLabel);
+};
 
 // ======================
-// 3. 이벤트 매핑
+// 2. 이벤트 매핑
 // ======================
 
 this.customEvents = {
-    click: {
-        [this.fieldRender.cssSelectors.button]: '@buttonClicked'
-    }
+  click: {
+    [this.cssSelectors.button]: "@buttonClicked",
+  },
 };
-
 bindEvents(this, this.customEvents);

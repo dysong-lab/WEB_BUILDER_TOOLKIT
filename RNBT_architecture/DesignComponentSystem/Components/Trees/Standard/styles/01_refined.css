@@ -1,0 +1,127 @@
+.tree {
+  width: 100%;
+  min-width: 280px;
+}
+
+.tree__list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tree__node {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  min-height: 44px;
+  border-radius: 18px;
+  transition: background-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+}
+
+.tree__node[data-selected="true"] {
+  background: rgba(121, 172, 255, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(144, 194, 255, 0.18);
+}
+
+.tree__node[data-tone="warning"] .tree__icon,
+.tree__node[data-tone="warning"] .tree__meta {
+  color: #ffd37a;
+}
+
+.tree__node[data-tone="critical"] .tree__icon,
+.tree__node[data-tone="critical"] .tree__meta {
+  color: #ff9086;
+}
+
+.tree__toggle,
+.tree__content {
+  border: 0;
+  background: transparent;
+}
+
+.tree__toggle {
+  width: 36px;
+  min-width: 36px;
+  border-radius: 12px;
+  color: #8bb9f5;
+  cursor: pointer;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+
+.tree__node[data-selected="false"] .tree__toggle:not(:active):hover {
+  background: rgba(139, 185, 245, 0.12);
+}
+
+.tree__toggle:active {
+  transform: scale(0.94);
+}
+
+.tree__toggle-glyph {
+  display: inline-block;
+  transition: transform 180ms ease;
+}
+
+.tree__node[data-expanded="true"] .tree__toggle-glyph {
+  transform: rotate(90deg);
+}
+
+.tree__node[data-has-children="false"] .tree__toggle {
+  visibility: hidden;
+}
+
+.tree__content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 10px 14px 10px 0;
+  border-radius: 16px;
+  color: #eaf2ff;
+  cursor: pointer;
+  text-align: left;
+  transition: transform 180ms ease, background-color 180ms ease;
+}
+
+.tree__node[data-selected="false"] .tree__content:not(:active):hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.tree__content:active {
+  transform: scale(0.99);
+}
+
+.tree__icon {
+  width: 20px;
+  font-size: 16px;
+  color: #8bb9f5;
+  text-align: center;
+}
+
+.tree__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.tree__label {
+  font-family: "SUIT", "Pretendard", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+.tree__meta {
+  font-family: "SUIT", "Pretendard", sans-serif;
+  font-size: 12px;
+  color: rgba(210, 226, 255, 0.62);
+}
+
+.tree__empty {
+  padding: 16px 0 4px;
+  font-family: "SUIT", "Pretendard", sans-serif;
+  font-size: 13px;
+  color: rgba(210, 226, 255, 0.54);
+}

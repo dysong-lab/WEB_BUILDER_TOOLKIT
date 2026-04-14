@@ -1,0 +1,94 @@
+/* 04_operational — 기능 중심 고밀도 스타일 */
+
+.checkbox-group-shell--operational {
+  display: inline-flex;
+  padding: 16px;
+  background: #0d1117;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+}
+
+.checkbox-group-shell--operational .checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 180px;
+}
+
+.checkbox-group-shell--operational .checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 100ms ease;
+}
+
+.checkbox-group-shell--operational .checkbox-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.checkbox-group-shell--operational .checkbox-item[data-disabled="true"] {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* 체크박스 박스 — 스퀘어, 컴팩트 */
+.checkbox-group-shell--operational .checkbox-item__box {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+  position: relative;
+  transition:
+    border-color 100ms ease,
+    background 100ms ease;
+}
+
+/* 체크마크 — 소형 */
+.checkbox-group-shell--operational .checkbox-item__box::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 4px;
+  width: 4px;
+  height: 7px;
+  border: 1.5px solid transparent;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+  transition: border-color 80ms ease;
+}
+
+/* 체크 상태 — 초록 강조 (운영 상태 표시) */
+.checkbox-group-shell--operational .checkbox-item[data-checked="true"] .checkbox-item__box {
+  border-color: #3fb950;
+  background: #238636;
+}
+
+.checkbox-group-shell--operational .checkbox-item[data-checked="true"] .checkbox-item__box::after {
+  border-color: #fff;
+}
+
+/* 레이블 */
+.checkbox-group-shell--operational .checkbox-item__label {
+  font:
+    400 12px/1.4 "JetBrains Mono",
+    "Consolas",
+    monospace;
+  color: #c9d1d9;
+  letter-spacing: 0;
+}
+
+.checkbox-group-shell--operational .checkbox-item[data-checked="true"] .checkbox-item__label {
+  color: #f0f6fc;
+}
+
+.checkbox-group-shell--operational .checkbox-item[data-disabled="true"] .checkbox-item__label {
+  color: rgba(201, 209, 217, 0.3);
+}
