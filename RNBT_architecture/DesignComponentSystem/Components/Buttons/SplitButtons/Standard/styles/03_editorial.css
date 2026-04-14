@@ -1,0 +1,158 @@
+/* 03_editorial: Persona C — Minimal Editorial
+   웜 그레이 / 세리프 / 라이트 / outlined 미니멀 */
+
+#split-button-container {
+    width: 260px;
+    height: 240px;
+
+    .split-button {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .split-button__bar {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        height: 40px;
+    }
+
+    .split-button__action,
+    .split-button__trigger {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #D1CBC3;
+        background: #FDFBF7;
+        cursor: pointer;
+        transition: background-color 150ms ease-out;
+    }
+
+    .split-button__action {
+        flex: 1;
+        gap: 8px;
+        padding: 0 18px;
+        border-radius: 2px 0 0 2px;
+        border-right: none;
+    }
+
+    .split-button__trigger {
+        width: 36px;
+        border-radius: 0 2px 2px 0;
+    }
+
+    .split-button__action:hover,
+    .split-button__trigger:hover {
+        background: #F0EDE7;
+    }
+
+    .split-button__action-icon {
+        font-size: 16px;
+        color: #8C7B6B;
+        flex-shrink: 0;
+    }
+
+    .split-button__action-icon:empty {
+        display: none;
+    }
+
+    .split-button__action-label {
+        font-family: 'Georgia', serif;
+        font-size: 14px;
+        font-weight: 400;
+        color: #3A3028;
+        white-space: nowrap;
+        letter-spacing: 0.3px;
+    }
+
+    .split-button__chevron {
+        font-family: 'Georgia', serif;
+        font-size: 14px;
+        color: #8C7B6B;
+        transition: transform 180ms ease-out;
+    }
+
+    .split-button[data-open="true"] .split-button__chevron {
+        transform: rotate(180deg);
+    }
+
+    .split-button__menu {
+        position: absolute;
+        top: 42px;
+        right: 0;
+        width: 220px;
+        display: none;
+        flex-direction: column;
+        padding: 4px;
+        background: #FDFBF7;
+        border: 1px solid #D1CBC3;
+        border-radius: 2px;
+        box-shadow: 0 2px 6px rgba(140, 123, 107, 0.12);
+        z-index: 10;
+    }
+
+    .split-button[data-open="true"] .split-button__menu {
+        display: flex;
+    }
+
+    .split-button__menu-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 12px;
+        height: 34px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        transition: background-color 120ms ease-out;
+    }
+
+    .split-button__menu-item:hover {
+        background: #F0EDE7;
+    }
+
+    .split-button__menu-item[data-selected="true"] {
+        background: #E8E2D9;
+    }
+
+    .split-button__menu-check {
+        display: none;
+        font-family: 'Georgia', serif;
+        font-size: 13px;
+        color: #3A3028;
+        flex-shrink: 0;
+    }
+
+    .split-button__menu-item[data-selected="true"] .split-button__menu-check {
+        display: inline-block;
+    }
+
+    .split-button__menu-item[data-selected="true"] .split-button__menu-icon {
+        display: none;
+    }
+
+    .split-button__menu-icon {
+        font-size: 16px;
+        color: #8C7B6B;
+        flex-shrink: 0;
+    }
+
+    .split-button__menu-icon:empty {
+        display: none;
+    }
+
+    .split-button__menu-label {
+        font-family: 'Georgia', serif;
+        font-size: 13px;
+        font-weight: 400;
+        color: #8C7B6B;
+        white-space: nowrap;
+    }
+
+    .split-button__menu-item[data-selected="true"] .split-button__menu-label {
+        color: #3A3028;
+        font-weight: 700;
+    }
+}

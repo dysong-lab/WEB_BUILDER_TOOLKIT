@@ -1,0 +1,157 @@
+/* 02_material: Persona B — Material Elevated
+   블루 팔레트 / filled / Roboto / 라이트 / shadow elevation */
+
+#split-button-container {
+    width: 260px;
+    height: 240px;
+
+    .split-button {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .split-button__bar {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        height: 40px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
+        border-radius: 20px;
+    }
+
+    .split-button__action,
+    .split-button__trigger {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        background: #1A73E8;
+        cursor: pointer;
+        transition: background-color 150ms ease-out;
+    }
+
+    .split-button__action {
+        flex: 1;
+        gap: 8px;
+        padding: 0 20px;
+        border-radius: 20px 0 0 20px;
+    }
+
+    .split-button__trigger {
+        width: 40px;
+        border-radius: 0 20px 20px 0;
+        border-left: 1px solid rgba(255, 255, 255, 0.24);
+    }
+
+    .split-button__action:hover,
+    .split-button__trigger:hover {
+        background: #1557B0;
+    }
+
+    .split-button__action-icon {
+        font-size: 18px;
+        color: #FFFFFF;
+        flex-shrink: 0;
+    }
+
+    .split-button__action-icon:empty {
+        display: none;
+    }
+
+    .split-button__action-label {
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #FFFFFF;
+        white-space: nowrap;
+        letter-spacing: 0.25px;
+    }
+
+    .split-button__chevron {
+        font-size: 20px;
+        color: #FFFFFF;
+        transition: transform 180ms ease-out;
+    }
+
+    .split-button[data-open="true"] .split-button__chevron {
+        transform: rotate(180deg);
+    }
+
+    .split-button__menu {
+        position: absolute;
+        top: 48px;
+        right: 0;
+        width: 220px;
+        display: none;
+        flex-direction: column;
+        padding: 8px 0;
+        background: #FFFFFF;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.08);
+        z-index: 10;
+    }
+
+    .split-button[data-open="true"] .split-button__menu {
+        display: flex;
+    }
+
+    .split-button__menu-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0 16px;
+        height: 40px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        transition: background-color 120ms ease-out;
+    }
+
+    .split-button__menu-item:hover {
+        background: #F5F7FB;
+    }
+
+    .split-button__menu-item[data-selected="true"] {
+        background: #E8F0FE;
+    }
+
+    .split-button__menu-check {
+        display: none;
+        font-size: 18px;
+        color: #1A73E8;
+        flex-shrink: 0;
+    }
+
+    .split-button__menu-item[data-selected="true"] .split-button__menu-check {
+        display: inline-block;
+    }
+
+    .split-button__menu-item[data-selected="true"] .split-button__menu-icon {
+        display: none;
+    }
+
+    .split-button__menu-icon {
+        font-size: 18px;
+        color: #5F6368;
+        flex-shrink: 0;
+    }
+
+    .split-button__menu-icon:empty {
+        display: none;
+    }
+
+    .split-button__menu-label {
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+        color: #202124;
+        white-space: nowrap;
+    }
+
+    .split-button__menu-item[data-selected="true"] .split-button__menu-label {
+        color: #1A73E8;
+        font-weight: 500;
+    }
+}

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>SplitButtons/Standard — 04_operational (Persona D)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #050D0F;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            gap: 20px;
+            padding: 40px 20px;
+        }
+        .demo-log {
+            width: 360px;
+            padding: 12px 14px;
+            background: #0D1B1E;
+            border: 1px solid #2A3A3E;
+            border-radius: 4px;
+            color: #5A7A80;
+            font-size: 11px;
+            line-height: 1.6;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .demo-log strong { color: #00BCD4; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+<div id="split-button-container"></div>
+<div class="demo-log" id="demo-log"><strong>[LOG]</strong><br>—</div>
+
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/FieldRenderMixin.js"></script>
+<script src="../../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('split-button-container', '../views/04_operational.html', '../styles/04_operational.css');
+
+    const instance = { id: 'split-buttons', appendElement: document.getElementById('split-button-container') };
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            action:     '.split-button__action',
+            actionIcon: '.split-button__action-icon',
+            label:      '.split-button__action-label'
+        }
+    });
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container: '.split-button__menu',
+            template:  '#split-button-menu-item-template',
+            menuid:    '.split-button__menu-item',
+            selected:  '.split-button__menu-item',
+            menuLabel: '.split-button__menu-label',
+            menuIcon:  '.split-button__menu-icon'
+        },
+        itemKey: 'menuid',
+        datasetAttrs: {
+            menuid:   'menuid',
+            selected: 'selected'
+        }
+    });
+
+    instance.subscriptions = {
+        splitButtonAction:    [instance.fieldRender.renderData],
+        splitButtonMenuItems: [instance.listRender.renderData]
+    };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.fieldRender.cssSelectors.action]: '@splitActionClicked',
+            '.split-button__trigger':                   '@splitMenuToggled',
+            [instance.listRender.cssSelectors.menuid]:  '@splitMenuItemClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>[LOG]</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>[LOG]</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    const root = () => instance.appendElement.querySelector('.split-button');
+
+    const menuItems = [
+        { menuid: 'deploy_staging', menuIcon: 'cloud_upload',     menuLabel: 'Staging',    selected: 'false' },
+        { menuid: 'deploy_prod',    menuIcon: 'rocket_launch',    menuLabel: 'Production', selected: 'false' },
+        { menuid: 'deploy_rollback',menuIcon: 'undo',             menuLabel: 'Rollback',   selected: 'false' }
+    ];
+
+    Wkit.onEventBusHandlers({
+        '@splitActionClicked': () => {
+            log('[EXEC] splitActionClicked -> deploy');
+        },
+        '@splitMenuToggled': () => {
+            const el = root();
+            const next = el.dataset.open === 'true' ? 'false' : 'true';
+            el.dataset.open = next;
+            log(`[TOGGLE] data-open="${next}"`);
+        },
+        '@splitMenuItemClicked': ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.listRender.cssSelectors.menuid);
+            const menuid = item?.getAttribute('data-menuid');
+            if (!menuid) return;
+            menuItems.forEach(it => {
+                targetInstance.listRender.updateItemState(it.menuid, { selected: it.menuid === menuid ? 'true' : 'false' });
+            });
+            root().dataset.open = 'false';
+            log(`[SELECT] "${menuid}" + CLOSE`);
+        }
+    });
+
+    GlobalDataPublisher.publish('splitButtonAction', { actionIcon: 'rocket_launch', label: 'Deploy' });
+    instance.listRender.renderData({ response: menuItems });
+})();
+</script>
+</body>
+</html>

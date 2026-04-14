@@ -1,0 +1,162 @@
+/* 04_operational: Persona D — Dark Operational
+   시안 팔레트 / 모노스페이스 / 다크 / 컴팩트 */
+
+#split-button-container {
+    width: 260px;
+    height: 220px;
+
+    .split-button {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .split-button__bar {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        height: 32px;
+    }
+
+    .split-button__action,
+    .split-button__trigger {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #2A3A3E;
+        background: #0D1B1E;
+        cursor: pointer;
+        transition: background-color 100ms ease-out, border-color 100ms ease-out;
+    }
+
+    .split-button__action {
+        flex: 1;
+        gap: 6px;
+        padding: 0 12px;
+        border-radius: 4px 0 0 4px;
+        border-right: none;
+    }
+
+    .split-button__trigger {
+        width: 28px;
+        border-radius: 0 4px 4px 0;
+    }
+
+    .split-button__action:hover,
+    .split-button__trigger:hover {
+        background: rgba(0, 188, 212, 0.12);
+        border-color: #00BCD4;
+    }
+
+    .split-button__action-icon {
+        font-size: 14px;
+        color: #00BCD4;
+        flex-shrink: 0;
+    }
+
+    .split-button__action-icon:empty {
+        display: none;
+    }
+
+    .split-button__action-label {
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        font-size: 12px;
+        font-weight: 500;
+        color: #B2EBF2;
+        white-space: nowrap;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .split-button__chevron {
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        font-size: 11px;
+        color: #00BCD4;
+        transition: transform 180ms ease-out;
+    }
+
+    .split-button[data-open="true"] .split-button__chevron {
+        transform: rotate(180deg);
+    }
+
+    .split-button__menu {
+        position: absolute;
+        top: 36px;
+        right: 0;
+        width: 220px;
+        display: none;
+        flex-direction: column;
+        padding: 4px;
+        background: #0D1B1E;
+        border: 1px solid #2A3A3E;
+        border-radius: 4px;
+        box-shadow: 0 4px 12px rgba(0, 188, 212, 0.12);
+        z-index: 10;
+    }
+
+    .split-button[data-open="true"] .split-button__menu {
+        display: flex;
+    }
+
+    .split-button__menu-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 10px;
+        height: 30px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        transition: background-color 100ms ease-out;
+    }
+
+    .split-button__menu-item:hover {
+        background: rgba(0, 188, 212, 0.08);
+    }
+
+    .split-button__menu-item[data-selected="true"] {
+        background: rgba(0, 188, 212, 0.16);
+    }
+
+    .split-button__menu-check {
+        display: none;
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        font-size: 10px;
+        color: #00BCD4;
+        flex-shrink: 0;
+    }
+
+    .split-button__menu-item[data-selected="true"] .split-button__menu-check {
+        display: inline-block;
+    }
+
+    .split-button__menu-item[data-selected="true"] .split-button__menu-icon {
+        display: none;
+    }
+
+    .split-button__menu-icon {
+        font-size: 14px;
+        color: #5A7A80;
+        flex-shrink: 0;
+    }
+
+    .split-button__menu-icon:empty {
+        display: none;
+    }
+
+    .split-button__menu-label {
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        font-size: 11px;
+        font-weight: 400;
+        color: #5A7A80;
+        white-space: nowrap;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .split-button__menu-item[data-selected="true"] .split-button__menu-label {
+        color: #B2EBF2;
+        font-weight: 500;
+    }
+}
