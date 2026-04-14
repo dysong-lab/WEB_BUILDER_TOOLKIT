@@ -12,10 +12,22 @@
               "name": "Standard",
               "spec": "Components/AppBars/Standard/CLAUDE.md",
               "previews": [
-                { "label": "01 refined", "path": "Components/AppBars/Standard/preview/01_refined.html" },
-                { "label": "02 material", "path": "Components/AppBars/Standard/preview/02_material.html" },
-                { "label": "03 editorial", "path": "Components/AppBars/Standard/preview/03_editorial.html" },
-                { "label": "04 operational", "path": "Components/AppBars/Standard/preview/04_operational.html" }
+                {
+                  "label": "01 refined",
+                  "path": "Components/AppBars/Standard/preview/01_refined.html"
+                },
+                {
+                  "label": "02 material",
+                  "path": "Components/AppBars/Standard/preview/02_material.html"
+                },
+                {
+                  "label": "03 editorial",
+                  "path": "Components/AppBars/Standard/preview/03_editorial.html"
+                },
+                {
+                  "label": "04 operational",
+                  "path": "Components/AppBars/Standard/preview/04_operational.html"
+                }
               ]
             },
             {
@@ -23,17 +35,23 @@
               "spec": null,
               "items": [
                 {
-                  "name": "searchEmbedded",
-                  "spec": "Components/AppBars/Advanced/searchEmbedded/CLAUDE.md",
-                  "previews": [
-                    { "label": "01 refined", "path": "Components/AppBars/Advanced/searchEmbedded/preview/01_refined.html" }
-                  ]
-                },
-                {
                   "name": "contextual",
                   "spec": "Components/AppBars/Advanced/contextual/CLAUDE.md",
                   "previews": [
-                    { "label": "01 refined", "path": "Components/AppBars/Advanced/contextual/preview/01_refined.html" }
+                    {
+                      "label": "01 refined",
+                      "path": "Components/AppBars/Advanced/contextual/preview/01_refined.html"
+                    }
+                  ]
+                },
+                {
+                  "name": "searchEmbedded",
+                  "spec": "Components/AppBars/Advanced/searchEmbedded/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 refined",
+                      "path": "Components/AppBars/Advanced/searchEmbedded/preview/01_refined.html"
+                    }
                   ]
                 }
               ]
@@ -54,10 +72,22 @@
               "name": "Standard",
               "spec": "Components/Badges/Standard/CLAUDE.md",
               "previews": [
-                { "label": "01 refined", "path": "Components/Badges/Standard/preview/01_refined.html" },
-                { "label": "02 material", "path": "Components/Badges/Standard/preview/02_material.html" },
-                { "label": "03 editorial", "path": "Components/Badges/Standard/preview/03_editorial.html" },
-                { "label": "04 operational", "path": "Components/Badges/Standard/preview/04_operational.html" }
+                {
+                  "label": "01 refined",
+                  "path": "Components/Badges/Standard/preview/01_refined.html"
+                },
+                {
+                  "label": "02 material",
+                  "path": "Components/Badges/Standard/preview/02_material.html"
+                },
+                {
+                  "label": "03 editorial",
+                  "path": "Components/Badges/Standard/preview/03_editorial.html"
+                },
+                {
+                  "label": "04 operational",
+                  "path": "Components/Badges/Standard/preview/04_operational.html"
+                }
               ]
             }
           ]
@@ -76,10 +106,22 @@
               "name": "Standard",
               "spec": "Components/Buttons/ButtonGroups/Standard/CLAUDE.md",
               "previews": [
-                { "label": "01 refined", "path": "Components/Buttons/ButtonGroups/Standard/preview/01_refined.html" },
-                { "label": "02 material", "path": "Components/Buttons/ButtonGroups/Standard/preview/02_material.html" },
-                { "label": "03 editorial", "path": "Components/Buttons/ButtonGroups/Standard/preview/03_editorial.html" },
-                { "label": "04 operational", "path": "Components/Buttons/ButtonGroups/Standard/preview/04_operational.html" }
+                {
+                  "label": "01 refined",
+                  "path": "Components/Buttons/ButtonGroups/Standard/preview/01_refined.html"
+                },
+                {
+                  "label": "02 material",
+                  "path": "Components/Buttons/ButtonGroups/Standard/preview/02_material.html"
+                },
+                {
+                  "label": "03 editorial",
+                  "path": "Components/Buttons/ButtonGroups/Standard/preview/03_editorial.html"
+                },
+                {
+                  "label": "04 operational",
+                  "path": "Components/Buttons/ButtonGroups/Standard/preview/04_operational.html"
+                }
               ]
             }
           ]
@@ -92,10 +134,22 @@
               "name": "Standard",
               "spec": "Components/Buttons/Buttons/Standard/CLAUDE.md",
               "previews": [
-                { "label": "01 refined", "path": "Components/Buttons/Buttons/Standard/preview/01_refined.html" },
-                { "label": "02 material", "path": "Components/Buttons/Buttons/Standard/preview/02_material.html" },
-                { "label": "03 editorial", "path": "Components/Buttons/Buttons/Standard/preview/03_editorial.html" },
-                { "label": "04 operational", "path": "Components/Buttons/Buttons/Standard/preview/04_operational.html" }
+                {
+                  "label": "01 refined",
+                  "path": "Components/Buttons/Buttons/Standard/preview/01_refined.html"
+                },
+                {
+                  "label": "02 material",
+                  "path": "Components/Buttons/Buttons/Standard/preview/02_material.html"
+                },
+                {
+                  "label": "03 editorial",
+                  "path": "Components/Buttons/Buttons/Standard/preview/03_editorial.html"
+                },
+                {
+                  "label": "04 operational",
+                  "path": "Components/Buttons/Buttons/Standard/preview/04_operational.html"
+                }
               ]
             }
           ]
@@ -108,15 +162,54 @@
               "name": "Standard",
               "spec": "Components/Buttons/ExtendedFABs/Standard/CLAUDE.md",
               "previews": [
-                { "label": "01 refined", "path": "Components/Buttons/ExtendedFABs/Standard/preview/01_refined.html" },
-                { "label": "02 material", "path": "Components/Buttons/ExtendedFABs/Standard/preview/02_material.html" },
-                { "label": "03 editorial", "path": "Components/Buttons/ExtendedFABs/Standard/preview/03_editorial.html" },
-                { "label": "04 operational", "path": "Components/Buttons/ExtendedFABs/Standard/preview/04_operational.html" }
+                {
+                  "label": "01 refined",
+                  "path": "Components/Buttons/ExtendedFABs/Standard/preview/01_refined.html"
+                },
+                {
+                  "label": "02 material",
+                  "path": "Components/Buttons/ExtendedFABs/Standard/preview/02_material.html"
+                },
+                {
+                  "label": "03 editorial",
+                  "path": "Components/Buttons/ExtendedFABs/Standard/preview/03_editorial.html"
+                },
+                {
+                  "label": "04 operational",
+                  "path": "Components/Buttons/ExtendedFABs/Standard/preview/04_operational.html"
+                }
               ]
             }
           ]
         },
-        { "name": "FAB", "spec": "Components/Buttons/FAB/CLAUDE.md", "sets": [] },
+        {
+          "name": "FAB",
+          "spec": "Components/Buttons/FAB/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/Buttons/FAB/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 refined",
+                  "path": "Components/Buttons/FAB/Standard/preview/01_refined.html"
+                },
+                {
+                  "label": "02 material",
+                  "path": "Components/Buttons/FAB/Standard/preview/02_material.html"
+                },
+                {
+                  "label": "03 editorial",
+                  "path": "Components/Buttons/FAB/Standard/preview/03_editorial.html"
+                },
+                {
+                  "label": "04 operational",
+                  "path": "Components/Buttons/FAB/Standard/preview/04_operational.html"
+                }
+              ]
+            }
+          ]
+        },
         {
           "name": "FABMenu",
           "spec": "Components/Buttons/FABMenu/CLAUDE.md",
@@ -125,10 +218,22 @@
               "name": "Standard",
               "spec": "Components/Buttons/FABMenu/Standard/CLAUDE.md",
               "previews": [
-                { "label": "01 refined", "path": "Components/Buttons/FABMenu/Standard/preview/01_refined.html" },
-                { "label": "02 material", "path": "Components/Buttons/FABMenu/Standard/preview/02_material.html" },
-                { "label": "03 editorial", "path": "Components/Buttons/FABMenu/Standard/preview/03_editorial.html" },
-                { "label": "04 operational", "path": "Components/Buttons/FABMenu/Standard/preview/04_operational.html" }
+                {
+                  "label": "01 refined",
+                  "path": "Components/Buttons/FABMenu/Standard/preview/01_refined.html"
+                },
+                {
+                  "label": "02 material",
+                  "path": "Components/Buttons/FABMenu/Standard/preview/02_material.html"
+                },
+                {
+                  "label": "03 editorial",
+                  "path": "Components/Buttons/FABMenu/Standard/preview/03_editorial.html"
+                },
+                {
+                  "label": "04 operational",
+                  "path": "Components/Buttons/FABMenu/Standard/preview/04_operational.html"
+                }
               ]
             }
           ]
@@ -141,52 +246,469 @@
               "name": "Standard",
               "spec": "Components/Buttons/IconButtons/Standard/CLAUDE.md",
               "previews": [
-                { "label": "01 refined", "path": "Components/Buttons/IconButtons/Standard/preview/01_refined.html" },
-                { "label": "02 material", "path": "Components/Buttons/IconButtons/Standard/preview/02_material.html" },
-                { "label": "03 editorial", "path": "Components/Buttons/IconButtons/Standard/preview/03_editorial.html" },
-                { "label": "04 operational", "path": "Components/Buttons/IconButtons/Standard/preview/04_operational.html" }
+                {
+                  "label": "01 refined",
+                  "path": "Components/Buttons/IconButtons/Standard/preview/01_refined.html"
+                },
+                {
+                  "label": "02 material",
+                  "path": "Components/Buttons/IconButtons/Standard/preview/02_material.html"
+                },
+                {
+                  "label": "03 editorial",
+                  "path": "Components/Buttons/IconButtons/Standard/preview/03_editorial.html"
+                },
+                {
+                  "label": "04 operational",
+                  "path": "Components/Buttons/IconButtons/Standard/preview/04_operational.html"
+                }
               ]
             }
           ]
         },
-        { "name": "SegmentedButtons", "spec": "Components/Buttons/SegmentedButtons/CLAUDE.md", "sets": [] },
-        { "name": "SplitButtons", "spec": "Components/Buttons/SplitButtons/CLAUDE.md", "sets": [] }
+        {
+          "name": "SegmentedButtons",
+          "spec": "Components/Buttons/SegmentedButtons/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/Buttons/SegmentedButtons/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 refined",
+                  "path": "Components/Buttons/SegmentedButtons/Standard/preview/01_refined.html"
+                },
+                {
+                  "label": "02 material",
+                  "path": "Components/Buttons/SegmentedButtons/Standard/preview/02_material.html"
+                },
+                {
+                  "label": "03 editorial",
+                  "path": "Components/Buttons/SegmentedButtons/Standard/preview/03_editorial.html"
+                },
+                {
+                  "label": "04 operational",
+                  "path": "Components/Buttons/SegmentedButtons/Standard/preview/04_operational.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "SplitButtons",
+          "spec": "Components/Buttons/SplitButtons/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/Buttons/SplitButtons/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 refined",
+                  "path": "Components/Buttons/SplitButtons/Standard/preview/01_refined.html"
+                },
+                {
+                  "label": "02 material",
+                  "path": "Components/Buttons/SplitButtons/Standard/preview/02_material.html"
+                },
+                {
+                  "label": "03 editorial",
+                  "path": "Components/Buttons/SplitButtons/Standard/preview/03_editorial.html"
+                },
+                {
+                  "label": "04 operational",
+                  "path": "Components/Buttons/SplitButtons/Standard/preview/04_operational.html"
+                }
+              ]
+            }
+          ]
+        }
       ]
     },
     {
       "name": "Cards",
       "spec": "Components/Cards/CLAUDE.md",
-      "components": []
+      "components": [
+        {
+          "name": "StatusCard",
+          "spec": "Components/Cards/StatusCard/CLAUDE.md",
+          "previews": [
+            {
+              "label": "01 refined",
+              "path": "Components/Cards/StatusCard/preview/01_refined.html"
+            },
+            {
+              "label": "02 material",
+              "path": "Components/Cards/StatusCard/preview/02_material.html"
+            },
+            {
+              "label": "03 editorial",
+              "path": "Components/Cards/StatusCard/preview/03_editorial.html"
+            },
+            {
+              "label": "04 operational",
+              "path": "Components/Cards/StatusCard/preview/04_operational.html"
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "Charts",
       "spec": "Components/Charts/CLAUDE.md",
-      "components": []
+      "components": [
+        {
+          "name": "AreaChart",
+          "spec": "Components/Charts/AreaChart/CLAUDE.md",
+          "previews": [
+            {
+              "label": "01 refined",
+              "path": "Components/Charts/AreaChart/preview/01_refined.html"
+            },
+            {
+              "label": "02 material",
+              "path": "Components/Charts/AreaChart/preview/02_material.html"
+            },
+            {
+              "label": "03 editorial",
+              "path": "Components/Charts/AreaChart/preview/03_editorial.html"
+            },
+            {
+              "label": "04 operational",
+              "path": "Components/Charts/AreaChart/preview/04_operational.html"
+            }
+          ]
+        },
+        {
+          "name": "BarChart",
+          "spec": "Components/Charts/BarChart/CLAUDE.md",
+          "previews": [
+            {
+              "label": "01 refined",
+              "path": "Components/Charts/BarChart/preview/01_refined.html"
+            },
+            {
+              "label": "02 material",
+              "path": "Components/Charts/BarChart/preview/02_material.html"
+            },
+            {
+              "label": "03 editorial",
+              "path": "Components/Charts/BarChart/preview/03_editorial.html"
+            },
+            {
+              "label": "04 operational",
+              "path": "Components/Charts/BarChart/preview/04_operational.html"
+            }
+          ]
+        },
+        {
+          "name": "LineChart",
+          "spec": "Components/Charts/LineChart/CLAUDE.md",
+          "previews": [
+            {
+              "label": "01 refined",
+              "path": "Components/Charts/LineChart/preview/01_refined.html"
+            },
+            {
+              "label": "02 material",
+              "path": "Components/Charts/LineChart/preview/02_material.html"
+            },
+            {
+              "label": "03 editorial",
+              "path": "Components/Charts/LineChart/preview/03_editorial.html"
+            },
+            {
+              "label": "04 operational",
+              "path": "Components/Charts/LineChart/preview/04_operational.html"
+            }
+          ]
+        },
+        {
+          "name": "PieChart",
+          "spec": "Components/Charts/PieChart/CLAUDE.md",
+          "previews": [
+            {
+              "label": "01 refined",
+              "path": "Components/Charts/PieChart/preview/01_refined.html"
+            },
+            {
+              "label": "02 material",
+              "path": "Components/Charts/PieChart/preview/02_material.html"
+            },
+            {
+              "label": "03 editorial",
+              "path": "Components/Charts/PieChart/preview/03_editorial.html"
+            },
+            {
+              "label": "04 operational",
+              "path": "Components/Charts/PieChart/preview/04_operational.html"
+            }
+          ]
+        },
+        {
+          "name": "RadarChart",
+          "spec": "Components/Charts/RadarChart/CLAUDE.md",
+          "previews": [
+            {
+              "label": "01 refined",
+              "path": "Components/Charts/RadarChart/preview/01_refined.html"
+            },
+            {
+              "label": "02 material",
+              "path": "Components/Charts/RadarChart/preview/02_material.html"
+            },
+            {
+              "label": "03 editorial",
+              "path": "Components/Charts/RadarChart/preview/03_editorial.html"
+            },
+            {
+              "label": "04 operational",
+              "path": "Components/Charts/RadarChart/preview/04_operational.html"
+            }
+          ]
+        },
+        {
+          "name": "ScatterChart",
+          "spec": "Components/Charts/ScatterChart/CLAUDE.md",
+          "previews": [
+            {
+              "label": "01 refined",
+              "path": "Components/Charts/ScatterChart/preview/01_refined.html"
+            },
+            {
+              "label": "02 material",
+              "path": "Components/Charts/ScatterChart/preview/02_material.html"
+            },
+            {
+              "label": "03 editorial",
+              "path": "Components/Charts/ScatterChart/preview/03_editorial.html"
+            },
+            {
+              "label": "04 operational",
+              "path": "Components/Charts/ScatterChart/preview/04_operational.html"
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "Checkbox",
       "spec": "Components/Checkbox/CLAUDE.md",
-      "components": []
+      "components": [
+        {
+          "name": "Checkbox",
+          "spec": "Components/Checkbox/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/Checkbox/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 refined",
+                  "path": "Components/Checkbox/Standard/preview/01_refined.html"
+                },
+                {
+                  "label": "02 material",
+                  "path": "Components/Checkbox/Standard/preview/02_material.html"
+                },
+                {
+                  "label": "03 editorial",
+                  "path": "Components/Checkbox/Standard/preview/03_editorial.html"
+                },
+                {
+                  "label": "04 operational",
+                  "path": "Components/Checkbox/Standard/preview/04_operational.html"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "Chips",
       "spec": "Components/Chips/CLAUDE.md",
       "components": [
-        { "name": "Assist", "spec": "Components/Chips/Assist/CLAUDE.md", "sets": [] },
-        { "name": "Filter", "spec": "Components/Chips/Filter/CLAUDE.md", "sets": [] },
-        { "name": "Input", "spec": "Components/Chips/Input/CLAUDE.md", "sets": [] },
-        { "name": "Suggestion", "spec": "Components/Chips/Suggestion/CLAUDE.md", "sets": [] }
+        {
+          "name": "Assist",
+          "spec": "Components/Chips/Assist/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/Chips/Assist/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 refined",
+                  "path": "Components/Chips/Assist/Standard/preview/01_refined.html"
+                },
+                {
+                  "label": "02 material",
+                  "path": "Components/Chips/Assist/Standard/preview/02_material.html"
+                },
+                {
+                  "label": "03 editorial",
+                  "path": "Components/Chips/Assist/Standard/preview/03_editorial.html"
+                },
+                {
+                  "label": "04 operational",
+                  "path": "Components/Chips/Assist/Standard/preview/04_operational.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Filter",
+          "spec": "Components/Chips/Filter/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/Chips/Filter/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 refined",
+                  "path": "Components/Chips/Filter/Standard/preview/01_refined.html"
+                },
+                {
+                  "label": "02 material",
+                  "path": "Components/Chips/Filter/Standard/preview/02_material.html"
+                },
+                {
+                  "label": "03 editorial",
+                  "path": "Components/Chips/Filter/Standard/preview/03_editorial.html"
+                },
+                {
+                  "label": "04 operational",
+                  "path": "Components/Chips/Filter/Standard/preview/04_operational.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Input",
+          "spec": "Components/Chips/Input/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/Chips/Input/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 refined",
+                  "path": "Components/Chips/Input/Standard/preview/01_refined.html"
+                },
+                {
+                  "label": "02 material",
+                  "path": "Components/Chips/Input/Standard/preview/02_material.html"
+                },
+                {
+                  "label": "03 editorial",
+                  "path": "Components/Chips/Input/Standard/preview/03_editorial.html"
+                },
+                {
+                  "label": "04 operational",
+                  "path": "Components/Chips/Input/Standard/preview/04_operational.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Suggestion",
+          "spec": "Components/Chips/Suggestion/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/Chips/Suggestion/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 refined",
+                  "path": "Components/Chips/Suggestion/Standard/preview/01_refined.html"
+                },
+                {
+                  "label": "02 material",
+                  "path": "Components/Chips/Suggestion/Standard/preview/02_material.html"
+                },
+                {
+                  "label": "03 editorial",
+                  "path": "Components/Chips/Suggestion/Standard/preview/03_editorial.html"
+                },
+                {
+                  "label": "04 operational",
+                  "path": "Components/Chips/Suggestion/Standard/preview/04_operational.html"
+                }
+              ]
+            }
+          ]
+        }
       ]
     },
     {
       "name": "Dialogs",
       "spec": "Components/Dialogs/CLAUDE.md",
-      "components": []
+      "components": [
+        {
+          "name": "Dialogs",
+          "spec": "Components/Dialogs/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/Dialogs/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 refined",
+                  "path": "Components/Dialogs/Standard/preview/01_refined.html"
+                },
+                {
+                  "label": "02 material",
+                  "path": "Components/Dialogs/Standard/preview/02_material.html"
+                },
+                {
+                  "label": "03 editorial",
+                  "path": "Components/Dialogs/Standard/preview/03_editorial.html"
+                },
+                {
+                  "label": "04 operational",
+                  "path": "Components/Dialogs/Standard/preview/04_operational.html"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "Divider",
       "spec": "Components/Divider/CLAUDE.md",
-      "components": []
+      "components": [
+        {
+          "name": "Divider",
+          "spec": "Components/Divider/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/Divider/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 refined",
+                  "path": "Components/Divider/Standard/preview/01_refined.html"
+                },
+                {
+                  "label": "02 material",
+                  "path": "Components/Divider/Standard/preview/02_material.html"
+                },
+                {
+                  "label": "03 editorial",
+                  "path": "Components/Divider/Standard/preview/03_editorial.html"
+                },
+                {
+                  "label": "04 operational",
+                  "path": "Components/Divider/Standard/preview/04_operational.html"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "Lists",
@@ -197,8 +719,16 @@
       "name": "Loading",
       "spec": "Components/Loading/CLAUDE.md",
       "components": [
-        { "name": "LoadingIndicator", "spec": "Components/Loading/LoadingIndicator/CLAUDE.md", "sets": [] },
-        { "name": "ProgressIndicators", "spec": "Components/Loading/ProgressIndicators/CLAUDE.md", "sets": [] }
+        {
+          "name": "LoadingIndicator",
+          "spec": "Components/Loading/LoadingIndicator/CLAUDE.md",
+          "sets": []
+        },
+        {
+          "name": "ProgressIndicators",
+          "spec": "Components/Loading/ProgressIndicators/CLAUDE.md",
+          "sets": []
+        }
       ]
     },
     {
@@ -210,7 +740,11 @@
       "name": "Navigation",
       "spec": "Components/Navigation/CLAUDE.md",
       "components": [
-        { "name": "NavigationBar", "spec": "Components/Navigation/NavigationBar/CLAUDE.md", "sets": [] },
+        {
+          "name": "NavigationBar",
+          "spec": "Components/Navigation/NavigationBar/CLAUDE.md",
+          "sets": []
+        },
         {
           "name": "NavigationDrawer",
           "spec": "Components/Navigation/NavigationDrawer/CLAUDE.md",
@@ -219,15 +753,31 @@
               "name": "Standard",
               "spec": "Components/Navigation/NavigationDrawer/Standard/CLAUDE.md",
               "previews": [
-                { "label": "01 refined", "path": "Components/Navigation/NavigationDrawer/Standard/preview/01_refined.html" },
-                { "label": "02 material", "path": "Components/Navigation/NavigationDrawer/Standard/preview/02_material.html" },
-                { "label": "03 editorial", "path": "Components/Navigation/NavigationDrawer/Standard/preview/03_editorial.html" },
-                { "label": "04 operational", "path": "Components/Navigation/NavigationDrawer/Standard/preview/04_operational.html" }
+                {
+                  "label": "01 refined",
+                  "path": "Components/Navigation/NavigationDrawer/Standard/preview/01_refined.html"
+                },
+                {
+                  "label": "02 material",
+                  "path": "Components/Navigation/NavigationDrawer/Standard/preview/02_material.html"
+                },
+                {
+                  "label": "03 editorial",
+                  "path": "Components/Navigation/NavigationDrawer/Standard/preview/03_editorial.html"
+                },
+                {
+                  "label": "04 operational",
+                  "path": "Components/Navigation/NavigationDrawer/Standard/preview/04_operational.html"
+                }
               ]
             }
           ]
         },
-        { "name": "NavigationRail", "spec": "Components/Navigation/NavigationRail/CLAUDE.md", "sets": [] }
+        {
+          "name": "NavigationRail",
+          "spec": "Components/Navigation/NavigationRail/CLAUDE.md",
+          "sets": []
+        }
       ]
     },
     {
@@ -244,17 +794,37 @@
       "name": "Sheets",
       "spec": "Components/Sheets/CLAUDE.md",
       "components": [
-        { "name": "BottomSheets", "spec": "Components/Sheets/BottomSheets/CLAUDE.md", "sets": [] },
-        { "name": "SideSheets", "spec": "Components/Sheets/SideSheets/CLAUDE.md", "sets": [] }
+        {
+          "name": "BottomSheets",
+          "spec": "Components/Sheets/BottomSheets/CLAUDE.md",
+          "sets": []
+        },
+        {
+          "name": "SideSheets",
+          "spec": "Components/Sheets/SideSheets/CLAUDE.md",
+          "sets": []
+        }
       ]
     },
     {
       "name": "Sliders",
       "spec": "Components/Sliders/CLAUDE.md",
       "components": [
-        { "name": "Basic", "spec": "Components/Sliders/Basic/CLAUDE.md", "sets": [] },
-        { "name": "Centered", "spec": "Components/Sliders/Centered/CLAUDE.md", "sets": [] },
-        { "name": "Range", "spec": "Components/Sliders/Range/CLAUDE.md", "sets": [] }
+        {
+          "name": "Basic",
+          "spec": "Components/Sliders/Basic/CLAUDE.md",
+          "sets": []
+        },
+        {
+          "name": "Centered",
+          "spec": "Components/Sliders/Centered/CLAUDE.md",
+          "sets": []
+        },
+        {
+          "name": "Range",
+          "spec": "Components/Sliders/Range/CLAUDE.md",
+          "sets": []
+        }
       ]
     },
     {
@@ -295,7 +865,36 @@
     {
       "name": "Trees",
       "spec": "Components/Trees/CLAUDE.md",
-      "components": []
+      "components": [
+        {
+          "name": "Trees",
+          "spec": "Components/Trees/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/Trees/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 refined",
+                  "path": "Components/Trees/Standard/preview/01_refined.html"
+                },
+                {
+                  "label": "02 material",
+                  "path": "Components/Trees/Standard/preview/02_material.html"
+                },
+                {
+                  "label": "03 editorial",
+                  "path": "Components/Trees/Standard/preview/03_editorial.html"
+                },
+                {
+                  "label": "04 operational",
+                  "path": "Components/Trees/Standard/preview/04_operational.html"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "3D_Components",
@@ -304,12 +903,29 @@
         {
           "name": "BATT",
           "spec": "Components/3D_Components/BATT/CLAUDE.md",
+          "previews": [
+            {
+              "label": "01 status",
+              "path": "Components/3D_Components/BATT/preview/01_status.html"
+            },
+            {
+              "label": "02 status camera",
+              "path": "Components/3D_Components/BATT/preview/02_status_camera.html"
+            },
+            {
+              "label": "03 status popup",
+              "path": "Components/3D_Components/BATT/preview/03_status_popup.html"
+            }
+          ],
           "sets": [
             {
               "name": "Standard",
               "spec": "Components/3D_Components/BATT/Standard/CLAUDE.md",
               "previews": [
-                { "label": "01 default", "path": "Components/3D_Components/BATT/Standard/preview/01_default.html" }
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/BATT/Standard/preview/01_default.html"
+                }
               ]
             },
             {
@@ -320,28 +936,40 @@
                   "name": "camera",
                   "spec": "Components/3D_Components/BATT/Advanced/camera/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/BATT/Advanced/camera/preview/01_default.html" }
-                  ]
-                },
-                {
-                  "name": "popup",
-                  "spec": "Components/3D_Components/BATT/Advanced/popup/CLAUDE.md",
-                  "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/BATT/Advanced/popup/preview/01_default.html" }
-                  ]
-                },
-                {
-                  "name": "highlight",
-                  "spec": "Components/3D_Components/BATT/Advanced/highlight/CLAUDE.md",
-                  "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/BATT/Advanced/highlight/preview/01_default.html" }
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/BATT/Advanced/camera/preview/01_default.html"
+                    }
                   ]
                 },
                 {
                   "name": "camera_highlight",
                   "spec": "Components/3D_Components/BATT/Advanced/camera_highlight/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/BATT/Advanced/camera_highlight/preview/01_default.html" }
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/BATT/Advanced/camera_highlight/preview/01_default.html"
+                    }
+                  ]
+                },
+                {
+                  "name": "highlight",
+                  "spec": "Components/3D_Components/BATT/Advanced/highlight/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/BATT/Advanced/highlight/preview/01_default.html"
+                    }
+                  ]
+                },
+                {
+                  "name": "popup",
+                  "spec": "Components/3D_Components/BATT/Advanced/popup/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/BATT/Advanced/popup/preview/01_default.html"
+                    }
                   ]
                 }
               ]
@@ -351,12 +979,29 @@
         {
           "name": "Chiller",
           "spec": "Components/3D_Components/Chiller/CLAUDE.md",
+          "previews": [
+            {
+              "label": "01 status",
+              "path": "Components/3D_Components/Chiller/preview/01_status.html"
+            },
+            {
+              "label": "02 status camera",
+              "path": "Components/3D_Components/Chiller/preview/02_status_camera.html"
+            },
+            {
+              "label": "03 status popup",
+              "path": "Components/3D_Components/Chiller/preview/03_status_popup.html"
+            }
+          ],
           "sets": [
             {
               "name": "Standard",
               "spec": "Components/3D_Components/Chiller/Standard/CLAUDE.md",
               "previews": [
-                { "label": "01 default", "path": "Components/3D_Components/Chiller/Standard/preview/01_default.html" }
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Chiller/Standard/preview/01_default.html"
+                }
               ]
             },
             {
@@ -364,38 +1009,53 @@
               "spec": null,
               "items": [
                 {
+                  "name": "animation",
+                  "spec": "Components/3D_Components/Chiller/Advanced/animation/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/Chiller/Advanced/animation/preview/01_default.html"
+                    }
+                  ]
+                },
+                {
                   "name": "camera",
                   "spec": "Components/3D_Components/Chiller/Advanced/camera/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/Chiller/Advanced/camera/preview/01_default.html" }
-                  ]
-                },
-                {
-                  "name": "popup",
-                  "spec": "Components/3D_Components/Chiller/Advanced/popup/CLAUDE.md",
-                  "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/Chiller/Advanced/popup/preview/01_default.html" }
-                  ]
-                },
-                {
-                  "name": "highlight",
-                  "spec": "Components/3D_Components/Chiller/Advanced/highlight/CLAUDE.md",
-                  "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/Chiller/Advanced/highlight/preview/01_default.html" }
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/Chiller/Advanced/camera/preview/01_default.html"
+                    }
                   ]
                 },
                 {
                   "name": "camera_highlight",
                   "spec": "Components/3D_Components/Chiller/Advanced/camera_highlight/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/Chiller/Advanced/camera_highlight/preview/01_default.html" }
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/Chiller/Advanced/camera_highlight/preview/01_default.html"
+                    }
                   ]
                 },
                 {
-                  "name": "animation",
-                  "spec": "Components/3D_Components/Chiller/Advanced/animation/CLAUDE.md",
+                  "name": "highlight",
+                  "spec": "Components/3D_Components/Chiller/Advanced/highlight/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/Chiller/Advanced/animation/preview/01_default.html" }
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/Chiller/Advanced/highlight/preview/01_default.html"
+                    }
+                  ]
+                },
+                {
+                  "name": "popup",
+                  "spec": "Components/3D_Components/Chiller/Advanced/popup/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/Chiller/Advanced/popup/preview/01_default.html"
+                    }
                   ]
                 }
               ]
@@ -405,12 +1065,29 @@
         {
           "name": "Panel",
           "spec": "Components/3D_Components/Panel/CLAUDE.md",
+          "previews": [
+            {
+              "label": "01 status",
+              "path": "Components/3D_Components/Panel/preview/01_status.html"
+            },
+            {
+              "label": "02 status camera",
+              "path": "Components/3D_Components/Panel/preview/02_status_camera.html"
+            },
+            {
+              "label": "03 status popup",
+              "path": "Components/3D_Components/Panel/preview/03_status_popup.html"
+            }
+          ],
           "sets": [
             {
               "name": "Standard",
               "spec": "Components/3D_Components/Panel/Standard/CLAUDE.md",
               "previews": [
-                { "label": "01 default", "path": "Components/3D_Components/Panel/Standard/preview/01_default.html" }
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Panel/Standard/preview/01_default.html"
+                }
               ]
             },
             {
@@ -421,14 +1098,20 @@
                   "name": "camera",
                   "spec": "Components/3D_Components/Panel/Advanced/camera/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/Panel/Advanced/camera/preview/01_default.html" }
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/Panel/Advanced/camera/preview/01_default.html"
+                    }
                   ]
                 },
                 {
                   "name": "popup",
                   "spec": "Components/3D_Components/Panel/Advanced/popup/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/Panel/Advanced/popup/preview/01_default.html" }
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/Panel/Advanced/popup/preview/01_default.html"
+                    }
                   ]
                 }
               ]
@@ -438,12 +1121,29 @@
         {
           "name": "UPS",
           "spec": "Components/3D_Components/UPS/CLAUDE.md",
+          "previews": [
+            {
+              "label": "01 status",
+              "path": "Components/3D_Components/UPS/preview/01_status.html"
+            },
+            {
+              "label": "02 status camera",
+              "path": "Components/3D_Components/UPS/preview/02_status_camera.html"
+            },
+            {
+              "label": "03 status popup",
+              "path": "Components/3D_Components/UPS/preview/03_status_popup.html"
+            }
+          ],
           "sets": [
             {
               "name": "Standard",
               "spec": "Components/3D_Components/UPS/Standard/CLAUDE.md",
               "previews": [
-                { "label": "01 default", "path": "Components/3D_Components/UPS/Standard/preview/01_default.html" }
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/UPS/Standard/preview/01_default.html"
+                }
               ]
             },
             {
@@ -454,14 +1154,20 @@
                   "name": "camera",
                   "spec": "Components/3D_Components/UPS/Advanced/camera/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/UPS/Advanced/camera/preview/01_default.html" }
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/UPS/Advanced/camera/preview/01_default.html"
+                    }
                   ]
                 },
                 {
                   "name": "popup",
                   "spec": "Components/3D_Components/UPS/Advanced/popup/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/UPS/Advanced/popup/preview/01_default.html" }
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/UPS/Advanced/popup/preview/01_default.html"
+                    }
                   ]
                 }
               ]
@@ -471,12 +1177,29 @@
         {
           "name": "tempHumiTH2B",
           "spec": "Components/3D_Components/tempHumiTH2B/CLAUDE.md",
+          "previews": [
+            {
+              "label": "01 status",
+              "path": "Components/3D_Components/tempHumiTH2B/preview/01_status.html"
+            },
+            {
+              "label": "02 status camera",
+              "path": "Components/3D_Components/tempHumiTH2B/preview/02_status_camera.html"
+            },
+            {
+              "label": "03 status popup",
+              "path": "Components/3D_Components/tempHumiTH2B/preview/03_status_popup.html"
+            }
+          ],
           "sets": [
             {
               "name": "Standard",
               "spec": "Components/3D_Components/tempHumiTH2B/Standard/CLAUDE.md",
               "previews": [
-                { "label": "01 default", "path": "Components/3D_Components/tempHumiTH2B/Standard/preview/01_default.html" }
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/tempHumiTH2B/Standard/preview/01_default.html"
+                }
               ]
             },
             {
@@ -487,14 +1210,20 @@
                   "name": "camera",
                   "spec": "Components/3D_Components/tempHumiTH2B/Advanced/camera/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/tempHumiTH2B/Advanced/camera/preview/01_default.html" }
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/tempHumiTH2B/Advanced/camera/preview/01_default.html"
+                    }
                   ]
                 },
                 {
                   "name": "popup",
                   "spec": "Components/3D_Components/tempHumiTH2B/Advanced/popup/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/tempHumiTH2B/Advanced/popup/preview/01_default.html" }
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/tempHumiTH2B/Advanced/popup/preview/01_default.html"
+                    }
                   ]
                 }
               ]
@@ -504,12 +1233,29 @@
         {
           "name": "thermohygrostat",
           "spec": "Components/3D_Components/thermohygrostat/CLAUDE.md",
+          "previews": [
+            {
+              "label": "01 status",
+              "path": "Components/3D_Components/thermohygrostat/preview/01_status.html"
+            },
+            {
+              "label": "02 status camera",
+              "path": "Components/3D_Components/thermohygrostat/preview/02_status_camera.html"
+            },
+            {
+              "label": "03 status popup",
+              "path": "Components/3D_Components/thermohygrostat/preview/03_status_popup.html"
+            }
+          ],
           "sets": [
             {
               "name": "Standard",
               "spec": "Components/3D_Components/thermohygrostat/Standard/CLAUDE.md",
               "previews": [
-                { "label": "01 default", "path": "Components/3D_Components/thermohygrostat/Standard/preview/01_default.html" }
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/thermohygrostat/Standard/preview/01_default.html"
+                }
               ]
             },
             {
@@ -520,14 +1266,20 @@
                   "name": "camera",
                   "spec": "Components/3D_Components/thermohygrostat/Advanced/camera/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/thermohygrostat/Advanced/camera/preview/01_default.html" }
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/thermohygrostat/Advanced/camera/preview/01_default.html"
+                    }
                   ]
                 },
                 {
                   "name": "popup",
                   "spec": "Components/3D_Components/thermohygrostat/Advanced/popup/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/thermohygrostat/Advanced/popup/preview/01_default.html" }
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/thermohygrostat/Advanced/popup/preview/01_default.html"
+                    }
                   ]
                 }
               ]
@@ -537,12 +1289,29 @@
         {
           "name": "gltf_container",
           "spec": "Components/3D_Components/gltf_container/CLAUDE.md",
+          "previews": [
+            {
+              "label": "01 status",
+              "path": "Components/3D_Components/gltf_container/preview/01_status.html"
+            },
+            {
+              "label": "02 status camera",
+              "path": "Components/3D_Components/gltf_container/preview/02_status_camera.html"
+            },
+            {
+              "label": "03 status popup",
+              "path": "Components/3D_Components/gltf_container/preview/03_status_popup.html"
+            }
+          ],
           "sets": [
             {
               "name": "Standard",
               "spec": "Components/3D_Components/gltf_container/Standard/CLAUDE.md",
               "previews": [
-                { "label": "01 default", "path": "Components/3D_Components/gltf_container/Standard/preview/01_default.html" }
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/gltf_container/Standard/preview/01_default.html"
+                }
               ]
             },
             {
@@ -553,14 +1322,20 @@
                   "name": "camera",
                   "spec": "Components/3D_Components/gltf_container/Advanced/camera/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/gltf_container/Advanced/camera/preview/01_default.html" }
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/gltf_container/Advanced/camera/preview/01_default.html"
+                    }
                   ]
                 },
                 {
                   "name": "popup",
                   "spec": "Components/3D_Components/gltf_container/Advanced/popup/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/gltf_container/Advanced/popup/preview/01_default.html" }
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/gltf_container/Advanced/popup/preview/01_default.html"
+                    }
                   ]
                 }
               ]
@@ -569,21 +1344,5 @@
         }
       ]
     }
-  ],
-  "mixins": [
-    { "name": "FieldRenderMixin", "purpose": "기존 요소에 데이터를 표시한다", "js": "Mixins/FieldRenderMixin.js", "md": "Mixins/FieldRenderMixin.md" },
-    { "name": "ListRenderMixin", "purpose": "항목을 반복 생성하여 표시한다", "js": "Mixins/ListRenderMixin.js", "md": "Mixins/ListRenderMixin.md" },
-    { "name": "TreeRenderMixin", "purpose": "계층적 데이터를 트리 구조로 렌더링한다", "js": "Mixins/TreeRenderMixin.js", "md": "Mixins/TreeRenderMixin.md" },
-    { "name": "EChartsMixin", "purpose": "ECharts 인스턴스를 생성하고 관리한다", "js": "Mixins/EChartsMixin.js", "md": "Mixins/EChartsMixin.md" },
-    { "name": "TabulatorMixin", "purpose": "Tabulator 인스턴스를 생성하고 관리한다", "js": "Mixins/TabulatorMixin.js", "md": "Mixins/TabulatorMixin.md" },
-    { "name": "HeatmapJsMixin", "purpose": "heatmap.js 기반 열 분포를 시각화하고 관리한다", "js": "Mixins/HeatmapJsMixin.js", "md": "Mixins/HeatmapJsMixin.md" },
-    { "name": "MeshStateMixin", "purpose": "3D 메시의 시각 상태를 데이터에 따라 변경한다", "js": "Mixins/MeshStateMixin.js", "md": "Mixins/MeshStateMixin.md" },
-    { "name": "MeshHighlightMixin", "purpose": "선택한 대상을 시각적으로 강조한다", "js": "Mixins/MeshHighlightMixin.js", "md": "Mixins/MeshHighlightMixin.md" },
-    { "name": "MeshVisibilityMixin", "purpose": "3D 장면의 특정 부분을 선택적으로 보여준다", "js": "Mixins/MeshVisibilityMixin.js", "md": "Mixins/MeshVisibilityMixin.md" },
-    { "name": "CameraFocusMixin", "purpose": "보는 위치를 전환한다", "js": "Mixins/CameraFocusMixin.js", "md": "Mixins/CameraFocusMixin.md" },
-    { "name": "AnimationMixin", "purpose": "3D 모델의 동작을 재현한다", "js": "Mixins/AnimationMixin.js", "md": "Mixins/AnimationMixin.md" },
-    { "name": "ClippingPlaneMixin", "purpose": "3D 모델의 내부를 보여준다", "js": "Mixins/ClippingPlaneMixin.js", "md": "Mixins/ClippingPlaneMixin.md" },
-    { "name": "ShadowPopupMixin", "purpose": "Shadow DOM으로 팝업을 생성하고 표시/숨김을 관리한다", "js": "Mixins/ShadowPopupMixin.js", "md": "Mixins/ShadowPopupMixin.md" },
-    { "name": "3DShadowPopupMixin", "purpose": "3D 컴포넌트에서 Shadow DOM 팝업을 생성/표시/숨김 관리한다", "js": "Mixins/3DShadowPopupMixin.js", "md": "Mixins/3DShadowPopupMixin.md" }
   ]
 }
