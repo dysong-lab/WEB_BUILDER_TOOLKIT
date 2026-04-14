@@ -1,0 +1,87 @@
+/* 02_material: Persona B — Material Elevated
+   블루 팔레트 / outlined / Roboto / 라이트 / Connected */
+
+#segmented-button-container {
+    width: 400px;
+    height: 48px;
+
+    .segmented-button {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .segmented-button__list {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .segmented-button__item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 0 16px;
+        height: 40px;
+        flex: 1;
+        border: 1px solid #79747E;
+        border-right: none;
+        background: #FFFFFF;
+        cursor: pointer;
+        transition: background-color 150ms ease-out;
+    }
+
+    .segmented-button__item:first-child {
+        border-radius: 20px 0 0 20px;
+    }
+
+    .segmented-button__item:last-child {
+        border-radius: 0 20px 20px 0;
+        border-right: 1px solid #79747E;
+    }
+
+    .segmented-button__item:hover {
+        background: #F0F3FF;
+    }
+
+    .segmented-button__item[data-selected="true"] {
+        background: #E8DEF8;
+    }
+
+    .segmented-button__check {
+        display: none;
+        font-size: 18px;
+        color: #1D192B;
+        flex-shrink: 0;
+    }
+
+    .segmented-button__item[data-selected="true"] .segmented-button__check {
+        display: inline-block;
+    }
+
+    .segmented-button__item[data-selected="true"] .segmented-button__icon {
+        display: none;
+    }
+
+    .segmented-button__icon {
+        font-size: 18px;
+        color: #49454F;
+        flex-shrink: 0;
+    }
+
+    .segmented-button__icon:empty {
+        display: none;
+    }
+
+    .segmented-button__label {
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #49454F;
+        white-space: nowrap;
+    }
+
+    .segmented-button__item[data-selected="true"] .segmented-button__label {
+        color: #1D192B;
+        font-weight: 500;
+    }
+}

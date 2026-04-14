@@ -1,0 +1,92 @@
+/* 01_refined: Persona A — Refined Technical
+   퍼플 팔레트 / 그라디언트 깊이 / Pretendard / 다크 / Connected */
+
+#segmented-button-container {
+    width: 420px;
+    height: 48px;
+
+    .segmented-button {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .segmented-button__list {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .segmented-button__item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 0 18px;
+        height: 40px;
+        flex: 1;
+        border: 1px solid #2A2574;
+        border-right: none;
+        background: transparent;
+        cursor: pointer;
+        transition: background-color 150ms ease-out, border-color 150ms ease-out;
+    }
+
+    .segmented-button__item:first-child {
+        border-radius: 20px 0 0 20px;
+    }
+
+    .segmented-button__item:last-child {
+        border-radius: 0 20px 20px 0;
+        border-right: 1px solid #2A2574;
+    }
+
+    .segmented-button__item:hover {
+        background: rgba(80, 46, 233, 0.12);
+    }
+
+    .segmented-button__item[data-selected="true"] {
+        background: linear-gradient(90deg, rgba(80, 46, 233, 0.24) 0%, rgba(146, 168, 244, 0.12) 100%);
+        border-color: #502EE9;
+    }
+
+    .segmented-button__item[data-selected="true"] + .segmented-button__item {
+        border-left-color: #502EE9;
+    }
+
+    .segmented-button__check {
+        display: none;
+        font-size: 18px;
+        color: #92A8F4;
+        flex-shrink: 0;
+    }
+
+    .segmented-button__item[data-selected="true"] .segmented-button__check {
+        display: inline-block;
+    }
+
+    .segmented-button__item[data-selected="true"] .segmented-button__icon {
+        display: none;
+    }
+
+    .segmented-button__icon {
+        font-size: 18px;
+        color: #707EB4;
+        flex-shrink: 0;
+    }
+
+    .segmented-button__icon:empty {
+        display: none;
+    }
+
+    .segmented-button__label {
+        font-family: 'Pretendard', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #707EB4;
+        white-space: nowrap;
+    }
+
+    .segmented-button__item[data-selected="true"] .segmented-button__label {
+        color: #E8EDFF;
+        font-weight: 600;
+    }
+}

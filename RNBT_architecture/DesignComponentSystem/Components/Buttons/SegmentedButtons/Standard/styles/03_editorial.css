@@ -1,0 +1,93 @@
+/* 03_editorial: Persona C — Minimal Editorial
+   웜 그레이 / 세리프 / 라이트 / Connected */
+
+#segmented-button-container {
+    width: 380px;
+    height: 48px;
+
+    .segmented-button {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .segmented-button__list {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .segmented-button__item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 0 18px;
+        height: 40px;
+        flex: 1;
+        border: 1px solid #D1CBC3;
+        border-right: none;
+        background: #FDFBF7;
+        cursor: pointer;
+        transition: background-color 150ms ease-out;
+    }
+
+    .segmented-button__item:first-child {
+        border-radius: 2px 0 0 2px;
+    }
+
+    .segmented-button__item:last-child {
+        border-radius: 0 2px 2px 0;
+        border-right: 1px solid #D1CBC3;
+    }
+
+    .segmented-button__item:hover {
+        background: #F0EDE7;
+    }
+
+    .segmented-button__item[data-selected="true"] {
+        background: #E8E2D9;
+        border-color: #8C7B6B;
+    }
+
+    .segmented-button__item[data-selected="true"] + .segmented-button__item {
+        border-left-color: #8C7B6B;
+    }
+
+    .segmented-button__check {
+        display: none;
+        font-size: 14px;
+        color: #3A3028;
+        font-family: 'Georgia', serif;
+        flex-shrink: 0;
+    }
+
+    .segmented-button__item[data-selected="true"] .segmented-button__check {
+        display: inline-block;
+    }
+
+    .segmented-button__item[data-selected="true"] .segmented-button__icon {
+        display: none;
+    }
+
+    .segmented-button__icon {
+        font-size: 18px;
+        color: #8C7B6B;
+        flex-shrink: 0;
+    }
+
+    .segmented-button__icon:empty {
+        display: none;
+    }
+
+    .segmented-button__label {
+        font-family: 'Georgia', serif;
+        font-size: 14px;
+        font-weight: 400;
+        color: #8C7B6B;
+        white-space: nowrap;
+    }
+
+    .segmented-button__item[data-selected="true"] .segmented-button__label {
+        color: #3A3028;
+        font-weight: 700;
+    }
+}

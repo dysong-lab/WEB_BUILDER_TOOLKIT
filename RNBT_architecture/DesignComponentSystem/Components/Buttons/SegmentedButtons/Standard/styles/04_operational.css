@@ -1,0 +1,95 @@
+/* 04_operational: Persona D — Dark Operational
+   시안 팔레트 / 모노스페이스 / 다크 / Connected (컴팩트) */
+
+#segmented-button-container {
+    width: 340px;
+    height: 40px;
+
+    .segmented-button {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .segmented-button__list {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .segmented-button__item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 0 12px;
+        height: 32px;
+        flex: 1;
+        border: 1px solid #2A3A3E;
+        border-right: none;
+        background: #0D1B1E;
+        cursor: pointer;
+        transition: background-color 100ms ease-out;
+    }
+
+    .segmented-button__item:first-child {
+        border-radius: 4px 0 0 4px;
+    }
+
+    .segmented-button__item:last-child {
+        border-radius: 0 4px 4px 0;
+        border-right: 1px solid #2A3A3E;
+    }
+
+    .segmented-button__item:hover {
+        background: rgba(0, 188, 212, 0.08);
+    }
+
+    .segmented-button__item[data-selected="true"] {
+        background: rgba(0, 188, 212, 0.16);
+        border-color: #00BCD4;
+    }
+
+    .segmented-button__item[data-selected="true"] + .segmented-button__item {
+        border-left-color: #00BCD4;
+    }
+
+    .segmented-button__check {
+        display: none;
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        font-size: 11px;
+        color: #00BCD4;
+        flex-shrink: 0;
+    }
+
+    .segmented-button__item[data-selected="true"] .segmented-button__check {
+        display: inline-block;
+    }
+
+    .segmented-button__item[data-selected="true"] .segmented-button__icon {
+        display: none;
+    }
+
+    .segmented-button__icon {
+        font-size: 16px;
+        color: #5A7A80;
+        flex-shrink: 0;
+    }
+
+    .segmented-button__icon:empty {
+        display: none;
+    }
+
+    .segmented-button__label {
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        font-size: 12px;
+        font-weight: 400;
+        color: #5A7A80;
+        white-space: nowrap;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .segmented-button__item[data-selected="true"] .segmented-button__label {
+        color: #B2EBF2;
+        font-weight: 500;
+    }
+}
