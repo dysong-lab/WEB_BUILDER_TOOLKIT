@@ -702,6 +702,7 @@ function isSetImplemented(set) {
 }
 
 function isComponentImplemented(comp) {
+    if ((comp.previews || []).length > 0) return true;
     return (comp.sets || []).some(isSetImplemented);
 }
 
@@ -898,10 +899,19 @@ function displayComponent(ci, compIdx) {
     state.selection = { catIdx: ci, compIdx };
     const cat = state.manifest.categories[ci];
     const comp = cat.components[compIdx];
-    const subtitle = isComponentImplemented(comp)
-        ? `${(comp.sets || []).length}개 set`
-        : '미구현';
+    const subtitle = (comp.previews || []).length > 0
+        ? `${comp.previews.length}개 변형`
+        : isComponentImplemented(comp)
+            ? `${(comp.sets || []).length}개 set`
+            : '미구현';
     setHeaderTitle(`${cat.name} / ${comp.name}`, subtitle);
+    if ((comp.previews || []).length > 0) {
+        showCompPreview(comp.previews || []);
+        loadSpec(comp.spec);
+        switchCompTab('preview');
+        return;
+    }
+
     showCompPreview(null);
     loadSpec(comp.spec);
     switchCompTab('spec');
