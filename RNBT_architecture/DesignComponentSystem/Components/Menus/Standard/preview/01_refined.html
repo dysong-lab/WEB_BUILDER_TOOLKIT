@@ -160,10 +160,12 @@
     });
 
     Wkit.onEventBusHandlers({
-        '@menuItemSelected': ({ targetInstance }) => {
+        '@menuItemSelected': ({ targetInstance, itemId }) => {
+            console.log('[Preview] menu item selected:', itemId);
             targetInstance.closeMenu();
         },
         '@menuDismissed': ({ targetInstance }) => {
+            console.log('[Preview] menu dismissed');
             targetInstance.closeMenu();
         }
     });
