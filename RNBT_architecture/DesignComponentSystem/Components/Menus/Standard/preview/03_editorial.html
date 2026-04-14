@@ -54,17 +54,6 @@
         .preview-trigger:hover {
             background: rgba(44, 38, 32, 0.05);
         }
-        .preview-log {
-            margin-top: 18px;
-            padding: 10px 14px;
-            border-radius: 4px;
-            background: rgba(44, 38, 32, 0.04);
-            border: 1px solid rgba(44, 38, 32, 0.08);
-            font-family: -apple-system, sans-serif;
-            font-size: 12px;
-            color: rgba(44, 38, 32, 0.48);
-            min-height: 36px;
-        }
     </style>
 </head>
 <body>
@@ -73,7 +62,6 @@
         <h1>Menus / Standard</h1>
         <p>임시 표면에 선택 항목 목록을 표시하는 컨텍스트 메뉴입니다. 아래 버튼으로 컴포넌트 동작과 이벤트를 확인할 수 있습니다.</p>
         <button type="button" class="preview-trigger">Open Menu</button>
-        <div class="preview-log" id="preview-log">이벤트 로그가 여기에 표시됩니다.</div>
         <div id="menus-standard-container"></div>
     </div>
 </div>
@@ -89,9 +77,6 @@
         id: 'menus-standard',
         appendElement: document.getElementById('menus-standard-container')
     };
-
-    const log = document.getElementById('preview-log');
-    function logEvent(msg) { log.textContent = msg; }
 
     instance._popupScope = null;
     instance._motionDuration = 200;
@@ -172,12 +157,10 @@
     });
 
     Wkit.onEventBusHandlers({
-        '@menuItemSelected': ({ targetInstance, itemId }) => {
-            logEvent('[Event] @menuItemSelected — id: ' + (itemId ?? '?'));
+        '@menuItemSelected': ({ targetInstance }) => {
             targetInstance.closeMenu();
         },
         '@menuDismissed': ({ targetInstance }) => {
-            logEvent('[Event] @menuDismissed');
             targetInstance.closeMenu();
         }
     });
