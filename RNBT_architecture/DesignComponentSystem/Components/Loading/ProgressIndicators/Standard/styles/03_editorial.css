@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Instrument+Sans:wght@400;500&display=swap');
+
+.progress-indicator {
+  --progress-tone: #7e624a;
+  --progress-ratio: 0;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 224px;
+  padding: 18px 18px;
+  border: 1px solid rgba(111, 88, 64, 0.16);
+  border-radius: 14px;
+  background: linear-gradient(180deg, #fbf6ee, #f1e6d5);
+  color: #34271d;
+}
+
+.progress-indicator[data-tone="neutral"] { --progress-tone: #968677; }
+.progress-indicator[data-tone="success"] { --progress-tone: #4f7e5c; }
+.progress-indicator[data-tone="warning"] { --progress-tone: #b97e2a; }
+
+.progress-indicator__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.progress-indicator__label { font: 600 18px/1.1 "Fraunces", serif; }
+.progress-indicator__value { font: 500 12px/1.2 "Instrument Sans", sans-serif; color: #6f5a47; }
+
+.progress-indicator__linear {
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(111, 88, 64, 0.12);
+  overflow: hidden;
+}
+
+.progress-indicator__linear-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: inherit;
+  background: var(--progress-tone);
+  transition: width 0.82s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.progress-indicator__circular {
+  display: none;
+  align-self: center;
+}
+
+.progress-indicator[data-kind="circular"] .progress-indicator__linear { display: none; }
+.progress-indicator[data-kind="circular"] .progress-indicator__circular { display: block; }
+
+.progress-indicator__circular-svg { width: 68px; height: 68px; transform: rotate(-90deg); }
+.progress-indicator__circular-track,
+.progress-indicator__circular-meter { fill: none; stroke-width: 4; }
+.progress-indicator__circular-track { stroke: rgba(111, 88, 64, 0.12); }
+.progress-indicator__circular-meter { stroke: var(--progress-tone); stroke-linecap: round; stroke-dasharray: 100; transition: stroke-dashoffset 0.82s cubic-bezier(0.22, 1, 0.36, 1); }
+
+.progress-indicator[data-indeterminate="true"] .progress-indicator__linear-fill {
+  width: 38% !important;
+  transition: none;
+  animation: progress-editorial-slide 1.25s infinite ease-in-out;
+}
+
+.progress-indicator[data-indeterminate="true"] .progress-indicator__circular-meter {
+  stroke-dasharray: 28 72;
+  transition: none;
+  animation: progress-editorial-spin 1.3s infinite linear;
+}
+
+@keyframes progress-editorial-slide {
+  0% { transform: translateX(-110%); }
+  100% { transform: translateX(260%); }
+}
+
+@keyframes progress-editorial-spin {
+  from { transform-origin: 21px 21px; transform: rotate(0deg); }
+  to { transform-origin: 21px 21px; transform: rotate(360deg); }
+}

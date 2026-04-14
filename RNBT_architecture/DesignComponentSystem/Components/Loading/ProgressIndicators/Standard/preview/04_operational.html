@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ProgressIndicators/Standard — 04_operational</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        background: linear-gradient(180deg, #071015, #020508);
+        display: flex;
+        justify-content: center;
+        padding: 36px 20px;
+      }
+      .preview-grid { display: flex; gap: 18px; flex-wrap: wrap; align-items: flex-start; }
+    </style>
+  </head>
+  <body>
+    <div class="preview-grid">
+      <div id="progress-linear"></div>
+      <div id="progress-circular"></div>
+      <div id="progress-indeterminate"></div>
+    </div>
+    <script src="../../../../../preview_runtime.js"></script>
+    <script>
+      (async () => {
+        const ids = ["progress-linear", "progress-circular", "progress-indeterminate"];
+        await Promise.all(ids.map((id) => loadComponentAssets(id, "../views/04_operational.html", "../styles/04_operational.css")));
+
+        const createInstance = (id) => {
+          const instance = { id, appendElement: document.getElementById(id) };
+          instance.cssSelectors = { root: ".progress-indicator", label: ".progress-indicator__label", value: ".progress-indicator__value", linearFill: ".progress-indicator__linear-fill", circularMeter: ".progress-indicator__circular-meter" };
+          instance._progressAnimationTimer = null;
+          instance.animateProgressEntry = function (root, linearFill, circularMeter, percent) {
+            if (this._progressAnimationTimer) {
+              clearTimeout(this._progressAnimationTimer);
+              this._progressAnimationTimer = null;
+            }
+            root.dataset.animateOnce = "true";
+            linearFill.style.width = "0%";
+            circularMeter.style.strokeDashoffset = "100";
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                linearFill.style.width = `${percent}%`;
+                circularMeter.style.strokeDashoffset = `${100 - percent}`;
+                root.dataset.hasAnimated = "true";
+                this._progressAnimationTimer = setTimeout(() => {
+                  root.dataset.animateOnce = "false";
+                  this._progressAnimationTimer = null;
+                }, 620);
+              });
+            });
+          };
+          instance.renderProgressInfo = function (data = {}) {
+            const root = this.appendElement.querySelector(this.cssSelectors.root);
+            const label = this.appendElement.querySelector(this.cssSelectors.label);
+            const value = this.appendElement.querySelector(this.cssSelectors.value);
+            const linearFill = this.appendElement.querySelector(this.cssSelectors.linearFill);
+            const circularMeter = this.appendElement.querySelector(this.cssSelectors.circularMeter);
+            if (!root || !label || !value || !linearFill || !circularMeter) return;
+            const kind = data?.kind === "circular" ? "circular" : "linear";
+            const tone = data?.tone === "neutral" || data?.tone === "success" || data?.tone === "warning" ? data.tone : "accent";
+            const indeterminate = data?.indeterminate === true;
+            const max = Number.isFinite(Number(data?.max)) && Number(data?.max) > 0 ? Number(data.max) : 100;
+            const current = Number.isFinite(Number(data?.value)) ? Math.min(Math.max(Number(data.value), 0), max) : 0;
+            const percent = Math.round((current / max) * 100);
+            root.dataset.kind = kind;
+            root.dataset.tone = tone;
+            root.dataset.indeterminate = indeterminate ? "true" : "false";
+            label.textContent = data?.label == null ? "" : String(data.label);
+            label.hidden = label.textContent.length === 0;
+            value.textContent = indeterminate ? "..." : `${percent}%`;
+            root.setAttribute("aria-label", label.textContent || "Progress indicator");
+            if (indeterminate) {
+              root.dataset.animateOnce = "false";
+              linearFill.style.width = `${percent}%`;
+              circularMeter.style.strokeDashoffset = `${100 - percent}`;
+            } else if (root.dataset.hasAnimated !== "true") {
+              this.animateProgressEntry(root, linearFill, circularMeter, percent);
+            } else {
+              root.dataset.animateOnce = "false";
+              linearFill.style.width = `${percent}%`;
+              circularMeter.style.strokeDashoffset = `${100 - percent}`;
+            }
+          };
+          return instance;
+        };
+
+        createInstance("progress-linear").renderProgressInfo({ kind: "linear", value: 71, max: 100, label: "Packet relay", tone: "accent" });
+        createInstance("progress-circular").renderProgressInfo({ kind: "circular", value: 49, max: 100, label: "Node scan", tone: "success" });
+        createInstance("progress-indeterminate").renderProgressInfo({ kind: "linear", indeterminate: true, label: "Polling sensors", tone: "warning" });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+
+.progress-indicator {
+  --progress-tone: #6750a4;
+  --progress-ratio: 0;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 220px;
+  padding: 16px 18px;
+  border-radius: 24px;
+  background: #fff;
+  color: #1c1b1f;
+  box-shadow: 0 12px 26px rgba(46, 44, 78, 0.12);
+}
+
+.progress-indicator[data-tone="neutral"] { --progress-tone: #7a7b85; }
+.progress-indicator[data-tone="success"] { --progress-tone: #146c43; }
+.progress-indicator[data-tone="warning"] { --progress-tone: #b26a00; }
+
+.progress-indicator__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.progress-indicator__label { font: 500 14px/1.2 "Roboto", sans-serif; }
+.progress-indicator__value { font: 500 13px/1.2 "Roboto", sans-serif; color: #5f5a70; }
+
+.progress-indicator__linear {
+  height: 6px;
+  border-radius: 999px;
+  background: #e7e0ec;
+  overflow: hidden;
+}
+
+.progress-indicator__linear-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: inherit;
+  background: var(--progress-tone);
+  transition: width 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.progress-indicator__circular {
+  display: none;
+  align-self: center;
+}
+
+.progress-indicator[data-kind="circular"] .progress-indicator__linear { display: none; }
+.progress-indicator[data-kind="circular"] .progress-indicator__circular { display: block; }
+
+.progress-indicator__circular-svg { width: 64px; height: 64px; transform: rotate(-90deg); }
+.progress-indicator__circular-track,
+.progress-indicator__circular-meter { fill: none; stroke-width: 4; }
+.progress-indicator__circular-track { stroke: #e7e0ec; }
+.progress-indicator__circular-meter { stroke: var(--progress-tone); stroke-linecap: round; stroke-dasharray: 100; transition: stroke-dashoffset 0.72s cubic-bezier(0.22, 1, 0.36, 1); }
+
+.progress-indicator[data-indeterminate="true"] .progress-indicator__linear-fill {
+  width: 36% !important;
+  transition: none;
+  animation: progress-material-slide 1.1s infinite ease-in-out;
+}
+
+.progress-indicator[data-indeterminate="true"] .progress-indicator__circular-meter {
+  stroke-dasharray: 28 72;
+  transition: none;
+  animation: progress-material-spin 1.1s infinite linear;
+}
+
+@keyframes progress-material-slide {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(280%); }
+}
+
+@keyframes progress-material-spin {
+  from { transform-origin: 21px 21px; transform: rotate(0deg); }
+  to { transform-origin: 21px 21px; transform: rotate(360deg); }
+}

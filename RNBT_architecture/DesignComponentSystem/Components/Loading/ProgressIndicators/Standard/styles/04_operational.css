@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+.progress-indicator {
+  --progress-tone: #63efff;
+  --progress-ratio: 0;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 220px;
+  padding: 14px 16px;
+  border: 1px solid rgba(99, 239, 255, 0.14);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(7, 16, 21, 0.98), rgba(2, 5, 8, 1));
+  color: #ddfbff;
+}
+
+.progress-indicator[data-tone="neutral"] { --progress-tone: #8ca8ad; }
+.progress-indicator[data-tone="success"] { --progress-tone: #4cf0a9; }
+.progress-indicator[data-tone="warning"] { --progress-tone: #ffb366; }
+
+.progress-indicator__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.progress-indicator__label {
+  font: 500 12px/1.2 "IBM Plex Mono", monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.progress-indicator__value {
+  font: 600 12px/1.2 "IBM Plex Mono", monospace;
+}
+
+.progress-indicator__linear {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.progress-indicator__linear-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: inherit;
+  background: var(--progress-tone);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--progress-tone) 45%, transparent);
+  transition: width 0.62s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.progress-indicator__circular {
+  display: none;
+  align-self: center;
+}
+
+.progress-indicator[data-kind="circular"] .progress-indicator__linear { display: none; }
+.progress-indicator[data-kind="circular"] .progress-indicator__circular { display: block; }
+
+.progress-indicator__circular-svg { width: 68px; height: 68px; transform: rotate(-90deg); }
+.progress-indicator__circular-track,
+.progress-indicator__circular-meter { fill: none; stroke-width: 4; }
+.progress-indicator__circular-track { stroke: rgba(255, 255, 255, 0.08); }
+.progress-indicator__circular-meter { stroke: var(--progress-tone); stroke-linecap: round; stroke-dasharray: 100; transition: stroke-dashoffset 0.62s cubic-bezier(0.22, 1, 0.36, 1); }
+
+.progress-indicator[data-indeterminate="true"] .progress-indicator__linear-fill {
+  width: 34% !important;
+  transition: none;
+  animation: progress-operational-slide 0.95s infinite linear;
+}
+
+.progress-indicator[data-indeterminate="true"] .progress-indicator__circular-meter {
+  stroke-dasharray: 26 74;
+  transition: none;
+  animation: progress-operational-spin 0.95s infinite linear;
+}
+
+@keyframes progress-operational-slide {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(320%); }
+}
+
+@keyframes progress-operational-spin {
+  from { transform-origin: 21px 21px; transform: rotate(0deg); }
+  to { transform-origin: 21px 21px; transform: rotate(360deg); }
+}

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>LoadingIndicator/Standard — 01_refined</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        background: linear-gradient(180deg, #0a0d20, #151d43);
+        display: flex;
+        justify-content: center;
+        padding: 40px 24px;
+      }
+      .preview-grid { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; }
+    </style>
+  </head>
+  <body>
+    <div class="preview-grid">
+      <div id="loading-primary"></div>
+      <div id="loading-success"></div>
+      <div id="loading-paused"></div>
+    </div>
+    <script src="../../../../../preview_runtime.js"></script>
+    <script>
+      (async () => {
+        const ids = ["loading-primary", "loading-success", "loading-paused"];
+        await Promise.all(ids.map((id) => loadComponentAssets(id, "../views/01_refined.html", "../styles/01_refined.css")));
+
+        const createInstance = (id) => {
+          const instance = { id, appendElement: document.getElementById(id) };
+          instance.cssSelectors = {
+            root: ".loading-indicator",
+            track: ".loading-indicator__track",
+            label: ".loading-indicator__label",
+          };
+          instance.renderLoadingInfo = function (data = {}) {
+            const root = this.appendElement.querySelector(this.cssSelectors.root);
+            const label = this.appendElement.querySelector(this.cssSelectors.label);
+            const track = this.appendElement.querySelector(this.cssSelectors.track);
+            if (!root || !label || !track) return;
+            const nextLabel = data?.label == null ? "" : String(data.label);
+            const nextSize = data?.size === "sm" || data?.size === "lg" ? data.size : "md";
+            const nextTone = data?.tone === "neutral" || data?.tone === "success" || data?.tone === "warning" ? data.tone : "accent";
+            const isActive = data?.active !== false;
+            root.dataset.size = nextSize;
+            root.dataset.tone = nextTone;
+            root.dataset.active = isActive ? "true" : "false";
+            root.setAttribute("aria-busy", isActive ? "true" : "false");
+            root.setAttribute("aria-label", nextLabel);
+            label.textContent = nextLabel;
+            label.hidden = nextLabel.length === 0;
+          };
+          return instance;
+        };
+
+        createInstance("loading-primary").renderLoadingInfo({ label: "Syncing data", tone: "accent", size: "md", active: true });
+        createInstance("loading-success").renderLoadingInfo({ label: "Applying patch", tone: "success", size: "lg", active: true });
+        createInstance("loading-paused").renderLoadingInfo({ label: "Queued", tone: "neutral", size: "sm", active: false });
+      })();
+    </script>
+  </body>
+</html>

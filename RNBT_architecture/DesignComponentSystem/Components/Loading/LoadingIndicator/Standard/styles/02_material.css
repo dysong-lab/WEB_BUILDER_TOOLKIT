@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+
+.loading-indicator {
+  --li-track-size: 38px;
+  --li-dot-size: 8px;
+  --li-gap: 6px;
+  --li-tone: #6750a4;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 999px;
+  background: #fff;
+  color: #1c1b1f;
+  box-shadow: 0 10px 28px rgba(46, 44, 78, 0.12);
+}
+
+.loading-indicator[data-size="sm"] { --li-track-size: 32px; --li-dot-size: 6px; }
+.loading-indicator[data-size="lg"] { --li-track-size: 44px; --li-dot-size: 10px; }
+.loading-indicator[data-tone="neutral"] { --li-tone: #757780; }
+.loading-indicator[data-tone="success"] { --li-tone: #146c43; }
+.loading-indicator[data-tone="warning"] { --li-tone: #b26a00; }
+
+.loading-indicator__track {
+  width: var(--li-track-size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--li-gap);
+}
+
+.loading-indicator__dot {
+  width: var(--li-dot-size);
+  height: var(--li-dot-size);
+  border-radius: 50%;
+  background: var(--li-tone);
+  animation: loading-material-pulse 1s infinite ease-in-out;
+}
+
+.loading-indicator__dot:nth-child(2) { animation-delay: 0.12s; }
+.loading-indicator__dot:nth-child(3) { animation-delay: 0.24s; }
+
+.loading-indicator[data-active="false"] .loading-indicator__dot {
+  animation: none;
+  opacity: 0.35;
+}
+
+.loading-indicator__label {
+  font: 500 14px/1.2 "Roboto", sans-serif;
+}
+
+@keyframes loading-material-pulse {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.36; }
+  40% { transform: scale(1); opacity: 1; }
+}

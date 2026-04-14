@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>LoadingIndicator/Standard — 04_operational</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        background: linear-gradient(180deg, #071015, #020508);
+        display: flex;
+        justify-content: center;
+        padding: 36px 20px;
+      }
+      .preview-grid { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; }
+    </style>
+  </head>
+  <body>
+    <div class="preview-grid">
+      <div id="loading-primary"></div>
+      <div id="loading-success"></div>
+      <div id="loading-paused"></div>
+    </div>
+    <script src="../../../../../preview_runtime.js"></script>
+    <script>
+      (async () => {
+        const ids = ["loading-primary", "loading-success", "loading-paused"];
+        await Promise.all(ids.map((id) => loadComponentAssets(id, "../views/04_operational.html", "../styles/04_operational.css")));
+
+        const createInstance = (id) => {
+          const instance = { id, appendElement: document.getElementById(id) };
+          instance.cssSelectors = { root: ".loading-indicator", track: ".loading-indicator__track", label: ".loading-indicator__label" };
+          instance.renderLoadingInfo = function (data = {}) {
+            const root = this.appendElement.querySelector(this.cssSelectors.root);
+            const label = this.appendElement.querySelector(this.cssSelectors.label);
+            if (!root || !label) return;
+            root.dataset.size = data?.size === "sm" || data?.size === "lg" ? data.size : "md";
+            root.dataset.tone = data?.tone === "neutral" || data?.tone === "success" || data?.tone === "warning" ? data.tone : "accent";
+            root.dataset.active = data?.active === false ? "false" : "true";
+            root.setAttribute("aria-busy", data?.active === false ? "false" : "true");
+            label.textContent = data?.label == null ? "" : String(data.label);
+            label.hidden = label.textContent.length === 0;
+            root.setAttribute("aria-label", label.textContent);
+          };
+          return instance;
+        };
+
+        createInstance("loading-primary").renderLoadingInfo({ label: "Buffering feed", tone: "accent", size: "md", active: true });
+        createInstance("loading-success").renderLoadingInfo({ label: "Routing packet", tone: "success", size: "lg", active: true });
+        createInstance("loading-paused").renderLoadingInfo({ label: "Standby", tone: "neutral", size: "sm", active: false });
+      })();
+    </script>
+  </body>
+</html>
