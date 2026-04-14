@@ -5,6 +5,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const COMPONENTS_ROOT = path.join(ROOT, 'Components');
+const MIXINS_ROOT = path.join(ROOT, 'Mixins');
 const MANIFEST_PATH = path.join(ROOT, 'manifest.json');
 
 const IGNORED_DIRS = new Set([
@@ -146,6 +147,54 @@ function buildComponent(componentDir, seedComponent) {
   return component;
 }
 
+function readMixinPurpose(mdPath, seedMixin) {
+  if (exists(mdPath)) {
+    const content = fs.readFileSync(mdPath, 'utf8');
+    const match = content.match(/^## 설계 의도\s+([\s\S]*?)(?:\n## |\n---|\n### |\n$)/m);
+    if (match) {
+      const lines = match[1]
+        .split('\n')
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .filter((line) => !line.startsWith('>'));
+      if (lines.length > 0) return lines[0];
+    }
+  }
+
+  return seedMixin?.purpose || null;
+}
+
+function generateMixins(seedManifest) {
+  if (!isDirectory(MIXINS_ROOT)) return seedManifest?.mixins || [];
+
+  const seedMixins = new Map((seedManifest?.mixins || []).map((mixin) => [mixin.name, mixin]));
+  const jsNames = fs
+    .readdirSync(MIXINS_ROOT, { withFileTypes: true })
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.js'))
+    .map((entry) => path.basename(entry.name, '.js'));
+
+  const orderedNames = [];
+  for (const mixin of seedManifest?.mixins || []) orderedNames.push(mixin.name);
+  for (const name of jsNames.sort((a, b) => a.localeCompare(b, 'en'))) {
+    if (!orderedNames.includes(name)) orderedNames.push(name);
+  }
+
+  return orderedNames
+    .filter((name) => exists(path.join(MIXINS_ROOT, `${name}.js`)))
+    .map((name) => {
+      const seedMixin = seedMixins.get(name);
+      const jsPath = path.join(MIXINS_ROOT, `${name}.js`);
+      const mdPath = path.join(MIXINS_ROOT, `${name}.md`);
+
+      return {
+        name,
+        purpose: readMixinPurpose(mdPath, seedMixin),
+        js: relativeFromRoot(jsPath),
+        md: exists(mdPath) ? relativeFromRoot(mdPath) : seedMixin?.md || null,
+      };
+    });
+}
+
 function discoverCategoryComponents(categoryDir, seedCategory) {
   const discovered = new Map();
   const categoryName = path.basename(categoryDir);
@@ -206,7 +255,10 @@ function generateManifest(seedManifest) {
     };
   });
 
-  return { categories };
+  return {
+    categories,
+    mixins: generateMixins(seedManifest),
+  };
 }
 
 function main() {

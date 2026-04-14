@@ -1344,5 +1344,91 @@
         }
       ]
     }
+  ],
+  "mixins": [
+    {
+      "name": "3DShadowPopupMixin",
+      "purpose": "3D 컴포넌트에서 콘텐츠를 별도 레이어에 표시한다.",
+      "js": "Mixins/3DShadowPopupMixin.js",
+      "md": "Mixins/3DShadowPopupMixin.md"
+    },
+    {
+      "name": "AnimationMixin",
+      "purpose": "3D 모델의 동작을 재현한다.",
+      "js": "Mixins/AnimationMixin.js",
+      "md": "Mixins/AnimationMixin.md"
+    },
+    {
+      "name": "CameraFocusMixin",
+      "purpose": "보는 위치를 전환한다.",
+      "js": "Mixins/CameraFocusMixin.js",
+      "md": "Mixins/CameraFocusMixin.md"
+    },
+    {
+      "name": "ClippingPlaneMixin",
+      "purpose": "3D 모델의 내부를 보여준다.",
+      "js": "Mixins/ClippingPlaneMixin.js",
+      "md": "Mixins/ClippingPlaneMixin.md"
+    },
+    {
+      "name": "EChartsMixin",
+      "purpose": "차트 인스턴스를 생성하고, 데이터를 적용하여 표시한다.",
+      "js": "Mixins/EChartsMixin.js",
+      "md": "Mixins/EChartsMixin.md"
+    },
+    {
+      "name": "FieldRenderMixin",
+      "purpose": "데이터 객체의 필드를 DOM 요소에 매핑하여 렌더링한다.",
+      "js": "Mixins/FieldRenderMixin.js",
+      "md": "Mixins/FieldRenderMixin.md"
+    },
+    {
+      "name": "HeatmapJsMixin",
+      "purpose": "히트맵 서피스를 생성하고, 데이터를 매핑하여 표시한다.",
+      "js": "Mixins/HeatmapJsMixin.js",
+      "md": "Mixins/HeatmapJsMixin.md"
+    },
+    {
+      "name": "ListRenderMixin",
+      "purpose": "배열 데이터를 template 기반으로 반복 렌더링한다.",
+      "js": "Mixins/ListRenderMixin.js",
+      "md": "Mixins/ListRenderMixin.md"
+    },
+    {
+      "name": "MeshHighlightMixin",
+      "purpose": "선택한 대상을 시각적으로 강조한다.",
+      "js": "Mixins/MeshHighlightMixin.js",
+      "md": "Mixins/MeshHighlightMixin.md"
+    },
+    {
+      "name": "MeshStateMixin",
+      "purpose": "3D 메시의 시각 상태를 데이터에 따라 변경한다.",
+      "js": "Mixins/MeshStateMixin.js",
+      "md": "Mixins/MeshStateMixin.md"
+    },
+    {
+      "name": "MeshVisibilityMixin",
+      "purpose": "3D 장면의 특정 부분을 선택적으로 보여준다.",
+      "js": "Mixins/MeshVisibilityMixin.js",
+      "md": "Mixins/MeshVisibilityMixin.md"
+    },
+    {
+      "name": "ShadowPopupMixin",
+      "purpose": "콘텐츠를 별도 레이어에 표시한다.",
+      "js": "Mixins/ShadowPopupMixin.js",
+      "md": "Mixins/ShadowPopupMixin.md"
+    },
+    {
+      "name": "TabulatorMixin",
+      "purpose": "테이블 인스턴스를 생성하고, 데이터를 적용하여 표시한다.",
+      "js": "Mixins/TabulatorMixin.js",
+      "md": "Mixins/TabulatorMixin.md"
+    },
+    {
+      "name": "TreeRenderMixin",
+      "purpose": "계층적 데이터를 트리 구조로 렌더링한다.",
+      "js": "Mixins/TreeRenderMixin.js",
+      "md": "Mixins/TreeRenderMixin.md"
+    }
   ]
 }
