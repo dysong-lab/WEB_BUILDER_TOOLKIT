@@ -64,6 +64,23 @@ const _datasetRegistry = {
     dashboard_devices:       '/api/devices'
 };
 
+const PREVIEW_BRIDGE_TYPE = 'RNBT_PREVIEW_EVENT_LOG';
+
+function postPreviewEventLog(entry) {
+    if (window.parent === window) return;
+    try {
+        window.parent.postMessage({
+            type: PREVIEW_BRIDGE_TYPE,
+            entry: {
+                timestamp: Date.now(),
+                ...entry,
+            },
+        }, '*');
+    } catch (_) {
+        // preview 독립 실행 시 부모 전달 실패는 무시
+    }
+}
+
 // ── GlobalDataPublisher 시뮬레이션 ──
 const _mappings = new Map();
 const _subscribers = new Map();
@@ -106,6 +123,14 @@ const GlobalDataPublisher = {
 const _eventHandlers = {};
 const Weventbus = {
     emit: (name, payload) => {
+        postPreviewEventLog({
+            source: 'eventbus',
+            message: name,
+            detail: {
+                targetInstanceId: payload?.targetInstance?.id || null,
+                eventType: payload?.event?.type || null,
+            },
+        });
         if (_eventHandlers[name]) _eventHandlers[name](payload);
     }
 };
@@ -201,6 +226,60 @@ async function loadComponentAssets(containerId, htmlPath, cssPath) {
     return container;
 }
 
+function observePreviewLogElements() {
+    const seen = new Map();
+    const selectors = ['#demo-log', '#event-log'];
+
+    const forwardLogElement = (el) => {
+        if (!el) return;
+        const raw = (el.innerText || el.textContent || '').trim();
+        if (!raw) return;
+        if (seen.get(el) === raw) return;
+        seen.set(el, raw);
+
+        const lines = raw.split('\n').map((line) => line.trim()).filter(Boolean);
+        const bodyLines = lines.filter((line) => line !== '이벤트 로그' && line !== '—');
+        if (bodyLines.length === 0) return;
+
+        postPreviewEventLog({
+            source: 'preview-log',
+            message: bodyLines[0],
+            lines: bodyLines.slice(0, 20),
+        });
+    };
+
+    const attachObserver = (el) => {
+        if (!el || el.__rnbtObserved) return;
+        el.__rnbtObserved = true;
+
+        const observer = new MutationObserver(() => forwardLogElement(el));
+        observer.observe(el, {
+            childList: true,
+            subtree: true,
+            characterData: true,
+        });
+        forwardLogElement(el);
+    };
+
+    const scan = () => {
+        selectors.forEach((selector) => {
+            document.querySelectorAll(selector).forEach(attachObserver);
+        });
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', scan, { once: true });
+    } else {
+        scan();
+    }
+
+    const rootObserver = new MutationObserver(scan);
+    rootObserver.observe(document.documentElement, {
+        childList: true,
+        subtree: true,
+    });
+}
+
 // ── window 노출 ──
 // 3D 프리뷰는 <script type="module">에서 THREE를 import하는데,
 // module scope에서는 classic script의 top-level const/let에 접근할 수 없다.
@@ -210,3 +289,6 @@ window.Weventbus = Weventbus;
 window.Wkit = Wkit;
 window.fx = fx;
 window.loadComponentAssets = loadComponentAssets;
+window.RNBT_PREVIEW_BRIDGE_TYPE = PREVIEW_BRIDGE_TYPE;
+
+observePreviewLogElements();
