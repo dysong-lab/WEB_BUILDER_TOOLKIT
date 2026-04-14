@@ -955,8 +955,17 @@ function bindVariantSelect() {
 function loadPreviewByIndex(idx) {
     const p = state.currentPreviews[idx];
     if (!p) return;
-    document.getElementById('comp-preview-frame').src = p.path;
-    document.getElementById('comp-open-new').href = p.path;
+    const frame = document.getElementById('comp-preview-frame');
+    const previewUrl = new URL(p.path, window.location.href);
+
+    // 같은 preview 계열로 빠르게 전환할 때 iframe 이 이전 문서를 유지하는 경우가 있어
+    // variant index 를 쿼리에 포함해 강제로 새 문서를 로드한다.
+    previewUrl.searchParams.set('__variant', String(idx));
+    previewUrl.searchParams.set('__ts', String(Date.now()));
+
+    frame.src = 'about:blank';
+    frame.src = previewUrl.toString();
+    document.getElementById('comp-open-new').href = previewUrl.toString();
 }
 
 // preview path → 컴포넌트 baseDir 추정 (preview 디렉토리의 부모)
