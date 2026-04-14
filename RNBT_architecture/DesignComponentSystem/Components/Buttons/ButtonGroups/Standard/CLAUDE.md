@@ -54,7 +54,7 @@ buttonid
 ### 페이지 연결 사례
 
 ```
-[페이지] ──publish(buttonGroupItems, [...])──> [ButtonGroups] 렌더링
+[페이지] ──fetchAndPublish('buttonGroupItems', this)──> [ButtonGroups] 렌더링 ([{ buttonid, label, ... }, ...])
 
 [ButtonGroups] ──@buttonClicked──> [페이지] ──> single-select: 이전 해제 + 클릭된 항목 선택
                                               + updateItemState(id, { selected: 'true' })

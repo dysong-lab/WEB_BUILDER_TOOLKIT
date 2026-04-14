@@ -39,7 +39,7 @@ FieldRenderMixin
 ### 페이지 연결 사례
 
 ```
-[페이지] ──publish(fabInfo, { icon })──> [FAB] 렌더링
+[페이지] ──fetchAndPublish('fabInfo', this)──> [FAB] 렌더링 ({ icon })
 
 [FAB] ──@fabClicked──> [페이지] ──> 주요 액션 실행
 ```

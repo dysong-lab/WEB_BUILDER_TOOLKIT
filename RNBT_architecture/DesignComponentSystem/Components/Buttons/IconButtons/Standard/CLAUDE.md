@@ -39,7 +39,7 @@ FieldRenderMixin
 ### 페이지 연결 사례
 
 ```
-[페이지] ──publish(iconButtonInfo, { icon })──> [IconButton] 렌더링
+[페이지] ──fetchAndPublish('iconButtonInfo', this)──> [IconButton] 렌더링 ({ icon })
 
 [IconButton] ──@iconButtonClicked──> [페이지] ──> 부수적 액션 실행
 ```

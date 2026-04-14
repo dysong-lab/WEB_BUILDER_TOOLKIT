@@ -55,7 +55,7 @@ ListRenderMixin
 ### 페이지 연결 사례
 
 ```
-[페이지] ──publish(fabMenuItems, [{ id, icon, label }, ...])──> [FABMenu] 항목 렌더
+[페이지] ──fetchAndPublish('fabMenuItems', this)──> [FABMenu] 항목 렌더 ([{ id, icon, label }, ...])
 
 [사용자] ──click .fab-menu__trigger──> [FABMenu] toggleMenu (메뉴 열림)
 

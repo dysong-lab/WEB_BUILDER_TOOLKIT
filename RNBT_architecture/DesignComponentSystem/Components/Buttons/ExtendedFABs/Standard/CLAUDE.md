@@ -40,7 +40,7 @@ FieldRenderMixin
 ### 페이지 연결 사례
 
 ```
-[페이지] ──publish(extendedFabInfo, { icon, label })──> [ExtendedFABs] 렌더링
+[페이지] ──fetchAndPublish('extendedFabInfo', this)──> [ExtendedFABs] 렌더링 ({ icon, label })
 
 [ExtendedFABs] ──@extendedFabClicked──> [페이지] ──> 주요 액션 실행
 ```
