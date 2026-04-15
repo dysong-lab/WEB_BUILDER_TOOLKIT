@@ -1,0 +1,93 @@
+/* 03_editorial — warm editorial utility */
+
+.search-bar--editorial {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 380px;
+  padding: 26px 24px 22px;
+  background: #f7f0e5;
+  border: 1px solid rgba(126, 103, 79, 0.18);
+}
+
+.search-bar--editorial .search-bar__form {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(126, 103, 79, 0.22);
+}
+
+.search-bar--editorial .search-bar__leading,
+.search-bar--editorial .search-bar__input,
+.search-bar--editorial .search-bar__clear,
+.search-bar--editorial .search-bar__submit,
+.search-bar--editorial .search-bar__supporting {
+  color: #3f3428;
+}
+
+.search-bar--editorial .search-bar__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font:
+    500 15px/1.5 "Iropke Batang",
+    "Nanum Myeongjo",
+    serif;
+}
+
+.search-bar--editorial .search-bar__input::-webkit-search-decoration,
+.search-bar--editorial .search-bar__input::-webkit-search-cancel-button,
+.search-bar--editorial .search-bar__input::-webkit-search-results-button,
+.search-bar--editorial .search-bar__input::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.search-bar--editorial .search-bar__clear,
+.search-bar--editorial .search-bar__submit {
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid rgba(126, 103, 79, 0.28);
+  border-radius: 999px;
+  background: rgba(255, 251, 244, 0.92);
+  cursor: pointer;
+  font:
+    600 12px/1.2 "SUIT",
+    sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition:
+    background 140ms ease,
+    color 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.search-bar--editorial .search-bar__clear {
+  color: #5f5142;
+}
+
+.search-bar--editorial .search-bar__submit {
+  border-color: rgba(123, 86, 48, 0.42);
+  background: #fff7eb;
+  color: #4c3926;
+}
+
+.search-bar--editorial .search-bar__clear:hover:not(:disabled),
+.search-bar--editorial .search-bar__submit:hover {
+  color: #7b5630;
+  border-color: #7b5630;
+  background: #fffaf2;
+  box-shadow: 0 2px 10px rgba(123, 86, 48, 0.08);
+}
+
+.search-bar--editorial .search-bar__supporting {
+  min-height: 18px;
+  color: #6b6560;
+  font:
+    500 12px/1.4 "SUIT",
+    sans-serif;
+}

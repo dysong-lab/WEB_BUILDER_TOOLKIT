@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Search/Standard — 04_operational</title>
+    <script src="../../../../preview_runtime.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        background: #071118;
+        display: flex;
+        justify-content: center;
+        padding: 48px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="search-operational"></div>
+    <script>
+      (async () => {
+        await loadComponentAssets("search-operational", "../views/04_operational.html", "../styles/04_operational.css");
+
+        const instance = { id: "search-operational", appendElement: document.getElementById("search-operational") };
+        instance.cssSelectors = {
+          root: ".search-bar",
+          form: ".search-bar__form",
+          input: ".search-bar__input",
+          leadingIcon: ".search-bar__leading",
+          clearButton: ".search-bar__clear",
+          submitButton: ".search-bar__submit",
+          supportingText: ".search-bar__supporting",
+        };
+        instance.getElement = function (key) {
+          return this.appendElement.querySelector(this.cssSelectors[key]);
+        };
+        instance.syncControls = function () {
+          const input = this.getElement("input");
+          const clearButton = this.getElement("clearButton");
+          const submitButton = this.getElement("submitButton");
+          if (!input || !clearButton || !submitButton) return;
+          const hasValue = input.value.trim() !== "";
+          const ariaLabel = input.getAttribute("placeholder") || "Search";
+          clearButton.hidden = !hasValue;
+          clearButton.disabled = !hasValue;
+          clearButton.setAttribute("aria-hidden", hasValue ? "false" : "true");
+          clearButton.setAttribute("aria-label", "Clear search");
+          submitButton.setAttribute("aria-label", "Submit search");
+          input.setAttribute("aria-label", ariaLabel);
+        };
+        instance.clearQuery = function () {
+          const input = this.getElement("input");
+          if (!input) return;
+          input.value = "";
+          this.syncControls();
+        };
+        instance.renderSearchInfo = function ({ response } = {}) {
+          const data = response || {};
+          const input = this.getElement("input");
+          const supportingText = this.getElement("supportingText");
+          const form = this.getElement("form");
+          form.setAttribute("role", "search");
+          input.setAttribute("type", "search");
+          input.setAttribute("placeholder", data.placeholder || "");
+          input.value = data.value || "";
+          supportingText.textContent = data.supportingText || "";
+          this.syncControls();
+        };
+
+        Wkit.onEventBusHandlers({
+          "@searchInputChanged": ({ event }) => {
+            console.log("[Preview] input", event.target.value);
+            instance.syncControls();
+          },
+          "@searchSubmitted": ({ event }) => {
+            console.log("[Preview] submit", instance.getElement("input").value, event.type);
+          },
+          "@searchCleared": () => {
+            console.log("[Preview] cleared");
+          },
+        });
+
+        Wkit.bindEvents(instance, {
+          input: { ".search-bar__input": "@searchInputChanged" },
+        });
+
+        instance.appendElement.addEventListener("click", (event) => {
+          const clearButton = event.target.closest(".search-bar__clear");
+          if (clearButton && !clearButton.disabled) {
+            instance.clearQuery();
+            Weventbus.emit("@searchCleared", { event, targetInstance: instance });
+            return;
+          }
+          if (event.target.closest(".search-bar__submit")) {
+            event.preventDefault();
+            Weventbus.emit("@searchSubmitted", { event, targetInstance: instance });
+          }
+        });
+
+        instance.appendElement.addEventListener("submit", (event) => {
+          if (!event.target.closest(".search-bar__form")) return;
+          event.preventDefault();
+          Weventbus.emit("@searchSubmitted", { event, targetInstance: instance });
+        });
+
+        instance.renderSearchInfo({
+          response: {
+            placeholder: "Search zones",
+            value: "line-a",
+            supportingText: "ACTIVE FEED",
+          },
+        });
+      })();
+    </script>
+  </body>
+</html>

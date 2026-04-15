@@ -1,0 +1,101 @@
+/* 01_refined — technical glass search bar */
+
+.search-bar--refined {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 360px;
+  padding: 20px;
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at top left, rgba(111, 208, 255, 0.28), transparent 38%),
+    linear-gradient(180deg, #112536 0%, #0a121a 100%);
+  border: 1px solid rgba(91, 130, 164, 0.28);
+}
+
+.search-bar--refined .search-bar__form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 20px;
+  background: rgba(9, 24, 34, 0.72);
+  border: 1px solid rgba(121, 187, 225, 0.18);
+}
+
+.search-bar--refined .search-bar__leading {
+  color: #9ddfff;
+  font-size: 18px;
+}
+
+.search-bar--refined .search-bar__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #edf7ff;
+  font:
+    500 15px/1.4 "SUIT",
+    "Pretendard",
+    sans-serif;
+}
+
+.search-bar--refined .search-bar__input::-webkit-search-decoration,
+.search-bar--refined .search-bar__input::-webkit-search-cancel-button,
+.search-bar--refined .search-bar__input::-webkit-search-results-button,
+.search-bar--refined .search-bar__input::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.search-bar--refined .search-bar__input::placeholder {
+  color: rgba(208, 234, 255, 0.54);
+}
+
+.search-bar--refined .search-bar__clear,
+.search-bar--refined .search-bar__submit {
+  border: 0;
+  cursor: pointer;
+  font:
+    600 13px/1 "SUIT",
+    sans-serif;
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease;
+}
+
+.search-bar--refined .search-bar__clear {
+  min-width: 32px;
+  height: 32px;
+  border-radius: 20px;
+  background: rgba(159, 210, 237, 0.12);
+  color: #d8f2ff;
+}
+
+.search-bar--refined .search-bar__submit {
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, #59b6ff 0%, #2f7dc7 100%);
+  color: #f7fbff;
+}
+
+.search-bar--refined .search-bar__clear:hover:not(:disabled) {
+  background: rgba(187, 227, 249, 0.22);
+  color: #f4fbff;
+}
+
+.search-bar--refined .search-bar__submit:hover {
+  background: linear-gradient(180deg, #7bc7ff 0%, #4796de 100%);
+}
+
+.search-bar--refined .search-bar__supporting {
+  min-height: 18px;
+  padding: 0 4px;
+  color: rgba(198, 225, 245, 0.76);
+  font:
+    500 12px/1.4 "SUIT",
+    sans-serif;
+}
