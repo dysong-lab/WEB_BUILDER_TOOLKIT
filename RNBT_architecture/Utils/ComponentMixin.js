@@ -96,6 +96,25 @@ ComponentMixin.applyModelLoaderMixin = function(instance) {
         }
         instance.composeResource(loadedObj);
         instance._onValidateResource();
+
+        // assetRegistry 생성 (asset 기능 활성 시)
+        if (wemb.configManager && wemb.configManager.assetEnabled) {
+          const assetTreePanel = wemb.viewComponentMap && wemb.viewComponentMap.get('AssetTreePanelMediator');
+          const assetsCache = (assetTreePanel && assetTreePanel.assetsCache) || null;
+          if (assetsCache && loadedObj) {
+            const registryMap = {};
+            loadedObj.traverse(function (obj) {
+              if (obj.isMesh || obj.isGroup) {
+                const name = obj.name;
+                if (name) {
+                  registryMap[name] = assetsCache.has(name) ? name : '';
+                }
+              }
+            });
+            instance.setDynamicGroupPropertyValue('assetRegistry', 'map', registryMap);
+          }
+        }
+
         requestAnimationFrame(() => {
           if (!instance.appendElement) return;
           instance.applyThreejsProperties(instance.getGroupProperties('threeJsProperties'))
