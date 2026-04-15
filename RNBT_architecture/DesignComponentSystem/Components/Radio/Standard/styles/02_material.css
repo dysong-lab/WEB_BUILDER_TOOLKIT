@@ -1,0 +1,86 @@
+/* 02_material — Material Design 3 표준 스타일 */
+
+.radio-group-shell--material {
+  display: inline-flex;
+  padding: 24px;
+  border-radius: 16px;
+  background: #1c1b1f;
+}
+
+.radio-group-shell--material .radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 220px;
+}
+
+.radio-group-shell--material .radio-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 0 16px;
+  border-radius: 100px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 150ms ease;
+}
+
+.radio-group-shell--material .radio-item:hover {
+  background: rgba(208, 188, 255, 0.08);
+}
+
+.radio-group-shell--material .radio-item:focus-visible {
+  outline: 2px solid #d0bcff;
+  outline-offset: 2px;
+}
+
+.radio-group-shell--material .radio-item[data-disabled="true"] {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+.radio-group-shell--material .radio-item__control {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  border: 2px solid #938f99;
+  transition:
+    border-color 150ms ease,
+    background 150ms ease;
+}
+
+.radio-group-shell--material .radio-item__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: transparent;
+  transform: scale(0.3);
+  transition:
+    background 150ms ease,
+    transform 150ms ease;
+}
+
+.radio-group-shell--material .radio-item[data-selected="true"] .radio-item__control {
+  border-color: #d0bcff;
+}
+
+.radio-group-shell--material .radio-item[data-selected="true"] .radio-item__dot {
+  background: #d0bcff;
+  transform: scale(1);
+}
+
+.radio-group-shell--material .radio-item__label {
+  font:
+    400 16px/1.5 "Roboto",
+    "SUIT",
+    sans-serif;
+  color: #e6e1e5;
+}
+
+.radio-group-shell--material .radio-item[data-disabled="true"] .radio-item__label {
+  color: rgba(230, 225, 229, 0.38);
+}

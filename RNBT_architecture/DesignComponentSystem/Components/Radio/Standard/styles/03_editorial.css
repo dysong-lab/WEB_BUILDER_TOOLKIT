@@ -1,0 +1,80 @@
+/* 03_editorial — 매거진형 라이트 스타일 */
+
+.radio-group-shell--editorial {
+  display: inline-flex;
+  padding: 28px;
+  border: 1px solid #d8d1c5;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 243, 235, 0.96)),
+    #f6f1e8;
+  box-shadow: 0 12px 30px rgba(90, 70, 44, 0.08);
+}
+
+.radio-group-shell--editorial .radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 240px;
+}
+
+.radio-group-shell--editorial .radio-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 42px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(126, 103, 79, 0.16);
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 160ms ease;
+}
+
+.radio-group-shell--editorial .radio-item:focus-visible {
+  outline: 2px solid #8f5f2a;
+  outline-offset: 3px;
+}
+
+.radio-group-shell--editorial .radio-item[data-disabled="true"] {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.radio-group-shell--editorial .radio-item__control {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  border: 1.5px solid #7e674f;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.radio-group-shell--editorial .radio-item__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: transparent;
+  transform: scale(0.35);
+  transition:
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.radio-group-shell--editorial .radio-item[data-selected="true"] .radio-item__control {
+  border-color: #8f5f2a;
+  background: #fffaf2;
+}
+
+.radio-group-shell--editorial .radio-item[data-selected="true"] .radio-item__dot {
+  background: #8f5f2a;
+  transform: scale(1);
+}
+
+.radio-group-shell--editorial .radio-item__label {
+  font:
+    500 15px/1.4 "Iropke Batang",
+    "Nanum Myeongjo",
+    serif;
+  color: #3f3428;
+}

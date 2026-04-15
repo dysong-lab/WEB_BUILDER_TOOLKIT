@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Radio/Standard — 02_material</title>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/ListRenderMixin.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #141218;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="radio-material"></div>
+    <script>
+      (async () => {
+        await loadComponentAssets(
+          "radio-material",
+          "../views/02_material.html",
+          "../styles/02_material.css",
+        );
+
+        const instance = { id: "radio-material", appendElement: document.getElementById("radio-material") };
+        applyListRenderMixin(instance, {
+          cssSelectors: {
+            container: ".radio-group",
+            template: "#radio-item-template",
+            item: ".radio-item",
+            id: ".radio-item",
+            selected: ".radio-item",
+            disabled: ".radio-item",
+            label: ".radio-item__label",
+          },
+          itemKey: "id",
+          datasetAttrs: {
+            id: "id",
+            selected: "selected",
+            disabled: "disabled",
+          },
+        });
+
+        const syncAccessibility = () => {
+          const items = Array.from(instance.appendElement.querySelectorAll(".radio-item"));
+          const selectedItem = items.find((item) => item.dataset.selected === "true");
+          const firstEnabledItem = items.find((item) => item.dataset.disabled !== "true");
+          const focusTarget = selectedItem || firstEnabledItem || null;
+
+          items.forEach((item) => {
+            item.setAttribute("role", "radio");
+            item.setAttribute("aria-checked", item.dataset.selected === "true" ? "true" : "false");
+            item.setAttribute("aria-disabled", item.dataset.disabled === "true" ? "true" : "false");
+            item.setAttribute(
+              "tabindex",
+              item.dataset.disabled !== "true" && item === focusTarget ? "0" : "-1",
+            );
+          });
+        };
+
+        instance.selectItem = (id) => {
+          const items = instance.appendElement.querySelectorAll(".radio-item");
+          items.forEach((item) =>
+            item.setAttribute("data-selected", item.dataset.id === String(id) ? "true" : "false"),
+          );
+          syncAccessibility();
+        };
+
+        instance.listRender.renderData({
+          response: [
+            { id: "grid", label: "Grid layout", selected: "true", disabled: "false" },
+            { id: "list", label: "List layout", selected: "false", disabled: "false" },
+            { id: "stack", label: "Stack layout", selected: "false", disabled: "false" },
+          ],
+        });
+        instance.appendElement.querySelector(".radio-group").setAttribute("role", "radiogroup");
+        syncAccessibility();
+
+        Wkit.onEventBusHandlers({
+          "@radioChanged": ({ targetInstance, event }) => {
+            const id = event.target.closest(".radio-item")?.dataset.id;
+            targetInstance?.selectItem(id);
+          },
+        });
+
+        Wkit.bindEvents(instance, {
+          click: {
+            ".radio-item": "@radioChanged",
+          },
+        });
+      })();
+    </script>
+  </body>
+</html>

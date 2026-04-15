@@ -1,0 +1,97 @@
+/* 04_operational — 산업 HMI 스타일 */
+
+.radio-group-shell--operational {
+  display: inline-flex;
+  padding: 20px;
+  border: 1px solid #274457;
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(20, 36, 46, 0.95), rgba(9, 18, 25, 0.98)),
+    #101d26;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 10px 24px rgba(0, 0, 0, 0.22);
+}
+
+.radio-group-shell--operational .radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 230px;
+}
+
+.radio-group-shell--operational .radio-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 38px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    border-color 140ms ease,
+    background 140ms ease;
+}
+
+.radio-group-shell--operational .radio-item:hover {
+  border-color: rgba(68, 174, 255, 0.34);
+  background: rgba(35, 76, 100, 0.26);
+}
+
+.radio-group-shell--operational .radio-item:focus-visible {
+  outline: 2px solid #51c8ff;
+  outline-offset: 2px;
+}
+
+.radio-group-shell--operational .radio-item[data-disabled="true"] {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.radio-group-shell--operational .radio-item__control {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 2px solid #4f7388;
+  background: #0d1b25;
+}
+
+.radio-group-shell--operational .radio-item__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: transparent;
+  transform: scale(0.25);
+  transition:
+    background 140ms ease,
+    transform 140ms ease;
+}
+
+.radio-group-shell--operational .radio-item[data-selected="true"] {
+  border-color: rgba(81, 200, 255, 0.35);
+  background: rgba(17, 74, 104, 0.26);
+}
+
+.radio-group-shell--operational .radio-item[data-selected="true"] .radio-item__control {
+  border-color: #51c8ff;
+}
+
+.radio-group-shell--operational .radio-item[data-selected="true"] .radio-item__dot {
+  background: #51c8ff;
+  transform: scale(1);
+}
+
+.radio-group-shell--operational .radio-item__label {
+  font:
+    600 14px/1.4 "SUIT",
+    "Pretendard",
+    sans-serif;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #d4ecf8;
+}
