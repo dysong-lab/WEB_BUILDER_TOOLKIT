@@ -167,7 +167,7 @@ Phase D: Advanced 기능 (프로젝트 요구 시 반복)                  │
 | 항목 | 설명 |
 |------|------|
 | **입력** | Step 4의 기능 목록 + 현재 Mixin 카탈로그 ([Mixins/README.md](../Mixins/README.md)) |
-| **활동** | DOM 패턴 기반으로 Mixin을 선택한다. 기존 Mixin으로 부족한 부분은 **커스텀 속성/메서드**로 정의한다. 여러 컴포넌트에서 동일 패턴이 반복되면 새 Mixin 검토 (`create-mixin-spec` → `implement-mixin`). |
+| **활동** | DOM 패턴 기반으로 Mixin을 선택한다. 기존 Mixin으로 부족한 부분은 **커스텀 속성/메서드**로 정의한다. 여러 컴포넌트에서 동일 패턴이 반복되는 것이 감지되어도 **이 생산 루프 안에서는 커스텀 메서드로 완결**하고, 반복 패턴은 **별도 수동 워크플로우**(`create-mixin-spec` → `implement-mixin`)로 이관한다. 컴포넌트 생산 중에 새 Mixin을 만들지 않는다. |
 | **출력** | 개별 컴포넌트 CLAUDE.md에 구현 명세 추가 (Mixin 선택 + cssSelectors + 커스텀 메서드) |
 | **완료 기준** | "이 컴포넌트의 register.js에 무엇이 들어가는가?"를 CLAUDE.md만 보고 알 수 있음 |
 
@@ -176,18 +176,16 @@ Phase D: Advanced 기능 (프로젝트 요구 시 반복)                  │
 ```
 Step 4에서 도출된 기능
     │
-    ├── 기존 Mixin으로 커버 가능 → Mixin 선택 → Step 6로
+    ├── 기존 Mixin으로 커버 가능        → Mixin 선택 → Step 6로
     │
     ├── Mixin + 커스텀 메서드 조합 필요 → 매핑 정의 → Step 6로
     │
-    └── 완전히 새로운 기능 패턴
-        │
-        ├── 이 컴포넌트에서만 필요 → 커스텀 메서드로 처리 → Step 6로
-        │
-        └── 여러 컴포넌트에서 반복될 패턴
-            → create-mixin-spec → 승인 → implement-mixin
-            → Mixin 카탈로그 업데이트 완료
-            → Step 5로 복귀하여 새 Mixin으로 매핑 확정 → Step 6로
+    └── 완전히 새로운 기능 패턴        → 커스텀 메서드로 처리 → Step 6로
+
+※ 여러 컴포넌트에서 반복이 감지되더라도 이 루프에서는 커스텀 메서드로 완결한다.
+  반복 패턴은 별도 수동 워크플로우(create-mixin-spec → implement-mixin)로
+  이관하며, 이는 사용자가 직접 인지/호출하는 독립 작업이다.
+  반복 패턴 추출은 audit-project로 사후 감사한다.
 ```
 
 **TopAppBar에 대입한 예시**:
@@ -321,6 +319,6 @@ Step 7과 동일한 검증을 수행한다. Advanced 컴포넌트가 Hook 검사
 - Standard 완료 후, 프로젝트에서 MD3에 없는 새 컴포넌트가 필요할 때 진입.
 - 기존 Standard 컴포넌트는 수정하지 않고, 같은 범주에 새 컴포넌트를 추가한다.
 
-**새 Mixin이 필요한 경우**: Step 5에서 발견되면 `create-mixin-spec` → `implement-mixin` → Mixin 카탈로그 업데이트 후 Step 5로 복귀.
+**새 Mixin이 필요한 경우**: 컴포넌트 생산 루프와 분리된 **별도 수동 작업**이다. Step 5에서 반복 패턴이 의심되어도 그 컴포넌트는 커스텀 메서드로 완결하고, 이후 사용자가 직접 `create-mixin-spec` → `implement-mixin`을 호출해 Mixin 카탈로그를 갱신한다. 기존 컴포넌트를 새 Mixin으로 리팩터할지는 별개 판단이다.
 
 *최종 업데이트: 2026-04-07*

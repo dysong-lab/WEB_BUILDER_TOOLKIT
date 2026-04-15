@@ -141,6 +141,12 @@ feat: 3D_Components/{장비명} Advanced 변형 생산 — {04_highlight, 05_cam
 
 ---
 
+## 디자인 페르소나 & CSS 조달 규칙 (팝업 등 HTML/CSS 생성 시)
+
+3D Advanced 변형 자체는 Mixin 조합 기반이지만, **팝업(ShadowPopup)이나 `publishCode`로 페르소나 4종(`01_refined` ~ `04_operational`)을 따르는 HTML/CSS를 생성하는 경우**에는 `produce-component/SKILL.md` **Step 5-1 "디자인 페르소나 & CSS 조달 규칙"**의 원칙을 그대로 따른다.
+
+---
+
 ## 참조 문서 (매 사이클 읽기)
 
 - `produce-component` SKILL: `/.claude/skills/0-produce/produce-component/SKILL.md`

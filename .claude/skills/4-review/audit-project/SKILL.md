@@ -96,7 +96,7 @@ Layer 4: 정합성  — 모든 구성 요소가 서로 일관되는가
 
 1. [.claude/skills/](/.claude/skills/) 전체 구조 확인
    - SKILL이 파이프라인 단계별로 분리되어 있는가
-   - [SHARED_INDEX.md](/.claude/skills/SHARED_INDEX.md)와 [SHARED_PATTERNS.md](/.claude/skills/SHARED_PATTERNS.md)로 공통 규칙을 분리 관리하는가
+   - [SHARED_INSTRUCTIONS.md](/.claude/skills/SHARED_INSTRUCTIONS.md)로 공통 규칙을 한 곳에서 관리하는가
    - 각 SKILL에 사전 읽기 목록이 있어 필요한 컨텍스트만 로드하는가
 2. [docs/](/RNBT_architecture/DesignComponentSystem/docs/) 구조 확인
    - 문서가 소비자별로 분류되어 있는가 (architecture → SKILL용, specs → Mixin개발용, reports → 사람용)
@@ -310,7 +310,7 @@ WEB_BUILDER_TOOLKIT/
 
 #### 점검 방법
 
-[.claude/skills/](/.claude/skills/) 디렉토리의 모든 SKILL.md와 SHARED_INDEX.md, SHARED_PATTERNS.md를 읽고:
+[.claude/skills/](/.claude/skills/) 디렉토리의 모든 SKILL.md와 SHARED_INSTRUCTIONS.md를 읽고:
 
 1. **용어 일치**: SKILL에서 사용하는 Mixin 이름, 네임스페이스, 함수명이 구현체와 일치하는가
 2. **패턴 일치**: SKILL에서 안내하는 register.js, beforeDestroy.js 패턴이 실제 예제와 일치하는가

@@ -159,6 +159,12 @@ feat: 3D_Components/{장비명} 컴포넌트 생산 — {한줄 설명}
 
 ---
 
+## 디자인 페르소나 & CSS 조달 규칙 (팝업 등 HTML/CSS 생성 시)
+
+3D Standard 변형 자체는 CSS 페르소나 기반이 아니지만, **팝업(`03_status_popup` 등 ShadowPopup) 또는 `publishCode`에서 페르소나 4종을 따르는 HTML/CSS를 생성하는 경우**에는 `produce-component/SKILL.md` **Step 5-1 "디자인 페르소나 & CSS 조달 규칙"**의 원칙을 그대로 따른다.
+
+---
+
 ## 참조 문서 (매 사이클 읽기)
 
 - `produce-component` SKILL: `/.claude/skills/0-produce/produce-component/SKILL.md`

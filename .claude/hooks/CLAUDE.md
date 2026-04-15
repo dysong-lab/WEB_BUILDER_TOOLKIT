@@ -223,7 +223,7 @@ Mixin이 추가되면 갱신해야 하는 파일 목록:
   1. Mixins/MixinName.js          (구현)
   2. Mixins/MixinName.md          (문서)
   3. Mixins/specs/MixinName.md    (명세)
-  4. SHARED_INDEX.md              (Mixin 목록)
+  4. SHARED_INSTRUCTIONS.md       (Mixin 목록)
   5. docs/README.md               (spec 수량)
 ```
 
@@ -232,7 +232,7 @@ structural-script 로직:
   트리거: Mixins/*.js 파일이 Write/Edit될 때
   1. Mixins/*.js 파일 수 카운트
   2. Mixins/*.md 파일 수 카운트
-  3. SHARED_INDEX.md의 Mixin 목록 항목 수 카운트
+  3. SHARED_INSTRUCTIONS.md의 Mixin 목록 항목 수 카운트
   4. 불일치 시 exit 2 + "다음 파일도 갱신 필요: [목록]"
 ```
 
@@ -323,7 +323,7 @@ loaded.js          → P0-4만 검사
 | P1-3 | 생성-정리 대응 | `*/beforeDestroy.js` | 같은 컴포넌트의 `register.js` | register의 subscribe/bind 수 == beforeDestroy의 unsubscribe/remove 수 |
 | P2-1 | 선택자 HTML 존재 | `*/register.js` | 같은 컴포넌트의 `views/*.html` | cssSelectors 값 추출 → HTML에서 존재 확인 |
 | P2-2 | template 태그 존재 | `*/register.js` | 같은 컴포넌트의 `views/*.html` | ListRenderMixin 사용 시 → HTML에 `<template>` 존재 확인 |
-| P2-3 | Mixin 문서 동시 갱신 | `*/Mixin*.js` | `SHARED_INDEX.md`, `*.md` | .js 수 vs .md 수 vs 목록 수 비교 |
+| P2-3 | Mixin 문서 동시 갱신 | `*/Mixin*.js` | `SHARED_INSTRUCTIONS.md`, `*.md` | .js 수 vs .md 수 vs 목록 수 비교 |
 
 ---
 
