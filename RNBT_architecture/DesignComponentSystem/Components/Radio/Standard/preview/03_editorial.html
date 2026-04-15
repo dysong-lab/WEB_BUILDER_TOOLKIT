@@ -16,135 +16,143 @@
         display: flex;
         justify-content: center;
         padding: 56px;
+        gap: 24px;
       }
     </style>
   </head>
   <body>
-    <div id="radio-editorial"></div>
+    <div id="radio-1"></div>
+    <div id="radio-2"></div>
     <script>
       (async () => {
-        await loadComponentAssets(
-          "radio-editorial",
-          "../views/03_editorial.html",
-          "../styles/03_editorial.css",
+        const ids = ["radio-1", "radio-2"];
+        await Promise.all(
+          ids.map((id) =>
+            loadComponentAssets(
+              id,
+              "../views/03_editorial.html",
+              "../styles/03_editorial.css",
+            ),
+          ),
         );
 
-        const instance = {
-          id: "radio-editorial",
-          appendElement: document.getElementById("radio-editorial"),
-        };
-
-        applyListRenderMixin(instance, {
-          cssSelectors: {
-            container: ".radio-group",
-            template: "#radio-item-template",
-            item: ".radio-item",
-            id: ".radio-item",
-            selected: ".radio-item",
-            disabled: ".radio-item",
-            label: ".radio-item__label",
-          },
-          itemKey: "id",
-          datasetAttrs: {
-            id: "id",
-            selected: "selected",
-            disabled: "disabled",
-          },
-        });
-
-        instance.getItemElement = function (targetId) {
-          return this.appendElement.querySelector(
-            `${this.listRender.cssSelectors.item}[data-id="${String(targetId)}"]`,
-          );
-        };
-
-        instance.syncAccessibility = function () {
-          const items = Array.from(
-            this.appendElement.querySelectorAll(this.listRender.cssSelectors.item),
-          );
-          const selectedItem = items.find((item) => item.dataset.selected === "true");
-          const firstEnabledItem = items.find((item) => item.dataset.disabled !== "true");
-          const focusTarget = selectedItem || firstEnabledItem || null;
-
-          items.forEach((item) => {
-            const isSelected = item.dataset.selected === "true";
-            const isDisabled = item.dataset.disabled === "true";
-            item.setAttribute("role", "radio");
-            item.setAttribute("aria-checked", isSelected ? "true" : "false");
-            item.setAttribute("aria-disabled", isDisabled ? "true" : "false");
-            item.setAttribute(
-              "tabindex",
-              !isDisabled && item === focusTarget ? "0" : "-1",
-            );
+        const createInstance = (id) => {
+          const instance = { id, appendElement: document.getElementById(id) };
+          applyListRenderMixin(instance, {
+            cssSelectors: {
+              container: ".radio-group",
+              template: "#radio-item-template",
+              item: ".radio-item",
+              id: ".radio-item",
+              selected: ".radio-item",
+              disabled: ".radio-item",
+              label: ".radio-item__label",
+            },
+            itemKey: "id",
+            datasetAttrs: {
+              id: "id",
+              selected: "selected",
+              disabled: "disabled",
+            },
           });
+          instance.getItemElement = function (targetId) {
+            return this.appendElement.querySelector(
+              `${this.listRender.cssSelectors.item}[data-id="${String(targetId)}"]`,
+            );
+          };
+          instance.syncAccessibility = function () {
+            const items = Array.from(
+              this.appendElement.querySelectorAll(this.listRender.cssSelectors.item),
+            );
+            const selectedItem = items.find((item) => item.dataset.selected === "true");
+            const firstEnabledItem = items.find((item) => item.dataset.disabled !== "true");
+            const focusTarget = selectedItem || firstEnabledItem || null;
+
+            items.forEach((item) => {
+              const isSelected = item.dataset.selected === "true";
+              const isDisabled = item.dataset.disabled === "true";
+              item.setAttribute("role", "radio");
+              item.setAttribute("aria-checked", isSelected ? "true" : "false");
+              item.setAttribute("aria-disabled", isDisabled ? "true" : "false");
+              item.setAttribute(
+                "tabindex",
+                !isDisabled && item === focusTarget ? "0" : "-1",
+              );
+            });
+          };
+          instance.selectItem = function (targetId) {
+            const target = this.getItemElement(targetId);
+            if (!target || target.dataset.disabled === "true") return;
+
+            const items = this.appendElement.querySelectorAll(this.listRender.cssSelectors.item);
+            items.forEach((item) =>
+              item.setAttribute(
+                "data-selected",
+                item.dataset.id === String(targetId) ? "true" : "false",
+              ),
+            );
+            this.syncAccessibility();
+          };
+          instance.renderRadioItems = function ({ response } = {}) {
+            const items = Array.isArray(response) ? response : [];
+            const normalized = items.map((item = {}) => ({
+              id: item.id == null ? "" : String(item.id),
+              label: item.label || "",
+              selected: item.selected === "true" ? "true" : "false",
+              disabled: item.disabled === "true" ? "true" : "false",
+            }));
+            if (!normalized.some((item) => item.selected === "true")) {
+              const firstEnabled = normalized.find((item) => item.disabled !== "true");
+              if (firstEnabled) firstEnabled.selected = "true";
+            }
+            this.listRender.renderData({ response: normalized });
+            this.appendElement
+              .querySelector(".radio-group")
+              .setAttribute("role", "radiogroup");
+            this.syncAccessibility();
+          };
+          instance.customEvents = {
+            click: {
+              [instance.listRender.cssSelectors.item]: "@radioChanged",
+            },
+          };
+          Wkit.bindEvents(instance, instance.customEvents);
+          instance.appendElement.addEventListener("keydown", (event) => {
+            const item = event.target.closest(".radio-item");
+            if (!item || item.dataset.disabled === "true") return;
+            if (event.key === " " || event.key === "Enter") {
+              event.preventDefault();
+              Weventbus.emit("@radioChanged", { event, targetInstance: instance });
+            }
+          });
+          return instance;
         };
 
-        instance.selectItem = function (targetId) {
-          const target = this.getItemElement(targetId);
-          if (!target || target.dataset.disabled === "true") return;
-
-          const items = this.appendElement.querySelectorAll(this.listRender.cssSelectors.item);
-          items.forEach((item) =>
-            item.setAttribute(
-              "data-selected",
-              item.dataset.id === String(targetId) ? "true" : "false",
-            ),
-          );
-          this.syncAccessibility();
-        };
-
-        instance.renderRadioItems = function ({ response } = {}) {
-          const items = Array.isArray(response) ? response : [];
-          this.listRender.renderData({ response: items });
-          this.appendElement
-            .querySelector(".radio-group")
-            .setAttribute("role", "radiogroup");
-          this.syncAccessibility();
-        };
+        const primary = createInstance("radio-1");
+        const secondary = createInstance("radio-2");
 
         Wkit.onEventBusHandlers({
-          "@radioChanged": ({ targetInstance, event }) => {
-            const id = event.target.closest(".radio-item")?.dataset.id;
+          "@radioChanged": ({ targetInstance, event, itemId }) => {
+            const el = event.target.closest(".radio-item");
+            const id = itemId || el?.dataset.id;
             targetInstance?.selectItem(id);
+            console.log("[Preview] Radio changed:", targetInstance?.id, id);
           },
         });
 
-        instance.customEvents = {
-          click: {
-            [instance.listRender.cssSelectors.item]: "@radioChanged",
-          },
-        };
-        Wkit.bindEvents(instance, instance.customEvents);
-
-        instance.appendElement.addEventListener("keydown", (event) => {
-          const item = event.target.closest(".radio-item");
-          if (!item || item.dataset.disabled === "true") return;
-          if (event.key === " " || event.key === "Enter") {
-            event.preventDefault();
-            Weventbus.emit("@radioChanged", { event, targetInstance: instance });
-          }
-        });
-
-        instance.renderRadioItems({
+        primary.renderRadioItems({
           response: [
-            {
-              id: "editorial-0",
-              label: "Feature Story",
-              selected: "true",
-              disabled: "false",
-            },
-            {
-              id: "editorial-1",
-              label: "Interview",
-              selected: "false",
-              disabled: "false",
-            },
-            {
-              id: "editorial-2",
-              label: "Essay",
-              selected: "false",
-              disabled: "false",
-            },
+            { id: "live", label: "실시간 관제", selected: "true", disabled: "false" },
+            { id: "daily", label: "일간 리포트", selected: "false", disabled: "false" },
+            { id: "weekly", label: "주간 리포트", selected: "false", disabled: "false" },
+          ],
+        });
+
+        secondary.renderRadioItems({
+          response: [
+            { id: "north", label: "북측 전력 라인", selected: "false", disabled: "false" },
+            { id: "south", label: "남측 전력 라인", selected: "true", disabled: "false" },
+            { id: "backup", label: "예비 라인 (점검 중)", selected: "false", disabled: "true" },
           ],
         });
       })();
