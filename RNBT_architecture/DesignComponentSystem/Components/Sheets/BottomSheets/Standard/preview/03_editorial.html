@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>BottomSheets/Standard — 03_editorial</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Instrument+Sans:wght@400;500&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { min-height: 100vh; background: #f2eadf; font-family: 'Instrument Sans', sans-serif; color: #231d18; }
+        .preview-shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 56px; }
+        .preview-card { width: min(100%, 700px); padding: 36px; background: rgba(247, 242, 233, 0.94); border: 1px solid rgba(83, 71, 60, 0.14); }
+        .preview-card h1 { font-family: 'Cormorant Garamond', serif; font-size: 42px; line-height: 1; }
+        .preview-card p { margin-top: 16px; font-size: 15px; line-height: 1.8; color: #60554b; }
+        .preview-trigger { margin-top: 22px; height: 42px; padding: 0 16px; border: 1px solid rgba(83, 71, 60, 0.24); background: transparent; color: #231d18; font-size: 13px; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div class="preview-shell">
+    <div class="preview-card">
+        <h1>Bottom Sheets</h1>
+        <p>Minimal editorial persona는 얇은 경계와 넓은 여백으로 보조 콘텐츠를 제시합니다.</p>
+        <button type="button" class="preview-trigger">Open Bottom Sheet</button>
+        <div id="bottom-sheets-standard-container"></div>
+    </div>
+</div>
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/ShadowPopupMixin.js"></script>
+<script src="../../../../../Mixins/FieldRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('bottom-sheets-standard-container', '../views/03_editorial.html', '../styles/03_editorial.css');
+    const instance = { id: 'bottom-sheets-standard', appendElement: document.getElementById('bottom-sheets-standard-container') };
+    instance._popupScope = null;
+    instance._closeTimer = null;
+    instance._sheetMotionDuration = 220;
+    applyShadowPopupMixin(instance, {
+        cssSelectors: {
+            template: '#bottom-sheet-popup-template',
+            overlay: '.bottom-sheet__overlay',
+            surface: '.bottom-sheet__surface',
+            closeBtn: '.bottom-sheet__close',
+            secondaryBtn: '.bottom-sheet__secondary',
+            primaryBtn: '.bottom-sheet__primary'
+        },
+        onCreated: (shadowRoot) => {
+            instance._popupScope = { appendElement: shadowRoot };
+            applyFieldRenderMixin(instance._popupScope, {
+                cssSelectors: {
+                    headline: '.bottom-sheet__headline',
+                    supportingText: '.bottom-sheet__supporting-text',
+                    body: '.bottom-sheet__body',
+                    primaryLabel: '.bottom-sheet__primary-label',
+                    secondaryLabel: '.bottom-sheet__secondary-label'
+                }
+            });
+        }
+    });
+    instance.renderBottomSheetContent = function(payload = {}) {
+        const { response = {} } = payload;
+        instance._popupScope.fieldRender.renderData({ response });
+        instance.shadowPopup.query('.bottom-sheet__supporting-text').hidden = !String(response.supportingText ?? '').trim();
+        instance.shadowPopup.query('.bottom-sheet__body').hidden = !String(response.body ?? '').trim();
+    };
+    instance.openBottomSheet = function(payload = {}) {
+        if (instance._closeTimer) clearTimeout(instance._closeTimer);
+        instance.shadowPopup.show();
+        instance.renderBottomSheetContent(payload);
+        const overlay = instance.shadowPopup.query(instance.shadowPopup.cssSelectors.overlay);
+        overlay.dataset.state = 'closed';
+        void overlay.offsetWidth;
+        requestAnimationFrame(() => { overlay.dataset.state = 'open'; });
+    };
+    instance.closeBottomSheet = function() {
+        const overlay = instance.shadowPopup.query(instance.shadowPopup.cssSelectors.overlay);
+        overlay.dataset.state = 'closing';
+        instance._closeTimer = setTimeout(() => {
+            instance.shadowPopup.hide();
+            overlay.dataset.state = 'closed';
+            instance._closeTimer = null;
+        }, instance._sheetMotionDuration);
+    };
+    instance.shadowPopup.bindPopupEvents({
+        click: {
+            [instance.shadowPopup.cssSelectors.overlay]: (event) => {
+                if (event.target.closest(instance.shadowPopup.cssSelectors.surface)) return;
+                Weventbus.emit('@bottomSheetDismissed', { event, targetInstance: instance });
+            },
+            [instance.shadowPopup.cssSelectors.closeBtn]: '@bottomSheetClosed',
+            [instance.shadowPopup.cssSelectors.secondaryBtn]: '@bottomSheetSecondaryAction',
+            [instance.shadowPopup.cssSelectors.primaryBtn]: '@bottomSheetPrimaryAction'
+        }
+    });
+    Wkit.onEventBusHandlers({
+        '@bottomSheetDismissed': ({ targetInstance }) => { console.log('[Preview] bottom sheet dismissed'); targetInstance.closeBottomSheet(); },
+        '@bottomSheetClosed': ({ targetInstance }) => { console.log('[Preview] bottom sheet closed'); targetInstance.closeBottomSheet(); },
+        '@bottomSheetSecondaryAction': ({ targetInstance }) => { console.log('[Preview] bottom sheet secondary action'); targetInstance.closeBottomSheet(); },
+        '@bottomSheetPrimaryAction': ({ targetInstance }) => { console.log('[Preview] bottom sheet primary action'); targetInstance.closeBottomSheet(); }
+    });
+    document.querySelector('.preview-trigger').addEventListener('click', () => {
+        instance.openBottomSheet({
+            response: {
+                headline: 'Report actions',
+                supportingText: 'Choose what to do with the selected report.',
+                body: 'Exports keep the current filters and annotations.',
+                primaryLabel: 'Run export',
+                secondaryLabel: 'Later'
+            }
+        });
+    });
+})();
+</script>
+</body>
+</html>

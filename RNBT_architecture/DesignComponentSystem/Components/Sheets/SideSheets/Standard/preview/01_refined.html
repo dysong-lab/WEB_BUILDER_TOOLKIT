@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>SideSheets/Standard — 01_refined</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tomorrow:wght@500;600&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { min-height: 100vh; background: radial-gradient(circle at top, rgba(116, 93, 255, 0.18), transparent 28%), #0d1226; font-family: 'Pretendard', sans-serif; color: #f3f1ff; }
+        .preview-shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 40px; }
+        .preview-card { width: min(100%, 620px); padding: 32px; border: 1px solid rgba(149, 131, 255, 0.18); border-radius: 30px; background: rgba(17, 22, 48, 0.88); }
+        .preview-card h1 { font-size: 30px; line-height: 1.1; letter-spacing: -1px; }
+        .preview-card p { margin-top: 12px; font-size: 15px; line-height: 1.7; color: rgba(232, 226, 255, 0.82); }
+        .preview-trigger { margin-top: 22px; height: 46px; padding: 0 18px; border: 0; border-radius: 24px; background: linear-gradient(135deg, #ccbeff, #8f73ff); color: #140f29; font-size: 14px; font-weight: 700; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div class="preview-shell">
+    <div class="preview-card">
+        <h1>SideSheets / Standard</h1>
+        <p>측면에 고정된 보조 확인 패널입니다. 버튼을 눌러 시트 열림과 액션 이벤트를 확인할 수 있습니다.</p>
+        <button type="button" class="preview-trigger">Open Side Sheet</button>
+        <div id="side-sheets-standard-container"></div>
+    </div>
+</div>
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/ShadowPopupMixin.js"></script>
+<script src="../../../../../Mixins/FieldRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('side-sheets-standard-container', '../views/01_refined.html', '../styles/01_refined.css');
+    const instance = { id: 'side-sheets-standard', appendElement: document.getElementById('side-sheets-standard-container') };
+    instance._popupScope = null;
+    instance._closeTimer = null;
+    instance._sheetMotionDuration = 260;
+    applyShadowPopupMixin(instance, {
+        cssSelectors: {
+            template: '#side-sheet-popup-template',
+            overlay: '.side-sheet__overlay',
+            surface: '.side-sheet__surface',
+            closeBtn: '.side-sheet__close',
+            secondaryBtn: '.side-sheet__secondary',
+            primaryBtn: '.side-sheet__primary'
+        },
+        onCreated: (shadowRoot) => {
+            instance._popupScope = { appendElement: shadowRoot };
+            applyFieldRenderMixin(instance._popupScope, {
+                cssSelectors: {
+                    headline: '.side-sheet__headline',
+                    supportingText: '.side-sheet__supporting-text',
+                    body: '.side-sheet__body',
+                    primaryLabel: '.side-sheet__primary-label',
+                    secondaryLabel: '.side-sheet__secondary-label'
+                }
+            });
+        }
+    });
+    instance.renderSideSheetContent = function(payload = {}) {
+        const { response = {} } = payload;
+        instance._popupScope.fieldRender.renderData({ response });
+        instance.shadowPopup.query('.side-sheet__supporting-text').hidden = !String(response.supportingText ?? '').trim();
+        instance.shadowPopup.query('.side-sheet__body').hidden = !String(response.body ?? '').trim();
+    };
+    instance.openSideSheet = function(payload = {}) {
+        if (instance._closeTimer) clearTimeout(instance._closeTimer);
+        instance.shadowPopup.show();
+        instance.renderSideSheetContent(payload);
+        const overlay = instance.shadowPopup.query(instance.shadowPopup.cssSelectors.overlay);
+        overlay.dataset.state = 'closed';
+        void overlay.offsetWidth;
+        requestAnimationFrame(() => { overlay.dataset.state = 'open'; });
+    };
+    instance.closeSideSheet = function() {
+        const overlay = instance.shadowPopup.query(instance.shadowPopup.cssSelectors.overlay);
+        overlay.dataset.state = 'closing';
+        instance._closeTimer = setTimeout(() => {
+            instance.shadowPopup.hide();
+            overlay.dataset.state = 'closed';
+            instance._closeTimer = null;
+        }, instance._sheetMotionDuration);
+    };
+    instance.shadowPopup.bindPopupEvents({
+        click: {
+            [instance.shadowPopup.cssSelectors.overlay]: (event) => {
+                if (event.target.closest(instance.shadowPopup.cssSelectors.surface)) return;
+                Weventbus.emit('@sideSheetDismissed', { event, targetInstance: instance });
+            },
+            [instance.shadowPopup.cssSelectors.closeBtn]: '@sideSheetClosed',
+            [instance.shadowPopup.cssSelectors.secondaryBtn]: '@sideSheetSecondaryAction',
+            [instance.shadowPopup.cssSelectors.primaryBtn]: '@sideSheetPrimaryAction'
+        }
+    });
+    Wkit.onEventBusHandlers({
+        '@sideSheetDismissed': ({ targetInstance }) => { console.log('[Preview] side sheet dismissed'); targetInstance.closeSideSheet(); },
+        '@sideSheetClosed': ({ targetInstance }) => { console.log('[Preview] side sheet closed'); targetInstance.closeSideSheet(); },
+        '@sideSheetSecondaryAction': ({ targetInstance }) => { console.log('[Preview] side sheet secondary action'); targetInstance.closeSideSheet(); },
+        '@sideSheetPrimaryAction': ({ targetInstance }) => { console.log('[Preview] side sheet primary action'); targetInstance.closeSideSheet(); }
+    });
+    document.querySelector('.preview-trigger').addEventListener('click', () => {
+        instance.openSideSheet({
+            response: {
+                headline: 'Device details',
+                supportingText: 'Optional context stays visible beside the main view.',
+                body: 'The selected feeder is currently operating in supervised mode.',
+                primaryLabel: 'Inspect',
+                secondaryLabel: 'Dismiss'
+            }
+        });
+    });
+})();
+</script>
+</body>
+</html>

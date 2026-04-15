@@ -1,0 +1,135 @@
+<div class="side-sheets side-sheets--editorial" aria-hidden="true">
+    <template id="side-sheet-popup-template">
+        <style>
+            .side-sheet__overlay {
+                position: fixed;
+                inset: 0;
+                display: flex;
+                justify-content: flex-end;
+                padding: 32px;
+                background: rgba(51, 43, 35, 0.16);
+                opacity: 0;
+                transition: opacity 220ms ease;
+            }
+
+            .side-sheet__surface {
+                width: min(100%, 440px);
+                height: 100%;
+                border-left: 1px solid rgba(71, 63, 53, 0.18);
+                border-radius: 4px;
+                padding: 28px 30px 32px;
+                background: #f7f2e9;
+                color: #231d18;
+                opacity: 0;
+                transform: translateX(22px);
+                transition: transform 220ms ease, opacity 220ms ease;
+            }
+
+            .side-sheet__overlay[data-state="open"] {
+                opacity: 1;
+            }
+
+            .side-sheet__overlay[data-state="open"] .side-sheet__surface {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            .side-sheet__overlay[data-state="closing"] .side-sheet__surface {
+                opacity: 0;
+                transform: translateX(14px);
+            }
+
+            .side-sheet__header {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 18px;
+            }
+
+            .side-sheet__headline {
+                font-family: 'Cormorant Garamond', serif;
+                font-size: 34px;
+                font-weight: 700;
+                line-height: 1.05;
+            }
+
+            .side-sheet__close {
+                border: 0;
+                background: transparent;
+                color: #5f554b;
+                font-family: 'Instrument Sans', sans-serif;
+                font-size: 22px;
+                cursor: pointer;
+            }
+
+            .side-sheet__supporting-text,
+            .side-sheet__body {
+                margin-top: 16px;
+                font-family: 'Instrument Sans', sans-serif;
+                font-size: 15px;
+                line-height: 1.8;
+                color: #5f554b;
+            }
+
+            .side-sheet__metrics {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                margin-top: 20px;
+            }
+
+            .side-sheet__metric {
+                padding: 12px 0;
+                border-top: 1px solid rgba(83, 71, 60, 0.12);
+                font-family: 'Instrument Sans', sans-serif;
+                font-size: 13px;
+                color: #5f554b;
+            }
+
+            .side-sheet__metric strong {
+                display: block;
+                margin-top: 6px;
+                font-size: 17px;
+                font-weight: 500;
+                color: #231d18;
+            }
+
+            .side-sheet__actions {
+                display: flex;
+                justify-content: flex-end;
+                gap: 10px;
+                margin-top: 28px;
+            }
+
+            .side-sheet__button {
+                height: 42px;
+                padding: 0 16px;
+                border: 1px solid rgba(80, 70, 61, 0.24);
+                border-radius: 3px;
+                background: transparent;
+                font-family: 'Instrument Sans', sans-serif;
+                font-size: 13px;
+                cursor: pointer;
+            }
+        </style>
+
+        <div class="side-sheet__overlay" data-state="closed">
+            <div class="side-sheet__surface" role="dialog" aria-modal="true">
+                <div class="side-sheet__header">
+                    <h2 class="side-sheet__headline">Device details</h2>
+                    <button type="button" class="side-sheet__close" aria-label="Close side sheet">×</button>
+                </div>
+                <p class="side-sheet__supporting-text">Optional context stays visible beside the main view.</p>
+                <p class="side-sheet__body">The selected feeder is currently operating in supervised mode.</p>
+                <div class="side-sheet__metrics">
+                    <div class="side-sheet__metric"><span>Collector</span><strong>RNBT-04</strong></div>
+                    <div class="side-sheet__metric"><span>Alarm state</span><strong>Normal</strong></div>
+                </div>
+                <div class="side-sheet__actions">
+                    <button type="button" class="side-sheet__button side-sheet__secondary"><span class="side-sheet__secondary-label">Dismiss</span></button>
+                    <button type="button" class="side-sheet__button side-sheet__primary"><span class="side-sheet__primary-label">Inspect</span></button>
+                </div>
+            </div>
+        </div>
+    </template>
+</div>

@@ -1,0 +1,134 @@
+<div class="bottom-sheets bottom-sheets--editorial" aria-hidden="true">
+    <template id="bottom-sheet-popup-template">
+        <style>
+            .bottom-sheet__overlay {
+                position: fixed;
+                inset: 0;
+                display: flex;
+                align-items: flex-end;
+                justify-content: center;
+                padding: 32px;
+                background: rgba(51, 43, 35, 0.18);
+                opacity: 0;
+                transition: opacity 220ms ease;
+            }
+
+            .bottom-sheet__surface {
+                width: min(100%, 760px);
+                border-top: 1px solid rgba(71, 63, 53, 0.18);
+                border-radius: 4px 4px 0 0;
+                padding: 24px 32px 32px;
+                background: #f7f2e9;
+                color: #231d18;
+                opacity: 0;
+                transform: translateY(24px);
+                transition: transform 220ms ease, opacity 220ms ease;
+            }
+
+            .bottom-sheet__overlay[data-state="open"] {
+                opacity: 1;
+            }
+
+            .bottom-sheet__overlay[data-state="open"] .bottom-sheet__surface {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .bottom-sheet__overlay[data-state="closing"] .bottom-sheet__surface {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            .bottom-sheet__handle {
+                width: 64px;
+                height: 2px;
+                margin-bottom: 20px;
+                background: rgba(60, 52, 45, 0.26);
+            }
+
+            .bottom-sheet__header {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 20px;
+            }
+
+            .bottom-sheet__headline {
+                font-family: 'Cormorant Garamond', serif;
+                font-size: 34px;
+                font-weight: 700;
+                line-height: 1.05;
+            }
+
+            .bottom-sheet__close {
+                border: 0;
+                background: transparent;
+                color: #5f554b;
+                font-family: 'Instrument Sans', sans-serif;
+                font-size: 22px;
+                cursor: pointer;
+            }
+
+            .bottom-sheet__supporting-text,
+            .bottom-sheet__body {
+                font-family: 'Instrument Sans', sans-serif;
+                line-height: 1.75;
+                color: #5f554b;
+            }
+
+            .bottom-sheet__supporting-text {
+                margin-top: 16px;
+                font-size: 15px;
+            }
+
+            .bottom-sheet__body {
+                margin-top: 16px;
+                font-size: 15px;
+            }
+
+            .bottom-sheet__actions {
+                display: flex;
+                justify-content: flex-end;
+                gap: 10px;
+                margin-top: 28px;
+            }
+
+            .bottom-sheet__button {
+                height: 42px;
+                padding: 0 16px;
+                border: 1px solid rgba(80, 70, 61, 0.24);
+                border-radius: 3px;
+                background: transparent;
+                font-family: 'Instrument Sans', sans-serif;
+                font-size: 13px;
+                cursor: pointer;
+                transition: border-color 160ms ease, color 160ms ease, background-color 160ms ease;
+            }
+
+            .bottom-sheet__button:hover {
+                border-color: rgba(80, 70, 61, 0.4);
+                background: rgba(80, 70, 61, 0.04);
+            }
+
+            .bottom-sheet__primary {
+                color: #231d18;
+            }
+        </style>
+
+        <div class="bottom-sheet__overlay" data-state="closed">
+            <div class="bottom-sheet__surface" role="dialog" aria-modal="true">
+                <div class="bottom-sheet__handle"></div>
+                <div class="bottom-sheet__header">
+                    <h2 class="bottom-sheet__headline">Report actions</h2>
+                    <button type="button" class="bottom-sheet__close" aria-label="Close bottom sheet">×</button>
+                </div>
+                <p class="bottom-sheet__supporting-text">Choose what to do with the selected report.</p>
+                <p class="bottom-sheet__body">Exports keep the current filters and annotations.</p>
+                <div class="bottom-sheet__actions">
+                    <button type="button" class="bottom-sheet__button bottom-sheet__secondary"><span class="bottom-sheet__secondary-label">Later</span></button>
+                    <button type="button" class="bottom-sheet__button bottom-sheet__primary"><span class="bottom-sheet__primary-label">Run export</span></button>
+                </div>
+            </div>
+        </div>
+    </template>
+</div>

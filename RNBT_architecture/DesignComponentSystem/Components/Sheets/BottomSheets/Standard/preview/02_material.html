@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>BottomSheets/Standard — 02_material</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { min-height: 100vh; background: #eef2ff; font-family: 'Roboto', sans-serif; color: #1b1b1f; }
+        .preview-shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 40px; }
+        .preview-card { width: min(100%, 620px); padding: 32px; border-radius: 24px; background: #ffffff; box-shadow: 0 18px 42px rgba(15, 23, 42, 0.12); }
+        .preview-card h1 { font-size: 28px; font-weight: 500; }
+        .preview-card p { margin-top: 12px; font-size: 15px; line-height: 1.7; color: #5d5f68; }
+        .preview-trigger { margin-top: 20px; height: 42px; padding: 0 18px; border: 0; border-radius: 21px; background: #3957ff; color: #fff; font-size: 14px; font-weight: 500; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div class="preview-shell">
+    <div class="preview-card">
+        <h1>BottomSheets / Standard</h1>
+        <p>Material persona에서는 가벼운 scrim과 elevation 중심의 하단 시트로 동작합니다.</p>
+        <button type="button" class="preview-trigger">Open Bottom Sheet</button>
+        <div id="bottom-sheets-standard-container"></div>
+    </div>
+</div>
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/ShadowPopupMixin.js"></script>
+<script src="../../../../../Mixins/FieldRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('bottom-sheets-standard-container', '../views/02_material.html', '../styles/02_material.css');
+    const instance = { id: 'bottom-sheets-standard', appendElement: document.getElementById('bottom-sheets-standard-container') };
+    instance._popupScope = null;
+    instance._closeTimer = null;
+    instance._sheetMotionDuration = 240;
+    applyShadowPopupMixin(instance, {
+        cssSelectors: {
+            template: '#bottom-sheet-popup-template',
+            overlay: '.bottom-sheet__overlay',
+            surface: '.bottom-sheet__surface',
+            closeBtn: '.bottom-sheet__close',
+            secondaryBtn: '.bottom-sheet__secondary',
+            primaryBtn: '.bottom-sheet__primary'
+        },
+        onCreated: (shadowRoot) => {
+            instance._popupScope = { appendElement: shadowRoot };
+            applyFieldRenderMixin(instance._popupScope, {
+                cssSelectors: {
+                    headline: '.bottom-sheet__headline',
+                    supportingText: '.bottom-sheet__supporting-text',
+                    body: '.bottom-sheet__body',
+                    primaryLabel: '.bottom-sheet__primary-label',
+                    secondaryLabel: '.bottom-sheet__secondary-label'
+                }
+            });
+        }
+    });
+    instance.renderBottomSheetContent = function(payload = {}) {
+        const { response = {} } = payload;
+        instance._popupScope.fieldRender.renderData({ response });
+        instance.shadowPopup.query('.bottom-sheet__supporting-text').hidden = !String(response.supportingText ?? '').trim();
+        instance.shadowPopup.query('.bottom-sheet__body').hidden = !String(response.body ?? '').trim();
+    };
+    instance.openBottomSheet = function(payload = {}) {
+        if (instance._closeTimer) clearTimeout(instance._closeTimer);
+        instance.shadowPopup.show();
+        instance.renderBottomSheetContent(payload);
+        const overlay = instance.shadowPopup.query(instance.shadowPopup.cssSelectors.overlay);
+        overlay.dataset.state = 'closed';
+        void overlay.offsetWidth;
+        requestAnimationFrame(() => { overlay.dataset.state = 'open'; });
+    };
+    instance.closeBottomSheet = function() {
+        const overlay = instance.shadowPopup.query(instance.shadowPopup.cssSelectors.overlay);
+        overlay.dataset.state = 'closing';
+        instance._closeTimer = setTimeout(() => {
+            instance.shadowPopup.hide();
+            overlay.dataset.state = 'closed';
+            instance._closeTimer = null;
+        }, instance._sheetMotionDuration);
+    };
+    instance.shadowPopup.bindPopupEvents({
+        click: {
+            [instance.shadowPopup.cssSelectors.overlay]: (event) => {
+                if (event.target.closest(instance.shadowPopup.cssSelectors.surface)) return;
+                Weventbus.emit('@bottomSheetDismissed', { event, targetInstance: instance });
+            },
+            [instance.shadowPopup.cssSelectors.closeBtn]: '@bottomSheetClosed',
+            [instance.shadowPopup.cssSelectors.secondaryBtn]: '@bottomSheetSecondaryAction',
+            [instance.shadowPopup.cssSelectors.primaryBtn]: '@bottomSheetPrimaryAction'
+        }
+    });
+    Wkit.onEventBusHandlers({
+        '@bottomSheetDismissed': ({ targetInstance }) => { console.log('[Preview] bottom sheet dismissed'); targetInstance.closeBottomSheet(); },
+        '@bottomSheetClosed': ({ targetInstance }) => { console.log('[Preview] bottom sheet closed'); targetInstance.closeBottomSheet(); },
+        '@bottomSheetSecondaryAction': ({ targetInstance }) => { console.log('[Preview] bottom sheet secondary action'); targetInstance.closeBottomSheet(); },
+        '@bottomSheetPrimaryAction': ({ targetInstance }) => { console.log('[Preview] bottom sheet primary action'); targetInstance.closeBottomSheet(); }
+    });
+    document.querySelector('.preview-trigger').addEventListener('click', () => {
+        instance.openBottomSheet({
+            response: {
+                headline: 'Report actions',
+                supportingText: 'Choose what to do with the selected report.',
+                body: 'Exports keep the current filters and annotations.',
+                primaryLabel: 'Run export',
+                secondaryLabel: 'Later'
+            }
+        });
+    });
+})();
+</script>
+</body>
+</html>

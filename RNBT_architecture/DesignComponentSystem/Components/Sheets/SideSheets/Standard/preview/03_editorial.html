@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>SideSheets/Standard — 03_editorial</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Instrument+Sans:wght@400;500&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { min-height: 100vh; background: #f2eadf; font-family: 'Instrument Sans', sans-serif; color: #231d18; }
+        .preview-shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 56px; }
+        .preview-card { width: min(100%, 700px); padding: 36px; background: rgba(247, 242, 233, 0.94); border: 1px solid rgba(83, 71, 60, 0.14); }
+        .preview-card h1 { font-family: 'Cormorant Garamond', serif; font-size: 42px; line-height: 1; }
+        .preview-card p { margin-top: 16px; font-size: 15px; line-height: 1.8; color: #60554b; }
+        .preview-trigger { margin-top: 22px; height: 42px; padding: 0 16px; border: 1px solid rgba(83, 71, 60, 0.24); background: transparent; color: #231d18; font-size: 13px; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div class="preview-shell">
+    <div class="preview-card">
+        <h1>Side Sheets</h1>
+        <p>Minimal editorial persona는 메인 캔버스의 여백을 유지한 채 측면 정보를 정리합니다.</p>
+        <button type="button" class="preview-trigger">Open Side Sheet</button>
+        <div id="side-sheets-standard-container"></div>
+    </div>
+</div>
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/ShadowPopupMixin.js"></script>
+<script src="../../../../../Mixins/FieldRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('side-sheets-standard-container', '../views/03_editorial.html', '../styles/03_editorial.css');
+    const instance = { id: 'side-sheets-standard', appendElement: document.getElementById('side-sheets-standard-container') };
+    instance._popupScope = null;
+    instance._closeTimer = null;
+    instance._sheetMotionDuration = 220;
+    applyShadowPopupMixin(instance, {
+        cssSelectors: {
+            template: '#side-sheet-popup-template',
+            overlay: '.side-sheet__overlay',
+            surface: '.side-sheet__surface',
+            closeBtn: '.side-sheet__close',
+            secondaryBtn: '.side-sheet__secondary',
+            primaryBtn: '.side-sheet__primary'
+        },
+        onCreated: (shadowRoot) => {
+            instance._popupScope = { appendElement: shadowRoot };
+            applyFieldRenderMixin(instance._popupScope, {
+                cssSelectors: {
+                    headline: '.side-sheet__headline',
+                    supportingText: '.side-sheet__supporting-text',
+                    body: '.side-sheet__body',
+                    primaryLabel: '.side-sheet__primary-label',
+                    secondaryLabel: '.side-sheet__secondary-label'
+                }
+            });
+        }
+    });
+    instance.renderSideSheetContent = function(payload = {}) {
+        const { response = {} } = payload;
+        instance._popupScope.fieldRender.renderData({ response });
+        instance.shadowPopup.query('.side-sheet__supporting-text').hidden = !String(response.supportingText ?? '').trim();
+        instance.shadowPopup.query('.side-sheet__body').hidden = !String(response.body ?? '').trim();
+    };
+    instance.openSideSheet = function(payload = {}) {
+        if (instance._closeTimer) clearTimeout(instance._closeTimer);
+        instance.shadowPopup.show();
+        instance.renderSideSheetContent(payload);
+        const overlay = instance.shadowPopup.query(instance.shadowPopup.cssSelectors.overlay);
+        overlay.dataset.state = 'closed';
+        void overlay.offsetWidth;
+        requestAnimationFrame(() => { overlay.dataset.state = 'open'; });
+    };
+    instance.closeSideSheet = function() {
+        const overlay = instance.shadowPopup.query(instance.shadowPopup.cssSelectors.overlay);
+        overlay.dataset.state = 'closing';
+        instance._closeTimer = setTimeout(() => {
+            instance.shadowPopup.hide();
+            overlay.dataset.state = 'closed';
+            instance._closeTimer = null;
+        }, instance._sheetMotionDuration);
+    };
+    instance.shadowPopup.bindPopupEvents({
+        click: {
+            [instance.shadowPopup.cssSelectors.overlay]: (event) => {
+                if (event.target.closest(instance.shadowPopup.cssSelectors.surface)) return;
+                Weventbus.emit('@sideSheetDismissed', { event, targetInstance: instance });
+            },
+            [instance.shadowPopup.cssSelectors.closeBtn]: '@sideSheetClosed',
+            [instance.shadowPopup.cssSelectors.secondaryBtn]: '@sideSheetSecondaryAction',
+            [instance.shadowPopup.cssSelectors.primaryBtn]: '@sideSheetPrimaryAction'
+        }
+    });
+    Wkit.onEventBusHandlers({
+        '@sideSheetDismissed': ({ targetInstance }) => { console.log('[Preview] side sheet dismissed'); targetInstance.closeSideSheet(); },
+        '@sideSheetClosed': ({ targetInstance }) => { console.log('[Preview] side sheet closed'); targetInstance.closeSideSheet(); },
+        '@sideSheetSecondaryAction': ({ targetInstance }) => { console.log('[Preview] side sheet secondary action'); targetInstance.closeSideSheet(); },
+        '@sideSheetPrimaryAction': ({ targetInstance }) => { console.log('[Preview] side sheet primary action'); targetInstance.closeSideSheet(); }
+    });
+    document.querySelector('.preview-trigger').addEventListener('click', () => {
+        instance.openSideSheet({
+            response: {
+                headline: 'Device details',
+                supportingText: 'Optional context stays visible beside the main view.',
+                body: 'The selected feeder is currently operating in supervised mode.',
+                primaryLabel: 'Inspect',
+                secondaryLabel: 'Dismiss'
+            }
+        });
+    });
+})();
+</script>
+</body>
+</html>

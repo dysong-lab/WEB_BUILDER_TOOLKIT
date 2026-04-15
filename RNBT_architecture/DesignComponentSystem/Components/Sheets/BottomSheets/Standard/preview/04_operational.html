@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>BottomSheets/Standard — 04_operational</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { min-height: 100vh; background: #061018; font-family: 'IBM Plex Mono', monospace; color: #dbf6ff; }
+        .preview-shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 40px; }
+        .preview-card { width: min(100%, 640px); padding: 28px; border: 1px solid rgba(78, 214, 255, 0.16); border-radius: 4px; background: rgba(9, 22, 29, 0.92); }
+        .preview-card h1 { font-size: 24px; font-weight: 600; text-transform: uppercase; }
+        .preview-card p { margin-top: 12px; font-size: 12px; line-height: 1.8; color: rgba(219, 246, 255, 0.76); }
+        .preview-trigger { margin-top: 18px; height: 34px; padding: 0 12px; border: 1px solid #4ed6ff; border-radius: 3px; background: #4ed6ff; color: #041017; font-size: 11px; font-weight: 600; text-transform: uppercase; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div class="preview-shell">
+    <div class="preview-card">
+        <h1>BottomSheets / Standard</h1>
+        <p>운영형 하단 시트는 빠른 승인과 보류 액션을 좁은 수직 공간에 정리합니다.</p>
+        <button type="button" class="preview-trigger">Open Bottom Sheet</button>
+        <div id="bottom-sheets-standard-container"></div>
+    </div>
+</div>
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/ShadowPopupMixin.js"></script>
+<script src="../../../../../Mixins/FieldRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('bottom-sheets-standard-container', '../views/04_operational.html', '../styles/04_operational.css');
+    const instance = { id: 'bottom-sheets-standard', appendElement: document.getElementById('bottom-sheets-standard-container') };
+    instance._popupScope = null;
+    instance._closeTimer = null;
+    instance._sheetMotionDuration = 220;
+    applyShadowPopupMixin(instance, {
+        cssSelectors: {
+            template: '#bottom-sheet-popup-template',
+            overlay: '.bottom-sheet__overlay',
+            surface: '.bottom-sheet__surface',
+            closeBtn: '.bottom-sheet__close',
+            secondaryBtn: '.bottom-sheet__secondary',
+            primaryBtn: '.bottom-sheet__primary'
+        },
+        onCreated: (shadowRoot) => {
+            instance._popupScope = { appendElement: shadowRoot };
+            applyFieldRenderMixin(instance._popupScope, {
+                cssSelectors: {
+                    headline: '.bottom-sheet__headline',
+                    supportingText: '.bottom-sheet__supporting-text',
+                    body: '.bottom-sheet__body',
+                    primaryLabel: '.bottom-sheet__primary-label',
+                    secondaryLabel: '.bottom-sheet__secondary-label'
+                }
+            });
+        }
+    });
+    instance.renderBottomSheetContent = function(payload = {}) {
+        const { response = {} } = payload;
+        instance._popupScope.fieldRender.renderData({ response });
+        instance.shadowPopup.query('.bottom-sheet__supporting-text').hidden = !String(response.supportingText ?? '').trim();
+        instance.shadowPopup.query('.bottom-sheet__body').hidden = !String(response.body ?? '').trim();
+    };
+    instance.openBottomSheet = function(payload = {}) {
+        if (instance._closeTimer) clearTimeout(instance._closeTimer);
+        instance.shadowPopup.show();
+        instance.renderBottomSheetContent(payload);
+        const overlay = instance.shadowPopup.query(instance.shadowPopup.cssSelectors.overlay);
+        overlay.dataset.state = 'closed';
+        void overlay.offsetWidth;
+        requestAnimationFrame(() => { overlay.dataset.state = 'open'; });
+    };
+    instance.closeBottomSheet = function() {
+        const overlay = instance.shadowPopup.query(instance.shadowPopup.cssSelectors.overlay);
+        overlay.dataset.state = 'closing';
+        instance._closeTimer = setTimeout(() => {
+            instance.shadowPopup.hide();
+            overlay.dataset.state = 'closed';
+            instance._closeTimer = null;
+        }, instance._sheetMotionDuration);
+    };
+    instance.shadowPopup.bindPopupEvents({
+        click: {
+            [instance.shadowPopup.cssSelectors.overlay]: (event) => {
+                if (event.target.closest(instance.shadowPopup.cssSelectors.surface)) return;
+                Weventbus.emit('@bottomSheetDismissed', { event, targetInstance: instance });
+            },
+            [instance.shadowPopup.cssSelectors.closeBtn]: '@bottomSheetClosed',
+            [instance.shadowPopup.cssSelectors.secondaryBtn]: '@bottomSheetSecondaryAction',
+            [instance.shadowPopup.cssSelectors.primaryBtn]: '@bottomSheetPrimaryAction'
+        }
+    });
+    Wkit.onEventBusHandlers({
+        '@bottomSheetDismissed': ({ targetInstance }) => { console.log('[Preview] bottom sheet dismissed'); targetInstance.closeBottomSheet(); },
+        '@bottomSheetClosed': ({ targetInstance }) => { console.log('[Preview] bottom sheet closed'); targetInstance.closeBottomSheet(); },
+        '@bottomSheetSecondaryAction': ({ targetInstance }) => { console.log('[Preview] bottom sheet secondary action'); targetInstance.closeBottomSheet(); },
+        '@bottomSheetPrimaryAction': ({ targetInstance }) => { console.log('[Preview] bottom sheet primary action'); targetInstance.closeBottomSheet(); }
+    });
+    document.querySelector('.preview-trigger').addEventListener('click', () => {
+        instance.openBottomSheet({
+            response: {
+                headline: 'Report actions',
+                supportingText: 'Choose what to do with the selected report.',
+                body: 'Exports keep the current filters and annotations.',
+                primaryLabel: 'Run export',
+                secondaryLabel: 'Later'
+            }
+        });
+    });
+})();
+</script>
+</body>
+</html>

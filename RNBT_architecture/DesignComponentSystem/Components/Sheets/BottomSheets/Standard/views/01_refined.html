@@ -1,0 +1,171 @@
+<div class="bottom-sheets bottom-sheets--refined" aria-hidden="true">
+    <template id="bottom-sheet-popup-template">
+        <style>
+            .bottom-sheet__overlay {
+                position: fixed;
+                inset: 0;
+                display: flex;
+                align-items: flex-end;
+                justify-content: center;
+                padding: 24px;
+                background:
+                    radial-gradient(circle at top, rgba(130, 101, 255, 0.22), transparent 34%),
+                    rgba(10, 13, 30, 0.72);
+                backdrop-filter: blur(14px);
+                opacity: 0;
+                transition: opacity 260ms cubic-bezier(0.22, 1, 0.36, 1);
+            }
+
+            .bottom-sheet__surface {
+                width: min(100%, 720px);
+                border: 1px solid rgba(151, 132, 255, 0.28);
+                border-radius: 36px;
+                padding: 20px 24px 24px;
+                background:
+                    linear-gradient(180deg, rgba(38, 44, 88, 0.98), rgba(20, 24, 52, 0.98));
+                color: #f3f1ff;
+                opacity: 0;
+                transform: translateY(28px);
+                transition:
+                    opacity 260ms cubic-bezier(0.22, 1, 0.36, 1),
+                    transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+            }
+
+            .bottom-sheet__overlay[data-state="open"] {
+                opacity: 1;
+            }
+
+            .bottom-sheet__overlay[data-state="open"] .bottom-sheet__surface {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .bottom-sheet__overlay[data-state="closing"] .bottom-sheet__surface {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            .bottom-sheet__handle {
+                width: 56px;
+                height: 6px;
+                margin: 0 auto 18px;
+                border-radius: 999px;
+                background: rgba(214, 208, 255, 0.3);
+            }
+
+            .bottom-sheet__header {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 16px;
+            }
+
+            .bottom-sheet__headline {
+                font-family: 'Tomorrow', 'Pretendard', sans-serif;
+                font-size: 25px;
+                font-weight: 600;
+                line-height: 1.2;
+                letter-spacing: -0.8px;
+            }
+
+            .bottom-sheet__close {
+                width: 42px;
+                height: 42px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 20px;
+                background: rgba(255, 255, 255, 0.06);
+                color: #f3f1ff;
+                font-size: 20px;
+                cursor: pointer;
+                transition: background-color 160ms ease, transform 160ms ease;
+            }
+
+            .bottom-sheet__close:hover {
+                background: rgba(255, 255, 255, 0.12);
+            }
+
+            .bottom-sheet__close:active {
+                transform: scale(0.96);
+            }
+
+            .bottom-sheet__supporting-text,
+            .bottom-sheet__body {
+                font-family: 'Pretendard', -apple-system, sans-serif;
+                line-height: 1.7;
+            }
+
+            .bottom-sheet__supporting-text {
+                margin-top: 10px;
+                font-size: 15px;
+                color: rgba(228, 223, 255, 0.84);
+            }
+
+            .bottom-sheet__body {
+                margin-top: 14px;
+                font-size: 14px;
+                color: rgba(205, 199, 243, 0.78);
+            }
+
+            .bottom-sheet__actions {
+                display: flex;
+                justify-content: flex-end;
+                gap: 12px;
+                margin-top: 22px;
+            }
+
+            .bottom-sheet__button {
+                height: 46px;
+                padding: 0 18px;
+                border-radius: 24px;
+                border: 1px solid transparent;
+                font-family: 'Pretendard', -apple-system, sans-serif;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                transition:
+                    background-color 160ms ease,
+                    border-color 160ms ease,
+                    transform 160ms ease;
+            }
+
+            .bottom-sheet__secondary {
+                background: rgba(255, 255, 255, 0.04);
+                border-color: rgba(212, 205, 255, 0.14);
+                color: #f3f1ff;
+            }
+
+            .bottom-sheet__secondary:hover {
+                background: rgba(255, 255, 255, 0.1);
+            }
+
+            .bottom-sheet__primary {
+                background: linear-gradient(135deg, #cab9ff, #8d72ff);
+                color: #18122f;
+            }
+
+            .bottom-sheet__primary:hover {
+                background: linear-gradient(135deg, #d5c7ff, #9b84ff);
+            }
+
+            .bottom-sheet__button:active {
+                transform: scale(0.97);
+            }
+        </style>
+
+        <div class="bottom-sheet__overlay" data-state="closed">
+            <div class="bottom-sheet__surface" role="dialog" aria-modal="true">
+                <div class="bottom-sheet__handle"></div>
+                <div class="bottom-sheet__header">
+                    <h2 class="bottom-sheet__headline">Report actions</h2>
+                    <button type="button" class="bottom-sheet__close" aria-label="Close bottom sheet">×</button>
+                </div>
+                <p class="bottom-sheet__supporting-text">Choose what to do with the selected report.</p>
+                <p class="bottom-sheet__body">Exports keep the current filters and annotations.</p>
+                <div class="bottom-sheet__actions">
+                    <button type="button" class="bottom-sheet__button bottom-sheet__secondary"><span class="bottom-sheet__secondary-label">Later</span></button>
+                    <button type="button" class="bottom-sheet__button bottom-sheet__primary"><span class="bottom-sheet__primary-label">Run export</span></button>
+                </div>
+            </div>
+        </div>
+    </template>
+</div>

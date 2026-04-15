@@ -1,0 +1,165 @@
+<div class="side-sheets side-sheets--refined" aria-hidden="true">
+    <template id="side-sheet-popup-template">
+        <style>
+            .side-sheet__overlay {
+                position: fixed;
+                inset: 0;
+                display: flex;
+                justify-content: flex-end;
+                padding: 24px;
+                background:
+                    radial-gradient(circle at right top, rgba(130, 101, 255, 0.2), transparent 30%),
+                    rgba(9, 12, 27, 0.68);
+                backdrop-filter: blur(14px);
+                opacity: 0;
+                transition: opacity 260ms cubic-bezier(0.22, 1, 0.36, 1);
+            }
+
+            .side-sheet__surface {
+                width: min(100%, 420px);
+                height: 100%;
+                border: 1px solid rgba(151, 132, 255, 0.28);
+                border-radius: 36px;
+                padding: 22px 24px 24px;
+                background:
+                    linear-gradient(180deg, rgba(36, 41, 84, 0.98), rgba(19, 22, 48, 0.98));
+                color: #f3f1ff;
+                opacity: 0;
+                transform: translateX(28px);
+                transition:
+                    opacity 260ms cubic-bezier(0.22, 1, 0.36, 1),
+                    transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+            }
+
+            .side-sheet__overlay[data-state="open"] {
+                opacity: 1;
+            }
+
+            .side-sheet__overlay[data-state="open"] .side-sheet__surface {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            .side-sheet__overlay[data-state="closing"] .side-sheet__surface {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+
+            .side-sheet__header {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 14px;
+            }
+
+            .side-sheet__headline {
+                font-family: 'Tomorrow', 'Pretendard', sans-serif;
+                font-size: 25px;
+                font-weight: 600;
+                line-height: 1.2;
+                letter-spacing: -0.8px;
+            }
+
+            .side-sheet__close {
+                width: 42px;
+                height: 42px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 20px;
+                background: rgba(255, 255, 255, 0.06);
+                color: #f3f1ff;
+                font-size: 20px;
+                cursor: pointer;
+            }
+
+            .side-sheet__supporting-text,
+            .side-sheet__body {
+                font-family: 'Pretendard', sans-serif;
+                line-height: 1.7;
+            }
+
+            .side-sheet__supporting-text {
+                margin-top: 14px;
+                font-size: 15px;
+                color: rgba(228, 223, 255, 0.82);
+            }
+
+            .side-sheet__body {
+                margin-top: 14px;
+                font-size: 14px;
+                color: rgba(205, 199, 243, 0.78);
+            }
+
+            .side-sheet__metrics {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 18px;
+            }
+
+            .side-sheet__metric {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 12px 14px;
+                border-radius: 20px;
+                background: rgba(255, 255, 255, 0.05);
+                font-family: 'Pretendard', sans-serif;
+                font-size: 13px;
+            }
+
+            .side-sheet__metric strong {
+                font-family: 'Tomorrow', sans-serif;
+                font-size: 14px;
+                font-weight: 500;
+            }
+
+            .side-sheet__actions {
+                display: flex;
+                justify-content: flex-end;
+                gap: 12px;
+                margin-top: 22px;
+            }
+
+            .side-sheet__button {
+                height: 46px;
+                padding: 0 18px;
+                border-radius: 24px;
+                border: 1px solid transparent;
+                font-family: 'Pretendard', sans-serif;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+            }
+
+            .side-sheet__secondary {
+                background: rgba(255, 255, 255, 0.04);
+                border-color: rgba(212, 205, 255, 0.14);
+                color: #f3f1ff;
+            }
+
+            .side-sheet__primary {
+                background: linear-gradient(135deg, #cab9ff, #8d72ff);
+                color: #18122f;
+            }
+        </style>
+
+        <div class="side-sheet__overlay" data-state="closed">
+            <div class="side-sheet__surface" role="dialog" aria-modal="true">
+                <div class="side-sheet__header">
+                    <h2 class="side-sheet__headline">Device details</h2>
+                    <button type="button" class="side-sheet__close" aria-label="Close side sheet">×</button>
+                </div>
+                <p class="side-sheet__supporting-text">Optional context stays visible beside the main view.</p>
+                <p class="side-sheet__body">The selected feeder is currently operating in supervised mode.</p>
+                <div class="side-sheet__metrics">
+                    <div class="side-sheet__metric"><span>Collector</span><strong>RNBT-04</strong></div>
+                    <div class="side-sheet__metric"><span>Alarm state</span><strong>Normal</strong></div>
+                </div>
+                <div class="side-sheet__actions">
+                    <button type="button" class="side-sheet__button side-sheet__secondary"><span class="side-sheet__secondary-label">Dismiss</span></button>
+                    <button type="button" class="side-sheet__button side-sheet__primary"><span class="side-sheet__primary-label">Inspect</span></button>
+                </div>
+            </div>
+        </div>
+    </template>
+</div>

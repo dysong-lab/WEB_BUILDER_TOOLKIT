@@ -1,0 +1,139 @@
+<div class="bottom-sheets bottom-sheets--operational" aria-hidden="true">
+    <template id="bottom-sheet-popup-template">
+        <style>
+            .bottom-sheet__overlay {
+                position: fixed;
+                inset: 0;
+                display: flex;
+                align-items: flex-end;
+                justify-content: center;
+                padding: 20px;
+                background: rgba(3, 12, 18, 0.56);
+                opacity: 0;
+                transition: opacity 220ms linear;
+            }
+
+            .bottom-sheet__surface {
+                width: min(100%, 760px);
+                border: 1px solid rgba(71, 202, 255, 0.18);
+                border-radius: 4px 4px 0 0;
+                padding: 14px 16px 16px;
+                background: linear-gradient(180deg, #0d1d28, #07131b);
+                color: #dbf6ff;
+                opacity: 0;
+                transform: translateY(18px);
+                transition: transform 220ms linear, opacity 220ms linear;
+            }
+
+            .bottom-sheet__overlay[data-state="open"] {
+                opacity: 1;
+            }
+
+            .bottom-sheet__overlay[data-state="open"] .bottom-sheet__surface {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .bottom-sheet__overlay[data-state="closing"] .bottom-sheet__surface {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            .bottom-sheet__handle {
+                width: 44px;
+                height: 3px;
+                margin-bottom: 12px;
+                background: rgba(78, 214, 255, 0.38);
+            }
+
+            .bottom-sheet__header {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 12px;
+            }
+
+            .bottom-sheet__headline {
+                font-family: 'IBM Plex Mono', monospace;
+                font-size: 18px;
+                font-weight: 600;
+                line-height: 1.2;
+                text-transform: uppercase;
+                letter-spacing: 0.6px;
+            }
+
+            .bottom-sheet__close {
+                width: 30px;
+                height: 30px;
+                border: 1px solid rgba(78, 214, 255, 0.18);
+                border-radius: 3px;
+                background: rgba(10, 27, 38, 0.9);
+                color: #dbf6ff;
+                font-size: 16px;
+                cursor: pointer;
+            }
+
+            .bottom-sheet__supporting-text,
+            .bottom-sheet__body {
+                font-family: 'IBM Plex Mono', monospace;
+                line-height: 1.65;
+            }
+
+            .bottom-sheet__supporting-text {
+                margin-top: 10px;
+                font-size: 12px;
+                color: rgba(219, 246, 255, 0.78);
+            }
+
+            .bottom-sheet__body {
+                margin-top: 10px;
+                font-size: 12px;
+                color: rgba(172, 214, 226, 0.84);
+            }
+
+            .bottom-sheet__actions {
+                display: flex;
+                justify-content: flex-end;
+                gap: 8px;
+                margin-top: 14px;
+            }
+
+            .bottom-sheet__button {
+                height: 34px;
+                padding: 0 12px;
+                border-radius: 3px;
+                border: 1px solid rgba(78, 214, 255, 0.22);
+                background: rgba(10, 27, 38, 0.9);
+                color: #dbf6ff;
+                font-family: 'IBM Plex Mono', monospace;
+                font-size: 11px;
+                font-weight: 600;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                cursor: pointer;
+            }
+
+            .bottom-sheet__primary {
+                background: #4ed6ff;
+                color: #041017;
+                border-color: #4ed6ff;
+            }
+        </style>
+
+        <div class="bottom-sheet__overlay" data-state="closed">
+            <div class="bottom-sheet__surface" role="dialog" aria-modal="true">
+                <div class="bottom-sheet__handle"></div>
+                <div class="bottom-sheet__header">
+                    <h2 class="bottom-sheet__headline">Report actions</h2>
+                    <button type="button" class="bottom-sheet__close" aria-label="Close bottom sheet">×</button>
+                </div>
+                <p class="bottom-sheet__supporting-text">Choose what to do with the selected report.</p>
+                <p class="bottom-sheet__body">Exports keep the current filters and annotations.</p>
+                <div class="bottom-sheet__actions">
+                    <button type="button" class="bottom-sheet__button bottom-sheet__secondary"><span class="bottom-sheet__secondary-label">Later</span></button>
+                    <button type="button" class="bottom-sheet__button bottom-sheet__primary"><span class="bottom-sheet__primary-label">Run export</span></button>
+                </div>
+            </div>
+        </div>
+    </template>
+</div>
