@@ -1,0 +1,79 @@
+/* 03_editorial: Persona C — Minimal Editorial
+   웜 그레이 / 색상 대비만 / Georgia 세리프 라벨
+   깊이=배경 색상 차이(shadow/gradient 최소) / 모서리=2px / 밀도=Expanded
+   선택 시 테두리 강조 + 배경 틴트 + 체크마크 표시 */
+
+#filter-chip-container {
+    width: 480px;
+    min-height: 60px;
+
+    .filter-chip {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .filter-chip__list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    .filter-chip__item {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        border-radius: 2px;
+        border: 1px solid #c8c0b8;
+        background: #fafaf8;
+        cursor: pointer;
+        outline: none;
+        user-select: none;
+    }
+
+    .filter-chip__item:hover {
+        border-color: #6b6560;
+        background: #f0eeea;
+    }
+
+    .filter-chip__item[data-selected="true"] {
+        border-color: #3d3833;
+        border-width: 2px;
+        padding: 9px 19px;
+        background: #f0eeea;
+    }
+
+    .filter-chip__item[data-selected="true"]:hover {
+        background: #e6e2dc;
+    }
+
+    .filter-chip__check {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+        color: #3d3833;
+        display: none;
+    }
+
+    .filter-chip__item[data-selected="true"] .filter-chip__check {
+        display: block;
+    }
+
+    .filter-chip__label {
+        font-family: 'Georgia', serif;
+        font-size: 14px;
+        font-weight: 400;
+        color: #3d3833;
+        line-height: 1.3;
+        white-space: nowrap;
+    }
+
+    .filter-chip__item:hover .filter-chip__label {
+        color: #1a1510;
+    }
+
+    .filter-chip__item[data-selected="true"] .filter-chip__label {
+        color: #1a1510;
+        font-weight: 500;
+    }
+}

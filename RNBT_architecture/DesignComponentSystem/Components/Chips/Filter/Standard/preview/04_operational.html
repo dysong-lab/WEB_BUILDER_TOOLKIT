@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Chips/Filter/Standard — 04_operational (Persona D)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0d1117;
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 24px;
+            padding: 40px 20px;
+        }
+        .demo-log {
+            width: 400px;
+            padding: 10px 12px;
+            background: #161b22;
+            border: 1px solid rgba(77, 208, 225, 0.15);
+            border-radius: 4px;
+            color: #7a8fa5;
+            font-size: 11px;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .demo-log strong { color: #b0c4d8; }
+    </style>
+</head>
+<body>
+
+<div id="filter-chip-container"></div>
+<div class="demo-log" id="demo-log"><strong>이벤트 로그</strong><br>—</div>
+
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('filter-chip-container', '../views/04_operational.html', '../styles/04_operational.css');
+
+    const instance = { id: 'filter-chip', appendElement: document.getElementById('filter-chip-container') };
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container: '.filter-chip__list',
+            template:  '#filter-chip-item-template',
+            chipid:    '.filter-chip__item',
+            selected:  '.filter-chip__item',
+            label:     '.filter-chip__label'
+        },
+        itemKey: 'chipid',
+        datasetAttrs: {
+            chipid:   'chipid',
+            selected: 'selected'
+        }
+    });
+
+    instance.subscriptions = { filterChipItems: [instance.listRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.listRender.cssSelectors.chipid]: '@filterChipClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>이벤트 로그</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>이벤트 로그</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    Wkit.onEventBusHandlers({
+        '@filterChipClicked': ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.listRender.cssSelectors.chipid);
+            const chipid = item?.getAttribute('data-chipid');
+            if (!chipid) return;
+            const current = targetInstance.listRender.getItemState(chipid);
+            const next = current?.selected === 'true' ? 'false' : 'true';
+            targetInstance.listRender.updateItemState(chipid, { selected: next });
+            log(`filterChipClicked "${chipid}" → selected: ${next}`);
+        }
+    });
+
+    const chipData = [
+        { chipid: 'urgent',   label: 'Urgent',   selected: 'false' },
+        { chipid: 'starred',  label: 'Starred',  selected: 'true' },
+        { chipid: 'unread',   label: 'Unread',   selected: 'false' },
+        { chipid: 'archived', label: 'Archived', selected: 'false' },
+        { chipid: 'shared',   label: 'Shared',   selected: 'true' }
+    ];
+
+    instance.listRender.renderData({ response: chipData });
+})();
+</script>
+</body>
+</html>

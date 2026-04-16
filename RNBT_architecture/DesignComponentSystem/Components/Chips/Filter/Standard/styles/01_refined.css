@@ -1,0 +1,82 @@
+/* 01_refined: Persona A — Refined Technical
+   퍼플 팔레트 / 그라디언트 깊이 / Pretendard / 다크
+   깊이=그라디언트(box-shadow 금지) / 모서리=8px / 밀도=Comfortable
+   선택 시 tonal 채움 + 체크마크 표시 */
+
+#filter-chip-container {
+    width: 420px;
+    min-height: 60px;
+
+    .filter-chip {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .filter-chip__list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .filter-chip__item {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        border-radius: 8px;
+        border: 1px solid #3D2F7E;
+        background: linear-gradient(135deg, rgba(36, 0, 196, 0.04) 0%, rgba(5, 171, 207, 0.02) 100%),
+                    rgba(25, 29, 80, 0.4);
+        cursor: pointer;
+        transition: background-color 150ms ease-out, border-color 150ms ease-out;
+        outline: none;
+        user-select: none;
+    }
+
+    .filter-chip__item:hover {
+        background: linear-gradient(135deg, rgba(80, 46, 233, 0.12) 0%, rgba(5, 171, 207, 0.05) 100%),
+                    rgba(25, 29, 80, 0.6);
+        border-color: #502EE9;
+    }
+
+    .filter-chip__item[data-selected="true"] {
+        background: linear-gradient(135deg, rgba(80, 46, 233, 0.25) 0%, rgba(5, 171, 207, 0.08) 100%),
+                    rgba(25, 29, 80, 0.8);
+        border-color: #502EE9;
+    }
+
+    .filter-chip__item[data-selected="true"]:hover {
+        background: linear-gradient(135deg, rgba(80, 46, 233, 0.3) 0%, rgba(5, 171, 207, 0.1) 100%),
+                    rgba(25, 29, 80, 0.9);
+        border-color: #92A8F4;
+    }
+
+    .filter-chip__check {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+        color: #92A8F4;
+        display: none;
+    }
+
+    .filter-chip__item[data-selected="true"] .filter-chip__check {
+        display: block;
+    }
+
+    .filter-chip__label {
+        font-family: 'Pretendard', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #C5CEEF;
+        line-height: 1.3;
+        white-space: nowrap;
+    }
+
+    .filter-chip__item:hover .filter-chip__label {
+        color: #E8EDFF;
+    }
+
+    .filter-chip__item[data-selected="true"] .filter-chip__label {
+        color: #E8EDFF;
+    }
+}

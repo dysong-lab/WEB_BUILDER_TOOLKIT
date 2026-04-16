@@ -1,0 +1,80 @@
+/* 02_material: Persona B — Material Elevated
+   라이트 블루 팔레트 / elevation shadow / Roboto
+   깊이=box-shadow elevation / 모서리=8px 균일 / 밀도=Comfortable
+   선택 시 filled 스타일 + 체크마크 표시 */
+
+#filter-chip-container {
+    width: 420px;
+    min-height: 60px;
+
+    .filter-chip {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .filter-chip__list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .filter-chip__item {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        border-radius: 8px;
+        border: 1px solid #d0d5dd;
+        background: #ffffff;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        cursor: pointer;
+        transition: box-shadow 200ms ease-in-out, background-color 200ms ease-in-out, border-color 200ms ease-in-out;
+        outline: none;
+        user-select: none;
+    }
+
+    .filter-chip__item:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        border-color: #1565c0;
+    }
+
+    .filter-chip__item[data-selected="true"] {
+        background: #e3f2fd;
+        border-color: #1565c0;
+        box-shadow: 0 1px 3px rgba(21, 101, 192, 0.12);
+    }
+
+    .filter-chip__item[data-selected="true"]:hover {
+        background: #bbdefb;
+        box-shadow: 0 4px 12px rgba(21, 101, 192, 0.18);
+    }
+
+    .filter-chip__check {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+        color: #1565c0;
+        display: none;
+    }
+
+    .filter-chip__item[data-selected="true"] .filter-chip__check {
+        display: block;
+    }
+
+    .filter-chip__label {
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #424242;
+        line-height: 1.3;
+        white-space: nowrap;
+    }
+
+    .filter-chip__item:hover .filter-chip__label {
+        color: #1565c0;
+    }
+
+    .filter-chip__item[data-selected="true"] .filter-chip__label {
+        color: #0d47a1;
+    }
+}
