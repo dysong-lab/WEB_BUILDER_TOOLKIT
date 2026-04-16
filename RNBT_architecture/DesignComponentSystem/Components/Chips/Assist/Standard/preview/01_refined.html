@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Chips/Assist/Standard — 01_refined (Persona A)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #12153D;
+            font-family: 'Pretendard', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 24px;
+            padding: 40px 20px;
+        }
+        .demo-log {
+            width: 420px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid #2A2574;
+            border-radius: 8px;
+            color: #A6B3DE;
+            font-size: 12px;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .demo-log strong { color: #E8EDFF; }
+    </style>
+</head>
+<body>
+
+<div id="assist-chip-container"></div>
+<div class="demo-log" id="demo-log"><strong>이벤트 로그</strong><br>—</div>
+
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('assist-chip-container', '../views/01_refined.html', '../styles/01_refined.css');
+
+    const instance = { id: 'assist-chip', appendElement: document.getElementById('assist-chip-container') };
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container: '.assist-chip__list',
+            template:  '#assist-chip-item-template',
+            chipid:    '.assist-chip__item',
+            icon:      '.assist-chip__icon',
+            label:     '.assist-chip__label'
+        },
+        datasetAttrs: {
+            chipid: 'chipid'
+        }
+    });
+
+    instance.subscriptions = { assistChipItems: [instance.listRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.listRender.cssSelectors.chipid]: '@assistChipClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>이벤트 로그</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>이벤트 로그</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    Wkit.onEventBusHandlers({
+        '@assistChipClicked': ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.listRender.cssSelectors.chipid);
+            const chipid = item?.getAttribute('data-chipid');
+            if (!chipid) return;
+            log(`assistChipClicked "${chipid}"`);
+        }
+    });
+
+    const chipData = [
+        { chipid: 'schedule',  icon: '\u{1F4C5}', label: 'Set a reminder' },
+        { chipid: 'navigate',  icon: '\u{1F4CD}', label: 'Get directions' },
+        { chipid: 'translate', icon: '\u{1F310}', label: 'Translate' },
+        { chipid: 'share',     icon: '\u{1F517}', label: 'Share link' },
+        { chipid: 'call',      icon: '\u{1F4DE}', label: 'Call support' }
+    ];
+
+    instance.listRender.renderData({ response: chipData });
+})();
+</script>
+</body>
+</html>

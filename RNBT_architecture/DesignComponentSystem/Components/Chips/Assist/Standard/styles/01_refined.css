@@ -1,0 +1,63 @@
+/* 01_refined: Persona A — Refined Technical
+   퍼플 팔레트 / 그라디언트 깊이 / Pretendard / 다크
+   깊이=그라디언트(box-shadow 금지) / 모서리=8px / 밀도=Comfortable */
+
+#assist-chip-container {
+    width: 420px;
+    min-height: 60px;
+
+    .assist-chip {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .assist-chip__list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .assist-chip__item {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        border-radius: 8px;
+        border: 1px solid #3D2F7E;
+        background: linear-gradient(135deg, rgba(36, 0, 196, 0.06) 0%, rgba(5, 171, 207, 0.03) 100%),
+                    rgba(25, 29, 80, 0.6);
+        cursor: pointer;
+        transition: background-color 150ms ease-out, border-color 150ms ease-out;
+        outline: none;
+        user-select: none;
+    }
+
+    .assist-chip__item:hover {
+        background: linear-gradient(135deg, rgba(80, 46, 233, 0.15) 0%, rgba(5, 171, 207, 0.06) 100%),
+                    rgba(25, 29, 80, 0.8);
+        border-color: #502EE9;
+    }
+
+    .assist-chip__icon {
+        font-size: 16px;
+        line-height: 1;
+        flex-shrink: 0;
+    }
+
+    .assist-chip__icon:empty {
+        display: none;
+    }
+
+    .assist-chip__label {
+        font-family: 'Pretendard', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #C5CEEF;
+        line-height: 1.3;
+        white-space: nowrap;
+    }
+
+    .assist-chip__item:hover .assist-chip__label {
+        color: #E8EDFF;
+    }
+}
