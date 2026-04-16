@@ -30,7 +30,7 @@ flowchart TD
 flowchart LR
     subgraph Skills
         direction TB
-        S0[0-produce<br/>produce-component<br/>produce-standard-loop<br/>plan-advanced-queue<br/>produce-advanced-loop<br/>produce-3d-standard-loop<br/>produce-3d-advanced-loop]
+        S0[0-produce<br/>produce-component<br/>produce-standard-loop<br/>produce-standard-auto<br/>plan-advanced-queue<br/>produce-advanced-loop<br/>produce-3d-standard-loop<br/>produce-3d-standard-auto<br/>produce-3d-advanced-loop]
         S1[1-figma<br/>figma-to-html<br/>figma-to-inline-svg]
         S2[2-component<br/>create-2d<br/>create-symbol-state<br/>create-3d<br/>create-3d-container]
         S3[3-page<br/>create-project]
@@ -60,9 +60,11 @@ flowchart LR
 |------|-------|
 | 새 컴포넌트를 처음부터 생산 (범주 확인 → 기능 분석 → Mixin 매핑 → 개발) | `produce-component` |
 | 2D 컴포넌트 Standard를 폴더 알파벳 순으로 순차 생산 | `produce-standard-loop` |
+| 2D 컴포넌트 Standard를 서브에이전트 기반 완전 자동 생산 | `produce-standard-auto` |
 | 2D 컴포넌트 Advanced 변형 후보 발굴 → ADVANCED_QUEUE.md 등록 | `plan-advanced-queue` |
 | 2D 컴포넌트 Advanced를 ADVANCED_QUEUE.md 순서대로 순차 생산 | `produce-advanced-loop` |
 | 3D 컴포넌트 Standard(01 status)를 PRODUCTION_QUEUE.md 순서대로 순차 생산 | `produce-3d-standard-loop` |
+| 3D 컴포넌트 Standard(01 status)를 서브에이전트 기반 완전 자동 생산 | `produce-3d-standard-auto` |
 | 3D 컴포넌트 Advanced(02~08)를 PRODUCTION_QUEUE.md 순서대로 순차 생산 | `produce-3d-advanced-loop` |
 
 `produce-component`는 전체 프로세스를 안내하며, 필요에 따라 아래 스킬들을 호출한다.
