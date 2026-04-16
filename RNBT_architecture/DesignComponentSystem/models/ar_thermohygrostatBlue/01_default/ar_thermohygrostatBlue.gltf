@@ -1,0 +1,318 @@
+{
+  "asset": {
+    "version": "2.0",
+    "generator": "babylon.js glTF exporter for 3dsmax 2023 v20221031.2"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1,
+        2,
+        3
+      ],
+      "scale": [
+        1000.0,
+        1000.0,
+        1000.0
+      ],
+      "name": "root"
+    },
+    {
+      "mesh": 0,
+      "translation": [
+        -0.0001505127,
+        0.000720145763,
+        0.004402344
+      ],
+      "name": "metalEtc"
+    },
+    {
+      "mesh": 1,
+      "translation": [
+        -0.000371506,
+        0.006742188,
+        0.003438791
+      ],
+      "name": "winEtc"
+    },
+    {
+      "mesh": 2,
+      "translation": [
+        -2.73436318E-09,
+        0.0,
+        -0.00034814456
+      ],
+      "name": "winPannel"
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 1,
+            "NORMAL": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 0,
+          "material": 0
+        }
+      ],
+      "name": "metalEtc"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 5,
+            "NORMAL": 6,
+            "TEXCOORD_0": 7
+          },
+          "indices": 4,
+          "material": 1
+        }
+      ],
+      "name": "winEtc"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 9,
+            "NORMAL": 10,
+            "TEXCOORD_0": 11
+          },
+          "indices": 8,
+          "material": 2
+        }
+      ],
+      "name": "winPannel"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5123,
+      "count": 9792,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 9792,
+      "max": [
+        0.00765885832,
+        0.008595204,
+        5.55161278E-05
+      ],
+      "min": [
+        -0.007357833,
+        -0.009613131,
+        -0.00854087248
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 117504,
+      "componentType": 5126,
+      "count": 9792,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 9792,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 19584,
+      "componentType": 5123,
+      "count": 3216,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 235008,
+      "componentType": 5126,
+      "count": 3216,
+      "max": [
+        0.007128498,
+        0.00132473756,
+        0.00123279146
+      ],
+      "min": [
+        -0.00712849852,
+        -0.00132473756,
+        -0.00123279227
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 273600,
+      "componentType": 5126,
+      "count": 3216,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 78336,
+      "componentType": 5126,
+      "count": 3216,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 26016,
+      "componentType": 5123,
+      "count": 1146,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 312192,
+      "componentType": 5126,
+      "count": 1146,
+      "max": [
+        0.0074985614,
+        0.009850104,
+        0.00469264155
+      ],
+      "min": [
+        -0.0074985614,
+        -0.009850002,
+        -0.004325001
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 325944,
+      "componentType": 5126,
+      "count": 1146,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 104064,
+      "componentType": 5126,
+      "count": 1146,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 28308,
+      "name": "bufferViewScalar"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 28308,
+      "byteLength": 339696,
+      "byteStride": 12,
+      "name": "bufferViewFloatVec3"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 368004,
+      "byteLength": 113232,
+      "byteStride": 8,
+      "name": "bufferViewFloatVec2"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "ar_thermohygrostatBlue.bin",
+      "byteLength": 481236
+    }
+  ],
+  "materials": [
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.450053632
+      },
+      "name": "Material #67"
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 1
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.450053632
+      },
+      "name": "Material #66"
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 2
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.450053632
+      },
+      "name": "Material #64"
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0,
+      "name": "metal.jpg"
+    },
+    {
+      "sampler": 0,
+      "source": 1,
+      "name": "etc.jpg"
+    },
+    {
+      "sampler": 0,
+      "source": 2,
+      "name": "winPannel.jpg"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/metal.jpg"
+    },
+    {
+      "uri": "textures/etc.jpg"
+    },
+    {
+      "uri": "textures/winPannel.jpg"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987
+    }
+  ]
+}

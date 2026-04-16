@@ -1,0 +1,337 @@
+{
+  "asset": {
+    "version": "2.0",
+    "generator": "babylon.js glTF exporter for 3dsmax 2023 v20221031.2"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1,
+        2,
+        3
+      ],
+      "scale": [
+        1000.0,
+        1000.0,
+        1000.0
+      ],
+      "name": "root"
+    },
+    {
+      "mesh": 0,
+      "translation": [
+        0.0,
+        0.0321444,
+        4.2661E-09
+      ],
+      "rotation": [
+        0.0,
+        0.7071068,
+        0.0,
+        0.7071067
+      ],
+      "name": "tr02"
+    },
+    {
+      "mesh": 1,
+      "translation": [
+        0.0153868068,
+        0.036083,
+        -0.0184769966
+      ],
+      "rotation": [
+        0.0,
+        0.7071068,
+        0.0,
+        0.7071067
+      ],
+      "name": "window_A"
+    },
+    {
+      "mesh": 2,
+      "translation": [
+        0.0,
+        0.0321444,
+        4.2661E-09
+      ],
+      "rotation": [
+        0.0,
+        0.7071068,
+        0.0,
+        0.7071067
+      ],
+      "name": "trEtc"
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 1,
+            "NORMAL": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 0,
+          "material": 0
+        }
+      ],
+      "name": "tr02"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 5,
+            "NORMAL": 6,
+            "TEXCOORD_0": 7
+          },
+          "indices": 4,
+          "material": 1
+        }
+      ],
+      "name": "window_A"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 9,
+            "NORMAL": 10,
+            "TEXCOORD_0": 11
+          },
+          "indices": 8,
+          "material": 2
+        }
+      ],
+      "name": "trEtc"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5123,
+      "count": 1407,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 532,
+      "max": [
+        0.0191185,
+        0.0321445,
+        0.1445004
+      ],
+      "min": [
+        -0.0191185,
+        -0.0272176,
+        -0.144500315
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 6384,
+      "componentType": 5126,
+      "count": 532,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 532,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 2816,
+      "componentType": 5123,
+      "count": 192,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 12768,
+      "componentType": 5126,
+      "count": 96,
+      "max": [
+        0.000616302539,
+        0.0054103015,
+        0.1228119
+      ],
+      "min": [
+        -0.03757021,
+        -0.00541029871,
+        -0.122811906
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 13920,
+      "componentType": 5126,
+      "count": 96,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 4256,
+      "componentType": 5126,
+      "count": 96,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 3200,
+      "componentType": 5123,
+      "count": 37770,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 15072,
+      "componentType": 5126,
+      "count": 16814,
+      "max": [
+        0.0192582011,
+        0.0276131015,
+        0.1445004
+      ],
+      "min": [
+        -0.0192582011,
+        -0.0321445,
+        -0.144500315
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 216840,
+      "componentType": 5126,
+      "count": 16814,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 5024,
+      "componentType": 5126,
+      "count": 16814,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 78740,
+      "name": "bufferViewScalar"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 78740,
+      "byteLength": 418608,
+      "byteStride": 12,
+      "name": "bufferViewFloatVec3"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 497348,
+      "byteLength": 139536,
+      "byteStride": 8,
+      "name": "bufferViewFloatVec2"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "ktx02.bin",
+      "byteLength": 636884
+    }
+  ],
+  "materials": [
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.450053632
+      },
+      "name": "Material #-2147483638"
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 1
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.450053632
+      },
+      "doubleSided": true,
+      "name": "Material #-2147483636"
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 2
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.450053632
+      },
+      "name": "Material #-2147483637"
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0,
+      "name": "tr02.jpg"
+    },
+    {
+      "sampler": 0,
+      "source": 1,
+      "name": "window_A.png"
+    },
+    {
+      "sampler": 0,
+      "source": 2,
+      "name": "trEtc.jpg"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/tr02.jpg"
+    },
+    {
+      "uri": "textures/window_A.png"
+    },
+    {
+      "uri": "textures/trEtc.jpg"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987
+    }
+  ]
+}
