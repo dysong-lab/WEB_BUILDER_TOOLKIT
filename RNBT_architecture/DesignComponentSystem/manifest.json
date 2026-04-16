@@ -504,7 +504,7 @@
     },
     {
       "name": "3D_Components",
-      "spec": "Components/3D_Components/PRODUCTION_QUEUE.md",
+      "spec": "Components/3D_Components/ADVANCED_QUEUE.md",
       "components": [
         {
           "name": "BATT",
