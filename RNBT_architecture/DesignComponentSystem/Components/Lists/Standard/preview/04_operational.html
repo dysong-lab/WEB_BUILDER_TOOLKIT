@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Lists/Standard — 04_operational (Persona D)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #010409;
+            font-family: 'IBM Plex Sans', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 24px;
+            padding: 40px 20px;
+        }
+        .demo-log {
+            width: 420px;
+            padding: 12px 16px;
+            background: #0D1117;
+            border: 1px solid rgba(99, 199, 255, 0.12);
+            border-radius: 4px;
+            color: #7A8FA5;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .demo-log strong { color: #E6EDF3; }
+    </style>
+</head>
+<body>
+
+<div id="list-container"></div>
+<div class="demo-log" id="demo-log"><strong>Event Log</strong><br>—</div>
+
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('list-container', '../views/04_operational.html', '../styles/04_operational.css');
+
+    const instance = { id: 'list', appendElement: document.getElementById('list-container') };
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container:  '.list__items',
+            template:   '#list-item-template',
+            itemid:     '.list__item',
+            leading:    '.list__leading',
+            headline:   '.list__headline',
+            supporting: '.list__supporting'
+        },
+        datasetAttrs: {
+            itemid: 'itemid'
+        }
+    });
+
+    instance.subscriptions = { listItems: [instance.listRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.listRender.cssSelectors.itemid]: '@listItemClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>Event Log</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>Event Log</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    Wkit.onEventBusHandlers({
+        '@listItemClicked': ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.listRender.cssSelectors.itemid);
+            const itemid = item?.getAttribute('data-itemid');
+            if (!itemid) return;
+            log(`listItemClicked "${itemid}"`);
+        }
+    });
+
+    const listData = [
+        { itemid: 'inbox',    leading: '\u{1F4E8}', headline: 'Inbox',         supporting: '24 new messages' },
+        { itemid: 'starred',  leading: '\u{2B50}',  headline: 'Starred',       supporting: '8 items' },
+        { itemid: 'sent',     leading: '\u{1F4E4}', headline: 'Sent',          supporting: 'Last sent 2h ago' },
+        { itemid: 'drafts',   leading: '\u{1F4DD}', headline: 'Drafts',        supporting: '3 drafts' },
+        { itemid: 'archive',  leading: '\u{1F4E6}', headline: 'Archive',       supporting: '142 items' },
+        { itemid: 'trash',    leading: '\u{1F5D1}', headline: 'Trash',         supporting: 'Empty' },
+        { itemid: 'settings', leading: '\u{2699}',  headline: 'Settings',      supporting: '' }
+    ];
+
+    instance.listRender.renderData({ response: listData });
+})();
+</script>
+</body>
+</html>

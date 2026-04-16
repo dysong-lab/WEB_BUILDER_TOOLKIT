@@ -364,7 +364,24 @@
     {
       "name": "Lists",
       "spec": "Components/Lists/CLAUDE.md",
-      "components": []
+      "components": [
+        {
+          "name": "Lists",
+          "spec": "Components/Lists/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/Lists/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 refined", "path": "Components/Lists/Standard/preview/01_refined.html" },
+                { "label": "02 material", "path": "Components/Lists/Standard/preview/02_material.html" },
+                { "label": "03 editorial", "path": "Components/Lists/Standard/preview/03_editorial.html" },
+                { "label": "04 operational", "path": "Components/Lists/Standard/preview/04_operational.html" }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "Loading",
