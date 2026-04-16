@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Chips/Input/Standard — 04_operational (Persona D)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0d1117;
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 16px;
+            padding: 40px 20px;
+        }
+        .demo-log {
+            width: 400px;
+            padding: 8px 12px;
+            background: #161b22;
+            border: 1px solid rgba(77, 208, 225, 0.15);
+            border-radius: 4px;
+            color: #7a8fa5;
+            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .demo-log strong { color: #b0c4d8; }
+    </style>
+</head>
+<body>
+
+<div id="input-chip-container"></div>
+<div class="demo-log" id="demo-log"><strong>이벤트 로그</strong><br>—</div>
+
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('input-chip-container', '../views/04_operational.html', '../styles/04_operational.css');
+
+    const instance = { id: 'input-chip', appendElement: document.getElementById('input-chip-container') };
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container: '.input-chip__list',
+            template:  '#input-chip-item-template',
+            chipid:    '.input-chip__item',
+            label:     '.input-chip__label',
+            removeBtn: '.input-chip__remove'
+        },
+        datasetAttrs: {
+            chipid: 'chipid'
+        }
+    });
+
+    instance.subscriptions = { inputChipItems: [instance.listRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.listRender.cssSelectors.chipid]:    '@inputChipClicked',
+            [instance.listRender.cssSelectors.removeBtn]: '@inputChipRemoved'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>이벤트 로그</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>이벤트 로그</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    let chipData = [
+        { chipid: 'react',      label: 'React' },
+        { chipid: 'vue',        label: 'Vue.js' },
+        { chipid: 'typescript', label: 'TypeScript' },
+        { chipid: 'nodejs',     label: 'Node.js' },
+        { chipid: 'graphql',    label: 'GraphQL' }
+    ];
+
+    Wkit.onEventBusHandlers({
+        '@inputChipClicked': ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.listRender.cssSelectors.chipid);
+            const chipid = item?.getAttribute('data-chipid');
+            if (!chipid) return;
+            log(`inputChipClicked "${chipid}"`);
+        },
+        '@inputChipRemoved': ({ event, targetInstance }) => {
+            event.stopPropagation();
+            const item = event.target.closest(targetInstance.listRender.cssSelectors.chipid);
+            const chipid = item?.getAttribute('data-chipid');
+            if (!chipid) return;
+            chipData = chipData.filter(c => c.chipid !== chipid);
+            targetInstance.listRender.renderData({ response: chipData });
+            log(`inputChipRemoved "${chipid}"`);
+        }
+    });
+
+    instance.listRender.renderData({ response: chipData });
+})();
+</script>
+</body>
+</html>

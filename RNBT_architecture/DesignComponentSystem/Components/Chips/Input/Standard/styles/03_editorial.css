@@ -1,0 +1,73 @@
+/* 03_editorial: Persona C — Minimal Editorial
+   웜 그레이 / 색상 대비만 / Georgia 세리프 라벨
+   깊이=배경 색상 차이(shadow/gradient 최소) / 모서리=2px / 밀도=Expanded */
+
+#input-chip-container {
+    width: 480px;
+    min-height: 60px;
+
+    .input-chip {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .input-chip__list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    .input-chip__item {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px 10px 20px;
+        border-radius: 2px;
+        border: 1px solid #c8c0b8;
+        background: #fafaf8;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .input-chip__item:hover {
+        border-color: #6b6560;
+        background: #f0eeea;
+    }
+
+    .input-chip__label {
+        font-family: 'Georgia', serif;
+        font-size: 14px;
+        font-weight: 400;
+        color: #3d3833;
+        line-height: 1.3;
+        white-space: nowrap;
+    }
+
+    .input-chip__item:hover .input-chip__label {
+        color: #1a1510;
+    }
+
+    .input-chip__remove {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        border: none;
+        border-radius: 2px;
+        background: transparent;
+        color: #a09890;
+        cursor: pointer;
+        flex-shrink: 0;
+        outline: none;
+    }
+
+    .input-chip__remove:hover {
+        color: #3d3833;
+    }
+
+    .input-chip__remove svg {
+        display: block;
+    }
+}

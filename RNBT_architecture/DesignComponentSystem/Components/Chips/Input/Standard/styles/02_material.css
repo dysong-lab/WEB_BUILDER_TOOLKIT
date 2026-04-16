@@ -1,0 +1,77 @@
+/* 02_material: Persona B — Material Elevated
+   라이트 블루 팔레트 / elevation shadow / Roboto
+   깊이=box-shadow elevation / 모서리=8px 균일 / 밀도=Comfortable */
+
+#input-chip-container {
+    width: 420px;
+    min-height: 60px;
+
+    .input-chip {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .input-chip__list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .input-chip__item {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px 8px 16px;
+        border-radius: 8px;
+        border: 1px solid #d0d5dd;
+        background: #ffffff;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        cursor: pointer;
+        transition: box-shadow 200ms ease-in-out, border-color 200ms ease-in-out;
+        user-select: none;
+    }
+
+    .input-chip__item:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        border-color: #1565c0;
+    }
+
+    .input-chip__label {
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #424242;
+        line-height: 1.3;
+        white-space: nowrap;
+    }
+
+    .input-chip__item:hover .input-chip__label {
+        color: #1565c0;
+    }
+
+    .input-chip__remove {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        border: none;
+        border-radius: 50%;
+        background: #e8eaed;
+        color: #757575;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: background-color 200ms ease-in-out, color 200ms ease-in-out;
+        outline: none;
+    }
+
+    .input-chip__remove:hover {
+        background: #d0d5dd;
+        color: #212121;
+    }
+
+    .input-chip__remove svg {
+        display: block;
+    }
+}
