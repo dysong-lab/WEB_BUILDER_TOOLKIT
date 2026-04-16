@@ -1,0 +1,153 @@
+<template id="dialog-popup-template">
+    <style>
+        /* 02_material: Persona B — Material Elevated
+           라이트 블루 / shadow elevation / Roboto / 라이트 / Elevated Dialog */
+
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
+
+        .dialog__overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.32);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .dialog__surface {
+            display: flex;
+            flex-direction: column;
+            width: 340px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .dialog__header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 24px 24px 0;
+        }
+
+        .dialog__icon {
+            font-family: 'Material Symbols Outlined';
+            font-size: 28px;
+            color: #1565C0;
+        }
+
+        .dialog__icon:empty {
+            display: none;
+        }
+
+        .dialog__headline {
+            font-family: 'Roboto', sans-serif;
+            font-size: 20px;
+            font-weight: 500;
+            color: #1a1a1a;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        .dialog__body {
+            padding: 12px 24px 20px;
+        }
+
+        .dialog__supporting {
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            color: #5f6368;
+            line-height: 1.55;
+            text-align: center;
+        }
+
+        .dialog__supporting:empty {
+            display: none;
+        }
+
+        .dialog__divider {
+            height: 1px;
+            background: #e0e0e0;
+            margin: 0;
+        }
+
+        .dialog__actions {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            gap: 8px;
+            padding: 12px 16px;
+        }
+
+        .dialog__actions:empty {
+            display: none;
+        }
+
+        .dialog__action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 36px;
+            padding: 0 16px;
+            border: none;
+            border-radius: 6px;
+            background: transparent;
+            color: #1565C0;
+            cursor: pointer;
+            transition: background-color 200ms ease-in-out;
+        }
+
+        .dialog__action:hover {
+            background: rgba(21, 101, 192, 0.08);
+        }
+
+        .dialog__action:last-child {
+            background: #1565C0;
+            color: #ffffff;
+        }
+
+        .dialog__action:last-child:hover {
+            background: #1976D2;
+            box-shadow: 0 2px 6px rgba(21, 101, 192, 0.24);
+        }
+
+        .dialog__action-label {
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        .dialog__close-btn {
+            display: none;
+        }
+
+        template {
+            display: none;
+        }
+    </style>
+    <div class="dialog__overlay">
+        <div class="dialog__surface">
+            <div class="dialog__header">
+                <span class="dialog__icon"></span>
+                <div class="dialog__headline"></div>
+            </div>
+            <div class="dialog__body">
+                <div class="dialog__supporting"></div>
+            </div>
+            <div class="dialog__divider"></div>
+            <div class="dialog__actions"></div>
+            <template id="dialog-action-template">
+                <button class="dialog__action" data-actionid="">
+                    <span class="dialog__action-label"></span>
+                </button>
+            </template>
+            <button class="dialog__close-btn"></button>
+        </div>
+    </div>
+</template>

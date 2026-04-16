@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Dialogs/Standard — 04_operational (Persona D)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0e14;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            gap: 24px;
+            padding: 40px 20px;
+        }
+        .demo-trigger {
+            padding: 8px 20px;
+            border: 1px solid rgba(77, 208, 225, 0.3);
+            border-radius: 2px;
+            background: rgba(77, 208, 225, 0.12);
+            color: #4dd0e1;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 150ms ease-out, border-color 150ms ease-out;
+        }
+        .demo-trigger:hover {
+            background: rgba(77, 208, 225, 0.2);
+            border-color: rgba(77, 208, 225, 0.5);
+        }
+        .demo-log {
+            width: 320px;
+            padding: 10px 12px;
+            background: #161b22;
+            border: 1px solid rgba(77, 208, 225, 0.12);
+            border-radius: 2px;
+            color: #7a8fa5;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .demo-log strong { color: #c9d1d9; }
+    </style>
+</head>
+<body>
+
+<button class="demo-trigger" id="open-btn">Open Dialog</button>
+<div id="dialog-container"></div>
+<div class="demo-log" id="demo-log"><strong>이벤트 로그</strong><br>—</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/ShadowPopupMixin.js"></script>
+<script src="../../../../Mixins/FieldRenderMixin.js"></script>
+<script src="../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('dialog-container', '../views/04_operational.html', '../styles/04_operational.css');
+
+    const instance = { id: 'dialog', appendElement: document.getElementById('dialog-container') };
+
+    instance._popupScope = null;
+
+    applyShadowPopupMixin(instance, {
+        cssSelectors: {
+            template: '#dialog-popup-template',
+            closeBtn: '.dialog__close-btn'
+        },
+        onCreated: (shadowRoot) => {
+            instance._popupScope = { appendElement: shadowRoot };
+
+            applyFieldRenderMixin(instance._popupScope, {
+                cssSelectors: {
+                    icon:       '.dialog__icon',
+                    headline:   '.dialog__headline',
+                    supporting: '.dialog__supporting'
+                }
+            });
+
+            applyListRenderMixin(instance._popupScope, {
+                cssSelectors: {
+                    container:   '.dialog__actions',
+                    template:    '#dialog-action-template',
+                    actionid:    '.dialog__action',
+                    actionLabel: '.dialog__action-label'
+                },
+                itemKey: 'actionid',
+                datasetAttrs: {
+                    actionid: 'actionid'
+                }
+            });
+        }
+    });
+
+    instance.shadowPopup.bindPopupEvents({
+        click: {
+            [instance.shadowPopup.cssSelectors.closeBtn]: '@dialogClose',
+            '.dialog__action': '@dialogActionClicked'
+        }
+    });
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>이벤트 로그</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>이벤트 로그</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    Wkit.onEventBusHandlers({
+        '@dialogClose': () => {
+            instance.shadowPopup.hide();
+            log('dialogClose → hide');
+        },
+        '@dialogActionClicked': ({ event }) => {
+            const item = event.target.closest('.dialog__action');
+            const actionid = item?.getAttribute('data-actionid');
+            log(`dialogActionClicked "${actionid}"`);
+            if (actionid === 'abort') instance.shadowPopup.hide();
+        }
+    });
+
+    document.getElementById('open-btn').addEventListener('click', () => {
+        instance.shadowPopup.show();
+        log('show dialog');
+
+        instance._popupScope.fieldRender.renderData({ response: {
+            icon: 'error',
+            headline: 'Critical Alert',
+            supporting: 'Rack 03-A temperature exceeds threshold (72.4°C). Immediate cooling required. Proceed with emergency protocol?'
+        } });
+
+        instance._popupScope.listRender.renderData({ response: [
+            { actionid: 'abort', actionLabel: 'Abort' },
+            { actionid: 'execute', actionLabel: 'Execute' }
+        ] });
+    });
+})();
+</script>
+</body>
+</html>

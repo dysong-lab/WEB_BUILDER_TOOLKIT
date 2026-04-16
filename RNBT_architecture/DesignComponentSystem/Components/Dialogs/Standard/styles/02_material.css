@@ -1,0 +1,7 @@
+/* 02_material: Persona B — Material Elevated
+   다이얼로그 컨테이너 — 팝업 CSS는 Shadow DOM 내부 (views/02_material.html <template> 참조) */
+
+#dialog-container {
+    /* ShadowPopupMixin 호스트는 런타임이 컨테이너 안에 생성함 */
+    /* 컨테이너 자체는 크기 제약 없음 — 팝업은 fixed overlay */
+}

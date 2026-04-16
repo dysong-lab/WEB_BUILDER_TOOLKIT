@@ -1,0 +1,153 @@
+<template id="dialog-popup-template">
+    <style>
+        /* 03_editorial: Persona C — Minimal Editorial
+           웜 그레이 / 세리프 제목 / Georgia / 라이트 / 헤어라인 구분 */
+
+        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
+
+        .dialog__overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(61, 56, 51, 0.36);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .dialog__surface {
+            display: flex;
+            flex-direction: column;
+            width: 380px;
+            background: #fafaf8;
+            border-radius: 2px;
+            border: 1px solid #ddd8d0;
+            overflow: hidden;
+        }
+
+        .dialog__header {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 32px 32px 0;
+        }
+
+        .dialog__icon {
+            font-family: 'Material Symbols Outlined';
+            font-size: 24px;
+            color: #6b6560;
+        }
+
+        .dialog__icon:empty {
+            display: none;
+        }
+
+        .dialog__headline {
+            font-family: 'DM Serif Display', serif;
+            font-size: 22px;
+            font-weight: 400;
+            color: #3d3833;
+            line-height: 1.35;
+        }
+
+        .dialog__body {
+            padding: 16px 32px 28px;
+        }
+
+        .dialog__supporting {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            color: #6b6560;
+            line-height: 1.65;
+        }
+
+        .dialog__supporting:empty {
+            display: none;
+        }
+
+        .dialog__divider {
+            height: 1px;
+            background: #ddd8d0;
+            margin: 0 32px;
+        }
+
+        .dialog__actions {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 20px 32px;
+        }
+
+        .dialog__actions:empty {
+            display: none;
+        }
+
+        .dialog__action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 36px;
+            padding: 0 20px;
+            border: 1px solid transparent;
+            border-radius: 2px;
+            background: transparent;
+            color: #6b6560;
+            cursor: pointer;
+        }
+
+        .dialog__action:hover {
+            color: #3d3833;
+            border-bottom: 2px solid #3d3833;
+        }
+
+        .dialog__action:last-child {
+            background: #3d3833;
+            color: #fafaf8;
+            border: none;
+        }
+
+        .dialog__action:last-child:hover {
+            background: #524d47;
+        }
+
+        .dialog__action-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+        }
+
+        .dialog__close-btn {
+            display: none;
+        }
+
+        template {
+            display: none;
+        }
+    </style>
+    <div class="dialog__overlay">
+        <div class="dialog__surface">
+            <div class="dialog__header">
+                <span class="dialog__icon"></span>
+                <div class="dialog__headline"></div>
+            </div>
+            <div class="dialog__body">
+                <div class="dialog__supporting"></div>
+            </div>
+            <div class="dialog__divider"></div>
+            <div class="dialog__actions"></div>
+            <template id="dialog-action-template">
+                <button class="dialog__action" data-actionid="">
+                    <span class="dialog__action-label"></span>
+                </button>
+            </template>
+            <button class="dialog__close-btn"></button>
+        </div>
+    </div>
+</template>
