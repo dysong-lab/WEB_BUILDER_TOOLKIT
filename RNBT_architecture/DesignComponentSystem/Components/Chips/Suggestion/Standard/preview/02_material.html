@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Chips/Suggestion/Standard — 02_material (Persona B)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #f5f5f5;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 24px;
+            padding: 40px 20px;
+        }
+        .demo-log {
+            width: 420px;
+            padding: 12px 16px;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            color: #616161;
+            font-size: 12px;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .demo-log strong { color: #212121; }
+    </style>
+</head>
+<body>
+
+<div id="suggestion-chip-container"></div>
+<div class="demo-log" id="demo-log"><strong>이벤트 로그</strong><br>—</div>
+
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('suggestion-chip-container', '../views/02_material.html', '../styles/02_material.css');
+
+    const instance = { id: 'suggestion-chip', appendElement: document.getElementById('suggestion-chip-container') };
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container: '.suggestion-chip__list',
+            template:  '#suggestion-chip-item-template',
+            chipid:    '.suggestion-chip__item',
+            icon:      '.suggestion-chip__icon',
+            label:     '.suggestion-chip__label'
+        },
+        datasetAttrs: {
+            chipid: 'chipid'
+        }
+    });
+
+    instance.subscriptions = { suggestionChipItems: [instance.listRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.listRender.cssSelectors.chipid]: '@suggestionChipClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>이벤트 로그</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>이벤트 로그</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    Wkit.onEventBusHandlers({
+        '@suggestionChipClicked': ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.listRender.cssSelectors.chipid);
+            const chipid = item?.getAttribute('data-chipid');
+            if (!chipid) return;
+            log(`suggestionChipClicked "${chipid}"`);
+        }
+    });
+
+    const chipData = [
+        { chipid: 'weather',   icon: '\u{2600}', label: 'Weather today' },
+        { chipid: 'nearby',    icon: '\u{1F4CD}', label: 'Restaurants nearby' },
+        { chipid: 'translate', icon: '\u{1F310}', label: 'Translate this' },
+        { chipid: 'summary',   icon: '\u{1F4DD}', label: 'Summarize' },
+        { chipid: 'define',    icon: '',           label: 'Define word' }
+    ];
+
+    instance.listRender.renderData({ response: chipData });
+})();
+</script>
+</body>
+</html>
