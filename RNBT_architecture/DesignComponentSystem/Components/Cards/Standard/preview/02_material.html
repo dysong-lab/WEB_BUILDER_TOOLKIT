@@ -107,12 +107,12 @@
         }
     });
 
-    GlobalDataPublisher.publish('cardInfo', {
+    instance.fieldRender.renderData({ response: {
         icon:       'travel_explore',
         headline:   'Weekly field report',
         subhead:    'Operations · 2026',
         supporting: 'Site inspections completed for the three primary facilities with minor maintenance follow-ups.'
-    });
+    } });
 
     instance.listRender.renderData({ response: [
         { actionid: 'open',   actionIcon: '',        actionLabel: 'Open' },

@@ -107,12 +107,12 @@
         }
     });
 
-    GlobalDataPublisher.publish('cardInfo', {
+    instance.fieldRender.renderData({ response: {
         icon:       'memory',
         headline:   'NODE-07 / ALERT',
         subhead:    'CPU 94% · 12s ago',
         supporting: 'Threshold exceeded on primary compute node. Auto-mitigation pending operator ack.'
-    });
+    } });
 
     instance.listRender.renderData({ response: [
         { actionid: 'ack',     actionIcon: 'check',   actionLabel: 'ACK' },

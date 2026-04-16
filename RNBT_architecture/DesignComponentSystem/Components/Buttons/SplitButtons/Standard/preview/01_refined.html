@@ -125,7 +125,7 @@
         }
     });
 
-    GlobalDataPublisher.publish('splitButtonAction', { actionIcon: 'share', label: 'Share' });
+    instance.fieldRender.renderData({ response: { actionIcon: 'share', label: 'Share' } });
     instance.listRender.renderData({ response: menuItems });
 })();
 </script>

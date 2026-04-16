@@ -106,12 +106,12 @@
         }
     });
 
-    GlobalDataPublisher.publish('cardInfo', {
+    instance.fieldRender.renderData({ response: {
         icon:       'bolt',
         headline:   'Energy Optimization',
         subhead:    'RNBT-01 · Sector A',
         supporting: '실시간 전력 소비 패턴을 분석하여 최적의 운영 구간을 자동으로 조정합니다.'
-    });
+    } });
 
     instance.listRender.renderData({ response: [
         { actionid: 'details', actionIcon: 'arrow_forward', actionLabel: 'Details' },

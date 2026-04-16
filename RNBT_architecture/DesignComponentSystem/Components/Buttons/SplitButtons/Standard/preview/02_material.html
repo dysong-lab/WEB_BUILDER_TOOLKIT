@@ -126,7 +126,7 @@
         }
     });
 
-    GlobalDataPublisher.publish('splitButtonAction', { actionIcon: 'save', label: 'Save' });
+    instance.fieldRender.renderData({ response: { actionIcon: 'save', label: 'Save' } });
     instance.listRender.renderData({ response: menuItems });
 })();
 </script>

@@ -124,7 +124,7 @@
         }
     });
 
-    GlobalDataPublisher.publish('splitButtonAction', { actionIcon: 'send', label: 'Publish' });
+    instance.fieldRender.renderData({ response: { actionIcon: 'send', label: 'Publish' } });
     instance.listRender.renderData({ response: menuItems });
 })();
 </script>

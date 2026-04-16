@@ -126,7 +126,7 @@
         }
     });
 
-    GlobalDataPublisher.publish('splitButtonAction', { actionIcon: 'rocket_launch', label: 'Deploy' });
+    instance.fieldRender.renderData({ response: { actionIcon: 'rocket_launch', label: 'Deploy' } });
     instance.listRender.renderData({ response: menuItems });
 })();
 </script>

@@ -104,12 +104,12 @@
         }
     });
 
-    GlobalDataPublisher.publish('cardInfo', {
+    instance.fieldRender.renderData({ response: {
         icon:       'menu_book',
         headline:   'Letters from the field',
         subhead:    'Dispatch No. 04',
         supporting: 'A quiet morning along the north sector; measurements held within expected tolerances throughout the inspection round.'
-    });
+    } });
 
     instance.listRender.renderData({ response: [
         { actionid: 'read',    actionIcon: '', actionLabel: 'Read' },
