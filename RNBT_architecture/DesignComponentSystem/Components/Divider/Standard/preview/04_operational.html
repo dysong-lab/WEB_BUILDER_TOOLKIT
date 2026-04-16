@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Divider/Standard — 04_operational (Persona D)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0d1117;
+            font-family: 'Pretendard', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 20px;
+            padding: 32px 20px;
+        }
+        .demo-section {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: flex-start;
+        }
+        .demo-label {
+            font-size: 10px;
+            color: #7a8fa5;
+            font-weight: 500;
+            font-family: 'IBM Plex Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+        .demo-context {
+            width: 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 12px;
+            background: #161b22;
+            border: 1px solid rgba(99, 199, 255, 0.12);
+            border-radius: 4px;
+        }
+        .demo-text {
+            font-size: 13px;
+            color: #7a8fa5;
+            line-height: 1.3;
+        }
+        .demo-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            height: 28px;
+        }
+
+        /* Divider CSS inlined */
+        #divider-container {
+            width: 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        #divider-container .divider {
+            width: 100%;
+            height: 1px;
+            background: rgba(99, 199, 255, 0.18);
+            flex-shrink: 0;
+        }
+
+        #divider-container .divider--inset {
+            margin-left: 12px;
+            width: calc(100% - 12px);
+        }
+
+        #divider-container .divider--middle {
+            margin-left: 12px;
+            margin-right: 12px;
+            width: calc(100% - 24px);
+        }
+
+        #divider-container .divider--vertical {
+            width: 1px;
+            height: 16px;
+            background: rgba(99, 199, 255, 0.18);
+            margin-left: 0;
+            margin-right: 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Full-width -->
+<div class="demo-section">
+    <span class="demo-label">Full-width</span>
+    <div class="demo-context">
+        <span class="demo-text">List item above</span>
+        <div class="divider"></div>
+        <span class="demo-text">List item below</span>
+    </div>
+</div>
+
+<!-- Inset -->
+<div class="demo-section">
+    <span class="demo-label">Inset</span>
+    <div class="demo-context">
+        <span class="demo-text">List item above</span>
+        <div class="divider divider--inset"></div>
+        <span class="demo-text">List item below</span>
+    </div>
+</div>
+
+<!-- Middle inset -->
+<div class="demo-section">
+    <span class="demo-label">Middle inset</span>
+    <div class="demo-context">
+        <span class="demo-text">List item above</span>
+        <div class="divider divider--middle"></div>
+        <span class="demo-text">List item below</span>
+    </div>
+</div>
+
+<!-- Vertical -->
+<div class="demo-section">
+    <span class="demo-label">Vertical</span>
+    <div class="demo-context">
+        <div class="demo-row">
+            <span class="demo-text">Left</span>
+            <div class="divider divider--vertical"></div>
+            <span class="demo-text">Right</span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

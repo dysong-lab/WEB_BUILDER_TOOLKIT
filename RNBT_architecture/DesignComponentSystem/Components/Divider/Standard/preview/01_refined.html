@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Divider/Standard — 01_refined (Persona A)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #12153D;
+            font-family: 'Pretendard', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 40px;
+            padding: 40px 20px;
+        }
+        .demo-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        .demo-label {
+            font-size: 12px;
+            color: #707EB4;
+            font-weight: 500;
+        }
+        .demo-context {
+            width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 20px;
+            background: rgba(42, 32, 99, 0.4);
+            border-radius: 20px;
+        }
+        .demo-text {
+            font-size: 14px;
+            color: #A6B3DE;
+            line-height: 1.4;
+        }
+        .demo-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            height: 40px;
+        }
+
+        /* Divider CSS inlined */
+        #divider-container {
+            width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        #divider-container .divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(80, 46, 233, 0.6) 0%, rgba(146, 168, 244, 0.2) 100%);
+            flex-shrink: 0;
+        }
+
+        #divider-container .divider--inset {
+            margin-left: 16px;
+            width: calc(100% - 16px);
+        }
+
+        #divider-container .divider--middle {
+            margin-left: 16px;
+            margin-right: 16px;
+            width: calc(100% - 32px);
+        }
+
+        #divider-container .divider--vertical {
+            width: 1px;
+            height: 24px;
+            background: linear-gradient(180deg, rgba(80, 46, 233, 0.6) 0%, rgba(146, 168, 244, 0.2) 100%);
+            margin-left: 0;
+            margin-right: 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Full-width -->
+<div class="demo-section">
+    <span class="demo-label">Full-width</span>
+    <div class="demo-context">
+        <span class="demo-text">List item above</span>
+        <div class="divider"></div>
+        <span class="demo-text">List item below</span>
+    </div>
+</div>
+
+<!-- Inset -->
+<div class="demo-section">
+    <span class="demo-label">Inset</span>
+    <div class="demo-context">
+        <span class="demo-text">List item above</span>
+        <div class="divider divider--inset"></div>
+        <span class="demo-text">List item below</span>
+    </div>
+</div>
+
+<!-- Middle inset -->
+<div class="demo-section">
+    <span class="demo-label">Middle inset</span>
+    <div class="demo-context">
+        <span class="demo-text">List item above</span>
+        <div class="divider divider--middle"></div>
+        <span class="demo-text">List item below</span>
+    </div>
+</div>
+
+<!-- Vertical -->
+<div class="demo-section">
+    <span class="demo-label">Vertical</span>
+    <div class="demo-context">
+        <div class="demo-row">
+            <span class="demo-text">Left</span>
+            <div class="divider divider--vertical"></div>
+            <span class="demo-text">Right</span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
