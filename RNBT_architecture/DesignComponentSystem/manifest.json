@@ -1024,6 +1024,19 @@
           ]
         },
         {
+          "name": "Chair_Office",
+          "spec": "Components/3D_Components/Chair_Office/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Chair_Office/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/Chair_Office/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "CONTREV",
           "spec": "Components/3D_Components/CONTREV/CLAUDE.md",
           "sets": [
