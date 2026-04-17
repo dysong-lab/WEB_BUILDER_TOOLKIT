@@ -1089,6 +1089,19 @@
           ]
         },
         {
+          "name": "CmswifIi_Sensors",
+          "spec": "Components/3D_Components/CmswifIi_Sensors/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/CmswifIi_Sensors/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/CmswifIi_Sensors/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "CONTREV",
           "spec": "Components/3D_Components/CONTREV/CLAUDE.md",
           "sets": [
