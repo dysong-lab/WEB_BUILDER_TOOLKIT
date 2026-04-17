@@ -585,6 +585,19 @@
           ]
         },
         {
+          "name": "Aircon_Ceiling01",
+          "spec": "Components/3D_Components/Aircon_Ceiling01/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Aircon_Ceiling01/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/Aircon_Ceiling01/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "ALTS",
           "spec": "Components/3D_Components/ALTS/CLAUDE.md",
           "sets": [
