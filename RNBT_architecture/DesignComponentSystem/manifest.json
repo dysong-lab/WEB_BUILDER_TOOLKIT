@@ -814,6 +814,19 @@
           ]
         },
         {
+          "name": "Blank_Panel_02",
+          "spec": "Components/3D_Components/Blank_Panel_02/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Blank_Panel_02/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/Blank_Panel_02/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "Chiller",
           "spec": "Components/3D_Components/Chiller/CLAUDE.md",
           "sets": [
