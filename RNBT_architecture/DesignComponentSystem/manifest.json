@@ -985,6 +985,19 @@
           ]
         },
         {
+          "name": "CardReader_BK500",
+          "spec": "Components/3D_Components/CardReader_BK500/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/CardReader_BK500/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/CardReader_BK500/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "CONTREV",
           "spec": "Components/3D_Components/CONTREV/CLAUDE.md",
           "sets": [
