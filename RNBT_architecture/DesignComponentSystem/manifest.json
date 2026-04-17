@@ -650,6 +650,19 @@
           ]
         },
         {
+          "name": "AutomaticDoor2P",
+          "spec": "Components/3D_Components/AutomaticDoor2P/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/AutomaticDoor2P/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/AutomaticDoor2P/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "BATT",
           "spec": "Components/3D_Components/BATT/CLAUDE.md",
           "sets": [
