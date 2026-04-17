@@ -110,7 +110,7 @@ Explore 에이전트에 위임하여 Advanced 후보를 발굴한다.
 | # | 장비명 | 변형 이름 | Mixin 조합 | 설명 | 분리 근거 |
 |---|--------|----------|-----------|------|----------|
 | 1 | Panel | highlight | MeshState + MeshHighlight | 경고 시 메시 색상 강조 | Mixin 추가 |
-| 2 | gltf_container | clipping | MeshState + ClippingPlaneMixin | 단면 분석 뷰 | Mixin 추가 |
+| 2 | meshesArea/area_01 | clipping | MeshState + ClippingPlaneMixin | 단면 분석 뷰 | Mixin 추가 |
 ```
 
 사용자에게 다음 중 선택받는다:

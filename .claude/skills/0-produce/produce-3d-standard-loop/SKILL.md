@@ -30,22 +30,27 @@ DesignComponentSystem/Components/3D_Components 아래의 3D 컴포넌트 **Stand
 
 ### Phase 0. 다음 대상 파악
 
-1. models/ 디렉토리의 전체 폴더 목록을 알파벳 순으로 가져온다:
+models/ 는 두 종류의 폴더로 구성된다:
+- **개별 장비 모델 폴더** — `models/{장비명}/`
+- **컨테이너 그룹 폴더** — `models/meshesArea/{컨테이너명}/` (`meshesArea/` 자체는 장비가 아님)
+
+1. 개별 + 컨테이너 후보를 각각 수집하고 병합한다:
    ```bash
-   ls -d RNBT_architecture/DesignComponentSystem/models/*/ | sort
+   ls -d RNBT_architecture/DesignComponentSystem/models/*/ | grep -v '/meshesArea/$' | sort
+   ls -d RNBT_architecture/DesignComponentSystem/models/meshesArea/*/ 2>/dev/null | sort
    ```
 
-2. 각 모델 폴더에 대해 Standard 완료 여부를 확인한다:
+2. 각 후보에 대해 Standard 완료 여부를 확인한다 (`{컴포넌트경로}`는 개별이면 `{장비명}`, 컨테이너면 `meshesArea/{컨테이너명}`):
    ```bash
-   ls RNBT_architecture/DesignComponentSystem/Components/3D_Components/{장비명}/Standard/scripts/register.js 2>/dev/null
+   ls RNBT_architecture/DesignComponentSystem/Components/3D_Components/{컴포넌트경로}/Standard/scripts/register.js 2>/dev/null
    ```
    `register.js`가 없는 첫 번째 항목 = 다음 대상.
 
 3. 유형 결정:
-   - 기본값: **개별** → `create-3d-component` 사용
-   - 장비명이 `gltf_container`인 경우: **컨테이너** → `create-3d-container-component` 사용
+   - 경로에 `meshesArea/` 포함: **컨테이너** → `create-3d-container-component` 사용
+   - 그 외: **개별** → `create-3d-component` 사용
 
-4. **사용자에게 보고**: "다음 대상: {장비명}, 유형: {개별/컨테이너}, Standard(MeshState) 생산"
+4. **사용자에게 보고**: "다음 대상: {컴포넌트경로}, 유형: {개별/컨테이너}, Standard(MeshState) 생산"
 
    대상이 없으면: "Standard가 누락된 장비가 없습니다. Advanced 변형은 `produce-3d-advanced-loop`을 사용하세요."
 

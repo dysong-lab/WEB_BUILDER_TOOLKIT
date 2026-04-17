@@ -146,7 +146,7 @@ Weventbus.on('@battClicked', async () => {
 });
 ```
 
-### 3. 컨테이너 (gltf_container) — 클릭된 mesh별 처리
+### 3. 컨테이너 (meshesArea/area_01) — 클릭된 mesh별 처리
 
 ```javascript
 const containerInstance = wemb.findInstance('gltfContainerComponent');
