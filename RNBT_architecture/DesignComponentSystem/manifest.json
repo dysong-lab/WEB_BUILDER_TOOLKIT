@@ -788,6 +788,19 @@
           ]
         },
         {
+          "name": "BlackCabinet",
+          "spec": "Components/3D_Components/BlackCabinet/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/BlackCabinet/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/BlackCabinet/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "Chiller",
           "spec": "Components/3D_Components/Chiller/CLAUDE.md",
           "sets": [
