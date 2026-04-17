@@ -97,24 +97,9 @@ ComponentMixin.applyModelLoaderMixin = function(instance) {
         instance.composeResource(loadedObj);
         instance._onValidateResource();
 
-        // assetRegistry 생성 (asset 기능 활성 시)
-        if (wemb.configManager && wemb.configManager.assetEnabled) {
-          const assetTreePanel = wemb.viewComponentMap && wemb.viewComponentMap.get('AssetTreePanelMediator');
-          const assetsCache = (assetTreePanel && assetTreePanel.assetsCache) || null;
-          if (assetsCache && loadedObj) {
-            const registryMap = {};
-            loadedObj.traverse(function (obj) {
-              if (obj.isMesh || obj.isGroup) {
-                const name = obj.name;
-                if (name) {
-                  registryMap[name] = assetsCache.has(name) ? name : '';
-                }
-              }
-            });
-            instance.setDynamicGroupPropertyValue('assetRegistry', 'map', registryMap);
-          }
-        }
-
+        // assetRegistry 빌드는 applyThreejsProperties 내부의 _updateAssetRegistry()에서 처리 (단일 진입점 유지)
+        // 리소스가 새로 로드됐으므로 동일 appendElement를 참조해도 내부 mesh 트리는 교체됨 → 재빌드 마커 리셋
+        instance._lastAssetRegistryRoot = null;
         requestAnimationFrame(() => {
           if (!instance.appendElement) return;
           instance.applyThreejsProperties(instance.getGroupProperties('threeJsProperties'))
