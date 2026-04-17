@@ -38,34 +38,7 @@ description: 3D Standard(01 status) 컴포넌트를 서브에이전트 기반으
 
 ### Phase 0. 다음 대상 파악
 
-매 사이클 시작 시 실행한다.
-
-models/ 는 두 종류의 폴더로 구성된다:
-- **개별 장비 모델 폴더** — `models/{장비명}/` (예: `models/BATT/`, `models/CoolingTower/`)
-- **컨테이너 그룹 폴더** — `models/meshesArea/{컨테이너명}/` (예: `models/meshesArea/area_01/`)
-  `meshesArea/` 자체는 장비가 아닌 **그룹 폴더**이므로 순회 대상에서 제외한다.
-
-1. 개별 장비 후보 수집 (알파벳 순):
-   ```bash
-   ls -d RNBT_architecture/DesignComponentSystem/models/*/ | grep -v '/meshesArea/$' | sort
-   ```
-
-2. 컨테이너 후보 수집 (알파벳 순):
-   ```bash
-   ls -d RNBT_architecture/DesignComponentSystem/models/meshesArea/*/ 2>/dev/null | sort
-   ```
-
-3. 두 목록을 순서대로 병합 (개별 → 컨테이너) 후 각 항목에 대해 Standard 완료 여부 확인:
-   - 개별: `Components/3D_Components/{장비명}/Standard/scripts/register.js`
-   - 컨테이너: `Components/3D_Components/meshesArea/{컨테이너명}/Standard/scripts/register.js`
-
-   `register.js`가 없는 첫 번째 항목 = 다음 대상.
-
-4. 유형 결정:
-   - 경로에 `meshesArea/` 가 포함되면: **컨테이너** → `create-3d-container-component` 사용
-   - 그 외: **개별** → `create-3d-component` 사용
-
-남은 대상이 없으면 **전체 루프 종료** 후 사용자에게 완료 보고.
+매 사이클 시작 시 실행한다. 대상 결정 규칙(입력측 `models/` / 출력측 `Components/3D_Components/` 구분, 개별 vs 컨테이너 유형 분기, 경로 변수 정의, 순회 스크립트, 유형별 개발 스킬 선택)은 [`_shared/phase0-3d.md`](../_shared/phase0-3d.md)를 따른다. 남은 대상이 없으면 **전체 루프 종료** 후 사용자에게 완료 보고.
 
 ---
 
@@ -73,16 +46,9 @@ models/ 는 두 종류의 폴더로 구성된다:
 
 `Agent` 도구로 `subagent_type=general-purpose`에 위임한다.
 
-**프롬프트 템플릿** (매 사이클 `{컴포넌트경로}`, `{장비명}`, `{모델경로}`, `{유형}`, `{개발스킬}` 교체):
+**프롬프트 템플릿** (매 사이클 `{컴포넌트경로}`, `{장비명}`, `{모델경로}`, `{유형}`, `{개발스킬}` 교체).
 
-> **경로 변수의 역할 — 루프 순회 시 입력/출력을 구분한다.**
-> - `{모델경로}` **(입력측)** : `DesignComponentSystem/models/` 아래의 모델 폴더 상대경로. Phase 0 순회는 이 도메인을 돈다. GLTF/텍스처 위치 결정에 사용.
-> - `{컴포넌트경로}` **(출력측)** : `DesignComponentSystem/Components/3D_Components/` 아래의 생산 대상 컴포넌트 상대경로. 생산 결과물(register.js, preview 등)이 놓일 위치.
->
-> 현재 폴더 구조상 두 값은 동일하게 해결되지만, 의미론적으로는 별개 공간이다.
-
-- `{컴포넌트경로}`: 개별이면 `{장비명}`, 컨테이너면 `meshesArea/{컨테이너명}`
-- `{모델경로}`: 개별이면 `{장비명}`, 컨테이너면 `meshesArea/{컨테이너명}`
+경로 변수 의미와 유형 분기 규칙은 [`_shared/phase0-3d.md`](../_shared/phase0-3d.md)를 따른다. Phase 0에서 해결된 값을 그대로 교체한다.
 
 ```
 대상: 3D 컴포넌트 `3D_Components/{컴포넌트경로}/Standard`를 처음부터 끝까지 생산한다.
