@@ -8,6 +8,10 @@
 
 ## 구현 명세
 
+### meshName
+
+`waterTower` (GLTF 내 주 메시 — 부모 노드 `CoolingTower`는 Group이므로 material 없음)
+
 ### Mixin
 
 MeshStateMixin
