@@ -72,8 +72,7 @@ description: GLTF 컨테이너 3D 컴포넌트를 생성합니다. 하나의 GLT
 | Advanced | 07 | animation | MeshState + AnimationMixin |
 | Advanced | 08 | clipping | MeshState + ClippingPlaneMixin |
 
-> 기존 생산된 01~03은 `01_status`, `02_status_camera`, `03_status_popup` 폴더명을 유지한다.
-> 신규 생산분(04~)부터 새 명명 규칙을 적용한다.
+> 기존 생산된 변형은 `meshesArea/area_01/{Standard,Advanced/camera,Advanced/popup}/` 구조로 존재한다. 표의 "이름" 컬럼이 Standard 폴더(`status`는 `Standard/`)와 Advanced 하위 폴더명(`camera`, `popup`, `highlight`, ...)에 그대로 매핑된다.
 > 클릭 이벤트가 있는 변형에서는 resolveMeshName이 필요하다.
 
 ---

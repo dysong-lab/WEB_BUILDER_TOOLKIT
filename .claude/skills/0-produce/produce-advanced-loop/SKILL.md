@@ -21,7 +21,7 @@ DesignComponentSystem/Components 아래의 2D 컴포넌트 Advanced 변형을 `A
 | 공통 카탈로그 | 없음 (범주 자체가 카탈로그) | 없음 — 큐에 개별 등록 필요 |
 | 출력 경로 | `<컴포넌트경로>/Standard/` | `<컴포넌트경로>/Advanced/<변형이름>/` |
 
-> **`<컴포넌트경로>`** = depth 1은 `<범주>` (예: `AppBars`), depth 2는 `<범주>/<서브범주>` (예: `Buttons/SplitButtons`). 2D Phase 0 규칙과 동일 (`_shared/phase0-2d.md`).
+> **`<컴포넌트경로>`** = depth 1은 `<범주>` (예: `AppBars`), depth 2는 `<범주>/<서브범주>` (예: `Buttons/SplitButtons`). 2D Phase 0 규칙과 동일([`_shared/phase0-2d.md`](../_shared/phase0-2d.md)).
 
 2D Advanced는 3D와 달리 공통 변형 카탈로그가 없다. 각 변형은 컴포넌트별로 고유하게 기획되며, ADVANCED_QUEUE.md에 사전 등록된 항목만 생산한다.
 
