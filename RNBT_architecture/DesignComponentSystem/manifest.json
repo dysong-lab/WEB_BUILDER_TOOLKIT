@@ -1193,6 +1193,19 @@
           ]
         },
         {
+          "name": "DST1000sensor",
+          "spec": "Components/3D_Components/DST1000sensor/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/DST1000sensor/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/DST1000sensor/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "Panel",
           "spec": "Components/3D_Components/Panel/CLAUDE.md",
           "sets": [
