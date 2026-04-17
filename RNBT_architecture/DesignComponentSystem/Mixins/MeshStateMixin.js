@@ -63,13 +63,22 @@ function applyMeshStateMixin(instance, options) {
      * @param {string} status - 상태 키 (colorMap의 키)
      */
     ns.setMeshState = function(meshName, status) {
-        const mesh = instance.appendElement.getObjectByName(meshName);
-        if (!mesh) return;
+        const obj = instance.appendElement.getObjectByName(meshName);
+        if (!obj) return;
 
         const color = colorMap[status];
-        if (color !== undefined && mesh.material) {
-            mesh.material = mesh.material.clone();
-            mesh.material.color.setHex(color);
+        if (color !== undefined) {
+            if (obj.material) {
+                obj.material = obj.material.clone();
+                obj.material.color.setHex(color);
+            } else {
+                obj.traverse(function(child) {
+                    if (child.material) {
+                        child.material = child.material.clone();
+                        child.material.color.setHex(color);
+                    }
+                });
+            }
         }
 
         stateMap.set(meshName, status);

@@ -150,13 +150,17 @@
             const status = btn.dataset.status;
 
             if (status === 'reset') {
-                const mesh = instance.appendElement.getObjectByName('waterTower');
-                if (mesh) mesh.material.color.setHex(0xffffff);
+                const group = instance.appendElement.getObjectByName('CoolingTower');
+                if (group) {
+                    group.traverse(function(child) {
+                        if (child.material) child.material.color.setHex(0xffffff);
+                    });
+                }
                 return;
             }
 
             instance.meshState.renderData({
-                response: [{ meshName: 'waterTower', status }]
+                response: [{ meshName: 'CoolingTower', status }]
             });
         });
     });

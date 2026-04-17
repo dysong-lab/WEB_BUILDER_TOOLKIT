@@ -10,7 +10,7 @@
 
 ### meshName
 
-`waterTower` (GLTF 내 주 메시 — 부모 노드 `CoolingTower`는 Group이므로 material 없음)
+`CoolingTower` (GLTF Group 노드 — 자식 메시 waterTower, waterTowerLadder_A를 포함)
 
 ### Mixin
 
