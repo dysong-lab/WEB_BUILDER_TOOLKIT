@@ -1076,6 +1076,19 @@
           ]
         },
         {
+          "name": "CirclePlate2p",
+          "spec": "Components/3D_Components/CirclePlate2p/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/CirclePlate2p/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/CirclePlate2p/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "CONTREV",
           "spec": "Components/3D_Components/CONTREV/CLAUDE.md",
           "sets": [
