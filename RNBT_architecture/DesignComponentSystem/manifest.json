@@ -736,6 +736,19 @@
           ]
         },
         {
+          "name": "B3F_UPS03",
+          "spec": "Components/3D_Components/B3F_UPS03/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/B3F_UPS03/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/B3F_UPS03/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "Chiller",
           "spec": "Components/3D_Components/Chiller/CLAUDE.md",
           "sets": [
