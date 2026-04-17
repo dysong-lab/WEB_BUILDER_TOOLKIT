@@ -598,6 +598,19 @@
           ]
         },
         {
+          "name": "ALTS02",
+          "spec": "Components/3D_Components/ALTS02/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/ALTS02/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/ALTS02/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "BATT",
           "spec": "Components/3D_Components/BATT/CLAUDE.md",
           "sets": [
