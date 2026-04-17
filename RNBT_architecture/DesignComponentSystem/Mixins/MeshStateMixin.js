@@ -41,6 +41,20 @@ function applyMeshStateMixin(instance, options) {
 
     const stateMap = new Map();
 
+    // material이 배열(multi-material mesh)인 경우도 지원
+    function applyColor(target, color) {
+        if (Array.isArray(target.material)) {
+            target.material = target.material.map(function(m) {
+                const c = m.clone();
+                if (c.color) c.color.setHex(color);
+                return c;
+            });
+        } else {
+            target.material = target.material.clone();
+            if (target.material.color) target.material.color.setHex(color);
+        }
+    }
+
     /**
      * 메시 상태 일괄 적용
      *
@@ -69,14 +83,10 @@ function applyMeshStateMixin(instance, options) {
         const color = colorMap[status];
         if (color !== undefined) {
             if (obj.material) {
-                obj.material = obj.material.clone();
-                obj.material.color.setHex(color);
+                applyColor(obj, color);
             } else {
                 obj.traverse(function(child) {
-                    if (child.material) {
-                        child.material = child.material.clone();
-                        child.material.color.setHex(color);
-                    }
+                    if (child.material) applyColor(child, color);
                 });
             }
         }
