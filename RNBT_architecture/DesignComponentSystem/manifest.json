@@ -637,6 +637,19 @@
           ]
         },
         {
+          "name": "ArmChair",
+          "spec": "Components/3D_Components/ArmChair/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/ArmChair/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/ArmChair/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "BATT",
           "spec": "Components/3D_Components/BATT/CLAUDE.md",
           "sets": [
