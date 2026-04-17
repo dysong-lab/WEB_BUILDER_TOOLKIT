@@ -34,13 +34,23 @@ models/ 는 두 종류의 폴더로 구성된다:
 - **개별 장비 모델 폴더** — `models/{장비명}/`
 - **컨테이너 그룹 폴더** — `models/meshesArea/{컨테이너명}/` (`meshesArea/` 자체는 장비가 아님)
 
+> **루프의 입력측 / 출력측**
+> - **입력측** — `models/` 도메인. Phase 0 순회는 `models/*/`, `models/meshesArea/*/`를 돌며 후보를 결정한다.
+> - **출력측** — `Components/3D_Components/` 도메인. 생산 결과물(register.js, preview 등)이 놓일 위치.
+>
+> **`{컴포넌트경로}`** (출력측 식별자): `Components/3D_Components/` 아래의 컴포넌트 루트 상대경로.
+> - 개별 장비: `{장비명}` (예: `BATT`, `CoolingTower02`)
+> - 컨테이너: `meshesArea/{컨테이너명}` (예: `meshesArea/area_01`)
+>
+> 현재 폴더 구조상 입력측 모델 경로와 출력측 컴포넌트 경로가 동일 문자열로 해결되지만, 의미론적으로는 별개 공간이다.
+
 1. 개별 + 컨테이너 후보를 각각 수집하고 병합한다:
    ```bash
    ls -d RNBT_architecture/DesignComponentSystem/models/*/ | grep -v '/meshesArea/$' | sort
    ls -d RNBT_architecture/DesignComponentSystem/models/meshesArea/*/ 2>/dev/null | sort
    ```
 
-2. 각 후보에 대해 Standard 완료 여부를 확인한다 (`{컴포넌트경로}`는 개별이면 `{장비명}`, 컨테이너면 `meshesArea/{컨테이너명}`):
+2. 각 후보에 대해 Standard 완료 여부를 확인한다:
    ```bash
    ls RNBT_architecture/DesignComponentSystem/Components/3D_Components/{컴포넌트경로}/Standard/scripts/register.js 2>/dev/null
    ```
@@ -67,7 +77,7 @@ models/ 는 두 종류의 폴더로 구성된다:
 | 개별 (1 GLTF = 1 Mesh) | `create-3d-component` |
 | 컨테이너 (1 GLTF = N Mesh) | `create-3d-container-component` |
 
-**출력 경로**: `Components/3D_Components/{장비명}/Standard/`
+**출력 경로**: `Components/3D_Components/{컴포넌트경로}/Standard/`
 **Mixin**: MeshState 단독
 
 **중요 — 승인 없이 진행하지 않는다:**
@@ -99,7 +109,7 @@ const MESH_NAME = '장비명';
 생산 완료 후 커밋한다.
 
 ```
-feat: 3D_Components/{장비명} 컴포넌트 생산 — {한줄 설명}
+feat: 3D_Components/{컴포넌트경로} 컴포넌트 생산 — {한줄 설명}
 ```
 
 ---
@@ -109,8 +119,8 @@ feat: 3D_Components/{장비명} 컴포넌트 생산 — {한줄 설명}
 사용자에게 안내:
 
 ```
-{장비명}/Standard 생산 완료.
-다음 대상: {다음 장비명} ({유형}) — Standard(MeshState)
+{컴포넌트경로}/Standard 생산 완료.
+다음 대상: {다음 컴포넌트경로} ({유형}) — Standard(MeshState)
 
 `/compact` 실행 후 "계속"을 입력해주세요.
 ```
