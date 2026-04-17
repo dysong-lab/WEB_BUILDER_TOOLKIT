@@ -1,5 +1,5 @@
 /**
- * gltf_container — 03_status_popup / scripts / register
+ * area_01 — Advanced/popup / scripts / register
  *
  * MeshStateMixin + 3DShadowPopupMixin
  * 컨테이너 GLTF 내 Mesh의 상태 색상 변경 + 클릭 시 상세 팝업 표시

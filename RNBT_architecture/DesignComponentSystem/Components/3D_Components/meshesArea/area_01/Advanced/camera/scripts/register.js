@@ -1,5 +1,5 @@
 /**
- * gltf_container — 02_status_camera / scripts / register
+ * area_01 — Advanced/camera / scripts / register
  *
  * MeshStateMixin + CameraFocusMixin
  * 컨테이너 GLTF 내 Mesh의 상태 색상 변경 + 클릭 시 카메라 포커스 이동

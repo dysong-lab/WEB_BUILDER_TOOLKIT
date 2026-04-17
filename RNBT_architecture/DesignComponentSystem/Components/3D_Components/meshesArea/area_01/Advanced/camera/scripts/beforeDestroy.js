@@ -1,5 +1,5 @@
 /**
- * gltf_container — 02_status_camera / scripts / beforeDestroy
+ * area_01 — Advanced/camera / scripts / beforeDestroy
  *
  * MeshStateMixin + CameraFocusMixin 정리
  */

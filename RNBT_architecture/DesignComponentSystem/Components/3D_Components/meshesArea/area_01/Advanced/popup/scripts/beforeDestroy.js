@@ -1,7 +1,7 @@
 /**
- * gltf_container — 01_status / scripts / beforeDestroy
+ * area_01 — Advanced/popup / scripts / beforeDestroy
  *
- * MeshStateMixin 정리
+ * MeshStateMixin + 3DShadowPopupMixin 정리
  */
 
 const { unsubscribe } = GlobalDataPublisher;
@@ -15,4 +15,9 @@ go(
 this.subscriptions = null;
 
 
+const { removeCustomEvents } = Wkit;
+
+removeCustomEvents(this, this.customEvents);
 this.meshState?.destroy();
+this.shadowPopup?.destroy();
+this.resolveMeshName = null;

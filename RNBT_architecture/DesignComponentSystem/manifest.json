@@ -1351,14 +1351,14 @@
           ]
         },
         {
-          "name": "gltf_container",
-          "spec": "Components/3D_Components/gltf_container/CLAUDE.md",
+          "name": "area_01",
+          "spec": "Components/3D_Components/meshesArea/area_01/CLAUDE.md",
           "sets": [
             {
               "name": "Standard",
-              "spec": "Components/3D_Components/gltf_container/Standard/CLAUDE.md",
+              "spec": "Components/3D_Components/meshesArea/area_01/Standard/CLAUDE.md",
               "previews": [
-                { "label": "01 default", "path": "Components/3D_Components/gltf_container/Standard/preview/01_default.html" }
+                { "label": "01 default", "path": "Components/3D_Components/meshesArea/area_01/Standard/preview/01_default.html" }
               ]
             },
             {
@@ -1367,16 +1367,16 @@
               "items": [
                 {
                   "name": "camera",
-                  "spec": "Components/3D_Components/gltf_container/Advanced/camera/CLAUDE.md",
+                  "spec": "Components/3D_Components/meshesArea/area_01/Advanced/camera/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/gltf_container/Advanced/camera/preview/01_default.html" }
+                    { "label": "01 default", "path": "Components/3D_Components/meshesArea/area_01/Advanced/camera/preview/01_default.html" }
                   ]
                 },
                 {
                   "name": "popup",
-                  "spec": "Components/3D_Components/gltf_container/Advanced/popup/CLAUDE.md",
+                  "spec": "Components/3D_Components/meshesArea/area_01/Advanced/popup/CLAUDE.md",
                   "previews": [
-                    { "label": "01 default", "path": "Components/3D_Components/gltf_container/Advanced/popup/preview/01_default.html" }
+                    { "label": "01 default", "path": "Components/3D_Components/meshesArea/area_01/Advanced/popup/preview/01_default.html" }
                   ]
                 }
               ]

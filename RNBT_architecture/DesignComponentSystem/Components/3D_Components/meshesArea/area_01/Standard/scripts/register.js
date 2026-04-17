@@ -1,5 +1,5 @@
 /**
- * gltf_container — 01_status / scripts / register
+ * area_01 — Standard / scripts / register
  *
  * MeshStateMixin 단독 적용
  * 컨테이너 GLTF 내 Mesh의 상태 색상 변경
