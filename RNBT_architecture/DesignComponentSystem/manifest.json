@@ -920,6 +920,19 @@
           ]
         },
         {
+          "name": "CarBike",
+          "spec": "Components/3D_Components/CarBike/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/CarBike/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/CarBike/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "CONTREV",
           "spec": "Components/3D_Components/CONTREV/CLAUDE.md",
           "sets": [
