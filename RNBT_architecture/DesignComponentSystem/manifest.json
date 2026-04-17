@@ -1128,6 +1128,19 @@
           ]
         },
         {
+          "name": "CoolingTower",
+          "spec": "Components/3D_Components/CoolingTower/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/CoolingTower/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/CoolingTower/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "CTT",
           "spec": "Components/3D_Components/CTT/CLAUDE.md",
           "sets": [
