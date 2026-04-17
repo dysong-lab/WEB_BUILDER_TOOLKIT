@@ -775,6 +775,19 @@
           ]
         },
         {
+          "name": "BUZZER",
+          "spec": "Components/3D_Components/BUZZER/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/BUZZER/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/BUZZER/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "Chiller",
           "spec": "Components/3D_Components/Chiller/CLAUDE.md",
           "sets": [
