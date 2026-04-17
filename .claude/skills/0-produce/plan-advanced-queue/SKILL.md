@@ -7,9 +7,11 @@ description: 2D 컴포넌트 Advanced 변형 후보를 발굴하여 ADVANCED_QUE
 
 ## 목표
 
-`Components/{범주}/Standard/`를 읽고, MD3 명세 및 업계 UI 패턴에서 Advanced 변형 후보를 발굴하여 `ADVANCED_QUEUE.md`에 "대기" 항목으로 등록한다.
+`Components/{컴포넌트경로}/Standard/`를 읽고, MD3 명세 및 업계 UI 패턴에서 Advanced 변형 후보를 발굴하여 `ADVANCED_QUEUE.md`에 "대기" 항목으로 등록한다.
 
 **이 스킬은 큐 등록까지만 담당한다.** 생산은 `produce-advanced-loop`이 처리한다.
+
+> **`{컴포넌트경로}`** = `Components/` 아래 컴포넌트 루트 상대경로. depth 1은 `<범주>` (예: `AppBars`), depth 2는 `<범주>/<서브범주>` (예: `Buttons/SplitButtons`). 2D Phase 0 규칙(`_shared/phase0-2d.md`)과 동일 표기.
 
 ---
 
@@ -17,11 +19,11 @@ description: 2D 컴포넌트 Advanced 변형 후보를 발굴하여 ADVANCED_QUE
 
 | 인수 | 의미 |
 |------|------|
-| (없음) | 모든 2D 범주를 일괄 탐색 |
-| 범주명 (예: `Cards`) | 해당 범주만 탐색 |
+| (없음) | 모든 2D 컴포넌트를 일괄 탐색 |
+| 컴포넌트경로 (예: `Cards`, `Buttons/SplitButtons`) | 해당 컴포넌트만 탐색 |
 
-사용자가 범주를 지정하지 않으면 일괄 모드로 진행한다.
-범주명은 `Components/` 하위 폴더명과 일치해야 한다 (대소문자 구분).
+사용자가 컴포넌트경로를 지정하지 않으면 일괄 모드로 진행한다.
+컴포넌트경로는 `Components/` 하위 실제 폴더 구조와 일치해야 한다 (대소문자 구분).
 
 ---
 
@@ -30,25 +32,26 @@ description: 2D 컴포넌트 Advanced 변형 후보를 발굴하여 ADVANCED_QUE
 ### Step 1. 현황 수집
 
 1. ADVANCED_QUEUE.md 전체 읽기 — 기존 등록 항목(대기/진행 중/완료) 목록화
-2. 대상 범주별로 다음 확인:
+2. 대상 컴포넌트별로 다음 확인:
    ```
-   Components/{범주}/CLAUDE.md
-   Components/{범주}/Standard/            (존재 여부 확인 — 필터 기준)
-   Components/{범주}/Standard/CLAUDE.md   (있으면)
-   Components/{범주}/Advanced/             (있으면 하위 변형 이름 수집)
+   Components/{컴포넌트경로}/CLAUDE.md
+   Components/{컴포넌트경로}/Standard/            (존재 여부 확인 — 필터 기준)
+   Components/{컴포넌트경로}/Standard/CLAUDE.md   (있으면)
+   Components/{컴포넌트경로}/Advanced/            (있으면 하위 변형 이름 수집)
    ```
+
+   대상 컴포넌트 목록은 2D Phase 0 규칙(`_shared/phase0-2d.md`)의 순회 스크립트로 수집한다. depth 1 (예: `AppBars`) / depth 2 (예: `Buttons/SplitButtons`) 모두 동일 변수로 처리.
 
 **Standard 선행 필터** (중요):
-- **Standard 폴더가 없는 범주는 Advanced 후보 발굴 대상에서 제외한다.**
+- **Standard 폴더가 없는 컴포넌트는 Advanced 후보 발굴 대상에서 제외한다.**
 - Standard 구현 없이 Advanced를 기획하면 분리 정당성(register.js 차이)을 검증할 수 없기 때문.
-- 제외된 범주는 Step 6에서 "Standard 선행 필요 — `produce-standard-loop`로 Standard 생산 후 `plan-advanced-queue` 재실행 권장" 안내와 함께 별도 보고한다.
-- 예외: 계층 범주(예: `Buttons/{Buttons,FAB,...}`)는 하위 범주 단위로 Standard 존재 여부를 판정한다.
+- 제외된 컴포넌트는 Step 6에서 "Standard 선행 필요 — `produce-standard-loop`로 Standard 생산 후 `plan-advanced-queue` 재실행 권장" 안내와 함께 별도 보고한다.
 
 **제외 대상**:
-- **Standard 폴더가 존재하지 않는 범주** (위 필터)
+- **Standard 폴더가 존재하지 않는 컴포넌트** (위 필터)
 - 이미 `Advanced/{변형}/` 폴더가 존재하는 변형
 - 이미 큐에 "대기"/"진행 중"/"완료"로 등록된 변형
-- `Components/3D_Components/` 하위 범주 (3D 전용 큐 사용)
+- `Components/3D_Components/` 하위 (3D 전용 큐 사용)
 
 ---
 
@@ -57,14 +60,14 @@ description: 2D 컴포넌트 Advanced 변형 후보를 발굴하여 ADVANCED_QUE
 Explore 에이전트에 위임하여 Advanced 후보를 발굴한다.
 
 **위임 프롬프트 구성 요소**:
-- 대상 범주 목록과 각 범주의 Standard CLAUDE.md 내용
+- 대상 컴포넌트 목록과 각 컴포넌트의 Standard CLAUDE.md 내용
 - 제외 목록 (Step 1에서 수집한 기존 변형)
-- MD3 (Material Design 3) 명세에서 해당 범주의 variant/pattern
+- MD3 (Material Design 3) 명세에서 해당 컴포넌트의 variant/pattern
 - 업계 UI 라이브러리의 확장 변형 사례 (예: AppBar searchEmbedded, Cards expandable, Dialogs fullscreen)
 - **Standard와 register.js 수준에서 다른 점이 있는 후보만 수집할 것**
 
 **에이전트 반환 형식**: 각 후보에 대해
-- 범주
+- 컴포넌트경로
 - 변형 이름 (camelCase)
 - 한 줄 설명
 - Standard와의 차이 (Mixin 조합 / 구독 토픽 / 커스텀 메서드 / 발행 이벤트 중 어느 것)
@@ -91,10 +94,11 @@ Explore 에이전트에 위임하여 Advanced 후보를 발굴한다.
 승인 후보를 표로 제시한다:
 
 ```
-| # | 범주 | 변형 이름 | 설명 | 분리 근거 |
-|---|------|----------|------|----------|
+| # | 컴포넌트경로 | 변형 이름 | 설명 | 분리 근거 |
+|---|-------------|----------|------|----------|
 | 1 | AppBars | searchEmbedded | 임베디드 검색 입력 AppBar | @searchInputChanged/@searchCleared 이벤트 발행 |
 | 2 | Cards  | expandable     | 클릭 시 상세 내용 확장 Card | toggle 커스텀 메서드 + 상태 관리 |
+| 3 | Buttons/SplitButtons | dropdownMenu | 보조 액션 드롭다운 | 팝업 상태 관리 + 이벤트 |
 ```
 
 사용자에게 다음 중 선택받는다:
@@ -122,13 +126,13 @@ Explore 에이전트에 위임하여 Advanced 후보를 발굴한다.
 다음 단계: `/produce-advanced-loop`으로 순차 생산 시작.
 ```
 
-**Standard 미구현 범주가 있었던 경우** 별도 섹션으로 함께 보고:
+**Standard 미구현 컴포넌트가 있었던 경우** 별도 섹션으로 함께 보고:
 
 ```
 Standard 선행 필요 (Advanced 후보 발굴 제외):
-- Cards, Lists, Menus, ...
+- Cards, Lists, Buttons/SplitButtons, ...
 
-해당 범주는 `produce-standard-loop`로 Standard를 먼저 생산한 뒤
+해당 컴포넌트는 `produce-standard-loop`로 Standard를 먼저 생산한 뒤
 `plan-advanced-queue`를 재실행하면 Advanced 후보가 발굴됩니다.
 ```
 

@@ -15,11 +15,15 @@
 ## 폴더 명명 규칙
 
 ```
-Components/3D_Components/<장비명>/Advanced/<변형이름>/
+Components/3D_Components/<컴포넌트경로>/Advanced/<변형이름>/
 ├── CLAUDE.md
 ├── scripts/
 └── page/
 ```
+
+**`<컴포넌트경로>`**: `Components/3D_Components/` 아래 컴포넌트 루트 상대경로.
+- 개별 장비: `<장비명>` (예: `BATT`, `CoolingTower02`)
+- 컨테이너: `meshesArea/<컨테이너명>` (예: `meshesArea/area_01`)
 
 **변형 이름**: 프리셋 이름(예: `camera`, `highlight`) 또는 자유 조합의 camelCase 설명명(예: `highlightAnimation`, `dataHud`)
 
@@ -47,10 +51,13 @@ Components/3D_Components/<장비명>/Advanced/<변형이름>/
 
 ## 생산 대기열
 
-| 순번 | 장비명 | 유형 | 변형 이름 | 설명 | 상태 |
-|------|--------|------|----------|------|------|
+| 순번 | 컴포넌트경로 | 유형 | 변형 이름 | 설명 | 상태 |
+|------|-------------|------|----------|------|------|
 
 > `plan-3d-advanced-queue`로 후보를 발굴하여 등록한다.
+>
+> 등록 예시 — 개별: `| 1 | Panel | 개별 | highlight | ... | 대기 |`
+> 등록 예시 — 컨테이너: `| 2 | meshesArea/area_01 | 컨테이너 | clipping | ... | 대기 |`
 
 ---
 

@@ -19,7 +19,9 @@ DesignComponentSystem/Components 아래의 2D 컴포넌트 Advanced 변형을 `A
 | 대상 결정 | 폴더 알파벳 순회 | **ADVANCED_QUEUE.md 명시적 대기열** |
 | 변형 이름 | 고정 (`Standard/`) | **컴포넌트별 고유** (예: `searchEmbedded`) |
 | 공통 카탈로그 | 없음 (범주 자체가 카탈로그) | 없음 — 큐에 개별 등록 필요 |
-| 출력 경로 | `<범주>/Standard/` | `<범주>/Advanced/<변형이름>/` |
+| 출력 경로 | `<컴포넌트경로>/Standard/` | `<컴포넌트경로>/Advanced/<변형이름>/` |
+
+> **`<컴포넌트경로>`** = depth 1은 `<범주>` (예: `AppBars`), depth 2는 `<범주>/<서브범주>` (예: `Buttons/SplitButtons`). 2D Phase 0 규칙과 동일 (`_shared/phase0-2d.md`).
 
 2D Advanced는 3D와 달리 공통 변형 카탈로그가 없다. 각 변형은 컴포넌트별로 고유하게 기획되며, ADVANCED_QUEUE.md에 사전 등록된 항목만 생산한다.
 
@@ -35,14 +37,15 @@ DesignComponentSystem/Components 아래의 2D 컴포넌트 Advanced 변형을 `A
    ```
 
 2. 상태가 "대기"인 첫 번째 항목 = 다음 대상
-   - 예: `AppBars | searchEmbedded | 임베디드 검색 입력 AppBar | 대기` → 대상: AppBars/Advanced/searchEmbedded
+   - 예(depth 1): `AppBars | searchEmbedded | ... | 대기` → 대상: `AppBars/Advanced/searchEmbedded`
+   - 예(depth 2): `Buttons/SplitButtons | dropdownMenu | ... | 대기` → 대상: `Buttons/SplitButtons/Advanced/dropdownMenu`
 
 3. 완료된 Advanced 변형 교차 확인:
    ```bash
    find RNBT_architecture/DesignComponentSystem/Components -type d -path "*/Advanced/*" -not -path "*/3D_Components/*" | sort
    ```
 
-4. **사용자에게 보고**: "다음 대상: {범주}/Advanced/{변형이름} — {설명}"
+4. **사용자에게 보고**: "다음 대상: {컴포넌트경로}/Advanced/{변형이름} — {설명}"
 
    큐가 비어있거나 "대기" 항목이 없으면: "ADVANCED_QUEUE.md에 대기 중인 항목이 없습니다. 신규 Advanced 변형이 필요하면 큐에 먼저 등록해주세요."
 
@@ -54,7 +57,7 @@ DesignComponentSystem/Components 아래의 2D 컴포넌트 Advanced 변형을 `A
 
 **호출 스킬**: `create-2d-component`
 
-**출력 경로**: `Components/{범주}/Advanced/{변형이름}/`
+**출력 경로**: `Components/{컴포넌트경로}/Advanced/{변형이름}/`
 
 **Standard와의 분리 정당성 확인**: Advanced 변형은 Standard와 명백히 다른 register.js(Mixin 조합, 구독 토픽, 커스텀 메서드, 이벤트 중 하나 이상)를 가져야 한다. Step 2 기능 분석 시 이를 CLAUDE.md에 명시한다.
 
@@ -71,7 +74,7 @@ DesignComponentSystem/Components 아래의 2D 컴포넌트 Advanced 변형을 `A
 생산 완료 후 커밋한다.
 
 ```
-feat: {범주}/Advanced/{변형이름} 컴포넌트 생산 — {한줄 설명}
+feat: {컴포넌트경로}/Advanced/{변형이름} 컴포넌트 생산 — {한줄 설명}
 ```
 
 ---
@@ -82,8 +85,8 @@ feat: {범주}/Advanced/{변형이름} 컴포넌트 생산 — {한줄 설명}
 2. 사용자에게 안내:
 
 ```
-{범주}/Advanced/{변형이름} 생산 완료.
-다음 대상: {다음 범주}/Advanced/{다음 변형}
+{컴포넌트경로}/Advanced/{변형이름} 생산 완료.
+다음 대상: {다음 컴포넌트경로}/Advanced/{다음 변형}
 
 `/compact` 실행 후 "계속"을 입력해주세요.
 ```
@@ -95,15 +98,15 @@ feat: {범주}/Advanced/{변형이름} 컴포넌트 생산 — {한줄 설명}
 ```markdown
 # 2D 컴포넌트 Advanced 생산 대기열
 
-| 순번 | 범주 | 변형 이름 | 설명 | 상태 |
-|------|------|----------|------|------|
+| 순번 | 컴포넌트경로 | 변형 이름 | 설명 | 상태 |
+|------|-------------|----------|------|------|
 | 1 | AppBars | searchEmbedded | 임베디드 검색 입력 AppBar | 완료 |
-| 2 | ... | ... | ... | 대기 |
+| 2 | Buttons/SplitButtons | ... | ... | 대기 |
 ```
 
 **열 설명**:
-- **범주**: `Components/{범주}/Advanced/`의 범주명 (예: AppBars, Cards, Dialogs)
-- **변형 이름**: Advanced 폴더명 (camelCase 권장, 예: searchEmbedded, inlineEditable)
+- **컴포넌트경로**: `Components/` 아래 컴포넌트 루트 상대경로. depth 1 (예: `AppBars`, `Cards`) / depth 2 (예: `Buttons/SplitButtons`, `Chips/Assist`) 모두 이 한 컬럼으로 기재.
+- **변형 이름**: Advanced 폴더명 (camelCase 권장, 예: `searchEmbedded`, `inlineEditable`)
 - **설명**: 한 줄 기능 요약 (Standard와 분리해야 할 이유가 드러나야 함)
 - **상태**: 대기 / 진행 중 / 완료
 

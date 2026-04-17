@@ -7,9 +7,11 @@ description: 3D 컴포넌트 Advanced 변형 후보를 발굴하여 ADVANCED_QUE
 
 ## 목표
 
-`Components/3D_Components/` 아래의 Standard가 완료된 장비를 읽고, 장비 특성 및 업계 BMS/SCADA 패턴에서 Advanced 변형 후보를 발굴하여 `ADVANCED_QUEUE.md`에 "대기" 항목으로 등록한다.
+`Components/3D_Components/` 아래의 Standard가 완료된 컴포넌트를 읽고, 장비 특성 및 업계 BMS/SCADA 패턴에서 Advanced 변형 후보를 발굴하여 `ADVANCED_QUEUE.md`에 "대기" 항목으로 등록한다.
 
 **이 스킬은 큐 등록까지만 담당한다.** 생산은 `produce-3d-advanced-loop`이 처리한다.
+
+> **`{컴포넌트경로}`** = 개별이면 `{장비명}` (예: `BATT`), 컨테이너면 `meshesArea/{컨테이너명}` (예: `meshesArea/area_01`). 3D Standard Phase 0 규칙(`_shared/phase0-3d.md`)과 동일 표기.
 
 ---
 
@@ -29,10 +31,10 @@ description: 3D 컴포넌트 Advanced 변형 후보를 발굴하여 ADVANCED_QUE
 
 | 인수 | 의미 |
 |------|------|
-| (없음) | 모든 3D 장비를 일괄 탐색 |
-| 장비명 (예: `Panel`) | 해당 장비만 탐색 |
+| (없음) | 모든 3D 컴포넌트(개별 + 컨테이너)를 일괄 탐색 |
+| 컴포넌트경로 (예: `Panel`, `meshesArea/area_01`) | 해당 컴포넌트만 탐색 |
 
-사용자가 장비를 지정하지 않으면 일괄 모드로 진행한다.
+사용자가 컴포넌트경로를 지정하지 않으면 일괄 모드로 진행한다.
 
 ---
 
@@ -45,20 +47,22 @@ description: 3D 컴포넌트 Advanced 변형 후보를 발굴하여 ADVANCED_QUE
    경로: RNBT_architecture/DesignComponentSystem/Components/3D_Components/ADVANCED_QUEUE.md
    ```
 
-2. 대상 장비별로 다음 확인:
+2. 대상 컴포넌트별로 다음 확인:
    ```
-   Components/3D_Components/{장비명}/Standard/           (존재 여부 — 필터 기준)
-   Components/3D_Components/{장비명}/Standard/CLAUDE.md  (있으면)
-   Components/3D_Components/{장비명}/Advanced/            (있으면 하위 변형 이름 수집)
+   Components/3D_Components/{컴포넌트경로}/Standard/           (존재 여부 — 필터 기준)
+   Components/3D_Components/{컴포넌트경로}/Standard/CLAUDE.md  (있으면)
+   Components/3D_Components/{컴포넌트경로}/Advanced/           (있으면 하위 변형 이름 수집)
    ```
+
+   대상 컴포넌트 목록은 3D Phase 0 규칙(`_shared/phase0-3d.md`)의 순회 스크립트로 수집한다. 개별(예: `BATT`) / 컨테이너(예: `meshesArea/area_01`) 모두 동일 변수로 처리.
 
 **Standard 선행 필터** (중요):
-- **Standard 폴더가 없는 장비는 Advanced 후보 발굴 대상에서 제외한다.**
+- **Standard 폴더가 없는 컴포넌트는 Advanced 후보 발굴 대상에서 제외한다.**
 - Standard 없이 Advanced를 기획하면 MeshState 기반 분리 정당성을 검증할 수 없기 때문.
-- 제외된 장비는 Step 6에서 "Standard 선행 필요 — `produce-3d-standard-loop`로 Standard 생산 후 재실행 권장" 안내와 함께 별도 보고한다.
+- 제외된 컴포넌트는 Step 6에서 "Standard 선행 필요 — `produce-3d-standard-loop`로 Standard 생산 후 재실행 권장" 안내와 함께 별도 보고한다.
 
 **제외 대상**:
-- **Standard 폴더가 존재하지 않는 장비** (위 필터)
+- **Standard 폴더가 존재하지 않는 컴포넌트** (위 필터)
 - 이미 `Advanced/{변형}/` 폴더가 존재하는 변형
 - 이미 큐에 "대기"/"진행 중"/"완료"로 등록된 변형
 
@@ -69,14 +73,15 @@ description: 3D 컴포넌트 Advanced 변형 후보를 발굴하여 ADVANCED_QUE
 Explore 에이전트에 위임하여 Advanced 후보를 발굴한다.
 
 **위임 프롬프트 구성 요소**:
-- 대상 장비 목록과 각 장비의 Standard CLAUDE.md 내용
+- 대상 컴포넌트 목록(개별 + 컨테이너)과 각 컴포넌트의 Standard CLAUDE.md 내용
 - 제외 목록 (Step 1에서 수집한 기존 변형)
-- 장비 특성에서 추론 가능한 기능 (예: Chiller는 가동/정지 애니메이션, Panel은 전력 계측 데이터 표시)
+- 컴포넌트 특성에서 추론 가능한 기능 (예: Chiller는 가동/정지 애니메이션, Panel은 전력 계측 데이터 표시, 컨테이너는 단면 분석/구역 강조)
 - 업계 BMS/SCADA/설비관리 시스템의 장비 인터랙션 패턴
 - **Standard와 register.js 수준에서 다른 점이 있는 후보만 수집할 것**
 
 **에이전트 반환 형식**: 각 후보에 대해
-- 장비명
+- 컴포넌트경로
+- 유형 (개별/컨테이너)
 - 변형 이름 (프리셋명 또는 camelCase 자유 조합명)
 - Mixin 조합 (예: `MeshState + CameraFocus + MeshHighlight`)
 - 한 줄 설명
@@ -107,10 +112,10 @@ Explore 에이전트에 위임하여 Advanced 후보를 발굴한다.
 승인 후보를 표로 제시한다:
 
 ```
-| # | 장비명 | 변형 이름 | Mixin 조합 | 설명 | 분리 근거 |
-|---|--------|----------|-----------|------|----------|
-| 1 | Panel | highlight | MeshState + MeshHighlight | 경고 시 메시 색상 강조 | Mixin 추가 |
-| 2 | meshesArea/area_01 | clipping | MeshState + ClippingPlaneMixin | 단면 분석 뷰 | Mixin 추가 |
+| # | 컴포넌트경로 | 유형 | 변형 이름 | Mixin 조합 | 설명 | 분리 근거 |
+|---|-------------|------|----------|-----------|------|----------|
+| 1 | Panel | 개별 | highlight | MeshState + MeshHighlight | 경고 시 메시 색상 강조 | Mixin 추가 |
+| 2 | meshesArea/area_01 | 컨테이너 | clipping | MeshState + ClippingPlaneMixin | 단면 분석 뷰 | Mixin 추가 |
 ```
 
 사용자에게 다음 중 선택받는다:
@@ -138,13 +143,13 @@ Explore 에이전트에 위임하여 Advanced 후보를 발굴한다.
 다음 단계: `/produce-3d-advanced-loop`으로 순차 생산 시작.
 ```
 
-**Standard 미구현 장비가 있었던 경우** 별도 섹션으로 함께 보고:
+**Standard 미구현 컴포넌트가 있었던 경우** 별도 섹션으로 함께 보고:
 
 ```
 Standard 선행 필요 (Advanced 후보 발굴 제외):
-- AHU, Transformer, ...
+- AHU, Transformer, meshesArea/area_02, ...
 
-해당 장비는 `produce-3d-standard-loop`로 Standard를 먼저 생산한 뒤
+해당 컴포넌트는 `produce-3d-standard-loop`로 Standard를 먼저 생산한 뒤
 `plan-3d-advanced-queue`를 재실행하면 Advanced 후보가 발굴됩니다.
 ```
 
