@@ -546,6 +546,19 @@
           ]
         },
         {
+          "name": "ACBsusol",
+          "spec": "Components/3D_Components/ACBsusol/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/ACBsusol/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/ACBsusol/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "BATT",
           "spec": "Components/3D_Components/BATT/CLAUDE.md",
           "sets": [
