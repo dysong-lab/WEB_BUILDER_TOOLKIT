@@ -753,6 +753,19 @@
           ]
         },
         {
+          "name": "3516CS",
+          "spec": "Components/3D_Components/3516CS/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/3516CS/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/3516CS/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "gltf_container",
           "spec": "Components/3D_Components/gltf_container/CLAUDE.md",
           "sets": [
