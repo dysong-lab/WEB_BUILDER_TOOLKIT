@@ -1312,6 +1312,19 @@
           ]
         },
         {
+          "name": "ELDGD16L05A",
+          "spec": "Components/3D_Components/ELDGD16L05A/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/ELDGD16L05A/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/ELDGD16L05A/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "Panel",
           "spec": "Components/3D_Components/Panel/CLAUDE.md",
           "sets": [
