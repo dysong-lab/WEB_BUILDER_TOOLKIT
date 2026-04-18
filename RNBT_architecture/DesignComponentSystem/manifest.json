@@ -1663,6 +1663,19 @@
           ]
         },
         {
+          "name": "HV_1P_06",
+          "spec": "Components/3D_Components/HV_1P_06/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/HV_1P_06/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/HV_1P_06/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "Panel",
           "spec": "Components/3D_Components/Panel/CLAUDE.md",
           "sets": [
