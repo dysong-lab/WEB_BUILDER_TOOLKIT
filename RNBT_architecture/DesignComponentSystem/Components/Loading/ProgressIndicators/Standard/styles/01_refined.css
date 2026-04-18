@@ -1,0 +1,76 @@
+/* ProgressIndicators — 01_refined (Persona A: Refined Technical)
+   다크 배경, Primary→Hover 그라디언트 채움, Primary 색조 저채도 트랙
+   깊이: 그라디언트 (box-shadow 금지)
+   모서리: 역할별 — 컨테이너 20px, 바/트랙 8px
+   서체: Pretendard 400-600 (700 금지), 데이터는 Tomorrow
+   호버: 밝아짐만
+   모션: 최소 — width transition 150ms */
+
+#progress-indicators-container {
+    width: 360px;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, rgba(80, 46, 233, 0.06) 0%, rgba(5, 171, 207, 0.03) 100%),
+                #2A2063;
+    border-radius: 20px;
+
+    .progress-indicator {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        cursor: pointer;
+        transition: background-color 150ms ease-out;
+    }
+
+    .progress-indicator__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 12px;
+    }
+
+    .progress-indicator__label {
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 500;
+        font-size: 14px;
+        color: #C8D0EC;
+        line-height: 1.3;
+    }
+
+    .progress-indicator__value {
+        font-family: 'Tomorrow', sans-serif;
+        font-weight: 500;
+        font-size: 14px;
+        color: #92A8F4;
+        line-height: 1.3;
+    }
+
+    .progress-indicator__track {
+        width: 100%;
+        height: 8px;
+        background: rgba(80, 46, 233, 0.18);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .progress-indicator__bar {
+        height: 100%;
+        background: linear-gradient(90deg, #502EE9 0%, #92A8F4 100%);
+        border-radius: 8px;
+        transition: width 150ms ease-out;
+    }
+
+    .progress-indicator[data-status="warning"] .progress-indicator__bar {
+        background: linear-gradient(90deg, #FDD01F 0%, #FD7F04 100%);
+    }
+    .progress-indicator[data-status="warning"] .progress-indicator__value { color: #FDD01F; }
+
+    .progress-indicator[data-status="error"] .progress-indicator__bar {
+        background: linear-gradient(90deg, #F43031 0%, #FD7F04 100%);
+    }
+    .progress-indicator[data-status="error"] .progress-indicator__value { color: #F43031; }
+
+    .progress-indicator[data-status="success"] .progress-indicator__bar {
+        background: linear-gradient(90deg, #32D28C 0%, #92A8F4 100%);
+    }
+    .progress-indicator[data-status="success"] .progress-indicator__value { color: #32D28C; }
+}

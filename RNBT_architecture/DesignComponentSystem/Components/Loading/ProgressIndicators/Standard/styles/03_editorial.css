@@ -1,0 +1,78 @@
+/* ProgressIndicators — 03_editorial (Persona C: Minimal Editorial)
+   라이트 배경, 세리프 라벨, 샤프 모서리, 얇은 바
+   깊이: 배경 색상 차이만 (그라디언트/shadow 없음)
+   모서리: 0-4px (샤프)
+   서체: DM Serif Display(라벨) + Inter(값)
+   호버: 밑줄/테두리 변화
+   모션: 없음 — 예외: width 전이 150ms (시각적 연속성)
+   밀도: Expanded */
+
+#progress-indicators-container {
+    width: 400px;
+    padding: 32px 36px;
+    background: #ffffff;
+    border: 1px solid #e8e3de;
+    border-radius: 2px;
+
+    .progress-indicator {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        cursor: pointer;
+    }
+
+    .progress-indicator__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #e8e3de;
+        transition: border-color 150ms ease-out;
+    }
+
+    .progress-indicator__label {
+        font-family: 'DM Serif Display', serif;
+        font-weight: 400;
+        font-size: 18px;
+        color: #3d3833;
+        line-height: 1.3;
+    }
+
+    .progress-indicator__value {
+        font-family: 'Inter', sans-serif;
+        font-weight: 400;
+        font-size: 14px;
+        color: #6b6560;
+        line-height: 1.3;
+        letter-spacing: 0.5px;
+    }
+
+    .progress-indicator__track {
+        width: 100%;
+        height: 2px;
+        background: #e8e3de;
+        border-radius: 0;
+        overflow: hidden;
+    }
+
+    .progress-indicator__bar {
+        height: 100%;
+        background: #3d3833;
+        border-radius: 0;
+        transition: width 150ms ease-out;
+    }
+
+    .progress-indicator[data-status="warning"] .progress-indicator__bar { background: #b07d2d; }
+    .progress-indicator[data-status="warning"] .progress-indicator__value { color: #b07d2d; }
+
+    .progress-indicator[data-status="error"] .progress-indicator__bar { background: #9c3a3a; }
+    .progress-indicator[data-status="error"] .progress-indicator__value { color: #9c3a3a; }
+
+    .progress-indicator[data-status="success"] .progress-indicator__bar { background: #4a7c59; }
+    .progress-indicator[data-status="success"] .progress-indicator__value { color: #4a7c59; }
+
+    .progress-indicator:hover .progress-indicator__header {
+        border-bottom-color: #3d3833;
+    }
+}

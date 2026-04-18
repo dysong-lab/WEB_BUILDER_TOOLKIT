@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Loading/ProgressIndicators/Standard — 04_operational (Persona D)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0d14;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 16px;
+            padding: 40px 20px;
+        }
+
+        #progress-indicators-container {
+            width: 300px;
+            padding: 10px 12px;
+            background: #0d1117;
+            border: 1px solid rgba(99, 199, 255, 0.18);
+            border-radius: 4px;
+            transition: border-color 150ms ease-out;
+        }
+        #progress-indicators-container .progress-indicator {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+        }
+        #progress-indicators-container .progress-indicator__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 8px;
+        }
+        #progress-indicators-container .progress-indicator__label {
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 11px;
+            color: #7a8fa5;
+            line-height: 1.3;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+        #progress-indicators-container .progress-indicator__value {
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 500;
+            font-size: 12px;
+            color: #4dd0e1;
+            line-height: 1.3;
+        }
+        #progress-indicators-container .progress-indicator__track {
+            width: 100%;
+            height: 4px;
+            background: #161b22;
+            border: 1px solid rgba(99, 199, 255, 0.10);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        #progress-indicators-container .progress-indicator__bar {
+            height: 100%;
+            background: #4dd0e1;
+            border-radius: 2px;
+            transition: width 200ms linear, background-color 300ms ease;
+        }
+        #progress-indicators-container .progress-indicator[data-status="warning"] .progress-indicator__bar { background: #FDD01F; }
+        #progress-indicators-container .progress-indicator[data-status="warning"] .progress-indicator__value { color: #FDD01F; }
+        #progress-indicators-container .progress-indicator[data-status="error"] .progress-indicator__bar {
+            background: #F43031;
+            animation: pulse-operational 1.5s ease-in-out infinite;
+        }
+        #progress-indicators-container .progress-indicator[data-status="error"] .progress-indicator__value { color: #F43031; }
+        #progress-indicators-container .progress-indicator[data-status="success"] .progress-indicator__bar { background: #32D28C; }
+        #progress-indicators-container .progress-indicator[data-status="success"] .progress-indicator__value { color: #32D28C; }
+
+        #progress-indicators-container:hover {
+            border-color: rgba(77, 208, 225, 0.5);
+        }
+
+        @keyframes pulse-operational {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .demo-log {
+            width: 300px;
+            padding: 10px 12px;
+            background: #0d1117;
+            border: 1px solid rgba(99, 199, 255, 0.18);
+            border-radius: 4px;
+            color: #7a8fa5;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            line-height: 1.6;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+        .demo-log strong {
+            color: #4dd0e1;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="progress-indicators-container">
+    <div class="progress-indicator" data-status="normal">
+        <div class="progress-indicator__header">
+            <span class="progress-indicator__label">-</span>
+            <span class="progress-indicator__value">-</span>
+        </div>
+        <div class="progress-indicator__track">
+            <div class="progress-indicator__bar" style="width: 0%"></div>
+        </div>
+    </div>
+</div>
+<div class="demo-log" id="demo-log"><strong>EVENT LOG</strong><br>—</div>
+
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/FieldRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('progress-indicators-container', '../views/04_operational.html', '../styles/04_operational.css');
+
+    const instance = { id: 'progressIndicators', appendElement: document.getElementById('progress-indicators-container') };
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            indicator: '.progress-indicator',
+            track:     '.progress-indicator__track',
+            bar:       '.progress-indicator__bar',
+            label:     '.progress-indicator__label',
+            valueText: '.progress-indicator__value',
+            status:    '.progress-indicator'
+        },
+        datasetAttrs: { status: 'status' },
+        styleAttrs:   { progress: { property: 'width', unit: '%' } }
+    });
+
+    instance.subscriptions = { progressInfo: [instance.fieldRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.fieldRender.cssSelectors.indicator]: '@progressClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>EVENT LOG</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>EVENT LOG</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    Wkit.onEventBusHandlers({
+        '@progressClicked': () => {
+            const label = instance.appendElement.querySelector('.progress-indicator__label')?.textContent;
+            const value = instance.appendElement.querySelector('.progress-indicator__value')?.textContent;
+            log(`progressClicked "${label}" (${value})`);
+        }
+    });
+
+    instance.fieldRender.renderData({ response: {
+        progress: 72,
+        label: 'SYNC RACK-07',
+        valueText: '72%',
+        status: 'normal'
+    }});
+
+    const states = [
+        { progress: 30, label: 'SYNC RACK-07', valueText: '30%', status: 'normal' },
+        { progress: 62, label: 'SYNC RACK-07', valueText: '62%', status: 'normal' },
+        { progress: 88, label: 'SYNC RACK-07', valueText: '88%', status: 'warning' },
+        { progress: 100, label: 'SYNC COMPLETE', valueText: '100%', status: 'success' },
+        { progress: 45, label: 'SYNC FAILED', valueText: '45% ERR', status: 'error' }
+    ];
+    let i = 0;
+    setInterval(() => {
+        instance.fieldRender.renderData({ response: states[i] });
+        i = (i + 1) % states.length;
+    }, 2500);
+})();
+</script>
+</body>
+</html>
