@@ -1884,6 +1884,19 @@
           ]
         },
         {
+          "name": "LSC611AW",
+          "spec": "Components/3D_Components/LSC611AW/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LSC611AW/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/LSC611AW/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "Panel",
           "spec": "Components/3D_Components/Panel/CLAUDE.md",
           "sets": [
