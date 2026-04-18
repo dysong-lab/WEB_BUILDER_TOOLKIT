@@ -189,6 +189,22 @@ grep "Wkit.functionName" Utils/Wkit.js
 
 ---
 
+## 작업 디렉토리 유지 원칙
+
+셸 명령 실행 시 세션의 작업 디렉토리(cwd)를 변경하지 않는다. 디렉토리 이동이 필요하면 `(cd X && ...)` 서브셸 또는 프로젝트 루트 기준 상대경로를 사용한다.
+
+**금지 행위:** `cd X && ...`를 단독으로 실행 — cwd가 영구 이동되어 이후 명령의 상대경로가 깨지고, "No such file" 오류가 파일 부재로 잘못 해석될 위험이 있다 (존재 여부 분기가 잘못 작동).
+**올바른 패턴:**
+```bash
+# 서브셸로 격리 — cwd 유지
+(cd RNBT_architecture/DesignComponentSystem && for d in */; do echo "$d"; done)
+
+# 또는 프로젝트 루트 기준 경로로 직접 지정
+ls RNBT_architecture/DesignComponentSystem/models/
+```
+
+---
+
 ## Git 충돌 처리 원칙
 
 **Git 충돌 발생 시 임의로 해결하지 않는다.**
@@ -212,4 +228,4 @@ grep "Wkit.functionName" Utils/Wkit.js
 
 ---
 
-*최종 업데이트: 2026-04-16*
+*최종 업데이트: 2026-04-18*

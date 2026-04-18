@@ -18,10 +18,9 @@
 
 ## 순회 스크립트
 
-1. **전체 대상 목록 수집 (알파벳 순)**:
+1. **전체 대상 목록 수집 (알파벳 순)** — 세션 cwd를 바꾸지 않기 위해 서브셸로 격리한다:
    ```bash
-   cd RNBT_architecture/DesignComponentSystem/Components
-   for d in */; do
+   (cd RNBT_architecture/DesignComponentSystem/Components && for d in */; do
        name="${d%/}"
        case "$name" in 3D_Components|Charts) continue ;; esac
        has_sub="N"
@@ -33,7 +32,7 @@
            echo "$name/$subname"
        done
        [ "$has_sub" = "N" ] && echo "$name"
-   done | sort
+   done | sort)
    ```
    결과 = `{컴포넌트경로}` 후보 목록 (예: `AppBars`, `Badges`, `Buttons/SplitButtons`, `Chips/Assist`).
 
