@@ -19,7 +19,7 @@ applyFieldRenderMixin(this, {
     cssSelectors: {
         indicator: '.progress-indicator',
         track:     '.progress-indicator__track',
-        bar:       '.progress-indicator__bar',
+        progress:  '.progress-indicator__bar',
         label:     '.progress-indicator__label',
         valueText: '.progress-indicator__value',
         status:    '.progress-indicator'

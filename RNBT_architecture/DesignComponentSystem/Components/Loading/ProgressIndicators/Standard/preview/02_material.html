@@ -95,17 +95,7 @@
 </head>
 <body>
 
-<div id="progress-indicators-container">
-    <div class="progress-indicator" data-status="normal">
-        <div class="progress-indicator__header">
-            <span class="progress-indicator__label">-</span>
-            <span class="progress-indicator__value">-</span>
-        </div>
-        <div class="progress-indicator__track">
-            <div class="progress-indicator__bar" style="width: 0%"></div>
-        </div>
-    </div>
-</div>
+<div id="progress-indicators-container"></div>
 <div class="demo-log" id="demo-log"><strong>이벤트 로그</strong><br>—</div>
 
 <script src="../../../../../preview_runtime.js"></script>
@@ -120,7 +110,7 @@
         cssSelectors: {
             indicator: '.progress-indicator',
             track:     '.progress-indicator__track',
-            bar:       '.progress-indicator__bar',
+            progress:  '.progress-indicator__bar',
             label:     '.progress-indicator__label',
             valueText: '.progress-indicator__value',
             status:    '.progress-indicator'
