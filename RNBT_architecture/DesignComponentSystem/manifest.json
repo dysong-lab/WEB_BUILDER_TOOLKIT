@@ -1338,6 +1338,19 @@
           ]
         },
         {
+          "name": "Earthquake",
+          "spec": "Components/3D_Components/Earthquake/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Earthquake/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/Earthquake/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "EVspeaker",
           "spec": "Components/3D_Components/EVspeaker/CLAUDE.md",
           "sets": [
