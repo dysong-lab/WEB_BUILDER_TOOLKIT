@@ -1572,6 +1572,19 @@
           ]
         },
         {
+          "name": "GeneratorSmall",
+          "spec": "Components/3D_Components/GeneratorSmall/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/GeneratorSmall/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/GeneratorSmall/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "Panel",
           "spec": "Components/3D_Components/Panel/CLAUDE.md",
           "sets": [
