@@ -2287,6 +2287,19 @@
           ]
         },
         {
+          "name": "Marker_Anemometer",
+          "spec": "Components/3D_Components/Marker_Anemometer/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Marker_Anemometer/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/Marker_Anemometer/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "Panel",
           "spec": "Components/3D_Components/Panel/CLAUDE.md",
           "sets": [
