@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>BottomSheets/Standard — 04_operational (Persona D)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0d1117;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            gap: 16px;
+            padding: 32px 16px;
+        }
+        .demo-trigger {
+            padding: 8px 16px;
+            border: 1px solid rgba(77, 208, 225, 0.4);
+            border-radius: 2px;
+            background: transparent;
+            color: #4dd0e1;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+            cursor: pointer;
+            transition: border-color 150ms ease, background-color 150ms ease;
+        }
+        .demo-trigger:hover {
+            border-color: #4dd0e1;
+            background: rgba(77, 208, 225, 0.12);
+        }
+        .demo-log {
+            width: 360px;
+            padding: 10px 12px;
+            background: #161b22;
+            border: 1px solid rgba(99, 199, 255, 0.12);
+            border-radius: 2px;
+            color: #7a8fa5;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .demo-log strong {
+            color: #c9d1d9;
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.1px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+<button class="demo-trigger" id="open-btn">[ OPEN BOTTOM SHEET ]</button>
+<div id="bottom-sheet-container"></div>
+<div class="demo-log" id="demo-log"><strong>Event Log</strong><br>&mdash;</div>
+
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/ShadowPopupMixin.js"></script>
+<script src="../../../../../Mixins/FieldRenderMixin.js"></script>
+<script src="../../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('bottom-sheet-container', '../views/04_operational.html', '../styles/04_operational.css');
+
+    const instance = { id: 'bottomSheet', appendElement: document.getElementById('bottom-sheet-container') };
+
+    instance._popupScope = null;
+
+    applyShadowPopupMixin(instance, {
+        cssSelectors: {
+            template: '#bottom-sheet-popup-template',
+            closeBtn: '.bottom-sheet__drag-handle',
+            scrim:    '.bottom-sheet__scrim'
+        },
+        onCreated: (shadowRoot) => {
+            instance._popupScope = { appendElement: shadowRoot };
+
+            applyFieldRenderMixin(instance._popupScope, {
+                cssSelectors: {
+                    headline:   '.bottom-sheet__headline',
+                    supporting: '.bottom-sheet__supporting'
+                }
+            });
+
+            applyListRenderMixin(instance._popupScope, {
+                cssSelectors: {
+                    container:   '.bottom-sheet__actions',
+                    template:    '#bottom-sheet-action-template',
+                    actionid:    '.bottom-sheet__action',
+                    actionLabel: '.bottom-sheet__action-label',
+                    actionIcon:  '.bottom-sheet__action-icon'
+                },
+                itemKey: 'actionid',
+                datasetAttrs: {
+                    actionid: 'actionid'
+                }
+            });
+        }
+    });
+
+    instance.shadowPopup.bindPopupEvents({
+        click: {
+            [instance.shadowPopup.cssSelectors.closeBtn]: '@bottomSheetClose',
+            [instance.shadowPopup.cssSelectors.scrim]:    '@bottomSheetClose',
+            '.bottom-sheet__action':                      '@bottomSheetActionClicked'
+        }
+    });
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>Event Log</strong><br>&mdash;';
+    const log = (msg) => {
+        logHtml = '<strong>Event Log</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    Wkit.onEventBusHandlers({
+        '@bottomSheetClose': () => {
+            instance.shadowPopup.hide();
+            log('bottomSheetClose &rarr; hide');
+        },
+        '@bottomSheetActionClicked': ({ event }) => {
+            const item = event.target.closest('.bottom-sheet__action');
+            const actionid = item?.getAttribute('data-actionid');
+            log(`bottomSheetActionClicked "${actionid}"`);
+            instance.shadowPopup.hide();
+        }
+    });
+
+    document.getElementById('open-btn').addEventListener('click', () => {
+        instance.shadowPopup.show();
+        log('show bottomSheet');
+
+        instance._popupScope.fieldRender.renderData({ response: {
+            headline: 'DEVICE ACTIONS',
+            supporting: 'RNBT-01 // 172.16.10.11'
+        } });
+
+        instance._popupScope.listRender.renderData({ response: [
+            { actionid: 'restart', actionIcon: 'restart_alt',   actionLabel: 'RESTART' },
+            { actionid: 'isolate', actionIcon: 'block',         actionLabel: 'ISOLATE' },
+            { actionid: 'confirm', actionIcon: 'power_settings_new', actionLabel: 'SHUTDOWN' }
+        ] });
+    });
+})();
+</script>
+</body>
+</html>

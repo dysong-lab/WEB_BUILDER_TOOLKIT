@@ -1,0 +1,161 @@
+<template id="bottom-sheet-popup-template">
+    <style>
+        /* 03_editorial: Persona C — Minimal Editorial
+           웜 그레이 / 세리프 제목 / 샤프한 직각 + 헤어라인 / 라이트 / Editorial Bottom Sheet */
+
+        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
+
+        .bottom-sheet__scrim {
+            position: fixed;
+            inset: 0;
+            background: rgba(61, 56, 51, 0.28);
+            z-index: 1000;
+            cursor: pointer;
+        }
+
+        .bottom-sheet__surface {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            background: #faf8f5;
+            border-top: 1px solid #d6cdbe;
+            border-radius: 0;
+            z-index: 1001;
+            overflow: hidden;
+        }
+
+        .bottom-sheet__drag-handle-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 0 12px;
+            cursor: pointer;
+        }
+
+        .bottom-sheet__drag-handle {
+            width: 48px;
+            height: 2px;
+            background: #a09890;
+            border-radius: 0;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .bottom-sheet__drag-handle:hover {
+            background: #3d3833;
+        }
+
+        .bottom-sheet__header {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding: 24px 48px 32px;
+        }
+
+        .bottom-sheet__headline {
+            font-family: 'DM Serif Display', serif;
+            font-size: 32px;
+            font-weight: 400;
+            color: #3d3833;
+            line-height: 1.25;
+        }
+
+        .bottom-sheet__supporting {
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            font-weight: 400;
+            color: #6b6560;
+            line-height: 1.7;
+        }
+
+        .bottom-sheet__supporting:empty {
+            display: none;
+        }
+
+        .bottom-sheet__divider {
+            height: 1px;
+            background: #d6cdbe;
+            margin: 0 48px;
+        }
+
+        .bottom-sheet__actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            padding: 16px 48px 40px;
+        }
+
+        .bottom-sheet__actions:empty {
+            display: none;
+        }
+
+        .bottom-sheet__action {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            height: 48px;
+            padding: 0;
+            border: none;
+            border-bottom: 1px solid transparent;
+            border-radius: 0;
+            background: transparent;
+            color: #3d3833;
+            cursor: pointer;
+            transition: color 150ms ease, border-color 150ms ease;
+            text-align: left;
+        }
+
+        .bottom-sheet__action:hover {
+            color: #1a1814;
+            border-bottom: 1px solid #3d3833;
+        }
+
+        .bottom-sheet__action:last-child {
+            color: #8a6d3b;
+            font-weight: 500;
+        }
+
+        .bottom-sheet__action:last-child:hover {
+            color: #6d5428;
+            border-bottom: 1px solid #6d5428;
+        }
+
+        .bottom-sheet__action-icon {
+            display: none;
+        }
+
+        .bottom-sheet__action-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            font-weight: 400;
+            letter-spacing: 0.1px;
+        }
+
+        template {
+            display: none;
+        }
+    </style>
+    <div class="bottom-sheet__scrim"></div>
+    <div class="bottom-sheet__surface">
+        <div class="bottom-sheet__drag-handle-area">
+            <button class="bottom-sheet__drag-handle" aria-label="close"></button>
+        </div>
+        <div class="bottom-sheet__header">
+            <div class="bottom-sheet__headline"></div>
+            <div class="bottom-sheet__supporting"></div>
+        </div>
+        <div class="bottom-sheet__divider"></div>
+        <div class="bottom-sheet__actions"></div>
+        <template id="bottom-sheet-action-template">
+            <button class="bottom-sheet__action" data-actionid="">
+                <span class="bottom-sheet__action-icon"></span>
+                <span class="bottom-sheet__action-label"></span>
+            </button>
+        </template>
+    </div>
+</template>

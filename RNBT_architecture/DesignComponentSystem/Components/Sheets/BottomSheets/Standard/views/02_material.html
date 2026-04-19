@@ -1,0 +1,172 @@
+<template id="bottom-sheet-popup-template">
+    <style>
+        /* 02_material: Persona B — Material Elevated
+           라이트 블루 / shadow elevation / Roboto / 라이트 / Elevated Bottom Sheet */
+
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
+
+        .bottom-sheet__scrim {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.32);
+            z-index: 1000;
+            cursor: pointer;
+        }
+
+        .bottom-sheet__surface {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+            border-radius: 12px 12px 0 0;
+            box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.14), 0 -2px 8px rgba(0, 0, 0, 0.08);
+            z-index: 1001;
+            overflow: hidden;
+            transition: box-shadow 200ms ease-in-out;
+        }
+
+        .bottom-sheet__drag-handle-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 0 8px;
+            cursor: pointer;
+        }
+
+        .bottom-sheet__drag-handle {
+            width: 32px;
+            height: 4px;
+            background: #bdbdbd;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            transition: background-color 200ms ease-in-out;
+        }
+
+        .bottom-sheet__drag-handle:hover {
+            background: #1565C0;
+        }
+
+        .bottom-sheet__header {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 12px 24px 8px;
+        }
+
+        .bottom-sheet__headline {
+            font-family: 'Roboto', sans-serif;
+            font-size: 20px;
+            font-weight: 500;
+            color: #1a1a1a;
+            line-height: 1.4;
+        }
+
+        .bottom-sheet__supporting {
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            color: #5f6368;
+            line-height: 1.55;
+        }
+
+        .bottom-sheet__supporting:empty {
+            display: none;
+        }
+
+        .bottom-sheet__divider {
+            height: 1px;
+            background: #e0e0e0;
+            margin: 16px 0 0;
+        }
+
+        .bottom-sheet__actions {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 8px 8px 16px;
+        }
+
+        .bottom-sheet__actions:empty {
+            display: none;
+        }
+
+        .bottom-sheet__action {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            height: 48px;
+            padding: 0 16px;
+            border: none;
+            border-radius: 6px;
+            background: transparent;
+            color: #1a1a1a;
+            cursor: pointer;
+            transition: background-color 200ms ease-in-out, box-shadow 200ms ease-in-out;
+            text-align: left;
+        }
+
+        .bottom-sheet__action:hover {
+            background: rgba(21, 101, 192, 0.08);
+        }
+
+        .bottom-sheet__action:last-child {
+            background: #1565C0;
+            color: #ffffff;
+        }
+
+        .bottom-sheet__action:last-child:hover {
+            background: #1976D2;
+            box-shadow: 0 2px 6px rgba(21, 101, 192, 0.24);
+        }
+
+        .bottom-sheet__action-icon {
+            font-family: 'Material Symbols Outlined';
+            font-size: 20px;
+            color: #1565C0;
+            flex-shrink: 0;
+        }
+
+        .bottom-sheet__action:last-child .bottom-sheet__action-icon {
+            color: #ffffff;
+        }
+
+        .bottom-sheet__action-icon:empty {
+            display: none;
+        }
+
+        .bottom-sheet__action-label {
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        template {
+            display: none;
+        }
+    </style>
+    <div class="bottom-sheet__scrim"></div>
+    <div class="bottom-sheet__surface">
+        <div class="bottom-sheet__drag-handle-area">
+            <button class="bottom-sheet__drag-handle" aria-label="close"></button>
+        </div>
+        <div class="bottom-sheet__header">
+            <div class="bottom-sheet__headline"></div>
+            <div class="bottom-sheet__supporting"></div>
+        </div>
+        <div class="bottom-sheet__divider"></div>
+        <div class="bottom-sheet__actions"></div>
+        <template id="bottom-sheet-action-template">
+            <button class="bottom-sheet__action" data-actionid="">
+                <span class="bottom-sheet__action-icon material-symbols-outlined"></span>
+                <span class="bottom-sheet__action-label"></span>
+            </button>
+        </template>
+    </div>
+</template>
