@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Sliders/Basic/Standard — 04_operational (Persona D)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0A0D12;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 16px;
+            padding: 40px 20px;
+        }
+        .demo-log {
+            width: 320px;
+            padding: 10px 12px;
+            background: #0D1117;
+            border: 1px solid rgba(99, 199, 255, 0.16);
+            border-radius: 4px;
+            color: #7A8FA5;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            line-height: 1.6;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+        .demo-log strong { color: #4DD0E1; }
+    </style>
+</head>
+<body>
+
+<div id="slider-basic-container"></div>
+<div class="demo-log" id="demo-log"><strong>[LOG]</strong><br>—</div>
+
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/FieldRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('slider-basic-container', '../views/04_operational.html', '../styles/04_operational.css');
+
+    const instance = { id: 'slider-basic', appendElement: document.getElementById('slider-basic-container') };
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            slider:     '.slider',
+            label:      '.slider__label',
+            valueText:  '.slider__value-label',
+            input:      '.slider__input',
+            min:        '.slider__input',
+            max:        '.slider__input',
+            step:       '.slider__input',
+            value:      '.slider__input',
+            progress:   '.slider__track-active'
+        },
+        elementAttrs: {
+            min:   'min',
+            max:   'max',
+            step:  'step',
+            value: 'value'
+        },
+        styleAttrs: {
+            progress: { property: 'width', unit: '%' }
+        }
+    });
+
+    instance.updateSliderValue = function ({ response: data }) {
+        if (!data) return;
+        const min  = Number.isFinite(data.min)  ? data.min  : 0;
+        const max  = Number.isFinite(data.max)  ? data.max  : 100;
+        const step = Number.isFinite(data.step) ? data.step : 1;
+        const raw  = Number.isFinite(data.value) ? data.value : min;
+        const value = Math.min(Math.max(raw, min), max);
+        const span = max - min;
+        const progress = span > 0 ? ((value - min) / span) * 100 : 0;
+        this.fieldRender.renderData({
+            response: {
+                label:     data.label ?? '',
+                valueText: data.valueText != null ? String(data.valueText) : String(value),
+                value,
+                min,
+                max,
+                step,
+                progress
+            }
+        });
+        const sliderEl = this.appendElement.querySelector(this.fieldRender.cssSelectors.slider);
+        if (sliderEl) sliderEl.dataset.disabled = data.disabled ? 'true' : 'false';
+        const inputEl = this.appendElement.querySelector(this.fieldRender.cssSelectors.input);
+        if (inputEl) inputEl.disabled = !!data.disabled;
+    };
+
+    instance.subscriptions = { sliderInfo: [instance.updateSliderValue] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        input: {
+            [instance.fieldRender.cssSelectors.input]: '@sliderChanged'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>[LOG]</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>[LOG]</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    const state = { label: 'CPU LIMIT', value: 75, min: 0, max: 100, step: 5, disabled: false, valueText: '75%' };
+
+    Wkit.onEventBusHandlers({
+        '@sliderChanged': ({ event, targetInstance }) => {
+            const nextValue = Number(event.target.value);
+            state.value = nextValue;
+            state.valueText = `${nextValue}%`;
+            targetInstance.updateSliderValue({ response: { ...state } });
+            log(`sliderChanged value=<strong>${nextValue}</strong>`);
+        }
+    });
+
+    instance.updateSliderValue({ response: { ...state } });
+})();
+</script>
+</body>
+</html>
