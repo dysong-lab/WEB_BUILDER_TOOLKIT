@@ -63,6 +63,21 @@
         }
 
         .top-tabs { display: flex; gap: 4px; }
+        .topbar-stats {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+        .topbar-stats .stat-total {
+            color: var(--text);
+            font-weight: 600;
+        }
+        .topbar-stats .stat-sep {
+            color: var(--border);
+        }
         .top-tab {
             padding: 6px 14px;
             border: none;
@@ -481,6 +496,7 @@
             <button class="top-tab active" data-view="components">Components</button>
             <button class="top-tab" data-view="mixins">Mixins</button>
         </div>
+        <div class="topbar-stats" id="topbar-stats"></div>
     </header>
 
     <main>
@@ -587,9 +603,37 @@ async function init() {
 
     renderComponentsSidebar();
     renderMixinsSidebar();
+    renderTopbarStats();
     bindTopTabs();
     bindCompTabs();
     bindVariantSelect();
+}
+
+// ── Topbar Stats ──────────────────────────────────────────
+// 페르소나(= preview 하나) 기준 총량 표시. 3D 카테고리(이름이 "3D"로 시작)는
+// 컴포넌트당 1개 페르소나만 있으므로 자연스럽게 2D/3D 분리 집계가 됨.
+function renderTopbarStats() {
+    let total2D = 0, total3D = 0;
+    for (const cat of state.manifest.categories) {
+        const is3D = /^3D/i.test(cat.name);
+        for (const comp of cat.components) {
+            for (const set of comp.sets || []) {
+                const setP = (set.previews || []).length;
+                const itemP = (set.items || []).reduce((n, it) => n + (it.previews || []).length, 0);
+                if (is3D) total3D += setP + itemP;
+                else      total2D += setP + itemP;
+            }
+        }
+    }
+    const total = total2D + total3D;
+    const el = document.getElementById('topbar-stats');
+    el.innerHTML = `
+        <span class="stat-total">총 ${total}개</span>
+        <span class="stat-sep">·</span>
+        <span>2D ${total2D}</span>
+        <span class="stat-sep">·</span>
+        <span>3D ${total3D}</span>
+    `;
 }
 
 // ── Top Tabs ──────────────────────────────────────────────
