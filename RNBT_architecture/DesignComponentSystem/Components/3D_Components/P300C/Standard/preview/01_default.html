@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>P300C — 01_status</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #1a1a2e; }
+        #p300c-pageThreeLayer {
+            width: 600px;
+            height: 480px;
+            display: block;
+            overflow: hidden;
+            margin: 40px auto;
+        }
+        canvas { display: block; }
+
+        .demo-controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px;
+        }
+        .demo-btn {
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #ffffff;
+            transition: opacity 0.15s;
+        }
+        .demo-btn:hover { opacity: 0.8; }
+        .demo-btn[data-status="normal"]  { background: #34d399; }
+        .demo-btn[data-status="warning"] { background: #fbbf24; color: #1a1a2e; }
+        .demo-btn[data-status="error"]   { background: #f87171; }
+        .demo-btn[data-status="offline"] { background: #6b7280; }
+        .demo-btn[data-status="reset"]   { background: #3b82f6; }
+    </style>
+</head>
+<body>
+    <div class="demo-controls">
+        <button class="demo-btn" data-status="normal">Normal</button>
+        <button class="demo-btn" data-status="warning">Warning</button>
+        <button class="demo-btn" data-status="error">Error</button>
+        <button class="demo-btn" data-status="offline">Offline</button>
+        <button class="demo-btn" data-status="reset">Reset</button>
+    </div>
+
+    <div id="p300c-pageThreeLayer"></div>
+
+    <!-- Mixin 로드 -->
+    <script src="../../../../../Mixins/MeshStateMixin.js"></script>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+    // ── Three.js Scene Setup ──────────────────────────────────
+    const container = document.getElementById('p300c-pageThreeLayer');
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x1a1a2e);
+
+    // P300C는 루트 scale 보정이 없어 실제 장면 크기가 약 0.153 × 0.092 × 0.234 단위의 초소형
+    // (P2400CH와 동일). Earthquake·OHU103·OutdoorConditioner_Ani의 root(scale 1000) 패턴과 달리
+    // 원본 유닛 그대로이므로 near=0.01, far=10으로 축소된 절두체를 사용. position도 소수점 단위.
+    const camera = new THREE.PerspectiveCamera(45, width / height, 0.01, 10);
+    camera.position.set(0.4, 0.3, 0.5);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.target.set(0, 0, 0);
+
+    // ── Lighting ──────────────────────────────────────────────
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    directionalLight.position.set(0.4, 0.6, 0.3);
+    scene.add(directionalLight);
+
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
+    fillLight.position.set(-0.2, 0.15, -0.15);
+    scene.add(fillLight);
+
+    // ── Grid ──────────────────────────────────────────────────
+    // 모델 실제 크기(~0.15 × 0.09 × 0.23)에 맞춰 그리드 크기를 1로 축소.
+    scene.add(new THREE.GridHelper(1, 20, 0x2a2a4a, 0x2a2a4a));
+
+    // ── Mock Instance ─────────────────────────────────────────
+    const instance = { appendElement: null };
+
+    // ── Load Model ────────────────────────────────────────────
+    // P300C.gltf:
+    //   "P300C"(Group Node, translation ≈ 0)
+    //     → P300C_01(mesh 0, material "P300C" + textures/P300C.jpg, doubleSided)
+    //     → P300C_02(mesh 1, material "plastic01" baseColorFactor 밝은 베이지 그레이 [0.692,0.661,0.610],
+    //                roughness 0.5, metallicRoughnessTexture TexturesCom_Plastic_Polymer_1K_roughness255.jpg,
+    //                doubleSided)
+    //     → P300C_03(mesh 2, material "black"  baseColorFactor 거의 검정, doubleSided)
+    //
+    // **폴더명 = Group Node 이름 완전 일치** — getObjectByName('P300C')가 Group을 반환하면
+    // MeshStateMixin은 obj.material이 없으므로 obj.traverse로 자식 Mesh 3개의 material을
+    // 각각 clone하여 color를 일괄 setHex. 자식 이름 하드코딩 없이 단일 meshName으로 제어.
+    //
+    // 루트 scale 보정 없음 → 원본 유닛 그대로 (약 0.15 × 0.09 × 0.23 단위).
+    // P300C는 P2400CH의 기본 단위 모듈에 해당 — P2400CH의 어두운 회색 `dGRAY`와 달리
+    // 밝은 베이지 `plastic01`을 사용한다(약 10배 밝은 톤 + metallicRoughnessTexture).
+    // 바운드 기반 자동 카메라 거리(maxDim × distanceFactor)는 스케일과 무관하게 동작.
+    const meshName = 'P300C';
+    const loader = new GLTFLoader();
+
+    loader.load('../../../../../models/P300C/01_default/P300C.gltf', (gltf) => {
+        const model = gltf.scene;
+        scene.add(model);
+
+        instance.appendElement = model;
+
+        // MeshStateMixin 적용 (register.js와 동일)
+        applyMeshStateMixin(instance, {
+            colorMap: {
+                normal:  0x34d399,
+                warning: 0xfbbf24,
+                error:   0xf87171,
+                offline: 0x6b7280
+            }
+        });
+
+        // 카메라 타겟 조정 (바운드 기준 자동 거리 설정)
+        const box = new THREE.Box3().setFromObject(model);
+        const center = box.getCenter(new THREE.Vector3());
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const distance = maxDim * 2.2;
+
+        controls.target.copy(center);
+        camera.position.set(center.x + distance, center.y + distance * 0.6, center.z + distance);
+        controls.update();
+    });
+
+    // ── Render Loop ───────────────────────────────────────────
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // ── Demo: renderData 호출 ─────────────────────────────────
+    document.querySelectorAll('.demo-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            if (!instance.meshState) return;
+
+            const status = btn.dataset.status;
+
+            if (status === 'reset') {
+                // Group 'P300C' 아래 세 자식 Mesh의 material(clone된 결과)을 흰색으로 복귀.
+                // MeshStateMixin이 Mesh 단위로 clone했으므로 세 material의 원본 공유와 무관하게
+                // 각 자식이 독립적으로 복귀된다.
+                const group = instance.appendElement.getObjectByName(meshName);
+                if (!group) return;
+                const applyWhite = (node) => {
+                    if (!node.isMesh || !node.material) return;
+                    if (Array.isArray(node.material)) {
+                        node.material.forEach(m => m.color && m.color.setHex(0xffffff));
+                    } else if (node.material.color) {
+                        node.material.color.setHex(0xffffff);
+                    }
+                };
+                if (group.isMesh) applyWhite(group);
+                else group.traverse(applyWhite);
+                return;
+            }
+
+            // 단일 meshName 'P300C'(Group)로 전체 자식 Mesh 일괄 치환.
+            // MeshStateMixin이 Group 타겟에 대해 obj.traverse로 자식에 일괄 적용.
+            instance.meshState.renderData({
+                response: [{ meshName, status }]
+            });
+        });
+    });
+
+    // ── Resize ────────────────────────────────────────────────
+    window.addEventListener('resize', () => {
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+    });
+    </script>
+</body>
+</html>
