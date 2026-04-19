@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>NavigationRail/Standard — 04_operational (Persona D)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #080b10;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            min-height: 100vh;
+            padding: 24px;
+            gap: 24px;
+        }
+
+        .demo-log {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            width: 320px;
+            padding: 10px 14px;
+            background: #0d1117;
+            border: 1px solid #1f3a4a;
+            border-radius: 2px;
+            color: #7dc7d9;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            line-height: 1.6;
+            max-height: 240px;
+            overflow-y: auto;
+            z-index: 200;
+        }
+        .demo-log strong {
+            color: #22d3ee;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body>
+
+<div id="nav-rail-container"></div>
+<div class="demo-log" id="demo-log"><strong>event log</strong><br>—</div>
+
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('nav-rail-container', '../views/04_operational.html', '../styles/04_operational.css');
+
+    const instance = { id: 'navigation-rail', appendElement: document.getElementById('nav-rail-container') };
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container: '.nav-rail__list',
+            template:  '#nav-rail-item-template',
+            menuid:    '.nav-rail__item',
+            active:    '.nav-rail__item',
+            icon:      '.nav-rail__icon',
+            label:     '.nav-rail__label',
+            badge:     '.nav-rail__badge'
+        },
+        itemKey: 'menuid',
+        datasetAttrs: {
+            menuid: 'menuid',
+            active: 'active'
+        }
+    });
+
+    instance.subscriptions = { navigationRail: [instance.listRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.listRender.cssSelectors.menuid]: '@navRailItemClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>event log</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>event log</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    let activeMenuid = 'scada';
+    Wkit.onEventBusHandlers({
+        '@navRailItemClicked': ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.listRender.cssSelectors.menuid);
+            const menuid = item?.getAttribute('data-menuid');
+            if (!menuid || menuid === activeMenuid) {
+                log(`navRailItemClicked "${menuid}" (already active)`);
+                return;
+            }
+            targetInstance.listRender.updateItemState(activeMenuid, { active: 'false' });
+            targetInstance.listRender.updateItemState(menuid,       { active: 'true' });
+            activeMenuid = menuid;
+            log(`navRailItemClicked "${menuid}" → activated`);
+        }
+    });
+
+    instance.listRender.renderData({ response: [
+        { menuid: 'scada',   icon: 'radar',         label: 'Scada',   badge: '',  active: 'true'  },
+        { menuid: 'alarms',  icon: 'warning',       label: 'Alarms',  badge: '7', active: 'false' },
+        { menuid: 'trends',  icon: 'timeline',      label: 'Trends',  badge: '',  active: 'false' },
+        { menuid: 'devices', icon: 'dns',           label: 'Nodes',   badge: '',  active: 'false' },
+        { menuid: 'logs',    icon: 'receipt_long',  label: 'Logs',    badge: '',  active: 'false' }
+    ]});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+/* 01_refined: Persona A — Refined Technical
+   퍼플 팔레트 / 그라디언트 깊이 / Pretendard / 다크
+   깊이=그라디언트 오버레이, 모서리=item 20px pill indicator + 컨테이너 0, 밀도=Comfortable
+   수직 레일: 폭 84px, 높이는 컨테이너가 주도 */
+
+#nav-rail-container {
+    width: 84px;
+    height: 520px;
+
+    .nav-rail {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        background: linear-gradient(180deg, #191D50 0%, #12153D 100%);
+        border-right: 1px solid #2A2574;
+        flex-shrink: 0;
+    }
+
+    .nav-rail__list {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        padding: 20px 4px;
+        gap: 12px;
+    }
+
+    .nav-rail__item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        padding: 8px 4px;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: background-color 150ms ease-out;
+    }
+
+    .nav-rail__item:hover {
+        background: rgba(80, 46, 233, 0.1);
+    }
+
+    .nav-rail__indicator {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 56px;
+        height: 32px;
+        border-radius: 20px;
+        transition: background-color 150ms ease-out;
+    }
+
+    .nav-rail__item[data-active="true"] .nav-rail__indicator {
+        background: linear-gradient(90deg, rgba(80, 46, 233, 0.32) 0%, rgba(146, 168, 244, 0.16) 100%);
+    }
+
+    .nav-rail__icon {
+        font-size: 22px;
+        color: #707EB4;
+        line-height: 1;
+    }
+
+    .nav-rail__item[data-active="true"] .nav-rail__icon {
+        color: #E8EDFF;
+    }
+
+    .nav-rail__badge {
+        position: absolute;
+        top: 0;
+        right: 4px;
+        font-family: 'Pretendard', sans-serif;
+        font-size: 11px;
+        font-weight: 600;
+        color: #E8EDFF;
+        background: #502EE9;
+        padding: 1px 6px;
+        border-radius: 10px;
+        min-width: 18px;
+        text-align: center;
+        line-height: 1.3;
+    }
+
+    .nav-rail__badge:empty {
+        display: none;
+    }
+
+    .nav-rail__label {
+        font-family: 'Pretendard', sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        color: #707EB4;
+        line-height: 1.2;
+        letter-spacing: 0.2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
+
+    .nav-rail__item[data-active="true"] .nav-rail__label {
+        color: #92A8F4;
+        font-weight: 600;
+    }
+}

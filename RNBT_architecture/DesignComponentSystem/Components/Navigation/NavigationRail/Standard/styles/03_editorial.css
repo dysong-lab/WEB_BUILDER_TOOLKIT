@@ -1,0 +1,108 @@
+/* 03_editorial: Persona C — Minimal Editorial
+   웜 그레이 / 배경 색상 차이만 / DM Serif Display + Inter / 라이트
+   깊이=배경 색상(no gradient/shadow), 모서리=0~2px, 밀도=Expanded
+   수직 레일: 넓은 폭 104px, 활성 항목은 좌측 테두리로 표시 */
+
+#nav-rail-container {
+    width: 104px;
+    height: 560px;
+
+    .nav-rail {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        background: #faf9f7;
+        border-right: 1px solid #e8e4de;
+        flex-shrink: 0;
+    }
+
+    .nav-rail__list {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        padding: 32px 0;
+        gap: 8px;
+    }
+
+    .nav-rail__item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 8px;
+        cursor: pointer;
+        border-left: 2px solid transparent;
+    }
+
+    .nav-rail__item:hover {
+        background: #f0ece6;
+    }
+
+    .nav-rail__item[data-active="true"] {
+        border-left: 2px solid #3d3833;
+    }
+
+    .nav-rail__indicator {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: auto;
+        height: 30px;
+        padding: 0 4px;
+    }
+
+    .nav-rail__icon {
+        font-size: 24px;
+        color: #a09890;
+        line-height: 1;
+    }
+
+    .nav-rail__item[data-active="true"] .nav-rail__icon {
+        color: #3d3833;
+    }
+
+    .nav-rail__badge {
+        position: absolute;
+        top: -4px;
+        right: -12px;
+        font-family: 'Inter', sans-serif;
+        font-size: 11px;
+        font-weight: 500;
+        color: #3d3833;
+        background: transparent;
+        line-height: 1.3;
+    }
+
+    .nav-rail__badge::before {
+        content: '(';
+    }
+
+    .nav-rail__badge::after {
+        content: ')';
+    }
+
+    .nav-rail__badge:empty {
+        display: none;
+    }
+
+    .nav-rail__label {
+        font-family: 'DM Serif Display', serif;
+        font-size: 13px;
+        font-weight: 400;
+        color: #6b6560;
+        line-height: 1.2;
+        letter-spacing: 0.3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
+
+    .nav-rail__item[data-active="true"] .nav-rail__label {
+        color: #2c2824;
+    }
+}
