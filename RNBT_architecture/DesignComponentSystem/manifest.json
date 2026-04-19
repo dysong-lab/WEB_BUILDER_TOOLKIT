@@ -2606,6 +2606,19 @@
           ]
         },
         {
+          "name": "PTT",
+          "spec": "Components/3D_Components/PTT/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/PTT/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/PTT/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "UPS",
           "spec": "Components/3D_Components/UPS/CLAUDE.md",
           "sets": [
