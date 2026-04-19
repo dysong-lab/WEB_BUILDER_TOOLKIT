@@ -1,0 +1,99 @@
+/* 03_editorial: Persona C — Minimal Editorial
+   웜 베이지 / 세리프 / 라이트 / 얇은 테두리 원 / 넓은 여백 */
+
+#radio-container {
+    width: 320px;
+    min-height: 220px;
+
+    .radio {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .radio__list {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .radio__item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 14px 4px;
+        border-bottom: 1px solid #ECE6DC;
+        cursor: pointer;
+        transition: background-color 200ms ease-out;
+        user-select: none;
+    }
+
+    .radio__item:last-child {
+        border-bottom: none;
+    }
+
+    .radio__item:hover {
+        background: #F5F1EA;
+    }
+
+    .radio__item[data-disabled="true"] {
+        cursor: not-allowed;
+        background: transparent;
+    }
+
+    .radio__circle {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        border: 1px solid #8C7B6B;
+        background: #FDFBF7;
+        flex-shrink: 0;
+        transition: border-color 200ms ease-out;
+    }
+
+    .radio__item[data-selected="true"] .radio__circle {
+        border-color: #3A3028;
+    }
+
+    .radio__dot {
+        display: none;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #3A3028;
+    }
+
+    .radio__item[data-selected="true"] .radio__dot {
+        display: inline-block;
+    }
+
+    .radio__item[data-disabled="true"] .radio__circle {
+        border-color: #C7BFB2;
+        background: #F5F1EA;
+    }
+
+    .radio__item[data-disabled="true"][data-selected="true"] .radio__dot {
+        background: #C7BFB2;
+    }
+
+    .radio__label {
+        font-family: 'Georgia', serif;
+        font-size: 15px;
+        font-weight: 400;
+        color: #5C544A;
+        line-height: 1.5;
+    }
+
+    .radio__item[data-selected="true"] .radio__label {
+        color: #2A2520;
+        font-weight: 700;
+    }
+
+    .radio__item[data-disabled="true"] .radio__label {
+        color: #A09890;
+        font-style: italic;
+    }
+}

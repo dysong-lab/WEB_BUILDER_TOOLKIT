@@ -1,0 +1,100 @@
+/* 02_material: Persona B — Material Elevated
+   블루 accent / outlined 링 / Roboto / 라이트 배경 / 얇은 elevation */
+
+#radio-container {
+    width: 300px;
+    min-height: 200px;
+
+    .radio {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .radio__list {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .radio__item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 200ms ease-in-out, box-shadow 200ms ease-in-out;
+        user-select: none;
+    }
+
+    .radio__item:hover {
+        background: #E8F0FE;
+    }
+
+    .radio__item[data-selected="true"] {
+        background: #F1F5FE;
+        box-shadow: 0 1px 3px rgba(26, 115, 232, 0.12);
+    }
+
+    .radio__item[data-disabled="true"] {
+        cursor: not-allowed;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .radio__circle {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid #49454F;
+        background: #FFFFFF;
+        flex-shrink: 0;
+        transition: border-color 200ms ease-in-out;
+    }
+
+    .radio__item[data-selected="true"] .radio__circle {
+        border-color: #1A73E8;
+    }
+
+    .radio__dot {
+        display: none;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #1A73E8;
+    }
+
+    .radio__item[data-selected="true"] .radio__dot {
+        display: inline-block;
+    }
+
+    .radio__item[data-disabled="true"] .radio__circle {
+        border-color: #BDBDBD;
+        background: #F5F5F5;
+    }
+
+    .radio__item[data-disabled="true"][data-selected="true"] .radio__dot {
+        background: #BDBDBD;
+    }
+
+    .radio__label {
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+        color: #3C4043;
+        line-height: 1.4;
+    }
+
+    .radio__item[data-selected="true"] .radio__label {
+        color: #1A73E8;
+        font-weight: 500;
+    }
+
+    .radio__item[data-disabled="true"] .radio__label {
+        color: #9AA0A6;
+    }
+}

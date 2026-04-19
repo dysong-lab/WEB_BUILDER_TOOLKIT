@@ -1,0 +1,108 @@
+/* 04_operational: Persona D — Dark Operational
+   시안 accent / 모노스페이스 / 다크 / 컴팩트 / 각진 느낌 */
+
+#radio-container {
+    width: 260px;
+    min-height: 160px;
+
+    .radio {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .radio__list {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .radio__item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 8px;
+        border-radius: 2px;
+        border: 1px solid transparent;
+        cursor: pointer;
+        transition: background-color 100ms ease-out, border-color 100ms ease-out;
+        user-select: none;
+    }
+
+    .radio__item:hover {
+        background: rgba(0, 188, 212, 0.08);
+        border-color: rgba(0, 188, 212, 0.2);
+    }
+
+    .radio__item[data-selected="true"] {
+        background: rgba(0, 188, 212, 0.12);
+        border-color: rgba(0, 188, 212, 0.35);
+    }
+
+    .radio__item[data-disabled="true"] {
+        cursor: not-allowed;
+        background: transparent;
+        border-color: transparent;
+    }
+
+    .radio__circle {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        border: 1px solid #2A3A3E;
+        background: #0D1B1E;
+        flex-shrink: 0;
+        transition: border-color 100ms ease-out;
+    }
+
+    .radio__item:hover .radio__circle {
+        border-color: #5A7A80;
+    }
+
+    .radio__item[data-selected="true"] .radio__circle {
+        border-color: #00BCD4;
+    }
+
+    .radio__dot {
+        display: none;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #00BCD4;
+    }
+
+    .radio__item[data-selected="true"] .radio__dot {
+        display: inline-block;
+    }
+
+    .radio__item[data-disabled="true"] .radio__circle {
+        border-color: #1A2326;
+        background: #0A1214;
+    }
+
+    .radio__item[data-disabled="true"][data-selected="true"] .radio__dot {
+        background: #3D4F65;
+    }
+
+    .radio__label {
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        font-size: 12px;
+        font-weight: 400;
+        color: #5A7A80;
+        line-height: 1.4;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .radio__item[data-selected="true"] .radio__label {
+        color: #B2EBF2;
+        font-weight: 500;
+    }
+
+    .radio__item[data-disabled="true"] .radio__label {
+        color: #3D4F65;
+    }
+}

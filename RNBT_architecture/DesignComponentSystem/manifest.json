@@ -500,7 +500,24 @@
     {
       "name": "Radio",
       "spec": "Components/Radio/CLAUDE.md",
-      "components": []
+      "components": [
+        {
+          "name": "Radio",
+          "spec": "Components/Radio/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/Radio/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 refined", "path": "Components/Radio/Standard/preview/01_refined.html" },
+                { "label": "02 material", "path": "Components/Radio/Standard/preview/02_material.html" },
+                { "label": "03 editorial", "path": "Components/Radio/Standard/preview/03_editorial.html" },
+                { "label": "04 operational", "path": "Components/Radio/Standard/preview/04_operational.html" }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "Search",

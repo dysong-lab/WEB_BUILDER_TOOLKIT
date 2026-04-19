@@ -1,0 +1,93 @@
+/* 01_refined: Persona A — Refined Technical
+   다크 남색 배경 / 퍼플 그라디언트 accent / Pretendard / box-shadow 없음 */
+
+#radio-container {
+    width: 280px;
+    min-height: 180px;
+
+    .radio {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .radio__list {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .radio__item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 150ms ease-out;
+        user-select: none;
+    }
+
+    .radio__item:hover {
+        background: rgba(80, 46, 233, 0.08);
+    }
+
+    .radio__item[data-disabled="true"] {
+        cursor: not-allowed;
+        background: transparent;
+    }
+
+    .radio__circle {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 2px solid #707EB4;
+        background: transparent;
+        flex-shrink: 0;
+        transition: border-color 150ms ease-out;
+    }
+
+    .radio__item[data-selected="true"] .radio__circle {
+        border-color: #7B5DFF;
+    }
+
+    .radio__dot {
+        display: none;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #502EE9 0%, #7B5DFF 100%);
+    }
+
+    .radio__item[data-selected="true"] .radio__dot {
+        display: inline-block;
+    }
+
+    .radio__item[data-disabled="true"] .radio__circle {
+        border-color: #4A4E6B;
+    }
+
+    .radio__item[data-disabled="true"][data-selected="true"] .radio__dot {
+        background: #4A4E6B;
+    }
+
+    .radio__label {
+        font-family: 'Pretendard', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #C5CEEF;
+        line-height: 1.4;
+    }
+
+    .radio__item[data-selected="true"] .radio__label {
+        color: #E8EDFF;
+        font-weight: 600;
+    }
+
+    .radio__item[data-disabled="true"] .radio__label {
+        color: #6C7296;
+    }
+}
