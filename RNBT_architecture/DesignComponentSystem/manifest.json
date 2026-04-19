@@ -2521,6 +2521,19 @@
           ]
         },
         {
+          "name": "OutdoorConditioner_Ani",
+          "spec": "Components/3D_Components/OutdoorConditioner_Ani/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/OutdoorConditioner_Ani/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/OutdoorConditioner_Ani/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "Panel",
           "spec": "Components/3D_Components/Panel/CLAUDE.md",
           "sets": [

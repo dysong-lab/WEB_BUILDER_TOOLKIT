@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>OutdoorConditioner_Ani — 01_status</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #1a1a2e; }
+        #outdoorconditionerani-pageThreeLayer {
+            width: 600px;
+            height: 480px;
+            display: block;
+            overflow: hidden;
+            margin: 40px auto;
+        }
+        canvas { display: block; }
+
+        .demo-controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px;
+        }
+        .demo-btn {
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #ffffff;
+            transition: opacity 0.15s;
+        }
+        .demo-btn:hover { opacity: 0.8; }
+        .demo-btn[data-status="normal"]  { background: #34d399; }
+        .demo-btn[data-status="warning"] { background: #fbbf24; color: #1a1a2e; }
+        .demo-btn[data-status="error"]   { background: #f87171; }
+        .demo-btn[data-status="offline"] { background: #6b7280; }
+        .demo-btn[data-status="reset"]   { background: #3b82f6; }
+    </style>
+</head>
+<body>
+    <div class="demo-controls">
+        <button class="demo-btn" data-status="normal">Normal</button>
+        <button class="demo-btn" data-status="warning">Warning</button>
+        <button class="demo-btn" data-status="error">Error</button>
+        <button class="demo-btn" data-status="offline">Offline</button>
+        <button class="demo-btn" data-status="reset">Reset</button>
+    </div>
+
+    <div id="outdoorconditionerani-pageThreeLayer"></div>
+
+    <!-- Mixin 로드 -->
+    <script src="../../../../../Mixins/MeshStateMixin.js"></script>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+    // ── Three.js Scene Setup ──────────────────────────────────
+    const container = document.getElementById('outdoorconditionerani-pageThreeLayer');
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x1a1a2e);
+
+    // OutdoorConditioner_Ani는 root scale 1000 + 자식 Node scale 0.15이 적용되어
+    // 실제 장면 크기가 본체 약 12 × 17 × 19 단위 규모. far=200으로 넉넉히 커버.
+    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 200);
+    camera.position.set(25, 20, 30);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.target.set(0, 0, 0);
+
+    // ── Lighting ──────────────────────────────────────────────
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    directionalLight.position.set(20, 30, 15);
+    scene.add(directionalLight);
+
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
+    fillLight.position.set(-10, 8, -8);
+    scene.add(fillLight);
+
+    // ── Grid ──────────────────────────────────────────────────
+    scene.add(new THREE.GridHelper(40, 20, 0x2a2a4a, 0x2a2a4a));
+
+    // ── Mock Instance ─────────────────────────────────────────
+    const instance = { appendElement: null };
+
+    // ── Load Model ────────────────────────────────────────────
+    // OutdoorConditioner_Ani.gltf:
+    //   root(scale [1000,1000,1000])
+    //     → winConditioner(mesh 0, Material #42064, textures/OutdoorConditioner.jpg)
+    //     → metalFan03      (mesh 1, Material #42066, textures/fan.jpg)
+    //     → metalFan04      (mesh 2, Material #42066, textures/fan.jpg — 공유)
+    // 세 자식 Node 모두 rotation [0, -0.7071068, 0, 0.7071067](Y축 +90도)과
+    // scale 0.15 적용. 폴더명과 Mesh 이름이 다르므로 실제 Mesh 이름을 직접 사용.
+    // GLTF 내부에 'Ani01' 애니메이션 클립(팬 회전)이 있으나 Standard에서는 재생하지 않는다.
+    const loader = new GLTFLoader();
+
+    loader.load('../../../../../models/OutdoorConditioner_Ani/01_default/OutdoorConditioner_Ani.gltf', (gltf) => {
+        const model = gltf.scene;
+        scene.add(model);
+
+        instance.appendElement = model;
+
+        // MeshStateMixin 적용 (register.js와 동일)
+        applyMeshStateMixin(instance, {
+            colorMap: {
+                normal:  0x34d399,
+                warning: 0xfbbf24,
+                error:   0xf87171,
+                offline: 0x6b7280
+            }
+        });
+
+        // 카메라 타겟 조정 (바운드 기준 자동 거리 설정)
+        const box = new THREE.Box3().setFromObject(model);
+        const center = box.getCenter(new THREE.Vector3());
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const distance = maxDim * 2.2;
+
+        controls.target.copy(center);
+        camera.position.set(center.x + distance, center.y + distance * 0.6, center.z + distance);
+        controls.update();
+    });
+
+    // ── Render Loop ───────────────────────────────────────────
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // ── Demo: renderData 호출 ─────────────────────────────────
+    const meshNames = ['winConditioner', 'metalFan03', 'metalFan04'];
+
+    document.querySelectorAll('.demo-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            if (!instance.meshState) return;
+
+            const status = btn.dataset.status;
+
+            if (status === 'reset') {
+                // 각 Mesh의 material(clone된 결과)을 흰색으로 복귀.
+                // metalFan03·metalFan04가 원본 material을 공유하더라도
+                // MeshStateMixin이 Mesh 단위로 clone했기 때문에 각각 독립적으로 복귀된다.
+                meshNames.forEach(name => {
+                    const mesh = instance.appendElement.getObjectByName(name);
+                    if (!mesh) return;
+                    const applyWhite = (node) => {
+                        if (!node.isMesh || !node.material) return;
+                        if (Array.isArray(node.material)) {
+                            node.material.forEach(m => m.color && m.color.setHex(0xffffff));
+                        } else if (node.material.color) {
+                            node.material.color.setHex(0xffffff);
+                        }
+                    };
+                    if (mesh.isMesh) applyWhite(mesh);
+                    else mesh.traverse(applyWhite);
+                });
+                return;
+            }
+
+            instance.meshState.renderData({
+                response: meshNames.map(name => ({ meshName: name, status }))
+            });
+        });
+    });
+
+    // ── Resize ────────────────────────────────────────────────
+    window.addEventListener('resize', () => {
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+    });
+    </script>
+</body>
+</html>
