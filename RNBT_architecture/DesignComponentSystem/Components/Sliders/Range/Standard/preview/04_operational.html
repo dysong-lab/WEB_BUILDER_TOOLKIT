@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Sliders/Range/Standard — 04_operational (Persona D)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0A0D12;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 16px;
+            padding: 40px 20px;
+        }
+        .demo-log {
+            width: 320px;
+            padding: 10px 12px;
+            background: #0D1117;
+            border: 1px solid rgba(99, 199, 255, 0.16);
+            border-radius: 4px;
+            color: #7A8FA5;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            line-height: 1.6;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+        .demo-log strong { color: #4DD0E1; }
+    </style>
+</head>
+<body>
+
+<div id="slider-range-container"></div>
+<div class="demo-log" id="demo-log"><strong>[LOG]</strong><br>—</div>
+
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/FieldRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('slider-range-container', '../views/04_operational.html', '../styles/04_operational.css');
+
+    const instance = { id: 'slider-range', appendElement: document.getElementById('slider-range-container') };
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            slider:        '.slider',
+            label:         '.slider__label',
+            lowText:       '.slider__value-label--low',
+            highText:      '.slider__value-label--high',
+            lowInput:      '.slider__input--low',
+            highInput:     '.slider__input--high',
+            lowInputMin:   '.slider__input--low',
+            lowInputMax:   '.slider__input--low',
+            lowInputStep:  '.slider__input--low',
+            low:           '.slider__input--low',
+            highInputMin:  '.slider__input--high',
+            highInputMax:  '.slider__input--high',
+            highInputStep: '.slider__input--high',
+            high:          '.slider__input--high',
+            lowProgress:   '.slider__track-active',
+            progress:      '.slider__track-active'
+        },
+        elementAttrs: {
+            lowInputMin:   'min',
+            lowInputMax:   'max',
+            lowInputStep:  'step',
+            low:           'value',
+            highInputMin:  'min',
+            highInputMax:  'max',
+            highInputStep: 'step',
+            high:          'value'
+        },
+        styleAttrs: {
+            lowProgress: { property: 'left',  unit: '%' },
+            progress:    { property: 'width', unit: '%' }
+        }
+    });
+
+    instance.updateSliderValue = function ({ response: data }) {
+        if (!data) return;
+        const min  = Number.isFinite(data.min)  ? data.min  : 0;
+        const max  = Number.isFinite(data.max)  ? data.max  : 100;
+        const step = Number.isFinite(data.step) ? data.step : 1;
+        const minDist = Math.max(0, Number.isFinite(data.minDistance) ? data.minDistance : 0);
+        let low  = Number.isFinite(data.low)  ? data.low  : min;
+        let high = Number.isFinite(data.high) ? data.high : max;
+        low  = Math.min(Math.max(low,  min), max);
+        high = Math.min(Math.max(high, min), max);
+        if (low > high) { const t = low; low = high; high = t; }
+        if (minDist > 0 && (high - low) < minDist) {
+            if (low + minDist <= max) high = low + minDist;
+            else { high = max; low = Math.max(min, max - minDist); }
+        }
+        const span = max - min;
+        const lowProgress  = span > 0 ? ((low  - min) / span) * 100 : 0;
+        const highProgress = span > 0 ? ((high - min) / span) * 100 : 0;
+        const progress     = Math.max(0, highProgress - lowProgress);
+        const lowText  = data.lowText  != null ? String(data.lowText)  : String(low);
+        const highText = data.highText != null ? String(data.highText) : String(high);
+        this.fieldRender.renderData({
+            response: {
+                label: data.label ?? '',
+                lowText, highText,
+                lowInputMin: min, lowInputMax: max, lowInputStep: step, low,
+                highInputMin: min, highInputMax: max, highInputStep: step, high,
+                lowProgress, progress
+            }
+        });
+        const sliderEl = this.appendElement.querySelector(this.fieldRender.cssSelectors.slider);
+        if (sliderEl) sliderEl.dataset.disabled = data.disabled ? 'true' : 'false';
+        const lowEl  = this.appendElement.querySelector(this.fieldRender.cssSelectors.lowInput);
+        if (lowEl)  lowEl.disabled  = !!data.disabled;
+        const highEl = this.appendElement.querySelector(this.fieldRender.cssSelectors.highInput);
+        if (highEl) highEl.disabled = !!data.disabled;
+    };
+
+    instance.subscriptions = { sliderInfo: [instance.updateSliderValue] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        input: {
+            [instance.fieldRender.cssSelectors.lowInput]:  '@sliderChanged',
+            [instance.fieldRender.cssSelectors.highInput]: '@sliderChanged'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>[LOG]</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>[LOG]</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    const state = { label: 'TEMP RANGE', low: 18, high: 26, min: 0, max: 50, step: 1, minDistance: 2, disabled: false };
+
+    Wkit.onEventBusHandlers({
+        '@sliderChanged': ({ event, targetInstance }) => {
+            const handle = event.target.dataset.handle;
+            const nextValue = Number(event.target.value);
+            if (handle === 'low')  state.low  = nextValue;
+            if (handle === 'high') state.high = nextValue;
+            targetInstance.updateSliderValue({ response: { ...state } });
+            log(`${handle}=<strong>${nextValue}</strong> [${state.low}..${state.high}]`);
+        }
+    });
+
+    instance.updateSliderValue({ response: { ...state } });
+})();
+</script>
+</body>
+</html>

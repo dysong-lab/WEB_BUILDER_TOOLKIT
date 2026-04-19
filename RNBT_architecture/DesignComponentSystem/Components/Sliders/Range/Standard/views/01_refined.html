@@ -1,0 +1,32 @@
+<div class="slider" data-disabled="false">
+    <div class="slider__header">
+        <label class="slider__label" for="slider-range-input-low">-</label>
+        <span class="slider__value">
+            <span class="slider__value-label--low">0</span>
+            <span class="slider__value-separator">–</span>
+            <span class="slider__value-label--high">0</span>
+        </span>
+    </div>
+    <div class="slider__track">
+        <div class="slider__track-inactive"></div>
+        <div class="slider__track-active" style="left: 0%; width: 0%"></div>
+        <input class="slider__input slider__input--low"
+               id="slider-range-input-low"
+               data-handle="low"
+               type="range"
+               min="0"
+               max="100"
+               step="1"
+               value="0"
+               aria-label="range slider low">
+        <input class="slider__input slider__input--high"
+               id="slider-range-input-high"
+               data-handle="high"
+               type="range"
+               min="0"
+               max="100"
+               step="1"
+               value="0"
+               aria-label="range slider high">
+    </div>
+</div>
