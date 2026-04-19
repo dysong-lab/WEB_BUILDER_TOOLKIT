@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Switch/Standard — 02_material (Persona B)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #F5F5F5;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 24px;
+            padding: 40px 20px;
+        }
+        .demo-log {
+            width: 360px;
+            padding: 12px 16px;
+            background: #ffffff;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            color: #5f6368;
+            font-size: 12px;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+        }
+        .demo-log strong { color: #1a73e8; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+<div id="switch-container"></div>
+<div class="demo-log" id="demo-log"><strong>이벤트 로그</strong><br>—</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('switch-container', '../views/02_material.html', '../styles/02_material.css');
+
+    const instance = { id: 'switch', appendElement: document.getElementById('switch-container') };
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container: '.switch__list',
+            template:  '#switch-item-template',
+            switchid:  '.switch__item',
+            checked:   '.switch__item',
+            disabled:  '.switch__item',
+            label:     '.switch__label'
+        },
+        itemKey: 'switchid',
+        datasetAttrs: {
+            switchid: 'switchid',
+            checked:  'checked',
+            disabled: 'disabled'
+        }
+    });
+
+    instance.subscriptions = { switchItems: [instance.listRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.listRender.cssSelectors.switchid]: '@switchClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>이벤트 로그</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>이벤트 로그</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    const itemsData = [
+        { switchid: 'notifications', label: 'Notifications',          checked: 'true',  disabled: 'false' },
+        { switchid: 'sync',          label: 'Background sync',        checked: 'false', disabled: 'false' },
+        { switchid: 'analytics',     label: 'Share usage analytics',  checked: 'true',  disabled: 'false' },
+        { switchid: 'beta',          label: 'Beta features (locked)', checked: 'false', disabled: 'true'  }
+    ];
+
+    Wkit.onEventBusHandlers({
+        '@switchClicked': ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.listRender.cssSelectors.switchid);
+            const switchid = item?.getAttribute('data-switchid');
+            if (!switchid) return;
+            const current = itemsData.find(it => it.switchid === switchid);
+            if (!current || current.disabled === 'true') return;
+            const next = current.checked === 'true' ? 'false' : 'true';
+            current.checked = next;
+            targetInstance.listRender.updateItemState(switchid, { checked: next });
+            log(`switchClicked "${switchid}" → ${next}`);
+        }
+    });
+
+    instance.listRender.renderData({ response: itemsData });
+})();
+</script>
+</body>
+</html>

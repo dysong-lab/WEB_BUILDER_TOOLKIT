@@ -1,0 +1,108 @@
+/* 03_editorial: Persona C — Minimal Editorial
+   웜 베이지 배경 / 세리프 제목 + 산세리프 라벨 / 샤프 미니멀 트랙 */
+
+#switch-container {
+    width: 320px;
+    min-height: 220px;
+
+    .switch {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .switch__list {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .switch__item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 14px 4px;
+        border-bottom: 1px solid #ECE6DC;
+        cursor: pointer;
+        transition: background-color 200ms ease-out;
+        user-select: none;
+    }
+
+    .switch__item:last-child {
+        border-bottom: none;
+    }
+
+    .switch__item:hover {
+        background: #F5F1EA;
+    }
+
+    .switch__item[data-disabled="true"] {
+        cursor: not-allowed;
+        background: transparent;
+    }
+
+    .switch__label {
+        flex: 1;
+        font-family: 'Georgia', serif;
+        font-size: 15px;
+        font-weight: 400;
+        color: #5C544A;
+        line-height: 1.5;
+    }
+
+    .switch__item[data-checked="true"] .switch__label {
+        color: #2A2520;
+        font-weight: 700;
+    }
+
+    .switch__item[data-disabled="true"] .switch__label {
+        color: #A89E91;
+    }
+
+    .switch__track {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        width: 40px;
+        height: 18px;
+        border-radius: 2px;
+        border: 1px solid #8C7B6B;
+        background: #FDFBF7;
+        flex-shrink: 0;
+        transition: background 200ms ease-out, border-color 200ms ease-out;
+    }
+
+    .switch__item[data-checked="true"] .switch__track {
+        background: #3A3028;
+        border-color: #3A3028;
+    }
+
+    .switch__thumb {
+        position: absolute;
+        left: 2px;
+        width: 12px;
+        height: 12px;
+        border-radius: 0;
+        background: #8C7B6B;
+        transition: left 200ms ease-out, background 200ms ease-out;
+    }
+
+    .switch__item[data-checked="true"] .switch__thumb {
+        left: 24px;
+        background: #FDFBF7;
+    }
+
+    .switch__item[data-disabled="true"] .switch__track {
+        border-color: #D4C9B5;
+        background: #F5F1EA;
+    }
+
+    .switch__item[data-disabled="true"][data-checked="true"] .switch__track {
+        background: #B8AFA0;
+        border-color: #B8AFA0;
+    }
+
+    .switch__item[data-disabled="true"] .switch__thumb {
+        background: #C4BAAA;
+    }
+}

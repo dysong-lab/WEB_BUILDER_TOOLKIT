@@ -1,0 +1,118 @@
+/* 04_operational: Persona D — Dark Operational
+   시안 accent / 모노스페이스 / 다크 / 컴팩트 / 각진 트랙 */
+
+#switch-container {
+    width: 280px;
+    min-height: 170px;
+
+    .switch {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .switch__list {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .switch__item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 6px 8px;
+        border-radius: 2px;
+        border: 1px solid transparent;
+        cursor: pointer;
+        transition: background-color 100ms ease-out, border-color 100ms ease-out;
+        user-select: none;
+    }
+
+    .switch__item:hover {
+        background: rgba(0, 188, 212, 0.08);
+        border-color: rgba(0, 188, 212, 0.2);
+    }
+
+    .switch__item[data-checked="true"] {
+        background: rgba(0, 188, 212, 0.12);
+        border-color: rgba(0, 188, 212, 0.35);
+    }
+
+    .switch__item[data-disabled="true"] {
+        cursor: not-allowed;
+        background: transparent;
+        border-color: transparent;
+    }
+
+    .switch__label {
+        flex: 1;
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        font-size: 12px;
+        font-weight: 400;
+        color: #5A7A80;
+        line-height: 1.4;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .switch__item[data-checked="true"] .switch__label {
+        color: #B2EBF2;
+        font-weight: 500;
+    }
+
+    .switch__item[data-disabled="true"] .switch__label {
+        color: #3D4F65;
+    }
+
+    .switch__track {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        width: 32px;
+        height: 14px;
+        border-radius: 2px;
+        border: 1px solid #2A3A3E;
+        background: #0D1B1E;
+        flex-shrink: 0;
+        transition: border-color 100ms ease-out, background 100ms ease-out;
+    }
+
+    .switch__item:hover .switch__track {
+        border-color: #5A7A80;
+    }
+
+    .switch__item[data-checked="true"] .switch__track {
+        background: rgba(0, 188, 212, 0.16);
+        border-color: #00BCD4;
+    }
+
+    .switch__thumb {
+        position: absolute;
+        left: 2px;
+        width: 8px;
+        height: 8px;
+        border-radius: 1px;
+        background: #5A7A80;
+        transition: left 100ms ease-out, background 100ms ease-out;
+    }
+
+    .switch__item[data-checked="true"] .switch__thumb {
+        left: 20px;
+        background: #00BCD4;
+    }
+
+    .switch__item[data-disabled="true"] .switch__track {
+        border-color: #1A2326;
+        background: #0A1214;
+    }
+
+    .switch__item[data-disabled="true"][data-checked="true"] .switch__track {
+        background: rgba(61, 79, 101, 0.4);
+        border-color: #3D4F65;
+    }
+
+    .switch__item[data-disabled="true"] .switch__thumb {
+        background: #3D4F65;
+    }
+}

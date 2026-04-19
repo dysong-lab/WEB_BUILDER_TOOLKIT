@@ -1,0 +1,100 @@
+/* 01_refined: Persona A — Refined Technical
+   다크 남색 배경 / 퍼플 그라디언트 트랙 / Pretendard / box-shadow 없음 */
+
+#switch-container {
+    width: 300px;
+    min-height: 180px;
+
+    .switch {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .switch__list {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .switch__item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 10px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 150ms ease-out;
+        user-select: none;
+    }
+
+    .switch__item:hover {
+        background: rgba(80, 46, 233, 0.08);
+    }
+
+    .switch__item[data-disabled="true"] {
+        cursor: not-allowed;
+        background: transparent;
+    }
+
+    .switch__label {
+        flex: 1;
+        font-family: 'Pretendard', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #C5CEEF;
+        line-height: 1.4;
+    }
+
+    .switch__item[data-checked="true"] .switch__label {
+        color: #E8EDFF;
+        font-weight: 600;
+    }
+
+    .switch__item[data-disabled="true"] .switch__label {
+        color: #6C7296;
+    }
+
+    .switch__track {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        width: 44px;
+        height: 22px;
+        border-radius: 30px;
+        background: #373D56;
+        flex-shrink: 0;
+        transition: background 150ms ease-out;
+    }
+
+    .switch__item[data-checked="true"] .switch__track {
+        background: linear-gradient(135deg, #502EE9 0%, #7B5DFF 100%);
+    }
+
+    .switch__thumb {
+        position: absolute;
+        left: 3px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #C5CEEF;
+        transition: left 150ms ease-out, background 150ms ease-out;
+    }
+
+    .switch__item[data-checked="true"] .switch__thumb {
+        left: 25px;
+        background: #E8EDFF;
+    }
+
+    .switch__item[data-disabled="true"] .switch__track {
+        background: #2A2F45;
+    }
+
+    .switch__item[data-disabled="true"][data-checked="true"] .switch__track {
+        background: #4A4E6B;
+    }
+
+    .switch__item[data-disabled="true"] .switch__thumb {
+        background: #6C7296;
+    }
+}
