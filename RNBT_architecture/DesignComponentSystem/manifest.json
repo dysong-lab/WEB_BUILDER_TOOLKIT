@@ -2976,6 +2976,19 @@
           ]
         },
         {
+          "name": "RoomCage",
+          "spec": "Components/3D_Components/RoomCage/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/RoomCage/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/RoomCage/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "UPS",
           "spec": "Components/3D_Components/UPS/CLAUDE.md",
           "sets": [
