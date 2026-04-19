@@ -1,0 +1,110 @@
+/* 03_editorial: Persona C — Minimal Editorial
+   웜 그레이 / 배경 색상 차이만 / DM Serif Display + Inter / 라이트
+   깊이=배경 색상(no gradient/shadow), 모서리=0~2px, 밀도=Expanded */
+
+#nav-bar-container {
+    width: 480px;
+    height: 88px;
+
+    .nav-bar {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        background: #faf9f7;
+        border-top: 1px solid #e8e4de;
+        flex-shrink: 0;
+    }
+
+    .nav-bar__list {
+        display: flex;
+        flex-direction: row;
+        flex: 1;
+        padding: 14px 0 10px;
+        gap: 0;
+    }
+
+    .nav-bar__item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 6px;
+        flex: 1;
+        min-width: 0;
+        padding: 4px 8px 6px;
+        cursor: pointer;
+        border-top: 2px solid transparent;
+    }
+
+    .nav-bar__item:hover {
+        background: #f0ece6;
+    }
+
+    .nav-bar__item[data-active="true"] {
+        border-top: 2px solid #3d3833;
+        padding-top: 2px;
+    }
+
+    .nav-bar__indicator {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: auto;
+        height: 28px;
+        padding: 0 4px;
+    }
+
+    .nav-bar__icon {
+        font-size: 22px;
+        color: #a09890;
+        line-height: 1;
+    }
+
+    .nav-bar__item[data-active="true"] .nav-bar__icon {
+        color: #3d3833;
+    }
+
+    .nav-bar__badge {
+        position: absolute;
+        top: -4px;
+        right: -10px;
+        font-family: 'Inter', sans-serif;
+        font-size: 11px;
+        font-weight: 500;
+        color: #3d3833;
+        background: transparent;
+        line-height: 1.3;
+    }
+
+    .nav-bar__badge::before {
+        content: '(';
+    }
+
+    .nav-bar__badge::after {
+        content: ')';
+    }
+
+    .nav-bar__badge:empty {
+        display: none;
+    }
+
+    .nav-bar__label {
+        font-family: 'DM Serif Display', serif;
+        font-size: 13px;
+        font-weight: 400;
+        color: #6b6560;
+        line-height: 1.2;
+        letter-spacing: 0.3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
+
+    .nav-bar__item[data-active="true"] .nav-bar__label {
+        color: #2c2824;
+    }
+}
