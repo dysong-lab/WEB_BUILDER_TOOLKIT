@@ -2456,6 +2456,19 @@
           ]
         },
         {
+          "name": "MeetingSofa",
+          "spec": "Components/3D_Components/MeetingSofa/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/MeetingSofa/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/MeetingSofa/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "Panel",
           "spec": "Components/3D_Components/Panel/CLAUDE.md",
           "sets": [
