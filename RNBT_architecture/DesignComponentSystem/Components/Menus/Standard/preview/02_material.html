@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Menus/Standard — 02_material (Persona B)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Roboto+Mono:wght@400;500&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #F5F1FA;
+            font-family: 'Roboto', 'Pretendard', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 24px;
+            padding: 40px 20px;
+        }
+        .demo-log {
+            width: 320px;
+            padding: 12px 16px;
+            background: #FFFFFF;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            color: #49454F;
+            font-size: 12px;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .demo-log strong { color: #1C1B1F; }
+    </style>
+</head>
+<body>
+
+<div id="menu-container"></div>
+<div class="demo-log" id="demo-log"><strong>Event Log</strong><br>—</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('menu-container', '../views/02_material.html', '../styles/02_material.css');
+
+    const instance = { id: 'menu', appendElement: document.getElementById('menu-container') };
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container: '.menu__items',
+            template:  '#menu-item-template',
+            menuid:    '.menu__item',
+            disabled:  '.menu__item',
+            divider:   '.menu__item',
+            leading:   '.menu__leading',
+            label:     '.menu__label',
+            trailing:  '.menu__trailing'
+        },
+        datasetAttrs: {
+            menuid:   'menuid',
+            disabled: 'disabled',
+            divider:  'divider'
+        }
+    });
+
+    instance.subscriptions = { menuItems: [instance.listRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.listRender.cssSelectors.menuid]: '@menuItemClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>Event Log</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>Event Log</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    Wkit.onEventBusHandlers({
+        '@menuItemClicked': ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.listRender.cssSelectors.menuid);
+            if (!item) return;
+            if (item.getAttribute('data-disabled') === 'true') {
+                log(`menuItemClicked ignored (disabled) "${item.getAttribute('data-menuid')}"`);
+                return;
+            }
+            if (item.getAttribute('data-divider') === 'true') return;
+            const menuid = item.getAttribute('data-menuid');
+            log(`menuItemClicked "${menuid}"`);
+        }
+    });
+
+    const menuData = [
+        { menuid: 'cut',    leading: '\u{2702}',  label: 'Cut',        trailing: '\u{2318}X' },
+        { menuid: 'copy',   leading: '\u{1F4CB}', label: 'Copy',       trailing: '\u{2318}C' },
+        { menuid: 'paste',  leading: '\u{1F4CC}', label: 'Paste',      trailing: '\u{2318}V' },
+        { menuid: 'div-1',  leading: '',          label: '',           trailing: '', divider: 'true' },
+        { menuid: 'select', leading: '\u{1F5C3}', label: 'Select All', trailing: '\u{2318}A' },
+        { menuid: 'find',   leading: '\u{1F50D}', label: 'Find...',    trailing: '\u{2318}F' },
+        { menuid: 'undo',   leading: '\u{21A9}',  label: 'Undo',       trailing: '\u{2318}Z', disabled: 'true' }
+    ];
+
+    instance.listRender.renderData({ response: menuData });
+})();
+</script>
+</body>
+</html>

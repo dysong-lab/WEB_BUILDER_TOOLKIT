@@ -1,0 +1,118 @@
+/* Menus/Standard — 02_material (Persona B: Material Elevated)
+   라이트 / box-shadow elevation / Roboto+Pretendard / 균일한 작은 모서리 (8px) / Grid 허용
+   MD3 Menu 표준에 가장 가까운 변형 */
+
+#menu-container {
+    width: 260px;
+}
+
+#menu-container .menu {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15),
+                0 1px 3px rgba(0, 0, 0, 0.08);
+    padding: 8px 0;
+    font-family: 'Roboto', 'Pretendard', sans-serif;
+    color: #1C1B1F;
+}
+
+#menu-container .menu__items {
+    display: flex;
+    flex-direction: column;
+}
+
+#menu-container .menu__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: background-color 200ms ease-in-out;
+}
+
+#menu-container .menu__item:hover {
+    background: rgba(103, 80, 164, 0.08);
+}
+
+#menu-container .menu__leading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    font-size: 18px;
+    color: #49454F;
+    line-height: 1;
+}
+
+#menu-container .menu__leading:empty {
+    display: none;
+}
+
+#menu-container .menu__label {
+    flex: 1;
+    min-width: 0;
+    font-size: 14px;
+    font-weight: 400;
+    color: #1C1B1F;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#menu-container .menu__trailing {
+    font-family: 'Roboto Mono', 'Roboto', monospace;
+    font-size: 12px;
+    font-weight: 400;
+    color: #757575;
+    line-height: 1.3;
+    flex-shrink: 0;
+}
+
+#menu-container .menu__trailing:empty {
+    display: none;
+}
+
+/* Disabled */
+#menu-container .menu__item[data-disabled="true"] {
+    cursor: not-allowed;
+}
+
+#menu-container .menu__item[data-disabled="true"]:hover {
+    background: transparent;
+}
+
+#menu-container .menu__item[data-disabled="true"] .menu__label {
+    color: #B8B4BC;
+}
+
+#menu-container .menu__item[data-disabled="true"] .menu__leading,
+#menu-container .menu__item[data-disabled="true"] .menu__trailing {
+    color: #CFCBD3;
+}
+
+/* Divider */
+#menu-container .menu__item[data-divider="true"] {
+    padding: 0;
+    margin: 6px 0;
+    height: 1px;
+    background: #E7E0EC;
+    border-radius: 0;
+    cursor: default;
+    gap: 0;
+}
+
+#menu-container .menu__item[data-divider="true"]:hover {
+    background: #E7E0EC;
+}
+
+#menu-container .menu__item[data-divider="true"] .menu__leading,
+#menu-container .menu__item[data-divider="true"] .menu__label,
+#menu-container .menu__item[data-divider="true"] .menu__trailing {
+    display: none;
+}

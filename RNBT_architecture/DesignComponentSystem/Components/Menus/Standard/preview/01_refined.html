@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Menus/Standard — 01_refined (Persona A)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tomorrow:wght@400;500&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #12153D;
+            font-family: 'Pretendard', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 24px;
+            padding: 40px 20px;
+        }
+        .demo-log {
+            width: 320px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid #2A2574;
+            border-radius: 8px;
+            color: #A6B3DE;
+            font-size: 12px;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .demo-log strong { color: #E8EDFF; }
+    </style>
+</head>
+<body>
+
+<div id="menu-container"></div>
+<div class="demo-log" id="demo-log"><strong>Event Log</strong><br>—</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('menu-container', '../views/01_refined.html', '../styles/01_refined.css');
+
+    const instance = { id: 'menu', appendElement: document.getElementById('menu-container') };
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container: '.menu__items',
+            template:  '#menu-item-template',
+            menuid:    '.menu__item',
+            disabled:  '.menu__item',
+            divider:   '.menu__item',
+            leading:   '.menu__leading',
+            label:     '.menu__label',
+            trailing:  '.menu__trailing'
+        },
+        datasetAttrs: {
+            menuid:   'menuid',
+            disabled: 'disabled',
+            divider:  'divider'
+        }
+    });
+
+    instance.subscriptions = { menuItems: [instance.listRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.listRender.cssSelectors.menuid]: '@menuItemClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>Event Log</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>Event Log</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    Wkit.onEventBusHandlers({
+        '@menuItemClicked': ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.listRender.cssSelectors.menuid);
+            if (!item) return;
+            if (item.getAttribute('data-disabled') === 'true') {
+                log(`menuItemClicked ignored (disabled) "${item.getAttribute('data-menuid')}"`);
+                return;
+            }
+            if (item.getAttribute('data-divider') === 'true') return;
+            const menuid = item.getAttribute('data-menuid');
+            log(`menuItemClicked "${menuid}"`);
+        }
+    });
+
+    const menuData = [
+        { menuid: 'new',     leading: '\u{1F4C4}', label: 'New File',      trailing: '\u{2318}N' },
+        { menuid: 'open',    leading: '\u{1F4C2}', label: 'Open...',       trailing: '\u{2318}O' },
+        { menuid: 'save',    leading: '\u{1F4BE}', label: 'Save',          trailing: '\u{2318}S' },
+        { menuid: 'div-1',   leading: '',          label: '',              trailing: '', divider: 'true' },
+        { menuid: 'rename',  leading: '\u{270F}',  label: 'Rename',        trailing: '' },
+        { menuid: 'archive', leading: '\u{1F4E6}', label: 'Archive',       trailing: '', disabled: 'true' },
+        { menuid: 'div-2',   leading: '',          label: '',              trailing: '', divider: 'true' },
+        { menuid: 'delete',  leading: '\u{1F5D1}', label: 'Move to Trash', trailing: '\u{232B}' }
+    ];
+
+    instance.listRender.renderData({ response: menuData });
+})();
+</script>
+</body>
+</html>

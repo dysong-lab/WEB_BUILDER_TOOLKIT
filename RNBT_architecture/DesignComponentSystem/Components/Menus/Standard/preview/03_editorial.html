@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Menus/Standard — 03_editorial (Persona C)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #F5F3EE;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 24px;
+            padding: 40px 20px;
+        }
+        .demo-log {
+            width: 340px;
+            padding: 14px 18px;
+            background: #FAF9F6;
+            border: 1px solid #E8E4DE;
+            border-radius: 2px;
+            color: #6B6560;
+            font-size: 12px;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .demo-log strong {
+            color: #3D3833;
+            font-family: 'DM Serif Display', serif;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="menu-container"></div>
+<div class="demo-log" id="demo-log"><strong>Event Log</strong><br>—</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('menu-container', '../views/03_editorial.html', '../styles/03_editorial.css');
+
+    const instance = { id: 'menu', appendElement: document.getElementById('menu-container') };
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container: '.menu__items',
+            template:  '#menu-item-template',
+            menuid:    '.menu__item',
+            disabled:  '.menu__item',
+            divider:   '.menu__item',
+            leading:   '.menu__leading',
+            label:     '.menu__label',
+            trailing:  '.menu__trailing'
+        },
+        datasetAttrs: {
+            menuid:   'menuid',
+            disabled: 'disabled',
+            divider:  'divider'
+        }
+    });
+
+    instance.subscriptions = { menuItems: [instance.listRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.listRender.cssSelectors.menuid]: '@menuItemClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>Event Log</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>Event Log</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    Wkit.onEventBusHandlers({
+        '@menuItemClicked': ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.listRender.cssSelectors.menuid);
+            if (!item) return;
+            if (item.getAttribute('data-disabled') === 'true') {
+                log(`menuItemClicked ignored (disabled) "${item.getAttribute('data-menuid')}"`);
+                return;
+            }
+            if (item.getAttribute('data-divider') === 'true') return;
+            const menuid = item.getAttribute('data-menuid');
+            log(`menuItemClicked "${menuid}"`);
+        }
+    });
+
+    const menuData = [
+        { menuid: 'read',    leading: '\u{1F4D6}', label: 'Read Article',    trailing: 'long' },
+        { menuid: 'save',    leading: '\u{1F516}', label: 'Save for Later',  trailing: '' },
+        { menuid: 'share',   leading: '\u{1F4E4}', label: 'Share',           trailing: '' },
+        { menuid: 'div-1',   leading: '',          label: '',                trailing: '', divider: 'true' },
+        { menuid: 'cite',    leading: '\u{1F4DC}', label: 'Cite',            trailing: 'MLA' },
+        { menuid: 'print',   leading: '\u{1F5A8}', label: 'Print',           trailing: '', disabled: 'true' },
+        { menuid: 'div-2',   leading: '',          label: '',                trailing: '', divider: 'true' },
+        { menuid: 'reader',  leading: '\u{1F4D1}', label: 'Reader Mode',     trailing: 'new' }
+    ];
+
+    instance.listRender.renderData({ response: menuData });
+})();
+</script>
+</body>
+</html>

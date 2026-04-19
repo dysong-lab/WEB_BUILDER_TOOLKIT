@@ -1,0 +1,121 @@
+/* Menus/Standard — 01_refined (Persona A: Refined Technical)
+   다크 퍼플 / 그라디언트 깊이 / Pretendard 400-600 / box-shadow 금지 / Flexbox only
+   모서리 컨테이너 20px, 항목 8px — Persona A의 역할별 모서리 프로파일 */
+
+#menu-container {
+    width: 280px;
+}
+
+#menu-container .menu {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background: linear-gradient(180deg, rgba(36, 0, 196, 0.06) 0%, rgba(5, 171, 207, 0.03) 100%),
+                #1E1B4B;
+    border: 1px solid #2A2574;
+    border-radius: 20px;
+    padding: 8px;
+    font-family: 'Pretendard', sans-serif;
+    color: #E8EDFF;
+}
+
+#menu-container .menu__items {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+#menu-container .menu__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 150ms ease-out;
+}
+
+#menu-container .menu__item:hover {
+    background: linear-gradient(90deg, rgba(146, 168, 244, 0.14) 0%, rgba(146, 168, 244, 0.04) 100%);
+}
+
+#menu-container .menu__leading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    font-size: 16px;
+    color: #92A8F4;
+    line-height: 1;
+}
+
+#menu-container .menu__leading:empty {
+    display: none;
+}
+
+#menu-container .menu__label {
+    flex: 1;
+    min-width: 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #E8EDFF;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#menu-container .menu__trailing {
+    font-family: 'Tomorrow', 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: #707EB4;
+    line-height: 1.3;
+    flex-shrink: 0;
+}
+
+#menu-container .menu__trailing:empty {
+    display: none;
+}
+
+/* Disabled — 탈채도 회색 (opacity 금지) */
+#menu-container .menu__item[data-disabled="true"] {
+    cursor: not-allowed;
+    background: transparent;
+}
+
+#menu-container .menu__item[data-disabled="true"]:hover {
+    background: transparent;
+}
+
+#menu-container .menu__item[data-disabled="true"] .menu__label {
+    color: #55597B;
+}
+
+#menu-container .menu__item[data-disabled="true"] .menu__leading,
+#menu-container .menu__item[data-disabled="true"] .menu__trailing {
+    color: #3D4168;
+}
+
+/* Divider — 구분선으로 변환 */
+#menu-container .menu__item[data-divider="true"] {
+    padding: 0;
+    margin: 6px 4px;
+    height: 1px;
+    background: #2A2574;
+    border-radius: 0;
+    cursor: default;
+    gap: 0;
+}
+
+#menu-container .menu__item[data-divider="true"]:hover {
+    background: #2A2574;
+}
+
+#menu-container .menu__item[data-divider="true"] .menu__leading,
+#menu-container .menu__item[data-divider="true"] .menu__label,
+#menu-container .menu__item[data-divider="true"] .menu__trailing {
+    display: none;
+}

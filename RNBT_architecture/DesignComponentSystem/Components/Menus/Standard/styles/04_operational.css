@@ -1,0 +1,129 @@
+/* Menus/Standard — 04_operational (Persona D: Dark Operational)
+   컴팩트 다크 / 쿨 톤 그레이(파랑/시안 기운) / 모노스페이스 trailing
+   미세 테두리 + 배경 색상 단계 / 각진 4px 모서리 / 밀도 Compact */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+#menu-container {
+    width: 260px;
+}
+
+#menu-container .menu {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background: #0D1117;
+    border: 1px solid rgba(99, 199, 255, 0.18);
+    border-radius: 4px;
+    padding: 4px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    color: #C9D1D9;
+}
+
+#menu-container .menu__items {
+    display: flex;
+    flex-direction: column;
+}
+
+#menu-container .menu__item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 10px;
+    border-radius: 2px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+#menu-container .menu__item:hover {
+    background: #161B22;
+    border-color: rgba(77, 208, 225, 0.3);
+}
+
+#menu-container .menu__leading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    font-size: 14px;
+    color: #4DD0E1;
+    line-height: 1;
+}
+
+#menu-container .menu__leading:empty {
+    display: none;
+}
+
+#menu-container .menu__label {
+    flex: 1;
+    min-width: 0;
+    font-size: 12px;
+    font-weight: 500;
+    color: #E6EDF3;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: 0.2px;
+}
+
+#menu-container .menu__trailing {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    color: #7A8FA5;
+    line-height: 1.3;
+    flex-shrink: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+#menu-container .menu__trailing:empty {
+    display: none;
+}
+
+/* Disabled */
+#menu-container .menu__item[data-disabled="true"] {
+    cursor: not-allowed;
+}
+
+#menu-container .menu__item[data-disabled="true"]:hover {
+    background: transparent;
+    border-color: transparent;
+}
+
+#menu-container .menu__item[data-disabled="true"] .menu__label {
+    color: #4A5568;
+}
+
+#menu-container .menu__item[data-disabled="true"] .menu__leading,
+#menu-container .menu__item[data-disabled="true"] .menu__trailing {
+    color: #3D4F65;
+}
+
+/* Divider */
+#menu-container .menu__item[data-divider="true"] {
+    padding: 0;
+    margin: 4px 2px;
+    height: 1px;
+    background: rgba(99, 199, 255, 0.14);
+    border-radius: 0;
+    border: none;
+    cursor: default;
+    gap: 0;
+}
+
+#menu-container .menu__item[data-divider="true"]:hover {
+    background: rgba(99, 199, 255, 0.14);
+    border-color: transparent;
+}
+
+#menu-container .menu__item[data-divider="true"] .menu__leading,
+#menu-container .menu__item[data-divider="true"] .menu__label,
+#menu-container .menu__item[data-divider="true"] .menu__trailing {
+    display: none;
+}
