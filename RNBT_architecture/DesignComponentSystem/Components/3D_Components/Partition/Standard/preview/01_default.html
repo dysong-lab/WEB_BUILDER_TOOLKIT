@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Partition — 01_status</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #1a1a2e; }
+        #partition-pageThreeLayer {
+            width: 600px;
+            height: 480px;
+            display: block;
+            overflow: hidden;
+            margin: 40px auto;
+        }
+        canvas { display: block; }
+
+        .demo-controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px;
+        }
+        .demo-btn {
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #ffffff;
+            transition: opacity 0.15s;
+        }
+        .demo-btn:hover { opacity: 0.8; }
+        .demo-btn[data-status="normal"]  { background: #34d399; }
+        .demo-btn[data-status="warning"] { background: #fbbf24; color: #1a1a2e; }
+        .demo-btn[data-status="error"]   { background: #f87171; }
+        .demo-btn[data-status="offline"] { background: #6b7280; }
+        .demo-btn[data-status="reset"]   { background: #3b82f6; }
+    </style>
+</head>
+<body>
+    <div class="demo-controls">
+        <button class="demo-btn" data-status="normal">Normal</button>
+        <button class="demo-btn" data-status="warning">Warning</button>
+        <button class="demo-btn" data-status="error">Error</button>
+        <button class="demo-btn" data-status="offline">Offline</button>
+        <button class="demo-btn" data-status="reset">Reset</button>
+    </div>
+
+    <div id="partition-pageThreeLayer"></div>
+
+    <!-- Mixin 로드 -->
+    <script src="../../../../../Mixins/MeshStateMixin.js"></script>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+    // ── Three.js Scene Setup ──────────────────────────────────
+    const container = document.getElementById('partition-pageThreeLayer');
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x1a1a2e);
+
+    // Partition은 root scale [1000, 1000, 1000] 업스케일 패턴 (Earthquake·OHU103·ElecPad·PCS와 동일).
+    // 두 자식 bound 합산 기준 원본 크기 약 0.016 × 0.012 × 0.0003 단위 → 업스케일 후 16 × 12 × 0.3.
+    // PTT·P300C·P2400CH의 "root scale 없음 → 초소형 좌표 원본 유지" 패턴과는 대비.
+    // far=1000으로 설정하고, 바운드 기반 자동 거리로 카메라를 모델 크기에 맞게 배치.
+    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+    camera.position.set(30, 20, 30);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.target.set(0, 0, 0);
+
+    // ── Lighting ──────────────────────────────────────────────
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    directionalLight.position.set(5, 8, 4);
+    scene.add(directionalLight);
+
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
+    fillLight.position.set(-3, 2, -2);
+    scene.add(fillLight);
+
+    // ── Grid ──────────────────────────────────────────────────
+    // 업스케일 후 모델 크기 ~16 × 12에 맞춰 그리드 크기 50, 분할 20 (~2.5 간격).
+    // Earthquake·OHU103·ElecPad·PCS의 업스케일 그리드 패턴과 유사.
+    scene.add(new THREE.GridHelper(50, 20, 0x2a2a4a, 0x2a2a4a));
+
+    // ── Mock Instance ─────────────────────────────────────────
+    const instance = { appendElement: null };
+
+    // ── Load Model ────────────────────────────────────────────
+    // Partition.gltf:
+    //   scene → root (scale [1000, 1000, 1000])
+    //           └─ Group003 (Group Node, children [2, 3])
+    //               ├─ partition (Mesh Node, mesh 0,
+    //               │             material "Material #25192003" = baseColorTexture textures/partition.jpg)
+    //               └─ glass_A  (Mesh Node, mesh 1,
+    //                            material "Material #25192004" = baseColorTexture textures/glass_A.png)
+    //
+    // **Group-traverse 단일 참조** — meshName='Group003'은 Group Node 이름.
+    // getObjectByName('Group003')은 자식 2개를 가진 Group을 반환하고, MeshStateMixin은
+    // obj.material이 없어서 traverse 브랜치로 진입해 자식 Mesh들의 material을 각각
+    // clone하고 color만 setHex로 치환. PTT(`PTT_033`)의 동일 패턴 — Earthquake의 배열 열거와 대비.
+    //
+    // 두 material 모두 baseColorTexture 주도이므로 color setHex가 텍스처에 곱해지며,
+    // PTT의 "한쪽 texture / 한쪽 factor → 반영도 불일치"와 달리 두 자식에서 균일하게 반영된다.
+    // glass_A는 PNG지만 alphaMode 미지정이라 OPAQUE로 해석(명시적 투명 처리 없음).
+    const meshName = 'Group003';
+    const loader = new GLTFLoader();
+
+    loader.load('../../../../../models/Partition/01_default/Partition.gltf', (gltf) => {
+        const model = gltf.scene;
+        scene.add(model);
+
+        instance.appendElement = model;
+
+        // MeshStateMixin 적용 (register.js와 동일)
+        applyMeshStateMixin(instance, {
+            colorMap: {
+                normal:  0x34d399,
+                warning: 0xfbbf24,
+                error:   0xf87171,
+                offline: 0x6b7280
+            }
+        });
+
+        // 카메라 타겟 조정 (바운드 기준 자동 거리 설정)
+        // 업스케일 후 모델이 얇은 평면이므로 max(X, Y) 기준으로 거리 산정.
+        const box = new THREE.Box3().setFromObject(model);
+        const center = box.getCenter(new THREE.Vector3());
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const distance = maxDim * 2.5;
+
+        controls.target.copy(center);
+        camera.position.set(center.x + distance, center.y + distance * 0.6, center.z + distance);
+        controls.update();
+    });
+
+    // ── Render Loop ───────────────────────────────────────────
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // ── Demo: renderData 호출 ─────────────────────────────────
+    document.querySelectorAll('.demo-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            if (!instance.meshState) return;
+
+            const status = btn.dataset.status;
+
+            if (status === 'reset') {
+                // Group 'Group003'의 자식 Mesh(partition·glass_A) material을 흰색으로 복귀.
+                // MeshStateMixin이 각 자식 Mesh 단위로 clone했으므로, 여기서도
+                // Group을 traverse하여 자식 material.color만 setHex(0xffffff)로 복귀.
+                const group = instance.appendElement.getObjectByName(meshName);
+                if (!group) return;
+                group.traverse((child) => {
+                    if (!child.material) return;
+                    if (Array.isArray(child.material)) {
+                        child.material.forEach(m => m.color && m.color.setHex(0xffffff));
+                    } else if (child.material.color) {
+                        child.material.color.setHex(0xffffff);
+                    }
+                });
+                return;
+            }
+
+            // 단일 meshName 'Group003'(부모 Group)으로 자식 2개 일괄 색상 치환.
+            // MeshStateMixin이 Group 타겟에 대해 traverse 브랜치로 진입,
+            // 자식 material을 각각 clone 후 color만 setHex.
+            instance.meshState.renderData({
+                response: [{ meshName, status }]
+            });
+        });
+    });
+
+    // ── Resize ────────────────────────────────────────────────
+    window.addEventListener('resize', () => {
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+    });
+    </script>
+</body>
+</html>
