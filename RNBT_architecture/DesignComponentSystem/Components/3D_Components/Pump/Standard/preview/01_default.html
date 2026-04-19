@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Pump — 01_status</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #1a1a2e; }
+        #pump-pageThreeLayer {
+            width: 600px;
+            height: 480px;
+            display: block;
+            overflow: hidden;
+            margin: 40px auto;
+        }
+        canvas { display: block; }
+
+        .demo-controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px;
+        }
+        .demo-btn {
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #ffffff;
+            transition: opacity 0.15s;
+        }
+        .demo-btn:hover { opacity: 0.8; }
+        .demo-btn[data-status="normal"]  { background: #34d399; }
+        .demo-btn[data-status="warning"] { background: #fbbf24; color: #1a1a2e; }
+        .demo-btn[data-status="error"]   { background: #f87171; }
+        .demo-btn[data-status="offline"] { background: #6b7280; }
+        .demo-btn[data-status="reset"]   { background: #3b82f6; }
+    </style>
+</head>
+<body>
+    <div class="demo-controls">
+        <button class="demo-btn" data-status="normal">Normal</button>
+        <button class="demo-btn" data-status="warning">Warning</button>
+        <button class="demo-btn" data-status="error">Error</button>
+        <button class="demo-btn" data-status="offline">Offline</button>
+        <button class="demo-btn" data-status="reset">Reset</button>
+    </div>
+
+    <div id="pump-pageThreeLayer"></div>
+
+    <!-- Mixin 로드 -->
+    <script src="../../../../../Mixins/MeshStateMixin.js"></script>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+    // ── Three.js Scene Setup ──────────────────────────────────
+    const container = document.getElementById('pump-pageThreeLayer');
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x1a1a2e);
+
+    // Pump은 root scale [1000, 1000, 1000] 업스케일 패턴 (Partition·Partition_small·Earthquake·OHU103·ElecPad·PCS와 동일).
+    // Mesh 원본 bound ~0.00186 × 0.00323 × 0.00154 → 업스케일 후 1.86 × 3.23 × 1.54
+    // (Y축이 길이 방향, 세 축이 비교적 균등한 부피체).
+    // Partition_small의 13.5(Z)보다 최대축이 작으므로 far=50으로 충분.
+    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 50);
+    camera.position.set(5, 3, 5);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.target.set(0, 0, 0);
+
+    // ── Lighting ──────────────────────────────────────────────
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    directionalLight.position.set(5, 8, 4);
+    scene.add(directionalLight);
+
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
+    fillLight.position.set(-3, 2, -2);
+    scene.add(fillLight);
+
+    // ── Grid ──────────────────────────────────────────────────
+    // 업스케일 후 모델 크기 ~3.23(Y) × 1.86(X) × 1.54(Z)에 맞춰 그리드 크기 10, 분할 10 (~1 간격).
+    scene.add(new THREE.GridHelper(10, 10, 0x2a2a4a, 0x2a2a4a));
+
+    // ── Mock Instance ─────────────────────────────────────────
+    const instance = { appendElement: null };
+
+    // ── Load Model ────────────────────────────────────────────
+    // Pump.gltf:
+    //   scene → root (scale [1000, 1000, 1000])
+    //           └─ Pump (Mesh Node, mesh 0,
+    //                    translation [0, 2.98e-08, 0],
+    //                    material "Pump" = baseColorTexture textures/Pump.jpg)
+    //
+    // **단일 Mesh 직접 참조** — meshName='Pump'은 리프 Mesh Node 이름.
+    // getObjectByName('Pump')은 단일 Mesh를 반환하고, MeshStateMixin은
+    // obj.material이 단일 객체이므로 Mesh 브랜치로 진입해 material을 clone하고
+    // color만 setHex로 치환. FLIREx·BATT·Chiller·Partition_small의 동일 패턴
+    // — Partition의 Group-traverse와 대비.
+    //
+    // material이 baseColorTexture 주도이므로 color setHex가 텍스처에 곱해진다(three.js 기본).
+    const meshName = 'Pump';
+    const loader = new GLTFLoader();
+
+    loader.load('../../../../../models/Pump/01_default/Pump.gltf', (gltf) => {
+        const model = gltf.scene;
+        scene.add(model);
+
+        instance.appendElement = model;
+
+        // MeshStateMixin 적용 (register.js와 동일)
+        applyMeshStateMixin(instance, {
+            colorMap: {
+                normal:  0x34d399,
+                warning: 0xfbbf24,
+                error:   0xf87171,
+                offline: 0x6b7280
+            }
+        });
+
+        // 카메라 타겟 조정 (바운드 기준 자동 거리 설정)
+        // 업스케일 후 세 축이 비교적 균등한 부피체이므로 max(X, Y, Z) 기준으로 거리 산정.
+        const box = new THREE.Box3().setFromObject(model);
+        const center = box.getCenter(new THREE.Vector3());
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const distance = maxDim * 2.0;
+
+        controls.target.copy(center);
+        camera.position.set(center.x + distance, center.y + distance * 0.6, center.z + distance);
+        controls.update();
+    });
+
+    // ── Render Loop ───────────────────────────────────────────
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // ── Demo: renderData 호출 ─────────────────────────────────
+    document.querySelectorAll('.demo-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            if (!instance.meshState) return;
+
+            const status = btn.dataset.status;
+
+            if (status === 'reset') {
+                // 단일 Mesh 'Pump'의 material을 흰색으로 복귀.
+                // MeshStateMixin이 단일 material을 clone했으므로, 여기서도
+                // material.color만 setHex(0xffffff)로 복귀.
+                const mesh = instance.appendElement.getObjectByName(meshName);
+                if (!mesh) return;
+                if (Array.isArray(mesh.material)) {
+                    mesh.material.forEach(m => m.color && m.color.setHex(0xffffff));
+                } else if (mesh.material && mesh.material.color) {
+                    mesh.material.color.setHex(0xffffff);
+                }
+                return;
+            }
+
+            // 단일 meshName 'Pump'(리프 Mesh)으로 단일 Mesh 색상 치환.
+            // MeshStateMixin이 Mesh 타겟에 대해 Array.isArray 미발동 경로로 진입,
+            // material을 clone 후 color만 setHex.
+            instance.meshState.renderData({
+                response: [{ meshName, status }]
+            });
+        });
+    });
+
+    // ── Resize ────────────────────────────────────────────────
+    window.addEventListener('resize', () => {
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+    });
+    </script>
+</body>
+</html>
