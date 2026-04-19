@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>TextFields/Standard — 03_editorial (Persona C)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #FAF9F6;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            gap: 28px;
+            padding: 80px 20px;
+        }
+        .demo-log {
+            width: 440px;
+            padding: 14px 18px;
+            background: #FFFFFF;
+            border: 1px solid #E8E4DE;
+            border-radius: 2px;
+            color: #6B6560;
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .demo-log strong { color: #1F1B17; font-family: 'DM Serif Display', serif; }
+        .demo-actions { display: flex; gap: 12px; }
+        .demo-actions button {
+            padding: 8px 18px;
+            background: transparent;
+            border: 1px solid #3D3833;
+            border-radius: 2px;
+            color: #3D3833;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            cursor: pointer;
+            letter-spacing: 0.3px;
+        }
+        .demo-actions button:hover {
+            background: #3D3833;
+            color: #FAF9F6;
+        }
+    </style>
+</head>
+<body>
+
+<div id="text-field-container"></div>
+<div class="demo-actions">
+    <button data-demo="error">Trigger error</button>
+    <button data-demo="disable">Toggle disabled</button>
+    <button data-demo="reset">Reset</button>
+</div>
+<div class="demo-log" id="demo-log"><strong>Event Log</strong><br>&mdash;</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/FieldRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('text-field-container', '../views/03_editorial.html', '../styles/03_editorial.css');
+
+    const instance = { id: 'text-field', appendElement: document.getElementById('text-field-container') };
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            root:         '.text-field',
+            label:        '.text-field__label',
+            leadingIcon:  '.text-field__leading',
+            value:        '.text-field__input',
+            placeholder:  '.text-field__input',
+            trailingIcon: '.text-field__trailing',
+            supporting:   '.text-field__supporting',
+            errorText:    '.text-field__error',
+            state:        '.text-field',
+            required:     '.text-field'
+        },
+        elementAttrs: {
+            value:       'value',
+            placeholder: 'placeholder'
+        },
+        datasetAttrs: {
+            state:    'state',
+            required: 'required'
+        }
+    });
+
+    instance.subscriptions = {
+        textField: [instance.fieldRender.renderData]
+    };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        input: {
+            [instance.fieldRender.cssSelectors.value]:        '@textFieldInput'
+        },
+        change: {
+            [instance.fieldRender.cssSelectors.value]:        '@textFieldChanged'
+        },
+        click: {
+            [instance.fieldRender.cssSelectors.trailingIcon]: '@textFieldTrailingClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>Event Log</strong><br>&mdash;';
+    const log = (msg) => {
+        logHtml = '<strong>Event Log</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    const baseData = {
+        label:        'Your Name',
+        required:     'false',
+        value:        '',
+        placeholder:  'Jane Doe',
+        leadingIcon:  '',
+        trailingIcon: '\u270E',   // 연필
+        supporting:   'As it should appear in the byline',
+        errorText:    '',
+        state:        'enabled'
+    };
+
+    instance.fieldRender.renderData({ response: baseData });
+
+    Wkit.onEventBusHandlers({
+        '@textFieldInput':            ({ event })           => log('textFieldInput "' + event.target.value + '"'),
+        '@textFieldChanged':          ({ event })           => log('<strong>textFieldChanged</strong> "' + event.target.value + '"'),
+        '@textFieldTrailingClicked':  ({ targetInstance })  => {
+            log('textFieldTrailingClicked');
+            const input = targetInstance.appendElement.querySelector(targetInstance.fieldRender.cssSelectors.value);
+            if (input) input.focus();
+        }
+    });
+
+    document.querySelector('[data-demo="error"]').addEventListener('click', () => {
+        instance.fieldRender.renderData({ response: {
+            ...baseData, state: 'error', errorText: 'Name cannot be empty.'
+        }});
+        log('demo: error state');
+    });
+    let disabled = false;
+    document.querySelector('[data-demo="disable"]').addEventListener('click', () => {
+        disabled = !disabled;
+        instance.fieldRender.renderData({ response: {
+            ...baseData,
+            state: disabled ? 'disabled' : 'enabled'
+        }});
+        log('demo: disabled=' + disabled);
+    });
+    document.querySelector('[data-demo="reset"]').addEventListener('click', () => {
+        const input = instance.appendElement.querySelector(instance.fieldRender.cssSelectors.value);
+        if (input) input.value = '';
+        instance.fieldRender.renderData({ response: baseData });
+        log('demo: reset');
+    });
+})();
+</script>
+</body>
+</html>

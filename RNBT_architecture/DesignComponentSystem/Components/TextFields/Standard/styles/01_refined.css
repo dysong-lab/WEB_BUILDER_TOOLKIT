@@ -1,0 +1,156 @@
+/* TextFields/Standard — 01_refined (Persona A: Refined Technical)
+   다크 퍼플 / 그라디언트 깊이 / Pretendard 400-600 / box-shadow 금지 / Flexbox only
+   모서리 8px (폼 필드), 라벨은 상단 고정, focus는 border 색상만 */
+
+#text-field-container {
+    width: 360px;
+}
+
+#text-field-container .text-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    font-family: 'Pretendard', sans-serif;
+    color: #E8EDFF;
+}
+
+/* 라벨 */
+#text-field-container .text-field__label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: #A6B3DE;
+    line-height: 1.4;
+    letter-spacing: 0.2px;
+}
+
+#text-field-container .text-field__label:empty {
+    display: none;
+}
+
+#text-field-container .text-field[data-required="true"] .text-field__label::after {
+    content: ' *';
+    color: #F43031;
+}
+
+/* 입력 필드 래퍼 */
+#text-field-container .text-field__field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: linear-gradient(90deg, rgba(146, 168, 244, 0.04) 0%, rgba(5, 171, 207, 0.02) 100%),
+                #1E1B4B;
+    border: 1px solid #2A2574;
+    border-radius: 8px;
+    transition: border-color 150ms ease-out;
+}
+
+#text-field-container .text-field__field:focus-within {
+    border-color: #92A8F4;
+}
+
+#text-field-container .text-field[data-state="error"] .text-field__field {
+    border-color: #F43031;
+}
+
+#text-field-container .text-field[data-state="disabled"] .text-field__field {
+    background: #191D50;
+    border-color: #2A2574;
+    pointer-events: none;
+}
+
+#text-field-container .text-field[data-state="disabled"] .text-field__input {
+    color: #707EB4;
+    cursor: not-allowed;
+}
+
+#text-field-container .text-field[data-state="disabled"] .text-field__label {
+    color: #4A527E;
+}
+
+/* 아이콘 */
+#text-field-container .text-field__leading,
+#text-field-container .text-field__trailing {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    font-size: 16px;
+    color: #92A8F4;
+    line-height: 1;
+}
+
+#text-field-container .text-field__leading:empty,
+#text-field-container .text-field__trailing:empty {
+    display: none;
+}
+
+#text-field-container .text-field__trailing {
+    color: #707EB4;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: color 150ms ease-out, background-color 150ms ease-out;
+    padding: 2px;
+    width: 22px;
+    height: 22px;
+}
+
+#text-field-container .text-field__trailing:hover {
+    color: #E8EDFF;
+    background: linear-gradient(90deg, rgba(146, 168, 244, 0.18) 0%, rgba(146, 168, 244, 0.06) 100%);
+}
+
+#text-field-container .text-field[data-state="error"] .text-field__trailing {
+    color: #F43031;
+}
+
+/* 입력 */
+#text-field-container .text-field__input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    color: #E8EDFF;
+    line-height: 1.3;
+    padding: 0;
+}
+
+#text-field-container .text-field__input::placeholder {
+    color: #707EB4;
+    font-weight: 400;
+}
+
+/* supporting / error */
+#text-field-container .text-field__supporting,
+#text-field-container .text-field__error {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: 0.1px;
+    padding: 0 2px;
+}
+
+#text-field-container .text-field__supporting {
+    color: #707EB4;
+}
+
+#text-field-container .text-field__error {
+    color: #F43031;
+}
+
+#text-field-container .text-field__supporting:empty,
+#text-field-container .text-field__error:empty {
+    display: none;
+}
+
+#text-field-container .text-field[data-state="error"] .text-field__supporting {
+    display: none;
+}

@@ -1,0 +1,176 @@
+/* TextFields/Standard — 04_operational (Persona D: Dark Operational)
+   컴팩트 다크 쿨 톤 / IBM Plex Mono / 2px 모서리 / 시안 미세 테두리
+   라벨 UPPERCASE 소형 / 밀도 Compact / 에러는 빨강 + 모노 */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+#text-field-container {
+    width: 320px;
+}
+
+#text-field-container .text-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    font-family: 'IBM Plex Sans', sans-serif;
+    color: #C9D1D9;
+}
+
+/* 라벨 — UPPERCASE 소형 */
+#text-field-container .text-field__label {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    color: #7A8FA5;
+    line-height: 1;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    padding: 0 2px;
+}
+
+#text-field-container .text-field__label:empty {
+    display: none;
+}
+
+#text-field-container .text-field[data-required="true"] .text-field__label::after {
+    content: ' *';
+    color: #F43031;
+}
+
+/* 입력 필드 래퍼 */
+#text-field-container .text-field__field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    background: #0D1117;
+    border: 1px solid rgba(99, 199, 255, 0.18);
+    border-radius: 2px;
+    transition: border-color 150ms ease;
+}
+
+#text-field-container .text-field__field:focus-within {
+    border-color: rgba(77, 208, 225, 0.5);
+}
+
+#text-field-container .text-field[data-state="error"] .text-field__field {
+    border-color: #F43031;
+    animation: text-field-pulse 1200ms ease-in-out infinite;
+}
+
+@keyframes text-field-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(244, 48, 49, 0); }
+    50%      { box-shadow: 0 0 0 1px rgba(244, 48, 49, 0.4); }
+}
+
+#text-field-container .text-field[data-state="disabled"] .text-field__field {
+    background: #161B22;
+    border-color: rgba(99, 199, 255, 0.08);
+    pointer-events: none;
+}
+
+#text-field-container .text-field[data-state="disabled"] .text-field__input {
+    color: #4D5A6B;
+    cursor: not-allowed;
+}
+
+#text-field-container .text-field[data-state="disabled"] .text-field__label {
+    color: #4D5A6B;
+}
+
+/* 아이콘 */
+#text-field-container .text-field__leading,
+#text-field-container .text-field__trailing {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: #4DD0E1;
+    line-height: 1;
+    padding: 0 4px;
+    letter-spacing: 0.4px;
+}
+
+#text-field-container .text-field__leading:empty,
+#text-field-container .text-field__trailing:empty {
+    display: none;
+}
+
+#text-field-container .text-field__trailing {
+    color: #7A8FA5;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    padding: 2px 6px;
+    font-size: 10px;
+    text-transform: uppercase;
+    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+#text-field-container .text-field__trailing:hover {
+    background: #161B22;
+    border-color: rgba(77, 208, 225, 0.3);
+    color: #E6EDF3;
+}
+
+#text-field-container .text-field[data-state="error"] .text-field__trailing {
+    color: #F43031;
+}
+
+/* 입력 */
+#text-field-container .text-field__input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 400;
+    color: #E6EDF3;
+    line-height: 1.3;
+    letter-spacing: 0.3px;
+    padding: 4px 0;
+}
+
+#text-field-container .text-field__input::placeholder {
+    color: #4D5A6B;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 11px;
+}
+
+/* supporting / error */
+#text-field-container .text-field__supporting,
+#text-field-container .text-field__error {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.3;
+    letter-spacing: 0.3px;
+    padding: 0 2px;
+    text-transform: uppercase;
+}
+
+#text-field-container .text-field__supporting {
+    color: #7A8FA5;
+}
+
+#text-field-container .text-field__error {
+    color: #F43031;
+}
+
+#text-field-container .text-field__supporting:empty,
+#text-field-container .text-field__error:empty {
+    display: none;
+}
+
+#text-field-container .text-field[data-state="error"] .text-field__supporting {
+    display: none;
+}

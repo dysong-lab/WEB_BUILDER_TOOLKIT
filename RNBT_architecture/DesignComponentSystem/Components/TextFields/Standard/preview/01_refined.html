@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>TextFields/Standard — 01_refined (Persona A)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #12153D;
+            font-family: 'Pretendard', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            gap: 24px;
+            padding: 60px 20px;
+        }
+        .demo-log {
+            width: 380px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid #2A2574;
+            border-radius: 8px;
+            color: #A6B3DE;
+            font-size: 12px;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .demo-log strong { color: #E8EDFF; }
+        .demo-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .demo-actions button {
+            padding: 6px 12px;
+            background: #2A2574;
+            border: 1px solid #92A8F4;
+            border-radius: 8px;
+            color: #E8EDFF;
+            font-family: inherit;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .demo-actions button:hover {
+            background: #3E3597;
+        }
+    </style>
+</head>
+<body>
+
+<div id="text-field-container"></div>
+<div class="demo-actions">
+    <button data-demo="error">Trigger error</button>
+    <button data-demo="disable">Toggle disabled</button>
+    <button data-demo="reset">Reset</button>
+</div>
+<div class="demo-log" id="demo-log"><strong>Event Log</strong><br>&mdash;</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/FieldRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('text-field-container', '../views/01_refined.html', '../styles/01_refined.css');
+
+    const instance = { id: 'text-field', appendElement: document.getElementById('text-field-container') };
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            root:         '.text-field',
+            label:        '.text-field__label',
+            leadingIcon:  '.text-field__leading',
+            value:        '.text-field__input',
+            placeholder:  '.text-field__input',
+            trailingIcon: '.text-field__trailing',
+            supporting:   '.text-field__supporting',
+            errorText:    '.text-field__error',
+            state:        '.text-field',
+            required:     '.text-field'
+        },
+        elementAttrs: {
+            value:       'value',
+            placeholder: 'placeholder'
+        },
+        datasetAttrs: {
+            state:    'state',
+            required: 'required'
+        }
+    });
+
+    instance.subscriptions = {
+        textField: [instance.fieldRender.renderData]
+    };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        input: {
+            [instance.fieldRender.cssSelectors.value]:        '@textFieldInput'
+        },
+        change: {
+            [instance.fieldRender.cssSelectors.value]:        '@textFieldChanged'
+        },
+        click: {
+            [instance.fieldRender.cssSelectors.trailingIcon]: '@textFieldTrailingClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>Event Log</strong><br>&mdash;';
+    const log = (msg) => {
+        logHtml = '<strong>Event Log</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    // 초기 상태
+    const baseData = {
+        label:        'Email address',
+        required:     'true',
+        value:        '',
+        placeholder:  'you@example.com',
+        leadingIcon:  '\u2709',    // 봉투
+        trailingIcon: '\u24D8',    // circled i (info)
+        supporting:   'We will never share your email.',
+        errorText:    '',
+        state:        'enabled'
+    };
+
+    instance.fieldRender.renderData({ response: baseData });
+
+    Wkit.onEventBusHandlers({
+        '@textFieldInput':            ({ event })           => log('textFieldInput "' + event.target.value + '"'),
+        '@textFieldChanged':          ({ event })           => log('<strong>textFieldChanged</strong> "' + event.target.value + '"'),
+        '@textFieldTrailingClicked':  ({ targetInstance })  => {
+            log('textFieldTrailingClicked');
+            const input = targetInstance.appendElement.querySelector(targetInstance.fieldRender.cssSelectors.value);
+            if (input) input.value = '';
+            // clear → 값/에러 초기화 재반영 (페이지 시뮬레이션)
+            instance.fieldRender.renderData({ response: {
+                ...baseData, value: '', state: 'enabled', errorText: ''
+            }});
+        }
+    });
+
+    document.querySelector('[data-demo="error"]').addEventListener('click', () => {
+        instance.fieldRender.renderData({ response: {
+            ...baseData, state: 'error', errorText: 'Invalid email format.'
+        }});
+        log('demo: error state');
+    });
+    let disabled = false;
+    document.querySelector('[data-demo="disable"]').addEventListener('click', () => {
+        disabled = !disabled;
+        instance.fieldRender.renderData({ response: {
+            ...baseData,
+            state: disabled ? 'disabled' : 'enabled'
+        }});
+        log('demo: disabled=' + disabled);
+    });
+    document.querySelector('[data-demo="reset"]').addEventListener('click', () => {
+        const input = instance.appendElement.querySelector(instance.fieldRender.cssSelectors.value);
+        if (input) input.value = '';
+        instance.fieldRender.renderData({ response: baseData });
+        log('demo: reset');
+    });
+})();
+</script>
+</body>
+</html>

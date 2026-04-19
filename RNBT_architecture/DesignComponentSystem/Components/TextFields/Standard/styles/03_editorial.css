@@ -1,0 +1,168 @@
+/* TextFields/Standard — 03_editorial (Persona C: Minimal Editorial)
+   웜 그레이 / 세리프 라벨 / 바닥줄 (border-bottom only) / 넓은 여백
+   DM Serif Display (라벨) + Inter (입력/보조) / 2px 모서리 */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
+
+#text-field-container {
+    width: 420px;
+}
+
+#text-field-container .text-field {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    color: #3D3833;
+}
+
+/* 라벨 — 세리프, 편집적 느낌 */
+#text-field-container .text-field__label {
+    display: block;
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: #3D3833;
+    line-height: 1.3;
+    letter-spacing: 0.2px;
+}
+
+#text-field-container .text-field__label:empty {
+    display: none;
+}
+
+#text-field-container .text-field[data-required="true"] .text-field__label::after {
+    content: ' *';
+    color: #B65959;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    vertical-align: top;
+}
+
+/* 입력 필드 래퍼 — 바닥줄 */
+#text-field-container .text-field__field {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 4px;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid #3D3833;
+    border-radius: 2px 2px 0 0;
+    transition: border-color 150ms ease;
+}
+
+#text-field-container .text-field__field:focus-within {
+    border-bottom-color: #1F1B17;
+    border-bottom-width: 2px;
+    padding-bottom: 9px;
+}
+
+#text-field-container .text-field[data-state="error"] .text-field__field {
+    border-bottom-color: #B65959;
+    border-bottom-width: 2px;
+    padding-bottom: 9px;
+}
+
+#text-field-container .text-field[data-state="disabled"] .text-field__field {
+    border-bottom-color: #D4CFC8;
+    border-bottom-style: dashed;
+    pointer-events: none;
+}
+
+#text-field-container .text-field[data-state="disabled"] .text-field__input {
+    color: #A09890;
+    cursor: not-allowed;
+}
+
+#text-field-container .text-field[data-state="disabled"] .text-field__label {
+    color: #A09890;
+}
+
+/* 아이콘 */
+#text-field-container .text-field__leading,
+#text-field-container .text-field__trailing {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    font-size: 16px;
+    color: #6B6560;
+    line-height: 1;
+}
+
+#text-field-container .text-field__leading:empty,
+#text-field-container .text-field__trailing:empty {
+    display: none;
+}
+
+#text-field-container .text-field__trailing {
+    color: #A09890;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    transition: color 150ms ease;
+}
+
+#text-field-container .text-field__trailing:hover {
+    color: #3D3833;
+}
+
+#text-field-container .text-field[data-state="error"] .text-field__trailing {
+    color: #B65959;
+}
+
+/* 입력 */
+#text-field-container .text-field__input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: #3D3833;
+    line-height: 1.3;
+    letter-spacing: 0.2px;
+    padding: 4px 0;
+}
+
+#text-field-container .text-field__input::placeholder {
+    color: #A09890;
+    font-style: italic;
+    font-family: 'DM Serif Display', serif;
+}
+
+/* supporting / error */
+#text-field-container .text-field__supporting,
+#text-field-container .text-field__error {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.4;
+    letter-spacing: 0.2px;
+    padding: 0 4px;
+}
+
+#text-field-container .text-field__supporting {
+    color: #6B6560;
+}
+
+#text-field-container .text-field__error {
+    color: #B65959;
+}
+
+#text-field-container .text-field__supporting:empty,
+#text-field-container .text-field__error:empty {
+    display: none;
+}
+
+#text-field-container .text-field[data-state="error"] .text-field__supporting {
+    display: none;
+}
