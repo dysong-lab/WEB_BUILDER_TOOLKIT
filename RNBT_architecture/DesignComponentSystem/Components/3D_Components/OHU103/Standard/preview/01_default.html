@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>OHU103 — 01_status</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #1a1a2e; }
+        #ohu103-pageThreeLayer {
+            width: 600px;
+            height: 480px;
+            display: block;
+            overflow: hidden;
+            margin: 40px auto;
+        }
+        canvas { display: block; }
+
+        .demo-controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px;
+        }
+        .demo-btn {
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #ffffff;
+            transition: opacity 0.15s;
+        }
+        .demo-btn:hover { opacity: 0.8; }
+        .demo-btn[data-status="normal"]  { background: #34d399; }
+        .demo-btn[data-status="warning"] { background: #fbbf24; color: #1a1a2e; }
+        .demo-btn[data-status="error"]   { background: #f87171; }
+        .demo-btn[data-status="offline"] { background: #6b7280; }
+        .demo-btn[data-status="reset"]   { background: #3b82f6; }
+    </style>
+</head>
+<body>
+    <div class="demo-controls">
+        <button class="demo-btn" data-status="normal">Normal</button>
+        <button class="demo-btn" data-status="warning">Warning</button>
+        <button class="demo-btn" data-status="error">Error</button>
+        <button class="demo-btn" data-status="offline">Offline</button>
+        <button class="demo-btn" data-status="reset">Reset</button>
+    </div>
+
+    <div id="ohu103-pageThreeLayer"></div>
+
+    <!-- Mixin 로드 -->
+    <script src="../../../../../Mixins/MeshStateMixin.js"></script>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+    // ── Three.js Scene Setup ──────────────────────────────────
+    const container = document.getElementById('ohu103-pageThreeLayer');
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x1a1a2e);
+
+    // far=500: OHU103은 root scale 1000 적용 후 ~32 × 17.6 × 10.5 단위 (X축 주축).
+    // maxDim(32) × distanceFactor(2.2) ≈ 70 거리를 수용하도록 넉넉한 far 값을 사용.
+    // MonnitTemperature_sensor(far=100, maxDim ~3.66)의 약 5배 스케일.
+    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 500);
+    camera.position.set(50, 30, 60);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.target.set(0, 0, 0);
+
+    // ── Lighting ──────────────────────────────────────────────
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    directionalLight.position.set(40, 60, 30);
+    scene.add(directionalLight);
+
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
+    fillLight.position.set(-20, 15, -15);
+    scene.add(fillLight);
+
+    // ── Grid ──────────────────────────────────────────────────
+    // 모델 실제 크기(~32 × 17.6 × 10.5)에 맞춰 그리드 크기를 80으로 조정
+    scene.add(new THREE.GridHelper(80, 16, 0x2a2a4a, 0x2a2a4a));
+
+    // ── Mock Instance ─────────────────────────────────────────
+    const instance = { appendElement: null };
+
+    // ── Load Model ────────────────────────────────────────────
+    // OHU103.gltf: scene → root(scale [1000,1000,1000]) → "OHU103"(mesh 0, 1 primitive, 1 material).
+    // **폴더명 = Node/Mesh 이름 완전 일치** — 영문 약어(OHU) + 숫자 모델 번호(103)의 짧은 식별자
+    // (LeakDetector·FLIREx·ExitSign·ElecPad·Earthquake·MonnitTemperature_sensor와 같은 "이름 일치형" 규약).
+    // Mesh Node rotation [0, -1, 0, 4.37e-8]은 쿼터니언 Y축 180도 회전
+    //  (3ds Max forward → glTF -Z-forward 보정).
+    // 단일 primitive × 단일 material(Material #42136, 3ds Max 5자리 숫자 일련번호)
+    //  — MeshStateMixin의 단일 material 경로로 색상 치환.
+    // roughnessFactor 0.45(정상 중간값), doubleSided 없음(일반 backface culling) —
+    // 두꺼운 박스형 공조 유닛 외장.
+    // 좌표 바운드 원시값 [-0.016, 0.0, -0.00525] ~ [0.016, 0.0176, 0.00525]
+    //  → root scale 1000으로 실제 ~32 × 17.6 × 10.5 단위
+    //  (X축 주축, Y축 바닥 앵커링, 가로로 긴 박스형 공조 유닛).
+    const meshName = 'OHU103';
+    const loader = new GLTFLoader();
+
+    loader.load('../../../../../models/OHU103/01_default/OHU103.gltf', (gltf) => {
+        const model = gltf.scene;
+        scene.add(model);
+
+        instance.appendElement = model;
+
+        // MeshStateMixin 적용 (register.js와 동일)
+        applyMeshStateMixin(instance, {
+            colorMap: {
+                normal:  0x34d399,
+                warning: 0xfbbf24,
+                error:   0xf87171,
+                offline: 0x6b7280
+            }
+        });
+
+        // 카메라 타겟 조정 (바운드 기준 — root scale 적용 후 실제 크기 기반.
+        // Y축 바닥 앵커링이므로 center가 Y=8.8 근방으로 형성됨; X축 주축 32 단위)
+        const box = new THREE.Box3().setFromObject(model);
+        const center = box.getCenter(new THREE.Vector3());
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const distance = maxDim * 2.2;
+
+        controls.target.copy(center);
+        camera.position.set(center.x + distance, center.y + distance * 0.6, center.z + distance);
+        controls.update();
+    });
+
+    // ── Render Loop ───────────────────────────────────────────
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // ── Demo: renderData 호출 ─────────────────────────────────
+    document.querySelectorAll('.demo-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            if (!instance.meshState) return;
+
+            const status = btn.dataset.status;
+
+            if (status === 'reset') {
+                // 단일 material 단일 Mesh — 객체 material의 color를 흰색으로 복귀.
+                // (LeakDetector의 배열 material 경로와 달리 객체 경로만 처리하면 됨)
+                const mesh = instance.appendElement.getObjectByName(meshName);
+                if (mesh) {
+                    const applyWhite = (node) => {
+                        if (!node.isMesh || !node.material) return;
+                        if (Array.isArray(node.material)) {
+                            node.material.forEach(m => m.color && m.color.setHex(0xffffff));
+                        } else if (node.material.color) {
+                            node.material.color.setHex(0xffffff);
+                        }
+                    };
+                    if (mesh.isMesh) applyWhite(mesh);
+                    else mesh.traverse(applyWhite);
+                }
+                return;
+            }
+
+            instance.meshState.renderData({
+                response: [{ meshName, status }]
+            });
+        });
+    });
+
+    // ── Resize ────────────────────────────────────────────────
+    window.addEventListener('resize', () => {
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+    });
+    </script>
+</body>
+</html>
