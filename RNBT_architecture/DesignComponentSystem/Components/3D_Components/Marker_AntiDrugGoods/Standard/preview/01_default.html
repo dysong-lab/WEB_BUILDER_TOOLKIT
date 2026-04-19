@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Marker_AntiDrugGoods — 01_status</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #1a1a2e; }
+        #marker_antidruggoods-pageThreeLayer {
+            width: 600px;
+            height: 480px;
+            display: block;
+            overflow: hidden;
+            margin: 40px auto;
+        }
+        canvas { display: block; }
+
+        .demo-controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px;
+        }
+        .demo-btn {
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #ffffff;
+            transition: opacity 0.15s;
+        }
+        .demo-btn:hover { opacity: 0.8; }
+        .demo-btn[data-status="normal"]  { background: #34d399; }
+        .demo-btn[data-status="warning"] { background: #fbbf24; color: #1a1a2e; }
+        .demo-btn[data-status="error"]   { background: #f87171; }
+        .demo-btn[data-status="offline"] { background: #6b7280; }
+        .demo-btn[data-status="reset"]   { background: #3b82f6; }
+    </style>
+</head>
+<body>
+    <div class="demo-controls">
+        <button class="demo-btn" data-status="normal">Normal</button>
+        <button class="demo-btn" data-status="warning">Warning</button>
+        <button class="demo-btn" data-status="error">Error</button>
+        <button class="demo-btn" data-status="offline">Offline</button>
+        <button class="demo-btn" data-status="reset">Reset</button>
+    </div>
+
+    <div id="marker_antidruggoods-pageThreeLayer"></div>
+
+    <!-- Mixin 로드 -->
+    <script src="../../../../../Mixins/MeshStateMixin.js"></script>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+    // ── Three.js Scene Setup ──────────────────────────────────
+    const container = document.getElementById('marker_antidruggoods-pageThreeLayer');
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x1a1a2e);
+
+    // Marker_AntiDrugGoods는 root scale [1000,1000,1000] 적용 후 실제 크기 ~5.94 × 6.86 × 0.20 단위
+    // (Marker_AICCTV·Marker_Anemometer와 동일 베이스 판 지오메트리).
+    // 카메라 거리(= maxDim * 2.2 ≈ 15.1)를 프러스텀에 담도록 near=0.1, far=100 (MT_01과 동일 스케일대).
+    // LithiumionBattery(far=5000, 실제 ~434 단위)의 1/50 스케일이므로 far 값을 크게 잡을 필요 없음.
+    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+    camera.position.set(8, 6, 10);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.target.set(0, 0, 0);
+
+    // ── Lighting ──────────────────────────────────────────────
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    directionalLight.position.set(5, 8, 4);
+    scene.add(directionalLight);
+
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
+    fillLight.position.set(-3, 2, -2);
+    scene.add(fillLight);
+
+    // ── Grid ──────────────────────────────────────────────────
+    // 모델 실제 크기(X ~5.94, Y ~6.86)에 맞춰 그리드 크기를 16으로 설정
+    scene.add(new THREE.GridHelper(16, 16, 0x2a2a4a, 0x2a2a4a));
+
+    // ── Mock Instance ─────────────────────────────────────────
+    const instance = { appendElement: null };
+
+    // ── Load Model ────────────────────────────────────────────
+    // Marker_AntiDrugGoods.gltf: scene → root(scale [1000,1000,1000]) → "MarkerAntiDrugGoods_A"(mesh 0, translation [0, 0, -0.00010015742])
+    //   — 단일 Mesh Node × 단일 primitive × 단일 material. Marker_AICCTV·Marker_Anemometer와 구조/수치 완전 동일,
+    //   LithiumionBattery와 동일한 2층 구조.
+    // **폴더-Node 형태 불일치 주의** — 폴더는 'Marker_AntiDrugGoods'(카멜케이스 + 중간 언더스코어)이지만
+    //   Node/Mesh 이름은 'MarkerAntiDrugGoods_A'(언더스코어 제거 + 뒤쪽 _A 접미).
+    //   getObjectByName은 이름을 그대로 비교하므로 반드시 'MarkerAntiDrugGoods_A'로 조회.
+    // 단일 primitive × 단일 material(Material #33, baseColorTexture textures/MarkerAntiDrugGoods_A.png)
+    //   — MeshStateMixin의 단일 material 경로로 색상 치환.
+    // roughness 0.450053632는 Marker_AICCTV·Marker_Anemometer와 동일한 마커 계열 공통 템플릿 값이며
+    // color 채널만 갱신되므로 치환 동작에 영향 없음.
+    // 좌표 바운드 ±0.00297 × ±0.00343 × ±0.000100 → root scale 1000 적용 후 실제 ~5.94 × 6.86 × 0.20 단위
+    //   (극단적 판상형 — Z축이 X·Y의 약 1/30; Marker_AICCTV·Marker_Anemometer와 완전 동일 바운드).
+    const meshName = 'MarkerAntiDrugGoods_A';
+    const loader = new GLTFLoader();
+
+    loader.load('../../../../../models/Marker_AntiDrugGoods/01_default/Marker_AntiDrugGoods.gltf', (gltf) => {
+        const model = gltf.scene;
+        scene.add(model);
+
+        instance.appendElement = model;
+
+        // MeshStateMixin 적용 (register.js와 동일)
+        applyMeshStateMixin(instance, {
+            colorMap: {
+                normal:  0x34d399,
+                warning: 0xfbbf24,
+                error:   0xf87171,
+                offline: 0x6b7280
+            }
+        });
+
+        // 카메라 타겟 조정 (바운드 기준 — root scale 적용 후 실제 크기 기반)
+        const box = new THREE.Box3().setFromObject(model);
+        const center = box.getCenter(new THREE.Vector3());
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const distance = maxDim * 2.2;
+
+        controls.target.copy(center);
+        camera.position.set(center.x + distance, center.y + distance * 0.6, center.z + distance);
+        controls.update();
+    });
+
+    // ── Render Loop ───────────────────────────────────────────
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // ── Demo: renderData 호출 ─────────────────────────────────
+    document.querySelectorAll('.demo-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            if (!instance.meshState) return;
+
+            const status = btn.dataset.status;
+
+            if (status === 'reset') {
+                // 단일 material 단일 Mesh — 객체 material의 color를 흰색으로 복귀.
+                // (LeakDetector의 배열 material 경로, MCCB의 Group traverse 경로와 달리 객체 경로만 처리)
+                const mesh = instance.appendElement.getObjectByName(meshName);
+                if (mesh) {
+                    const applyWhite = (node) => {
+                        if (!node.isMesh || !node.material) return;
+                        if (Array.isArray(node.material)) {
+                            node.material.forEach(m => m.color && m.color.setHex(0xffffff));
+                        } else if (node.material.color) {
+                            node.material.color.setHex(0xffffff);
+                        }
+                    };
+                    if (mesh.isMesh) applyWhite(mesh);
+                    else mesh.traverse(applyWhite);
+                }
+                return;
+            }
+
+            instance.meshState.renderData({
+                response: [{ meshName, status }]
+            });
+        });
+    });
+
+    // ── Resize ────────────────────────────────────────────────
+    window.addEventListener('resize', () => {
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+    });
+    </script>
+</body>
+</html>
