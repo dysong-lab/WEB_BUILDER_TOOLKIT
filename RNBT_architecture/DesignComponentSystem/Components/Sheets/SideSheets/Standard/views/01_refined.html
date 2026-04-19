@@ -1,0 +1,190 @@
+<template id="side-sheet-popup-template">
+    <style>
+        /* 01_refined: Persona A — Refined Technical
+           퍼플 팔레트 / 그라디언트 깊이 / Pretendard / 다크 / Modal Side Sheet (right-anchored) */
+
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+        @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
+
+        .side-sheet__scrim {
+            position: fixed;
+            inset: 0;
+            background: rgba(14, 17, 48, 0.72);
+            z-index: 1000;
+            cursor: pointer;
+        }
+
+        .side-sheet__surface {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 360px;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(180deg, #1F2358 0%, #171A44 100%);
+            border-left: 1px solid rgba(80, 46, 233, 0.4);
+            z-index: 1001;
+            overflow: hidden;
+        }
+
+        .side-sheet__header {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 20px 20px 12px 28px;
+        }
+
+        .side-sheet__header-text {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .side-sheet__headline {
+            font-family: 'Pretendard', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: #E8EDFF;
+            line-height: 1.35;
+        }
+
+        .side-sheet__supporting {
+            font-family: 'Pretendard', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            color: #A6B3DE;
+            line-height: 1.6;
+        }
+
+        .side-sheet__supporting:empty {
+            display: none;
+        }
+
+        .side-sheet__close-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+            border: none;
+            border-radius: 30px;
+            background: transparent;
+            color: #92A8F4;
+            cursor: pointer;
+            font-family: 'Material Symbols Outlined';
+            font-size: 22px;
+            padding: 0;
+            transition: background-color 150ms ease-out;
+        }
+
+        .side-sheet__close-btn:hover {
+            background: rgba(146, 168, 244, 0.16);
+        }
+
+        .side-sheet__close-btn::before {
+            content: 'close';
+        }
+
+        .side-sheet__divider {
+            height: 1px;
+            background: rgba(80, 46, 233, 0.2);
+            margin: 8px 20px 0;
+        }
+
+        .side-sheet__content {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+        }
+
+        .side-sheet__actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 16px 20px 24px;
+            border-top: 1px solid rgba(80, 46, 233, 0.2);
+        }
+
+        .side-sheet__actions:empty {
+            display: none;
+        }
+
+        .side-sheet__action {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            height: 44px;
+            padding: 0 16px;
+            border: none;
+            border-radius: 8px;
+            background: transparent;
+            color: #E8EDFF;
+            cursor: pointer;
+            transition: background-color 150ms ease-out;
+            text-align: left;
+        }
+
+        .side-sheet__action:hover {
+            background: rgba(80, 46, 233, 0.16);
+        }
+
+        .side-sheet__action:last-child {
+            background: #502EE9;
+        }
+
+        .side-sheet__action:last-child:hover {
+            background: #6B4BF0;
+        }
+
+        .side-sheet__action-icon {
+            font-family: 'Material Symbols Outlined';
+            font-size: 20px;
+            color: #92A8F4;
+            flex-shrink: 0;
+        }
+
+        .side-sheet__action:last-child .side-sheet__action-icon {
+            color: #E8EDFF;
+        }
+
+        .side-sheet__action-icon:empty {
+            display: none;
+        }
+
+        .side-sheet__action-label {
+            font-family: 'Pretendard', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+        }
+
+        template {
+            display: none;
+        }
+    </style>
+    <div class="side-sheet__scrim"></div>
+    <div class="side-sheet__surface">
+        <div class="side-sheet__header">
+            <div class="side-sheet__header-text">
+                <div class="side-sheet__headline"></div>
+                <div class="side-sheet__supporting"></div>
+            </div>
+            <button class="side-sheet__close-btn" aria-label="close"></button>
+        </div>
+        <div class="side-sheet__divider"></div>
+        <div class="side-sheet__content"></div>
+        <div class="side-sheet__actions"></div>
+        <template id="side-sheet-action-template">
+            <button class="side-sheet__action" data-actionid="">
+                <span class="side-sheet__action-icon material-symbols-outlined"></span>
+                <span class="side-sheet__action-label"></span>
+            </button>
+        </template>
+    </div>
+</template>

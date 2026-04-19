@@ -1,0 +1,189 @@
+<template id="side-sheet-popup-template">
+    <style>
+        /* 03_editorial: Persona C — Minimal Editorial
+           웜 그레이 / 세리프 제목 / 샤프한 직각 + 헤어라인 / 라이트 / Editorial Modal Side Sheet */
+
+        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
+
+        .side-sheet__scrim {
+            position: fixed;
+            inset: 0;
+            background: rgba(61, 56, 51, 0.28);
+            z-index: 1000;
+            cursor: pointer;
+        }
+
+        .side-sheet__surface {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 420px;
+            display: flex;
+            flex-direction: column;
+            background: #faf8f5;
+            border-left: 1px solid #d6cdbe;
+            border-radius: 0;
+            z-index: 1001;
+            overflow: hidden;
+        }
+
+        .side-sheet__header {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 32px 32px 24px 48px;
+        }
+
+        .side-sheet__header-text {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .side-sheet__headline {
+            font-family: 'DM Serif Display', serif;
+            font-size: 32px;
+            font-weight: 400;
+            color: #3d3833;
+            line-height: 1.25;
+        }
+
+        .side-sheet__supporting {
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            font-weight: 400;
+            color: #6b6560;
+            line-height: 1.7;
+        }
+
+        .side-sheet__supporting:empty {
+            display: none;
+        }
+
+        .side-sheet__close-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+            border: none;
+            border-bottom: 1px solid transparent;
+            border-radius: 0;
+            background: transparent;
+            color: #6b6560;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 22px;
+            font-weight: 400;
+            line-height: 1;
+            padding: 0;
+            transition: color 150ms ease, border-color 150ms ease;
+        }
+
+        .side-sheet__close-btn:hover {
+            color: #1a1814;
+            border-bottom: 1px solid #3d3833;
+        }
+
+        .side-sheet__close-btn::before {
+            content: '\00d7';
+            font-size: 28px;
+        }
+
+        .side-sheet__divider {
+            height: 1px;
+            background: #d6cdbe;
+            margin: 0 48px;
+        }
+
+        .side-sheet__content {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+        }
+
+        .side-sheet__actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            padding: 24px 48px 40px;
+            border-top: 1px solid #d6cdbe;
+        }
+
+        .side-sheet__actions:empty {
+            display: none;
+        }
+
+        .side-sheet__action {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            height: 48px;
+            padding: 0;
+            border: none;
+            border-bottom: 1px solid transparent;
+            border-radius: 0;
+            background: transparent;
+            color: #3d3833;
+            cursor: pointer;
+            transition: color 150ms ease, border-color 150ms ease;
+            text-align: left;
+        }
+
+        .side-sheet__action:hover {
+            color: #1a1814;
+            border-bottom: 1px solid #3d3833;
+        }
+
+        .side-sheet__action:last-child {
+            color: #8a6d3b;
+            font-weight: 500;
+        }
+
+        .side-sheet__action:last-child:hover {
+            color: #6d5428;
+            border-bottom: 1px solid #6d5428;
+        }
+
+        .side-sheet__action-icon {
+            display: none;
+        }
+
+        .side-sheet__action-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            font-weight: 400;
+            letter-spacing: 0.1px;
+        }
+
+        template {
+            display: none;
+        }
+    </style>
+    <div class="side-sheet__scrim"></div>
+    <div class="side-sheet__surface">
+        <div class="side-sheet__header">
+            <div class="side-sheet__header-text">
+                <div class="side-sheet__headline"></div>
+                <div class="side-sheet__supporting"></div>
+            </div>
+            <button class="side-sheet__close-btn" aria-label="close"></button>
+        </div>
+        <div class="side-sheet__divider"></div>
+        <div class="side-sheet__content"></div>
+        <div class="side-sheet__actions"></div>
+        <template id="side-sheet-action-template">
+            <button class="side-sheet__action" data-actionid="">
+                <span class="side-sheet__action-icon"></span>
+                <span class="side-sheet__action-label"></span>
+            </button>
+        </template>
+    </div>
+</template>

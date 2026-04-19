@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>SideSheets/Standard — 03_editorial (Persona C)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #faf8f5;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            gap: 40px;
+            padding: 80px 20px;
+        }
+        .demo-trigger {
+            padding: 12px 32px;
+            border: 1px solid #3d3833;
+            border-radius: 0;
+            background: transparent;
+            color: #3d3833;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 0.2px;
+            cursor: pointer;
+            transition: color 150ms ease, border-color 150ms ease;
+        }
+        .demo-trigger:hover {
+            color: #1a1814;
+            border-color: #1a1814;
+        }
+        .demo-log {
+            width: 360px;
+            padding: 16px 20px;
+            background: transparent;
+            border: 1px solid #d6cdbe;
+            border-radius: 0;
+            color: #6b6560;
+            font-size: 13px;
+            line-height: 1.7;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .demo-log strong {
+            color: #3d3833;
+            font-family: 'DM Serif Display', serif;
+            font-size: 16px;
+            font-weight: 400;
+        }
+    </style>
+</head>
+<body>
+
+<button class="demo-trigger" id="open-btn">Open Side Sheet</button>
+<div id="side-sheet-container"></div>
+<div class="demo-log" id="demo-log"><strong>이벤트 로그</strong><br>&mdash;</div>
+
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/ShadowPopupMixin.js"></script>
+<script src="../../../../../Mixins/FieldRenderMixin.js"></script>
+<script src="../../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('side-sheet-container', '../views/03_editorial.html', '../styles/03_editorial.css');
+
+    const instance = { id: 'sideSheet', appendElement: document.getElementById('side-sheet-container') };
+
+    instance._popupScope = null;
+
+    applyShadowPopupMixin(instance, {
+        cssSelectors: {
+            template: '#side-sheet-popup-template',
+            closeBtn: '.side-sheet__close-btn',
+            scrim:    '.side-sheet__scrim'
+        },
+        onCreated: (shadowRoot) => {
+            instance._popupScope = { appendElement: shadowRoot };
+
+            applyFieldRenderMixin(instance._popupScope, {
+                cssSelectors: {
+                    headline:   '.side-sheet__headline',
+                    supporting: '.side-sheet__supporting'
+                }
+            });
+
+            applyListRenderMixin(instance._popupScope, {
+                cssSelectors: {
+                    container:   '.side-sheet__actions',
+                    template:    '#side-sheet-action-template',
+                    actionid:    '.side-sheet__action',
+                    actionLabel: '.side-sheet__action-label',
+                    actionIcon:  '.side-sheet__action-icon'
+                },
+                itemKey: 'actionid',
+                datasetAttrs: {
+                    actionid: 'actionid'
+                }
+            });
+        }
+    });
+
+    instance.shadowPopup.bindPopupEvents({
+        click: {
+            [instance.shadowPopup.cssSelectors.closeBtn]: '@sideSheetClose',
+            [instance.shadowPopup.cssSelectors.scrim]:    '@sideSheetClose',
+            '.side-sheet__action':                        '@sideSheetActionClicked'
+        }
+    });
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>이벤트 로그</strong><br>&mdash;';
+    const log = (msg) => {
+        logHtml = '<strong>이벤트 로그</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    Wkit.onEventBusHandlers({
+        '@sideSheetClose': () => {
+            instance.shadowPopup.hide();
+            log('sideSheetClose &rarr; hide');
+        },
+        '@sideSheetActionClicked': ({ event }) => {
+            const item = event.target.closest('.side-sheet__action');
+            const actionid = item?.getAttribute('data-actionid');
+            log(`sideSheetActionClicked "${actionid}"`);
+            instance.shadowPopup.hide();
+        }
+    });
+
+    document.getElementById('open-btn').addEventListener('click', () => {
+        instance.shadowPopup.show();
+        log('show sideSheet');
+
+        instance._popupScope.fieldRender.renderData({ response: {
+            headline: 'Table of Contents',
+            supporting: 'Navigate the chapters of this long-form essay with ease.'
+        } });
+
+        instance._popupScope.listRender.renderData({ response: [
+            { actionid: 'chapter1', actionLabel: 'Chapter I — Arrival' },
+            { actionid: 'chapter2', actionLabel: 'Chapter II — Reflection' },
+            { actionid: 'notes',    actionLabel: 'Save as reading note' }
+        ] });
+    });
+})();
+</script>
+</body>
+</html>
