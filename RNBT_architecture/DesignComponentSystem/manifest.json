@@ -2040,6 +2040,19 @@
           ]
         },
         {
+          "name": "LV_1P_07",
+          "spec": "Components/3D_Components/LV_1P_07/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV_1P_07/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/LV_1P_07/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "Panel",
           "spec": "Components/3D_Components/Panel/CLAUDE.md",
           "sets": [
