@@ -1,0 +1,98 @@
+/* 01_refined: Persona A — Refined Technical
+   퍼플 팔레트 / 그라디언트 깊이 / Pretendard / 다크 / Tonal Snackbar */
+
+#snackbar-container {
+    .snackbar {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+        min-width: 300px;
+        max-width: 560px;
+        padding: 12px 12px 12px 20px;
+        background: linear-gradient(160deg, #1F2358 0%, #171A44 100%);
+        border: 1px solid rgba(80, 46, 233, 0.4);
+        border-radius: 8px;
+        opacity: 0;
+        transform: translateY(12px);
+        pointer-events: none;
+        transition: opacity 150ms ease-out, transform 150ms ease-out;
+    }
+
+    .snackbar[data-open="true"] {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+
+    .snackbar__supporting {
+        flex: 1;
+        min-width: 0;
+        font-family: 'Pretendard', sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+        color: #E8EDFF;
+        line-height: 1.5;
+    }
+
+    .snackbar__actions {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 4px;
+        flex-shrink: 0;
+    }
+
+    .snackbar__actions:empty {
+        display: none;
+    }
+
+    .snackbar__action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 32px;
+        padding: 0 14px;
+        border: none;
+        border-radius: 6px;
+        background: transparent;
+        color: #92A8F4;
+        cursor: pointer;
+        transition: background-color 150ms ease-out;
+    }
+
+    .snackbar__action:hover {
+        background: rgba(80, 46, 233, 0.2);
+    }
+
+    .snackbar__action-label {
+        font-family: 'Pretendard', sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.2px;
+    }
+
+    .snackbar__close-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border: none;
+        border-radius: 6px;
+        background: transparent;
+        color: #A6B3DE;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: background-color 150ms ease-out, color 150ms ease-out;
+    }
+
+    .snackbar__close-btn:hover {
+        background: rgba(80, 46, 233, 0.16);
+        color: #E8EDFF;
+    }
+
+    .snackbar__close-icon {
+        font-size: 18px;
+    }
+}

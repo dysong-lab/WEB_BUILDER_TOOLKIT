@@ -636,7 +636,24 @@
     {
       "name": "Snackbar",
       "spec": "Components/Snackbar/CLAUDE.md",
-      "components": []
+      "components": [
+        {
+          "name": "Snackbar",
+          "spec": "Components/Snackbar/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/Snackbar/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 refined", "path": "Components/Snackbar/Standard/preview/01_refined.html" },
+                { "label": "02 material", "path": "Components/Snackbar/Standard/preview/02_material.html" },
+                { "label": "03 editorial", "path": "Components/Snackbar/Standard/preview/03_editorial.html" },
+                { "label": "04 operational", "path": "Components/Snackbar/Standard/preview/04_operational.html" }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "Switch",

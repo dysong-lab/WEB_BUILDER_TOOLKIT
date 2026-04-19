@@ -1,0 +1,101 @@
+/* 02_material: Persona B — Material Elevated
+   인버스 서피스(다크 스낵바) / Roboto / shadow elevation / 라이트 앱 위 오버레이 */
+
+#snackbar-container {
+    .snackbar {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+        min-width: 288px;
+        max-width: 568px;
+        padding: 6px 8px 6px 16px;
+        background: #322F35;
+        border-radius: 4px;
+        box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2), 0 6px 10px rgba(0, 0, 0, 0.14), 0 1px 18px rgba(0, 0, 0, 0.12);
+        opacity: 0;
+        transform: translateY(16px);
+        pointer-events: none;
+        transition: opacity 200ms ease-in-out, transform 200ms ease-in-out, box-shadow 200ms ease-in-out;
+    }
+
+    .snackbar[data-open="true"] {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+
+    .snackbar__supporting {
+        flex: 1;
+        min-width: 0;
+        padding: 8px 0;
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+        color: #F5EFF7;
+        line-height: 1.43;
+        letter-spacing: 0.25px;
+    }
+
+    .snackbar__actions {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 4px;
+        flex-shrink: 0;
+    }
+
+    .snackbar__actions:empty {
+        display: none;
+    }
+
+    .snackbar__action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 36px;
+        padding: 0 12px;
+        border: none;
+        border-radius: 4px;
+        background: transparent;
+        color: #D0BCFF;
+        cursor: pointer;
+        transition: background-color 200ms ease-in-out;
+    }
+
+    .snackbar__action:hover {
+        background: rgba(208, 188, 255, 0.12);
+    }
+
+    .snackbar__action-label {
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+    }
+
+    .snackbar__close-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border: none;
+        border-radius: 50%;
+        background: transparent;
+        color: #CAC4D0;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: background-color 200ms ease-in-out, color 200ms ease-in-out;
+    }
+
+    .snackbar__close-btn:hover {
+        background: rgba(202, 196, 208, 0.12);
+        color: #F5EFF7;
+    }
+
+    .snackbar__close-icon {
+        font-size: 18px;
+    }
+}

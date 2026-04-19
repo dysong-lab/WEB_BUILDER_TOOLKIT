@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Snackbar/Standard — 04_operational (Persona D)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #071112;
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            gap: 16px;
+            padding: 32px 20px 160px;
+        }
+        .demo-trigger {
+            padding: 6px 14px;
+            border: 1px solid #2A3A3E;
+            border-radius: 2px;
+            background: #0D1B1E;
+            color: #B2EBF2;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: border-color 100ms ease-out, background-color 100ms ease-out;
+        }
+        .demo-trigger:hover {
+            border-color: #00BCD4;
+            background: rgba(0, 188, 212, 0.1);
+        }
+        .demo-log {
+            width: 360px;
+            padding: 10px 12px;
+            background: #0D1B1E;
+            border: 1px solid #2A3A3E;
+            border-radius: 2px;
+            color: #7A9AA0;
+            font-size: 11px;
+            line-height: 1.5;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .demo-log strong { color: #B2EBF2; }
+        #snackbar-container {
+            position: fixed;
+            left: 50%;
+            bottom: 24px;
+            transform: translateX(-50%);
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+<button class="demo-trigger" id="trigger-info">[OK] push info (4s)</button>
+<button class="demo-trigger" id="trigger-action">[WARN] push with retry (10s)</button>
+<div id="snackbar-container"></div>
+<div class="demo-log" id="demo-log"><strong>&gt; EVENT LOG</strong><br>—</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/FieldRenderMixin.js"></script>
+<script src="../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('snackbar-container', '../views/04_operational.html', '../styles/04_operational.css');
+
+    const instance = { id: 'snackbar', appendElement: document.getElementById('snackbar-container') };
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            snackbar:   '.snackbar',
+            supporting: '.snackbar__supporting'
+        }
+    });
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container:   '.snackbar__actions',
+            template:    '#snackbar-action-template',
+            actionid:    '.snackbar__action',
+            actionLabel: '.snackbar__action-label'
+        },
+        itemKey: 'actionid',
+        datasetAttrs: {
+            actionid: 'actionid'
+        }
+    });
+
+    instance.subscriptions = {
+        snackbarInfo:    [instance.fieldRender.renderData],
+        snackbarActions: [instance.listRender.renderData]
+    };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.listRender.cssSelectors.actionid]: '@snackbarActionClicked',
+            '.snackbar__close-btn':                      '@snackbarClose'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>&gt; EVENT LOG</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>&gt; EVENT LOG</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    const rootEl = () => instance.appendElement.querySelector('.snackbar');
+    let dismissTimer = null;
+    const openSnackbar = (ms) => {
+        clearTimeout(dismissTimer);
+        rootEl().dataset.open = 'true';
+        dismissTimer = setTimeout(() => { rootEl().dataset.open = 'false'; log('[TIMEOUT] auto dismiss'); }, ms);
+    };
+    const closeSnackbar = () => {
+        clearTimeout(dismissTimer);
+        rootEl().dataset.open = 'false';
+    };
+
+    Wkit.onEventBusHandlers({
+        '@snackbarClose': () => { closeSnackbar(); log('[DISMISS] snackbarClose'); },
+        '@snackbarActionClicked': ({ event }) => {
+            const item = event.target.closest('.snackbar__action');
+            const actionid = item?.getAttribute('data-actionid');
+            log(`[ACTION] snackbarActionClicked "${actionid}"`);
+            closeSnackbar();
+        }
+    });
+
+    document.getElementById('trigger-info').addEventListener('click', () => {
+        instance.fieldRender.renderData({ response: { supporting: 'CONN RESTORED · NODE RNBT-01' } });
+        instance.listRender.renderData({ response: [] });
+        openSnackbar(4000);
+        log('[PUSH] info → 4s');
+    });
+
+    document.getElementById('trigger-action').addEventListener('click', () => {
+        instance.fieldRender.renderData({ response: { supporting: 'TELEMETRY UPLOAD FAILED · CODE 504' } });
+        instance.listRender.renderData({ response: [{ actionid: 'retry', actionLabel: 'Retry' }] });
+        openSnackbar(10000);
+        log('[PUSH] action → 10s');
+    });
+})();
+</script>
+</body>
+</html>

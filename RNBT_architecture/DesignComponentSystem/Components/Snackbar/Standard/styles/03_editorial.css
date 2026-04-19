@@ -1,0 +1,97 @@
+/* 03_editorial: Persona C — Minimal Editorial
+   웜 그레이 / Georgia 세리프 / 라이트 / 샤프한 직각 + 헤어라인 */
+
+#snackbar-container {
+    .snackbar {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 16px;
+        min-width: 340px;
+        max-width: 600px;
+        padding: 16px 16px 16px 24px;
+        background: #FDFBF7;
+        border: 1px solid #D1CBC3;
+        border-radius: 2px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 150ms ease-out;
+    }
+
+    .snackbar[data-open="true"] {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .snackbar__supporting {
+        flex: 1;
+        min-width: 0;
+        font-family: 'Georgia', serif;
+        font-size: 15px;
+        font-weight: 400;
+        color: #3A3028;
+        line-height: 1.55;
+    }
+
+    .snackbar__actions {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 4px;
+        flex-shrink: 0;
+    }
+
+    .snackbar__actions:empty {
+        display: none;
+    }
+
+    .snackbar__action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 32px;
+        padding: 0 12px;
+        border: none;
+        border-radius: 0;
+        background: transparent;
+        color: #4A3F35;
+        cursor: pointer;
+        transition: color 150ms ease-out;
+    }
+
+    .snackbar__action:hover {
+        color: #1F1915;
+        border-bottom: 1px solid #1F1915;
+    }
+
+    .snackbar__action-label {
+        font-family: 'Georgia', serif;
+        font-size: 13px;
+        font-weight: 400;
+        font-style: italic;
+        letter-spacing: 0.3px;
+    }
+
+    .snackbar__close-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border: none;
+        border-radius: 0;
+        background: transparent;
+        color: #8C7B6B;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: color 150ms ease-out;
+    }
+
+    .snackbar__close-btn:hover {
+        color: #1F1915;
+    }
+
+    .snackbar__close-icon {
+        font-size: 18px;
+    }
+}
