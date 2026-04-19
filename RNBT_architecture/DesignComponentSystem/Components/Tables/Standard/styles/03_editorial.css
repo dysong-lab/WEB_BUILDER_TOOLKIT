@@ -1,0 +1,124 @@
+/* Tables/Standard — 03_editorial (Persona C: Minimal Editorial)
+   웜 그레이, 세리프 헤드라인, 넓은 여백, 샤프 구분선, 정적 */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+#table-container {
+    width: 680px;
+    height: 460px;
+    overflow: auto;
+}
+
+#table-container .table {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background: #FAF9F6;
+    border-radius: 2px;
+    font-family: 'Inter', sans-serif;
+    color: #3D3833;
+    overflow: hidden;
+}
+
+#table-container .table__header {
+    display: flex;
+    align-items: center;
+    padding: 28px 32px 18px;
+    flex-shrink: 0;
+}
+
+#table-container .table__title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: #3D3833;
+    line-height: 1.3;
+    letter-spacing: 0.2px;
+}
+
+#table-container .table__head-row {
+    display: flex;
+    align-items: center;
+    padding: 12px 32px;
+    border-top: 1px solid #3D3833;
+    border-bottom: 1px solid #E8E4DE;
+    flex-shrink: 0;
+}
+
+#table-container .table__head-cell {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: #6B6560;
+    line-height: 1.3;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#table-container .table__head-cell--col1,
+#table-container .table__cell--col1 { flex: 1.3; }
+#table-container .table__head-cell--col2,
+#table-container .table__cell--col2 { flex: 1.2; }
+#table-container .table__head-cell--col3,
+#table-container .table__cell--col3 { flex: 1.0; }
+#table-container .table__head-cell--col4,
+#table-container .table__cell--col4 { flex: 1.0; }
+#table-container .table__head-cell--col5,
+#table-container .table__cell--col5 { flex: 0.8; text-align: right; }
+
+#table-container .table__head-cell + .table__head-cell {
+    margin-left: 24px;
+}
+
+#table-container .table__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 0 32px 32px;
+}
+
+#table-container .table__row {
+    display: flex;
+    align-items: center;
+    padding: 18px 0;
+    border-bottom: 1px solid #E8E4DE;
+    cursor: pointer;
+    transition: color 150ms ease;
+}
+
+#table-container .table__row:last-child {
+    border-bottom: none;
+}
+
+#table-container .table__row:hover {
+    background: #F5F3EE;
+}
+
+#table-container .table__cell {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #3D3833;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#table-container .table__cell--col1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: #3D3833;
+}
+
+#table-container .table__cell + .table__cell {
+    margin-left: 24px;
+}

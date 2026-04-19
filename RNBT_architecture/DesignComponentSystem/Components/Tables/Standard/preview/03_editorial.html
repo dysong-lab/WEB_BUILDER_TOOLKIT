@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Tables/Standard — 03_editorial (Persona C)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #F0EDE6;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 28px;
+            padding: 40px 20px;
+        }
+        .demo-log {
+            width: 720px;
+            padding: 14px 20px;
+            background: #FAF9F6;
+            border-top: 1px solid #3D3833;
+            color: #6B6560;
+            font-size: 12px;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .demo-log strong { color: #3D3833; font-family: 'DM Serif Display', serif; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<div id="table-container"></div>
+<div class="demo-log" id="demo-log"><strong>Event Log</strong><br>—</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('table-container', '../views/03_editorial.html', '../styles/03_editorial.css');
+
+    const instance = { id: 'table', appendElement: document.getElementById('table-container') };
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container: '.table__body',
+            template:  '#table-row-template',
+            rowid:     '.table__row',
+            col1:      '.table__cell--col1',
+            col2:      '.table__cell--col2',
+            col3:      '.table__cell--col3',
+            col4:      '.table__cell--col4',
+            col5:      '.table__cell--col5'
+        },
+        datasetAttrs: {
+            rowid: 'rowid'
+        }
+    });
+
+    instance.subscriptions = { tableRows: [instance.listRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.listRender.cssSelectors.rowid]: '@tableRowClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>Event Log</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>Event Log</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    Wkit.onEventBusHandlers({
+        '@tableRowClicked': ({ event, targetInstance }) => {
+            const row = event.target.closest(targetInstance.listRender.cssSelectors.rowid);
+            const rowid = row?.getAttribute('data-rowid');
+            if (!rowid) return;
+            log(`tableRowClicked "${rowid}"`);
+        }
+    });
+
+    const tableData = [
+        { rowid: 'r01', col1: '14:30:12', col2: 'SV-001',  col3: 'Temperature', col4: 'Critical', col5: '87.3' },
+        { rowid: 'r02', col1: '14:28:04', col2: 'PMP-A3',  col3: 'Flow Rate',   col4: 'Warning',  col5: '42.1' },
+        { rowid: 'r03', col1: '14:25:51', col2: 'EVA-02',  col3: 'Pressure',    col4: 'Normal',   col5: '3.18' },
+        { rowid: 'r04', col1: '14:22:10', col2: 'SV-002',  col3: 'Temperature', col4: 'Normal',   col5: '64.8' },
+        { rowid: 'r05', col1: '14:18:37', col2: 'BLR-01',  col3: 'Steam',       col4: 'Warning',  col5: '12.4' },
+        { rowid: 'r06', col1: '14:15:22', col2: 'PMP-B1',  col3: 'Flow Rate',   col4: 'Normal',   col5: '55.2' },
+        { rowid: 'r07', col1: '14:11:09', col2: 'CMP-03',  col3: 'Vibration',   col4: 'Minor',    col5: '0.24' },
+        { rowid: 'r08', col1: '14:07:48', col2: 'EVA-01',  col3: 'Pressure',    col4: 'Normal',   col5: '3.02' }
+    ];
+
+    instance.listRender.renderData({ response: tableData });
+})();
+</script>
+</body>
+</html>
