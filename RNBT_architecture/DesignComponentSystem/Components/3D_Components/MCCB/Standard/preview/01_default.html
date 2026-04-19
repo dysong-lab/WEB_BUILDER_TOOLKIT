@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>MCCB — 01_status</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #1a1a2e; }
+        #mccb-pageThreeLayer {
+            width: 600px;
+            height: 480px;
+            display: block;
+            overflow: hidden;
+            margin: 40px auto;
+        }
+        canvas { display: block; }
+
+        .demo-controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px;
+        }
+        .demo-btn {
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #ffffff;
+            transition: opacity 0.15s;
+        }
+        .demo-btn:hover { opacity: 0.8; }
+        .demo-btn[data-status="normal"]  { background: #34d399; }
+        .demo-btn[data-status="warning"] { background: #fbbf24; color: #1a1a2e; }
+        .demo-btn[data-status="error"]   { background: #f87171; }
+        .demo-btn[data-status="offline"] { background: #6b7280; }
+        .demo-btn[data-status="reset"]   { background: #3b82f6; }
+    </style>
+</head>
+<body>
+    <div class="demo-controls">
+        <button class="demo-btn" data-status="normal">Normal</button>
+        <button class="demo-btn" data-status="warning">Warning</button>
+        <button class="demo-btn" data-status="error">Error</button>
+        <button class="demo-btn" data-status="offline">Offline</button>
+        <button class="demo-btn" data-status="reset">Reset</button>
+    </div>
+
+    <div id="mccb-pageThreeLayer"></div>
+
+    <!-- Mixin 로드 -->
+    <script src="../../../../../Mixins/MeshStateMixin.js"></script>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+    // ── Three.js Scene Setup ──────────────────────────────────
+    const container = document.getElementById('mccb-pageThreeLayer');
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x1a1a2e);
+
+    // MCCB는 루트 scale이 없어 원시 좌표 그대로(~0.10 × 0.09 × 0.20 단위) 로드된다.
+    // near=0.01, far=100으로 소형 모델에 맞춘다 (LithiumionBattery의 far=5000과 대비).
+    const camera = new THREE.PerspectiveCamera(45, width / height, 0.01, 100);
+    camera.position.set(0.4, 0.3, 0.5);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.target.set(0, 0, 0);
+
+    // ── Lighting ──────────────────────────────────────────────
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    directionalLight.position.set(5, 8, 4);
+    scene.add(directionalLight);
+
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
+    fillLight.position.set(-3, 2, -2);
+    scene.add(fillLight);
+
+    // ── Grid ──────────────────────────────────────────────────
+    // 소형 모델(~0.2 단위)에 맞춰 그리드 크기를 1 단위로 축소
+    scene.add(new THREE.GridHelper(1, 20, 0x2a2a4a, 0x2a2a4a));
+
+    // ── Mock Instance ─────────────────────────────────────────
+    const instance = { appendElement: null };
+
+    // ── Load Model ────────────────────────────────────────────
+    // MCCB.gltf: scene → "MCCB"(Group) → [Object299(GRAY), Object300(MCCB+tex, BLEND), Rectangle180(WHITE)].
+    // 자식 이름(Object299/Object300/Rectangle180)은 3ds Max 기본 네이밍이므로 페이지는 루트 Group 'MCCB'만 사용.
+    // MeshStateMixin은 Group 대상에 대해 traverse로 자식 Mesh들의 material을 일괄 clone + color 적용한다.
+    // Object300의 baseColorTexture(MCCB.png 라벨)는 유지되고 color 승수만 적용되어 라벨 글자는 보존.
+    const meshName = 'MCCB';
+    const loader = new GLTFLoader();
+
+    loader.load('../../../../../models/MCCB/01_default/MCCB.gltf', (gltf) => {
+        const model = gltf.scene;
+        scene.add(model);
+
+        instance.appendElement = model;
+
+        // MeshStateMixin 적용 (register.js와 동일)
+        applyMeshStateMixin(instance, {
+            colorMap: {
+                normal:  0x34d399,
+                warning: 0xfbbf24,
+                error:   0xf87171,
+                offline: 0x6b7280
+            }
+        });
+
+        // 카메라 타겟 조정 (바운드 기준 — 루트 scale 없음, 원시 좌표)
+        const box = new THREE.Box3().setFromObject(model);
+        const center = box.getCenter(new THREE.Vector3());
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const distance = maxDim * 2.2;
+
+        controls.target.copy(center);
+        camera.position.set(center.x + distance, center.y + distance * 0.6, center.z + distance);
+        controls.update();
+    });
+
+    // ── Render Loop ───────────────────────────────────────────
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // ── Demo: renderData 호출 ─────────────────────────────────
+    document.querySelectorAll('.demo-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            if (!instance.meshState) return;
+
+            const status = btn.dataset.status;
+
+            if (status === 'reset') {
+                // 루트 Group 'MCCB' 하위 자식 Mesh들의 material color를 흰색으로 복귀.
+                // MeshStateMixin과 동일하게 traverse로 내려가 각 자식의 material 객체/배열을 모두 처리.
+                const root = instance.appendElement.getObjectByName(meshName);
+                if (root) {
+                    root.traverse((node) => {
+                        if (!node.isMesh || !node.material) return;
+                        if (Array.isArray(node.material)) {
+                            node.material.forEach(m => m.color && m.color.setHex(0xffffff));
+                        } else if (node.material.color) {
+                            node.material.color.setHex(0xffffff);
+                        }
+                    });
+                }
+                return;
+            }
+
+            // 루트 Group 단일 항목으로 3개 자식 일괄 제어
+            instance.meshState.renderData({
+                response: [{ meshName, status }]
+            });
+        });
+    });
+
+    // ── Resize ────────────────────────────────────────────────
+    window.addEventListener('resize', () => {
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+    });
+    </script>
+</body>
+</html>

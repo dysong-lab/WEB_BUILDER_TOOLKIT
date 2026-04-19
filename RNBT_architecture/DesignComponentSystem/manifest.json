@@ -2248,6 +2248,19 @@
           ]
         },
         {
+          "name": "MCCB",
+          "spec": "Components/3D_Components/MCCB/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/MCCB/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/MCCB/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "Panel",
           "spec": "Components/3D_Components/Panel/CLAUDE.md",
           "sets": [
