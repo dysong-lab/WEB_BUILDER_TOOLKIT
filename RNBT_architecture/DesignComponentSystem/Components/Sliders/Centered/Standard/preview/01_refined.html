@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Sliders/Centered/Standard — 01_refined (Persona A)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tomorrow:wght@400;500&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #12153D;
+            font-family: 'Pretendard', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 24px;
+            padding: 40px 20px;
+        }
+        .demo-log {
+            width: 360px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid #2A2574;
+            border-radius: 8px;
+            color: #A6B3DE;
+            font-size: 12px;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .demo-log strong { color: #E8EDFF; }
+    </style>
+</head>
+<body>
+
+<div id="slider-centered-container"></div>
+<div class="demo-log" id="demo-log"><strong>이벤트 로그</strong><br>—</div>
+
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/FieldRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('slider-centered-container', '../views/01_refined.html', '../styles/01_refined.css');
+
+    const instance = { id: 'slider-centered', appendElement: document.getElementById('slider-centered-container') };
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            slider:       '.slider',
+            label:        '.slider__label',
+            valueText:    '.slider__value-label',
+            input:        '.slider__input',
+            min:          '.slider__input',
+            max:          '.slider__input',
+            step:         '.slider__input',
+            value:        '.slider__input',
+            progress:     '.slider__track-active',
+            progressLeft: '.slider__track-active'
+        },
+        elementAttrs: {
+            min:   'min',
+            max:   'max',
+            step:  'step',
+            value: 'value'
+        },
+        styleAttrs: {
+            progress:     { property: 'width', unit: '%' },
+            progressLeft: { property: 'left',  unit: '%' }
+        }
+    });
+
+    instance.updateSliderValue = function ({ response: data }) {
+        if (!data) return;
+        const min  = Number.isFinite(data.min)  ? data.min  : -50;
+        const max  = Number.isFinite(data.max)  ? data.max  :  50;
+        const step = Number.isFinite(data.step) ? data.step :   1;
+        const raw  = Number.isFinite(data.value) ? data.value : 0;
+        const value = Math.min(Math.max(raw, min), max);
+        const rawCenter = Number.isFinite(data.center) ? data.center : (min + max) / 2;
+        const center = Math.min(Math.max(rawCenter, min), max);
+        const span = max - min;
+        const leftVal  = Math.min(value, center);
+        const widthVal = Math.abs(value - center);
+        const progressLeft = span > 0 ? ((leftVal - min) / span) * 100 : 50;
+        const progress     = span > 0 ? ( widthVal       / span) * 100 : 0;
+        let valueText;
+        if (data.valueText != null) valueText = String(data.valueText);
+        else if (value > center) valueText = `+${value - center}`;
+        else if (value < center) valueText = `-${center - value}`;
+        else valueText = '0';
+        this.fieldRender.renderData({
+            response: { label: data.label ?? '', valueText, value, min, max, step, progress, progressLeft }
+        });
+        const sliderEl = this.appendElement.querySelector(this.fieldRender.cssSelectors.slider);
+        if (sliderEl) sliderEl.dataset.disabled = data.disabled ? 'true' : 'false';
+        const inputEl = this.appendElement.querySelector(this.fieldRender.cssSelectors.input);
+        if (inputEl) inputEl.disabled = !!data.disabled;
+    };
+
+    instance.subscriptions = { sliderInfo: [instance.updateSliderValue] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        input: {
+            [instance.fieldRender.cssSelectors.input]: '@sliderChanged'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>이벤트 로그</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>이벤트 로그</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    const state = { label: 'Brightness Delta', value: -20, min: -50, max: 50, step: 1, center: 0, disabled: false };
+
+    Wkit.onEventBusHandlers({
+        '@sliderChanged': ({ event, targetInstance }) => {
+            const nextValue = Number(event.target.value);
+            state.value = nextValue;
+            targetInstance.updateSliderValue({ response: { ...state } });
+            log(`sliderChanged value → <strong>${nextValue}</strong>`);
+        }
+    });
+
+    instance.updateSliderValue({ response: { ...state } });
+})();
+</script>
+</body>
+</html>
