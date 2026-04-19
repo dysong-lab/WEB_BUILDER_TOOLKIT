@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Tabs/Standard — 01_refined (Persona A)</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #12153D;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 48px 24px;
+            gap: 24px;
+        }
+
+        .demo-log {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            width: 320px;
+            padding: 12px 16px;
+            background: rgba(25, 29, 80, 0.9);
+            border: 1px solid #2A2574;
+            border-radius: 8px;
+            color: #A6B3DE;
+            font-family: 'Pretendard', sans-serif;
+            font-size: 12px;
+            line-height: 1.6;
+            max-height: 240px;
+            overflow-y: auto;
+            z-index: 200;
+        }
+        .demo-log strong { color: #E8EDFF; }
+    </style>
+</head>
+<body>
+
+<div id="tabs-container"></div>
+<div class="demo-log" id="demo-log"><strong>이벤트 로그</strong><br>—</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('tabs-container', '../views/01_refined.html', '../styles/01_refined.css');
+
+    const instance = { id: 'tabs', appendElement: document.getElementById('tabs-container') };
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container: '.tabs__list',
+            template:  '#tabs-item-template',
+            tabid:     '.tabs__item',
+            active:    '.tabs__item',
+            icon:      '.tabs__icon',
+            label:     '.tabs__label',
+            badge:     '.tabs__badge'
+        },
+        itemKey: 'tabid',
+        datasetAttrs: {
+            tabid:  'tabid',
+            active: 'active'
+        }
+    });
+
+    instance.subscriptions = { tabItems: [instance.listRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.listRender.cssSelectors.tabid]: '@tabClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>이벤트 로그</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>이벤트 로그</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    let activeTabid = 'overview';
+    Wkit.onEventBusHandlers({
+        '@tabClicked': ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.listRender.cssSelectors.tabid);
+            const tabid = item?.getAttribute('data-tabid');
+            if (!tabid || tabid === activeTabid) {
+                log(`tabClicked "${tabid}" (이미 활성)`);
+                return;
+            }
+            targetInstance.listRender.updateItemState(activeTabid, { active: 'false' });
+            targetInstance.listRender.updateItemState(tabid,       { active: 'true' });
+            activeTabid = tabid;
+            log(`tabClicked "${tabid}" → 활성 전환`);
+        }
+    });
+
+    instance.listRender.renderData({ response: [
+        { tabid: 'overview', icon: 'dashboard',     label: 'Overview', badge: '',  active: 'true' },
+        { tabid: 'metrics',  icon: 'analytics',     label: 'Metrics',  badge: '',  active: 'false' },
+        { tabid: 'alerts',   icon: 'notifications', label: 'Alerts',   badge: '5', active: 'false' },
+        { tabid: 'logs',     icon: 'description',   label: 'Logs',     badge: '',  active: 'false' }
+    ]});
+})();
+</script>
+</body>
+</html>
