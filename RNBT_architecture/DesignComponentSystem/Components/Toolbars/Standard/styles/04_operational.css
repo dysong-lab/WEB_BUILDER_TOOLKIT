@@ -1,0 +1,90 @@
+/* 04_operational: Persona D — Dark Operational
+   시안 팔레트 / 모노스페이스 / 다크 / Compact
+   MD3 Variant: Floating Toolbar (vertical) — 세로 컬럼, 화면 우측/좌측에 떠있음
+   깊이=배경 색상 단계 + 미세 테두리, 모서리=4px, 밀도=Compact */
+
+#toolbar-container {
+    width: 48px;
+    height: 240px;
+
+    .toolbar {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 4px;
+        background: #0D1B1E;
+        border: 1px solid #2A3A3E;
+        border-radius: 4px;
+    }
+
+    .toolbar__list {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        flex: 1;
+        gap: 2px;
+    }
+
+    .toolbar__action {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        height: 40px;
+        padding: 0 4px;
+        border: 1px solid transparent;
+        background: transparent;
+        border-radius: 2px;
+        cursor: pointer;
+        transition: background-color 100ms ease-out, border-color 100ms ease-out;
+    }
+
+    .toolbar__action:hover {
+        background: rgba(0, 188, 212, 0.1);
+        border-color: rgba(0, 188, 212, 0.5);
+    }
+
+    .toolbar__action[data-disabled="true"] {
+        pointer-events: none;
+        background: transparent;
+        border-color: transparent;
+    }
+
+    .toolbar__action[data-disabled="true"] .toolbar__icon,
+    .toolbar__action[data-disabled="true"] .toolbar__label {
+        color: #34464B;
+    }
+
+    .toolbar__icon {
+        font-size: 18px;
+        color: #7DC7D9;
+        flex-shrink: 0;
+    }
+
+    .toolbar__action:hover .toolbar__icon {
+        color: #00BCD4;
+    }
+
+    .toolbar__icon:empty {
+        display: none;
+    }
+
+    .toolbar__label {
+        font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+        font-size: 10px;
+        font-weight: 500;
+        color: #5A7A80;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+    }
+
+    .toolbar__action:hover .toolbar__label {
+        color: #B2EBF2;
+    }
+
+    .toolbar__label:empty {
+        display: none;
+    }
+}

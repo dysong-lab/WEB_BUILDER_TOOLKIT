@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Toolbars/Standard — 04_operational (Persona D)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0A1214;
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 24px;
+            padding: 40px 20px;
+        }
+        .demo-log {
+            width: 360px;
+            padding: 10px 14px;
+            background: #0d1117;
+            border: 1px solid #1f3a4a;
+            border-radius: 2px;
+            color: #7dc7d9;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .demo-log strong {
+            color: #22d3ee;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body>
+
+<div id="toolbar-container"></div>
+<div class="demo-log" id="demo-log"><strong>event log</strong><br>—</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('toolbar-container', '../views/04_operational.html', '../styles/04_operational.css');
+
+    const instance = { id: 'toolbars', appendElement: document.getElementById('toolbar-container') };
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container: '.toolbar__list',
+            template:  '#toolbar-action-template',
+            actionid:  '.toolbar__action',
+            disabled:  '.toolbar__action',
+            icon:      '.toolbar__icon',
+            label:     '.toolbar__label'
+        },
+        itemKey: 'actionid',
+        datasetAttrs: {
+            actionid: 'actionid',
+            disabled: 'disabled'
+        }
+    });
+
+    instance.subscriptions = { toolbarActions: [instance.listRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.listRender.cssSelectors.actionid]: '@toolbarActionClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>event log</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>event log</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    Wkit.onEventBusHandlers({
+        '@toolbarActionClicked': ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.listRender.cssSelectors.actionid);
+            const actionid = item?.getAttribute('data-actionid');
+            const isDisabled = item?.getAttribute('data-disabled') === 'true';
+            if (isDisabled) {
+                log(`toolbarActionClicked "${actionid}" (disabled)`);
+                return;
+            }
+            log(`toolbarActionClicked "${actionid}" → cmd exec`);
+        }
+    });
+
+    instance.listRender.renderData({ response: [
+        { actionid: 'start',  icon: 'play_arrow', label: '', disabled: 'false' },
+        { actionid: 'pause',  icon: 'pause',      label: '', disabled: 'false' },
+        { actionid: 'stop',   icon: 'stop',       label: '', disabled: 'false' },
+        { actionid: 'reset',  icon: 'restart_alt',label: '', disabled: 'false' },
+        { actionid: 'export', icon: 'download',   label: '', disabled: 'true'  }
+    ]});
+})();
+</script>
+</body>
+</html>

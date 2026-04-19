@@ -1,0 +1,79 @@
+/* 02_material: Persona B — Material Elevated
+   블루 팔레트 / shadow elevation / Roboto / 라이트
+   MD3 Variant: Floating Toolbar (horizontal, pill) — body 위에 떠 있는 pill 컨테이너
+   깊이=box-shadow elevation, 모서리=pill 28px (컨테이너), 액션 circle */
+
+#toolbar-container {
+    width: 360px;
+    height: 72px;
+
+    .toolbar {
+        display: flex;
+        align-items: center;
+        padding: 8px;
+        background: #FFFFFF;
+        border-radius: 28px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
+    }
+
+    .toolbar__list {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .toolbar__action {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 40px;
+        height: 40px;
+        padding: 0 14px;
+        border: none;
+        background: transparent;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: background-color 200ms ease-in-out, box-shadow 200ms ease-in-out;
+    }
+
+    .toolbar__action:hover {
+        background: #E0E5FF;
+        box-shadow: 0 1px 2px rgba(59, 91, 219, 0.12);
+    }
+
+    .toolbar__action[data-disabled="true"] {
+        pointer-events: none;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .toolbar__action[data-disabled="true"] .toolbar__icon,
+    .toolbar__action[data-disabled="true"] .toolbar__label {
+        color: #C2C7CF;
+    }
+
+    .toolbar__icon {
+        font-size: 20px;
+        color: #3B5BDB;
+        flex-shrink: 0;
+    }
+
+    .toolbar__icon:empty {
+        display: none;
+    }
+
+    .toolbar__label {
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #1A237E;
+        white-space: nowrap;
+        letter-spacing: 0.1px;
+    }
+
+    .toolbar__label:empty {
+        display: none;
+    }
+}
