@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Trees/Standard — 04_operational (Persona D)</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #010409;
+            font-family: 'IBM Plex Sans', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            gap: 16px;
+            padding: 40px 20px;
+        }
+        .demo-log {
+            width: 420px;
+            padding: 10px 14px;
+            background: #0D1117;
+            border: 1px solid rgba(99, 199, 255, 0.18);
+            border-radius: 4px;
+            color: #7A8FA5;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            line-height: 1.6;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+        .demo-log strong {
+            color: #4DD0E1;
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="tree-container"></div>
+<div class="demo-log" id="demo-log"><strong>Event Log</strong><br>&mdash;</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('tree-container', '../views/04_operational.html', '../styles/04_operational.css');
+
+    const instance = { id: 'tree', appendElement: document.getElementById('tree-container') };
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container:   '.tree__list',
+            template:    '#tree-node-template',
+            treeid:      '.tree__node',
+            depth:       '.tree__node',
+            expanded:    '.tree__node',
+            hasChildren: '.tree__node',
+            selected:    '.tree__node',
+            toggle:      '.tree__toggle',
+            leading:     '.tree__leading',
+            label:       '.tree__label',
+            trailing:    '.tree__trailing'
+        },
+        datasetAttrs: {
+            treeid:      'treeid',
+            depth:       'depth',
+            expanded:    'expanded',
+            hasChildren: 'has-children',
+            selected:    'selected'
+        }
+    });
+
+    instance.subscriptions = { treeNodes: [instance.listRender.renderData] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.listRender.cssSelectors.toggle]: '@treeToggleClicked',
+            [instance.listRender.cssSelectors.treeid]: '@treeNodeClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const rootTree = [
+        { treeid: 'zone-a', leading: '\u{25A0}', label: 'ZONE_A', trailing: '07/12', expanded: true, children: [
+            { treeid: 'rack-a01', leading: '\u{25A0}', label: 'RACK_A01', trailing: '12/16', expanded: true, children: [
+                { treeid: 'dev-a01-01', leading: '\u{25CF}', label: 'CTRL-001', trailing: 'OK' },
+                { treeid: 'dev-a01-02', leading: '\u{25CF}', label: 'CTRL-002', trailing: 'OK' },
+                { treeid: 'dev-a01-03', leading: '\u{25CF}', label: 'CTRL-003', trailing: 'WARN' }
+            ]},
+            { treeid: 'rack-a02', leading: '\u{25A0}', label: 'RACK_A02', trailing: '09/16', expanded: false, children: [
+                { treeid: 'dev-a02-01', leading: '\u{25CF}', label: 'CTRL-004', trailing: 'OK' }
+            ]}
+        ]},
+        { treeid: 'zone-b', leading: '\u{25A0}', label: 'ZONE_B', trailing: '02/08', expanded: false, children: [
+            { treeid: 'rack-b01', leading: '\u{25A0}', label: 'RACK_B01', trailing: '02/04' }
+        ]},
+        { treeid: 'zone-c', leading: '\u{25A0}', label: 'ZONE_C', trailing: '00/04', expanded: false, children: [
+            { treeid: 'rack-c01', leading: '\u{25A0}', label: 'RACK_C01', trailing: '00/04' }
+        ]}
+    ];
+    let selectedId = null;
+
+    const flatten = (nodes, depth = 0, out = []) => {
+        nodes.forEach(n => {
+            const hasChildren = Array.isArray(n.children) && n.children.length > 0;
+            out.push({
+                treeid:      n.treeid,
+                depth:       String(depth),
+                expanded:    String(!!n.expanded),
+                hasChildren: String(hasChildren),
+                selected:    String(n.treeid === selectedId),
+                leading:     n.leading || '',
+                label:       n.label || '',
+                trailing:    n.trailing || ''
+            });
+            if (hasChildren && n.expanded) flatten(n.children, depth + 1, out);
+        });
+        return out;
+    };
+
+    const findNode = (nodes, id) => {
+        for (const n of nodes) {
+            if (n.treeid === id) return n;
+            if (n.children) {
+                const hit = findNode(n.children, id);
+                if (hit) return hit;
+            }
+        }
+        return null;
+    };
+
+    const publish = () => {
+        instance.listRender.renderData({ response: flatten(rootTree) });
+    };
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>Event Log</strong><br>&mdash;';
+    const log = (msg) => {
+        logHtml = '<strong>Event Log</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    Wkit.onEventBusHandlers({
+        '@treeToggleClicked': ({ event }) => {
+            event.stopPropagation();
+            const nodeEl = event.target.closest('.tree__node');
+            const id = nodeEl?.getAttribute('data-treeid');
+            if (!id) return;
+            const node = findNode(rootTree, id);
+            if (!node || !Array.isArray(node.children) || node.children.length === 0) return;
+            node.expanded = !node.expanded;
+            log('treeToggleClicked "' + id + '" &rarr; expanded=' + node.expanded);
+            publish();
+        },
+        '@treeNodeClicked': ({ event }) => {
+            const nodeEl = event.target.closest('.tree__node');
+            const id = nodeEl?.getAttribute('data-treeid');
+            if (!id) return;
+            selectedId = id;
+            log('treeNodeClicked "' + id + '"');
+            publish();
+        }
+    });
+
+    publish();
+})();
+</script>
+</body>
+</html>
