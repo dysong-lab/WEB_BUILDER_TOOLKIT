@@ -2963,6 +2963,19 @@
           ]
         },
         {
+          "name": "RoadBlock",
+          "spec": "Components/3D_Components/RoadBlock/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/RoadBlock/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/RoadBlock/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "UPS",
           "spec": "Components/3D_Components/UPS/CLAUDE.md",
           "sets": [
