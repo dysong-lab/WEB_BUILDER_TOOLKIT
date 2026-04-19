@@ -1,0 +1,33 @@
+/* 01_refined: Persona A — Refined Technical
+   퍼플 팔레트 / 그라디언트 깊이 / Pretendard / 다크 / Tonal Plain Tooltip */
+
+#tooltip-container {
+    .tooltip {
+        display: inline-flex;
+        align-items: center;
+        max-width: 240px;
+        padding: 6px 12px;
+        background: linear-gradient(160deg, #1F2358 0%, #171A44 100%);
+        border: 1px solid rgba(80, 46, 233, 0.4);
+        border-radius: 8px;
+        opacity: 0;
+        transform: translateY(4px);
+        pointer-events: none;
+        transition: opacity 150ms ease-out, transform 150ms ease-out;
+    }
+
+    .tooltip[data-open="true"] {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .tooltip__label {
+        font-family: 'Pretendard', sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        color: #E8EDFF;
+        line-height: 1.4;
+        letter-spacing: 0.1px;
+        white-space: normal;
+    }
+}

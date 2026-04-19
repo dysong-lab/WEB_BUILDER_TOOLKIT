@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Tooltips/Standard — 03_editorial (Persona C)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #F6F2EA;
+            font-family: 'Georgia', serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            gap: 32px;
+            padding: 80px 20px 100px;
+            color: #3A3028;
+        }
+        .demo-row {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+        .demo-anchor {
+            padding: 10px 18px;
+            border: 1px solid #3A3028;
+            border-radius: 0;
+            background: transparent;
+            color: #3A3028;
+            font-family: 'Georgia', serif;
+            font-size: 14px;
+            font-style: italic;
+            cursor: pointer;
+            transition: color 150ms ease-out, border-color 150ms ease-out;
+        }
+        .demo-anchor:hover { color: #1F1915; border-color: #1F1915; }
+        .demo-log {
+            width: 360px;
+            padding: 14px 18px;
+            background: #FDFBF7;
+            border: 1px solid #D1CBC3;
+            border-radius: 0;
+            color: #4A3F35;
+            font-size: 12px;
+            line-height: 1.7;
+            max-height: 160px;
+            overflow-y: auto;
+            font-family: 'Georgia', serif;
+        }
+        .demo-log strong { color: #1F1915; }
+        #tooltip-container {
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="demo-row">
+    <button class="demo-anchor" data-tip="Save this draft for later review">Save</button>
+    <button class="demo-anchor" data-tip="Share with editorial team">Share</button>
+    <button class="demo-anchor" data-tip="Delete permanently — cannot be undone">Delete</button>
+</div>
+<div id="tooltip-container"></div>
+<div class="demo-log" id="demo-log"><strong>Log</strong><br>—</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/FieldRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('tooltip-container', '../views/03_editorial.html', '../styles/03_editorial.css');
+
+    const instance = { id: 'tooltip', appendElement: document.getElementById('tooltip-container') };
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            tooltip: '.tooltip',
+            label:   '.tooltip__label'
+        }
+    });
+
+    instance.subscriptions = {
+        tooltipInfo: [instance.fieldRender.renderData]
+    };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {};
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>Log</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>Log</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    const rootEl = () => instance.appendElement.querySelector('.tooltip');
+    let dismissTimer = null;
+
+    const placeAbove = (anchor) => {
+        const rect = anchor.getBoundingClientRect();
+        const el = rootEl();
+        el.style.left = (rect.left + rect.width / 2) + 'px';
+        el.style.top = (rect.top - 10) + 'px';
+        el.style.transform = 'translate(-50%, -100%)';
+    };
+
+    const openTooltip = (anchor, label) => {
+        clearTimeout(dismissTimer);
+        instance.fieldRender.renderData({ response: { label } });
+        placeAbove(anchor);
+        rootEl().dataset.open = 'true';
+        dismissTimer = setTimeout(() => {
+            rootEl().dataset.open = 'false';
+            log('auto dismiss (1500ms)');
+        }, 1500);
+    };
+
+    const closeTooltip = () => {
+        clearTimeout(dismissTimer);
+        rootEl().dataset.open = 'false';
+    };
+
+    document.querySelectorAll('.demo-anchor').forEach(anchor => {
+        anchor.addEventListener('mouseenter', () => {
+            const label = anchor.getAttribute('data-tip');
+            openTooltip(anchor, label);
+            log(`show "${label}"`);
+        });
+        anchor.addEventListener('mouseleave', () => closeTooltip());
+        anchor.addEventListener('focus', () => {
+            const label = anchor.getAttribute('data-tip');
+            openTooltip(anchor, label);
+            log(`focus show "${label}"`);
+        });
+        anchor.addEventListener('blur', () => closeTooltip());
+    });
+})();
+</script>
+</body>
+</html>

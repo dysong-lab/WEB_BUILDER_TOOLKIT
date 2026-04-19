@@ -1,0 +1,32 @@
+/* 03_editorial: Persona C — Minimal Editorial
+   웜 아이보리 배경 / Georgia 세리프 / 라이트 / 샤프 직각 + 헤어라인 테두리 */
+
+#tooltip-container {
+    .tooltip {
+        display: inline-flex;
+        align-items: center;
+        max-width: 280px;
+        padding: 10px 14px;
+        background: #FDFBF7;
+        border: 1px solid #D1CBC3;
+        border-radius: 0;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 150ms ease-out;
+    }
+
+    .tooltip[data-open="true"] {
+        opacity: 1;
+    }
+
+    .tooltip__label {
+        font-family: 'Georgia', serif;
+        font-size: 13px;
+        font-weight: 400;
+        font-style: italic;
+        color: #3A3028;
+        line-height: 1.5;
+        letter-spacing: 0.2px;
+        white-space: normal;
+    }
+}

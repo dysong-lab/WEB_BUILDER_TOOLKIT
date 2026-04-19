@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Tooltips/Standard — 02_material (Persona B)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #FDFCFF;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            gap: 28px;
+            padding: 60px 20px 80px;
+        }
+        .demo-row {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .demo-anchor {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 40px;
+            padding: 0 16px;
+            border: none;
+            border-radius: 8px;
+            background: #6750A4;
+            color: #FFFFFF;
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.1px;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
+            transition: box-shadow 200ms ease-in-out;
+        }
+        .demo-anchor:hover { box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.1); }
+        .demo-log {
+            width: 360px;
+            padding: 12px 16px;
+            background: #F7F2FA;
+            border: 1px solid #E7E0EC;
+            border-radius: 4px;
+            color: #49454F;
+            font-size: 12px;
+            line-height: 1.6;
+            max-height: 160px;
+            overflow-y: auto;
+        }
+        .demo-log strong { color: #1D1B20; }
+        #tooltip-container {
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="demo-row">
+    <button class="demo-anchor" data-tip="Save draft">Save</button>
+    <button class="demo-anchor" data-tip="Share with team">Share</button>
+    <button class="demo-anchor" data-tip="Delete permanently">Delete</button>
+</div>
+<div id="tooltip-container"></div>
+<div class="demo-log" id="demo-log"><strong>Event Log</strong><br>—</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/FieldRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('tooltip-container', '../views/02_material.html', '../styles/02_material.css');
+
+    const instance = { id: 'tooltip', appendElement: document.getElementById('tooltip-container') };
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            tooltip: '.tooltip',
+            label:   '.tooltip__label'
+        }
+    });
+
+    instance.subscriptions = {
+        tooltipInfo: [instance.fieldRender.renderData]
+    };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {};
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>Event Log</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>Event Log</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    const rootEl = () => instance.appendElement.querySelector('.tooltip');
+    let dismissTimer = null;
+
+    const placeAbove = (anchor) => {
+        const rect = anchor.getBoundingClientRect();
+        const el = rootEl();
+        el.style.left = (rect.left + rect.width / 2) + 'px';
+        el.style.top = (rect.top - 8) + 'px';
+        el.style.transform = 'translate(-50%, -100%) scale(1)';
+    };
+
+    const openTooltip = (anchor, label) => {
+        clearTimeout(dismissTimer);
+        instance.fieldRender.renderData({ response: { label } });
+        placeAbove(anchor);
+        rootEl().dataset.open = 'true';
+        dismissTimer = setTimeout(() => {
+            rootEl().dataset.open = 'false';
+            log('auto dismiss (1500ms)');
+        }, 1500);
+    };
+
+    const closeTooltip = () => {
+        clearTimeout(dismissTimer);
+        rootEl().dataset.open = 'false';
+    };
+
+    document.querySelectorAll('.demo-anchor').forEach(anchor => {
+        anchor.addEventListener('mouseenter', () => {
+            const label = anchor.getAttribute('data-tip');
+            openTooltip(anchor, label);
+            log(`show "${label}"`);
+        });
+        anchor.addEventListener('mouseleave', () => closeTooltip());
+        anchor.addEventListener('focus', () => {
+            const label = anchor.getAttribute('data-tip');
+            openTooltip(anchor, label);
+            log(`focus show "${label}"`);
+        });
+        anchor.addEventListener('blur', () => closeTooltip());
+    });
+})();
+</script>
+</body>
+</html>

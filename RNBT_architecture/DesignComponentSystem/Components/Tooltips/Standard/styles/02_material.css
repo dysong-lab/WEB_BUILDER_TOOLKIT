@@ -1,0 +1,34 @@
+/* 02_material: Persona B — Material Elevated
+   MD3 Plain Tooltip 기반: inverse surface(다크) / Roboto / box-shadow elevation 2 / 라이트 앱 위 */
+
+#tooltip-container {
+    .tooltip {
+        display: inline-flex;
+        align-items: center;
+        max-width: 200px;
+        min-height: 24px;
+        padding: 4px 8px;
+        background: #322F35;
+        border-radius: 4px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.15);
+        opacity: 0;
+        transform: scale(0.96);
+        pointer-events: none;
+        transition: opacity 200ms ease-in-out, transform 200ms ease-in-out;
+    }
+
+    .tooltip[data-open="true"] {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .tooltip__label {
+        font-family: 'Roboto', sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        color: #F5EFF7;
+        line-height: 1.33;
+        letter-spacing: 0.4px;
+        white-space: normal;
+    }
+}

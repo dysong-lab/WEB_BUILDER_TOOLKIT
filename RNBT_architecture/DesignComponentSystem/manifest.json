@@ -768,7 +768,24 @@
     {
       "name": "Tooltips",
       "spec": "Components/Tooltips/CLAUDE.md",
-      "components": []
+      "components": [
+        {
+          "name": "Tooltips",
+          "spec": "Components/Tooltips/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/Tooltips/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 refined", "path": "Components/Tooltips/Standard/preview/01_refined.html" },
+                { "label": "02 material", "path": "Components/Tooltips/Standard/preview/02_material.html" },
+                { "label": "03 editorial", "path": "Components/Tooltips/Standard/preview/03_editorial.html" },
+                { "label": "04 operational", "path": "Components/Tooltips/Standard/preview/04_operational.html" }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "Trees",
