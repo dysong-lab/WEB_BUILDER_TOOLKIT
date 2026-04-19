@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sliders/Centered — 01_refined</title>
+    <script src="../../../../preview_runtime.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 48px;
+        background: radial-gradient(circle at top, #143151, #06111d 60%);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="centered-refined"></div>
+    <script>
+      (async () => {
+        await loadComponentAssets("centered-refined", "../views/01_refined.html", "../styles/01_refined.css");
+        const root = document.querySelector("#centered-refined .centered-slider");
+        const input = root.querySelector(".centered-slider__native");
+        const fill = root.querySelector(".centered-slider__fill");
+        const value = root.querySelector(".centered-slider__value");
+        const sync = () => {
+          const min = Number(input.min);
+          const max = Number(input.max);
+          const current = Number(input.value);
+          const center = (min + max) / 2;
+          const start = Math.min((center - min) / (max - min), (current - min) / (max - min));
+          const size = Math.abs(current - center) / (max - min);
+          fill.style.left = `${start * 100}%`;
+          fill.style.width = `${size * 100}%`;
+          value.textContent = `${current > center ? "+" : ""}${current}°`;
+        };
+        input.addEventListener("input", sync);
+        sync();
+      })();
+    </script>
+  </body>
+</html>

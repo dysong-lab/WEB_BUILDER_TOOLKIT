@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sliders/Basic — 04_operational</title>
+    <script src="../../../../preview_runtime.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 48px;
+        background: #090d11;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="basic-operational"></div>
+    <script>
+      (async () => {
+        await loadComponentAssets("basic-operational", "../views/04_operational.html", "../styles/04_operational.css");
+        const root = document.querySelector("#basic-operational .slider");
+        const input = root.querySelector(".slider__native");
+        const fill = root.querySelector(".slider__fill");
+        const value = root.querySelector(".slider__value");
+        const sync = () => {
+          const min = Number(input.min);
+          const max = Number(input.max);
+          fill.style.width = `${((Number(input.value) - min) / (max - min)) * 100}%`;
+          value.textContent = `${input.value}%`;
+        };
+        input.addEventListener("input", sync);
+        sync();
+      })();
+    </script>
+  </body>
+</html>

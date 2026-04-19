@@ -1,0 +1,121 @@
+.slider {
+  --slider-surface: linear-gradient(180deg, #fbf3e7, #f4eadb);
+  --slider-line: rgba(98, 73, 49, 0.18);
+  --slider-track: rgba(98, 73, 49, 0.12);
+  --slider-fill: linear-gradient(90deg, #cb7a2c, #7f3d1d);
+  --slider-text: #2a1c13;
+  --slider-muted: rgba(42, 28, 19, 0.62);
+  --slider-thumb: #2a1c13;
+  width: min(100%, 420px);
+  padding: 28px 26px;
+  border: 1px solid var(--slider-line);
+  border-radius: 22px;
+  background: var(--slider-surface);
+  color: var(--slider-text);
+}
+
+.slider__header,
+.slider__title-row,
+.slider__scale {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.slider__header {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.slider__eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(42, 28, 19, 0.58);
+}
+
+.slider__label {
+  max-width: 220px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  line-height: 1.08;
+}
+
+.slider__value {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 34px;
+}
+
+.slider__control {
+  position: relative;
+  margin: 22px 0 10px;
+  height: 30px;
+}
+
+.slider__track,
+.slider__fill {
+  position: absolute;
+  inset: 50% 0 auto;
+  transform: translateY(-50%);
+  height: 4px;
+}
+
+.slider__track {
+  width: 100%;
+  background: var(--slider-track);
+}
+
+.slider__fill {
+  width: 32%;
+  background: var(--slider-fill);
+}
+
+.slider__native {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  margin: 0;
+  appearance: none;
+  background: transparent;
+}
+
+.slider__native::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #f4eadb;
+  background: var(--slider-thumb);
+  cursor: pointer;
+}
+
+.slider__native::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #f4eadb;
+  background: var(--slider-thumb);
+  cursor: pointer;
+}
+
+.slider__native::-webkit-slider-runnable-track,
+.slider__native::-moz-range-track {
+  height: 4px;
+  background: transparent;
+}
+
+.slider__scale,
+.slider__supporting {
+  font-size: 13px;
+  color: var(--slider-muted);
+}
+
+.slider__supporting {
+  margin-top: 14px;
+  line-height: 1.55;
+}
+
+.slider[data-disabled="true"] {
+  opacity: 0.56;
+}

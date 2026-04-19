@@ -1067,17 +1067,86 @@
         {
           "name": "Basic",
           "spec": "Components/Sliders/Basic/CLAUDE.md",
-          "sets": []
+          "sets": [
+            {
+              "name": "Basic",
+              "spec": "Components/Sliders/Basic/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 refined",
+                  "path": "Components/Sliders/Basic/preview/01_refined.html"
+                },
+                {
+                  "label": "02 material",
+                  "path": "Components/Sliders/Basic/preview/02_material.html"
+                },
+                {
+                  "label": "03 editorial",
+                  "path": "Components/Sliders/Basic/preview/03_editorial.html"
+                },
+                {
+                  "label": "04 operational",
+                  "path": "Components/Sliders/Basic/preview/04_operational.html"
+                }
+              ]
+            }
+          ]
         },
         {
           "name": "Centered",
           "spec": "Components/Sliders/Centered/CLAUDE.md",
-          "sets": []
+          "sets": [
+            {
+              "name": "Centered",
+              "spec": "Components/Sliders/Centered/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 refined",
+                  "path": "Components/Sliders/Centered/preview/01_refined.html"
+                },
+                {
+                  "label": "02 material",
+                  "path": "Components/Sliders/Centered/preview/02_material.html"
+                },
+                {
+                  "label": "03 editorial",
+                  "path": "Components/Sliders/Centered/preview/03_editorial.html"
+                },
+                {
+                  "label": "04 operational",
+                  "path": "Components/Sliders/Centered/preview/04_operational.html"
+                }
+              ]
+            }
+          ]
         },
         {
           "name": "Range",
           "spec": "Components/Sliders/Range/CLAUDE.md",
-          "sets": []
+          "sets": [
+            {
+              "name": "Range",
+              "spec": "Components/Sliders/Range/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 refined",
+                  "path": "Components/Sliders/Range/preview/01_refined.html"
+                },
+                {
+                  "label": "02 material",
+                  "path": "Components/Sliders/Range/preview/02_material.html"
+                },
+                {
+                  "label": "03 editorial",
+                  "path": "Components/Sliders/Range/preview/03_editorial.html"
+                },
+                {
+                  "label": "04 operational",
+                  "path": "Components/Sliders/Range/preview/04_operational.html"
+                }
+              ]
+            }
+          ]
         }
       ]
     },

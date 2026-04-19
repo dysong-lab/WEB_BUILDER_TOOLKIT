@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sliders/Range — 04_operational</title>
+    <script src="../../../../preview_runtime.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 48px;
+        background: #090d11;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="range-operational"></div>
+    <script>
+      (async () => {
+        await loadComponentAssets("range-operational", "../views/04_operational.html", "../styles/04_operational.css");
+        const root = document.querySelector("#range-operational .range-slider");
+        const lower = root.querySelector(".range-slider__input--lower");
+        const upper = root.querySelector(".range-slider__input--upper");
+        const fill = root.querySelector(".range-slider__fill");
+        const value = root.querySelector(".range-slider__value");
+        const sync = source => {
+          if (source === "lower" && Number(lower.value) > Number(upper.value)) upper.value = lower.value;
+          if (source === "upper" && Number(upper.value) < Number(lower.value)) lower.value = upper.value;
+          const min = Number(lower.min);
+          const max = Number(lower.max);
+          const start = (Number(lower.value) - min) / (max - min);
+          const end = (Number(upper.value) - min) / (max - min);
+          fill.style.left = `${start * 100}%`;
+          fill.style.width = `${(end - start) * 100}%`;
+          value.textContent = `${lower.value}V - ${upper.value}V`;
+        };
+        lower.addEventListener("input", () => sync("lower"));
+        upper.addEventListener("input", () => sync("upper"));
+        sync();
+      })();
+    </script>
+  </body>
+</html>

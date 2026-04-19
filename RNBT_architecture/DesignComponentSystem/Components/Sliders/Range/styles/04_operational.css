@@ -1,0 +1,125 @@
+.range-slider {
+  --slider-surface: linear-gradient(180deg, #12191e, #0b1116);
+  --slider-line: rgba(140, 161, 174, 0.2);
+  --slider-track: rgba(204, 218, 227, 0.12);
+  --slider-fill: linear-gradient(90deg, #8eff61, #38b04d);
+  --slider-text: #eff7ff;
+  --slider-muted: rgba(205, 217, 226, 0.66);
+  --slider-thumb: #dafea5;
+  width: min(100%, 420px);
+  padding: 20px 22px;
+  border: 1px solid var(--slider-line);
+  border-radius: 12px;
+  background: var(--slider-surface);
+  color: var(--slider-text);
+}
+
+.range-slider__header,
+.range-slider__title-row,
+.range-slider__scale {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.range-slider__header {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.range-slider__eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8eff61;
+}
+
+.range-slider__label {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.range-slider__value {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.range-slider__control {
+  position: relative;
+  margin: 18px 0 10px;
+  height: 28px;
+}
+
+.range-slider__track,
+.range-slider__fill {
+  position: absolute;
+  inset: 50% 0 auto;
+  transform: translateY(-50%);
+  height: 6px;
+  border-radius: 999px;
+}
+
+.range-slider__track {
+  width: 100%;
+  background: var(--slider-track);
+}
+
+.range-slider__fill {
+  left: 40%;
+  width: 34.3%;
+  background: var(--slider-fill);
+  box-shadow: 0 0 12px rgba(142, 255, 97, 0.22);
+}
+
+.range-slider__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  margin: 0;
+  appearance: none;
+  background: transparent;
+  pointer-events: none;
+}
+
+.range-slider__input::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1px solid rgba(11, 17, 22, 0.92);
+  background: var(--slider-thumb);
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.range-slider__input::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1px solid rgba(11, 17, 22, 0.92);
+  background: var(--slider-thumb);
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.range-slider__input::-webkit-slider-runnable-track,
+.range-slider__input::-moz-range-track {
+  height: 6px;
+  background: transparent;
+}
+
+.range-slider__scale,
+.range-slider__supporting {
+  font-size: 12px;
+  color: var(--slider-muted);
+}
+
+.range-slider__supporting {
+  margin-top: 12px;
+  line-height: 1.45;
+}
+
+.range-slider[data-disabled="true"] {
+  opacity: 0.48;
+}
