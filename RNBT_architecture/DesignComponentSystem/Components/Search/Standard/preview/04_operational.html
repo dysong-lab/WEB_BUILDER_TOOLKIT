@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Search/Standard — 04_operational (Persona D)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #010409;
+            font-family: 'IBM Plex Sans', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            gap: 16px;
+            padding: 48px 20px;
+        }
+        .demo-log {
+            width: 320px;
+            padding: 10px 12px;
+            background: #0D1117;
+            border: 1px solid rgba(99, 199, 255, 0.18);
+            border-radius: 4px;
+            color: #7A8FA5;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+            letter-spacing: 0.3px;
+        }
+        .demo-log strong {
+            color: #4DD0E1;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="search-container"></div>
+<div class="demo-log" id="demo-log"><strong>Event Log</strong><br>&mdash;</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/FieldRenderMixin.js"></script>
+<script src="../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('search-container', '../views/04_operational.html', '../styles/04_operational.css');
+
+    const instance = { id: 'search', appendElement: document.getElementById('search-container') };
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            searchBar:   '.search__bar',
+            leadingIcon: '.search__leading',
+            query:       '.search__input',
+            placeholder: '.search__input',
+            clearBtn:    '.search__clear',
+            submitBtn:   '.search__submit'
+        },
+        elementAttrs: {
+            query:       'value',
+            placeholder: 'placeholder'
+        }
+    });
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container:    '.search__suggestions',
+            template:     '#search-suggestion-template',
+            suggestionid: '.search__suggestion-item',
+            leading:      '.search__suggestion-leading',
+            label:        '.search__suggestion-label',
+            supporting:   '.search__suggestion-supporting'
+        },
+        datasetAttrs: { suggestionid: 'suggestionid' }
+    });
+
+    instance.subscriptions = {
+        searchBar:         [instance.fieldRender.renderData],
+        searchSuggestions: [instance.listRender.renderData]
+    };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        input: {
+            [instance.fieldRender.cssSelectors.query]:       '@searchInput'
+        },
+        change: {
+            [instance.fieldRender.cssSelectors.query]:       '@searchSubmitted'
+        },
+        click: {
+            [instance.fieldRender.cssSelectors.clearBtn]:    '@searchCleared',
+            [instance.fieldRender.cssSelectors.submitBtn]:   '@searchSubmitted',
+            [instance.listRender.cssSelectors.suggestionid]: '@suggestionClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>Event Log</strong><br>&mdash;';
+    const log = (msg) => {
+        logHtml = '<strong>Event Log</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    Wkit.onEventBusHandlers({
+        '@searchInput': ({ event }) => log('INPUT &gt; "' + event.target.value + '"'),
+        '@searchSubmitted': ({ event, targetInstance }) => {
+            const input = targetInstance.appendElement.querySelector(targetInstance.fieldRender.cssSelectors.query);
+            log('<strong>SUBMIT</strong> &gt; "' + (input ? input.value : '') + '"');
+        },
+        '@searchCleared': ({ targetInstance }) => {
+            const input = targetInstance.appendElement.querySelector(targetInstance.fieldRender.cssSelectors.query);
+            if (input) input.value = '';
+            targetInstance.listRender.clear();
+            log('CLEAR');
+        },
+        '@suggestionClicked': ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.listRender.cssSelectors.suggestionid);
+            if (!item) return;
+            const id = item.getAttribute('data-suggestionid');
+            log('SELECT &gt; "' + id + '"');
+        }
+    });
+
+    instance.fieldRender.renderData({
+        response: {
+            placeholder: 'query...',
+            query:       ''
+        }
+    });
+
+    instance.listRender.renderData({
+        response: [
+            { suggestionid: 'host-node-a01', leading: '#', label: 'NODE-A01',     supporting: 'online' },
+            { suggestionid: 'host-node-a02', leading: '#', label: 'NODE-A02',     supporting: 'degraded' },
+            { suggestionid: 'proc-svc-auth', leading: '$', label: 'svc-auth.sh',  supporting: 'pid 4432' },
+            { suggestionid: 'log-err-timeout', leading: '!', label: 'TCP timeout',  supporting: 'ERR 0x22' },
+            { suggestionid: 'metric-cpu-spk', leading: '~', label: 'cpu_spike_07', supporting: 'metric' }
+        ]
+    });
+})();
+</script>
+</body>
+</html>

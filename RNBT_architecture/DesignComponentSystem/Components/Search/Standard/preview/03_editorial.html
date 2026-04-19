@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Search/Standard — 03_editorial (Persona C)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500&display=swap">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #FDFBF7;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            gap: 32px;
+            padding: 80px 20px;
+        }
+        .demo-log {
+            width: 420px;
+            padding: 14px 18px;
+            background: #FAF9F6;
+            border: 1px solid #E8E4DE;
+            border-radius: 2px;
+            color: #6B6560;
+            font-size: 12px;
+            line-height: 1.7;
+            max-height: 200px;
+            overflow-y: auto;
+            font-style: italic;
+        }
+        .demo-log strong {
+            color: #3D3833;
+            font-family: 'DM Serif Display', serif;
+            font-style: normal;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="search-container"></div>
+<div class="demo-log" id="demo-log"><strong>Event Log</strong><br>&mdash;</div>
+
+<script src="../../../../preview_runtime.js"></script>
+<script src="../../../../Mixins/FieldRenderMixin.js"></script>
+<script src="../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('search-container', '../views/03_editorial.html', '../styles/03_editorial.css');
+
+    const instance = { id: 'search', appendElement: document.getElementById('search-container') };
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            searchBar:   '.search__bar',
+            leadingIcon: '.search__leading',
+            query:       '.search__input',
+            placeholder: '.search__input',
+            clearBtn:    '.search__clear',
+            submitBtn:   '.search__submit'
+        },
+        elementAttrs: {
+            query:       'value',
+            placeholder: 'placeholder'
+        }
+    });
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container:    '.search__suggestions',
+            template:     '#search-suggestion-template',
+            suggestionid: '.search__suggestion-item',
+            leading:      '.search__suggestion-leading',
+            label:        '.search__suggestion-label',
+            supporting:   '.search__suggestion-supporting'
+        },
+        datasetAttrs: { suggestionid: 'suggestionid' }
+    });
+
+    instance.subscriptions = {
+        searchBar:         [instance.fieldRender.renderData],
+        searchSuggestions: [instance.listRender.renderData]
+    };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach(handler => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        input: {
+            [instance.fieldRender.cssSelectors.query]:       '@searchInput'
+        },
+        change: {
+            [instance.fieldRender.cssSelectors.query]:       '@searchSubmitted'
+        },
+        click: {
+            [instance.fieldRender.cssSelectors.clearBtn]:    '@searchCleared',
+            [instance.fieldRender.cssSelectors.submitBtn]:   '@searchSubmitted',
+            [instance.listRender.cssSelectors.suggestionid]: '@suggestionClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>Event Log</strong><br>&mdash;';
+    const log = (msg) => {
+        logHtml = '<strong>Event Log</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    Wkit.onEventBusHandlers({
+        '@searchInput': ({ event }) => log('searchInput \u201C' + event.target.value + '\u201D'),
+        '@searchSubmitted': ({ event, targetInstance }) => {
+            const input = targetInstance.appendElement.querySelector(targetInstance.fieldRender.cssSelectors.query);
+            log('<strong>searchSubmitted</strong> \u201C' + (input ? input.value : '') + '\u201D');
+        },
+        '@searchCleared': ({ targetInstance }) => {
+            const input = targetInstance.appendElement.querySelector(targetInstance.fieldRender.cssSelectors.query);
+            if (input) input.value = '';
+            targetInstance.listRender.clear();
+            log('searchCleared');
+        },
+        '@suggestionClicked': ({ event, targetInstance }) => {
+            const item = event.target.closest(targetInstance.listRender.cssSelectors.suggestionid);
+            if (!item) return;
+            const id = item.getAttribute('data-suggestionid');
+            log('suggestionClicked \u201C' + id + '\u201D');
+        }
+    });
+
+    instance.fieldRender.renderData({
+        response: {
+            placeholder: 'Search the archive',
+            query:       ''
+        }
+    });
+
+    instance.listRender.renderData({
+        response: [
+            { suggestionid: 'essay-mono',     leading: '',  label: 'On monochromatic interfaces', supporting: 'Essay \u00B7 2024' },
+            { suggestionid: 'essay-rhythm',   leading: '',  label: 'The rhythm of whitespace',    supporting: 'Essay \u00B7 2023' },
+            { suggestionid: 'archive-grids',  leading: '',  label: 'Editorial grids revisited',    supporting: 'Archive' },
+            { suggestionid: 'notes-serif',    leading: '',  label: 'A serif for the screen',      supporting: 'Notes' }
+        ]
+    });
+})();
+</script>
+</body>
+</html>

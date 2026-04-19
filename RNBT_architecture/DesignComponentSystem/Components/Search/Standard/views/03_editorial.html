@@ -1,0 +1,17 @@
+<div class="search">
+    <div class="search__bar">
+        <span class="search__leading"></span>
+        <input class="search__input" type="text" autocomplete="off" spellcheck="false">
+        <button class="search__clear" type="button" aria-label="Clear">&#x00D7;</button>
+        <button class="search__submit" type="button" aria-label="Search">&#x2192;</button>
+    </div>
+    <div class="search__suggestions"></div>
+
+    <template id="search-suggestion-template">
+        <div class="search__suggestion-item" data-suggestionid="">
+            <span class="search__suggestion-leading"></span>
+            <span class="search__suggestion-label"></span>
+            <span class="search__suggestion-supporting"></span>
+        </div>
+    </template>
+</div>
