@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>SHV_03 — 01_status</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #1a1a2e; }
+        #shv03-pageThreeLayer {
+            width: 600px;
+            height: 480px;
+            display: block;
+            overflow: hidden;
+            margin: 40px auto;
+        }
+        canvas { display: block; }
+
+        .demo-controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px;
+        }
+        .demo-btn {
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #ffffff;
+            transition: opacity 0.15s;
+        }
+        .demo-btn:hover { opacity: 0.8; }
+        .demo-btn[data-status="normal"]  { background: #34d399; }
+        .demo-btn[data-status="warning"] { background: #fbbf24; color: #1a1a2e; }
+        .demo-btn[data-status="error"]   { background: #f87171; }
+        .demo-btn[data-status="offline"] { background: #6b7280; }
+        .demo-btn[data-status="reset"]   { background: #3b82f6; }
+    </style>
+</head>
+<body>
+    <div class="demo-controls">
+        <button class="demo-btn" data-status="normal">Normal</button>
+        <button class="demo-btn" data-status="warning">Warning</button>
+        <button class="demo-btn" data-status="error">Error</button>
+        <button class="demo-btn" data-status="offline">Offline</button>
+        <button class="demo-btn" data-status="reset">Reset</button>
+    </div>
+
+    <div id="shv03-pageThreeLayer"></div>
+
+    <!-- Mixin 로드 -->
+    <script src="../../../../../Mixins/MeshStateMixin.js"></script>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+    // ── Three.js Scene Setup ──────────────────────────────────
+    const container = document.getElementById('shv03-pageThreeLayer');
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x1a1a2e);
+
+    // SHV_03은 루트 scale 업스케일이 없는(1:1 스케일) 케이스.
+    // 원본 미터 유닛 그대로 사용 — Pump·Partition의 [1000,1000,1000] 업스케일과 대비.
+    // bound ~1.2(X) × 2.65(Y) × 3.0(Z) → far=50으로 충분, maxDim=3.0 기준 거리 적절.
+    // (SHV_01·SHV_02와 완전히 동일한 바운드 — SHV 제품군 공통 외형 템플릿의 3종 확정)
+    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 50);
+    camera.position.set(4, 3, 5);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.target.set(0, 0, 0);
+
+    // ── Lighting ──────────────────────────────────────────────
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    directionalLight.position.set(5, 8, 4);
+    scene.add(directionalLight);
+
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
+    fillLight.position.set(-3, 2, -2);
+    scene.add(fillLight);
+
+    // ── Grid ──────────────────────────────────────────────────
+    // 모델 크기 ~3.0(Z)이므로 그리드 10, 분할 10 (~1 간격)으로 맞춤.
+    scene.add(new THREE.GridHelper(10, 10, 0x2a2a4a, 0x2a2a4a));
+
+    // ── Mock Instance ─────────────────────────────────────────
+    const instance = { appendElement: null };
+
+    // ── Load Model ────────────────────────────────────────────
+    // SHV_03.gltf:
+    //   scene → SHV-6 (Mesh Node, mesh 0,
+    //                   rotation [0.0, -1.0, 0.0, 4.371139E-08] ≒ Y축 π 회전,
+    //                   material "Material #342540113"
+    //                    = baseColorTexture maps/SHV05.jpg,
+    //                      metallicFactor 0, roughnessFactor 0, doubleSided true)
+    //
+    // **단일 Mesh 직접 참조** — meshName='SHV-6'은 리프 Mesh Node 이름.
+    // 장비 폴더명(SHV_03, 언더스코어+숫자 3) ≠ meshName(SHV-6, 하이픈+숫자 6)의
+    // **비대칭 명명** 주의. 특히 폴더 번호(3)와 Node 번호(6)가 일치하지 않는 특이 케이스
+    // (SHV_01: 폴더 1 = Node 1, SHV_02: 폴더 2 ≠ Node 4-1, SHV_03: 폴더 3 ≠ Node 6).
+    // 2025년 빌드 babylon exporter의 공통 비대칭 패턴
+    // (RTU: 폴더 `RTU` vs meshName `RTU2`, SC_02: 폴더 `SC_02` vs meshName `SC-U1`,
+    //  SHV_01: 폴더 `SHV_01` vs meshName `SHV-1`,
+    //  SHV_02: 폴더 `SHV_02` vs meshName `SHV-4-1`과 동류).
+    //
+    // getObjectByName('SHV-6')은 단일 Mesh를 반환하고, MeshStateMixin은
+    // obj.material이 단일 객체이므로 Mesh 브랜치로 진입해 material을 clone하고
+    // color만 setHex로 치환. BATT·Pump·Chiller·Partition_small·RTU·HV_1P_01·
+    // SHV_01·SHV_02의 동일 패턴.
+    //
+    // material이 baseColorTexture 주도이므로 color setHex가 텍스처에 곱해진다(three.js 기본).
+    // doubleSided:true가 clone 후에도 유지되므로 양면 렌더도 보존된다.
+    const meshName = 'SHV-6';
+    const loader = new GLTFLoader();
+
+    loader.load('../../../../../models/SHV_03/01_default/SHV_03.gltf', (gltf) => {
+        const model = gltf.scene;
+        scene.add(model);
+
+        instance.appendElement = model;
+
+        // MeshStateMixin 적용 (register.js와 동일)
+        applyMeshStateMixin(instance, {
+            colorMap: {
+                normal:  0x34d399,
+                warning: 0xfbbf24,
+                error:   0xf87171,
+                offline: 0x6b7280
+            }
+        });
+
+        // 카메라 타겟 조정 (바운드 기준 자동 거리 설정)
+        // SHV_03은 Z축이 가장 긴 깊이 방향 직육면체이므로 maxDim=3.0 기준 거리 * 1.8로 충분.
+        // (SHV_01·SHV_02와 비트 단위로 동일한 바운드 — SHV 제품군 공통 외형 템플릿)
+        const box = new THREE.Box3().setFromObject(model);
+        const center = box.getCenter(new THREE.Vector3());
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const distance = maxDim * 1.8;
+
+        controls.target.copy(center);
+        camera.position.set(center.x + distance, center.y + distance * 0.5, center.z + distance);
+        controls.update();
+    });
+
+    // ── Render Loop ───────────────────────────────────────────
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // ── Demo: renderData 호출 ─────────────────────────────────
+    document.querySelectorAll('.demo-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            if (!instance.meshState) return;
+
+            const status = btn.dataset.status;
+
+            if (status === 'reset') {
+                // 단일 Mesh 'SHV-6'의 material을 흰색으로 복귀.
+                // MeshStateMixin이 단일 material을 clone했으므로, 여기서도
+                // material.color만 setHex(0xffffff)로 복귀.
+                const mesh = instance.appendElement.getObjectByName(meshName);
+                if (!mesh) return;
+                if (Array.isArray(mesh.material)) {
+                    mesh.material.forEach(m => m.color && m.color.setHex(0xffffff));
+                } else if (mesh.material && mesh.material.color) {
+                    mesh.material.color.setHex(0xffffff);
+                }
+                return;
+            }
+
+            // 단일 meshName 'SHV-6'(리프 Mesh, 하이픈+숫자 단순 표기)으로 단일 Mesh 색상 치환.
+            // MeshStateMixin이 Mesh 타겟에 대해 Array.isArray 미발동 경로로 진입,
+            // material을 clone 후 color만 setHex.
+            instance.meshState.renderData({
+                response: [{ meshName, status }]
+            });
+        });
+    });
+
+    // ── Resize ────────────────────────────────────────────────
+    window.addEventListener('resize', () => {
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+    });
+    </script>
+</body>
+</html>

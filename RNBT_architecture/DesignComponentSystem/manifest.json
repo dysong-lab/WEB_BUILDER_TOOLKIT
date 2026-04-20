@@ -3067,6 +3067,19 @@
           ]
         },
         {
+          "name": "SHV_03",
+          "spec": "Components/3D_Components/SHV_03/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/SHV_03/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/SHV_03/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "UPS",
           "spec": "Components/3D_Components/UPS/CLAUDE.md",
           "sets": [
