@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tabs/Standard — 04_operational</title>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/ListRenderMixin.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 48px; background: #090d11; }
+    </style>
+  </head>
+  <body>
+    <div id="tabs-operational"></div>
+    <script>
+      (async () => {
+        await loadComponentAssets("tabs-operational", "../views/04_operational.html", "../styles/04_operational.css");
+        const instance = { id: "tabs-operational", appendElement: document.getElementById("tabs-operational") };
+        applyListRenderMixin(instance, {
+          cssSelectors: { list: ".tabs__list", template: "#tab-item-template", item: ".tabs__tab", id: ".tabs__tab", selected: ".tabs__tab", disabled: ".tabs__tab", label: ".tabs__label", badge: ".tabs__badge" },
+          itemKey: "id",
+          datasetAttrs: { id: "id", selected: "selected", disabled: "disabled" },
+        });
+        const items = [
+          { id: "power", label: "Power", badge: "2", selected: "true", disabled: "false", panelEyebrow: "Live feed", panelTitle: "Input voltage anomaly", panelBody: "Bus B remains below threshold and is being tracked against redundant load transfer." },
+          { id: "cooling", label: "Cooling", badge: "1", selected: "false", disabled: "false", panelEyebrow: "Environment", panelTitle: "Coolant loop warning", panelBody: "Cooling loop four is degraded and recovery actions are queued for the next maintenance window." },
+          { id: "network", label: "Network", badge: "", selected: "false", disabled: "false", panelEyebrow: "Latency", panelTitle: "Edge path healthy", panelBody: "Core uplink and edge relay remain within the acceptable latency envelope." },
+          { id: "safety", label: "Safety", badge: "", selected: "false", disabled: "true", panelEyebrow: "Restricted", panelTitle: "Safety view locked", panelBody: "This console requires elevated operator clearance." }
+        ];
+        const renderPanel = (item = {}) => {
+          instance.appendElement.querySelector(".tabs__panel-eyebrow").textContent = item.panelEyebrow || "";
+          instance.appendElement.querySelector(".tabs__panel-title").textContent = item.panelTitle || "";
+          instance.appendElement.querySelector(".tabs__panel-body").textContent = item.panelBody || "";
+        };
+        const sync = () => {
+          const tabs = Array.from(instance.appendElement.querySelectorAll(".tabs__tab"));
+          const selected = tabs.find((tab) => tab.dataset.selected === "true") || tabs[0];
+          instance.appendElement.querySelector(".tabs__list").setAttribute("role", "tablist");
+          tabs.forEach((tab) => {
+            tab.setAttribute("role", "tab");
+            tab.setAttribute("aria-selected", tab === selected ? "true" : "false");
+            tab.setAttribute("tabindex", tab === selected && tab.dataset.disabled !== "true" ? "0" : "-1");
+          });
+        };
+        const selectTab = (id, event) => {
+          const target = instance.appendElement.querySelector(`.tabs__tab[data-id="${id}"]`);
+          if (!target || target.dataset.disabled === "true") return;
+          instance.appendElement.querySelectorAll(".tabs__tab").forEach((tab) => {
+            tab.dataset.selected = tab.dataset.id === id ? "true" : "false";
+            tab.setAttribute("data-selected", tab.dataset.selected);
+          });
+          const next = items.find((item) => item.id === id) || {};
+          renderPanel(next);
+          sync();
+          Weventbus.emit("@tabChanged", { event, targetInstance: instance, itemId: id, response: next });
+        };
+        instance.listRender.renderData({ response: items });
+        renderPanel(items[0]);
+        sync();
+        instance.appendElement.addEventListener("click", (event) => {
+          const tab = event.target.closest(".tabs__tab");
+          if (!tab) return;
+          selectTab(tab.dataset.id, event);
+        });
+      })();
+    </script>
+  </body>
+</html>

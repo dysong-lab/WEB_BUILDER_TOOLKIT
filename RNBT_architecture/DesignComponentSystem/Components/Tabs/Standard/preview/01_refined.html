@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tabs/Standard — 01_refined</title>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/ListRenderMixin.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 48px;
+        background: radial-gradient(circle at top, #133452, #08111a 62%);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="tabs-refined"></div>
+    <script>
+      (async () => {
+        await loadComponentAssets("tabs-refined", "../views/01_refined.html", "../styles/01_refined.css");
+        const instance = { id: "tabs-refined", appendElement: document.getElementById("tabs-refined") };
+        applyListRenderMixin(instance, {
+          cssSelectors: {
+            list: ".tabs__list",
+            template: "#tab-item-template",
+            item: ".tabs__tab",
+            id: ".tabs__tab",
+            selected: ".tabs__tab",
+            disabled: ".tabs__tab",
+            label: ".tabs__label",
+            badge: ".tabs__badge",
+          },
+          itemKey: "id",
+          datasetAttrs: { id: "id", selected: "selected", disabled: "disabled" },
+        });
+
+        const items = [
+          { id: "overview", label: "Overview", badge: "12", selected: "true", disabled: "false", panelEyebrow: "Operations", panelTitle: "Daily status summary", panelBody: "Live incidents, deployment health, and active approvals are surfaced in one place." },
+          { id: "incidents", label: "Incidents", badge: "4", selected: "false", disabled: "false", panelEyebrow: "Response", panelTitle: "Critical escalations", panelBody: "Unresolved power and cooling alerts are prioritized with response owners and elapsed time." },
+          { id: "approvals", label: "Approvals", badge: "9", selected: "false", disabled: "false", panelEyebrow: "Workflow", panelTitle: "Pending release gates", panelBody: "Deployment approvals, access requests, and compliance acknowledgements remain grouped by urgency." },
+          { id: "archive", label: "Archive", badge: "", selected: "false", disabled: "true", panelEyebrow: "History", panelTitle: "Archived reviews", panelBody: "This section is unavailable while retention sync is running." }
+        ];
+
+        const renderPanel = (item = {}) => {
+          instance.appendElement.querySelector(".tabs__panel-eyebrow").textContent = item.panelEyebrow || "";
+          instance.appendElement.querySelector(".tabs__panel-title").textContent = item.panelTitle || "";
+          instance.appendElement.querySelector(".tabs__panel-body").textContent = item.panelBody || "";
+        };
+
+        const sync = () => {
+          const tabs = Array.from(instance.appendElement.querySelectorAll(".tabs__tab"));
+          const selected = tabs.find((tab) => tab.dataset.selected === "true") || tabs[0];
+          instance.appendElement.querySelector(".tabs__list").setAttribute("role", "tablist");
+          tabs.forEach((tab) => {
+            tab.setAttribute("role", "tab");
+            tab.setAttribute("aria-selected", tab === selected ? "true" : "false");
+            tab.setAttribute("tabindex", tab === selected && tab.dataset.disabled !== "true" ? "0" : "-1");
+          });
+        };
+
+        const selectTab = (id, event) => {
+          const target = instance.appendElement.querySelector(`.tabs__tab[data-id="${id}"]`);
+          if (!target || target.dataset.disabled === "true") return;
+          instance.appendElement.querySelectorAll(".tabs__tab").forEach((tab) => {
+            tab.dataset.selected = tab.dataset.id === id ? "true" : "false";
+            tab.setAttribute("data-selected", tab.dataset.selected);
+          });
+          const next = items.find((item) => item.id === id) || {};
+          renderPanel(next);
+          sync();
+          Weventbus.emit("@tabChanged", { event, targetInstance: instance, itemId: id, response: next });
+        };
+
+        instance.listRender.renderData({ response: items });
+        renderPanel(items[0]);
+        sync();
+
+        instance.appendElement.addEventListener("click", (event) => {
+          const tab = event.target.closest(".tabs__tab");
+          if (!tab) return;
+          selectTab(tab.dataset.id, event);
+        });
+      })();
+    </script>
+  </body>
+</html>

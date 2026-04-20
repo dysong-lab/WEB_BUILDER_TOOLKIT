@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tabs/Standard — 02_material</title>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/ListRenderMixin.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 48px; background: #efe9fb; }
+    </style>
+  </head>
+  <body>
+    <div id="tabs-material"></div>
+    <script>
+      (async () => {
+        await loadComponentAssets("tabs-material", "../views/02_material.html", "../styles/02_material.css");
+        const instance = { id: "tabs-material", appendElement: document.getElementById("tabs-material") };
+        applyListRenderMixin(instance, {
+          cssSelectors: { list: ".tabs__list", template: "#tab-item-template", item: ".tabs__tab", id: ".tabs__tab", selected: ".tabs__tab", disabled: ".tabs__tab", label: ".tabs__label", badge: ".tabs__badge" },
+          itemKey: "id",
+          datasetAttrs: { id: "id", selected: "selected", disabled: "disabled" },
+        });
+        const items = [
+          { id: "brief", label: "Brief", badge: "", selected: "true", disabled: "false", panelEyebrow: "Planning", panelTitle: "Project brief confirmed", panelBody: "Goals, audience, and launch timing have been aligned with stakeholders." },
+          { id: "tasks", label: "Tasks", badge: "18", selected: "false", disabled: "false", panelEyebrow: "Execution", panelTitle: "Assigned work items", panelBody: "Current sprint tasks stay grouped by owner, due time, and blocking state." },
+          { id: "files", label: "Files", badge: "6", selected: "false", disabled: "false", panelEyebrow: "Assets", panelTitle: "Shared working files", panelBody: "Design links, copy decks, and source exports remain accessible in one surface." },
+          { id: "billing", label: "Billing", badge: "", selected: "false", disabled: "true", panelEyebrow: "Finance", panelTitle: "Billing access required", panelBody: "This area unlocks after workspace finance permission is granted." }
+        ];
+        const renderPanel = (item = {}) => {
+          instance.appendElement.querySelector(".tabs__panel-eyebrow").textContent = item.panelEyebrow || "";
+          instance.appendElement.querySelector(".tabs__panel-title").textContent = item.panelTitle || "";
+          instance.appendElement.querySelector(".tabs__panel-body").textContent = item.panelBody || "";
+        };
+        const sync = () => {
+          const tabs = Array.from(instance.appendElement.querySelectorAll(".tabs__tab"));
+          const selected = tabs.find((tab) => tab.dataset.selected === "true") || tabs[0];
+          instance.appendElement.querySelector(".tabs__list").setAttribute("role", "tablist");
+          tabs.forEach((tab) => {
+            tab.setAttribute("role", "tab");
+            tab.setAttribute("aria-selected", tab === selected ? "true" : "false");
+            tab.setAttribute("tabindex", tab === selected && tab.dataset.disabled !== "true" ? "0" : "-1");
+          });
+        };
+        const selectTab = (id, event) => {
+          const target = instance.appendElement.querySelector(`.tabs__tab[data-id="${id}"]`);
+          if (!target || target.dataset.disabled === "true") return;
+          instance.appendElement.querySelectorAll(".tabs__tab").forEach((tab) => {
+            tab.dataset.selected = tab.dataset.id === id ? "true" : "false";
+            tab.setAttribute("data-selected", tab.dataset.selected);
+          });
+          const next = items.find((item) => item.id === id) || {};
+          renderPanel(next);
+          sync();
+          Weventbus.emit("@tabChanged", { event, targetInstance: instance, itemId: id, response: next });
+        };
+        instance.listRender.renderData({ response: items });
+        renderPanel(items[0]);
+        sync();
+        instance.appendElement.addEventListener("click", (event) => {
+          const tab = event.target.closest(".tabs__tab");
+          if (!tab) return;
+          selectTab(tab.dataset.id, event);
+        });
+      })();
+    </script>
+  </body>
+</html>

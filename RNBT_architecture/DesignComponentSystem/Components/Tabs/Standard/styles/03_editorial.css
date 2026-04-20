@@ -1,0 +1,85 @@
+.tabs {
+  width: min(780px, 100%);
+  padding: 20px 22px 26px;
+  color: #1f1915;
+  background: #f7f0e5;
+  border: 1px solid #dacdbb;
+}
+
+.tabs__list {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(86, 63, 41, 0.18);
+}
+
+.tabs__tab {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 0 0 10px;
+  border: 0;
+  background: transparent;
+  color: rgba(31, 25, 21, 0.62);
+  cursor: pointer;
+}
+
+.tabs__tab[data-selected="true"] {
+  color: #1f1915;
+}
+
+.tabs__tab[data-selected="true"]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -15px;
+  height: 2px;
+  background: #1f1915;
+}
+
+.tabs__tab[data-disabled="true"] {
+  opacity: 0.36;
+  cursor: not-allowed;
+}
+
+.tabs__tab:focus-visible {
+  outline: 2px solid #6c5339;
+  outline-offset: 4px;
+}
+
+.tabs__label {
+  font: 700 18px/1.1 Georgia, "Times New Roman", serif;
+}
+
+.tabs__badge {
+  font: 700 11px/1 "Segoe UI", sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tabs__badge:empty {
+  display: none;
+}
+
+.tabs__panel-eyebrow {
+  margin-bottom: 12px;
+  color: #7f674d;
+  font: 600 12px/1.2 "Segoe UI", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.tabs__panel-title {
+  margin-bottom: 14px;
+  font: 700 34px/1.08 Georgia, "Times New Roman", serif;
+}
+
+.tabs__panel-body {
+  max-width: 58ch;
+  color: #4b4037;
+  font: 400 17px/1.8 Georgia, "Times New Roman", serif;
+}

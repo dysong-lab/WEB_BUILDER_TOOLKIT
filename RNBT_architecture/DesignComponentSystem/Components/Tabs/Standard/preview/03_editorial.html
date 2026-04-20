@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tabs/Standard — 03_editorial</title>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/ListRenderMixin.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 48px; background: linear-gradient(180deg, #f4ecdf, #eadfce); }
+    </style>
+  </head>
+  <body>
+    <div id="tabs-editorial"></div>
+    <script>
+      (async () => {
+        await loadComponentAssets("tabs-editorial", "../views/03_editorial.html", "../styles/03_editorial.css");
+        const instance = { id: "tabs-editorial", appendElement: document.getElementById("tabs-editorial") };
+        applyListRenderMixin(instance, {
+          cssSelectors: { list: ".tabs__list", template: "#tab-item-template", item: ".tabs__tab", id: ".tabs__tab", selected: ".tabs__tab", disabled: ".tabs__tab", label: ".tabs__label", badge: ".tabs__badge" },
+          itemKey: "id",
+          datasetAttrs: { id: "id", selected: "selected", disabled: "disabled" },
+        });
+        const items = [
+          { id: "essay", label: "Essay", badge: "Lead", selected: "true", disabled: "false", panelEyebrow: "Feature", panelTitle: "Opening essay and framing notes", panelBody: "The lead article sets tone, pacing, and the editorial lens for the full issue." },
+          { id: "voices", label: "Voices", badge: "3", selected: "false", disabled: "false", panelEyebrow: "Interviews", panelTitle: "Contributors and quoted voices", panelBody: "Interview excerpts and commentary are curated to support the central narrative." },
+          { id: "gallery", label: "Gallery", badge: "12", selected: "false", disabled: "false", panelEyebrow: "Visuals", panelTitle: "Image sequence and captions", panelBody: "A restrained gallery sequence extends the story without interrupting reading flow." },
+          { id: "notes", label: "Notes", badge: "", selected: "false", disabled: "true", panelEyebrow: "Appendix", panelTitle: "Footnotes unavailable", panelBody: "Reference notes appear after editorial approval is complete." }
+        ];
+        const renderPanel = (item = {}) => {
+          instance.appendElement.querySelector(".tabs__panel-eyebrow").textContent = item.panelEyebrow || "";
+          instance.appendElement.querySelector(".tabs__panel-title").textContent = item.panelTitle || "";
+          instance.appendElement.querySelector(".tabs__panel-body").textContent = item.panelBody || "";
+        };
+        const sync = () => {
+          const tabs = Array.from(instance.appendElement.querySelectorAll(".tabs__tab"));
+          const selected = tabs.find((tab) => tab.dataset.selected === "true") || tabs[0];
+          instance.appendElement.querySelector(".tabs__list").setAttribute("role", "tablist");
+          tabs.forEach((tab) => {
+            tab.setAttribute("role", "tab");
+            tab.setAttribute("aria-selected", tab === selected ? "true" : "false");
+            tab.setAttribute("tabindex", tab === selected && tab.dataset.disabled !== "true" ? "0" : "-1");
+          });
+        };
+        const selectTab = (id, event) => {
+          const target = instance.appendElement.querySelector(`.tabs__tab[data-id="${id}"]`);
+          if (!target || target.dataset.disabled === "true") return;
+          instance.appendElement.querySelectorAll(".tabs__tab").forEach((tab) => {
+            tab.dataset.selected = tab.dataset.id === id ? "true" : "false";
+            tab.setAttribute("data-selected", tab.dataset.selected);
+          });
+          const next = items.find((item) => item.id === id) || {};
+          renderPanel(next);
+          sync();
+          Weventbus.emit("@tabChanged", { event, targetInstance: instance, itemId: id, response: next });
+        };
+        instance.listRender.renderData({ response: items });
+        renderPanel(items[0]);
+        sync();
+        instance.appendElement.addEventListener("click", (event) => {
+          const tab = event.target.closest(".tabs__tab");
+          if (!tab) return;
+          selectTab(tab.dataset.id, event);
+        });
+      })();
+    </script>
+  </body>
+</html>
