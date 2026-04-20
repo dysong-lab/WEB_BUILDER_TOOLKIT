@@ -1931,6 +1931,22 @@
               ]
             }
           ]
+        },
+        {
+          "name": "ACBmetasol",
+          "spec": "Components/3D_Components/ACBmetasol/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/ACBmetasol/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/ACBmetasol/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
         }
       ]
     }
