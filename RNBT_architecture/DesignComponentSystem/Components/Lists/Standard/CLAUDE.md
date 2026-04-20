@@ -2,11 +2,10 @@
 
 ## 기능 정의
 
-1. **리스트 항목 렌더링** — `listItems` 토픽으로 수신한 배열 데이터를 수직 리스트 항목으로 렌더링한다
-2. **항목 선택 전환** — 선택 가능한 항목 클릭 시 해당 항목의 `selected` 상태를 토글한다
-3. **항목 클릭 이벤트 발행** — 항목 루트 클릭 시 `@listItemClicked` 이벤트를 발행한다
-4. **후행 액션 이벤트 발행** — trailing action 클릭 시 `@listTrailingActionClicked` 이벤트를 발행한다
-5. **상태 표시 반영** — 각 항목의 `selected`, `disabled`, `selectable`, leading/trailing 정보를 시각 상태로 반영한다
+1. **리스트 항목 렌더링** — `listItems` 토픽으로 수신한 배열 데이터를 template 반복으로 렌더링한다. 각 항목은 선행 아이콘 + 헤드라인 + 보조 텍스트로 구성된다
+2. **항목 클릭 이벤트** — 항목 클릭 시 `@listItemClicked` 발행 (페이지가 상세/네비게이션 등 후속 액션 수행)
+
+---
 
 ## 구현 명세
 
@@ -18,80 +17,54 @@ ListRenderMixin
 
 | KEY | VALUE | 용도 |
 |-----|-------|------|
-| container | `.list` | 항목 컨테이너 |
-| template | `#list-item-template` | 항목 템플릿 |
-| item | `.list-item` | 항목 루트 |
-| id | `.list-item` | 항목 식별자 |
-| selected | `.list-item` | 선택 상태 |
-| disabled | `.list-item` | 비활성 상태 |
-| selectable | `.list-item` | 선택 가능 여부 |
-| leading | `.list-item__leading` | 선행 비주얼 |
-| leadingType | `.list-item__leading` | 선행 비주얼 타입 |
-| overline | `.list-item__overline` | 상단 보조 텍스트 |
-| headline | `.list-item__headline` | 기본 제목 |
-| supporting | `.list-item__supporting` | 보조 설명 |
-| trailingText | `.list-item__trailing-text` | 후행 텍스트 |
-| trailingAction | `.list-item__trailing-action` | 후행 액션 아이콘/버튼 |
-| trailingActionLabel | `.list-item__trailing-action` | 후행 액션 접근성 라벨 |
-
-### itemKey
-
-id
+| container | `.list__items` | 항목이 추가될 부모 (규약) |
+| template  | `#list-item-template` | cloneNode 대상 (규약) |
+| itemid    | `.list__item` | 항목 루트 + 이벤트 매핑 |
+| leading   | `.list__leading` | 선행 요소 (아이콘/이모지) |
+| headline  | `.list__headline` | 헤드라인 텍스트 |
+| supporting | `.list__supporting` | 보조 텍스트 |
 
 ### datasetAttrs
 
-```javascript
-{
-    id: "id",
-    selected: "selected",
-    disabled: "disabled",
-    selectable: "selectable",
-    leadingType: "leading-type"
-}
-```
-
-### elementAttrs
-
-```javascript
-{
-    trailingActionLabel: "aria-label"
-}
-```
+| KEY | VALUE |
+|-----|-------|
+| itemid | itemid |
 
 ### 구독 (subscriptions)
 
 | topic | handler |
 |-------|---------|
-| listItems | `this.renderListItems` |
+| listItems | `this.listRender.renderData` |
 
-### 이벤트
+### 이벤트 (customEvents)
 
-| 이벤트 | 트리거 | 발행 |
+| 이벤트 | 선택자 | 발행 |
 |--------|--------|------|
-| click | `.list-item` native listener | `@listItemClicked` |
-| click | `.list-item__trailing-action` native listener | `@listTrailingActionClicked` |
+| click | `itemid` (computed property) | `@listItemClicked` |
 
 ### 커스텀 메서드
 
-| 메서드 | 설명 |
-|--------|------|
-| `this.renderListItems({ response })` | 입력 배열을 정규화한 뒤 `ListRenderMixin`으로 렌더링한다 |
-| `this.getItemElement(id)` | id로 항목 루트 요소를 조회한다 |
-| `this.toggleSelection(id)` | `ListRenderMixin.getItemState/updateItemState`로 선택 가능한 항목의 `selected` 상태를 토글한다 |
-| `this.setSelected(id, selected)` | `ListRenderMixin.updateItemState`로 지정한 항목의 `selected` 상태를 명시적으로 설정한다 |
+없음
 
 ### 페이지 연결 사례
 
-```text
-[Lists/Standard] --@listItemClicked--> [페이지] --> 상세 패널 열기 / 상태 변경 / 라우팅
-[Lists/Standard] --@listTrailingActionClicked--> [페이지] --> 세부 액션 수행
+```
+[페이지] ──fetchAndPublish('listItems', this)──> [Lists] 렌더링 ([{ itemid, leading, headline, supporting }, ...])
+
+[Lists] ──@listItemClicked──> [페이지] ──> 해당 항목의 액션 수행
 ```
 
 ### 디자인 변형
 
 | 파일 | 페르소나 | 설명 |
 |------|---------|------|
-| 01_refined | A: Refined Technical | 보랏빛 블루 톤, 글래스형 패널, 기술형 밀도 |
-| 02_material | B: Material Elevated | 라이트 서피스, 로보토, MD3에 가까운 표준형 |
-| 03_editorial | C: Minimal Editorial | 웜 그레이, 세리프 헤드라인, 여백 강조 |
-| 04_operational | D: Dark Operational | 다크 네이비, 모노스페이스 포인트, 운영 패널형 |
+| 01_refined     | A: Refined Technical | 다크 퍼플, 그라디언트 호버, Pretendard |
+| 02_material    | B: Material Elevated | 라이트, elevation shadow, Roboto |
+| 03_editorial   | C: Minimal Editorial | 웜 그레이, 세리프 헤드라인, 미니멀 구분선 |
+| 04_operational | D: Dark Operational  | 컴팩트 다크 시안, 모노스페이스, 각진 모서리 |
+
+### 결정사항
+
+- **선행 요소**: 텍스트 기반 (이모지 또는 심볼 문자). leading 필드가 비어있으면 아이콘 영역이 CSS로 숨겨진다.
+- **MD3 기반**: MD3 Lists의 one-line / two-line 구조. supporting이 비어있으면 one-line으로 표시.
+- **근거**: MD3 Lists는 배열 데이터를 수직 목록으로 반복 렌더하므로 ListRenderMixin이 적합.

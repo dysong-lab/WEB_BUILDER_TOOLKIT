@@ -34,7 +34,7 @@ description: GLTF 컨테이너 3D 컴포넌트를 생성합니다. 하나의 GLT
 3. [CODING_STYLE.md](/.claude/guides/CODING_STYLE.md) — 코딩 스타일
 4. **Mixin 문서 확인** — 구현 명세에 명시된 Mixin의 .md 파일
 5. **기존 예제 확인** — 같은 패턴의 기존 컴포넌트를 참조:
-   - [gltf_container](/RNBT_architecture/DesignComponentSystem/Components/3D_Components/gltf_container/) — 대표 GLTF 컨테이너 컴포넌트
+   - [meshesArea/area_01](/RNBT_architecture/DesignComponentSystem/Components/3D_Components/meshesArea/area_01/) — 대표 GLTF 컨테이너 컴포넌트
 
 ---
 
@@ -72,8 +72,7 @@ description: GLTF 컨테이너 3D 컴포넌트를 생성합니다. 하나의 GLT
 | Advanced | 07 | animation | MeshState + AnimationMixin |
 | Advanced | 08 | clipping | MeshState + ClippingPlaneMixin |
 
-> 기존 생산된 01~03은 `01_status`, `02_status_camera`, `03_status_popup` 폴더명을 유지한다.
-> 신규 생산분(04~)부터 새 명명 규칙을 적용한다.
+> 기존 생산된 변형은 `meshesArea/area_01/{Standard,Advanced/camera,Advanced/popup}/` 구조로 존재한다. 표의 "이름" 컬럼이 Standard 폴더(`status`는 `Standard/`)와 Advanced 하위 폴더명(`camera`, `popup`, `highlight`, ...)에 그대로 매핑된다.
 > 클릭 이벤트가 있는 변형에서는 resolveMeshName이 필요하다.
 
 ---
@@ -827,7 +826,7 @@ models/
 
 ### 폴더/파일 명명 규칙
 
-- 모델 변종은 `models/{컨테이너명}/NN_변종명/` 폴더로 격리한다 (예: `models/gltf_container/01_default/`)
+- 모델 변종은 `models/meshesArea/{컨테이너명}/NN_변종명/` 폴더로 격리한다 (예: `models/meshesArea/area_01/01_default/`)
 - 폴더 안의 GLTF·.bin·텍스처 파일은 원래 이름을 유지한다 (GLTF 내부 상대 참조가 그대로 유효해야 한다)
 - preview HTML은 항상 `{Standard 또는 Advanced/{구현명}}/preview/NN_변종명.html` 위치에 둔다 (구현명은 경로에 있으므로 파일명은 변종명만)
 - manifest 라벨은 `"NN 변종명"` (공백 구분)으로 표기하여 2D 형식과 정합
@@ -839,7 +838,7 @@ models/
 
 ### 금지 사항
 
-- ❌ `models/gltf_container/gltf_container.gltf`처럼 변종 폴더 없이 자산을 두지 않는다 (변형이 1개여도 `01_default/`를 둔다)
+- ❌ `models/meshesArea/area_01/area_01.gltf`처럼 변종 폴더 없이 자산을 두지 않는다 (변형이 1개여도 `01_default/`를 둔다)
 - ❌ preview HTML 라벨을 구현명(`camera`, `popup`)으로 쓰지 않는다 — item 이름과 중복되어 의미가 없다
 - ❌ 모델 변종을 위해 register.js나 resolveMeshName을 수정하지 않는다 (수정해야 한다면 변종이 아니라 별도 컴포넌트다)
 
@@ -877,6 +876,6 @@ models/
 | ClippingPlaneMixin | [Mixins/ClippingPlaneMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/ClippingPlaneMixin.md) |
 | 3DShadowPopupMixin | [Mixins/3DShadowPopupMixin.md](/RNBT_architecture/DesignComponentSystem/Mixins/3DShadowPopupMixin.md) |
 | 개별 단위 패턴 | [create-3d-component](/.claude/skills/2-component/create-3d-component/SKILL.md) |
-| gltf_container (참조 구현) | [Components/3D_Components/gltf_container](/RNBT_architecture/DesignComponentSystem/Components/3D_Components/gltf_container/) |
+| meshesArea/area_01 (참조 구현) | [Components/3D_Components/meshesArea/area_01](/RNBT_architecture/DesignComponentSystem/Components/3D_Components/meshesArea/area_01/) |
 
 ---

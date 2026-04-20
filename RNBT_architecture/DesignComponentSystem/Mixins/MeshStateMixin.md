@@ -18,7 +18,9 @@
 |------|------|------|
 | `colorMap` | O | 상태값 → 색상(hex) 매핑 |
 
-3D 컴포넌트 자신의 메시 상태를 관리한다. `instance.appendElement`(THREE.Object3D)에서 `getObjectByName`으로 메시를 탐색한다.
+3D 컴포넌트 자신의 메시 상태를 관리한다. `instance.appendElement`(THREE.Object3D)에서 `getObjectByName`으로 오브젝트를 탐색한다. 대상이 Mesh이면 직접 material 색상을 변경하고, Group이면 자식 Mesh들을 traverse하여 일괄 변경한다.
+
+Mesh의 `material`이 단일 Material 객체인 경우와 배열(multi-material mesh, 서브메시별로 다른 material)인 경우를 모두 지원한다. 배열이면 각 material을 clone 후 color를 일괄 적용한다.
 
 ### colorMap
 
@@ -74,6 +76,6 @@ this.subscriptions = {
 | 속성/메서드 | 역할 |
 |------------|------|
 | `renderData({ response })` | 메시 상태 배열을 받아 색상 일괄 적용 |
-| `setMeshState(meshName, status)` | 개별 메시의 상태(색상) 변경 |
+| `setMeshState(meshName, status)` | 개별 메시의 상태(색상) 변경. Group이면 자식 Mesh 일괄 적용 |
 | `getMeshState(meshName)` | 개별 메시의 현재 상태 조회 |
 | `destroy()` | 상태 맵 정리 + 모든 속성/메서드 정리 |

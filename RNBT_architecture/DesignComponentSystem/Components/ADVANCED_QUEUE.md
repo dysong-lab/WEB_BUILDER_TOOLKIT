@@ -15,13 +15,17 @@
 ## 폴더 명명 규칙
 
 ```
-Components/<범주>/Advanced/<변형이름>/
+Components/<컴포넌트경로>/Advanced/<변형이름>/
 ├── CLAUDE.md
 ├── scripts/
 ├── styles/
 ├── views/
 └── preview/
 ```
+
+**`<컴포넌트경로>`**: `Components/` 아래 컴포넌트 루트 상대경로.
+- depth 1 범주: `<범주>` (예: `AppBars`, `Badges`, `Cards`)
+- depth 2 범주: `<범주>/<서브범주>` (예: `Buttons/SplitButtons`, `Chips/Assist`)
 
 **변형 이름**: camelCase 권장 (예: `searchEmbedded`, `inlineEditable`)
 
@@ -31,10 +35,12 @@ Components/<범주>/Advanced/<변형이름>/
 
 ## 생산 대기열
 
-| 순번 | 범주 | 변형 이름 | 설명 | 상태 |
-|------|------|----------|------|------|
+| 순번 | 컴포넌트경로 | 변형 이름 | 설명 | 상태 |
+|------|-------------|----------|------|------|
 | 1 | AppBars | searchEmbedded | 임베디드 검색 입력 AppBar — @searchInputChanged/@searchCleared 발행 | 완료 |
 | 2 | AppBars | contextual | 선택 모드 AppBar — selectionInfo 구독, @selectionActionClicked/@selectionCleared 발행 | 완료 |
+
+> depth 2 케이스 등록 예시: `| 3 | Buttons/SplitButtons | ... | ... | 대기 |`
 
 ---
 
