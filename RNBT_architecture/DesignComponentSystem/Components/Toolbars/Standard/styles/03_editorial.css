@@ -1,0 +1,57 @@
+.toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  width: min(860px, 100%);
+  padding: 18px 0 14px;
+  color: #211a15;
+  border-bottom: 1px solid rgba(86, 63, 41, 0.2);
+}
+
+.toolbar__meta {
+  display: grid;
+  gap: 10px;
+}
+
+.toolbar__supporting {
+  color: #7f674d;
+  font: 600 12px/1.2 "Segoe UI", sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.toolbar__title {
+  font: 700 34px/1.08 Georgia, "Times New Roman", serif;
+}
+
+.toolbar__controls,
+.toolbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.toolbar__action,
+.toolbar__overflow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 0 8px;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  color: rgba(33, 26, 21, 0.68);
+  cursor: pointer;
+}
+
+.toolbar__action-label {
+  font: 600 14px/1.2 "Segoe UI", sans-serif;
+}
+
+.toolbar__action[data-emphasis="true"],
+.toolbar[data-overflow-open="true"] .toolbar__overflow {
+  color: #211a15;
+  border-bottom-color: #211a15;
+}

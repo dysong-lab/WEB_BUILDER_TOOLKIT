@@ -1,0 +1,65 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: min(820px, 100%);
+  padding: 24px 26px;
+  border-radius: 26px;
+  color: #eef6ff;
+  background: linear-gradient(180deg, rgba(15, 29, 44, 0.94), rgba(7, 15, 24, 0.98));
+  border: 1px solid rgba(145, 204, 255, 0.18);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+}
+
+.toolbar__meta {
+  display: grid;
+  gap: 8px;
+}
+
+.toolbar__supporting {
+  color: #8dd9ff;
+  font: 700 12px/1.2 "Segoe UI", sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.toolbar__title {
+  font: 700 28px/1.15 "Segoe UI", sans-serif;
+}
+
+.toolbar__controls,
+.toolbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.toolbar__action,
+.toolbar__overflow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(145, 204, 255, 0.18);
+  background: rgba(255, 255, 255, 0.05);
+  color: inherit;
+  cursor: pointer;
+}
+
+.toolbar__action[data-emphasis="true"] {
+  background: linear-gradient(180deg, rgba(88, 197, 255, 0.34), rgba(24, 126, 216, 0.38));
+  border-color: rgba(145, 220, 255, 0.46);
+}
+
+.toolbar__action-icon {
+  font-size: 16px;
+}
+
+.toolbar[data-overflow-open="true"] .toolbar__overflow {
+  border-color: rgba(145, 220, 255, 0.46);
+  background: rgba(88, 197, 255, 0.18);
+}

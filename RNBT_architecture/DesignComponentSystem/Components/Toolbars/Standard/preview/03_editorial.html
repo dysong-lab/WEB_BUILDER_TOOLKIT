@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Toolbars/Standard — 03_editorial</title>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/FieldRenderMixin.js"></script>
+    <script src="../../../../Mixins/ListRenderMixin.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 48px; background: linear-gradient(180deg, #f4ecdf, #eadfce); }
+    </style>
+  </head>
+  <body>
+    <div id="toolbar-editorial"></div>
+    <script>
+      (async () => {
+        await loadComponentAssets("toolbar-editorial", "../views/03_editorial.html", "../styles/03_editorial.css");
+        const instance = { id: "toolbar-editorial", appendElement: document.getElementById("toolbar-editorial") };
+        applyFieldRenderMixin(instance, { cssSelectors: { root: ".toolbar", title: ".toolbar__title", supportingText: ".toolbar__supporting", overflowButton: ".toolbar__overflow" } });
+        applyListRenderMixin(instance, { cssSelectors: { container: ".toolbar__actions", template: "#toolbar-action-template", item: ".toolbar__action", id: ".toolbar__action", emphasis: ".toolbar__action", icon: ".toolbar__action-icon", label: ".toolbar__action-label" }, itemKey: "id", datasetAttrs: { id: "id", emphasis: "emphasis" } });
+        instance.fieldRender.renderData({ response: { title: "Editorial Tools", supportingText: "Adjust structure, notes, and image sequence." } });
+        instance.listRender.renderData({ response: [{ id: "structure", label: "Structure", icon: "§", emphasis: "true" }, { id: "notes", label: "Notes", icon: "✎", emphasis: "false" }, { id: "gallery", label: "Gallery", icon: "◫", emphasis: "false" }] });
+        instance.appendElement.addEventListener("click", (event) => {
+          const overflow = event.target.closest(".toolbar__overflow");
+          if (overflow) {
+            const root = instance.appendElement.querySelector(".toolbar");
+            root.dataset.overflowOpen = root.dataset.overflowOpen === "true" ? "false" : "true";
+            Weventbus.emit("@toolbarOverflowToggled", { event, targetInstance: instance });
+            return;
+          }
+          const action = event.target.closest(".toolbar__action");
+          if (!action) return;
+          Weventbus.emit("@toolbarActionClicked", { event, targetInstance: instance, itemId: action.dataset.id, response: { id: action.dataset.id } });
+        });
+      })();
+    </script>
+  </body>
+</html>
