@@ -2,11 +2,11 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>3516BS — Standard</title>
+    <title>3516CS — Standard</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #1a1a2e; }
-        #camera3516bs-pageThreeLayer {
+        #camera3516cs-pageThreeLayer {
             width: 720px;
             height: 520px;
             display: block;
@@ -62,8 +62,8 @@
         <button class="demo-btn" data-status="reset">Reset</button>
     </div>
 
-    <div id="camera3516bs-pageThreeLayer"></div>
-    <div class="demo-message" id="demoMessage">loading 3516BS.gltf...</div>
+    <div id="camera3516cs-pageThreeLayer"></div>
+    <div class="demo-message" id="demoMessage">loading 3516CS.gltf...</div>
 
     <script src="../../../../../Mixins/MeshStateMixin.js"></script>
 
@@ -81,9 +81,9 @@
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
     import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-    const MESH_NAMES = ['3516C_01', '3516C_03_A', '3516C_Wing', '3516C_05'];
+    const MESH_NAMES = ['3516B_01', '3516B_02_A', '3516B_05', '3516B_Wing'];
 
-    const container = document.getElementById('camera3516bs-pageThreeLayer');
+    const container = document.getElementById('camera3516cs-pageThreeLayer');
     const width = container.clientWidth;
     const height = container.clientHeight;
 
@@ -116,7 +116,7 @@
     const instance = { appendElement: null };
     const loader = new GLTFLoader();
 
-    loader.load('../../../../../models/3516BS/01_default/3516BS.gltf', (gltf) => {
+    loader.load('../../../../../models/3516CS/01_default/3516CS.gltf', (gltf) => {
         const model = gltf.scene;
         scene.add(model);
 
