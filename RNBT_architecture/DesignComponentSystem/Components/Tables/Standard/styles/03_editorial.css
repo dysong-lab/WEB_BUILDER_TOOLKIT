@@ -1,0 +1,31 @@
+.data-table--editorial {
+  width: min(100%, 780px);
+  border-radius: 22px;
+  border: 1px solid rgba(112, 77, 43, 0.16);
+  background: linear-gradient(180deg, #fff5e8, #f2e7d7);
+  color: #281b12;
+  overflow: hidden;
+}
+
+.data-table--editorial .data-table__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 22px 12px;
+}
+
+.data-table--editorial .data-table__meta { display: grid; gap: 6px; }
+.data-table--editorial .data-table__title { font: 500 28px/1 Georgia, "Times New Roman", serif; }
+.data-table--editorial .data-table__supporting { font: 500 12px/1.5 "SUIT", sans-serif; color: rgba(40, 27, 18, 0.66); }
+.data-table--editorial .data-table__count { font: 600 12px/1 "SUIT", sans-serif; color: #8c431a; }
+.data-table--editorial .data-table__container { padding: 0 14px 14px; min-height: 240px; }
+
+.data-table--editorial .table-mock { width: 100%; border-collapse: collapse; }
+.data-table--editorial .table-mock th,
+.data-table--editorial .table-mock td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(112, 77, 43, 0.12);
+  font: 500 13px/1.45 "SUIT", sans-serif;
+}
+.data-table--editorial .table-mock th { color: #8c431a; text-align: left; font-weight: 600; }

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tables/Standard — 02_material</title>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/TabulatorMixin.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 48px; background: #efe9fb; }
+    </style>
+  </head>
+  <body>
+    <div id="table-material"></div>
+    <script>
+      class Tabulator { constructor(c,o){ this.container=c; this.options=o; this.handlers={}; this.data=o.data||[]; this.render(); setTimeout(()=>this.emit("tableBuilt"),0);} on(n,h){ this.handlers[n]=h; return this;} emit(n,...a){ if(this.handlers[n]) this.handlers[n](...a);} setData(d){ this.data=d; this.render();} clearData(){ this.data=[]; this.render();} destroy(){ this.container.innerHTML=""; this.handlers={};} render(){ const h=this.options.columns.map(col=>`<th>${col.title}</th>`).join(""); const r=this.data.map((row,i)=>`<tr data-index="${i}">${this.options.columns.map(col=>`<td>${row[col.field] ?? ""}</td>`).join("")}</tr>`).join(""); this.container.innerHTML=`<table class="table-mock"><thead><tr>${h}</tr></thead><tbody>${r}</tbody></table>`; this.container.querySelectorAll("tbody tr").forEach((tr)=>tr.addEventListener("click",(event)=>this.emit("rowClick",event,{getData:()=>this.data[Number(tr.dataset.index)]}))); } }
+      (async () => {
+        await loadComponentAssets("table-material", "../views/02_material.html", "../styles/02_material.css");
+        const instance = { id: "table-material", appendElement: document.getElementById("table-material") };
+        applyTabulatorMixin(instance, { cssSelectors: { container: ".data-table__container" }, columns: [{ title: "ID", field: "id" }, { title: "Name", field: "name" }, { title: "Type", field: "type" }, { title: "Status", field: "status" }, { title: "Value", field: "value" }, { title: "Updated", field: "updated" }] });
+        instance.tabulator.init().on("rowClick", (event, row) => Weventbus.emit("@tableRowClicked", { event, targetInstance: instance, response: row.getData() }));
+        instance.appendElement.querySelector(".data-table__count").textContent = "3 rows";
+        instance.tabulator.renderData({ response: [{ id: "REQ-18", name: "Deploy change set", type: "Release", status: "Pending", value: "3 files", updated: "09:52:10" }, { id: "REQ-19", name: "Update page metadata", type: "Content", status: "Approved", value: "12 fields", updated: "09:49:03" }, { id: "REQ-20", name: "Archive draft", type: "Workflow", status: "Blocked", value: "Waiting", updated: "09:45:41" }] });
+      })();
+    </script>
+  </body>
+</html>

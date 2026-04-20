@@ -1,0 +1,31 @@
+.data-table--material {
+  width: min(100%, 760px);
+  border-radius: 20px;
+  border: 1px solid #ddd6eb;
+  background: #faf7ff;
+  color: #1d1b20;
+  overflow: hidden;
+}
+
+.data-table--material .data-table__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px 12px;
+}
+
+.data-table--material .data-table__meta { display: grid; gap: 6px; }
+.data-table--material .data-table__title { font: 600 18px/1.2 "SUIT", "Pretendard", sans-serif; }
+.data-table--material .data-table__supporting { font: 500 12px/1.4 "SUIT", sans-serif; color: #665f73; }
+.data-table--material .data-table__count { font: 600 12px/1 "SUIT", sans-serif; color: #6750a4; }
+.data-table--material .data-table__container { padding: 0 12px 12px; min-height: 240px; }
+
+.data-table--material .table-mock { width: 100%; border-collapse: collapse; }
+.data-table--material .table-mock th,
+.data-table--material .table-mock td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #ece6f3;
+  font: 500 13px/1.4 "SUIT", sans-serif;
+}
+.data-table--material .table-mock th { color: #6750a4; text-align: left; font-weight: 600; }

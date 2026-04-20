@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tables/Standard — 01_refined</title>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/TabulatorMixin.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 48px;
+        background: radial-gradient(circle at top, #143450, #08111a 62%);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="table-refined"></div>
+    <script>
+      class Tabulator {
+        constructor(container, options) {
+          this.container = container;
+          this.options = options;
+          this.handlers = {};
+          this.data = options.data || [];
+          this.render();
+          setTimeout(() => this.emit("tableBuilt"), 0);
+        }
+        on(name, handler) { this.handlers[name] = handler; return this; }
+        emit(name, ...args) { if (this.handlers[name]) this.handlers[name](...args); }
+        setData(data) { this.data = data; this.render(); }
+        clearData() { this.data = []; this.render(); }
+        destroy() { this.container.innerHTML = ""; this.handlers = {}; }
+        render() {
+          const headers = this.options.columns.map(col => `<th>${col.title}</th>`).join("");
+          const rows = this.data.map((row, index) => `<tr data-index="${index}">${this.options.columns.map(col => `<td>${row[col.field] ?? ""}</td>`).join("")}</tr>`).join("");
+          this.container.innerHTML = `<table class="table-mock"><thead><tr>${headers}</tr></thead><tbody>${rows}</tbody></table>`;
+          this.container.querySelectorAll("tbody tr").forEach((tr) => {
+            tr.addEventListener("click", (event) => {
+              const rowData = this.data[Number(tr.dataset.index)];
+              this.emit("rowClick", event, { getData: () => rowData });
+            });
+          });
+        }
+      }
+      (async () => {
+        await loadComponentAssets("table-refined", "../views/01_refined.html", "../styles/01_refined.css");
+        const instance = { id: "table-refined", appendElement: document.getElementById("table-refined") };
+        applyTabulatorMixin(instance, {
+          cssSelectors: { container: ".data-table__container" },
+          columns: [
+            { title: "ID", field: "id" },
+            { title: "Name", field: "name" },
+            { title: "Type", field: "type" },
+            { title: "Status", field: "status" },
+            { title: "Value", field: "value" },
+            { title: "Updated", field: "updated" },
+          ],
+        });
+        const table = instance.tabulator.init();
+        table.on("rowClick", (event, row) => {
+          Weventbus.emit("@tableRowClicked", { event, targetInstance: instance, response: row.getData() });
+        });
+        instance.appendElement.querySelector(".data-table__count").textContent = "3 rows";
+        instance.tabulator.renderData({
+          response: [
+            { id: "UPS-01", name: "Rack UPS", type: "Power", status: "Normal", value: "72%", updated: "09:41:22" },
+            { id: "CRAC-02", name: "Cooling Unit", type: "HVAC", status: "Warning", value: "28C", updated: "09:41:10" },
+            { id: "ATS-07", name: "Transfer Switch", type: "Grid", status: "Normal", value: "Standby", updated: "09:40:51" },
+          ],
+        });
+      })();
+    </script>
+  </body>
+</html>
