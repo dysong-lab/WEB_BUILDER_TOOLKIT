@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Switch/Standard — 01_refined</title>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/ListRenderMixin.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 48px;
+        background: radial-gradient(circle at top, #133452, #08111a 62%);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="switch-refined"></div>
+    <script>
+      (async () => {
+        await loadComponentAssets("switch-refined", "../views/01_refined.html", "../styles/01_refined.css");
+        const instance = { id: "switch-refined", appendElement: document.getElementById("switch-refined") };
+        applyListRenderMixin(instance, {
+          cssSelectors: {
+            container: ".switch-group",
+            template: "#switch-item-template",
+            item: ".switch-item",
+            id: ".switch-item",
+            checked: ".switch-item",
+            disabled: ".switch-item",
+            label: ".switch-item__label",
+            supportingText: ".switch-item__supporting",
+          },
+          itemKey: "id",
+          datasetAttrs: { id: "id", checked: "checked", disabled: "disabled" },
+        });
+        instance.listRender.renderData({
+          response: [
+            { id: "wifi", label: "Wi-Fi relay", supportingText: "Keep devices reachable", checked: "true", disabled: "false" },
+            { id: "alerts", label: "Alert routing", supportingText: "Escalate to the primary channel", checked: "false", disabled: "false" },
+            { id: "override", label: "Remote override", supportingText: "Managed by policy", checked: "true", disabled: "true" },
+          ],
+        });
+        instance.appendElement.addEventListener("click", (event) => {
+          const item = event.target.closest(".switch-item");
+          if (!item || item.dataset.disabled === "true") return;
+          item.dataset.checked = item.dataset.checked === "true" ? "false" : "true";
+          item.setAttribute("data-checked", item.dataset.checked);
+          Weventbus.emit("@switchChanged", { event, targetInstance: instance });
+        });
+      })();
+    </script>
+  </body>
+</html>

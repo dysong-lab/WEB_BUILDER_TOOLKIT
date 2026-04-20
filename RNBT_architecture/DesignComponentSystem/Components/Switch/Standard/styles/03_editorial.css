@@ -1,0 +1,51 @@
+.switch-group--editorial {
+  display: grid;
+  gap: 14px;
+  width: min(100%, 460px);
+}
+
+.switch-group--editorial .switch-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  width: 100%;
+  padding: 18px 20px;
+  border: 1px solid rgba(112, 77, 43, 0.16);
+  border-radius: 20px;
+  background: linear-gradient(180deg, #fff5e9, #f2e7d8);
+  color: #281b12;
+  cursor: pointer;
+  text-align: left;
+}
+
+.switch-group--editorial .switch-item__text { display: grid; gap: 6px; }
+.switch-group--editorial .switch-item__label { font: 500 22px/1.1 Georgia, "Times New Roman", serif; }
+.switch-group--editorial .switch-item__supporting { font: 500 12px/1.5 "SUIT", sans-serif; color: rgba(40, 27, 18, 0.62); }
+.switch-group--editorial .switch-item__track {
+  position: relative;
+  width: 48px;
+  height: 28px;
+  border-radius: 999px;
+  background: rgba(121, 79, 42, 0.18);
+}
+.switch-group--editorial .switch-item__thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: transform 160ms ease;
+}
+.switch-group--editorial .switch-item[data-checked="true"] .switch-item__track {
+  background: linear-gradient(90deg, #d58a38, #92431c);
+}
+.switch-group--editorial .switch-item[data-checked="true"] .switch-item__thumb {
+  transform: translateX(20px);
+}
+.switch-group--editorial .switch-item[data-disabled="true"] {
+  opacity: 0.48;
+  cursor: default;
+}

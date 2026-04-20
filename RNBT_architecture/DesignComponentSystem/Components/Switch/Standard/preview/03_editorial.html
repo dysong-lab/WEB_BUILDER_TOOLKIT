@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Switch/Standard — 03_editorial</title>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/ListRenderMixin.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 48px;
+        background: linear-gradient(180deg, #f4ecdf, #eadfce);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="switch-editorial"></div>
+    <script>
+      (async () => {
+        await loadComponentAssets("switch-editorial", "../views/03_editorial.html", "../styles/03_editorial.css");
+        const instance = { id: "switch-editorial", appendElement: document.getElementById("switch-editorial") };
+        applyListRenderMixin(instance, {
+          cssSelectors: {
+            container: ".switch-group",
+            template: "#switch-item-template",
+            item: ".switch-item",
+            id: ".switch-item",
+            checked: ".switch-item",
+            disabled: ".switch-item",
+            label: ".switch-item__label",
+            supportingText: ".switch-item__supporting",
+          },
+          itemKey: "id",
+          datasetAttrs: { id: "id", checked: "checked", disabled: "disabled" },
+        });
+        instance.listRender.renderData({
+          response: [
+            { id: "captions", label: "Show captions", supportingText: "Reveal supporting narrative cues", checked: "true", disabled: "false" },
+            { id: "notes", label: "Editor notes", supportingText: "Expose internal annotations", checked: "false", disabled: "false" },
+          ],
+        });
+        instance.appendElement.addEventListener("click", (event) => {
+          const item = event.target.closest(".switch-item");
+          if (!item || item.dataset.disabled === "true") return;
+          item.dataset.checked = item.dataset.checked === "true" ? "false" : "true";
+          item.setAttribute("data-checked", item.dataset.checked);
+          Weventbus.emit("@switchChanged", { event, targetInstance: instance });
+        });
+      })();
+    </script>
+  </body>
+</html>

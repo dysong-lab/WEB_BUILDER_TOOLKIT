@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Switch/Standard — 04_operational</title>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/ListRenderMixin.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 48px;
+        background: #090d11;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="switch-operational"></div>
+    <script>
+      (async () => {
+        await loadComponentAssets("switch-operational", "../views/04_operational.html", "../styles/04_operational.css");
+        const instance = { id: "switch-operational", appendElement: document.getElementById("switch-operational") };
+        applyListRenderMixin(instance, {
+          cssSelectors: {
+            container: ".switch-group",
+            template: "#switch-item-template",
+            item: ".switch-item",
+            id: ".switch-item",
+            checked: ".switch-item",
+            disabled: ".switch-item",
+            label: ".switch-item__label",
+            supportingText: ".switch-item__supporting",
+          },
+          itemKey: "id",
+          datasetAttrs: { id: "id", checked: "checked", disabled: "disabled" },
+        });
+        instance.listRender.renderData({
+          response: [
+            { id: "pump", label: "Pump bypass", supportingText: "Route through emergency loop", checked: "false", disabled: "false" },
+            { id: "alarm", label: "Alarm siren", supportingText: "Physical output stage", checked: "true", disabled: "false" },
+            { id: "override", label: "Manual override", supportingText: "Locked by supervisor", checked: "false", disabled: "true" },
+          ],
+        });
+        instance.appendElement.addEventListener("click", (event) => {
+          const item = event.target.closest(".switch-item");
+          if (!item || item.dataset.disabled === "true") return;
+          item.dataset.checked = item.dataset.checked === "true" ? "false" : "true";
+          item.setAttribute("data-checked", item.dataset.checked);
+          Weventbus.emit("@switchChanged", { event, targetInstance: instance });
+        });
+      })();
+    </script>
+  </body>
+</html>
