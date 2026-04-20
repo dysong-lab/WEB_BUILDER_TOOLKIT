@@ -13,8 +13,10 @@ if (this._toolbarClickHandler) {
 
 this._toolbarClickHandler = null;
 this._overflowOpen = null;
+this._toolbarActions = null;
 this.getActionElement = null;
 this.normalizeToolbarInfo = null;
+this.setActiveAction = null;
 this.toggleOverflow = null;
 this.renderToolbarInfo = null;
 this.listRender.destroy();

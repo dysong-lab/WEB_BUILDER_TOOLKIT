@@ -19,6 +19,7 @@ applyListRenderMixin(this, {
     template: "#toolbar-action-template",
     item: ".toolbar__action",
     id: ".toolbar__action",
+    active: ".toolbar__action",
     emphasis: ".toolbar__action",
     icon: ".toolbar__action-icon",
     label: ".toolbar__action-label",
@@ -26,12 +27,14 @@ applyListRenderMixin(this, {
   itemKey: "id",
   datasetAttrs: {
     id: "id",
+    active: "active",
     emphasis: "emphasis",
   },
 });
 
 this._toolbarClickHandler = null;
 this._overflowOpen = false;
+this._toolbarActions = [];
 
 this.getActionElement = function (id) {
   return this.appendElement.querySelector(
@@ -56,9 +59,25 @@ this.normalizeToolbarInfo = function ({ response: data } = {}) {
       id: item.id == null ? "" : String(item.id),
       label: item.label == null ? "" : String(item.label),
       icon: item.icon == null ? "" : String(item.icon),
+      active: item.active === "true" ? "true" : "false",
       emphasis: item.emphasis === "true" ? "true" : "false",
     })),
   };
+};
+
+this.setActiveAction = function (id) {
+  const items = this.appendElement.querySelectorAll(this.listRender.cssSelectors.item);
+  items.forEach((item) => {
+    item.setAttribute(
+      "data-active",
+      item.dataset.id === String(id) ? "true" : "false",
+    );
+  });
+
+  this._toolbarActions = this._toolbarActions.map((item) => ({
+    ...item,
+    active: item.id === String(id) ? "true" : "false",
+  }));
 };
 
 this.toggleOverflow = function () {
@@ -78,6 +97,11 @@ this.renderToolbarInfo = function (payload = {}) {
   if (!root || !supportingText) return;
 
   const nextData = this.normalizeToolbarInfo(payload);
+  const hasActive = nextData.actions.some((item) => item.active === "true");
+  if (!hasActive && nextData.actions[0]) {
+    nextData.actions[0].active = "true";
+  }
+  this._toolbarActions = nextData.actions;
 
   this.fieldRender.renderData({
     response: {
@@ -116,6 +140,9 @@ this._toolbarClickHandler = (event) => {
 
   const action = event.target.closest(this.listRender.cssSelectors.item);
   if (!action || !this.appendElement.contains(action)) return;
+  if (action.dataset.id) {
+    this.setActiveAction(action.dataset.id);
+  }
 
   Weventbus.emit("@toolbarActionClicked", {
     event,

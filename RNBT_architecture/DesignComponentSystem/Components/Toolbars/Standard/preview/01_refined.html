@@ -26,15 +26,15 @@
         const instance = { id: "toolbar-refined", appendElement: document.getElementById("toolbar-refined") };
         applyFieldRenderMixin(instance, { cssSelectors: { root: ".toolbar", title: ".toolbar__title", supportingText: ".toolbar__supporting", overflowButton: ".toolbar__overflow" } });
         applyListRenderMixin(instance, {
-          cssSelectors: { container: ".toolbar__actions", template: "#toolbar-action-template", item: ".toolbar__action", id: ".toolbar__action", emphasis: ".toolbar__action", icon: ".toolbar__action-icon", label: ".toolbar__action-label" },
+          cssSelectors: { container: ".toolbar__actions", template: "#toolbar-action-template", item: ".toolbar__action", id: ".toolbar__action", active: ".toolbar__action", emphasis: ".toolbar__action", icon: ".toolbar__action-icon", label: ".toolbar__action-label" },
           itemKey: "id",
-          datasetAttrs: { id: "id", emphasis: "emphasis" },
+          datasetAttrs: { id: "id", active: "active", emphasis: "emphasis" },
         });
         instance.fieldRender.renderData({ response: { title: "Canvas Tools", supportingText: "Arrange, annotate, and export the current selection." } });
         instance.listRender.renderData({ response: [
-          { id: "align", label: "Align", icon: "⇄", emphasis: "false" },
-          { id: "annotate", label: "Annotate", icon: "✎", emphasis: "true" },
-          { id: "export", label: "Export", icon: "↓", emphasis: "false" }
+          { id: "align", label: "Align", icon: "⇄", active: "true", emphasis: "false" },
+          { id: "annotate", label: "Annotate", icon: "✎", active: "false", emphasis: "true" },
+          { id: "export", label: "Export", icon: "↓", active: "false", emphasis: "false" }
         ] });
         instance.appendElement.addEventListener("click", (event) => {
           const overflow = event.target.closest(".toolbar__overflow");
@@ -46,6 +46,10 @@
           }
           const action = event.target.closest(".toolbar__action");
           if (!action) return;
+          instance.appendElement.querySelectorAll(".toolbar__action").forEach((item) => {
+            item.dataset.active = item === action ? "true" : "false";
+            item.setAttribute("data-active", item.dataset.active);
+          });
           Weventbus.emit("@toolbarActionClicked", { event, targetInstance: instance, itemId: action.dataset.id, response: { id: action.dataset.id } });
         });
       })();

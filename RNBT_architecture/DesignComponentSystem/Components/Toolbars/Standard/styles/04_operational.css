@@ -2,9 +2,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 18px;
+  gap: 20px;
   width: min(820px, 100%);
-  padding: 18px 20px;
+  min-height: 68px;
+  padding: 10px 12px 10px 16px;
   color: #d6e2ea;
   background: #0a0f14;
   border: 1px solid #1e2a34;
@@ -12,7 +13,8 @@
 
 .toolbar__meta {
   display: grid;
-  gap: 6px;
+  gap: 4px;
+  min-width: 180px;
 }
 
 .toolbar__supporting {
@@ -23,7 +25,7 @@
 }
 
 .toolbar__title {
-  font: 700 24px/1.12 "Segoe UI", sans-serif;
+  font: 700 18px/1.12 "Segoe UI", sans-serif;
 }
 
 .toolbar__controls,
@@ -34,26 +36,42 @@
   flex-wrap: wrap;
 }
 
+.toolbar__controls {
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.toolbar__actions {
+  padding: 5px;
+  border: 1px solid #1d2a34;
+  background: #0d141b;
+}
+
 .toolbar__action,
 .toolbar__overflow {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  min-height: 38px;
+  min-height: 32px;
   padding: 0 12px;
-  border: 1px solid #21323f;
-  background: linear-gradient(180deg, #0f1820, #0a1117);
+  border: 1px solid transparent;
+  background: transparent;
   color: #8ea2b4;
   cursor: pointer;
 }
 
-.toolbar__action[data-emphasis="true"] {
+.toolbar__action[data-active="true"] {
   color: #d8f8ff;
   border-color: #3b7f91;
   background: linear-gradient(180deg, #123543, #0c1f29);
 }
 
+.toolbar__action[data-emphasis="true"][data-active="false"] {
+  color: #73d0e4;
+}
+
 .toolbar[data-overflow-open="true"] .toolbar__overflow {
   color: #d8f8ff;
   border-color: #3b7f91;
+  background: rgba(59, 127, 145, 0.14);
 }
