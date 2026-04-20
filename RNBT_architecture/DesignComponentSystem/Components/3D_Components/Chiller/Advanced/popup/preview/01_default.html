@@ -425,6 +425,7 @@
         const h = container.clientHeight;
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
+        renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(w, h);
     });
     </script>
