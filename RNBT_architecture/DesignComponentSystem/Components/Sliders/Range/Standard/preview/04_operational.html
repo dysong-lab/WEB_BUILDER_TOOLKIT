@@ -11,13 +11,27 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        gap: 24px;
+        flex-wrap: wrap;
         padding: 48px;
         background: #090d11;
+      }
+      #event-log {
+        width: 320px;
+        min-height: 220px;
+        padding: 16px;
+        border-radius: 12px;
+        background: rgba(7, 11, 14, 0.86);
+        border: 1px solid rgba(141, 177, 101, 0.22);
+        color: #dff2c1;
+        font: 12px/1.5 monospace;
+        white-space: pre-wrap;
       }
     </style>
   </head>
   <body>
     <div id="range-operational"></div>
+    <pre id="event-log">[ready] waiting for slider events</pre>
     <script>
       (async () => {
         await loadComponentAssets("range-operational", "../views/04_operational.html", "../styles/04_operational.css");
@@ -26,6 +40,11 @@
         const upper = root.querySelector(".range-slider__input--upper");
         const fill = root.querySelector(".range-slider__fill");
         const value = root.querySelector(".range-slider__value");
+        const log = document.getElementById("event-log");
+        const appendLog = message => {
+          log.textContent = `${message}\n${log.textContent}`.trim();
+          console.log(message);
+        };
         const sync = source => {
           if (source === "lower" && Number(lower.value) > Number(upper.value)) upper.value = lower.value;
           if (source === "upper" && Number(upper.value) < Number(lower.value)) lower.value = upper.value;
@@ -37,8 +56,22 @@
           fill.style.width = `${(end - start) * 100}%`;
           value.textContent = `${lower.value}V - ${upper.value}V`;
         };
-        lower.addEventListener("input", () => sync("lower"));
-        upper.addEventListener("input", () => sync("upper"));
+        lower.addEventListener("input", () => {
+          sync("lower");
+          appendLog(`@rangeSliderInputChanged handle=lower start=${lower.value} end=${upper.value}`);
+        });
+        upper.addEventListener("input", () => {
+          sync("upper");
+          appendLog(`@rangeSliderInputChanged handle=upper start=${lower.value} end=${upper.value}`);
+        });
+        lower.addEventListener("change", () => {
+          sync("lower");
+          appendLog(`@rangeSliderChanged handle=lower start=${lower.value} end=${upper.value}`);
+        });
+        upper.addEventListener("change", () => {
+          sync("upper");
+          appendLog(`@rangeSliderChanged handle=upper start=${lower.value} end=${upper.value}`);
+        });
         sync();
       })();
     </script>
