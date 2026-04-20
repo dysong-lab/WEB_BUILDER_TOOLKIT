@@ -1,0 +1,13 @@
+.tooltip-host {
+  display: inline-flex;
+}
+
+.tooltip-host__trigger {
+  padding: 0 0 8px;
+  border: 0;
+  border-bottom: 1px solid rgba(86, 63, 41, 0.3);
+  background: transparent;
+  color: #211a15;
+  font: 700 18px/1 Georgia, "Times New Roman", serif;
+  cursor: pointer;
+}

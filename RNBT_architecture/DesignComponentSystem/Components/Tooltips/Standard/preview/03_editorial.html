@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tooltips/Standard — 03_editorial</title>
+    <script src="../../../../preview_runtime.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 48px; background: linear-gradient(180deg, #f4ecdf, #eadfce); }
+    </style>
+  </head>
+  <body>
+    <div id="tooltip-editorial"></div>
+    <script>
+      (async () => {
+        await loadComponentAssets("tooltip-editorial", "../views/03_editorial.html", "../styles/03_editorial.css");
+        const root = document.getElementById("tooltip-editorial");
+        const instance = { id: "tooltip-editorial", appendElement: root };
+        const trigger = root.querySelector(".tooltip-host__trigger");
+        const show = () => {
+          let host = document.querySelector(".preview-tooltip-editorial");
+          if (!host) {
+            host = document.createElement("div");
+            host.className = "preview-tooltip-editorial";
+            host.textContent = "Margin note - Used for short contextual commentary beside the text.";
+            host.style.cssText = "position:fixed;left:50%;top:calc(50% - 58px);transform:translateX(-50%);padding:12px 14px;background:#f7f0e5;color:#211a15;border:1px solid rgba(86,63,41,0.18);font:13px/1.6 Georgia,'Times New Roman',serif";
+            document.body.appendChild(host);
+          }
+          host.hidden = false;
+          Weventbus.emit('@tooltipShown', { targetInstance: instance, response: { label: 'Margin note' } });
+        };
+        const hide = () => {
+          const host = document.querySelector(".preview-tooltip-editorial");
+          if (!host) return;
+          host.hidden = true;
+          Weventbus.emit('@tooltipHidden', { targetInstance: instance, response: { reason: 'leave' } });
+        };
+        trigger.addEventListener("mouseenter", show);
+        trigger.addEventListener("focus", show);
+        trigger.addEventListener("mouseleave", hide);
+        trigger.addEventListener("blur", hide);
+      })();
+    </script>
+  </body>
+</html>

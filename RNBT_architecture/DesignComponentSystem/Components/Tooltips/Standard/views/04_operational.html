@@ -1,0 +1,52 @@
+<div class="tooltip-host tooltip-host--operational">
+  <button class="tooltip-host__trigger" type="button">Inspect Signal</button>
+  <template id="tooltip-popup-template">
+    <style>
+      .tooltip__overlay {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      .tooltip__surface {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        display: grid;
+        gap: 6px;
+        min-width: 180px;
+        max-width: 260px;
+        padding: 10px 12px;
+        color: #d6e2ea;
+        background: #0d141b;
+        border: 1px solid #1d2a34;
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.28);
+        opacity: 0;
+        transform: translate(-50%, calc(-50% - 8px));
+        transition: opacity 140ms ease, transform 140ms ease;
+      }
+
+      .tooltip__overlay[data-state="open"] .tooltip__surface[data-open="true"] {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+
+      .tooltip__label {
+        font: 700 12px/1.2 "Segoe UI", sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .tooltip__supporting {
+        color: #8a9dab;
+        font: 400 12px/1.5 "Segoe UI", sans-serif;
+      }
+    </style>
+    <div class="tooltip__overlay" data-state="closed">
+      <div class="tooltip__surface" data-open="false" data-placement="top" role="tooltip">
+        <div class="tooltip__label"></div>
+        <div class="tooltip__supporting"></div>
+      </div>
+    </div>
+  </template>
+</div>

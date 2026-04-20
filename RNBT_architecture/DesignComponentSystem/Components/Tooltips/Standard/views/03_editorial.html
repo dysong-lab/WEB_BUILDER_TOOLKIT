@@ -1,0 +1,49 @@
+<div class="tooltip-host tooltip-host--editorial">
+  <button class="tooltip-host__trigger" type="button">Read Note</button>
+  <template id="tooltip-popup-template">
+    <style>
+      .tooltip__overlay {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      .tooltip__surface {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        display: grid;
+        gap: 8px;
+        min-width: 190px;
+        max-width: 280px;
+        padding: 12px 14px;
+        color: #211a15;
+        background: #f7f0e5;
+        border: 1px solid rgba(86, 63, 41, 0.18);
+        opacity: 0;
+        transform: translate(-50%, calc(-50% - 8px));
+        transition: opacity 140ms ease, transform 140ms ease;
+      }
+
+      .tooltip__overlay[data-state="open"] .tooltip__surface[data-open="true"] {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+
+      .tooltip__label {
+        font: 700 14px/1.15 Georgia, "Times New Roman", serif;
+      }
+
+      .tooltip__supporting {
+        color: #5a4d43;
+        font: 400 13px/1.6 Georgia, "Times New Roman", serif;
+      }
+    </style>
+    <div class="tooltip__overlay" data-state="closed">
+      <div class="tooltip__surface" data-open="false" data-placement="top" role="tooltip">
+        <div class="tooltip__label"></div>
+        <div class="tooltip__supporting"></div>
+      </div>
+    </div>
+  </template>
+</div>

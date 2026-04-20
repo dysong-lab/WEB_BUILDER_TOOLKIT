@@ -1,0 +1,13 @@
+.tooltip-host {
+  display: inline-flex;
+}
+
+.tooltip-host__trigger {
+  min-height: 34px;
+  padding: 0 14px;
+  border: 1px solid #21323f;
+  background: linear-gradient(180deg, #0f1820, #0a1117);
+  color: #d6e2ea;
+  font: 600 13px/1 "Segoe UI", sans-serif;
+  cursor: pointer;
+}

@@ -1,0 +1,51 @@
+<div class="tooltip-host tooltip-host--material">
+  <button class="tooltip-host__trigger" type="button">Open Guidance</button>
+  <template id="tooltip-popup-template">
+    <style>
+      .tooltip__overlay {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      .tooltip__surface {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        display: grid;
+        gap: 6px;
+        min-width: 180px;
+        max-width: 260px;
+        padding: 12px 14px;
+        border-radius: 12px;
+        color: #241d27;
+        background: #fffafb;
+        border: 1px solid #e1d5e3;
+        box-shadow: 0 10px 24px rgba(63, 45, 73, 0.16);
+        opacity: 0;
+        transform: translate(-50%, calc(-50% - 8px));
+        transition: opacity 140ms ease, transform 140ms ease;
+      }
+
+      .tooltip__overlay[data-state="open"] .tooltip__surface[data-open="true"] {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+
+      .tooltip__label {
+        font: 700 13px/1.2 "Segoe UI", sans-serif;
+      }
+
+      .tooltip__supporting {
+        color: #65596a;
+        font: 400 12px/1.5 "Segoe UI", sans-serif;
+      }
+    </style>
+    <div class="tooltip__overlay" data-state="closed">
+      <div class="tooltip__surface" data-open="false" data-placement="top" role="tooltip">
+        <div class="tooltip__label"></div>
+        <div class="tooltip__supporting"></div>
+      </div>
+    </div>
+  </template>
+</div>

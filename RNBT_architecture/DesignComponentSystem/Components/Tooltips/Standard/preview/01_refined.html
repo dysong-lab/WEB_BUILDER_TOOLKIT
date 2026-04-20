@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tooltips/Standard — 01_refined</title>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/ShadowPopupMixin.js"></script>
+    <script src="../../../../Mixins/FieldRenderMixin.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 48px;
+        background: radial-gradient(circle at top, #133452, #08111a 62%);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="tooltip-refined"></div>
+    <script>
+      (async () => {
+        await loadComponentAssets("tooltip-refined", "../views/01_refined.html", "../styles/01_refined.css");
+        const root = document.getElementById("tooltip-refined");
+        const instance = { id: "tooltip-refined", appendElement: root };
+        const trigger = root.querySelector(".tooltip-host__trigger");
+        let timer = null;
+        const show = () => {
+          let host = root.querySelector(".preview-tooltip");
+          if (!host) {
+            host = document.createElement("div");
+            host.className = "preview-tooltip";
+            host.textContent = "Copy link - Create a shareable URL for this page.";
+            host.style.cssText = "position:fixed;left:50%;top:calc(50% - 54px);transform:translateX(-50%);padding:12px 14px;border-radius:14px;background:linear-gradient(180deg, rgba(15,29,44,0.96), rgba(7,15,24,0.98));color:#eef6ff;border:1px solid rgba(145,220,255,0.22);font:12px/1.5 'Segoe UI',sans-serif;box-shadow:0 18px 36px rgba(0,0,0,0.28)";
+            document.body.appendChild(host);
+          }
+          host.hidden = false;
+          Weventbus.emit("@tooltipShown", { targetInstance: instance, response: { label: "Copy link" } });
+        };
+        const hide = () => {
+          const host = root.querySelector(".preview-tooltip") || document.querySelector(".preview-tooltip");
+          if (!host) return;
+          host.hidden = true;
+          Weventbus.emit("@tooltipHidden", { targetInstance: instance, response: { reason: "leave" } });
+        };
+        trigger.addEventListener("mouseenter", show);
+        trigger.addEventListener("focus", show);
+        trigger.addEventListener("mouseleave", hide);
+        trigger.addEventListener("blur", hide);
+      })();
+    </script>
+  </body>
+</html>
