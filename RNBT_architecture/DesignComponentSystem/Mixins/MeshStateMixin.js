@@ -33,8 +33,19 @@
  * ─────────────────────────────────────────────────────────────
  */
 
+const DEFAULT_MESH_STATE_COLOR_MAP = Object.freeze({
+    normal:  0x34d399,
+    warning: 0xfbbf24,
+    error:   0xf87171,
+    offline: 0x6b7280
+});
+
 function applyMeshStateMixin(instance, options) {
-    const { colorMap = {} } = options;
+    const mergedOptions = options || {};
+    const colorMap = {
+        ...DEFAULT_MESH_STATE_COLOR_MAP,
+        ...(mergedOptions.colorMap || {})
+    };
 
     const ns = {};
     instance.meshState = ns;

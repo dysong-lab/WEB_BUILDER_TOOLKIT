@@ -1,3 +1,4 @@
+@import "../../../_shared/semantic-status.css";
 .extended-fab-shell {
   display: inline-flex;
   align-items: center;

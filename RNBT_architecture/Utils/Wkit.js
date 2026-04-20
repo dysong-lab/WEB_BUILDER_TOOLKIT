@@ -171,6 +171,44 @@ Wkit.withSelector = function (element, selector, fn) {
   return target ? fn(target) : null;
 };
 
+Wkit.normalizeSemanticStatus = function (value, fallback = 'normal') {
+  const normalized = String(value ?? '').trim().toLowerCase();
+  const map = {
+    normal: 'normal',
+    success: 'normal',
+    ok: 'normal',
+    healthy: 'normal',
+    warning: 'warning',
+    warn: 'warning',
+    caution: 'warning',
+    error: 'error',
+    danger: 'error',
+    critical: 'error',
+    offline: 'offline',
+    disconnected: 'offline',
+    disabled: 'offline',
+  };
+
+  return map[normalized] || fallback;
+};
+
+Wkit.applySemanticStatus = function (element, data = {}, fallback = 'normal') {
+  if (!element) return fallback;
+
+  const rawValue = data?.status ?? data?.tone;
+  const nextStatus = Wkit.normalizeSemanticStatus(rawValue, fallback);
+
+  element.dataset.status = nextStatus;
+
+  if (data?.tone != null) {
+    element.dataset.tone = String(data.tone).trim().toLowerCase();
+  } else {
+    delete element.dataset.tone;
+  }
+
+  return nextStatus;
+};
+
 /* Public API: event bus on / off */
 Wkit.onEventBusHandlers = function (eventBusHandlers) {
   fx.go(

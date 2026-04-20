@@ -1813,6 +1813,22 @@
           ]
         },
         {
+          "name": "3Darrow",
+          "spec": "Components/3D_Components/3Darrow/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/3Darrow/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/3Darrow/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
           "name": "gltf_container",
           "spec": "Components/3D_Components/gltf_container/CLAUDE.md",
           "previews": [

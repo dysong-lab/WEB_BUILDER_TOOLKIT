@@ -1,4 +1,4 @@
-const { bindEvents } = Wkit;
+const { bindEvents, applySemanticStatus } = Wkit;
 
 this.cssSelectors = {
   button: ".extended-fab",
@@ -27,6 +27,7 @@ this.renderExtendedFabInfo = function (data = {}) {
   label.textContent = nextLabel;
   button.setAttribute("aria-label", nextAria);
   button.dataset.size = nextSize;
+  applySemanticStatus(button, data);
 };
 
 this.customEvents = {

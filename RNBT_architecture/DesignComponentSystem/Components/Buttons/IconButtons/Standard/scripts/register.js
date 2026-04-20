@@ -6,7 +6,7 @@
  *
  * Mixin: 없음
  */
-const { bindEvents } = Wkit;
+const { bindEvents, applySemanticStatus } = Wkit;
 
 this.cssSelectors = {
   button: ".icon-button",
@@ -27,6 +27,7 @@ this.renderIconButtonInfo = function (data = {}) {
 
   icon.textContent = nextIcon;
   button.setAttribute("aria-label", nextAria);
+  applySemanticStatus(button, data);
 };
 
 this.customEvents = {

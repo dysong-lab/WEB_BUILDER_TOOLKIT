@@ -1,4 +1,4 @@
-const { bindEvents } = Wkit;
+const { bindEvents, applySemanticStatus } = Wkit;
 
 applyListRenderMixin(this, {
   cssSelectors: {
@@ -16,6 +16,8 @@ applyListRenderMixin(this, {
   itemKey: "id",
   datasetAttrs: {
     id: "id",
+    status: "status",
+    tone: "tone",
   },
 });
 
@@ -46,6 +48,7 @@ this.renderFabMenu = function (data = {}) {
   triggerIcon.textContent = nextIcon;
   triggerLabel.textContent = nextLabel;
   trigger.setAttribute("aria-label", nextLabel);
+  applySemanticStatus(trigger, data);
   root.dataset.open = "false";
   this.listRender.renderData({
     response: Array.isArray(data?.items) ? data.items : [],

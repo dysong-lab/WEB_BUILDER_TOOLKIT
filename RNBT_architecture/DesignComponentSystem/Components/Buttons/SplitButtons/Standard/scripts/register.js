@@ -1,4 +1,4 @@
-const { bindEvents } = Wkit;
+const { bindEvents, applySemanticStatus } = Wkit;
 
 applyListRenderMixin(this, {
   cssSelectors: {
@@ -15,6 +15,8 @@ applyListRenderMixin(this, {
   itemKey: "id",
   datasetAttrs: {
     id: "id",
+    status: "status",
+    tone: "tone",
   },
 });
 
@@ -28,7 +30,10 @@ this.renderSplitButton = function (data = {}) {
   const label = this.appendElement.querySelector(
     this.listRender.cssSelectors.primaryLabel,
   );
-  if (!root || !primary || !label) return;
+  const toggle = this.appendElement.querySelector(
+    this.listRender.cssSelectors.toggle,
+  );
+  if (!root || !primary || !label || !toggle) return;
 
   const nextLabel =
     data?.label === null || data?.label === undefined
@@ -36,6 +41,8 @@ this.renderSplitButton = function (data = {}) {
       : String(data.label);
   label.textContent = nextLabel;
   primary.setAttribute("aria-label", nextLabel);
+  applySemanticStatus(primary, data);
+  applySemanticStatus(toggle, data);
   root.dataset.open = "false";
   this.listRender.renderData({
     response: Array.isArray(data?.menuItems) ? data.menuItems : [],

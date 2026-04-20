@@ -6,7 +6,7 @@
  *
  * Mixin: 없음
  */
-const { bindEvents } = Wkit;
+const { bindEvents, applySemanticStatus } = Wkit;
 
 // ======================
 // 1. selector + 자체 메서드 정의
@@ -27,6 +27,7 @@ this.renderButtonInfo = function (data = {}) {
 
   label.textContent = nextLabel;
   button.setAttribute("aria-label", nextLabel);
+  applySemanticStatus(button, data);
 };
 
 // ======================

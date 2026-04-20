@@ -16,6 +16,8 @@ applyListRenderMixin(this, {
   datasetAttrs: {
     id: "id",
     selected: "selected",
+    status: "status",
+    tone: "tone",
   },
 });
 
