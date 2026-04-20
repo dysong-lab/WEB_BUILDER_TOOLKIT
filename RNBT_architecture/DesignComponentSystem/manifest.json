@@ -1829,6 +1829,22 @@
           ]
         },
         {
+          "name": "3Dpointer",
+          "spec": "Components/3D_Components/3Dpointer/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/3Dpointer/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/3Dpointer/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
           "name": "gltf_container",
           "spec": "Components/3D_Components/gltf_container/CLAUDE.md",
           "previews": [
