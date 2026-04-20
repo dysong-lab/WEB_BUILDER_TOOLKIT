@@ -5,6 +5,11 @@
 | 유형 | 개별 (1 GLTF = 1 Mesh) |
 | 기본 Mixin | MeshStateMixin |
 
+## 모델 구조
+
+- 루트 노드: `root`
+- meshName: `KdbAed`
+
 ## 세트 현황
 
 | 세트 | 상태 |

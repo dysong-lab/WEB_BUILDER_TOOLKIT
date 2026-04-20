@@ -21,6 +21,10 @@ MeshStateMixin
 | error | 0xf87171 |
 | offline | 0x6b7280 |
 
+### meshName
+
+`KdbAed`
+
 ### 구독 (subscriptions)
 
 | topic | handler |

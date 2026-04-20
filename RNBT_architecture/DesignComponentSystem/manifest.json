@@ -1963,6 +1963,22 @@
               ]
             }
           ]
+        },
+        {
+          "name": "AED",
+          "spec": "Components/3D_Components/AED/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/AED/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/AED/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
         }
       ]
     }
