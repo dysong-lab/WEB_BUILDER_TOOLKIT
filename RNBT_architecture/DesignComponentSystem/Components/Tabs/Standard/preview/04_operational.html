@@ -17,7 +17,7 @@
         await loadComponentAssets("tabs-operational", "../views/04_operational.html", "../styles/04_operational.css");
         const instance = { id: "tabs-operational", appendElement: document.getElementById("tabs-operational") };
         applyListRenderMixin(instance, {
-          cssSelectors: { list: ".tabs__list", template: "#tab-item-template", item: ".tabs__tab", id: ".tabs__tab", selected: ".tabs__tab", disabled: ".tabs__tab", label: ".tabs__label", badge: ".tabs__badge" },
+          cssSelectors: { container: ".tabs__list", template: "#tab-item-template", item: ".tabs__tab", id: ".tabs__tab", selected: ".tabs__tab", disabled: ".tabs__tab", label: ".tabs__label", badge: ".tabs__badge" },
           itemKey: "id",
           datasetAttrs: { id: "id", selected: "selected", disabled: "disabled" },
         });

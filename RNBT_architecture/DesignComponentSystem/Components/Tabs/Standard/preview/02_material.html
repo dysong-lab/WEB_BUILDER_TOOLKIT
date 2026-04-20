@@ -17,7 +17,7 @@
         await loadComponentAssets("tabs-material", "../views/02_material.html", "../styles/02_material.css");
         const instance = { id: "tabs-material", appendElement: document.getElementById("tabs-material") };
         applyListRenderMixin(instance, {
-          cssSelectors: { list: ".tabs__list", template: "#tab-item-template", item: ".tabs__tab", id: ".tabs__tab", selected: ".tabs__tab", disabled: ".tabs__tab", label: ".tabs__label", badge: ".tabs__badge" },
+          cssSelectors: { container: ".tabs__list", template: "#tab-item-template", item: ".tabs__tab", id: ".tabs__tab", selected: ".tabs__tab", disabled: ".tabs__tab", label: ".tabs__label", badge: ".tabs__badge" },
           itemKey: "id",
           datasetAttrs: { id: "id", selected: "selected", disabled: "disabled" },
         });

@@ -19,7 +19,7 @@ ListRenderMixin
 | KEY | VALUE | 용도 |
 |-----|-------|------|
 | root | `.tabs` | 루트 상태 반영 |
-| list | `.tabs__list` | 탭 리스트 컨테이너 |
+| container | `.tabs__list` | 탭 리스트 컨테이너 |
 | template | `#tab-item-template` | 탭 템플릿 |
 | item | `.tabs__tab` | 개별 탭 항목 |
 | id | `.tabs__tab` | 항목 식별 |

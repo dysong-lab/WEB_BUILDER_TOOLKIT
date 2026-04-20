@@ -3,7 +3,7 @@ const { each, go } = fx;
 
 applyListRenderMixin(this, {
   cssSelectors: {
-    list: ".tabs__list",
+    container: ".tabs__list",
     template: "#tab-item-template",
     item: ".tabs__tab",
     id: ".tabs__tab",
@@ -63,7 +63,9 @@ this.normalizeItems = function ({ response } = {}) {
 
 this.syncAccessibility = function () {
   const root = this.appendElement.querySelector(this.cssSelectors.root);
-  const list = this.appendElement.querySelector(this.listRender.cssSelectors.list);
+  const list = this.appendElement.querySelector(
+    this.listRender.cssSelectors.container,
+  );
   const items = Array.from(
     this.appendElement.querySelectorAll(this.listRender.cssSelectors.item),
   );
