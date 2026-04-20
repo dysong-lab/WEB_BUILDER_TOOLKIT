@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>SDC500 — 01_status</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #1a1a2e; }
+        #sdc500-pageThreeLayer {
+            width: 600px;
+            height: 480px;
+            display: block;
+            overflow: hidden;
+            margin: 40px auto;
+        }
+        canvas { display: block; }
+
+        .demo-controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px;
+        }
+        .demo-btn {
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #ffffff;
+            transition: opacity 0.15s;
+        }
+        .demo-btn:hover { opacity: 0.8; }
+        .demo-btn[data-status="normal"]  { background: #34d399; }
+        .demo-btn[data-status="warning"] { background: #fbbf24; color: #1a1a2e; }
+        .demo-btn[data-status="error"]   { background: #f87171; }
+        .demo-btn[data-status="offline"] { background: #6b7280; }
+        .demo-btn[data-status="reset"]   { background: #3b82f6; }
+    </style>
+</head>
+<body>
+    <div class="demo-controls">
+        <button class="demo-btn" data-status="normal">Normal</button>
+        <button class="demo-btn" data-status="warning">Warning</button>
+        <button class="demo-btn" data-status="error">Error</button>
+        <button class="demo-btn" data-status="offline">Offline</button>
+        <button class="demo-btn" data-status="reset">Reset</button>
+    </div>
+
+    <div id="sdc500-pageThreeLayer"></div>
+
+    <!-- Mixin 로드 -->
+    <script src="../../../../../Mixins/MeshStateMixin.js"></script>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+    // ── Three.js Scene Setup ──────────────────────────────────
+    const container = document.getElementById('sdc500-pageThreeLayer');
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x1a1a2e);
+
+    // SDC500은 루트 Group `SDC500` scale 업스케일 없음(1:1) — BATT·SC_01·SC_02·RTU와 동일 규약.
+    // 단, 자식 노드에 scale [1.1935, 1.1935, 1.1935] 비정수 배율이 부여되어 bound 약 19% 확대.
+    // 자식 bound 합산 원본 ~0.312 × 0.14 × 0.212 → scale 적용 후 ~0.37 × 0.17 × 0.25 단위.
+    // 추가로 sdc500_003의 translation z=0.08337501 + X축 π/2 회전으로 Y/Z 축 스왑됨.
+    // 전반적으로 소형 박스형 감지기 → far=50, 바운드 기반 자동 거리(근거리 1 단위 수준).
+    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 50);
+    camera.position.set(1, 0.8, 1);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.target.set(0, 0, 0);
+
+    // ── Lighting ──────────────────────────────────────────────
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    directionalLight.position.set(5, 8, 4);
+    scene.add(directionalLight);
+
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
+    fillLight.position.set(-3, 2, -2);
+    scene.add(fillLight);
+
+    // ── Grid ──────────────────────────────────────────────────
+    // 소형 장비(~0.37 단위)이므로 그리드 2, 분할 10 (~0.2 간격)으로 맞춤.
+    scene.add(new THREE.GridHelper(2, 10, 0x2a2a4a, 0x2a2a4a));
+
+    // ── Mock Instance ─────────────────────────────────────────
+    const instance = { appendElement: null };
+
+    // ── Load Model ────────────────────────────────────────────
+    // SDC500.gltf:
+    //   scene → SDC500 (Group Node, children [1, 2])
+    //           ├─ sdc500_003 (Mesh Node, mesh 0,
+    //           │              translation [0, 0, 0.08337501],
+    //           │              rotation [0.7071068, ~0, ~0, 0.7071067] ≒ X축 π/2 회전,
+    //           │              scale [1.1935, 1.1935, 1.1935],
+    //           │              material "SDC500" = baseColorTexture textures/SDC500.jpg,
+    //           │                metallicFactor 0, roughnessFactor 0, doubleSided true)
+    //           └─ sdc500_004 (Mesh Node, mesh 1,
+    //                          rotation/scale 동일,
+    //                          material "plastic01" = baseColorFactor [0.692,0.661,0.610,1.0],
+    //                            metallicRoughnessTexture textures/TexturesCom_..._roughness255.jpg,
+    //                            roughnessFactor 0.5, doubleSided true, UV 부재)
+    //
+    // **Group-traverse 단일 참조** — meshName='SDC500'은 Group Node 이름.
+    // 장비 폴더명(SDC500) = Group Node 이름(SDC500) 대칭 명명
+    // (BATT·Pump·RoadBlock·FLIREx 계열, SC_02의 `SC-U1`·RTU의 `RTU2` 비대칭과 대비).
+    // getObjectByName('SDC500')은 자식 2개를 가진 Group을 반환하고, MeshStateMixin은
+    // obj.material이 없어서 traverse 브랜치로 진입해 자식 Mesh들의 material을 각각
+    // clone하고 color만 setHex로 치환. Partition(`Group003`)·PTT(`PTT_033`)의 동일 패턴.
+    //
+    // **타입 혼합 쌍 구조**:
+    //   - SDC500 material (sdc500_003): baseColorTexture 주도 → color setHex가 텍스처에 곱해져
+    //     텍스처 원색 부분 유지 + 상태색 가미(three.js 기본 동작).
+    //   - plastic01 material (sdc500_004): baseColorFactor 주도 → color setHex가 factor를 직접 치환
+    //     → 상태색이 플라스틱 커버 전체를 균일하게 치환.
+    //   → 두 자식의 상태색 반영 강도가 다르다(PTT 패턴, Partition의 균일 반영과 대비).
+    // doubleSided:true는 두 material 모두 clone 후에도 유지(양면 렌더 보존).
+    // alphaMode 미선언 → OPAQUE(반투명 처리 없음).
+    const meshName = 'SDC500';
+    const loader = new GLTFLoader();
+
+    loader.load('../../../../../models/SDC500/01_default/SDC500.gltf', (gltf) => {
+        const model = gltf.scene;
+        scene.add(model);
+
+        instance.appendElement = model;
+
+        // MeshStateMixin 적용 (register.js와 동일)
+        applyMeshStateMixin(instance, {
+            colorMap: {
+                normal:  0x34d399,
+                warning: 0xfbbf24,
+                error:   0xf87171,
+                offline: 0x6b7280
+            }
+        });
+
+        // 카메라 타겟 조정 (바운드 기준 자동 거리 설정)
+        // SDC500은 소형 박스형 감지기 → maxDim 기준 거리 * 2.5로 충분.
+        const box = new THREE.Box3().setFromObject(model);
+        const center = box.getCenter(new THREE.Vector3());
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const distance = maxDim * 2.5;
+
+        controls.target.copy(center);
+        camera.position.set(center.x + distance, center.y + distance * 0.6, center.z + distance);
+        controls.update();
+    });
+
+    // ── Render Loop ───────────────────────────────────────────
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // ── Demo: renderData 호출 ─────────────────────────────────
+    document.querySelectorAll('.demo-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            if (!instance.meshState) return;
+
+            const status = btn.dataset.status;
+
+            if (status === 'reset') {
+                // Group 'SDC500'의 자식 Mesh(sdc500_003·sdc500_004) material을 흰색으로 복귀.
+                // MeshStateMixin이 각 자식 Mesh 단위로 clone했으므로, 여기서도
+                // Group을 traverse하여 자식 material.color만 setHex(0xffffff)로 복귀.
+                // plastic01은 baseColorFactor 주도이므로 color 복귀 시 원래 베이지 톤으로 돌아가지 않고
+                // 흰색이 됨에 주의 — 실제 장면에서는 새로운 status로 재호출되어 덮어쓰는 것이 정상 경로.
+                const group = instance.appendElement.getObjectByName(meshName);
+                if (!group) return;
+                group.traverse((child) => {
+                    if (!child.material) return;
+                    if (Array.isArray(child.material)) {
+                        child.material.forEach(m => m.color && m.color.setHex(0xffffff));
+                    } else if (child.material.color) {
+                        child.material.color.setHex(0xffffff);
+                    }
+                });
+                return;
+            }
+
+            // 단일 meshName 'SDC500'(부모 Group)으로 자식 2개 일괄 색상 치환.
+            // MeshStateMixin이 Group 타겟에 대해 traverse 브랜치로 진입,
+            // 자식 material을 각각 clone 후 color만 setHex.
+            instance.meshState.renderData({
+                response: [{ meshName, status }]
+            });
+        });
+    });
+
+    // ── Resize ────────────────────────────────────────────────
+    window.addEventListener('resize', () => {
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+    });
+    </script>
+</body>
+</html>

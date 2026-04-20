@@ -3028,6 +3028,19 @@
           ]
         },
         {
+          "name": "SDC500",
+          "spec": "Components/3D_Components/SDC500/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/SDC500/Standard/CLAUDE.md",
+              "previews": [
+                { "label": "01 default", "path": "Components/3D_Components/SDC500/Standard/preview/01_default.html" }
+              ]
+            }
+          ]
+        },
+        {
           "name": "UPS",
           "spec": "Components/3D_Components/UPS/CLAUDE.md",
           "sets": [
