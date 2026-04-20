@@ -1,0 +1,316 @@
+{
+  "asset": {
+    "version": "2.0",
+    "generator": "babylon.js glTF exporter for 3dsmax 2023 v20220628.14"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1,
+        2,
+        3
+      ],
+      "name": "GIMACDC"
+    },
+    {
+      "mesh": 0,
+      "translation": [
+        0.0,
+        5.859375E-06,
+        -0.00675
+      ],
+      "rotation": [
+        0.7071068,
+        0.0,
+        0.0,
+        0.7071067
+      ],
+      "name": "Rectangle042"
+    },
+    {
+      "mesh": 1,
+      "translation": [
+        0.0,
+        0.000160156254,
+        0.0290937517
+      ],
+      "rotation": [
+        0.7071068,
+        0.0,
+        0.0,
+        0.7071067
+      ],
+      "name": "Object196"
+    },
+    {
+      "mesh": 2,
+      "translation": [
+        0.0,
+        0.0,
+        0.022343751
+      ],
+      "rotation": [
+        0.7071068,
+        0.0,
+        0.0,
+        0.7071067
+      ],
+      "name": "Rectangle038"
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 1,
+            "NORMAL": 2
+          },
+          "indices": 0,
+          "material": 0
+        }
+      ],
+      "name": "Rectangle042"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 4,
+            "NORMAL": 5,
+            "TEXCOORD_0": 6
+          },
+          "indices": 3,
+          "material": 1
+        }
+      ],
+      "name": "Object196"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 8,
+            "NORMAL": 9
+          },
+          "indices": 7,
+          "material": 2
+        }
+      ],
+      "name": "Rectangle038"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5123,
+      "count": 228,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 104,
+      "max": [
+        0.02707104,
+        0.0223281272,
+        0.0278218482
+      ],
+      "min": [
+        -0.02707104,
+        -0.022328129,
+        -0.0278218482
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1248,
+      "componentType": 5126,
+      "count": 104,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 456,
+      "componentType": 5123,
+      "count": 6,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 2496,
+      "componentType": 5126,
+      "count": 4,
+      "max": [
+        0.04266247,
+        1.90734872E-09,
+        0.03885714
+      ],
+      "min": [
+        -0.04266247,
+        -1.90734872E-09,
+        -0.0388574451
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 2544,
+      "componentType": 5126,
+      "count": 4,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 4,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 468,
+      "componentType": 5123,
+      "count": 54,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 2592,
+      "componentType": 5126,
+      "count": 28,
+      "max": [
+        0.0477187522,
+        0.006750002,
+        0.049034182
+      ],
+      "min": [
+        -0.0477187522,
+        -0.0067656273,
+        -0.049034182
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 2928,
+      "componentType": 5126,
+      "count": 28,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 576,
+      "name": "bufferViewScalar"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 576,
+      "byteLength": 3264,
+      "byteStride": 12,
+      "name": "bufferViewFloatVec3"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 3840,
+      "byteLength": 32,
+      "byteStride": 8,
+      "name": "bufferViewFloatVec2"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "GIMACDC.bin",
+      "byteLength": 3872
+    }
+  ],
+  "materials": [
+    {
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.052,
+          0.052,
+          0.052,
+          1.0
+        ],
+        "roughnessFactor": 0.5
+      },
+      "doubleSided": true,
+      "name": "black"
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        }
+      },
+      "doubleSided": true,
+      "name": "GIMACDC",
+      "extras": {
+        "babylonSeparateCullingPass": false
+      }
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.691943169,
+          0.6612478,
+          0.609959364,
+          1.0
+        ],
+        "roughnessFactor": 0.5,
+        "metallicRoughnessTexture": {
+          "index": 1
+        }
+      },
+      "doubleSided": true,
+      "name": "plastic01"
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0,
+      "name": "GIMACDC.jpg"
+    },
+    {
+      "sampler": 0,
+      "source": 1,
+      "name": "TexturesCom_Plastic_Polymer_1K_roughness255.jpg"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/GIMACDC.jpg"
+    },
+    {
+      "uri": "textures/TexturesCom_Plastic_Polymer_1K_roughness255.jpg"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987
+    }
+  ]
+}

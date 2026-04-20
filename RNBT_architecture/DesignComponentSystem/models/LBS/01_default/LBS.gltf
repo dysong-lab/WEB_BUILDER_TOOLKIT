@@ -1,0 +1,371 @@
+{
+  "asset": {
+    "version": "2.0",
+    "generator": "babylon.js glTF exporter for 3dsmax 2023 v20220628.14"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "name": "LBS"
+    },
+    {
+      "mesh": 0,
+      "translation": [
+        0.207000017,
+        0.16876173,
+        -0.407500029
+      ],
+      "rotation": [
+        -0.5,
+        -0.5,
+        0.5,
+        -0.5
+      ],
+      "name": "Line012"
+    },
+    {
+      "mesh": 1,
+      "translation": [
+        0.191906258,
+        0.103501961,
+        0.0055625
+      ],
+      "rotation": [
+        0.7071068,
+        0.0,
+        0.0,
+        0.7071067
+      ],
+      "name": "Circle073"
+    },
+    {
+      "mesh": 2,
+      "translation": [
+        -0.06740625,
+        -0.138689458,
+        -0.413593769
+      ],
+      "name": "Rectangle171"
+    },
+    {
+      "mesh": 3,
+      "translation": [
+        0.191906258,
+        -8.872245,
+        -0.368062526
+      ],
+      "name": "Circle071"
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 1,
+            "NORMAL": 2
+          },
+          "indices": 0,
+          "material": 0
+        }
+      ],
+      "name": "Line012"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 4,
+            "NORMAL": 5
+          },
+          "indices": 3,
+          "material": 0
+        }
+      ],
+      "name": "Circle073"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 7,
+            "NORMAL": 8
+          },
+          "indices": 6,
+          "material": 1
+        }
+      ],
+      "name": "Rectangle171"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 10,
+            "NORMAL": 11
+          },
+          "indices": 9,
+          "material": 2
+        }
+      ],
+      "name": "Circle071"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5123,
+      "count": 108,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 72,
+      "max": [
+        0.06617191,
+        1.90734872E-09,
+        0.12612699
+      ],
+      "min": [
+        -0.891773462,
+        -0.549125,
+        -0.009456055
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 864,
+      "componentType": 5126,
+      "count": 72,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 216,
+      "componentType": 5123,
+      "count": 1674,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1728,
+      "componentType": 5126,
+      "count": 603,
+      "max": [
+        0.217953146,
+        0.407718778,
+        0.278913617
+      ],
+      "min": [
+        -0.552328169,
+        -0.499343783,
+        -0.03389069
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 8964,
+      "componentType": 5126,
+      "count": 603,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 3564,
+      "componentType": 5123,
+      "count": 84,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 16200,
+      "componentType": 5126,
+      "count": 53,
+      "max": [
+        0.3408125,
+        0.1339297,
+        0.9073606
+      ],
+      "min": [
+        -0.342453152,
+        -0.0395268574,
+        -0.0475613438
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 16836,
+      "componentType": 5126,
+      "count": 53,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 3732,
+      "componentType": 5123,
+      "count": 3477,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 17472,
+      "componentType": 5126,
+      "count": 1314,
+      "max": [
+        0.217953146,
+        9.046007,
+        0.8190802
+      ],
+      "min": [
+        -0.5938511,
+        8.696833,
+        -0.12568751
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 33240,
+      "componentType": 5126,
+      "count": 1314,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 10688,
+      "name": "bufferViewScalar"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 10688,
+      "byteLength": 49008,
+      "byteStride": 12,
+      "name": "bufferViewFloatVec3"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "LBS.bin",
+      "byteLength": 59696
+    }
+  ],
+  "materials": [
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 1
+        },
+        "metallicFactor": 0.8,
+        "metallicRoughnessTexture": {
+          "index": 2
+        }
+      },
+      "normalTexture": {
+        "index": 0
+      },
+      "doubleSided": true,
+      "name": "metal03_Gold"
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.691943169,
+          0.6612478,
+          0.609959364,
+          1.0
+        ],
+        "roughnessFactor": 0.5,
+        "metallicRoughnessTexture": {
+          "index": 3
+        }
+      },
+      "doubleSided": true,
+      "name": "plastic01"
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.165876776,
+          0.01650906,
+          0.01650906,
+          1.0
+        ],
+        "roughnessFactor": 0.5
+      },
+      "name": "RED"
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0,
+      "name": "TexturesCom_Metal_GoldOld_1K_normal.jpg"
+    },
+    {
+      "sampler": 0,
+      "source": 1,
+      "name": "TexturesCom_Metal_GoldOld_1K_albedo.jpg"
+    },
+    {
+      "sampler": 0,
+      "source": 2,
+      "name": "TexturesCom_Metal_GoldOld_1K_roughness204.jpg"
+    },
+    {
+      "sampler": 0,
+      "source": 3,
+      "name": "TexturesCom_Plastic_Polymer_1K_roughness255.jpg"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/TexturesCom_Metal_GoldOld_1K_normal.jpg"
+    },
+    {
+      "uri": "textures/TexturesCom_Metal_GoldOld_1K_albedo.jpg"
+    },
+    {
+      "uri": "textures/TexturesCom_Metal_GoldOld_1K_roughness204.jpg"
+    },
+    {
+      "uri": "textures/TexturesCom_Plastic_Polymer_1K_roughness255.jpg"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987
+    }
+  ]
+}

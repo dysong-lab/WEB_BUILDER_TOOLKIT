@@ -1,12 +1,15 @@
 # Menus — Standard
 
+## MD3 정의
+
+> Menus display a list of choices on a temporary surface.
+
+MD3 Menu anatomy: 컨테이너(임시 표면) + 메뉴 항목 목록. 각 항목은 (선행 아이콘) + 레이블 + (후행 텍스트: 단축키/보조 정보) 구조. 항목은 선택 가능 또는 비활성 상태일 수 있으며, 그룹 구분을 위한 divider 행이 등장할 수 있다.
+
 ## 기능 정의
 
-1. **메뉴 표시/숨김** — `openMenu()`와 `closeMenu()`로 Shadow DOM 기반 팝업을 열고 닫는다
-2. **항목 목록 렌더링** — 배열 데이터를 template 기반으로 메뉴 항목으로 반복 렌더링한다
-3. **항목 비활성화** — `disabled: true`인 항목은 클릭 불가 상태로 표시한다
-4. **항목 선택 이벤트** — 활성화된 항목 클릭 시 `@menuItemSelected` 이벤트를 발행한다
-5. **외부 클릭 닫기** — overlay 영역(surface 바깥) 클릭 시 메뉴를 닫고 `@menuDismissed`를 발행한다
+1. **메뉴 항목 렌더링** — `menuItems` 토픽으로 수신한 배열 데이터를 template 반복으로 렌더링한다. 각 항목은 선행 아이콘(leading), 레이블(label), 후행 텍스트(trailing)로 구성된다. `disabled`/`divider` 플래그로 비활성/구분선 상태를 표현한다
+2. **항목 클릭 이벤트** — 비활성/구분선이 아닌 항목 클릭 시 `@menuItemClicked` 발행 (페이지가 해당 액션 수행 + 메뉴 dismiss)
 
 ---
 
@@ -14,98 +17,70 @@
 
 ### Mixin
 
-ShadowPopupMixin, ListRenderMixin (팝업 내부)
+ListRenderMixin
 
 ### cssSelectors
 
 | KEY | VALUE | 용도 |
 |-----|-------|------|
-| template | `#menu-popup-template` | Shadow DOM 템플릿 (규약) |
-| overlay | `.menu__overlay` | 전체 화면 ooverlay (scrim) |
-| surface | `.menu__surface` | 메뉴 패널 |
-| item | `.menu__item` | 개별 메뉴 항목 (이벤트 위임 대상) |
-| container | `.menu__list` | ListRenderMixin 컨테이너 |
-| itemTemplate | `#menu-item-template` | ListRenderMixin 항목 템플릿 |
-| icon | `.menu__item-icon` | 항목 아이콘 |
-| label | `.menu__item-label` | 항목 레이블 |
+| container | `.menu__items` | 항목이 추가될 부모 (규약) |
+| template  | `#menu-item-template` | cloneNode 대상 (규약) |
+| menuid    | `.menu__item` | 항목 식별 + 이벤트 매핑 |
+| disabled  | `.menu__item` | 비활성 상태 (data-disabled) |
+| divider   | `.menu__item` | 구분선 상태 (data-divider) |
+| leading   | `.menu__leading` | 선행 아이콘/이모지 |
+| label     | `.menu__label` | 항목 레이블 |
+| trailing  | `.menu__trailing` | 후행 텍스트 (단축키/보조) |
+
+### datasetAttrs
+
+| KEY | VALUE |
+|-----|-------|
+| menuid   | menuid |
+| disabled | disabled |
+| divider  | divider |
 
 ### 구독 (subscriptions)
 
-해당 없음. 페이지에서 `openMenu({ response })` 또는 `closeMenu()`를 직접 호출한다.
+| topic | handler |
+|-------|---------|
+| menuItems | `this.listRender.renderData` |
 
 ### 이벤트 (customEvents)
 
 | 이벤트 | 선택자 | 발행 |
 |--------|--------|------|
-| click | `overlay` (popup 내부, surface 바깥) | `@menuDismissed` |
-| click | `item` (disabled가 아닌 항목) | `@menuItemSelected` |
+| click | `menuid` (computed property) | `@menuItemClicked` |
 
-### 자체 속성
-
-| 속성 | 용도 |
-|------|------|
-| `this._popupScope` | Shadow DOM 내부 렌더링용 래퍼 (ListRenderMixin 적용) |
-| `this._motionDuration` | 닫힘 애니메이션 지속 시간 (ms) |
-| `this._motionTimer` | 닫힘 타이머 핸들 |
+> 페이지는 핸들러에서 `data-disabled="true"` 또는 `data-divider="true"` 항목을 필터링한다. 컴포넌트는 dispatch만 하고 필터는 페이지 레벨의 판단이다.
 
 ### 커스텀 메서드
 
-| 메서드 | 설명 |
-|--------|------|
-| `this.openMenu(payload)` | `payload.response.items` 배열로 항목을 렌더링하고 팝업 표시 |
-| `this.closeMenu()` | 애니메이션 후 팝업 숨김 |
-
-### 데이터 계약
-
-```javascript
-{
-  items: [
-    { id: "edit",      icon: "✎", label: "Edit",      disabled: false },
-    { id: "duplicate", icon: "⧉", label: "Duplicate", disabled: false },
-    { id: "archive",   icon: "⊟", label: "Archive",   disabled: false },
-    { id: "delete",    icon: "⊗", label: "Delete",    disabled: true  }
-  ]
-}
-```
-
-### 표시 규칙
-
-- `id`는 필수이며 항목 고유값으로 사용한다
-- `icon`이 없으면 아이콘 영역을 빈 상태로 표시한다
-- `disabled: true`인 항목은 `data-disabled="true"` 속성을 적용하고 클릭을 무시한다
-- `label`이 없으면 빈 문자열로 처리한다
+없음
 
 ### 페이지 연결 사례
 
-```javascript
-pageEventBusHandlers['@rowActionRequested'] = ({ targetInstance }) => {
-    targetInstance.openMenu({
-        response: {
-            items: [
-                { id: 'edit',   icon: '✎', label: 'Edit',   disabled: false },
-                { id: 'delete', icon: '⊗', label: 'Delete', disabled: false }
-            ]
-        }
-    });
-};
+```
+[페이지] ──fetchAndPublish('menuItems', this)──> [Menus] 렌더링
+          [{ menuid, leading, label, trailing, disabled?, divider? }, ...]
 
-pageEventBusHandlers['@menuItemSelected'] = ({ targetInstance, itemId }) => {
-    // itemId는 Shadow DOM 내부에서 미리 추출되어 전달됨
-    // (Shadow DOM 경계 밖에서 event.target으로 접근하면 retarget되어 id를 읽을 수 없음)
-    console.log('[Page] menu selected:', itemId);
-    targetInstance.closeMenu();
-};
-
-pageEventBusHandlers['@menuDismissed'] = ({ targetInstance }) => {
-    targetInstance.closeMenu();
-};
+[Menus] ──@menuItemClicked──> [페이지] ──> disabled/divider 필터 후
+                                          선택 액션 실행 + 메뉴 dismiss
 ```
 
 ### 디자인 변형
 
 | 파일 | 페르소나 | 설명 |
 |------|---------|------|
-| 01_refined | A: Refined Technical | 보랏빛 글로우와 글래스 서피스의 다크 컨텍스트 메뉴 |
-| 02_material | B: Material Elevated | 라이트 서피스와 MD3 표준 밀도의 메뉴 |
-| 03_editorial | C: Minimal Editorial | 넓은 여백과 세리프 타이포 중심의 미니멀 메뉴 |
-| 04_operational | D: Dark Operational | 고대비 다크 베이스의 컴팩트 운영형 메뉴 |
+| 01_refined     | A: Refined Technical | 다크 퍼플, 그라디언트 깊이, Pretendard, 20px 모서리, box-shadow 금지 |
+| 02_material    | B: Material Elevated | 라이트, elevation shadow, Roboto, 8px 모서리 (MD3 기본 메뉴) |
+| 03_editorial   | C: Minimal Editorial | 웜 그레이, 세리프 레이블, 넓은 여백, 샤프 모서리 (2px) |
+| 04_operational | D: Dark Operational  | 컴팩트 다크, 시안 테두리, 모노스페이스 trailing(단축키), 4px 모서리 |
+
+### 결정사항
+
+- **선행 요소**: 텍스트 기반 (이모지/심볼). `leading`이 비어있으면 CSS로 숨김.
+- **후행 요소**: 단축키 또는 보조 텍스트. `trailing`이 비어있으면 CSS로 숨김.
+- **상태 플래그**: `disabled`/`divider`는 datasetAttrs로 등록되어 `[data-disabled="true"]`, `[data-divider="true"]`로 CSS 스타일링 가능. 페이지 핸들러가 필터링.
+- **Dismiss 동작**: 메뉴 자체는 오버레이/팝업이 아닌 인라인 표면으로 구현한다. 팝업이 필요한 advanced 케이스는 별도 ShadowPopupMixin 조합(Advanced 변형)에서 다룬다 — Standard는 MD3 "temporary surface" 시각만 제공하고 dismiss 로직은 페이지 책임.
+- **근거**: MD3 Menus는 배열을 수직 목록으로 반복 렌더하므로 ListRenderMixin이 적합. Lists와의 차이는 trailing(단축키), disabled/divider 상태 3가지 축.

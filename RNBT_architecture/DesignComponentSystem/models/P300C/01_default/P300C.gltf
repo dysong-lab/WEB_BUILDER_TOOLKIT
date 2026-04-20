@@ -1,0 +1,316 @@
+{
+  "asset": {
+    "version": "2.0",
+    "generator": "babylon.js glTF exporter for 3dsmax 2023 v20220628.14"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1,
+        2,
+        3
+      ],
+      "name": "P300C"
+    },
+    {
+      "mesh": 0,
+      "translation": [
+        0.0,
+        0.0,
+        0.0748125
+      ],
+      "name": "P300C_01"
+    },
+    {
+      "mesh": 1,
+      "translation": [
+        0.0,
+        0.0,
+        -0.00025
+      ],
+      "name": "P300C_02"
+    },
+    {
+      "mesh": 2,
+      "translation": [
+        0.0,
+        -0.001,
+        0.00331250019
+      ],
+      "name": "P300C_03"
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 1,
+            "NORMAL": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 0,
+          "material": 0
+        }
+      ],
+      "name": "P300C_01"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 5,
+            "NORMAL": 6,
+            "TEXCOORD_0": 7
+          },
+          "indices": 4,
+          "material": 1
+        }
+      ],
+      "name": "P300C_02"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 9,
+            "NORMAL": 10,
+            "TEXCOORD_0": 11
+          },
+          "indices": 8,
+          "material": 2
+        }
+      ],
+      "name": "P300C_03"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5123,
+      "count": 6,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 4,
+      "max": [
+        0.06424707,
+        0.0337470733,
+        0.0
+      ],
+      "min": [
+        -0.06424707,
+        -0.0337470733,
+        0.0
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 48,
+      "componentType": 5126,
+      "count": 4,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 4,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 12,
+      "componentType": 5123,
+      "count": 396,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 96,
+      "componentType": 5126,
+      "count": 212,
+      "max": [
+        0.076500006,
+        0.0460000038,
+        0.07791992
+      ],
+      "min": [
+        -0.076500006,
+        -0.0460000038,
+        -0.07790625
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 2640,
+      "componentType": 5126,
+      "count": 212,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 32,
+      "componentType": 5126,
+      "count": 212,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 804,
+      "componentType": 5123,
+      "count": 168,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 5184,
+      "componentType": 5126,
+      "count": 112,
+      "max": [
+        0.07650586,
+        0.02385254,
+        0.07484571
+      ],
+      "min": [
+        -0.07650098,
+        -0.0238515642,
+        -0.07485547
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 6528,
+      "componentType": 5126,
+      "count": 112,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 1728,
+      "componentType": 5126,
+      "count": 112,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 1140,
+      "name": "bufferViewScalar"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 1140,
+      "byteLength": 7872,
+      "byteStride": 12,
+      "name": "bufferViewFloatVec3"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 9012,
+      "byteLength": 2624,
+      "byteStride": 8,
+      "name": "bufferViewFloatVec2"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "P300C.bin",
+      "byteLength": 11636
+    }
+  ],
+  "materials": [
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        }
+      },
+      "doubleSided": true,
+      "name": "P300C",
+      "extras": {
+        "babylonSeparateCullingPass": false
+      }
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.691943169,
+          0.6612478,
+          0.609959364,
+          1.0
+        ],
+        "roughnessFactor": 0.5,
+        "metallicRoughnessTexture": {
+          "index": 1
+        }
+      },
+      "doubleSided": true,
+      "name": "plastic01"
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.052,
+          0.052,
+          0.052,
+          1.0
+        ],
+        "roughnessFactor": 0.5
+      },
+      "doubleSided": true,
+      "name": "black"
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0,
+      "name": "P300C.jpg"
+    },
+    {
+      "sampler": 0,
+      "source": 1,
+      "name": "TexturesCom_Plastic_Polymer_1K_roughness255.jpg"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/P300C.jpg"
+    },
+    {
+      "uri": "textures/TexturesCom_Plastic_Polymer_1K_roughness255.jpg"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987
+    }
+  ]
+}

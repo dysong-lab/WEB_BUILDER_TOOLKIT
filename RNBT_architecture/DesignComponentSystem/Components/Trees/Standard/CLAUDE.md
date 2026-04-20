@@ -1,12 +1,14 @@
 # Trees — Standard
 
+## 정의 근거
+
+> MD3 공식 범주가 아님. Trees display hierarchical data in an expandable and collapsible structure.
+
 ## 기능 정의
 
-1. **계층 데이터 렌더링** — 재귀 구조의 노드 배열을 트리로 렌더링한다
-2. **확장/축소 토글** — 자식이 있는 노드의 토글 버튼으로 하위 노드를 펼치거나 접는다
-3. **노드 선택 표시** — 콘텐츠 영역 클릭 시 현재 선택 노드를 시각적으로 표시한다
-4. **트리 제어 메서드** — `renderTreeData()`, `expandAllNodes()`, `collapseAllNodes()`로 외부에서 상태를 제어한다
-5. **사용자 액션 이벤트** — 노드 선택과 토글 시 대응 이벤트를 발행한다
+1. **노드 렌더링 (flat 배열)** — `treeNodes` 토픽으로 수신한 **평탄화된 노드 배열**을 template 반복으로 렌더링한다. 각 노드는 `{ treeid, depth, expanded, hasChildren, selected, leading, label, trailing }`로 구성되며, `depth`/`expanded`/`hasChildren`/`selected`는 data-* 속성으로 반영되어 CSS가 들여쓰기·회전·숨김·선택 상태를 제어한다. 계층→flat 전개는 페이지 책임.
+2. **토글 클릭** — chevron 영역 클릭 시 `@treeToggleClicked` 발행. 페이지가 대상 노드의 `expanded`를 반전하고 하위 노드 visible을 재계산하여 다시 발행한다.
+3. **노드 선택** — 노드 본체 클릭 시 `@treeNodeClicked` 발행. 페이지가 후속 액션(상세 표시 등)을 수행하고 필요 시 `selected` 상태를 갱신한다.
 
 ---
 
@@ -14,105 +16,86 @@
 
 ### Mixin
 
-TreeRenderMixin
+ListRenderMixin (flat 배열 렌더 + datasetAttrs로 depth/상태 반영)
+
+> TreeRenderMixin이 아닌 ListRenderMixin을 선택한 이유: 페이지가 계층 구조를 이미 보유하므로, 페이지에서 현재 visible한 노드만 flat 배열로 전개해 발행하는 구조가 단순하고 예측 가능하다. depth/expanded/hasChildren/selected는 datasetAttrs를 통해 CSS가 해석한다. 재귀 중첩 DOM은 필요 없다.
 
 ### cssSelectors
 
 | KEY | VALUE | 용도 |
 |-----|-------|------|
-| container | `.tree__list` | 트리 노드 컨테이너 |
-| template | `#tree-node-template` | 노드 템플릿 |
-| node | `.tree__node` | 각 노드 루트 |
-| toggle | `.tree__toggle` | 확장/축소 버튼 |
-| content | `.tree__content` | 선택 가능한 콘텐츠 영역 |
-| icon | `.tree__icon` | 아이콘 텍스트 |
-| label | `.tree__label` | 노드 레이블 |
-| meta | `.tree__meta` | 보조 정보 |
-| tone | `.tree__node` | 상태 톤 dataset 적용 대상 |
-| empty | `.tree__empty` | 빈 상태 문구 |
+| container     | `.tree__list`               | 노드가 추가될 부모 (규약) |
+| template      | `#tree-node-template`       | cloneNode 대상 (규약) |
+| treeid        | `.tree__node`               | 노드 식별 + 노드 클릭 이벤트 매핑 |
+| depth         | `.tree__node`               | 들여쓰기 단계 (data-depth) |
+| expanded      | `.tree__node`               | 펼침 상태 (data-expanded) |
+| hasChildren   | `.tree__node`               | 자식 존재 여부 (data-has-children) |
+| selected      | `.tree__node`               | 선택 상태 (data-selected) |
+| toggle        | `.tree__toggle`             | 토글 영역 (chevron 클릭 이벤트 매핑) |
+| leading       | `.tree__leading`            | 선행 아이콘/이모지 |
+| label         | `.tree__label`              | 노드 레이블 |
+| trailing      | `.tree__trailing`           | 후행 배지/수량 |
+
+### datasetAttrs
+
+| KEY | VALUE |
+|-----|-------|
+| treeid       | treeid |
+| depth        | depth |
+| expanded     | expanded |
+| hasChildren  | has-children |
+| selected     | selected |
 
 ### 구독 (subscriptions)
 
-해당 없음. 페이지에서 `renderTreeData({ response })`를 직접 호출한다.
+| topic | handler |
+|-------|---------|
+| treeNodes | `this.listRender.renderData` |
 
-### 이벤트
+### 이벤트 (customEvents)
 
-| 이벤트 | 조건 | 발행 |
-|--------|------|------|
-| click | `.tree__toggle` 클릭 | `@treeNodeToggled` |
-| click | `.tree__content` 클릭 | `@treeNodeSelected` |
+| 이벤트 | 선택자 | 발행 |
+|--------|--------|------|
+| click | `toggle` (computed property) | `@treeToggleClicked` |
+| click | `treeid` (computed property) | `@treeNodeClicked` |
 
-위 이벤트는 내부 클릭 위임 핸들러에서 직접 발행한다.
-
-### 자체 속성
-
-| 속성 | 용도 |
-|------|------|
-| `this._selectedNodeId` | 현재 선택 노드 ID |
-| `this._treeClickHandler` | 내부 클릭 위임 해제용 핸들러 |
+> chevron(`toggle`)은 노드 내부 요소이므로 이벤트가 bubble 되면서 `treeid` 매핑에도 도달할 수 있다. 페이지 핸들러는 `@treeToggleClicked`가 먼저 발행되면 `event.stopPropagation()` 또는 두 핸들러의 논리(토글 시 선택 이벤트 무시)로 처리한다 — 컴포넌트는 dispatch만 담당.
 
 ### 커스텀 메서드
 
-| 메서드 | 설명 |
-|--------|------|
-| `this.renderTreeData(payload)` | TreeRenderMixin으로 데이터 렌더링 후 기본 접힘 상태를 적용 |
-| `this.expandAllNodes()` | 전체 노드를 펼친다 |
-| `this.collapseAllNodes()` | 전체 노드를 접고 루트만 남긴다 |
-| `this.setSelectedNode(nodeId)` | 선택 노드를 시각적으로 갱신한다 |
-
-### 데이터 계약
-
-```javascript
-[
-  {
-    id: "ops",
-    icon: "◫",
-    label: "Operations",
-    meta: "12 nodes",
-    tone: "accent",
-    children: [
-      {
-        id: "ops-zone-04",
-        icon: "▣",
-        label: "Zone 04",
-        meta: "3 alerts",
-        tone: "warning",
-        children: []
-      }
-    ]
-  }
-]
-```
-
-### 표시 규칙
-
-- `id`는 필수이며 노드 고유값으로 사용한다
-- `children`이 없는 노드는 리프 노드로 처리한다
-- 초기 렌더 후에는 루트만 보이고 하위 노드는 접힌 상태로 시작한다
-- `tone`이 없으면 기본 톤으로 처리한다
-- `meta`가 없으면 빈 문자열로 처리한다
+없음.
 
 ### 페이지 연결 사례
 
-```javascript
-pageEventBusHandlers["@treeNodeSelected"] = ({ event, targetInstance }) => {
-    const node = event.target.closest(targetInstance.treeRender.cssSelectors.node);
-    const nodeId = node?.dataset.nodeId;
-    console.log("[Page] selected:", nodeId);
-};
+```
+[페이지]
+    계층 트리 상태 유지  ──flatten(visible only)──> fetchAndPublish('treeNodes', this)
+                                                   → [Trees] 렌더링
 
-pageEventBusHandlers["@treeNodeToggled"] = ({ event, targetInstance }) => {
-    const node = event.target.closest(targetInstance.treeRender.cssSelectors.node);
-    const nodeId = node?.dataset.nodeId;
-    console.log("[Page] toggled:", nodeId, targetInstance.treeRender.getNodeState(nodeId));
-};
+[Trees] ──@treeToggleClicked──> [페이지] expanded 반전 → 재발행
+[Trees] ──@treeNodeClicked  ──> [페이지] selected 갱신 / 상세 뷰 오픈 → 재발행
+```
+
+각 노드 객체의 예시:
+
+```javascript
+{ treeid: 'room-301', depth: 2, expanded: 'false', hasChildren: 'false',
+  selected: 'false', leading: '\u{1F5A5}', label: '서버실', trailing: '12' }
 ```
 
 ### 디자인 변형
 
 | 파일 | 페르소나 | 설명 |
 |------|---------|------|
-| 01_refined | A: Refined Technical | 정교한 패널과 은은한 블루 하이라이트의 트리 |
-| 02_material | B: Material Elevated | 라이트 서피스와 명확한 상태층을 가진 트리 |
-| 03_editorial | C: Minimal Editorial | 조용한 종이 질감과 타이포 중심의 트리 |
-| 04_operational | D: Dark Operational | HUD 계열의 고대비 운영 트리 |
+| 01_refined     | A: Refined Technical | 다크 퍼플, 그라디언트 깊이, Pretendard, box-shadow 금지, 8/20px 모서리 |
+| 02_material    | B: Material Elevated | 라이트, elevation shadow, Roboto+Pretendard, 8px 균일 모서리 |
+| 03_editorial   | C: Minimal Editorial | 웜 그레이, 세리프 레이블(DM Serif), 넓은 여백, 2px 이하 모서리 |
+| 04_operational | D: Dark Operational  | 컴팩트 다크 시안, IBM Plex Mono trailing, 미세 테두리, 2-4px 모서리 |
+
+### 결정 사항
+
+- **flat 배열 + datasetAttrs**: 재귀 중첩 DOM 대신 단일 컨테이너 안에 모든 visible 노드를 형제 요소로 배치하고, CSS가 `data-depth`로 들여쓰기(`padding-left: calc(depth * 16px + base)`)를 계산한다. 페이지가 계층 관리를 전적으로 담당하여 컴포넌트는 "표시"에 집중.
+- **숨긴 노드**: 페이지가 collapsed 상태 하위 노드를 flat 배열에 포함하지 않는 방식으로 구현. 컴포넌트는 보이는 노드만 렌더.
+- **chevron 가시성**: `data-has-children="false"`일 때 CSS로 `.tree__toggle { visibility: hidden }` 처리. 공간은 유지하여 들여쓰기가 깨지지 않게 함.
+- **leading/trailing**: 텍스트 기반(이모지/심볼/수량). 비어있으면 CSS `:empty`로 숨김.
+- **선택 상태**: `data-selected="true"`를 CSS에서 강조(배경색/테두리/타이포 변화)로 표현.

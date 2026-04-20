@@ -2,10 +2,10 @@
 
 ## 기능 정의
 
-1. **체크박스 목록 렌더링** — 배열 데이터를 체크박스 목록으로 렌더링
-2. **개별 항목 토글** — 클릭한 항목의 `checked` 상태만 반전 (`disabled`면 무시)
-3. **상태 반영** — 각 항목의 `checked`, `disabled` 상태를 시각 상태로 표현
-4. **선택 이벤트 발행** — 항목 클릭 시 `@checkboxChanged` 이벤트를 발행
+1. **체크박스 항목 렌더링** — `checkboxItems` 토픽으로 수신한 배열 데이터를 template 반복으로 렌더링한다. 각 항목은 체크박스 박스 + 라벨로 구성되며, 개별 항목의 체크 상태(checked / unchecked / indeterminate)를 관리한다
+2. **체크박스 클릭 이벤트** — 항목 클릭 시 `@checkboxClicked` 발행 (페이지가 다음 상태를 결정)
+
+---
 
 ## 구현 명세
 
@@ -15,56 +15,65 @@ ListRenderMixin
 
 ### cssSelectors
 
-| KEY       | VALUE                        | 용도                         |
-| --------- | ---------------------------- | ---------------------------- |
-| container | `.checkbox-group`            | 항목 컨테이너                |
-| template  | `#checkbox-item-template`    | 항목 템플릿                  |
-| item      | `.checkbox-item`             | 클릭 이벤트 타깃             |
-| id        | `.checkbox-item`             | 항목 식별자                  |
-| checked   | `.checkbox-item`             | 체크 상태                    |
-| disabled  | `.checkbox-item`             | 비활성 상태                  |
-| label     | `.checkbox-item__label`      | 항목 레이블 텍스트           |
+| KEY | VALUE | 용도 |
+|-----|-------|------|
+| container | `.checkbox__list` | 항목이 추가될 부모 (규약) |
+| template  | `#checkbox-item-template` | cloneNode 대상 (규약) |
+| checkid   | `.checkbox__item` | 항목 식별 + 이벤트 매핑 |
+| checked   | `.checkbox__item` | 체크 상태 (data-checked: "true"/"false"/"indeterminate") |
+| disabled  | `.checkbox__item` | 비활성화 상태 (data-disabled) |
+| label     | `.checkbox__label` | 라벨 텍스트 |
+
+> **체크마크/인디터미네이트 처리**: `.checkbox__check-mark`(체크 아이콘)와 `.checkbox__indeterminate-mark`(대시 아이콘)는 template에 고정 존재하며 `data-checked` 값에 따라 CSS로만 표시를 제어한다. cssSelectors KEY로 등록하지 않는다 (데이터 바인딩 대상이 아니므로).
+
+### itemKey
+
+checkid
 
 ### datasetAttrs
 
-```javascript
-{
-    id:       "id",
-    checked:  "checked",
-    disabled: "disabled"
-}
-```
+| KEY | VALUE |
+|-----|-------|
+| checkid  | checkid |
+| checked  | checked |
+| disabled | disabled |
 
 ### 구독 (subscriptions)
 
-| topic         | handler                      |
-| ------------- | ---------------------------- |
+| topic | handler |
+|-------|---------|
 | checkboxItems | `this.listRender.renderData` |
 
 ### 이벤트 (customEvents)
 
-| 이벤트 | 선택자           | 발행               |
-| ------ | ---------------- | ------------------ |
-| click  | `.checkbox-item` | `@checkboxChanged` |
+| 이벤트 | 선택자 | 발행 |
+|--------|--------|------|
+| click | `checkid` (computed property) | `@checkboxClicked` |
 
-### 자체 메서드
+### 커스텀 메서드
 
-| 메서드                 | 설명                                                      |
-| ---------------------- | --------------------------------------------------------- |
-| `this.toggleItem(id)`  | 지정한 항목의 `checked` 상태를 반전한다. `disabled`면 무시 |
+없음
 
-### 렌더링 데이터 형식
+### 페이지 연결 사례
 
-```javascript
-[
-    { id: "opt-1", label: "항목 A", checked: "true",  disabled: "false" },
-    { id: "opt-2", label: "항목 B", checked: "false", disabled: "false" },
-    { id: "opt-3", label: "항목 C", checked: "false", disabled: "true"  }
-]
+```
+[페이지] ──fetchAndPublish('checkboxItems', this)──> [Checkbox] 렌더링 ([{ checkid, label, checked, ... }, ...])
+
+[Checkbox] ──@checkboxClicked──> [페이지] ──> 다음 상태 결정(toggle)
+                                              + updateItemState(id, { checked: next })
 ```
 
-### 비고
+### 디자인 변형
 
-- 네이티브 `<input type="checkbox">` 미사용 — ListRenderMixin이 `checked` 속성 제어 불가
-- 시각적 체크박스는 `<div class="checkbox-item__box">` + `[data-checked="true"]` CSS로 구현
-- 실제 체크 상태는 `data-checked` dataset 속성으로 추적
+| 파일 | 페르소나 | 설명 |
+|------|---------|------|
+| 01_refined     | A: Refined Technical | 다크 퍼플 tonal, Pretendard, 그라디언트 체크박스 |
+| 02_material    | B: Material Elevated | outlined 둥근 모서리, 라이트 블루, Roboto |
+| 03_editorial   | C: Minimal Editorial | 웜 그레이, Georgia 세리프, 미니멀 사각 |
+| 04_operational | D: Dark Operational  | 컴팩트 다크 시안, JetBrains Mono, 각진 모서리 |
+
+### 결정사항
+
+- **tri-state** 표현: `data-checked="true" | "false" | "indeterminate"`. CSS가 각 상태에 맞는 아이콘(check 또는 dash)을 표시한다.
+- **체크마크 아이콘**: 인라인 SVG (체크 `✓` 모양)와 대시 SVG (`─` 모양)를 template에 고정 배치. 상태별 visibility는 CSS에서만 제어한다.
+- **선택/토글 결정은 페이지에 위임**: Mixin은 순수 렌더링만 수행한다.

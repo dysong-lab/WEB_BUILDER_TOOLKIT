@@ -1,33 +1,37 @@
 ---
 name: produce-3d-advanced-loop
-description: 3D 컴포넌트의 Advanced 변형을 PRODUCTION_QUEUE.md 순서대로 순차 생산합니다. 프리셋 이름 또는 자유 Mixin 조합을 지원하며, 한 사이클에 하나의 장비를 생산하고, /compact 후 "계속"으로 다음 장비를 생산합니다.
+description: 3D 컴포넌트의 Advanced 변형을 ADVANCED_QUEUE.md 순서대로 순차 생산합니다. 프리셋 이름 또는 자유 Mixin 조합을 지원하며, 한 사이클에 하나의 변형을 생산하고, /compact 후 "계속"으로 다음 변형을 생산합니다.
 ---
 
 # 3D Advanced 컴포넌트 순차 생산
 
 ## 목표
 
-DesignComponentSystem/Components/3D_Components 아래의 3D 컴포넌트 Advanced 변형을 PRODUCTION_QUEUE.md 순서대로 생산한다.
-한 사이클에 하나의 장비에 대해 "추가 대상" 컬럼에 지정된 Advanced 변형들을 생산하고, 사용자가 `/compact` 후 "계속"을 입력하면 다음 장비로 진행한다.
+DesignComponentSystem/Components/3D_Components 아래의 3D 컴포넌트 Advanced 변형을 `ADVANCED_QUEUE.md` 순서대로 생산한다.
+한 사이클에 하나의 Advanced 변형을 생산하고, 사용자가 `/compact` 후 "계속"을 입력하면 다음 변형으로 진행한다.
 
 **프리셋 이름**(예: `highlight`, `camera_highlight`) 또는 **자유 Mixin 조합**(예: `highlightAnimation: MeshState+MeshHighlight+Animation`) 양쪽을 지원한다.
 
 ---
 
-## Standard 루프와의 차이
+## 2D Advanced 루프와의 대칭
 
-| 측면 | Standard 루프 | Advanced 루프 (이 문서) |
-|------|--------------|------------------------|
-| 대상 변형 | status (Standard) | Advanced 변형 (프리셋 또는 자유 조합) |
-| QUEUE 컬럼 | "기존(완료)"에 status가 없거나 | "추가 대상"에 변형명이 명시됨 |
-| 폴더 출력 | `Standard/` | `Advanced/<변형이름>/` |
-| Mixin | MeshState 단독 | MeshState + 추가 Mixin 조합 |
+| 측면 | 2D (produce-advanced-loop) | 3D (이 문서) |
+|------|---------------------------|-------------|
+| 큐 파일 | Components/ADVANCED_QUEUE.md | Components/3D_Components/ADVANCED_QUEUE.md |
+| 대상 결정 | 큐에서 "대기" 첫 항목 | 동일 |
+| 변형 성격 | 컴포넌트별 고유 | 프리셋 + 자유 조합 |
+| 분리 기준 | register.js 차이 | 동일 — Mixin 조합 차이 또는 커스텀 메서드 |
+| 기획 스킬 | plan-advanced-queue | plan-3d-advanced-queue |
+| 개발 스킬 | create-2d-component | create-3d-component / create-3d-container-component |
 
-프리셋 목록 및 폴더 명명 규칙은 PRODUCTION_QUEUE.md의 "변형 프리셋" 섹션을 따른다.
+---
 
 ### Standard 선행 필터
 
-"기존(완료)"에 `status`가 없는 장비는 Advanced 대상에서 제외하고 `produce-3d-standard-loop` 선행을 안내한다. Standard 없이 Advanced를 생산하면 MeshState 기반 분리 정당성을 검증할 수 없기 때문이다.
+Standard 폴더가 없는 컴포넌트는 Advanced 대상에서 제외하고 `produce-3d-standard-loop` 선행을 안내한다. Standard 없이 Advanced를 생산하면 MeshState 기반 분리 정당성을 검증할 수 없기 때문이다.
+
+> **`{컴포넌트경로}`** = 개별이면 `{장비명}`, 컨테이너면 `meshesArea/{컨테이너명}`. 3D Standard Phase 0 규칙(`_shared/phase0-3d.md`)과 동일 표기.
 
 ---
 
@@ -35,23 +39,29 @@ DesignComponentSystem/Components/3D_Components 아래의 3D 컴포넌트 Advance
 
 ### Phase 0. 다음 대상 파악
 
-1. PRODUCTION_QUEUE.md 확인:
+1. ADVANCED_QUEUE.md 확인:
    ```
-   경로: RNBT_architecture/DesignComponentSystem/Components/3D_Components/PRODUCTION_QUEUE.md
+   경로: RNBT_architecture/DesignComponentSystem/Components/3D_Components/ADVANCED_QUEUE.md
    ```
 
-2. "추가 대상" 컬럼에 값이 있고 상태가 "대기"인 첫 번째 항목 = 다음 대상
-   - 예: `BATT | 개별 | status, camera, popup | highlight; camera_highlight | 대기` → 대상: BATT, 추가 변형 highlight, camera_highlight
-   - 자유 조합 예: `dataHud: MeshState+FieldRender` → 폴더명 `dataHud`, Mixin 조합은 `:` 뒤에서 파싱
+2. 상태가 "대기"인 첫 번째 항목 = 다음 대상
+   - 예(개별): `Panel | 개별 | highlight | MeshState + MeshHighlight | 대기` → 대상: `Panel/Advanced/highlight`
+   - 예(컨테이너): `meshesArea/area_01 | 컨테이너 | clipping | MeshState + ClippingPlaneMixin | 대기` → 대상: `meshesArea/area_01/Advanced/clipping`
 
-3. **Standard 선행 필터**: "기존(완료)"에 `status`가 없으면 제외하고 `produce-3d-standard-loop` 선행 안내.
-
-4. 각 추가 변형의 Advanced 폴더 존재 여부 확인:
+3. Standard 선행 필터: 해당 컴포넌트의 Standard 폴더 존재 여부 확인
    ```bash
-   ls RNBT_architecture/DesignComponentSystem/Components/3D_Components/{장비명}/Advanced/ 2>/dev/null
+   ls RNBT_architecture/DesignComponentSystem/Components/3D_Components/{컴포넌트경로}/Standard/scripts/register.js 2>/dev/null
+   ```
+   없으면 해당 항목을 건너뛰고 `produce-3d-standard-loop` 선행 안내.
+
+4. Advanced 폴더 존재 여부 확인:
+   ```bash
+   ls RNBT_architecture/DesignComponentSystem/Components/3D_Components/{컴포넌트경로}/Advanced/{변형이름}/ 2>/dev/null
    ```
 
-5. **사용자에게 보고**: "다음 대상: {장비명}, 유형: {개별/컨테이너}, 추가 Advanced 변형: {highlight, camera_highlight, ...}"
+5. **사용자에게 보고**: "다음 대상: {컴포넌트경로}/Advanced/{변형이름} — {설명}"
+
+   큐가 비어있거나 "대기" 항목이 없으면: "ADVANCED_QUEUE.md에 대기 중인 항목이 없습니다. 신규 Advanced 변형이 필요하면 `plan-3d-advanced-queue`로 먼저 등록해주세요."
 
 ---
 
@@ -66,7 +76,9 @@ DesignComponentSystem/Components/3D_Components 아래의 3D 컴포넌트 Advance
 | 개별 (1 GLTF = 1 Mesh) | `create-3d-component` |
 | 컨테이너 (1 GLTF = N Mesh) | `create-3d-container-component` |
 
-**출력 경로**: `Components/3D_Components/{장비명}/Advanced/{변형이름}/`
+**출력 경로**: `Components/3D_Components/{컴포넌트경로}/Advanced/{변형이름}/`
+
+**Standard와의 분리 정당성 확인**: Advanced 변형은 Standard와 명백히 다른 register.js(Mixin 조합, 커스텀 메서드 중 하나 이상)를 가져야 한다. Step 2 기능 분석 시 이를 CLAUDE.md에 명시한다.
 
 **중요 — 승인 없이 진행하지 않는다:**
 - Step 2 기능 분석 결과 → 사용자 승인
@@ -76,7 +88,7 @@ DesignComponentSystem/Components/3D_Components 아래의 3D 컴포넌트 Advance
 
 ### 모델 없이 작성하는 경우
 
-모델이 "미준비" 상태이면 [MODEL_READY] placeholder를 사용한다.
+모델이 없으면 [MODEL_READY] placeholder를 사용한다.
 
 ```javascript
 // TODO: [MODEL_READY] 모델의 실제 meshName으로 교체
@@ -97,24 +109,19 @@ const MESH_NAME = '장비명';
 생산 완료 후 커밋한다.
 
 ```
-feat: 3D_Components/{장비명}/Advanced/{변형명} 컴포넌트 생산 — {한줄 설명}
-```
-
-여러 Advanced 변형을 한 사이클에 생산한 경우:
-```
-feat: 3D_Components/{장비명} Advanced 변형 생산 — {04_highlight, 05_camera_highlight}
+feat: 3D_Components/{컴포넌트경로}/Advanced/{변형명} 컴포넌트 생산 — {한줄 설명}
 ```
 
 ---
 
-### Phase 3. PRODUCTION_QUEUE.md 업데이트 + 사이클 종료
+### Phase 3. ADVANCED_QUEUE.md 업데이트 + 사이클 종료
 
-1. PRODUCTION_QUEUE.md에서 해당 장비의 "기존(완료)" 컬럼에 새 변형 이름 추가, "추가 대상" 컬럼에서 제거, 모두 소진되면 상태를 "완료"로 변경
+1. ADVANCED_QUEUE.md에서 해당 항목의 상태를 "완료"로 변경
 2. 사용자에게 안내:
 
 ```
-{장비명} Advanced 생산 완료 (추가: {highlight, camera_highlight}).
-다음 대상: {다음 장비명} ({유형}) — {남은 추가 변형}
+{컴포넌트경로}/Advanced/{변형이름} 생산 완료.
+다음 대상: {다음 컴포넌트경로}/Advanced/{다음 변형}
 
 `/compact` 실행 후 "계속"을 입력해주세요.
 ```
@@ -125,16 +132,15 @@ feat: 3D_Components/{장비명} Advanced 변형 생산 — {04_highlight, 05_cam
 
 자주 쓰이는 Mixin 조합에 이름을 붙여둔 프리셋이며 **고정 목록이 아니다**. 필요 시 자유 조합을 직접 기재한다.
 
-| 프리셋 이름 | 세트 | Mixin 조합 |
-|------------|------|-----------|
-| status | Standard | MeshState |
-| camera | Advanced | MeshState + CameraFocus |
-| popup | Advanced | MeshState + 3DShadowPopup |
-| highlight | Advanced | MeshState + MeshHighlight |
-| camera_highlight | Advanced | MeshState + CameraFocus + MeshHighlight |
-| visibility | Advanced | MeshState + MeshVisibility |
-| animation | Advanced | MeshState + AnimationMixin |
-| clipping | Advanced | MeshState + ClippingPlaneMixin |
+| 프리셋 이름 | Mixin 조합 |
+|------------|-----------|
+| camera | MeshState + CameraFocus |
+| popup | MeshState + 3DShadowPopup |
+| highlight | MeshState + MeshHighlight |
+| camera_highlight | MeshState + CameraFocus + MeshHighlight |
+| visibility | MeshState + MeshVisibility |
+| animation | MeshState + AnimationMixin |
+| clipping | MeshState + ClippingPlaneMixin |
 
 > 자유 조합 예시: `highlightAnimation: MeshState+MeshHighlight+Animation`, `dataHud: MeshState+FieldRender`(컨테이너용)
 > 실제 Mixin 조합 결정은 produce-component Step 3에서 확정한다.

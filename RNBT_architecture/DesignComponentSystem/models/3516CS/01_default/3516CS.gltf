@@ -1,0 +1,435 @@
+{
+  "asset": {
+    "version": "2.0",
+    "generator": "babylon.js glTF exporter for 3dsmax 2023 v20220628.14"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "scale": [
+        1000.0,
+        1000.0,
+        1000.0
+      ],
+      "name": "root"
+    },
+    {
+      "children": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "translation": [
+        0.0,
+        9.536744E-10,
+        0.0
+      ],
+      "scale": [
+        0.01,
+        0.01,
+        0.01
+      ],
+      "name": "3516C"
+    },
+    {
+      "mesh": 0,
+      "translation": [
+        0.293700427,
+        0.0,
+        9.536743E-08
+      ],
+      "name": "3516B_05"
+    },
+    {
+      "mesh": 1,
+      "translation": [
+        -0.09138699,
+        0.03321743,
+        -0.04836793
+      ],
+      "rotation": [
+        0.5,
+        -0.5,
+        0.50000006,
+        0.49999994
+      ],
+      "name": "3516B_01"
+    },
+    {
+      "mesh": 2,
+      "translation": [
+        -1.90734866E-07,
+        0.0146162044,
+        -0.000440406817
+      ],
+      "name": "3516B_02_A"
+    },
+    {
+      "mesh": 3,
+      "translation": [
+        3.108188,
+        -0.0453040153,
+        -0.004727793
+      ],
+      "rotation": [
+        -0.159064457,
+        -0.159064472,
+        -0.6889837,
+        0.688983738
+      ],
+      "scale": [
+        0.9354163,
+        -0.9354163,
+        0.9354163
+      ],
+      "name": "3516B_Wing"
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 1,
+            "NORMAL": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 0,
+          "material": 0
+        }
+      ],
+      "name": "3516B_05"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 5,
+            "NORMAL": 6,
+            "TEXCOORD_0": 7
+          },
+          "indices": 4,
+          "material": 1
+        }
+      ],
+      "name": "3516B_01"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 9,
+            "NORMAL": 10,
+            "TEXCOORD_0": 11
+          },
+          "indices": 8,
+          "material": 2
+        }
+      ],
+      "name": "3516B_02_A"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 13,
+            "NORMAL": 14,
+            "TEXCOORD_0": 15
+          },
+          "indices": 12,
+          "material": 3
+        }
+      ],
+      "name": "3516B_Wing"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5123,
+      "count": 1722,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 826,
+      "max": [
+        3.074386,
+        1.49201107,
+        1.14301085
+      ],
+      "min": [
+        -3.07438612,
+        -1.49201107,
+        -1.14301085
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 9912,
+      "componentType": 5126,
+      "count": 826,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 826,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 3444,
+      "componentType": 5123,
+      "count": 19398,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 19824,
+      "componentType": 5126,
+      "count": 7573,
+      "max": [
+        1.02691925,
+        3.2766993,
+        1.44582236
+      ],
+      "min": [
+        -1.02691925,
+        -3.2766993,
+        -1.44582236
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 110700,
+      "componentType": 5126,
+      "count": 7573,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 6608,
+      "componentType": 5126,
+      "count": 7573,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 42240,
+      "componentType": 5123,
+      "count": 66,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 201576,
+      "componentType": 5126,
+      "count": 32,
+      "max": [
+        3.36808658,
+        1.28490651,
+        1.1001817
+      ],
+      "min": [
+        -3.36808634,
+        -1.28490651,
+        -1.1001817
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 201960,
+      "componentType": 5126,
+      "count": 32,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 67192,
+      "componentType": 5126,
+      "count": 32,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 42372,
+      "componentType": 5123,
+      "count": 10092,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 202344,
+      "componentType": 5126,
+      "count": 2538,
+      "max": [
+        1.07133329,
+        0.07224989,
+        1.05952692
+      ],
+      "min": [
+        -1.07133317,
+        -0.07225012,
+        -1.05952692
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 232800,
+      "componentType": 5126,
+      "count": 2538,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 67448,
+      "componentType": 5126,
+      "count": 2538,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 62556,
+      "name": "bufferViewScalar"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 62556,
+      "byteLength": 263256,
+      "byteStride": 12,
+      "name": "bufferViewFloatVec3"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 325812,
+      "byteLength": 87752,
+      "byteStride": 8,
+      "name": "bufferViewFloatVec2"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "3516CS.bin",
+      "byteLength": 413564
+    }
+  ],
+  "materials": [
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.450053632
+      },
+      "name": "3516B_05"
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 1
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.450053632
+      },
+      "name": "3516B_01"
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 2
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.450053632
+      },
+      "name": "lattice_A"
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 3
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.450053632
+      },
+      "name": "3516B_Wing"
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0,
+      "name": "3516B_05.jpg"
+    },
+    {
+      "sampler": 0,
+      "source": 1,
+      "name": "3516B_01.jpg"
+    },
+    {
+      "sampler": 0,
+      "source": 2,
+      "name": "lattice_A.png"
+    },
+    {
+      "sampler": 0,
+      "source": 3,
+      "name": "3516B_Wing.jpg"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/3516B_05.jpg"
+    },
+    {
+      "uri": "textures/3516B_01.jpg"
+    },
+    {
+      "uri": "textures/lattice_A.png"
+    },
+    {
+      "uri": "textures/3516B_Wing.jpg"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987
+    }
+  ]
+}

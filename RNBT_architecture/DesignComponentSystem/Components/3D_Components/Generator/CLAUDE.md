@@ -1,0 +1,21 @@
+# 컴포넌트 정보
+
+| 항목 | 값 |
+|------|-----|
+| 유형 | 개별 (1 GLTF = 1 Group "Generator" [자식 Mesh 3개: Generator_mesh_A, Generator_blade, Generator]) |
+| 기본 Mixin | MeshStateMixin |
+| meshName | Generator |
+
+## 장비 개요
+
+Generator는 비상/예비 전력을 공급하는 발전기를 표현하는 3D 컴포넌트이다. GLTF 내부는 루트 Group 노드 `Generator` 아래에 3개의 자식 Mesh(`Generator_mesh_A`, `Generator_blade`, `Generator`)로 구성된다. MeshStateMixin은 `getObjectByName('Generator')`로 루트 Group을 찾고, Group인 경우 자식 Mesh들을 traverse하여 색상을 일괄 적용한다(MeshStateMixin.js의 Group 지원 경로).
+
+> 참고: GLTF 내부에는 "Generator"라는 이름이 **Group 노드(Node 2)** 와 **자식 Mesh(Node 5)** 에 중복 존재한다. `getObjectByName`은 depth-first 첫 매치를 반환하므로 부모 Group이 먼저 매칭되며, Mixin은 material이 없는 Group으로 인식하여 자식 전체를 traverse 적용한다 — 이 동작이 "발전기 전체의 상태 색상 표시"라는 기능 목적과 일치한다.
+>
+> 모델 폴더에는 `textures/` 대신 `maps/`가 사용된다(GLTF 내부 URI도 `maps/`로 참조). 모델 변종 자산 구조상의 변이로, 컴포넌트 코드에는 영향 없음.
+
+## 세트 현황
+
+| 세트 | 상태 |
+|------|------|
+| Standard | 완료 |

@@ -1,0 +1,323 @@
+{
+  "asset": {
+    "version": "2.0",
+    "generator": "babylon.js glTF exporter for 3dsmax 2023 v20220628.14"
+  },
+  "extensionsUsed": [
+    "KHR_materials_clearcoat",
+    "KHR_materials_ior"
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "name": "TRANSFORMER"
+    },
+    {
+      "mesh": 0,
+      "translation": [
+        -0.00078125,
+        0.6123946,
+        0.000937500037
+      ],
+      "name": "Rectangle196"
+    },
+    {
+      "mesh": 1,
+      "rotation": [
+        -0.5,
+        -0.5,
+        0.5,
+        -0.5
+      ],
+      "name": "Rectangle195"
+    },
+    {
+      "mesh": 2,
+      "translation": [
+        -0.00078125,
+        -0.0292031262,
+        0.000937500037
+      ],
+      "name": "Line018"
+    },
+    {
+      "mesh": 3,
+      "translation": [
+        -0.00084375,
+        -0.02920508,
+        0.0279375017
+      ],
+      "name": "Circle087"
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 1,
+            "NORMAL": 2
+          },
+          "indices": 0,
+          "material": 0
+        }
+      ],
+      "name": "Rectangle196"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 4,
+            "NORMAL": 5
+          },
+          "indices": 3,
+          "material": 1
+        }
+      ],
+      "name": "Rectangle195"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 7,
+            "NORMAL": 8
+          },
+          "indices": 6,
+          "material": 0
+        }
+      ],
+      "name": "Line018"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 10,
+            "NORMAL": 11
+          },
+          "indices": 9,
+          "material": 2
+        }
+      ],
+      "name": "Circle087"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5123,
+      "count": 180,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 120,
+      "max": [
+        0.72355473,
+        0.153948739,
+        0.11454688
+      ],
+      "min": [
+        -0.72355473,
+        -0.153949231,
+        -0.114562511
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1440,
+      "componentType": 5126,
+      "count": 120,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 360,
+      "componentType": 5123,
+      "count": 402,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 2880,
+      "componentType": 5126,
+      "count": 284,
+      "max": [
+        0.4681715,
+        0.901912153,
+        0.895382166
+      ],
+      "min": [
+        -0.468187541,
+        -0.901897,
+        -0.895382166
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 6288,
+      "componentType": 5126,
+      "count": 284,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 1164,
+      "componentType": 5123,
+      "count": 2736,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 9696,
+      "componentType": 5126,
+      "count": 1896,
+      "max": [
+        0.837515652,
+        0.565527856,
+        0.236796886
+      ],
+      "min": [
+        -0.837515652,
+        -0.5655286,
+        -0.236812577
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 32448,
+      "componentType": 5126,
+      "count": 1896,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 6636,
+      "componentType": 5123,
+      "count": 603,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 55200,
+      "componentType": 5126,
+      "count": 219,
+      "max": [
+        0.8833438,
+        0.487649918,
+        0.310296237
+      ],
+      "min": [
+        -0.88332814,
+        -0.487649679,
+        -0.310281336
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 57828,
+      "componentType": 5126,
+      "count": 219,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 7844,
+      "name": "bufferViewScalar"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 7844,
+      "byteLength": 60456,
+      "byteStride": 12,
+      "name": "bufferViewFloatVec3"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "TRANSFORMER.bin",
+      "byteLength": 68300
+    }
+  ],
+  "materials": [
+    {
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.369668245,
+          0.357072264,
+          0.297836959,
+          1.0
+        ],
+        "roughnessFactor": 0.35
+      },
+      "name": "STEEL7",
+      "extensions": {
+        "KHR_materials_clearcoat": {
+          "clearcoatFactor": 0.7
+        },
+        "KHR_materials_ior": {
+          "ior": 1.0
+        }
+      }
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.052,
+          0.052,
+          0.052,
+          1.0
+        ],
+        "roughnessFactor": 0.5
+      },
+      "doubleSided": true,
+      "name": "black"
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.165876776,
+          0.01650906,
+          0.01650906,
+          1.0
+        ],
+        "roughnessFactor": 0.5
+      },
+      "name": "RED"
+    }
+  ]
+}

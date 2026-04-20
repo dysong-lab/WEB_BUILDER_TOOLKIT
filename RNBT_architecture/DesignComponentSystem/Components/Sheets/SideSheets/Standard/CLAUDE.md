@@ -2,9 +2,11 @@
 
 ## 기능 정의
 
-1. **측면 시트 표시/숨김** — `openSideSheet()`와 `closeSideSheet()`로 Shadow DOM 기반 측면 시트를 열고 닫는다
-2. **시트 내용 반영** — headline, supportingText, body, primaryLabel, secondaryLabel 데이터를 팝업 내부 요소에 반영한다
-3. **사용자 액션 이벤트** — scrim, 닫기, 보조 액션, 주요 액션 클릭 시 각각 대응 이벤트를 발행한다
+1. **시트 헤더 렌더링** — `sideSheetInfo` 토픽으로 수신한 단일 객체(headline/supporting)를 시트 상단 헤더 영역에 렌더
+2. **시트 액션 버튼 렌더링** — `sideSheetActions` 토픽으로 수신한 배열 데이터를 template 반복으로 시트 하단 액션 영역에 렌더
+3. **시트 표시/숨김** — ShadowPopupMixin으로 Shadow DOM 기반 Modal Side Sheet 관리 (scrim + 우측 앵커 시트 패널)
+4. **액션 버튼 클릭 이벤트** — 액션 버튼 클릭 시 `@sideSheetActionClicked` 발행
+5. **시트 닫기 이벤트** — 헤더의 닫기 아이콘 버튼 또는 scrim 클릭 시 `@sideSheetClose` 발행
 
 ---
 
@@ -12,96 +14,102 @@
 
 ### Mixin
 
-ShadowPopupMixin, FieldRenderMixin
+ShadowPopupMixin + FieldRenderMixin + ListRenderMixin
+
+- ShadowPopupMixin — Shadow DOM 기반 Side Sheet 오버레이 관리
+- FieldRenderMixin — 시트 헤더 콘텐츠 (headline, supporting) — `_popupScope`에 적용
+- ListRenderMixin — 시트 액션 버튼 배열 반복 — `_popupScope`에 적용
 
 ### cssSelectors
 
+#### ShadowPopupMixin (`this.shadowPopup`) — 시트 관리
+
 | KEY | VALUE | 용도 |
 |-----|-------|------|
-| template | `#side-sheet-popup-template` | Shadow DOM 템플릿 (규약) |
-| overlay | `.side-sheet__overlay` | scrim 및 정렬 컨테이너 |
-| surface | `.side-sheet__surface` | 측면 시트 패널 |
-| headline | `.side-sheet__headline` | 제목 텍스트 |
-| supportingText | `.side-sheet__supporting-text` | 보조 설명 |
-| body | `.side-sheet__body` | 본문 텍스트 |
-| closeBtn | `.side-sheet__close` | 닫기 버튼 |
-| secondaryBtn | `.side-sheet__secondary` | 보조 액션 버튼 |
-| primaryBtn | `.side-sheet__primary` | 주요 액션 버튼 |
+| template | `#side-sheet-popup-template` | 시트 HTML/CSS가 담긴 template (규약) |
+| closeBtn | `.side-sheet__close-btn` | 헤더 닫기 아이콘 버튼 — Shadow DOM 내부 닫기 트리거 |
+| scrim | `.side-sheet__scrim` | 배경 오버레이 — Shadow DOM 내부 닫기 트리거 |
+
+#### FieldRenderMixin (`this._popupScope.fieldRender`) — 시트 헤더
+
+| KEY | VALUE | 용도 |
+|-----|-------|------|
+| headline | `.side-sheet__headline` | 시트 제목 |
+| supporting | `.side-sheet__supporting` | 시트 보조 설명 |
+
+#### ListRenderMixin (`this._popupScope.listRender`) — 시트 액션
+
+| KEY | VALUE | 용도 |
+|-----|-------|------|
+| container | `.side-sheet__actions` | 항목이 추가될 부모 (규약) |
+| template | `#side-sheet-action-template` | cloneNode 대상 (규약) |
+| actionid | `.side-sheet__action` | 항목 식별 + 이벤트 매핑 |
+| actionLabel | `.side-sheet__action-label` | 액션 라벨 |
+| actionIcon | `.side-sheet__action-icon` | 액션 아이콘 (선택적) |
+
+### itemKey
+
+actionid (ListRenderMixin)
+
+### datasetAttrs
+
+| Mixin | KEY | VALUE |
+|-------|-----|-------|
+| ListRenderMixin | actionid | actionid |
 
 ### 구독 (subscriptions)
 
-해당 없음. 페이지에서 `openSideSheet({ response })` 또는 `closeSideSheet()`를 직접 호출한다.
+| topic | handler |
+|-------|---------|
+| sideSheetInfo | `this._renderSideSheetInfo` (래퍼) |
+| sideSheetActions | `this._renderSideSheetActions` (래퍼) |
+
+> Mixin은 `_popupScope` 아래에서 `onCreated` 콜백(Shadow DOM 최초 생성) 시점에 생성되므로, 구독 핸들러는 래퍼 메서드로 감싸 `show()` 이후에도 안전하게 동작하도록 한다.
 
 ### 이벤트 (customEvents)
 
-| 이벤트 | 선택자 | 발행 |
-|--------|--------|------|
-| click | `overlay` (popup selector) | `@sideSheetDismissed` |
-| click | `closeBtn` (popup selector) | `@sideSheetClosed` |
-| click | `secondaryBtn` (popup selector) | `@sideSheetSecondaryAction` |
-| click | `primaryBtn` (popup selector) | `@sideSheetPrimaryAction` |
-
-### 자체 속성
-
-| 속성 | 용도 |
-|------|------|
-| `this._popupScope` | Shadow DOM 내부 렌더링용 래퍼 |
-| `this._closeTimer` | 닫힘 애니메이션 타이머 |
-| `this._sheetMotionDuration` | 열림/닫힘 애니메이션 시간 |
+| 이벤트 | 선택자 | 발행 | 위치 |
+|--------|--------|------|------|
+| click | `closeBtn` (shadowPopup.cssSelectors) | `@sideSheetClose` | bindPopupEvents (Shadow DOM) |
+| click | `scrim` (shadowPopup.cssSelectors) | `@sideSheetClose` | bindPopupEvents (Shadow DOM) |
+| click | `.side-sheet__action` | `@sideSheetActionClicked` | bindPopupEvents (Shadow DOM) |
 
 ### 커스텀 메서드
 
 | 메서드 | 설명 |
 |--------|------|
-| `this.renderSideSheetContent(payload)` | payload의 response를 팝업 요소에 반영하고 빈 필드 hidden 상태를 동기화 |
-| `this.openSideSheet(payload)` | payload를 렌더링하고 측면 시트를 표시 |
-| `this.closeSideSheet()` | 애니메이션 후 측면 시트를 숨김 |
-
-### 데이터 계약
-
-```javascript
-{
-  headline: "Device details",
-  supportingText: "Optional context stays visible beside the main view.",
-  body: "The selected feeder is currently operating in supervised mode.",
-  primaryLabel: "Inspect",
-  secondaryLabel: "Dismiss"
-}
-```
+| `this._renderSideSheetInfo({ response })` | `_popupScope.fieldRender` 존재 시 헤더 데이터 렌더 |
+| `this._renderSideSheetActions({ response })` | `_popupScope.listRender` 존재 시 액션 배열 렌더 |
 
 ### 페이지 연결 사례
 
-```javascript
-pageEventBusHandlers['@devicePeekRequested'] = ({ targetInstance }) => {
-    targetInstance.openSideSheet({
-        response: {
-            headline: 'Device details',
-            supportingText: 'Optional context stays visible beside the main view.',
-            body: 'The selected feeder is currently operating in supervised mode.',
-            primaryLabel: 'Inspect',
-            secondaryLabel: 'Dismiss'
-        }
-    });
-};
+```
+[페이지] ──fetchAndPublish('sideSheetInfo', this)──> [SideSheets] 헤더 렌더링
+         publish data: { headline, supporting }
 
-pageEventBusHandlers['@sideSheetPrimaryAction'] = ({ targetInstance }) => {
-    targetInstance.closeSideSheet();
-};
+[페이지] ──fetchAndPublish('sideSheetActions', this)──> [SideSheets] 액션 렌더링
+         publish data: [{ actionid, actionLabel, actionIcon }, ...]
 
-pageEventBusHandlers['@sideSheetSecondaryAction'] = ({ targetInstance }) => {
-    targetInstance.closeSideSheet();
-};
+[페이지] ──targetInstance.shadowPopup.show()──> 시트 표시
+[페이지] ──targetInstance.shadowPopup.hide()──> 시트 숨김
 
-pageEventBusHandlers['@sideSheetDismissed'] = ({ targetInstance }) => {
-    targetInstance.closeSideSheet();
-};
+[SideSheets] ──@sideSheetClose──> [페이지] ──> shadowPopup.hide()
+[SideSheets] ──@sideSheetActionClicked──> [페이지] ──> actionid에 따라 분기 처리
 ```
 
 ### 디자인 변형
 
 | 파일 | 페르소나 | 설명 |
 |------|---------|------|
-| 01_refined | A: Refined Technical | 깊이감 있는 기술형 우측 시트 |
-| 02_material | B: Material Elevated | MD3 패널 감각의 라이트 측면 시트 |
-| 03_editorial | C: Minimal Editorial | 넓은 여백과 정적 타이포 중심의 측면 시트 |
-| 04_operational | D: Dark Operational | 밀집된 정보 확인용 관제형 측면 시트 |
+| 01_refined | A: Refined Technical | 다크 퍼플 tonal, Pretendard, 그라디언트 시트 + 라벤더 아이콘 버튼 |
+| 02_material | B: Material Elevated | 라이트 블루, Roboto, shadow elevation + 좌측 라운드 코너 |
+| 03_editorial | C: Minimal Editorial | 웜 그레이, 세리프 제목, 샤프한 직각 모서리 + 헤어라인 구분 |
+| 04_operational | D: Dark Operational | 다크 시안 컴팩트, JetBrains Mono, 얇은 테두리 + 밀집 레이아웃 |
+
+### MD3 근거
+
+- Side sheets show secondary content anchored to the side of the screen
+- Anatomy: scrim (modal) · container/panel · header (headline + close icon button) · divider · content · actions
+- Standard 변형은 **Modal side sheet** 형태로 구현한다: scrim으로 배경 상호작용을 막고, 닫기 아이콘 또는 scrim 클릭으로 닫기
+- 시트는 LTR 기준 화면 우측에 앵커한다
+- 출처: Material Design 3 — Side sheets overview / guidelines, Material Components Android SideSheet 문서 (WebSearch 확인, 2026-04-19)
