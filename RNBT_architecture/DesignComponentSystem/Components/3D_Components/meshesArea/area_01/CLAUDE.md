@@ -13,3 +13,4 @@
 | Standard | 완료 |
 | Advanced/camera | 완료 |
 | Advanced/popup | 완료 |
+| Advanced/highlight | 완료 |

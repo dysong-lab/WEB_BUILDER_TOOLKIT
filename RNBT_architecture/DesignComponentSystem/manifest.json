@@ -3232,6 +3232,13 @@
                   "previews": [
                     { "label": "01 default", "path": "Components/3D_Components/meshesArea/area_01/Advanced/popup/preview/01_default.html" }
                   ]
+                },
+                {
+                  "name": "highlight",
+                  "spec": "Components/3D_Components/meshesArea/area_01/Advanced/highlight/CLAUDE.md",
+                  "previews": [
+                    { "label": "01 default", "path": "Components/3D_Components/meshesArea/area_01/Advanced/highlight/preview/01_default.html" }
+                  ]
                 }
               ]
             }
