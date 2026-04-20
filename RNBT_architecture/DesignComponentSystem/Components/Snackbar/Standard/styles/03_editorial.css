@@ -1,0 +1,57 @@
+.snackbar--editorial {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  width: min(100%, 480px);
+  padding: 18px 20px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, #fff5ea, #f1e5d5);
+  border: 1px solid rgba(112, 76, 42, 0.18);
+  color: #281b12;
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+.snackbar--editorial[data-open="false"] {
+  transform: translateY(10px);
+  opacity: 0.32;
+}
+
+.snackbar--editorial .snackbar__content { flex: 1 1 auto; }
+.snackbar--editorial .snackbar__message {
+  margin: 0;
+  font: 500 19px/1.3 Georgia, "Times New Roman", serif;
+}
+
+.snackbar--editorial .snackbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.snackbar--editorial .snackbar__action,
+.snackbar--editorial .snackbar__dismiss {
+  border: 0;
+  cursor: pointer;
+}
+
+.snackbar--editorial .snackbar__action {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(142, 82, 33, 0.12);
+  color: #6d3515;
+  font: 700 12px/1 "SUIT", sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.snackbar--editorial .snackbar__dismiss {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(40, 27, 18, 0.08);
+  color: #503222;
+  font-size: 14px;
+}

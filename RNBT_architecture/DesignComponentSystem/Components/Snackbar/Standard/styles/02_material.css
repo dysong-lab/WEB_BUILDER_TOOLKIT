@@ -1,0 +1,56 @@
+.snackbar--material {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: min(100%, 460px);
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: #f4effb;
+  border: 1px solid #d8d1e8;
+  box-shadow: 0 10px 24px rgba(33, 28, 48, 0.08);
+  color: #1d1b20;
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+.snackbar--material[data-open="false"] {
+  transform: translateY(10px);
+  opacity: 0.32;
+}
+
+.snackbar--material .snackbar__content { flex: 1 1 auto; }
+.snackbar--material .snackbar__message {
+  margin: 0;
+  font: 500 14px/1.45 "SUIT", "Pretendard", sans-serif;
+}
+
+.snackbar--material .snackbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.snackbar--material .snackbar__action,
+.snackbar--material .snackbar__dismiss {
+  border: 0;
+  cursor: pointer;
+}
+
+.snackbar--material .snackbar__action {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #e8def8;
+  color: #4f378b;
+  font: 700 12px/1 "SUIT", sans-serif;
+}
+
+.snackbar--material .snackbar__dismiss {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ece6f0;
+  color: #625b71;
+  font-size: 14px;
+}

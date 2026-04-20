@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Snackbar/Standard — 01_refined</title>
+    <script src="../../../../preview_runtime.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+        flex-wrap: wrap;
+        padding: 48px;
+        background: radial-gradient(circle at top, #133350, #08111a 62%);
+      }
+      .preview-panel { display: flex; flex-direction: column; gap: 16px; }
+      .preview-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+      .preview-actions button {
+        padding: 10px 14px;
+        border: 0;
+        border-radius: 999px;
+        cursor: pointer;
+        background: rgba(113, 223, 255, 0.16);
+        color: #eaf7ff;
+      }
+      #event-log {
+        width: 340px;
+        min-height: 220px;
+        padding: 16px;
+        border-radius: 16px;
+        background: rgba(4, 12, 20, 0.72);
+        border: 1px solid rgba(124, 184, 226, 0.24);
+        color: #dcefff;
+        font: 12px/1.5 monospace;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-panel">
+      <div class="preview-actions">
+        <button id="show-success">Show success</button>
+        <button id="show-danger">Show danger</button>
+        <button id="hide-snackbar">Hide</button>
+      </div>
+      <div id="snackbar-refined"></div>
+    </div>
+    <pre id="event-log">[ready] waiting for snackbar events</pre>
+    <script>
+      (async () => {
+        await loadComponentAssets("snackbar-refined", "../views/01_refined.html", "../styles/01_refined.css");
+        const instance = { id: "snackbar-refined", appendElement: document.getElementById("snackbar-refined") };
+        const log = document.getElementById("event-log");
+        const appendLog = message => {
+          log.textContent = `${message}\n${log.textContent}`.trim();
+          console.log(message);
+        };
+
+        instance.root = instance.appendElement.querySelector(".snackbar");
+        instance.message = instance.appendElement.querySelector(".snackbar__message");
+        instance.action = instance.appendElement.querySelector(".snackbar__action");
+        instance.actionLabel = instance.appendElement.querySelector(".snackbar__action-label");
+        instance.dismiss = instance.appendElement.querySelector(".snackbar__dismiss");
+        instance.timer = null;
+
+        instance.show = payload => {
+          if (instance.timer) clearTimeout(instance.timer);
+          instance.root.dataset.tone = payload.tone || "accent";
+          instance.root.dataset.open = "true";
+          instance.root.dataset.hasAction = payload.actionLabel ? "true" : "false";
+          instance.root.setAttribute("aria-hidden", "false");
+          instance.message.textContent = payload.message || "";
+          instance.actionLabel.textContent = payload.actionLabel || "";
+          instance.action.hidden = !payload.actionLabel;
+          appendLog(`@snackbarShown tone=${instance.root.dataset.tone} message="${instance.message.textContent}"`);
+          if (payload.duration > 0) {
+            instance.timer = setTimeout(() => {
+              instance.hide("timeout");
+            }, payload.duration);
+          }
+        };
+
+        instance.hide = reason => {
+          if (instance.timer) clearTimeout(instance.timer);
+          instance.root.dataset.open = "false";
+          instance.root.setAttribute("aria-hidden", "true");
+          appendLog(`@snackbarHidden reason=${reason}`);
+        };
+
+        instance.action.addEventListener("click", () => appendLog("@snackbarActionClicked"));
+        instance.dismiss.addEventListener("click", () => {
+          appendLog("@snackbarDismissed");
+          instance.hide("dismiss");
+        });
+
+        document.getElementById("show-success").addEventListener("click", () => {
+          instance.show({ message: "Configuration synced with the edge gateway.", actionLabel: "Undo", tone: "success", duration: 3200 });
+        });
+        document.getElementById("show-danger").addEventListener("click", () => {
+          instance.show({ message: "Failed to reach the upstream relay. Retry queued.", actionLabel: "Retry", tone: "danger", duration: 0 });
+        });
+        document.getElementById("hide-snackbar").addEventListener("click", () => instance.hide("manual"));
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Snackbar/Standard — 04_operational</title>
+    <script src="../../../../preview_runtime.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+        flex-wrap: wrap;
+        padding: 48px;
+        background: #090d11;
+      }
+      .preview-panel { display: flex; flex-direction: column; gap: 16px; }
+      .preview-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+      .preview-actions button {
+        padding: 10px 14px;
+        border: 0;
+        border-radius: 8px;
+        cursor: pointer;
+        background: rgba(142, 255, 97, 0.16);
+        color: #d8ffbf;
+      }
+      #event-log {
+        width: 340px;
+        min-height: 220px;
+        padding: 16px;
+        border-radius: 12px;
+        background: rgba(7, 11, 14, 0.86);
+        border: 1px solid rgba(141, 177, 101, 0.22);
+        color: #dff2c1;
+        font: 12px/1.5 monospace;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-panel">
+      <div class="preview-actions">
+        <button id="show-warning">Show warning</button>
+        <button id="show-danger">Show danger</button>
+        <button id="hide-snackbar">Hide</button>
+      </div>
+      <div id="snackbar-operational"></div>
+    </div>
+    <pre id="event-log">[ready] waiting for snackbar events</pre>
+    <script>
+      (async () => {
+        await loadComponentAssets("snackbar-operational", "../views/04_operational.html", "../styles/04_operational.css");
+        const root = document.querySelector("#snackbar-operational .snackbar");
+        const message = root.querySelector(".snackbar__message");
+        const action = root.querySelector(".snackbar__action");
+        const actionLabel = root.querySelector(".snackbar__action-label");
+        const dismiss = root.querySelector(".snackbar__dismiss");
+        const log = document.getElementById("event-log");
+        let timer = null;
+        const appendLog = text => {
+          log.textContent = `${text}\n${log.textContent}`.trim();
+          console.log(text);
+        };
+        const show = payload => {
+          if (timer) clearTimeout(timer);
+          root.dataset.tone = payload.tone || "warning";
+          root.dataset.open = "true";
+          root.dataset.hasAction = payload.actionLabel ? "true" : "false";
+          root.setAttribute("aria-hidden", "false");
+          message.textContent = payload.message || "";
+          actionLabel.textContent = payload.actionLabel || "";
+          action.hidden = !payload.actionLabel;
+          appendLog(`@snackbarShown tone=${root.dataset.tone} message="${message.textContent}"`);
+          if (payload.duration > 0) {
+            timer = setTimeout(() => hide("timeout"), payload.duration);
+          }
+        };
+        const hide = reason => {
+          if (timer) clearTimeout(timer);
+          root.dataset.open = "false";
+          root.setAttribute("aria-hidden", "true");
+          appendLog(`@snackbarHidden reason=${reason}`);
+        };
+        action.addEventListener("click", () => appendLog("@snackbarActionClicked"));
+        dismiss.addEventListener("click", () => {
+          appendLog("@snackbarDismissed");
+          hide("dismiss");
+        });
+        document.getElementById("show-warning").addEventListener("click", () => show({ message: "Generator voltage left the approved band.", actionLabel: "Acknowledge", tone: "warning", duration: 0 }));
+        document.getElementById("show-danger").addEventListener("click", () => show({ message: "Cooling loop 2 has stopped responding. Fallback engaged.", actionLabel: "Inspect", tone: "danger", duration: 0 }));
+        document.getElementById("hide-snackbar").addEventListener("click", () => hide("manual"));
+      })();
+    </script>
+  </body>
+</html>

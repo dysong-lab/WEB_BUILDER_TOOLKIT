@@ -1,0 +1,66 @@
+.snackbar--refined {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  width: min(100%, 460px);
+  padding: 16px 18px;
+  border-radius: 22px;
+  border: 1px solid rgba(103, 198, 255, 0.18);
+  background:
+    radial-gradient(circle at top left, rgba(110, 224, 255, 0.18), transparent 34%),
+    linear-gradient(180deg, rgba(12, 24, 40, 0.96), rgba(7, 14, 24, 0.92));
+  box-shadow: 0 18px 32px rgba(0, 0, 0, 0.28);
+  color: #eff8ff;
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+.snackbar--refined[data-open="false"] {
+  transform: translateY(12px);
+  opacity: 0.3;
+}
+
+.snackbar--refined[data-tone="success"] { border-color: rgba(109, 237, 180, 0.26); }
+.snackbar--refined[data-tone="warning"] { border-color: rgba(255, 192, 104, 0.3); }
+.snackbar--refined[data-tone="danger"] { border-color: rgba(255, 112, 124, 0.32); }
+
+.snackbar--refined .snackbar__content {
+  flex: 1 1 auto;
+}
+
+.snackbar--refined .snackbar__message {
+  margin: 0;
+  font: 500 14px/1.5 "SUIT", "Pretendard", sans-serif;
+}
+
+.snackbar--refined .snackbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.snackbar--refined .snackbar__action,
+.snackbar--refined .snackbar__dismiss {
+  border: 0;
+  cursor: pointer;
+  color: inherit;
+}
+
+.snackbar--refined .snackbar__action {
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(108, 210, 255, 0.16);
+  font: 700 12px/1 "SUIT", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.snackbar--refined .snackbar__dismiss {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 14px;
+}
