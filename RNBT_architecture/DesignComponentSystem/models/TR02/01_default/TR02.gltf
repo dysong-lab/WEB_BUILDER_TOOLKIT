@@ -1,0 +1,152 @@
+{
+  "asset": {
+    "version": "2.0",
+    "generator": "babylon.js glTF exporter for 3dsmax 2023 v20240312.5"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "scale": [
+        1000.0,
+        1000.0,
+        1000.0
+      ],
+      "name": "root"
+    },
+    {
+      "mesh": 0,
+      "translation": [
+        0.0,
+        0.0,
+        1.90734872E-09
+      ],
+      "name": "TR"
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 1,
+            "NORMAL": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 0,
+          "material": 0
+        }
+      ],
+      "name": "TR"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5123,
+      "count": 1728,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 1050,
+      "max": [
+        0.0100000128,
+        0.0137921721,
+        0.0129992515
+      ],
+      "min": [
+        -0.0100000119,
+        -0.0137921721,
+        -0.0129992515
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 12600,
+      "componentType": 5126,
+      "count": 1050,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 1050,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 3456,
+      "name": "bufferViewScalar"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 3456,
+      "byteLength": 25200,
+      "byteStride": 12,
+      "name": "bufferViewFloatVec3"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 28656,
+      "byteLength": 8400,
+      "byteStride": 8,
+      "name": "bufferViewFloatVec2"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "TR02.bin",
+      "byteLength": 37056
+    }
+  ],
+  "materials": [
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0.0
+      },
+      "name": "TR",
+      "extras": {
+        "babylonSeparateCullingPass": false
+      }
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0,
+      "name": "2FS060.jpg"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/2FS060.jpg"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987
+    }
+  ]
+}

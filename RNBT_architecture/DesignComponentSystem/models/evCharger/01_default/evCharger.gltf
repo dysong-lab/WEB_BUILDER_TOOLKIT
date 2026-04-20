@@ -1,0 +1,156 @@
+{
+  "asset": {
+    "version": "2.0",
+    "generator": "babylon.js glTF exporter for 3dsmax 2023 v20230922.2"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "scale": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "name": "root"
+    },
+    {
+      "mesh": 0,
+      "rotation": [
+        0.7071068,
+        2.52254247E-16,
+        -2.522547E-16,
+        0.7071067
+      ],
+      "scale": [
+        0.817497969,
+        1.0,
+        0.817497969
+      ],
+      "name": "evCharger "
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 1,
+            "NORMAL": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 0,
+          "material": 0
+        }
+      ],
+      "name": "evCharger "
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5123,
+      "count": 1140,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 436,
+      "max": [
+        0.02011121,
+        0.0147550069,
+        0.02686102
+      ],
+      "min": [
+        -0.02011121,
+        0.00013683796,
+        -0.0272171982
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 5232,
+      "componentType": 5126,
+      "count": 436,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 436,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 2280,
+      "name": "bufferViewScalar"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 2280,
+      "byteLength": 10464,
+      "byteStride": 12,
+      "name": "bufferViewFloatVec3"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 12744,
+      "byteLength": 3488,
+      "byteStride": 8,
+      "name": "bufferViewFloatVec2"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "evCharger.bin",
+      "byteLength": 16232
+    }
+  ],
+  "materials": [
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.450053632
+      },
+      "name": "Material #464"
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0,
+      "name": "evCharger.jpg"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/evCharger.jpg"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987
+    }
+  ]
+}

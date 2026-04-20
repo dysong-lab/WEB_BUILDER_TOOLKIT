@@ -1,0 +1,216 @@
+{
+  "asset": {
+    "version": "2.0",
+    "generator": "babylon.js glTF exporter for 3dsmax 2023 v20221031.2"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "scale": [
+        1000.0,
+        1000.0,
+        1000.0
+      ],
+      "name": "root"
+    },
+    {
+      "mesh": 0,
+      "name": "untitled"
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 1,
+            "NORMAL": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 0,
+          "material": 0
+        },
+        {
+          "attributes": {
+            "POSITION": 5,
+            "NORMAL": 6,
+            "TEXCOORD_0": 7
+          },
+          "indices": 4,
+          "material": 1
+        }
+      ],
+      "name": "untitled"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5123,
+      "count": 936,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 384,
+      "max": [
+        0.00147758285,
+        -0.000238644,
+        0.000658676843
+      ],
+      "min": [
+        -0.000517317967,
+        -0.0005550376,
+        0.000608253467
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 4608,
+      "componentType": 5126,
+      "count": 384,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 384,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 1872,
+      "componentType": 5123,
+      "count": 2238,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 9216,
+      "componentType": 5126,
+      "count": 838,
+      "max": [
+        0.00175000308,
+        0.00113500014,
+        0.000646411267
+      ],
+      "min": [
+        -0.00175000308,
+        -0.00113500014,
+        -0.000658676843
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 19272,
+      "componentType": 5126,
+      "count": 838,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 3072,
+      "componentType": 5126,
+      "count": 838,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 6348,
+      "name": "bufferViewScalar"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 6348,
+      "byteLength": 29328,
+      "byteStride": 12,
+      "name": "bufferViewFloatVec3"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 35676,
+      "byteLength": 9776,
+      "byteStride": 8,
+      "name": "bufferViewFloatVec2"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "vesda.bin",
+      "byteLength": 45452
+    }
+  ],
+  "materials": [
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": -2.02441
+      },
+      "doubleSided": true,
+      "name": "untitled_Material__342515829"
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 1
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": -2.02441
+      },
+      "doubleSided": true,
+      "name": "untitled_Material__342515809"
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0,
+      "name": "metal_vesda.jpg"
+    },
+    {
+      "sampler": 0,
+      "source": 1,
+      "name": "win_vesda.jpg"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/metal_vesda.jpg"
+    },
+    {
+      "uri": "textures/win_vesda.jpg"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987
+    }
+  ]
+}

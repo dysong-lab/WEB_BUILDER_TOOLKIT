@@ -1,0 +1,150 @@
+{
+  "asset": {
+    "version": "2.0",
+    "generator": "babylon.js glTF exporter for 3dsmax 2023 v20221031.2"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "scale": [
+        1000.0,
+        1000.0,
+        1000.0
+      ],
+      "name": "root"
+    },
+    {
+      "mesh": 0,
+      "scale": [
+        0.03855687,
+        0.03855687,
+        0.03855687
+      ],
+      "name": "metalTree_poly01"
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 1,
+            "NORMAL": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 0,
+          "material": 0
+        }
+      ],
+      "name": "metalTree_poly01"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5123,
+      "count": 270,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 260,
+      "max": [
+        0.5791963,
+        1.72666514,
+        0.547282457
+      ],
+      "min": [
+        -0.5791736,
+        0.0,
+        -0.5543943
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 3120,
+      "componentType": 5126,
+      "count": 260,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 260,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 540,
+      "name": "bufferViewScalar"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 540,
+      "byteLength": 6240,
+      "byteStride": 12,
+      "name": "bufferViewFloatVec3"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 6780,
+      "byteLength": 2080,
+      "byteStride": 8,
+      "name": "bufferViewFloatVec2"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "Tree_poly01.bin",
+      "byteLength": 8860
+    }
+  ],
+  "materials": [
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.450053632
+      },
+      "name": "Material #246"
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0,
+      "name": "Tree_poly01.jpg"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/Tree_poly01.jpg"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987
+    }
+  ]
+}

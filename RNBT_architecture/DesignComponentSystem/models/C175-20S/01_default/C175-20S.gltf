@@ -1,0 +1,429 @@
+{
+  "asset": {
+    "version": "2.0",
+    "generator": "babylon.js glTF exporter for 3dsmax 2023 v20220628.14"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "scale": [
+        1000.0,
+        1000.0,
+        1000.0
+      ],
+      "name": "root"
+    },
+    {
+      "children": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "translation": [
+        3.81469745E-09,
+        9.536744E-10,
+        -1.00135811E-08
+      ],
+      "scale": [
+        0.01,
+        0.01,
+        0.01
+      ],
+      "name": "C175_20"
+    },
+    {
+      "mesh": 0,
+      "translation": [
+        0.6807753,
+        0.005392552,
+        0.00250000972
+      ],
+      "name": "C175_20_01_A"
+    },
+    {
+      "mesh": 1,
+      "translation": [
+        0.0543870963,
+        -9.536743E-08,
+        -1.43051153E-07
+      ],
+      "name": "C175_20_02"
+    },
+    {
+      "mesh": 2,
+      "translation": [
+        -0.243552417,
+        -0.0618369132,
+        0.0220415611
+      ],
+      "name": "C175_20_03"
+    },
+    {
+      "mesh": 3,
+      "translation": [
+        3.88408923,
+        0.0579616576,
+        -0.004290724
+      ],
+      "rotation": [
+        -0.159064472,
+        -0.159064457,
+        -0.6889837,
+        0.688983738
+      ],
+      "scale": [
+        1.18122363,
+        -1.18122351,
+        1.18122363
+      ],
+      "name": "C175_20_Wing"
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 1,
+            "NORMAL": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 0,
+          "material": 0
+        }
+      ],
+      "name": "C175_20_01_A"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 5,
+            "NORMAL": 6,
+            "TEXCOORD_0": 7
+          },
+          "indices": 4,
+          "material": 1
+        }
+      ],
+      "name": "C175_20_02"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 9,
+            "NORMAL": 10,
+            "TEXCOORD_0": 11
+          },
+          "indices": 8,
+          "material": 2
+        }
+      ],
+      "name": "C175_20_03"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 13,
+            "NORMAL": 14,
+            "TEXCOORD_0": 15
+          },
+          "indices": 12,
+          "material": 3
+        }
+      ],
+      "name": "C175_20_Wing"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5123,
+      "count": 84,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 60,
+      "max": [
+        3.4734652,
+        1.45871294,
+        1.4089644
+      ],
+      "min": [
+        -3.473465,
+        -1.45871282,
+        -1.408963
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 720,
+      "componentType": 5126,
+      "count": 60,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 60,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 168,
+      "componentType": 5123,
+      "count": 888,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1440,
+      "componentType": 5126,
+      "count": 502,
+      "max": [
+        4.11074543,
+        1.87720728,
+        1.58144641
+      ],
+      "min": [
+        -4.110746,
+        -1.87720728,
+        -1.58144534
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 7464,
+      "componentType": 5126,
+      "count": 502,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 480,
+      "componentType": 5126,
+      "count": 502,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 1944,
+      "componentType": 5123,
+      "count": 30942,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 13488,
+      "componentType": 5126,
+      "count": 10971,
+      "max": [
+        3.92158127,
+        1.77470171,
+        1.17440486
+      ],
+      "min": [
+        -3.921581,
+        -1.77470171,
+        -1.17440534
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 145140,
+      "componentType": 5126,
+      "count": 10971,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 4496,
+      "componentType": 5126,
+      "count": 10971,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 63828,
+      "componentType": 5123,
+      "count": 10092,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 276792,
+      "componentType": 5126,
+      "count": 2538,
+      "max": [
+        1.07133317,
+        0.0722498,
+        1.05952692
+      ],
+      "min": [
+        -1.07133329,
+        -0.07225021,
+        -1.05952692
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 307248,
+      "componentType": 5126,
+      "count": 2538,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 92264,
+      "componentType": 5126,
+      "count": 2538,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 84012,
+      "name": "bufferViewScalar"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 84012,
+      "byteLength": 337704,
+      "byteStride": 12,
+      "name": "bufferViewFloatVec3"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 421716,
+      "byteLength": 112568,
+      "byteStride": 8,
+      "name": "bufferViewFloatVec2"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "C175-20S.bin",
+      "byteLength": 534284
+    }
+  ],
+  "materials": [
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.450053632
+      },
+      "name": "lattice_A"
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 1
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.450053632
+      },
+      "name": "C175_20_02"
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 2
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.450053632
+      },
+      "name": "C175_20_03"
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 3
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.450053632
+      },
+      "name": "C175_20_Wing"
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0,
+      "name": "lattice_A.png"
+    },
+    {
+      "sampler": 0,
+      "source": 1,
+      "name": "C175_20_02.jpg"
+    },
+    {
+      "sampler": 0,
+      "source": 2,
+      "name": "C175_20_03.jpg"
+    },
+    {
+      "sampler": 0,
+      "source": 3,
+      "name": "C175_20_Wing.jpg"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/lattice_A.png"
+    },
+    {
+      "uri": "textures/C175_20_02.jpg"
+    },
+    {
+      "uri": "textures/C175_20_03.jpg"
+    },
+    {
+      "uri": "textures/C175_20_Wing.jpg"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987
+    }
+  ]
+}

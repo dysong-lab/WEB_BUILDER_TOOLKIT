@@ -1,0 +1,208 @@
+{
+  "asset": {
+    "version": "2.0",
+    "generator": "babylon.js glTF exporter for 3dsmax 2023 v20220628.14"
+  },
+  "extensionsUsed": [
+    "KHR_materials_clearcoat",
+    "KHR_materials_ior"
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1,
+        2
+      ],
+      "name": "THERMALCAM"
+    },
+    {
+      "mesh": 0,
+      "translation": [
+        0.00025,
+        0.0554941446,
+        0.039
+      ],
+      "rotation": [
+        0.7071068,
+        0.0,
+        0.0,
+        0.7071067
+      ],
+      "name": "Circle085"
+    },
+    {
+      "mesh": 1,
+      "translation": [
+        0.0,
+        0.0,
+        -0.002125
+      ],
+      "rotation": [
+        0.7071068,
+        0.0,
+        0.0,
+        0.7071067
+      ],
+      "name": "Circle084"
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 1,
+            "NORMAL": 2
+          },
+          "indices": 0,
+          "material": 0
+        }
+      ],
+      "name": "Circle085"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 4,
+            "NORMAL": 5
+          },
+          "indices": 3,
+          "material": 1
+        }
+      ],
+      "name": "Circle084"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5123,
+      "count": 174,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 60,
+      "max": [
+        0.0134843756,
+        0.00215625018,
+        0.0134843765
+      ],
+      "min": [
+        -0.0134843756,
+        -0.00214062515,
+        -0.0134843756
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 720,
+      "componentType": 5126,
+      "count": 60,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 348,
+      "componentType": 5123,
+      "count": 1596,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1440,
+      "componentType": 5126,
+      "count": 913,
+      "max": [
+        0.0585003532,
+        0.039000012,
+        0.118600585
+      ],
+      "min": [
+        -0.0585000031,
+        -0.03901621,
+        -0.118599631
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 12396,
+      "componentType": 5126,
+      "count": 913,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 3540,
+      "name": "bufferViewScalar"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 3540,
+      "byteLength": 23352,
+      "byteStride": 12,
+      "name": "bufferViewFloatVec3"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "THERMALCAM.bin",
+      "byteLength": 26892
+    }
+  ],
+  "materials": [
+    {
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.369668245,
+          0.357072264,
+          0.297836959,
+          1.0
+        ],
+        "roughnessFactor": 0.35
+      },
+      "name": "STEEL7",
+      "extensions": {
+        "KHR_materials_clearcoat": {
+          "clearcoatFactor": 0.7
+        },
+        "KHR_materials_ior": {
+          "ior": 1.0
+        }
+      }
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.052,
+          0.052,
+          0.052,
+          1.0
+        ],
+        "roughnessFactor": 0.5
+      },
+      "doubleSided": true,
+      "name": "black"
+    }
+  ]
+}

@@ -1,0 +1,242 @@
+{
+  "asset": {
+    "version": "2.0",
+    "generator": "babylon.js glTF exporter for 3dsmax 2023 v20240312.5"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1,
+        2
+      ],
+      "scale": [
+        1000.0,
+        1000.0,
+        1000.0
+      ],
+      "name": "root"
+    },
+    {
+      "mesh": 0,
+      "translation": [
+        0.0,
+        -9.536744E-10,
+        -0.000266180054
+      ],
+      "name": "LV01"
+    },
+    {
+      "mesh": 1,
+      "translation": [
+        0.0,
+        -0.003619713,
+        0.00933641847
+      ],
+      "name": "glass_A"
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 1,
+            "NORMAL": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 0,
+          "material": 1
+        }
+      ],
+      "name": "LV01"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 5,
+            "NORMAL": 6,
+            "TEXCOORD_0": 7
+          },
+          "indices": 4,
+          "material": 0
+        }
+      ],
+      "name": "glass_A"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5123,
+      "count": 1236,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 797,
+      "max": [
+        0.00400006725,
+        0.011918759,
+        0.009599274
+      ],
+      "min": [
+        -0.004000043,
+        -0.011918759,
+        -0.009599275
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 9564,
+      "componentType": 5126,
+      "count": 797,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 797,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 2472,
+      "componentType": 5123,
+      "count": 426,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 19128,
+      "componentType": 5126,
+      "count": 128,
+      "max": [
+        0.00175678718,
+        0.00192607,
+        0.000529036333
+      ],
+      "min": [
+        -0.00175677007,
+        -0.0019260702,
+        -0.000529036
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 20664,
+      "componentType": 5126,
+      "count": 128,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 6376,
+      "componentType": 5126,
+      "count": 128,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 3324,
+      "name": "bufferViewScalar"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 3324,
+      "byteLength": 22200,
+      "byteStride": 12,
+      "name": "bufferViewFloatVec3"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 25524,
+      "byteLength": 7400,
+      "byteStride": 8,
+      "name": "bufferViewFloatVec2"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "LV01.bin",
+      "byteLength": 32924
+    }
+  ],
+  "materials": [
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.8
+      },
+      "alphaMode": "BLEND",
+      "doubleSided": true,
+      "name": "glass_A",
+      "extras": {
+        "babylonSeparateCullingPass": false
+      }
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 1
+        },
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.1
+      },
+      "name": "LV01",
+      "extras": {
+        "babylonSeparateCullingPass": false
+      }
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0,
+      "name": "glass_A.png"
+    },
+    {
+      "sampler": 0,
+      "source": 1,
+      "name": "1FS020.jpg"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/glass_A.png"
+    },
+    {
+      "uri": "textures/1FS020.jpg"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987
+    }
+  ]
+}

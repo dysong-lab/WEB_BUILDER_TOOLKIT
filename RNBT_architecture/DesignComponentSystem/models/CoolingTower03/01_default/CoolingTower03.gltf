@@ -1,0 +1,241 @@
+{
+  "asset": {
+    "version": "2.0",
+    "generator": "babylon.js glTF exporter for 3dsmax 2023 v20240312.5"
+  },
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1,
+        2
+      ],
+      "scale": [
+        1000.0,
+        1000.0,
+        1000.0
+      ],
+      "name": "root"
+    },
+    {
+      "mesh": 0,
+      "translation": [
+        0.008217011,
+        -0.009300964,
+        0.007724976
+      ],
+      "name": "Line2_A"
+    },
+    {
+      "mesh": 1,
+      "translation": [
+        0.0,
+        -8.630741E-10,
+        0.0
+      ],
+      "name": "Coolingtower"
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 1,
+            "NORMAL": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 0,
+          "material": 1
+        }
+      ],
+      "name": "Line2_A"
+    },
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 5,
+            "NORMAL": 6,
+            "TEXCOORD_0": 7
+          },
+          "indices": 4,
+          "material": 0
+        }
+      ],
+      "name": "Coolingtower"
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "componentType": 5123,
+      "count": 48,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 48,
+      "max": [
+        0.0173689146,
+        0.00734634558,
+        6.034334E-10
+      ],
+      "min": [
+        -0.0173689164,
+        -0.00734634558,
+        -9.228746E-10
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 576,
+      "componentType": 5126,
+      "count": 48,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 48,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 96,
+      "componentType": 5123,
+      "count": 8970,
+      "type": "SCALAR",
+      "name": "accessorIndices"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1152,
+      "componentType": 5126,
+      "count": 8970,
+      "max": [
+        0.0264669824,
+        0.0185,
+        0.00777500356
+      ],
+      "min": [
+        -0.0264669824,
+        -0.0184999984,
+        -0.00777500449
+      ],
+      "type": "VEC3",
+      "name": "accessorPositions"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 108792,
+      "componentType": 5126,
+      "count": 8970,
+      "type": "VEC3",
+      "name": "accessorNormals"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 384,
+      "componentType": 5126,
+      "count": 8970,
+      "type": "VEC2",
+      "name": "accessorUVs"
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 18036,
+      "name": "bufferViewScalar"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 18036,
+      "byteLength": 216432,
+      "byteStride": 12,
+      "name": "bufferViewFloatVec3"
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 234468,
+      "byteLength": 72144,
+      "byteStride": 8,
+      "name": "bufferViewFloatVec2"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "CoolingTower03.bin",
+      "byteLength": 306612
+    }
+  ],
+  "materials": [
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0.3,
+        "roughnessFactor": 0.5
+      },
+      "doubleSided": true,
+      "name": "Coolingtower",
+      "extras": {
+        "babylonSeparateCullingPass": false
+      }
+    },
+    {
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 1
+        },
+        "metallicFactor": 0.0
+      },
+      "alphaMode": "BLEND",
+      "name": "Line2_A",
+      "extras": {
+        "babylonSeparateCullingPass": false
+      }
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0,
+      "name": "Coolingtower.jpg"
+    },
+    {
+      "sampler": 0,
+      "source": 1,
+      "name": "Line2_A.png"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/Coolingtower.jpg"
+    },
+    {
+      "uri": "textures/Line2_A.png"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987
+    }
+  ]
+}
