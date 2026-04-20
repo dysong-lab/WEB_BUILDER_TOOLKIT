@@ -33,8 +33,17 @@ this.cssSelectors = {
   trigger: ".tooltip-host__trigger",
 };
 
+this._triggerElement = null;
 this._triggerEnterHandler = null;
 this._triggerLeaveHandler = null;
+this._outsidePointerHandler = null;
+
+this.ensureTooltipPopup = function () {
+  if (!this._popupScope || !this._popupScope.fieldRender) {
+    this.shadowPopup.show();
+    this.shadowPopup.hide();
+  }
+};
 
 this.normalizeTooltipInfo = function ({ response: data } = {}) {
   const nextData = data || {};
@@ -63,10 +72,7 @@ this.renderTooltipInfo = function (payload = {}) {
   const nextData = this.normalizeTooltipInfo(payload);
   this._tooltipInfo = nextData;
 
-  if (!this._popupScope || !this._popupScope.fieldRender) {
-    this.shadowPopup.show();
-    this.shadowPopup.hide();
-  }
+  this.ensureTooltipPopup();
 
   if (!this._popupScope || !this._popupScope.fieldRender) return;
 
@@ -97,6 +103,7 @@ this.openTooltip = function () {
     this._hideTimer = null;
   }
 
+  this.ensureTooltipPopup();
   this.renderTooltipInfo({ response: this._tooltipInfo });
   this.shadowPopup.show();
 
@@ -149,18 +156,25 @@ go(
 );
 
 this._triggerEnterHandler = (event) => {
-  const trigger = event.target.closest(this.cssSelectors.trigger);
-  if (!trigger || !this.appendElement.contains(trigger)) return;
   this.openTooltip();
 };
 
 this._triggerLeaveHandler = (event) => {
-  const trigger = event.target.closest(this.cssSelectors.trigger);
-  if (!trigger || !this.appendElement.contains(trigger)) return;
   this.closeTooltip(event.type);
 };
 
-this.appendElement.addEventListener("mouseenter", this._triggerEnterHandler, true);
-this.appendElement.addEventListener("focusin", this._triggerEnterHandler);
-this.appendElement.addEventListener("mouseleave", this._triggerLeaveHandler, true);
-this.appendElement.addEventListener("focusout", this._triggerLeaveHandler);
+this._triggerElement = this.appendElement.querySelector(this.cssSelectors.trigger);
+if (this._triggerElement) {
+  this._triggerElement.addEventListener("mouseenter", this._triggerEnterHandler);
+  this._triggerElement.addEventListener("focus", this._triggerEnterHandler);
+  this._triggerElement.addEventListener("mouseleave", this._triggerLeaveHandler);
+  this._triggerElement.addEventListener("blur", this._triggerLeaveHandler);
+}
+
+this._outsidePointerHandler = (event) => {
+  if (!this._triggerElement) return;
+  if (this._triggerElement.contains(event.target)) return;
+  this.closeTooltip("outside");
+};
+
+document.addEventListener("pointerdown", this._outsidePointerHandler);

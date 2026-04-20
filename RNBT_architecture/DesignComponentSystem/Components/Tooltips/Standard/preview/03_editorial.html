@@ -36,9 +36,11 @@
           Weventbus.emit('@tooltipHidden', { targetInstance: instance, response: { reason: 'leave' } });
         };
         trigger.addEventListener("mouseenter", show);
-        trigger.addEventListener("focus", show);
         trigger.addEventListener("mouseleave", hide);
-        trigger.addEventListener("blur", hide);
+        document.addEventListener("pointerdown", (event) => {
+          if (trigger.contains(event.target)) return;
+          hide();
+        });
       })();
     </script>
   </body>

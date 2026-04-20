@@ -28,7 +28,7 @@
         const trigger = root.querySelector(".tooltip-host__trigger");
         let timer = null;
         const show = () => {
-          let host = root.querySelector(".preview-tooltip");
+          let host = document.querySelector(".preview-tooltip");
           if (!host) {
             host = document.createElement("div");
             host.className = "preview-tooltip";
@@ -40,15 +40,17 @@
           Weventbus.emit("@tooltipShown", { targetInstance: instance, response: { label: "Copy link" } });
         };
         const hide = () => {
-          const host = root.querySelector(".preview-tooltip") || document.querySelector(".preview-tooltip");
+          const host = document.querySelector(".preview-tooltip");
           if (!host) return;
           host.hidden = true;
           Weventbus.emit("@tooltipHidden", { targetInstance: instance, response: { reason: "leave" } });
         };
         trigger.addEventListener("mouseenter", show);
-        trigger.addEventListener("focus", show);
         trigger.addEventListener("mouseleave", hide);
-        trigger.addEventListener("blur", hide);
+        document.addEventListener("pointerdown", (event) => {
+          if (trigger.contains(event.target)) return;
+          hide();
+        });
       })();
     </script>
   </body>
