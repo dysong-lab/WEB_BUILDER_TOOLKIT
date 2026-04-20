@@ -26,17 +26,6 @@
         background: rgba(142, 255, 97, 0.16);
         color: #d8ffbf;
       }
-      #event-log {
-        width: 340px;
-        min-height: 220px;
-        padding: 16px;
-        border-radius: 12px;
-        background: rgba(7, 11, 14, 0.86);
-        border: 1px solid rgba(141, 177, 101, 0.22);
-        color: #dff2c1;
-        font: 12px/1.5 monospace;
-        white-space: pre-wrap;
-      }
     </style>
   </head>
   <body>
@@ -48,21 +37,16 @@
       </div>
       <div id="snackbar-operational"></div>
     </div>
-    <pre id="event-log">[ready] waiting for snackbar events</pre>
     <script>
       (async () => {
         await loadComponentAssets("snackbar-operational", "../views/04_operational.html", "../styles/04_operational.css");
+        const instance = { id: "snackbar-operational", appendElement: document.getElementById("snackbar-operational") };
         const root = document.querySelector("#snackbar-operational .snackbar");
         const message = root.querySelector(".snackbar__message");
         const action = root.querySelector(".snackbar__action");
         const actionLabel = root.querySelector(".snackbar__action-label");
         const dismiss = root.querySelector(".snackbar__dismiss");
-        const log = document.getElementById("event-log");
         let timer = null;
-        const appendLog = text => {
-          log.textContent = `${text}\n${log.textContent}`.trim();
-          console.log(text);
-        };
         const show = payload => {
           if (timer) clearTimeout(timer);
           root.dataset.tone = payload.tone || "warning";
@@ -72,7 +56,7 @@
           message.textContent = payload.message || "";
           actionLabel.textContent = payload.actionLabel || "";
           action.hidden = !payload.actionLabel;
-          appendLog(`@snackbarShown tone=${root.dataset.tone} message="${message.textContent}"`);
+          Weventbus.emit("@snackbarShown", { event: { type: "show" }, targetInstance: instance });
           if (payload.duration > 0) {
             timer = setTimeout(() => hide("timeout"), payload.duration);
           }
@@ -81,11 +65,11 @@
           if (timer) clearTimeout(timer);
           root.dataset.open = "false";
           root.setAttribute("aria-hidden", "true");
-          appendLog(`@snackbarHidden reason=${reason}`);
+          Weventbus.emit("@snackbarHidden", { event: { type: reason }, targetInstance: instance });
         };
-        action.addEventListener("click", () => appendLog("@snackbarActionClicked"));
+        action.addEventListener("click", () => Weventbus.emit("@snackbarActionClicked", { event: { type: "click" }, targetInstance: instance }));
         dismiss.addEventListener("click", () => {
-          appendLog("@snackbarDismissed");
+          Weventbus.emit("@snackbarDismissed", { event: { type: "click" }, targetInstance: instance });
           hide("dismiss");
         });
         document.getElementById("show-warning").addEventListener("click", () => show({ message: "Generator voltage left the approved band.", actionLabel: "Acknowledge", tone: "warning", duration: 0 }));

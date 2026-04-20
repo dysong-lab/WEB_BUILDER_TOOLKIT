@@ -16,34 +16,18 @@
         padding: 48px;
         background: linear-gradient(180deg, #f3ecdf, #eadfcf);
       }
-      #event-log {
-        width: 320px;
-        min-height: 220px;
-        padding: 16px;
-        border-radius: 16px;
-        background: rgba(255, 250, 244, 0.72);
-        border: 1px solid rgba(125, 81, 38, 0.18);
-        color: #51331f;
-        font: 12px/1.5 monospace;
-        white-space: pre-wrap;
-      }
     </style>
   </head>
   <body>
     <div id="centered-editorial"></div>
-    <pre id="event-log">[ready] waiting for slider events</pre>
     <script>
       (async () => {
         await loadComponentAssets("centered-editorial", "../views/03_editorial.html", "../styles/03_editorial.css");
+        const instance = { id: "centered-editorial", appendElement: document.getElementById("centered-editorial") };
         const root = document.querySelector("#centered-editorial .centered-slider");
         const input = root.querySelector(".centered-slider__native");
         const fill = root.querySelector(".centered-slider__fill");
         const value = root.querySelector(".centered-slider__value");
-        const log = document.getElementById("event-log");
-        const appendLog = message => {
-          log.textContent = `${message}\n${log.textContent}`.trim();
-          console.log(message);
-        };
         const sync = () => {
           const min = Number(input.min);
           const max = Number(input.max);
@@ -57,11 +41,11 @@
         };
         input.addEventListener("input", () => {
           sync();
-          appendLog(`@centeredSliderInputChanged value=${input.value}`);
+          Weventbus.emit("@centeredSliderInputChanged", { event: { type: "input" }, targetInstance: instance });
         });
         input.addEventListener("change", () => {
           sync();
-          appendLog(`@centeredSliderChanged value=${input.value}`);
+          Weventbus.emit("@centeredSliderChanged", { event: { type: "change" }, targetInstance: instance });
         });
         sync();
       })();

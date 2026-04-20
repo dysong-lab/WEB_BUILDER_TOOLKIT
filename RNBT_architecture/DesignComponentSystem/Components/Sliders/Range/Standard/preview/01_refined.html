@@ -16,35 +16,19 @@
         padding: 48px;
         background: radial-gradient(circle at top, #143151, #06111d 60%);
       }
-      #event-log {
-        width: 320px;
-        min-height: 220px;
-        padding: 16px;
-        border-radius: 16px;
-        background: rgba(4, 12, 20, 0.72);
-        border: 1px solid rgba(124, 184, 226, 0.24);
-        color: #dcefff;
-        font: 12px/1.5 monospace;
-        white-space: pre-wrap;
-      }
     </style>
   </head>
   <body>
     <div id="range-refined"></div>
-    <pre id="event-log">[ready] waiting for slider events</pre>
     <script>
       (async () => {
         await loadComponentAssets("range-refined", "../views/01_refined.html", "../styles/01_refined.css");
+        const instance = { id: "range-refined", appendElement: document.getElementById("range-refined") };
         const root = document.querySelector("#range-refined .range-slider");
         const lower = root.querySelector(".range-slider__input--lower");
         const upper = root.querySelector(".range-slider__input--upper");
         const fill = root.querySelector(".range-slider__fill");
         const value = root.querySelector(".range-slider__value");
-        const log = document.getElementById("event-log");
-        const appendLog = message => {
-          log.textContent = `${message}\n${log.textContent}`.trim();
-          console.log(message);
-        };
         const sync = source => {
           if (source === "lower" && Number(lower.value) > Number(upper.value)) upper.value = lower.value;
           if (source === "upper" && Number(upper.value) < Number(lower.value)) lower.value = upper.value;
@@ -58,19 +42,19 @@
         };
         lower.addEventListener("input", () => {
           sync("lower");
-          appendLog(`@rangeSliderInputChanged handle=lower start=${lower.value} end=${upper.value}`);
+          Weventbus.emit("@rangeSliderInputChanged", { event: { type: "input" }, targetInstance: instance });
         });
         upper.addEventListener("input", () => {
           sync("upper");
-          appendLog(`@rangeSliderInputChanged handle=upper start=${lower.value} end=${upper.value}`);
+          Weventbus.emit("@rangeSliderInputChanged", { event: { type: "input" }, targetInstance: instance });
         });
         lower.addEventListener("change", () => {
           sync("lower");
-          appendLog(`@rangeSliderChanged handle=lower start=${lower.value} end=${upper.value}`);
+          Weventbus.emit("@rangeSliderChanged", { event: { type: "change" }, targetInstance: instance });
         });
         upper.addEventListener("change", () => {
           sync("upper");
-          appendLog(`@rangeSliderChanged handle=upper start=${lower.value} end=${upper.value}`);
+          Weventbus.emit("@rangeSliderChanged", { event: { type: "change" }, targetInstance: instance });
         });
         sync();
       })();

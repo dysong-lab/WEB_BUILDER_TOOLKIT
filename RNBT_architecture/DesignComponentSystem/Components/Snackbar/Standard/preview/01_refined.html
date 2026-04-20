@@ -26,17 +26,6 @@
         background: rgba(113, 223, 255, 0.16);
         color: #eaf7ff;
       }
-      #event-log {
-        width: 340px;
-        min-height: 220px;
-        padding: 16px;
-        border-radius: 16px;
-        background: rgba(4, 12, 20, 0.72);
-        border: 1px solid rgba(124, 184, 226, 0.24);
-        color: #dcefff;
-        font: 12px/1.5 monospace;
-        white-space: pre-wrap;
-      }
     </style>
   </head>
   <body>
@@ -48,17 +37,10 @@
       </div>
       <div id="snackbar-refined"></div>
     </div>
-    <pre id="event-log">[ready] waiting for snackbar events</pre>
     <script>
       (async () => {
         await loadComponentAssets("snackbar-refined", "../views/01_refined.html", "../styles/01_refined.css");
         const instance = { id: "snackbar-refined", appendElement: document.getElementById("snackbar-refined") };
-        const log = document.getElementById("event-log");
-        const appendLog = message => {
-          log.textContent = `${message}\n${log.textContent}`.trim();
-          console.log(message);
-        };
-
         instance.root = instance.appendElement.querySelector(".snackbar");
         instance.message = instance.appendElement.querySelector(".snackbar__message");
         instance.action = instance.appendElement.querySelector(".snackbar__action");
@@ -75,7 +57,7 @@
           instance.message.textContent = payload.message || "";
           instance.actionLabel.textContent = payload.actionLabel || "";
           instance.action.hidden = !payload.actionLabel;
-          appendLog(`@snackbarShown tone=${instance.root.dataset.tone} message="${instance.message.textContent}"`);
+          Weventbus.emit("@snackbarShown", { event: { type: "show" }, targetInstance: instance });
           if (payload.duration > 0) {
             instance.timer = setTimeout(() => {
               instance.hide("timeout");
@@ -87,12 +69,12 @@
           if (instance.timer) clearTimeout(instance.timer);
           instance.root.dataset.open = "false";
           instance.root.setAttribute("aria-hidden", "true");
-          appendLog(`@snackbarHidden reason=${reason}`);
+          Weventbus.emit("@snackbarHidden", { event: { type: reason }, targetInstance: instance });
         };
 
-        instance.action.addEventListener("click", () => appendLog("@snackbarActionClicked"));
+        instance.action.addEventListener("click", () => Weventbus.emit("@snackbarActionClicked", { event: { type: "click" }, targetInstance: instance }));
         instance.dismiss.addEventListener("click", () => {
-          appendLog("@snackbarDismissed");
+          Weventbus.emit("@snackbarDismissed", { event: { type: "click" }, targetInstance: instance });
           instance.hide("dismiss");
         });
 

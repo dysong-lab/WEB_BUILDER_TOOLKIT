@@ -26,17 +26,6 @@
         background: #e8def8;
         color: #4f378b;
       }
-      #event-log {
-        width: 340px;
-        min-height: 220px;
-        padding: 16px;
-        border-radius: 16px;
-        background: rgba(255, 255, 255, 0.74);
-        border: 1px solid rgba(103, 80, 164, 0.16);
-        color: #3a305d;
-        font: 12px/1.5 monospace;
-        white-space: pre-wrap;
-      }
     </style>
   </head>
   <body>
@@ -48,22 +37,16 @@
       </div>
       <div id="snackbar-material"></div>
     </div>
-    <pre id="event-log">[ready] waiting for snackbar events</pre>
     <script>
       (async () => {
         await loadComponentAssets("snackbar-material", "../views/02_material.html", "../styles/02_material.css");
-        const instance = { appendElement: document.getElementById("snackbar-material") };
+        const instance = { id: "snackbar-material", appendElement: document.getElementById("snackbar-material") };
         const root = instance.appendElement.querySelector(".snackbar");
         const message = instance.appendElement.querySelector(".snackbar__message");
         const action = instance.appendElement.querySelector(".snackbar__action");
         const actionLabel = instance.appendElement.querySelector(".snackbar__action-label");
         const dismiss = instance.appendElement.querySelector(".snackbar__dismiss");
-        const log = document.getElementById("event-log");
         let timer = null;
-        const appendLog = messageText => {
-          log.textContent = `${messageText}\n${log.textContent}`.trim();
-          console.log(messageText);
-        };
         const show = payload => {
           if (timer) clearTimeout(timer);
           root.dataset.tone = payload.tone || "neutral";
@@ -73,7 +56,7 @@
           message.textContent = payload.message || "";
           actionLabel.textContent = payload.actionLabel || "";
           action.hidden = !payload.actionLabel;
-          appendLog(`@snackbarShown tone=${root.dataset.tone} message="${message.textContent}"`);
+          Weventbus.emit("@snackbarShown", { event: { type: "show" }, targetInstance: instance });
           if (payload.duration > 0) {
             timer = setTimeout(() => hide("timeout"), payload.duration);
           }
@@ -82,11 +65,11 @@
           if (timer) clearTimeout(timer);
           root.dataset.open = "false";
           root.setAttribute("aria-hidden", "true");
-          appendLog(`@snackbarHidden reason=${reason}`);
+          Weventbus.emit("@snackbarHidden", { event: { type: reason }, targetInstance: instance });
         };
-        action.addEventListener("click", () => appendLog("@snackbarActionClicked"));
+        action.addEventListener("click", () => Weventbus.emit("@snackbarActionClicked", { event: { type: "click" }, targetInstance: instance }));
         dismiss.addEventListener("click", () => {
-          appendLog("@snackbarDismissed");
+          Weventbus.emit("@snackbarDismissed", { event: { type: "click" }, targetInstance: instance });
           hide("dismiss");
         });
         document.getElementById("show-neutral").addEventListener("click", () => show({ message: "Draft moved to the review queue.", actionLabel: "Open", tone: "neutral", duration: 3200 }));
