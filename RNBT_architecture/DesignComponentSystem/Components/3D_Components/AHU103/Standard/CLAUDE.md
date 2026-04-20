@@ -21,6 +21,10 @@ MeshStateMixin
 | error | 0xf87171 |
 | offline | 0x6b7280 |
 
+### meshName
+
+`AHU103`
+
 ### 구독 (subscriptions)
 
 | topic | handler |
