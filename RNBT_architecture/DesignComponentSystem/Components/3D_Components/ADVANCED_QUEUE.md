@@ -53,7 +53,7 @@ Components/3D_Components/<컴포넌트경로>/Advanced/<변형이름>/
 
 | 순번 | 컴포넌트경로 | 유형 | 변형 이름 | 설명 | 상태 |
 |------|-------------|------|----------|------|------|
-| 1 | meshesArea/area_01 | 컨테이너 | highlight | 선택 메시 아웃라인 강조 (MeshState+MeshHighlight) | 대기 |
+| 1 | meshesArea/area_01 | 컨테이너 | highlight | 선택 메시 아웃라인 강조 (MeshState+MeshHighlight) | 완료 |
 | 2 | meshesArea/area_01 | 컨테이너 | camera_highlight | 카메라 이동과 발광 강조 동시 적용 (MeshState+CameraFocus+MeshHighlight) | 대기 |
 | 3 | meshesArea/area_01 | 컨테이너 | visibility | 층별/구역별 선택적 표시 (MeshState+MeshVisibility) | 대기 |
 | 4 | meshesArea/area_01 | 컨테이너 | animation | 레이어/시간 GLTF 애니메이션 재생 (MeshState+AnimationMixin) | 대기 |
