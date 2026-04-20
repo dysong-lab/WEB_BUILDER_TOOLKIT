@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>TextFields/Standard — 03_editorial</title>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/FieldRenderMixin.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 48px; background: linear-gradient(180deg, #f4ecdf, #eadfce); }
+    </style>
+  </head>
+  <body>
+    <div id="textfield-editorial"></div>
+    <script>
+      (async () => {
+        await loadComponentAssets("textfield-editorial", "../views/03_editorial.html", "../styles/03_editorial.css");
+        const instance = { id: "textfield-editorial", appendElement: document.getElementById("textfield-editorial") };
+        applyFieldRenderMixin(instance, { cssSelectors: { root: ".text-field", label: ".text-field__label", input: ".text-field__input", supportingText: ".text-field__supporting", errorText: ".text-field__error", clearButton: ".text-field__clear" } });
+        const root = instance.appendElement.querySelector(".text-field");
+        const input = instance.appendElement.querySelector(".text-field__input");
+        const supporting = instance.appendElement.querySelector(".text-field__supporting");
+        const error = instance.appendElement.querySelector(".text-field__error");
+        const clear = instance.appendElement.querySelector(".text-field__clear");
+        instance.fieldRender.renderData({ response: { label: "Headline", supportingText: "Keep the title under 60 characters for print balance.", errorText: "Headline cannot be empty." } });
+        input.placeholder = "Write a headline";
+        input.value = "";
+        root.dataset.invalid = "true";
+        supporting.hidden = true;
+        error.hidden = false;
+        input.addEventListener("input", (event) => {
+          const hasValue = input.value.trim() !== "";
+          root.dataset.hasValue = hasValue ? "true" : "false";
+          root.dataset.invalid = hasValue ? "false" : "true";
+          clear.hidden = !hasValue;
+          supporting.hidden = !hasValue ? true : false;
+          error.hidden = hasValue;
+          Weventbus.emit("@textFieldInputChanged", { event, targetInstance: instance });
+        });
+        input.addEventListener("change", (event) => Weventbus.emit("@textFieldChanged", { event, targetInstance: instance }));
+        input.addEventListener("focus", (event) => Weventbus.emit("@textFieldFocused", { event, targetInstance: instance }));
+        input.addEventListener("blur", (event) => Weventbus.emit("@textFieldBlurred", { event, targetInstance: instance }));
+        clear.addEventListener("click", (event) => {
+          input.value = "";
+          root.dataset.hasValue = "false";
+          root.dataset.invalid = "true";
+          clear.hidden = true;
+          supporting.hidden = true;
+          error.hidden = false;
+          Weventbus.emit("@textFieldCleared", { event, targetInstance: instance });
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>TextFields/Standard — 01_refined</title>
+    <script src="../../../../preview_runtime.js"></script>
+    <script src="../../../../Mixins/FieldRenderMixin.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 48px;
+        background: radial-gradient(circle at top, #133452, #08111a 62%);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="textfield-refined"></div>
+    <script>
+      (async () => {
+        await loadComponentAssets("textfield-refined", "../views/01_refined.html", "../styles/01_refined.css");
+        const instance = { id: "textfield-refined", appendElement: document.getElementById("textfield-refined") };
+        applyFieldRenderMixin(instance, {
+          cssSelectors: {
+            root: ".text-field",
+            label: ".text-field__label",
+            input: ".text-field__input",
+            supportingText: ".text-field__supporting",
+            errorText: ".text-field__error",
+            clearButton: ".text-field__clear",
+          },
+        });
+        const root = instance.appendElement.querySelector(".text-field");
+        const input = instance.appendElement.querySelector(".text-field__input");
+        const supporting = instance.appendElement.querySelector(".text-field__supporting");
+        const error = instance.appendElement.querySelector(".text-field__error");
+        const clear = instance.appendElement.querySelector(".text-field__clear");
+        instance.fieldRender.renderData({
+          response: {
+            label: "Cluster name",
+            supportingText: "Shown in navigation and deployment summaries.",
+            errorText: "Name is required.",
+          },
+        });
+        input.placeholder = "Enter cluster name";
+        input.value = "North Edge";
+        root.dataset.hasValue = "true";
+        clear.hidden = false;
+        input.addEventListener("input", (event) => {
+          root.dataset.hasValue = input.value.trim() ? "true" : "false";
+          clear.hidden = !input.value.trim();
+          Weventbus.emit("@textFieldInputChanged", { event, targetInstance: instance });
+        });
+        input.addEventListener("change", (event) => Weventbus.emit("@textFieldChanged", { event, targetInstance: instance }));
+        input.addEventListener("focus", (event) => Weventbus.emit("@textFieldFocused", { event, targetInstance: instance }));
+        input.addEventListener("blur", (event) => Weventbus.emit("@textFieldBlurred", { event, targetInstance: instance }));
+        clear.addEventListener("click", (event) => {
+          input.value = "";
+          root.dataset.hasValue = "false";
+          clear.hidden = true;
+          supporting.hidden = false;
+          error.hidden = true;
+          root.dataset.invalid = "false";
+          Weventbus.emit("@textFieldCleared", { event, targetInstance: instance });
+        });
+      })();
+    </script>
+  </body>
+</html>

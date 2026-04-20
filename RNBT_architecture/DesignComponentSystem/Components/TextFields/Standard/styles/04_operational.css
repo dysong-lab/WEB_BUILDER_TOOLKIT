@@ -1,0 +1,66 @@
+.text-field {
+  display: grid;
+  gap: 8px;
+  width: min(420px, 100%);
+  color: #d5e3eb;
+}
+
+.text-field__label {
+  font: 600 12px/1.2 "Segoe UI", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #73d0e4;
+}
+
+.text-field__control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 14px;
+  border: 1px solid #20323d;
+  background: linear-gradient(180deg, #0e151c, #0a1015);
+}
+
+.text-field[data-invalid="true"] .text-field__control {
+  border-color: #dd6678;
+}
+
+.text-field__input {
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: inherit;
+  font: 500 14px/1.4 "Segoe UI", sans-serif;
+}
+
+.text-field__input::placeholder {
+  color: #6f8594;
+}
+
+.text-field__clear {
+  width: 24px;
+  height: 24px;
+  border: 0;
+  background: rgba(115, 208, 228, 0.1);
+  color: #73d0e4;
+  cursor: pointer;
+}
+
+.text-field__supporting,
+.text-field__error {
+  font: 400 12px/1.5 "Segoe UI", sans-serif;
+}
+
+.text-field__supporting {
+  color: #8a9dab;
+}
+
+.text-field__error {
+  color: #ff8899;
+}
+
+.text-field[data-disabled="true"] {
+  opacity: 0.4;
+}

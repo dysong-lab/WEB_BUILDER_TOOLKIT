@@ -1,0 +1,64 @@
+.text-field {
+  display: grid;
+  gap: 10px;
+  width: min(460px, 100%);
+  color: #241d19;
+}
+
+.text-field__label {
+  font: 700 13px/1.2 "Segoe UI", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #7a634d;
+}
+
+.text-field__control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 62px;
+  padding: 0 0 10px;
+  border-bottom: 1px solid rgba(84, 63, 44, 0.32);
+}
+
+.text-field[data-invalid="true"] .text-field__control {
+  border-bottom-color: #b14958;
+}
+
+.text-field__input {
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: inherit;
+  font: 400 28px/1.15 Georgia, "Times New Roman", serif;
+}
+
+.text-field__input::placeholder {
+  color: rgba(36, 29, 25, 0.34);
+}
+
+.text-field__clear {
+  border: 0;
+  background: transparent;
+  color: #6b5540;
+  font: 400 20px/1 Georgia, "Times New Roman", serif;
+  cursor: pointer;
+}
+
+.text-field__supporting,
+.text-field__error {
+  font: 400 15px/1.7 Georgia, "Times New Roman", serif;
+}
+
+.text-field__supporting {
+  color: #5a4d43;
+}
+
+.text-field__error {
+  color: #9f3d47;
+}
+
+.text-field[data-disabled="true"] {
+  opacity: 0.46;
+}
