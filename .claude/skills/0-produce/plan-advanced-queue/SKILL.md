@@ -13,6 +13,16 @@ description: 2D 컴포넌트 Advanced 변형 후보를 발굴하여 ADVANCED_QUE
 
 > **`{컴포넌트경로}`** = `Components/` 아래 컴포넌트 루트 상대경로. depth 1은 `<범주>` (예: `AppBars`), depth 2는 `<범주>/<서브범주>` (예: `Buttons/SplitButtons`). 2D Phase 0 규칙(`_shared/phase0-2d.md`)과 동일 표기.
 
+### 스킬의 1차 목적: 기능 발굴 (Mixin 조합이 아님)
+
+이 스킬의 목적은 **컴포넌트에 현실적으로 필요한 기능을 발굴하는 것**이다. Mixin 조합이나 기존 구현 수단은 사고의 출발점이 아니다.
+
+- 먼저 "이 UI 컴포넌트에 어떤 확장 변형(상호작용/이벤트/상태)이 필요한가?"를 묻는다.
+- 필요한 기능이 기존 Mixin 조합으로 표현 가능하면 → Mixin 조합으로 기재
+- 기존 Mixin으로 표현 불가하면 → **커스텀 메서드** 또는 **신규 Mixin 필요**로 기재 (생산 시 `create-mixin-spec` 선행)
+
+기존 Mixin 목록을 필터로 써서 후보를 한정하지 않는다. Mixin이 없는 기능도 빠짐없이 포함한다.
+
 ---
 
 ## 입력 모드
@@ -59,17 +69,29 @@ description: 2D 컴포넌트 Advanced 변형 후보를 발굴하여 ADVANCED_QUE
 
 Explore 에이전트에 위임하여 Advanced 후보를 발굴한다.
 
+**사고 순서** (반드시 이 순서로):
+
+**① 기능 발굴** — "이 UI 컴포넌트에 어떤 상호작용/상태/이벤트 확장이 필요한가?"
+- MD3 variant/pattern, 업계 UI 라이브러리 패턴, 실제 사용 맥락에서 도출
+- 이 단계에서는 **Mixin 존재 여부를 고려하지 않는다.** 기능이 먼저, 구현 수단은 그 다음.
+
+**② 구현 수단 매핑** — 각 기능을 다음 중 하나로 분류:
+- **기존 Mixin / Mixin 조합** — FieldRender, ListRender, ShadowPopup 등 이미 있는 Mixin으로 충족
+- **커스텀 메서드** — 기존 Mixin으로 표현 불가, 컴포넌트 내부 메서드로 해결
+- **신규 Mixin 필요** — 공통 재사용 가치가 있는 새 기능, 생산 시 `create-mixin-spec` 선행
+
 **위임 프롬프트 구성 요소**:
 - 대상 컴포넌트 목록과 각 컴포넌트의 Standard CLAUDE.md 내용
 - 제외 목록 (Step 1에서 수집한 기존 변형)
 - MD3 (Material Design 3) 명세에서 해당 컴포넌트의 variant/pattern
 - 업계 UI 라이브러리의 확장 변형 사례 (예: AppBar searchEmbedded, Cards expandable, Dialogs fullscreen)
-- **Standard와 register.js 수준에서 다른 점이 있는 후보만 수집할 것**
+- **Standard와 register.js 수준에서 다른 점이 있는 후보만 수집할 것** (Mixin 조합 / 구독 토픽 / 커스텀 메서드 / 발행 이벤트 중 하나 이상)
 
 **에이전트 반환 형식**: 각 후보에 대해
 - 컴포넌트경로
 - 변형 이름 (camelCase)
-- 한 줄 설명
+- **기능 설명** (무엇을 하는가)
+- **구현 수단** (기존 Mixin 조합 / 커스텀 메서드 / 신규 Mixin 필요 중 하나, 개요 명시)
 - Standard와의 차이 (Mixin 조합 / 구독 토픽 / 커스텀 메서드 / 발행 이벤트 중 어느 것)
 
 **MD3 WebFetch 실패 시**: 학습 데이터 + WebSearch로 대체하고, 결과를 Step 4에서 사용자에게 검증받는다.
@@ -83,7 +105,9 @@ Explore 에이전트에 위임하여 Advanced 후보를 발굴한다.
 | 질문 | 결과 |
 |------|------|
 | register.js가 Standard와 동일한가? (DOM/CSS만 다름) | → **제외** (Standard 내부 디자인 variant로 처리) |
-| Mixin 조합, 구독 토픽, 커스텀 메서드, 발행 이벤트 중 **최소 하나** 다른가? | → 후보 유지 |
+| Mixin 조합, 구독 토픽, 커스텀 메서드, 발행 이벤트, 신규 Mixin 필요성 중 **최소 하나** 다른가? | → 후보 유지 |
+
+**"기존 Mixin 없음" 자체는 탈락 사유가 아니다.** 커스텀 메서드로 해결하는 후보, 신규 Mixin 개발이 필요한 후보도 동등하게 통과시킨다. 분리의 핵심은 "register.js가 Standard와 다른가" 하나다.
 
 근거가 모호한 후보는 제외한다. "확실히 다른 register.js가 필요한 경우"만 통과시킨다.
 
@@ -91,14 +115,15 @@ Explore 에이전트에 위임하여 Advanced 후보를 발굴한다.
 
 ### Step 4. 사용자 검토 요청
 
-승인 후보를 표로 제시한다:
+승인 후보를 표로 제시한다. **기능 설명과 구현 수단을 분리**하여 기능 우선으로 읽히게 한다:
 
 ```
-| # | 컴포넌트경로 | 변형 이름 | 설명 | 분리 근거 |
-|---|-------------|----------|------|----------|
-| 1 | AppBars | searchEmbedded | 임베디드 검색 입력 AppBar | @searchInputChanged/@searchCleared 이벤트 발행 |
-| 2 | Cards  | expandable     | 클릭 시 상세 내용 확장 Card | toggle 커스텀 메서드 + 상태 관리 |
-| 3 | Buttons/SplitButtons | dropdownMenu | 보조 액션 드롭다운 | 팝업 상태 관리 + 이벤트 |
+| # | 컴포넌트경로 | 변형 이름 | 기능 설명 | 구현 수단 | 분리 근거 |
+|---|-------------|----------|----------|----------|----------|
+| 1 | AppBars | searchEmbedded | 임베디드 검색 입력 AppBar | 커스텀 메서드 + 이벤트 발행 | @searchInputChanged/@searchCleared 이벤트 |
+| 2 | Cards  | expandable     | 클릭 시 상세 내용 확장 Card | 커스텀 메서드 + 상태 관리 | toggle 메서드 추가 |
+| 3 | Buttons/SplitButtons | dropdownMenu | 보조 액션 드롭다운 | 기존 Mixin: ShadowPopup + 이벤트 | 팝업 상태 관리 + 이벤트 |
+| 4 | Cards | sortable | 드래그로 카드 순서 변경 | 신규 Mixin 필요 (DragSortMixin) | 신규 Mixin + 발행 이벤트 |
 ```
 
 사용자에게 다음 중 선택받는다:
