@@ -226,9 +226,10 @@ function discoverCategoryComponents(categoryDir, seedCategory) {
   }
 
   return orderedNames.map((name) => {
-    const componentDir = discovered.get(name) || path.join(categoryDir, name);
+    const componentDir = discovered.get(name);
+    if (!componentDir) return null;
     return buildComponent(componentDir, seedComponents.get(name));
-  });
+  }).filter(Boolean);
 }
 
 function generateManifest(seedManifest) {
