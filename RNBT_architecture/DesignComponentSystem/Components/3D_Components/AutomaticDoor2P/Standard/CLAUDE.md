@@ -12,6 +12,10 @@
 
 MeshStateMixin
 
+### meshName
+
+`automaticDoor`, `doorGlass_A`
+
 ### colorMap
 
 | 상태 | 색상 |
