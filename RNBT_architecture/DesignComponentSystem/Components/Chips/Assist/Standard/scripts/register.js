@@ -8,18 +8,15 @@ const { each, go } = fx;
 
 applyListRenderMixin(this, {
   cssSelectors: {
-    container: ".assist-chips",
+    container: ".assist-chip__list",
     template: "#assist-chip-item-template",
-    item: ".assist-chip",
-    id: ".assist-chip",
-    disabled: ".assist-chip",
-    leadingIcon: ".assist-chip__icon",
+    chipid: ".assist-chip__item",
+    icon: ".assist-chip__icon",
     label: ".assist-chip__label",
   },
-  itemKey: "id",
+  itemKey: "chipid",
   datasetAttrs: {
-    id: "id",
-    disabled: "disabled",
+    chipid: "chipid",
   },
 });
 
@@ -44,7 +41,7 @@ go(
 
 this.customEvents = {
   click: {
-    [this.listRender.cssSelectors.item]: "@assistChipClicked",
+    [this.listRender.cssSelectors.chipid]: "@assistChipClicked",
   },
 };
 bindEvents(this, this.customEvents);

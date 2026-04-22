@@ -1,33 +1,34 @@
 .filter-chip-shell {
   display: inline-flex;
-  padding: 24px;
-  border-radius: 28px;
+  padding: 28px;
+  border-radius: 30px;
   background:
     radial-gradient(
       circle at top left,
-      rgba(139, 213, 255, 0.36),
+      rgba(132, 212, 255, 0.18),
       transparent 42%
     ),
-    linear-gradient(180deg, #10233a 0%, #09141f 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    linear-gradient(180deg, #12253a 0%, #09121d 100%);
+  border: 1px solid rgba(160, 217, 255, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .filter-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
 }
 
 .filter-chip {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  min-height: 36px;
-  padding: 0 14px;
-  border: 1px solid rgba(187, 220, 255, 0.18);
+  gap: 10px;
+  min-height: 42px;
+  padding: 0 18px;
+  border: 1px solid rgba(168, 220, 255, 0.18);
   border-radius: 999px;
-  background: rgba(191, 223, 255, 0.1);
-  color: #d9edff;
+  background: linear-gradient(180deg, rgba(150, 208, 255, 0.1), rgba(82, 129, 182, 0.08));
+  color: #deefff;
   cursor: pointer;
   transition:
     background 180ms ease,
@@ -39,29 +40,15 @@
 
 .filter-chip:hover {
   transform: translateY(-1px);
-  border-color: rgba(187, 220, 255, 0.32);
+  border-color: rgba(205, 236, 255, 0.34);
+  box-shadow: 0 12px 24px rgba(5, 16, 25, 0.28);
 }
 
 .filter-chip[data-selected="true"] {
-  border-color: rgba(235, 247, 255, 0.88);
-  background: linear-gradient(180deg, #f1f8ff 0%, #d8eaff 100%);
-  color: #0c3c6b;
-  box-shadow: 0 10px 20px rgba(53, 108, 178, 0.26);
-}
-
-.filter-chip[data-disabled="true"] {
-  opacity: 0.44;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-.filter-chip__icon {
-  font-size: 18px;
-}
-
-.filter-chip__icon:empty {
-  display: none;
+  border-color: rgba(233, 245, 255, 0.88);
+  background: linear-gradient(180deg, #f4f9ff 0%, #dcecff 100%);
+  color: #133f6d;
+  box-shadow: 0 14px 26px rgba(41, 89, 138, 0.26);
 }
 
 .filter-chip__label {
@@ -70,4 +57,33 @@
     "Pretendard",
     sans-serif;
   letter-spacing: -0.3px;
+}
+
+.filter-chip__check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.filter-chip__check svg {
+  width: 16px;
+  height: 16px;
+}
+
+.filter-chip[data-selected="true"] .filter-chip__check,
+.filter-chip__item[data-selected="true"] .filter-chip__check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.filter-chip:focus-visible {
+  outline: 2px solid rgba(205, 236, 255, 0.72);
+  outline-offset: 2px;
 }

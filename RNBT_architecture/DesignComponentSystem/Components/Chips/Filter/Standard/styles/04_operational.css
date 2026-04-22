@@ -57,3 +57,14 @@
     sans-serif;
   letter-spacing: 0.1px;
 }
+
+.filter-chip__check {
+  font-size: 18px;
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.filter-chip[data-selected="true"] .filter-chip__check,
+.filter-chip__item[data-selected="true"] .filter-chip__check {
+  opacity: 1;
+}

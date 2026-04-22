@@ -1,8 +1,6 @@
 .suggestion-chip-shell { display:inline-flex; padding:20px; border:1px solid #25374b; border-radius:16px; background:#08101a; }
 .suggestion-chips { display:flex; flex-wrap:wrap; gap:8px; }
 .suggestion-chip { display:inline-flex; align-items:center; gap:6px; min-height:34px; padding:0 12px; border:1px dashed #49617a; border-radius:6px; background:#0d1a29; color:#dce8f6; cursor:pointer; }
-.suggestion-chip[data-selected="true"] { border-style:solid; border-color:#f59e0b; background:rgba(245,158,11,.14); color:#fff0c9; }
-.suggestion-chip[data-disabled="true"] { opacity:.34; cursor:not-allowed; }
 .suggestion-chip__icon { font-size:16px; }
 .suggestion-chip__icon:empty { display:none; }
 .suggestion-chip__label { font:600 13px/1 "IBM Plex Sans","Pretendard",sans-serif; }

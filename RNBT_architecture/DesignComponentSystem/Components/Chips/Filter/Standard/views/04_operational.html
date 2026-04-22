@@ -1,14 +1,20 @@
 <div class="filter-chip-shell filter-chip-shell--operational">
-  <div class="filter-chips"></div>
+  <div class="filter-chips filter-chip__list"></div>
   <template id="filter-chip-item-template"
     ><button
-      class="filter-chip"
+      class="filter-chip filter-chip__item"
       type="button"
-      data-id=""
+      data-chipid=""
       data-selected="false"
-      data-disabled="false"
     >
-      <span class="filter-chip__icon material-symbols-outlined"></span>
+      <span class="filter-chip__check" aria-hidden="true">
+        <svg viewBox="0 0 16 16" focusable="false" aria-hidden="true">
+          <path
+            d="M6.4 11.2L3.2 8l1.1-1.1 2.1 2.1 5.3-5.3L12.8 4z"
+            fill="currentColor"
+          />
+        </svg>
+      </span>
       <span class="filter-chip__label"></span></button
   ></template>
 </div>

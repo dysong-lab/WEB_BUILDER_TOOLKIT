@@ -1,10 +1,11 @@
 const { unsubscribe } = GlobalDataPublisher;
-const { removeCustomEvents } = Wkit;
 const { each, go } = fx;
 
 // 3. 이벤트 제거
 
-removeCustomEvents(this, this.customEvents);
+if (this._chipClickHandler) {
+  this.appendElement.removeEventListener("click", this._chipClickHandler);
+}
 this.customEvents = null;
 
 // 2. 구독 해제
@@ -17,6 +18,5 @@ this.subscriptions = null;
 
 // 1. 자체 상태 및 Mixin 정리
 
-this.toggleSelection = null;
-this.removeItem = null;
+this._chipClickHandler = null;
 this.listRender.destroy();

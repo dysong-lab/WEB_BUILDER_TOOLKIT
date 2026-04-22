@@ -8,34 +8,18 @@ const { each, go } = fx;
 
 applyListRenderMixin(this, {
   cssSelectors: {
-    container: ".filter-chips",
+    container: ".filter-chip__list",
     template: "#filter-chip-item-template",
-    item: ".filter-chip",
-    id: ".filter-chip",
-    selected: ".filter-chip",
-    disabled: ".filter-chip",
-    leadingIcon: ".filter-chip__icon",
+    chipid: ".filter-chip__item",
+    selected: ".filter-chip__item",
     label: ".filter-chip__label",
   },
-  itemKey: "id",
+  itemKey: "chipid",
   datasetAttrs: {
-    id: "id",
+    chipid: "chipid",
     selected: "selected",
-    disabled: "disabled",
   },
 });
-
-this.toggleItem = function (id) {
-  const target = this.appendElement.querySelector(
-    `${this.listRender.cssSelectors.item}[data-id="${String(id)}"]`,
-  );
-  if (!target || target.dataset.disabled === "true") return;
-
-  target.setAttribute(
-    "data-selected",
-    target.dataset.selected === "true" ? "false" : "true",
-  );
-};
 
 // ======================
 // 2. 구독 연결
@@ -58,7 +42,7 @@ go(
 
 this.customEvents = {
   click: {
-    [this.listRender.cssSelectors.item]: "@filterChipClicked",
+    [this.listRender.cssSelectors.chipid]: "@filterChipClicked",
   },
 };
 bindEvents(this, this.customEvents);

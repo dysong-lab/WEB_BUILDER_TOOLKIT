@@ -8,34 +8,19 @@ const { each, go } = fx;
 
 applyListRenderMixin(this, {
   cssSelectors: {
-    container: ".segmented-buttons",
+    container: ".segmented-button__list",
     template: "#segmented-button-item-template",
-    item: ".segmented-button",
-    id: ".segmented-button",
-    selected: ".segmented-button",
+    segmentid: ".segmented-button__item",
+    selected: ".segmented-button__item",
     icon: ".segmented-button__icon",
     label: ".segmented-button__label",
   },
-  itemKey: "id",
+  itemKey: "segmentid",
   datasetAttrs: {
-    id: "id",
+    segmentid: "segmentid",
     selected: "selected",
-    status: "status",
-    tone: "tone",
   },
 });
-
-this.selectItem = function (id) {
-  const items = this.appendElement.querySelectorAll(
-    this.listRender.cssSelectors.item,
-  );
-  items.forEach((item) =>
-    item.setAttribute(
-      "data-selected",
-      item.dataset.id === String(id) ? "true" : "false",
-    ),
-  );
-};
 
 // ======================
 // 2. 구독 연결
@@ -58,7 +43,7 @@ go(
 
 this.customEvents = {
   click: {
-    [this.listRender.cssSelectors.item]: "@segmentedButtonClicked",
+    [this.listRender.cssSelectors.segmentid]: "@segmentClicked",
   },
 };
 bindEvents(this, this.customEvents);
