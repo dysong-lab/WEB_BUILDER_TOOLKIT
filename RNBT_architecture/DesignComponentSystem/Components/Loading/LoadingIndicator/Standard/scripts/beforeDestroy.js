@@ -6,5 +6,4 @@ this.customEvents = null;
 this.subscriptions = null;
 // 1. 자체 상태 및 Mixin 정리
 
-this.renderLoadingInfo = null;
 this.cssSelectors = null;

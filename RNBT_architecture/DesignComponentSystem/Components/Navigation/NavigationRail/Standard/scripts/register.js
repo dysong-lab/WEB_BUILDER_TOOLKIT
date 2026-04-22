@@ -21,7 +21,8 @@ applyListRenderMixin(this, {
         menuid:    '.nav-rail__item',
         active:    '.nav-rail__item',
         icon:      '.nav-rail__icon',
-        label:     '.nav-rail__label'
+        label:     '.nav-rail__label',
+        badge:     '.nav-rail__badge'
     },
     itemKey: 'menuid',
     datasetAttrs: {
@@ -35,7 +36,7 @@ applyListRenderMixin(this, {
 // ======================
 
 this.subscriptions = {
-    navigationMenu: [this.listRender.renderData]
+    navigationRail: [this.listRender.renderData]
 };
 
 go(
@@ -51,7 +52,7 @@ go(
 
 this.customEvents = {
     click: {
-        [this.listRender.cssSelectors.menuid]: '@navItemClicked'
+        [this.listRender.cssSelectors.menuid]: '@navRailItemClicked'
     }
 };
 
