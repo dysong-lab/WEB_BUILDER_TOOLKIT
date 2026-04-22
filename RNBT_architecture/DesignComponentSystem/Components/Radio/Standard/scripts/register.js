@@ -2,6 +2,10 @@ const { subscribe } = GlobalDataPublisher;
 const { bindEvents } = Wkit;
 const { each, go } = fx;
 
+// ======================
+// 1. MIXIN 적용 + 자체 메서드 정의
+// ======================
+
 applyListRenderMixin(this, {
     cssSelectors: {
         container: '.radio-group',
@@ -136,6 +140,10 @@ this._radioKeydownHandler = (event) => {
 
 this.appendElement.addEventListener('keydown', this._radioKeydownHandler);
 
+// ======================
+// 2. 구독 연결
+// ======================
+
 this.subscriptions = {
     radioItems: [this.renderRadioItems],
 };
@@ -146,6 +154,10 @@ go(
         each(handler => subscribe(topic, this, handler), handlers)
     )
 );
+
+// ======================
+// 3. 이벤트 매핑
+// ======================
 
 this.customEvents = {
     click: {

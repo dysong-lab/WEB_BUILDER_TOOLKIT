@@ -1,5 +1,9 @@
 const { bindEvents, applySemanticStatus } = Wkit;
 
+// ======================
+// 1. MIXIN 적용 + 자체 메서드 정의
+// ======================
+
 applyListRenderMixin(this, {
   cssSelectors: {
     root: ".split-button",
@@ -58,6 +62,16 @@ this.toggleMenu = function (force) {
     typeof force === "boolean" ? force : root.dataset.open !== "true";
   root.dataset.open = nextOpen ? "true" : "false";
 };
+
+// ======================
+// 2. 구독 연결
+// ======================
+
+this.subscriptions = null;
+
+// ======================
+// 3. 이벤트 매핑
+// ======================
 
 this.customEvents = {
   click: {

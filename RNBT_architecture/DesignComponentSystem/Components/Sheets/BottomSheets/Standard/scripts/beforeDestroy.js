@@ -2,6 +2,8 @@
  * BottomSheets — Standard 정리
  */
 
+// 3. 이벤트 제거
+
 if (this.shadowPopup) {
   this.shadowPopup.removePopupEvents();
 }
@@ -23,5 +25,11 @@ if (this.shadowPopup) {
 this.renderBottomSheetContent = null;
 this.openBottomSheet = null;
 this.closeBottomSheet = null;
+
+// 2. 구독 해제
+
 this.subscriptions = null;
+
+// 1. 자체 상태 및 Mixin 정리
+
 this._sheetMotionDuration = null;

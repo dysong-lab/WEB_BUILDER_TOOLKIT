@@ -8,6 +8,10 @@
  */
 const { bindEvents, applySemanticStatus } = Wkit;
 
+// ======================
+// 1. selector + 자체 메서드 정의
+// ======================
+
 this.cssSelectors = {
   button: ".icon-button",
   icon: ".icon-button__icon",
@@ -29,6 +33,16 @@ this.renderIconButtonInfo = function (data = {}) {
   button.setAttribute("aria-label", nextAria);
   applySemanticStatus(button, data);
 };
+
+// ======================
+// 2. 구독 연결
+// ======================
+
+this.subscriptions = null;
+
+// ======================
+// 3. 이벤트 매핑
+// ======================
 
 this.customEvents = {
   click: {

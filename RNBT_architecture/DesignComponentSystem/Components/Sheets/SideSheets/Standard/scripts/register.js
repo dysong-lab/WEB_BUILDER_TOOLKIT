@@ -7,6 +7,10 @@
  * Mixin: ShadowPopupMixin, FieldRenderMixin
  */
 
+// ======================
+// 1. MIXIN 적용 + 자체 메서드 정의
+// ======================
+
 this._popupScope = null;
 this._closeTimer = null;
 this._sheetMotionDuration = 260;
@@ -103,7 +107,15 @@ this.closeSideSheet = function () {
   }, this._sheetMotionDuration);
 };
 
+// ======================
+// 2. 구독 연결
+// ======================
+
 this.subscriptions = {};
+
+// ======================
+// 3. 이벤트 매핑
+// ======================
 
 this.shadowPopup.bindPopupEvents({
   click: {

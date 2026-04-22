@@ -1,6 +1,10 @@
 const { subscribe } = GlobalDataPublisher;
 const { each, go } = fx;
 
+// ======================
+// 1. MIXIN 적용 + 자체 메서드 정의
+// ======================
+
 applyFieldRenderMixin(this, {
   cssSelectors: {
     root: ".toolbar",
@@ -115,6 +119,10 @@ this.renderToolbarInfo = function (payload = {}) {
   supportingText.hidden = nextData.supportingText === "";
 };
 
+// ======================
+// 2. 구독 연결
+// ======================
+
 this.subscriptions = {
   toolbarInfo: [this.renderToolbarInfo],
 };
@@ -125,6 +133,12 @@ go(
     each((handler) => subscribe(topic, this, handler), handlers),
   ),
 );
+
+// ======================
+// 3. 이벤트 매핑
+// ======================
+
+this.customEvents = null;
 
 this._toolbarClickHandler = (event) => {
   const overflowButton = event.target.closest(this.fieldRender.cssSelectors.overflowButton);

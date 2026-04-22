@@ -2,6 +2,10 @@ const { subscribe } = GlobalDataPublisher;
 const { bindEvents } = Wkit;
 const { each, go } = fx;
 
+// ======================
+// 1. MIXIN 적용 + 자체 메서드 정의
+// ======================
+
 applyListRenderMixin(this, {
   cssSelectors: {
     container: ".input-chips",
@@ -43,6 +47,10 @@ this.removeItem = function (id) {
   target.remove();
 };
 
+// ======================
+// 2. 구독 연결
+// ======================
+
 this.subscriptions = {
   inputChipItems: [this.listRender.renderData],
 };
@@ -53,6 +61,10 @@ go(
     each((handler) => subscribe(topic, this, handler), handlers),
   ),
 );
+
+// ======================
+// 3. 이벤트 매핑
+// ======================
 
 this.customEvents = {
   click: {

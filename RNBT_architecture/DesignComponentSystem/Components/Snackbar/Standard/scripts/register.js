@@ -2,6 +2,10 @@ const { subscribe } = GlobalDataPublisher;
 const { bindEvents } = Wkit;
 const { each, go } = fx;
 
+// ======================
+// 1. MIXIN 적용 + 자체 메서드 정의
+// ======================
+
 applyFieldRenderMixin(this, {
   cssSelectors: {
     root: ".snackbar",
@@ -137,6 +141,10 @@ this.renderSnackbarInfo = function (payload = {}) {
   }
 };
 
+// ======================
+// 2. 구독 연결
+// ======================
+
 this.subscriptions = {
   snackbarInfo: [this.renderSnackbarInfo],
 };
@@ -147,6 +155,10 @@ go(
     each((handler) => subscribe(topic, this, handler), handlers),
   ),
 );
+
+// ======================
+// 3. 이벤트 매핑
+// ======================
 
 this.customEvents = {
   click: {

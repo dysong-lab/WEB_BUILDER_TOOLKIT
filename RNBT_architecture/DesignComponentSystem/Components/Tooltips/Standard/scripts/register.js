@@ -1,6 +1,10 @@
 const { subscribe } = GlobalDataPublisher;
 const { each, go } = fx;
 
+// ======================
+// 1. MIXIN 적용 + 자체 메서드 정의
+// ======================
+
 this._popupScope = null;
 this._hideTimer = null;
 this._tooltipInfo = {
@@ -144,6 +148,10 @@ this.closeTooltip = function (reason = "manual") {
   });
 };
 
+// ======================
+// 2. 구독 연결
+// ======================
+
 this.subscriptions = {
   tooltipInfo: [this.renderTooltipInfo],
 };
@@ -154,6 +162,12 @@ go(
     each((handler) => subscribe(topic, this, handler), handlers),
   ),
 );
+
+// ======================
+// 3. 이벤트 매핑
+// ======================
+
+this.customEvents = null;
 
 this._triggerEnterHandler = (event) => {
   this.openTooltip();

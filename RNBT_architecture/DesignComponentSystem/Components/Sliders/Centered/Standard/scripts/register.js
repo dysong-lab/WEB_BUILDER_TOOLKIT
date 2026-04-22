@@ -2,6 +2,10 @@ const { subscribe } = GlobalDataPublisher;
 const { bindEvents } = Wkit;
 const { each, go } = fx;
 
+// ======================
+// 1. selector + 자체 메서드 정의
+// ======================
+
 this.cssSelectors = {
   root: ".centered-slider",
   eyebrow: ".centered-slider__eyebrow",
@@ -146,6 +150,10 @@ this.renderCenteredSliderInfo = function (payload) {
   this.syncCenteredUi();
 };
 
+// ======================
+// 2. 구독 연결
+// ======================
+
 this.subscriptions = {
   centeredSliderInfo: [this.renderCenteredSliderInfo],
 };
@@ -169,6 +177,10 @@ this._changeSyncHandler = (event) => {
 
 this.appendElement.addEventListener("input", this._inputSyncHandler);
 this.appendElement.addEventListener("change", this._changeSyncHandler);
+
+// ======================
+// 3. 이벤트 매핑
+// ======================
 
 this.customEvents = {
   input: {

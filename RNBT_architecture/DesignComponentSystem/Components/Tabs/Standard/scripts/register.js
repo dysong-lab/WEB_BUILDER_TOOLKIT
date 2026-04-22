@@ -1,6 +1,10 @@
 const { subscribe } = GlobalDataPublisher;
 const { each, go } = fx;
 
+// ======================
+// 1. MIXIN 적용 + 자체 메서드 정의
+// ======================
+
 applyListRenderMixin(this, {
   cssSelectors: {
     container: ".tabs__list",
@@ -166,6 +170,10 @@ this.renderTabItems = function (payload = {}) {
   this.syncAccessibility();
 };
 
+// ======================
+// 2. 구독 연결
+// ======================
+
 this.subscriptions = {
   tabItems: [this.renderTabItems],
 };
@@ -176,6 +184,12 @@ go(
     each((handler) => subscribe(topic, this, handler), handlers),
   ),
 );
+
+// ======================
+// 3. 이벤트 매핑
+// ======================
+
+this.customEvents = null;
 
 this._tabClickHandler = (event) => {
   const item = event.target.closest(this.listRender.cssSelectors.item);

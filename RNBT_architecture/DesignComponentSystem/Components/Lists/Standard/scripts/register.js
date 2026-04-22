@@ -1,6 +1,10 @@
 const { subscribe } = GlobalDataPublisher;
 const { each, go } = fx;
 
+// ======================
+// 1. MIXIN 적용 + 자체 메서드 정의
+// ======================
+
 applyListRenderMixin(this, {
   cssSelectors: {
     container: ".list",
@@ -120,6 +124,10 @@ this._listKeydownHandler = (event) => {
 this.appendElement.addEventListener("click", this._listClickHandler);
 this.appendElement.addEventListener("keydown", this._listKeydownHandler);
 
+// ======================
+// 2. 구독 연결
+// ======================
+
 this.subscriptions = {
   listItems: [this.renderListItems],
 };
@@ -130,5 +138,9 @@ go(
     each((handler) => subscribe(topic, this, handler), handlers),
   ),
 );
+
+// ======================
+// 3. 이벤트 매핑
+// ======================
 
 this.customEvents = null;

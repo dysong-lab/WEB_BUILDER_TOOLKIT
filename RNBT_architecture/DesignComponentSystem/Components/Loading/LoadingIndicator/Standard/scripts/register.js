@@ -1,3 +1,7 @@
+// ======================
+// 1. selector + 자체 메서드 정의
+// ======================
+
 this.cssSelectors = {
   root: ".loading-indicator",
   track: ".loading-indicator__track",
@@ -33,5 +37,13 @@ this.renderLoadingInfo = function (data = {}) {
 };
 
 this.renderLoadingInfo();
+// ======================
+// 2. 구독 연결
+// ======================
+
 this.subscriptions = null;
+// ======================
+// 3. 이벤트 매핑
+// ======================
+
 this.customEvents = null;

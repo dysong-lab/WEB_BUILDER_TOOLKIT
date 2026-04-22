@@ -2,6 +2,10 @@ const { subscribe } = GlobalDataPublisher;
 const { bindEvents } = Wkit;
 const { each, go } = fx;
 
+// ======================
+// 1. selector + 자체 메서드 정의
+// ======================
+
 this.cssSelectors = {
   root: ".search-bar",
   form: ".search-bar__form",
@@ -78,6 +82,10 @@ this.renderSearchInfo = function ({ response: data } = {}) {
   this.syncControls();
 };
 
+// ======================
+// 2. 구독 연결
+// ======================
+
 this.subscriptions = {
   searchInfo: [this.renderSearchInfo],
 };
@@ -88,6 +96,10 @@ go(
     each((handler) => subscribe(topic, this, handler), handlers),
   ),
 );
+
+// ======================
+// 3. 이벤트 매핑
+// ======================
 
 this.customEvents = {
   input: {
