@@ -8,6 +8,11 @@
 | 기본 Mixin | MeshStateMixin |
 | meshName | JUNC-B003 |
 
+## 모델 구조
+
+- 루트 노드: `JUNC-B003`
+- meshName: `JUNC-B003`
+
 ## 세트 현황
 
 | 세트 | 상태 |
