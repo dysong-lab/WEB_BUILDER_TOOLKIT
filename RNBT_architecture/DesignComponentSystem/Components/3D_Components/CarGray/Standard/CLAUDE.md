@@ -12,6 +12,10 @@
 
 MeshStateMixin
 
+### meshName
+
+`CarGray`
+
 ### colorMap
 
 | 상태 | 색상 |
