@@ -12,6 +12,10 @@
 
 MeshStateMixin
 
+### meshName
+
+`BUZZER`
+
 ### colorMap
 
 | 상태 | 색상 |
