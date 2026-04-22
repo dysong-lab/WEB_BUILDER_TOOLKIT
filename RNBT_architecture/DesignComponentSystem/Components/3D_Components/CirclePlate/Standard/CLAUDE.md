@@ -12,6 +12,10 @@
 
 MeshStateMixin
 
+### meshName
+
+`win006`
+
 ### colorMap
 
 | 상태 | 색상 |
