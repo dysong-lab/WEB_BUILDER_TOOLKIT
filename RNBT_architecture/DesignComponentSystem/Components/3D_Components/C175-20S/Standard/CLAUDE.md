@@ -12,6 +12,10 @@
 
 MeshStateMixin
 
+### meshName
+
+`C175_20_01_A`, `C175_20_02`, `C175_20_03`, `C175_20_Wing`
+
 ### colorMap
 
 | 상태 | 색상 |
