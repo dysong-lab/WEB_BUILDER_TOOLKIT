@@ -12,6 +12,10 @@
 
 MeshStateMixin
 
+### meshName
+
+`caffeChair`
+
 ### colorMap
 
 | 상태 | 색상 |
