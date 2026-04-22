@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Partition_small — Standard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #1a1a2e; }
+        #partition-small-pageThreeLayer { width: 600px; height: 480px; display: block; overflow: hidden; margin: 40px auto; }
+        canvas { display: block; }
+        .demo-controls { display: flex; justify-content: center; gap: 8px; padding: 16px; }
+        .demo-btn { padding: 8px 16px; font-size: 13px; font-weight: 600; border: none; border-radius: 4px; cursor: pointer; color: #ffffff; transition: opacity 0.15s; }
+        .demo-btn:hover { opacity: 0.8; }
+        .demo-btn[data-status="normal"]  { background: #34d399; }
+        .demo-btn[data-status="warning"] { background: #fbbf24; color: #1a1a2e; }
+        .demo-btn[data-status="error"]   { background: #f87171; }
+        .demo-btn[data-status="offline"] { background: #6b7280; }
+        .demo-btn[data-status="reset"]   { background: #3b82f6; }
+        .demo-message { width: 600px; margin: 0 auto; padding: 10px 12px; border-radius: 6px; background: rgba(15, 23, 42, 0.9); color: #cbd5e1; font: 12px/1.4 monospace; }
+        .demo-message[data-state="error"] { color: #fecaca; background: rgba(69, 10, 10, 0.9); }
+    </style>
+</head>
+<body>
+    <div class="demo-controls">
+        <button class="demo-btn" data-status="normal">Normal</button>
+        <button class="demo-btn" data-status="warning">Warning</button>
+        <button class="demo-btn" data-status="error">Error</button>
+        <button class="demo-btn" data-status="offline">Offline</button>
+        <button class="demo-btn" data-status="reset">Reset</button>
+    </div>
+    <div id="partition-small-pageThreeLayer"></div>
+    <div class="demo-message" id="demoMessage">loading Partition_small.gltf...</div>
+
+    <script src="../../../../../Mixins/MeshStateMixin.js"></script>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+    const container = document.getElementById('partition-small-pageThreeLayer');
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    const meshNames = ['`partitionSmall` — **Mesh Node 이름**. `getObjectByName('partitionSmall')`은 단일 Mesh를 반환하고', 'MeshStateMixin은 `obj.material`이 존재하므로(단일 객체) Mesh 브랜치의 `Array.isArray(material)` 미발동 경로로 진입해 material을 clone 후 color만 setHex로 치환. FLIREx·BATT 등의 "**단일 Mesh 직접 참조**" 패턴과 동일하며', 'Partition(부모 `Group003`)·Earthquake(자식 배열 열거)와는 대비된다.'];
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x1a1a2e);
+    const message = document.getElementById('demoMessage');
+
+    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+    camera.position.set(1.6, 1.8, 2.4);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    directionalLight.position.set(4, 6, 3);
+    scene.add(directionalLight);
+
+    scene.add(new THREE.GridHelper(8, 16, 0x2a2a4a, 0x2a2a4a));
+
+    const instance = { appendElement: null };
+    const loader = new GLTFLoader();
+
+    loader.load('../../../../../models/Partition_small/01_default/Partition_small.gltf', (gltf) => {
+        const model = gltf.scene;
+        scene.add(model);
+
+        instance.appendElement = model;
+
+        applyMeshStateMixin(instance, {
+            colorMap: {
+                normal:  0x34d399,
+                warning: 0xfbbf24,
+                error:   0xf87171,
+                offline: 0x6b7280
+            }
+        });
+
+        const box = new THREE.Box3().setFromObject(model);
+        const center = box.getCenter(new THREE.Vector3());
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z) || 1;
+        const distance = maxDim * 2.2;
+
+        controls.target.copy(center);
+        camera.position.set(
+            center.x + distance,
+            center.y + distance * 0.8,
+            center.z + distance
+        );
+        camera.near = Math.max(0.001, maxDim / 500);
+        camera.far = Math.max(20, maxDim * 50);
+        camera.updateProjectionMatrix();
+        camera.lookAt(center);
+        controls.update();
+
+        message.textContent = 'loaded: mesh=' + meshNames.join(', ') + ', size=' + size.x.toFixed(4) + ' x ' + size.y.toFixed(4) + ' x ' + size.z.toFixed(4);
+        message.dataset.state = 'ok';
+    }, undefined, (error) => {
+        console.error(error);
+        message.textContent = 'load failed: ' + (error?.message || error);
+        message.dataset.state = 'error';
+    });
+
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    document.querySelectorAll('.demo-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            if (!instance.meshState || !instance.appendElement) return;
+
+            const status = btn.dataset.status;
+
+            if (status === 'reset') {
+                meshNames.forEach((meshName) => {
+                    const mesh = instance.appendElement.getObjectByName(meshName);
+                    if (mesh?.material?.color) mesh.material.color.setHex(0xffffff);
+                });
+                return;
+            }
+
+            instance.meshState.renderData({
+                response: meshNames.map((meshName) => ({ meshName, status }))
+            });
+        });
+    });
+
+    window.addEventListener('resize', () => {
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+    });
+    </script>
+</body>
+</html>

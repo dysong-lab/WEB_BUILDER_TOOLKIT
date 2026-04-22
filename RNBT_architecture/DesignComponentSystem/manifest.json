@@ -5,6 +5,198 @@
       "spec": "Components/AppBars/CLAUDE.md",
       "components": [
         {
+          "name": "3516BS",
+          "spec": "Components/3D_Components/3516BS/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/3516BS/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/3516BS/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "3516CS",
+          "spec": "Components/3D_Components/3516CS/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/3516CS/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/3516CS/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "3Darrow",
+          "spec": "Components/3D_Components/3Darrow/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/3Darrow/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/3Darrow/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "3Dpointer",
+          "spec": "Components/3D_Components/3Dpointer/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/3Dpointer/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/3Dpointer/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ACBmetasol",
+          "spec": "Components/3D_Components/ACBmetasol/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/ACBmetasol/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/ACBmetasol/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ACBsusol",
+          "spec": "Components/3D_Components/ACBsusol/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/ACBsusol/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/ACBsusol/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "AED",
+          "spec": "Components/3D_Components/AED/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/AED/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/AED/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "AHU103",
+          "spec": "Components/3D_Components/AHU103/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/AHU103/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/AHU103/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Aircon_Ceiling01",
+          "spec": "Components/3D_Components/Aircon_Ceiling01/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Aircon_Ceiling01/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Aircon_Ceiling01/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Aircon_Ceiling02",
+          "spec": "Components/3D_Components/Aircon_Ceiling02/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Aircon_Ceiling02/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Aircon_Ceiling02/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ALTS",
+          "spec": "Components/3D_Components/ALTS/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/ALTS/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/ALTS/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ALTS02",
+          "spec": "Components/3D_Components/ALTS02/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/ALTS02/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/ALTS02/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
           "name": "AppBars",
           "spec": "Components/AppBars/CLAUDE.md",
           "sets": [
@@ -53,6 +245,150 @@
                       "path": "Components/AppBars/Advanced/searchEmbedded/preview/01_refined.html"
                     }
                   ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ArmChair",
+          "spec": "Components/3D_Components/ArmChair/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/ArmChair/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/ArmChair/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "AutomaticDoor2P",
+          "spec": "Components/3D_Components/AutomaticDoor2P/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/AutomaticDoor2P/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/AutomaticDoor2P/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "B3F_UPS",
+          "spec": "Components/3D_Components/B3F_UPS/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/B3F_UPS/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/B3F_UPS/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "B3F_UPS02",
+          "spec": "Components/3D_Components/B3F_UPS02/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/B3F_UPS02/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/B3F_UPS02/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "B3F_UPS03",
+          "spec": "Components/3D_Components/B3F_UPS03/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/B3F_UPS03/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/B3F_UPS03/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "BATT",
+          "spec": "Components/3D_Components/BATT/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/BATT/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/BATT/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "BCB02",
+          "spec": "Components/3D_Components/BCB02/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/BCB02/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/BCB02/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "BCP",
+          "spec": "Components/3D_Components/BCP/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/BCP/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/BCP/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "BlackCabinet",
+          "spec": "Components/3D_Components/BlackCabinet/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/BlackCabinet/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/BlackCabinet/Standard/preview/01_default.html"
                 }
               ]
             }
@@ -117,6 +453,22 @@
                 {
                   "label": "01 default",
                   "path": "Components/3D_Components/Blank_Panel_04/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "BUZZER",
+          "spec": "Components/3D_Components/BUZZER/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/BUZZER/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/BUZZER/Standard/preview/01_default.html"
                 }
               ]
             }
@@ -293,6 +645,22 @@
                 {
                   "label": "01 default",
                   "path": "Components/3D_Components/Chair_Office02/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Chiller",
+          "spec": "Components/3D_Components/Chiller/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Chiller/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Chiller/Standard/preview/01_default.html"
                 }
               ]
             }
@@ -795,6 +1163,38 @@
           ]
         },
         {
+          "name": "Generator",
+          "spec": "Components/3D_Components/Generator/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Generator/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Generator/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "GeneratorSmall",
+          "spec": "Components/3D_Components/GeneratorSmall/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/GeneratorSmall/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/GeneratorSmall/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
           "name": "GIMACDC",
           "spec": "Components/3D_Components/GIMACDC/CLAUDE.md",
           "sets": [
@@ -901,6 +1301,1510 @@
                 {
                   "label": "01 default",
                   "path": "Components/3D_Components/GRC_EVC/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Heatexchanger",
+          "spec": "Components/3D_Components/Heatexchanger/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Heatexchanger/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Heatexchanger/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "HumanSymbol_Ani",
+          "spec": "Components/3D_Components/HumanSymbol_Ani/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/HumanSymbol_Ani/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/HumanSymbol_Ani/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "HV",
+          "spec": "Components/3D_Components/HV/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/HV/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/HV/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "HV_1P_01",
+          "spec": "Components/3D_Components/HV_1P_01/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/HV_1P_01/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/HV_1P_01/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "HV_1P_02",
+          "spec": "Components/3D_Components/HV_1P_02/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/HV_1P_02/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/HV_1P_02/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "HV_1P_03",
+          "spec": "Components/3D_Components/HV_1P_03/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/HV_1P_03/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/HV_1P_03/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "HV_1P_04",
+          "spec": "Components/3D_Components/HV_1P_04/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/HV_1P_04/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/HV_1P_04/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "HV_1P_05",
+          "spec": "Components/3D_Components/HV_1P_05/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/HV_1P_05/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/HV_1P_05/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "HV_1P_06",
+          "spec": "Components/3D_Components/HV_1P_06/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/HV_1P_06/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/HV_1P_06/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "HV_2P_01",
+          "spec": "Components/3D_Components/HV_2P_01/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/HV_2P_01/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/HV_2P_01/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "HV_2P_02",
+          "spec": "Components/3D_Components/HV_2P_02/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/HV_2P_02/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/HV_2P_02/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "HV_2P_03",
+          "spec": "Components/3D_Components/HV_2P_03/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/HV_2P_03/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/HV_2P_03/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "HV_2P_04",
+          "spec": "Components/3D_Components/HV_2P_04/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/HV_2P_04/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/HV_2P_04/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "IAQone",
+          "spec": "Components/3D_Components/IAQone/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/IAQone/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/IAQone/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Infodesk",
+          "spec": "Components/3D_Components/Infodesk/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Infodesk/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Infodesk/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "IntrusionDetectionSensor",
+          "spec": "Components/3D_Components/IntrusionDetectionSensor/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/IntrusionDetectionSensor/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/IntrusionDetectionSensor/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Inverter",
+          "spec": "Components/3D_Components/Inverter/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Inverter/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Inverter/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "IRISID_iCAM7",
+          "spec": "Components/3D_Components/IRISID_iCAM7/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/IRISID_iCAM7/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/IRISID_iCAM7/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LBS",
+          "spec": "Components/3D_Components/LBS/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LBS/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LBS/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LeakDetector",
+          "spec": "Components/3D_Components/LeakDetector/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LeakDetector/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LeakDetector/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LEVELMonnit_Sensors",
+          "spec": "Components/3D_Components/LEVELMonnit_Sensors/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LEVELMonnit_Sensors/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LEVELMonnit_Sensors/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LithiumionBattery",
+          "spec": "Components/3D_Components/LithiumionBattery/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LithiumionBattery/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LithiumionBattery/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LPR",
+          "spec": "Components/3D_Components/LPR/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LPR/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LPR/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LPRIn",
+          "spec": "Components/3D_Components/LPRIn/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LPRIn/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LPRIn/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LPRInOut",
+          "spec": "Components/3D_Components/LPRInOut/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LPRInOut/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LPRInOut/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LSC611AW",
+          "spec": "Components/3D_Components/LSC611AW/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LSC611AW/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LSC611AW/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV_01",
+          "spec": "Components/3D_Components/LV_01/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV_01/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV_01/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV_02",
+          "spec": "Components/3D_Components/LV_02/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV_02/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV_02/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV_1P_01",
+          "spec": "Components/3D_Components/LV_1P_01/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV_1P_01/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV_1P_01/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV_1P_02",
+          "spec": "Components/3D_Components/LV_1P_02/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV_1P_02/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV_1P_02/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV_1P_03",
+          "spec": "Components/3D_Components/LV_1P_03/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV_1P_03/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV_1P_03/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV_1P_04",
+          "spec": "Components/3D_Components/LV_1P_04/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV_1P_04/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV_1P_04/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV_1P_05",
+          "spec": "Components/3D_Components/LV_1P_05/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV_1P_05/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV_1P_05/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV_1P_06",
+          "spec": "Components/3D_Components/LV_1P_06/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV_1P_06/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV_1P_06/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV_1P_07",
+          "spec": "Components/3D_Components/LV_1P_07/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV_1P_07/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV_1P_07/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV_2P_01",
+          "spec": "Components/3D_Components/LV_2P_01/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV_2P_01/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV_2P_01/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV_2P_02",
+          "spec": "Components/3D_Components/LV_2P_02/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV_2P_02/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV_2P_02/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV_2P_03",
+          "spec": "Components/3D_Components/LV_2P_03/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV_2P_03/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV_2P_03/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV_2P_04",
+          "spec": "Components/3D_Components/LV_2P_04/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV_2P_04/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV_2P_04/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV_2P_05",
+          "spec": "Components/3D_Components/LV_2P_05/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV_2P_05/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV_2P_05/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV_2P_06",
+          "spec": "Components/3D_Components/LV_2P_06/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV_2P_06/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV_2P_06/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV_2P_07",
+          "spec": "Components/3D_Components/LV_2P_07/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV_2P_07/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV_2P_07/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV_2P_08",
+          "spec": "Components/3D_Components/LV_2P_08/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV_2P_08/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV_2P_08/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV_2P_09",
+          "spec": "Components/3D_Components/LV_2P_09/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV_2P_09/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV_2P_09/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV_2P_10",
+          "spec": "Components/3D_Components/LV_2P_10/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV_2P_10/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV_2P_10/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV_2P_11",
+          "spec": "Components/3D_Components/LV_2P_11/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV_2P_11/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV_2P_11/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV_BAT",
+          "spec": "Components/3D_Components/LV_BAT/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV_BAT/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV_BAT/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV_R",
+          "spec": "Components/3D_Components/LV_R/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV_R/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV_R/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV01",
+          "spec": "Components/3D_Components/LV01/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV01/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV01/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV02",
+          "spec": "Components/3D_Components/LV02/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV02/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV02/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "LV03",
+          "spec": "Components/3D_Components/LV03/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/LV03/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/LV03/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Marker_AICCTV",
+          "spec": "Components/3D_Components/Marker_AICCTV/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Marker_AICCTV/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Marker_AICCTV/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Marker_Anemometer",
+          "spec": "Components/3D_Components/Marker_Anemometer/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Marker_Anemometer/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Marker_Anemometer/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Marker_AntiDrugGoods",
+          "spec": "Components/3D_Components/Marker_AntiDrugGoods/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Marker_AntiDrugGoods/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Marker_AntiDrugGoods/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Marker_Bridge",
+          "spec": "Components/3D_Components/Marker_Bridge/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Marker_Bridge/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Marker_Bridge/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Marker_Firealarm",
+          "spec": "Components/3D_Components/Marker_Firealarm/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Marker_Firealarm/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Marker_Firealarm/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Marker_FixedCCTV",
+          "spec": "Components/3D_Components/Marker_FixedCCTV/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Marker_FixedCCTV/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Marker_FixedCCTV/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Marker_GD",
+          "spec": "Components/3D_Components/Marker_GD/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Marker_GD/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Marker_GD/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Marker_IndoorHydrant",
+          "spec": "Components/3D_Components/Marker_IndoorHydrant/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Marker_IndoorHydrant/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Marker_IndoorHydrant/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Marker_MonitorNozzle",
+          "spec": "Components/3D_Components/Marker_MonitorNozzle/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Marker_MonitorNozzle/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Marker_MonitorNozzle/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Marker_MoveCCTV",
+          "spec": "Components/3D_Components/Marker_MoveCCTV/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Marker_MoveCCTV/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Marker_MoveCCTV/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Marker_OdorDetector",
+          "spec": "Components/3D_Components/Marker_OdorDetector/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Marker_OdorDetector/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Marker_OdorDetector/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Marker_OutdoorHydrant",
+          "spec": "Components/3D_Components/Marker_OutdoorHydrant/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Marker_OutdoorHydrant/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Marker_OutdoorHydrant/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Marker_RotationaCCTV",
+          "spec": "Components/3D_Components/Marker_RotationaCCTV/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Marker_RotationaCCTV/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Marker_RotationaCCTV/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Marker_SafetyShower",
+          "spec": "Components/3D_Components/Marker_SafetyShower/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Marker_SafetyShower/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Marker_SafetyShower/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "MCCB",
+          "spec": "Components/3D_Components/MCCB/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/MCCB/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/MCCB/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "MeetingSofa",
+          "spec": "Components/3D_Components/MeetingSofa/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/MeetingSofa/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/MeetingSofa/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "MetalDetector",
+          "spec": "Components/3D_Components/MetalDetector/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/MetalDetector/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/MetalDetector/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "MetalSphere",
+          "spec": "Components/3D_Components/MetalSphere/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/MetalSphere/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/MetalSphere/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "MonnitTemperature_sensor",
+          "spec": "Components/3D_Components/MonnitTemperature_sensor/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/MonnitTemperature_sensor/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/MonnitTemperature_sensor/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "MT_01",
+          "spec": "Components/3D_Components/MT_01/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/MT_01/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/MT_01/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "OHU103",
+          "spec": "Components/3D_Components/OHU103/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/OHU103/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/OHU103/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "OutdoorConditioner_Ani",
+          "spec": "Components/3D_Components/OutdoorConditioner_Ani/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/OutdoorConditioner_Ani/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/OutdoorConditioner_Ani/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "P2400CH",
+          "spec": "Components/3D_Components/P2400CH/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/P2400CH/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/P2400CH/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "P300C",
+          "spec": "Components/3D_Components/P300C/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/P300C/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/P300C/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Panel",
+          "spec": "Components/3D_Components/Panel/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Panel/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Panel/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Partition",
+          "spec": "Components/3D_Components/Partition/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Partition/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Partition/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Partition_small",
+          "spec": "Components/3D_Components/Partition_small/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Partition_small/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Partition_small/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "PCS",
+          "spec": "Components/3D_Components/PCS/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/PCS/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/PCS/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "PTT",
+          "spec": "Components/3D_Components/PTT/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/PTT/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/PTT/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Pump",
+          "spec": "Components/3D_Components/Pump/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/Pump/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/Pump/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RoadBlock",
+          "spec": "Components/3D_Components/RoadBlock/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/RoadBlock/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/RoadBlock/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RoomCage",
+          "spec": "Components/3D_Components/RoomCage/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/RoomCage/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/RoomCage/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RoomCageSmall",
+          "spec": "Components/3D_Components/RoomCageSmall/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/RoomCageSmall/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/RoomCageSmall/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "RTU",
+          "spec": "Components/3D_Components/RTU/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/RTU/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/RTU/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "SC_01",
+          "spec": "Components/3D_Components/SC_01/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/SC_01/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/SC_01/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "SC_02",
+          "spec": "Components/3D_Components/SC_02/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/SC_02/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/SC_02/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "SDC500",
+          "spec": "Components/3D_Components/SDC500/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/SDC500/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/SDC500/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "SHV_01",
+          "spec": "Components/3D_Components/SHV_01/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/SHV_01/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/SHV_01/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "SHV_02",
+          "spec": "Components/3D_Components/SHV_02/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/SHV_02/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/SHV_02/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "SHV_03",
+          "spec": "Components/3D_Components/SHV_03/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/SHV_03/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/SHV_03/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "tempHumiTH2B",
+          "spec": "Components/3D_Components/tempHumiTH2B/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/tempHumiTH2B/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/tempHumiTH2B/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "thermohygrostat",
+          "spec": "Components/3D_Components/thermohygrostat/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/thermohygrostat/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/thermohygrostat/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "UPS",
+          "spec": "Components/3D_Components/UPS/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/UPS/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/UPS/Standard/preview/01_default.html"
                 }
               ]
             }
