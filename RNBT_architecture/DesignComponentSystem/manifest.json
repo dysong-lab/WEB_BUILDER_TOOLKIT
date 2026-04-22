@@ -2029,6 +2029,38 @@
           ]
         },
         {
+          "name": "ALTS",
+          "spec": "Components/3D_Components/ALTS/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/ALTS/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/ALTS/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ALTS02",
+          "spec": "Components/3D_Components/ALTS02/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/ALTS02/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/ALTS02/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
           "name": "ArmChair",
           "spec": "Components/3D_Components/ArmChair/CLAUDE.md",
           "sets": [
@@ -2039,6 +2071,134 @@
                 {
                   "label": "01 default",
                   "path": "Components/3D_Components/ArmChair/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "AutomaticDoor2P",
+          "spec": "Components/3D_Components/AutomaticDoor2P/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/AutomaticDoor2P/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/AutomaticDoor2P/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "B3F_UPS",
+          "spec": "Components/3D_Components/B3F_UPS/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/B3F_UPS/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/B3F_UPS/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "B3F_UPS02",
+          "spec": "Components/3D_Components/B3F_UPS02/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/B3F_UPS02/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/B3F_UPS02/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "B3F_UPS03",
+          "spec": "Components/3D_Components/B3F_UPS03/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/B3F_UPS03/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/B3F_UPS03/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "BCB02",
+          "spec": "Components/3D_Components/BCB02/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/BCB02/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/BCB02/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "BCP",
+          "spec": "Components/3D_Components/BCP/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/BCP/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/BCP/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "BUZZER",
+          "spec": "Components/3D_Components/BUZZER/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/BUZZER/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/BUZZER/Standard/preview/01_default.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "BlackCabinet",
+          "spec": "Components/3D_Components/BlackCabinet/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/BlackCabinet/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/BlackCabinet/Standard/preview/01_default.html"
                 }
               ]
             }
