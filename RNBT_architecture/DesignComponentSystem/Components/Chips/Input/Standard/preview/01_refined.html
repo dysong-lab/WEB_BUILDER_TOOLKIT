@@ -37,25 +37,22 @@
             container: ".input-chips",
             template: "#input-chip-item-template",
             item: ".input-chip",
-            id: ".input-chip",
+            chipid: ".input-chip",
             selected: ".input-chip",
             disabled: ".input-chip",
-            avatar: ".input-chip__avatar",
             label: ".input-chip__label",
             removeBtn: ".input-chip__remove",
-            removeId: ".input-chip__remove",
           },
-          itemKey: "id",
+          itemKey: "chipid",
           datasetAttrs: {
-            id: "id",
-            removeId: "id",
+            chipid: "chipid",
             selected: "selected",
             disabled: "disabled",
           },
         });
-        instance.toggleSelection = function (targetId) {
+        instance.toggleSelection = function (targetChipId) {
           const target = this.appendElement.querySelector(
-            `${this.listRender.cssSelectors.item}[data-id="${String(targetId)}"]`,
+            `${this.listRender.cssSelectors.item}[data-chipid="${String(targetChipId)}"]`,
           );
           if (!target || target.dataset.disabled === "true") return;
           target.setAttribute(
@@ -63,9 +60,9 @@
             target.dataset.selected === "true" ? "false" : "true",
           );
         };
-        instance.removeItem = function (targetId) {
+        instance.removeItem = function (targetChipId) {
           const target = this.appendElement.querySelector(
-            `${this.listRender.cssSelectors.item}[data-id="${String(targetId)}"]`,
+            `${this.listRender.cssSelectors.item}[data-chipid="${String(targetChipId)}"]`,
           );
           if (!target || target.dataset.disabled === "true") return;
           target.remove();
@@ -80,56 +77,52 @@
         instance.appendElement.addEventListener("click", (event) => {
           if (event.target.closest(".input-chip__remove")) return;
           const chip = event.target.closest(".input-chip");
-          const id = chip?.dataset.id;
-          if (!id) return;
-          instance.toggleSelection(id);
+          const chipid = chip?.dataset.chipid;
+          if (!chipid) return;
+          instance.toggleSelection(chipid);
           console.log(
             "[Preview] Input chip toggled:",
             instance.id,
-            id,
+            chipid,
             chip?.dataset.selected,
           );
         });
         Wkit.onEventBusHandlers({
           "@inputChipRemoveClicked": ({ targetInstance, event }) => {
-            const el = event.target.closest(".input-chip__remove");
-            const id = el?.dataset.id;
-            targetInstance?.removeItem(id);
+            const chip = event.target.closest(".input-chip");
+            const chipid = chip?.dataset.chipid;
+            targetInstance?.removeItem(chipid);
             console.log(
               "[Preview] Input chip remove clicked:",
               targetInstance?.id,
-              id,
+              chipid,
             );
           },
         });
         instance.listRender.renderData({
           response: [
             {
-              id: "seo",
+              chipid: "seo",
               selected: "true",
               disabled: "false",
-              avatar: "S",
               label: "SEO",
             },
             {
-              id: "ops",
+              chipid: "ops",
               selected: "false",
               disabled: "false",
-              avatar: "O",
               label: "Ops",
             },
             {
-              id: "design",
+              chipid: "design",
               selected: "false",
               disabled: "false",
-              avatar: "D",
               label: "Design",
             },
             {
-              id: "locked",
+              chipid: "locked",
               selected: "false",
               disabled: "true",
-              avatar: "L",
               label: "Locked",
             },
           ],

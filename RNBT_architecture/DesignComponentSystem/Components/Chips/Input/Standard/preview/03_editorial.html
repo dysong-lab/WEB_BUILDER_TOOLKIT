@@ -37,23 +37,20 @@
             container: ".input-chips",
             template: "#input-chip-item-template",
             item: ".input-chip",
-            id: ".input-chip",
+            chipid: ".input-chip",
             disabled: ".input-chip",
-            avatar: ".input-chip__avatar",
             label: ".input-chip__label",
             removeBtn: ".input-chip__remove",
-            removeId: ".input-chip__remove",
           },
-          itemKey: "id",
+          itemKey: "chipid",
           datasetAttrs: {
-            id: "id",
-            removeId: "id",
+            chipid: "chipid",
             disabled: "disabled",
           },
         });
-        instance.removeItem = function (targetId) {
+        instance.removeItem = function (targetChipId) {
           const target = this.appendElement.querySelector(
-            `${this.listRender.cssSelectors.item}[data-id="${String(targetId)}"]`,
+            `${this.listRender.cssSelectors.item}[data-chipid="${String(targetChipId)}"]`,
           );
           if (!target || target.dataset.disabled === "true") return;
           target.remove();
@@ -67,21 +64,21 @@
         Wkit.bindEvents(instance, instance.customEvents);
         Wkit.onEventBusHandlers({
           "@inputChipRemoveClicked": ({ targetInstance, event }) => {
-            const el = event.target.closest(".input-chip__remove");
-            const id = el?.dataset.id;
-            targetInstance?.removeItem(id);
+            const chip = event.target.closest(".input-chip");
+            const chipid = chip?.dataset.chipid;
+            targetInstance?.removeItem(chipid);
             console.log(
               "[Preview] Input chip remove clicked:",
               targetInstance?.id,
-              id,
+              chipid,
             );
           },
         });
         instance.listRender.renderData({
           response: [
-            { id: "essay", disabled: "false", avatar: "E", label: "Essay" },
-            { id: "quote", disabled: "false", avatar: "Q", label: "Quote" },
-            { id: "draft", disabled: "true", avatar: "D", label: "Draft" },
+            { chipid: "essay", disabled: "false", label: "Essay" },
+            { chipid: "quote", disabled: "false", label: "Quote" },
+            { chipid: "draft", disabled: "true", label: "Draft" },
           ],
         });
       })();
