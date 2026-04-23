@@ -4533,6 +4533,184 @@
               ]
             }
           ]
+        },
+        {
+          "name": "area_01",
+          "spec": "Components/3D_Components/area_01/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/area_01/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/area_01/Standard/preview/01_default.html"
+                }
+              ]
+            },
+            {
+              "name": "Advanced",
+              "spec": null,
+              "items": [
+                {
+                  "name": "animation",
+                  "spec": "Components/3D_Components/area_01/Advanced/animation/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/area_01/Advanced/animation/preview/01_default.html"
+                    }
+                  ]
+                },
+                {
+                  "name": "camera",
+                  "spec": "Components/3D_Components/area_01/Advanced/camera/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/area_01/Advanced/camera/preview/01_default.html"
+                    }
+                  ]
+                },
+                {
+                  "name": "camera_highlight",
+                  "spec": "Components/3D_Components/area_01/Advanced/camera_highlight/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/area_01/Advanced/camera_highlight/preview/01_default.html"
+                    }
+                  ]
+                },
+                {
+                  "name": "highlight",
+                  "spec": "Components/3D_Components/area_01/Advanced/highlight/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/area_01/Advanced/highlight/preview/01_default.html"
+                    }
+                  ]
+                },
+                {
+                  "name": "popup",
+                  "spec": "Components/3D_Components/area_01/Advanced/popup/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/area_01/Advanced/popup/preview/01_default.html"
+                    }
+                  ]
+                },
+                {
+                  "name": "visibility",
+                  "spec": "Components/3D_Components/area_01/Advanced/visibility/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/area_01/Advanced/visibility/preview/01_default.html"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "STATCOM_BD",
+          "spec": "Components/3D_Components/STATCOM_BD/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/STATCOM_BD/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/STATCOM_BD/Standard/preview/01_default.html"
+                }
+              ]
+            },
+            {
+              "name": "Advanced",
+              "spec": null,
+              "items": [
+                {
+                  "name": "animation",
+                  "spec": "Components/3D_Components/STATCOM_BD/Advanced/animation/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/STATCOM_BD/Advanced/animation/preview/01_default.html"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "STATCOM_MMC",
+          "spec": "Components/3D_Components/STATCOM_MMC/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/STATCOM_MMC/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/STATCOM_MMC/Standard/preview/01_default.html"
+                }
+              ]
+            },
+            {
+              "name": "Advanced",
+              "spec": null,
+              "items": [
+                {
+                  "name": "pipeFlow",
+                  "spec": "Components/3D_Components/STATCOM_MMC/Advanced/pipeFlow/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/STATCOM_MMC/Advanced/pipeFlow/preview/01_default.html"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "STATCOM_Submodule",
+          "spec": "Components/3D_Components/STATCOM_Submodule/CLAUDE.md",
+          "sets": [
+            {
+              "name": "Standard",
+              "spec": "Components/3D_Components/STATCOM_Submodule/Standard/CLAUDE.md",
+              "previews": [
+                {
+                  "label": "01 default",
+                  "path": "Components/3D_Components/STATCOM_Submodule/Standard/preview/01_default.html"
+                }
+              ]
+            },
+            {
+              "name": "Advanced",
+              "spec": null,
+              "items": [
+                {
+                  "name": "animation",
+                  "spec": "Components/3D_Components/STATCOM_Submodule/Advanced/animation/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/STATCOM_Submodule/Advanced/animation/preview/01_default.html"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ]
     }
