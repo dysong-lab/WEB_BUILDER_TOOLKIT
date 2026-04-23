@@ -20,7 +20,7 @@
   </style>
 </head>
 <body>
-  <div class="demo-controls"><button class="demo-btn" data-status="normal">Normal</button><button class="demo-btn" data-status="warning">Warning</button><button class="demo-btn" data-status="error">Error</button><button class="demo-btn" data-status="offline">Offline</button><button class="demo-btn" data-action="play">Play</button><button class="demo-btn" data-action="stop">Stop</button></div><div id="demo-view" class="demo-view"></div><div class="demo-note">AnimationMixin이 사용할 clip이 없으면 fallback clip Spin 을 사용합니다</div><div id="demo-log" class="demo-log">loading...</div>
+  <div class="demo-controls"><button class="demo-btn" data-status="normal">Normal</button><button class="demo-btn" data-status="warning">Warning</button><button class="demo-btn" data-status="error">Error</button><button class="demo-btn" data-status="offline">Offline</button><button class="demo-btn" data-action="play">Play</button><button class="demo-btn" data-action="stop">Stop</button></div><div id="demo-view" class="demo-view"></div><div class="demo-note">현재 area_01 GLTF에는 clip이 없어서 Play는 no-op입니다. 로드 실패 시에만 fallback clip Spin 을 사용합니다</div><div id="demo-log" class="demo-log">loading...</div>
   <script src="../../../../../../preview_runtime.js"></script>
   <script src="../../../../../../Mixins/MeshStateMixin.js"></script>
   <script src="../../../../../../Mixins/AnimationMixin.js"></script>
@@ -37,7 +37,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 window.THREE = THREE;
-const MESH_NAMES = ["Generator","LV_P01","HV_P05_top","Panel_A","Panel_B"];
+const MESH_NAMES = ["HV-U8-B","BLK-HV-01","cnsFloorB4f","G-1","HV-P1-A"];
 const container = document.getElementById('demo-view');
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x111827);

@@ -36,7 +36,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 window.THREE = THREE;
-const MESH_NAMES = ["STATCOM_MMC_1257_Flow01","STATCOM_MMC_1258_Flow02","MMC_Core_A","MMC_Core_B"];
+const MESH_NAMES = ["STATCOM_MMC_00","STATCOM_MMC_32","STATCOM_MMC_1257_Flow01","STATCOM_MMC_1258_Flow02"];
 const container = document.getElementById('demo-view');
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x111827);
@@ -101,9 +101,14 @@ function finalizeModel(model, animations = []) {
   camera.updateProjectionMatrix();
   controls.update();
 }
-const model = makeFallbackModel();
-finalizeModel(model, instance.animations || []);
-log('fallback geometry preview');
+new GLTFLoader().load("../../../../../../models/meshesArea/STATCOM_MMC/01_default/STATCOM_MMC.gltf", (gltf) => {
+  finalizeModel(gltf.scene, gltf.animations || []);
+  log('model loaded\nmeshes=' + clickable.length + '\nclips=' + instance.animations.length);
+}, undefined, (error) => {
+  const model = makeFallbackModel();
+  finalizeModel(model, instance.animations || []);
+  log('model load failed, fallback used\n' + (error?.message || error));
+});
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 function pick(event) {
