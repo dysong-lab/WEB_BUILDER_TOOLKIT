@@ -69,6 +69,34 @@ DesignComponentSystem/Components 아래의 2D 컴포넌트 Advanced 변형을 `A
 
 ---
 
+### Phase 1.5. 기존 변형과의 패턴 대조 (Commit 직전 필수)
+
+Phase 1 생산이 끝나면 **커밋 직전에** 아래 체크리스트로 동일 범주(또는 유사 Mixin 조합) 기존 Advanced 변형과의 일관성을 검증한다. 이 단계를 생략하면 사소한 규약 drift가 commit 이후 별도 refactor 커밋으로 이어진다.
+
+#### 1. 비교 대상 선정
+
+- **동일 범주의 완료 Advanced 변형**이 있으면 최우선 기준으로 삼는다 (예: 신규가 `AppBars/Advanced/contextual` → 기준: `AppBars/Advanced/searchEmbedded`).
+- 동일 범주에 없으면 **동일 Mixin 조합을 쓰는 다른 범주의 Advanced 변형**을 기준으로 삼는다.
+- 어느 쪽도 없으면(최초 케이스) Standard register.js와의 차이점이 CLAUDE.md "Standard와의 분리 정당성"에 명시되었는지 확인한다.
+
+#### 2. 대조 체크리스트
+
+| # | 항목 | 관례 |
+|---|------|------|
+| 1 | **register.js 평탄 작성** | 저장소 전체 register.js는 top-level 평탄 작성이다. IIFE·수동 클로저로 감싸지 않는다. |
+| 2 | **cssSelectors 계약** | CLAUDE.md에 선언된 KEY를 view HTML이 모두 제공하고, register.js의 Mixin 옵션이 동일 KEY 집합을 사용한다. |
+| 3 | **subscriptions 핸들러 배선** | 구독 토픽이 실제 페이지에서 publish되는 이름과 일치하고, 핸들러가 Mixin이 제공하는 것(예: `this.xxx.renderData`)을 가리키는가. |
+| 4 | **customEvents 이름 일관성** | `@camelCaseEvent` 규약 + CLAUDE.md "이벤트" 표와 실제 발행 이름 일치. |
+| 5 | **beforeDestroy.js 정리 순서** | 구독 해제 → `removeCustomEvents` → `this.xxx?.destroy()` 순서. self-null을 수행하는 Mixin destroy는 호출만, 그렇지 않은 것은 beforeDestroy에서 명시 null. 기존 변형의 순서/방식과 대조. |
+| 6 | **컨테이너 CSS 규칙** | `#[component]-container`의 width/height/overflow와 CSS nesting 패턴이 기존 변형과 같은 구조. preview에는 컨테이너 크기를 인라인으로 두지 않는다. |
+| 7 | **manifest·ADVANCED_QUEUE 2중 등록** | 두 곳 모두에 변형이 기재되어 있고 spec/preview 경로가 실제 파일과 일치. |
+
+#### 3. 실패 처리
+
+항목 중 하나라도 drift가 있으면 **커밋 이전**에 정정한다. 커밋 이후 수정은 별도 refactor 커밋으로 git log를 늘린다.
+
+---
+
 ### Phase 2. 커밋
 
 생산 완료 후 커밋한다.
