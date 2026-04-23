@@ -104,6 +104,42 @@ const MESH_NAME = '장비명';
 
 ---
 
+### Phase 1.5. 기존 변형과의 패턴 대조 (Commit 직전 필수)
+
+Phase 1 생산이 끝나면 **커밋 직전에** 아래 체크리스트로 기존 Advanced 변형과의 일관성을 검증한다. 이 단계를 생략하면 사소한 규약 drift가 commit 이후 별도 refactor 커밋(IIFE 제거, destroy 동기화, 축 오인, preview 누락 등)으로 이어진다.
+
+> 대표 사례 — `meshesArea/STATCOM_MMC/Advanced/pipeFlow`는 초기 커밋 이후 IIFE 제거·destroy 규약 동기화·preview destroy 누락·UV 축 u→v 교체·슬라이더 콜백 축 불일치 총 5건의 후행 refactor 커밋이 필요했다. Phase 1.5를 수행했다면 초기 커밋에서 모두 흡수 가능했다.
+
+#### 1. 비교 대상 선정
+
+- **동일 컨테이너 타입**(개별 vs `meshesArea/*`) 중 **가장 가까운 완료 변형** 1개를 기준 파일로 선정
+  - 신규가 `meshesArea/X/Advanced/highlight` → 기준: `meshesArea/area_01/Advanced/highlight`
+  - 신규가 커스텀 메서드(`this.xxx` 네임스페이스)를 포함 → 기준에 `Mixins/MeshStateMixin.js`의 destroy 패턴 추가 대조
+- 신규 커스텀 메서드에 RAF·리소스 Wrap 설정·텍스처 mutation이 있다면 기준 파일은 **최근 완료된 유사 커스텀 변형**(예: `STATCOM_MMC/Advanced/pipeFlow`)까지 포함
+
+#### 2. 대조 체크리스트
+
+| # | 항목 | 관례 |
+|---|------|------|
+| 1 | **register.js 평탄 작성** | 저장소 전체 register.js는 top-level 평탄 작성이다. IIFE·수동 클로저로 감싸지 않는다(인스턴스마다 새 실행 컨텍스트에서 평가되므로 불필요). |
+| 2 | **인스턴스 네임스페이스 self-null** | `this.xxx.destroy()` 내부에서 `this.xxx = null`까지 스스로 수행한다 (MeshStateMixin.destroy 패턴 — `Mixins/MeshStateMixin.js:115`). |
+| 3 | **beforeDestroy.js는 호출만** | `this.xxx?.destroy()` 호출만 남기고 null 할당은 생략한다 (destroy가 self-null 하므로 중복 금지). |
+| 4 | **preview 내부 attach 함수 destroy 일치** | preview의 `attachXxx` 내부 destroy 콜백도 register.js와 동일 규약(`inst.xxx = null` 포함)을 따른다. "register.js와 동일 로직" 주석이 있다면 실제 구현도 동일해야 한다. |
+| 5 | **커스텀 메서드 시그니처 일관성** | 기존 유사 커스텀(`pipeFlow` 등) 및 Mixin API와 동사·인자 형태가 일관된가 (`start/stop/setSpeed(meshName, {u,v})/getMeshNames/destroy`). |
+| 6 | **UI ↔ API 인자 축 일치** | preview 슬라이더/버튼이 변경하는 축(u/v·x/y·속도/시간)과 API 호출 인자가 일치한다. 축 불일치는 "0으로 맞춰도 멈추지 않음" 류 버그의 주 원인. |
+| 7 | **기본값의 시각적 관찰 가능성** | 실제 텍스처/모델 특성(그라디언트 방향, 반복성, 클립 존재 여부 등)에서 기본값이 화면에 관찰 가능한가. 관찰 불가하면 기본값을 조정하거나 근거를 CLAUDE.md에 명시. |
+| 8 | **manifest·ADVANCED_QUEUE·컴포넌트 루트 CLAUDE.md 3중 등록** | 세 곳 모두에 변형이 기재되어 있고 spec/preview 경로가 실제 파일과 일치. |
+
+#### 3. 실패 처리
+
+항목 중 하나라도 drift가 있으면 **커밋 이전**에 정정한다. 커밋 이후 수정은 별도 refactor 커밋으로 git log를 늘리고, 문서의 "기존 변형과 동일" 주장을 사후 거짓으로 만든다.
+
+#### 4. 신규 커스텀 메서드 추가 시
+
+추가로 `ADVANCED_QUEUE.md`의 **"커스텀 메서드 vs 신규 Mixin 판단 규칙"** 섹션에 따라 커스텀/Mixin 선택이 적절한지 재확인한다. 2번째 컴포넌트에서 동일 기법이 요청될 경우의 승격 시나리오를 컴포넌트 CLAUDE.md에 한 줄 메모해두면 미래 혼선을 줄일 수 있다.
+
+---
+
 ### Phase 2. 커밋
 
 생산 완료 후 커밋한다.

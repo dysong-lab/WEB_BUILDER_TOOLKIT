@@ -59,8 +59,13 @@ applyMeshVisibilityMixin(this, {});
 | `show(meshName)` | 지정 메시를 보이게 한다 (자식 포함) |
 | `hide(meshName)` | 지정 메시를 숨긴다 (자식 포함) |
 | `toggle(meshName)` | 지정 메시의 가시성을 반전한다 |
-| `showOnly(meshNames)` | 지정 목록의 메시만 보이게 하고 나머지는 숨긴다 |
-| `showAll()` | 모든 추적 중인 메시를 보이게 한다 |
-| `hideAll()` | 모든 추적 중인 메시를 숨긴다 |
+| `showOnly(meshNames)` | 지정 목록의 메시만 보이게 하고 appendElement 하위의 나머지 named 객체는 숨긴다 |
+| `showAll()` | appendElement 하위의 모든 named 객체를 보이게 한다 (root 제외) |
+| `hideAll()` | appendElement 하위의 모든 named 객체를 숨긴다 (root 제외) |
 | `isVisible(meshName)` | 지정 메시의 현재 가시성 조회 (boolean) |
 | `destroy()` | 모든 메시 보이게 복원 + 상태 맵 정리 + 모든 속성/메서드 null 처리 |
+
+### 일괄 메서드 (showAll / hideAll / showOnly) 주의사항
+
+- 사전 `show/hide` 호출 없이 바로 사용 가능. `appendElement.traverse`로 모든 named 객체를 자율 탐색한다.
+- **계층 구조 한계**: 모델이 `Group floor1 { Mesh wall1 }` 구조일 때 `hideAll()` 후 `show('floor1')`을 호출하면 Group만 visible=true로 복원되지만 자식 Mesh는 여전히 visible=false로 남아 실제로는 렌더되지 않는다. Three.js의 visible 상속 규칙상 필연. 계층 구조 모델에서는 자식 이름으로 직접 `show`를 호출하거나 `showOnly`를 사용해야 한다.
