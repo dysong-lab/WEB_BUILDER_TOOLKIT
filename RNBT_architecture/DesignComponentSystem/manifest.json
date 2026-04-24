@@ -1855,62 +1855,6 @@
           ]
         },
         {
-          "name": "gltf_container",
-          "spec": "Components/3D_Components/gltf_container/CLAUDE.md",
-          "previews": [
-            {
-              "label": "01 status",
-              "path": "Components/3D_Components/gltf_container/preview/01_status.html"
-            },
-            {
-              "label": "02 status camera",
-              "path": "Components/3D_Components/gltf_container/preview/02_status_camera.html"
-            },
-            {
-              "label": "03 status popup",
-              "path": "Components/3D_Components/gltf_container/preview/03_status_popup.html"
-            }
-          ],
-          "sets": [
-            {
-              "name": "Standard",
-              "spec": "Components/3D_Components/gltf_container/Standard/CLAUDE.md",
-              "previews": [
-                {
-                  "label": "01 default",
-                  "path": "Components/3D_Components/gltf_container/Standard/preview/01_default.html"
-                }
-              ]
-            },
-            {
-              "name": "Advanced",
-              "spec": null,
-              "items": [
-                {
-                  "name": "camera",
-                  "spec": "Components/3D_Components/gltf_container/Advanced/camera/CLAUDE.md",
-                  "previews": [
-                    {
-                      "label": "01 default",
-                      "path": "Components/3D_Components/gltf_container/Advanced/camera/preview/01_default.html"
-                    }
-                  ]
-                },
-                {
-                  "name": "popup",
-                  "spec": "Components/3D_Components/gltf_container/Advanced/popup/CLAUDE.md",
-                  "previews": [
-                    {
-                      "label": "01 default",
-                      "path": "Components/3D_Components/gltf_container/Advanced/popup/preview/01_default.html"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
           "name": "3516BS",
           "spec": "Components/3D_Components/3516BS/CLAUDE.md",
           "sets": [
