@@ -79,6 +79,7 @@
     scene.add(new THREE.GridHelper(8, 16, 0x2a2a4a, 0x2a2a4a));
 
     const instance = { appendElement: null };
+    let selectedStatus = 'normal';
     const loader = new GLTFLoader();
 
     loader.load('../../../../../models/LeakDetector/01_default/LeakDetector.gltf', (gltf) => {
@@ -129,24 +130,50 @@
     }
     animate();
 
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
+    function pick(event) {
+        if (!instance.appendElement) return [];
+        const rect = renderer.domElement.getBoundingClientRect();
+        mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+        raycaster.setFromCamera(mouse, camera);
+        return raycaster.intersectObjects(instance.appendElement.children, true);
+    }
+
+    function applyState(status, targetMeshNames = meshNames) {
+        if (!instance.meshState || !instance.appendElement) return;
+
+        if (status === 'reset') {
+            targetMeshNames.forEach((meshName) => {
+                const mesh = instance.appendElement.getObjectByName(meshName);
+                if (!mesh) return;
+                const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+                materials.forEach((material) => material?.color?.setHex(0xffffff));
+            });
+            return;
+        }
+
+        instance.meshState.renderData({
+            response: targetMeshNames.map((meshName) => ({ meshName, status }))
+        });
+    }
+
     document.querySelectorAll('.demo-btn').forEach((btn) => {
         btn.addEventListener('click', () => {
-            if (!instance.meshState || !instance.appendElement) return;
-
             const status = btn.dataset.status;
-
-            if (status === 'reset') {
-                meshNames.forEach((meshName) => {
-                    const mesh = instance.appendElement.getObjectByName(meshName);
-                    if (mesh?.material?.color) mesh.material.color.setHex(0xffffff);
-                });
-                return;
-            }
-
-            instance.meshState.renderData({
-                response: meshNames.map((meshName) => ({ meshName, status }))
-            });
+            if (status !== 'reset') selectedStatus = status;
+            applyState(status);
         });
+    });
+
+    renderer.domElement.addEventListener('click', (event) => {
+        const intersects = pick(event);
+        if (!intersects.length) return;
+        applyState(selectedStatus, [intersects[0].object.name]);
+        message.textContent = 'clicked mesh=' + intersects[0].object.name + ', applied status=' + selectedStatus;
+        message.dataset.state = 'ok';
     });
 
     window.addEventListener('resize', () => {
