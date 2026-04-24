@@ -50,7 +50,7 @@
     const container = document.getElementById('partition-pageThreeLayer');
     const width = container.clientWidth;
     const height = container.clientHeight;
-    const meshNames = ['`Group003` — **Group Node 이름**. `getObjectByName('Group003')`는 두 자식 Mesh(`partition`', '`glass_A`)를 가진 Group을 반환하고', 'MeshStateMixin은 `obj.material`이 없으므로 traverse 분기로 진입해 자식 Mesh들의 material을 일괄 clone+setHex. PTT의 "부모 Group 이름 하나로 자식 전체를 관리하는 **Group-traverse 단일 참조**" 패턴과 동일하며', 'Earthquake의 "자식 이름 배열 열거(`['Earthquake'', ''Earthquake_A']`)" 패턴과는 대비된다.'];
+    const meshNames = ['Group003'];
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x1a1a2e);

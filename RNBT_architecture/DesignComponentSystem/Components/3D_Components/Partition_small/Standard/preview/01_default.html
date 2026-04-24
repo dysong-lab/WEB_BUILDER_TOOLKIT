@@ -50,7 +50,7 @@
     const container = document.getElementById('partition-small-pageThreeLayer');
     const width = container.clientWidth;
     const height = container.clientHeight;
-    const meshNames = ['`partitionSmall` — **Mesh Node 이름**. `getObjectByName('partitionSmall')`은 단일 Mesh를 반환하고', 'MeshStateMixin은 `obj.material`이 존재하므로(단일 객체) Mesh 브랜치의 `Array.isArray(material)` 미발동 경로로 진입해 material을 clone 후 color만 setHex로 치환. FLIREx·BATT 등의 "**단일 Mesh 직접 참조**" 패턴과 동일하며', 'Partition(부모 `Group003`)·Earthquake(자식 배열 열거)와는 대비된다.'];
+    const meshNames = ['partitionSmall'];
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x1a1a2e);

@@ -50,7 +50,7 @@
     const container = document.getElementById('roadblock-pageThreeLayer');
     const width = container.clientWidth;
     const height = container.clientHeight;
-    const meshNames = ['`RoadBlock` — **Mesh Node 이름이 장비명과 일치**하는 대칭 명명 케이스. BATT(`BATT`)·Pump(`Pump`)·Chiller(`Chiller`)의 "장비명 = meshName" 규약과 동일하며', 'RTU(장비 `RTU` ≠ Mesh `RTU2`)의 비대칭 명명과 대비된다. `getObjectByName('RoadBlock')`는 자식이 없는 리프 Mesh를 반환하고', '`obj.material`이 단일 객체이므로 MeshStateMixin의 Mesh 브랜치(`Array.isArray(material)` 미발동)로 진입하여 material을 clone 후 color만 setHex로 치환한다.'];
+    const meshNames = ['RoadBlock'];
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x1a1a2e);
