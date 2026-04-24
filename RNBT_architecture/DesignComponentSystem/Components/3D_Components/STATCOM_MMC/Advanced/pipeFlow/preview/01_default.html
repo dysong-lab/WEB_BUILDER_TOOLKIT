@@ -20,7 +20,7 @@
   </style>
 </head>
 <body>
-  <div class="demo-controls"><button class="demo-btn" data-status="normal">Normal</button><button class="demo-btn" data-status="warning">Warning</button><button class="demo-btn" data-status="error">Error</button><button class="demo-btn" data-status="offline">Offline</button><button class="demo-btn" data-action="start">Start Flow</button><button class="demo-btn" data-action="stop">Stop Flow</button></div><div id="demo-view" class="demo-view"></div><div class="demo-note">Flow mesh 이름에 _Flow 가 포함된 경우 UV 스크롤을 적용합니다</div><div id="demo-log" class="demo-log">loading...</div>
+  <div class="demo-controls"><button class="demo-btn" data-status="normal">Normal</button><button class="demo-btn" data-status="warning">Warning</button><button class="demo-btn" data-status="error">Error</button><button class="demo-btn" data-status="offline">Offline</button><button class="demo-btn" data-action="start">Start Flow</button><button class="demo-btn" data-action="stop">Stop Flow</button></div><div id="demo-view" class="demo-view"></div><div class="demo-note">상태 데이터는 3초마다 자동 갱신됩니다 · Flow mesh 이름에 _Flow 가 포함된 경우 Start/Stop으로 UV 스크롤을 제어합니다</div><div id="demo-log" class="demo-log">loading...</div>
   <script src="../../../../../../preview_runtime.js"></script>
   <script src="../../../../../../Mixins/MeshStateMixin.js"></script>
   <script type="importmap">
@@ -127,6 +127,8 @@ window.addEventListener('resize', () => {
   renderer.setSize(w, h);
 });
 (function animate() { requestAnimationFrame(animate); controls.update(); renderer.render(scene, camera); })();
+const STATUS_SEQUENCE = ['normal', 'warning', 'error', 'offline'];
+let statusTick = 0;
 if (!__preview.instance.meshState) applyMeshStateMixin(__preview.instance, {
     colorMap: {
         normal:  0x34d399,
@@ -166,9 +168,20 @@ __preview.instance.pipeFlow = {
   stop() { if (pipeState.rafId !== null) cancelAnimationFrame(pipeState.rafId); pipeState.rafId = null; },
   getMeshNames() { return [...pipeState.meshMap.keys()]; }
 };
-document.querySelectorAll('[data-status]').forEach((btn) => btn.addEventListener('click', () => { __preview.instance.meshState.renderData({ response: __preview.MESH_NAMES.map((meshName) => ({ meshName, status: btn.dataset.status })) }); __preview.log('status=' + btn.dataset.status); }));
+function nextStatusData() {
+  const data = __preview.MESH_NAMES.map((meshName, index) => ({ meshName, status: STATUS_SEQUENCE[(statusTick + index) % STATUS_SEQUENCE.length] }));
+  statusTick = (statusTick + 1) % STATUS_SEQUENCE.length;
+  return data;
+}
+function applyData(data, reason) {
+  if (!__preview.instance.appendElement) return;
+  __preview.instance.meshState.renderData({ response: data });
+  __preview.log(reason + '\n' + data.map(({ meshName, status }) => meshName + '=' + status).join('\n') + '\nflow=' + JSON.stringify(__preview.instance.pipeFlow.getMeshNames()));
+}
+document.querySelectorAll('[data-status]').forEach((btn) => btn.addEventListener('click', () => { applyData(__preview.MESH_NAMES.map((meshName) => ({ meshName, status: btn.dataset.status })), 'manual status=' + btn.dataset.status); }));
 document.querySelector('[data-action="start"]').addEventListener('click', () => { __preview.instance.pipeFlow.start(); __preview.log('pipeFlow.start()\n' + JSON.stringify(__preview.instance.pipeFlow.getMeshNames())); });
 document.querySelector('[data-action="stop"]').addEventListener('click', () => { __preview.instance.pipeFlow.stop(); __preview.log('pipeFlow.stop()'); });
+setInterval(() => applyData(nextStatusData(), 'auto refresh (3s)'), 3000);
   </script>
 </body>
 </html>

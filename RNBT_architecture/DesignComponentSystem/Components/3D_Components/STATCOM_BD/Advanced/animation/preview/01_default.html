@@ -20,7 +20,7 @@
   </style>
 </head>
 <body>
-  <div class="demo-controls"><button class="demo-btn" data-status="normal">Normal</button><button class="demo-btn" data-status="warning">Warning</button><button class="demo-btn" data-status="error">Error</button><button class="demo-btn" data-status="offline">Offline</button><button class="demo-btn" data-action="play">Play</button><button class="demo-btn" data-action="stop">Stop</button></div><div id="demo-view" class="demo-view"></div><div class="demo-note">실제 GLTF의 AnimationClip을 재생합니다. 로드 실패 시에만 fallback clip Spin 을 사용합니다</div><div id="demo-log" class="demo-log">loading...</div>
+  <div class="demo-controls"><button class="demo-btn" data-status="normal">Normal</button><button class="demo-btn" data-status="warning">Warning</button><button class="demo-btn" data-status="error">Error</button><button class="demo-btn" data-status="offline">Offline</button><button class="demo-btn" data-action="play">Play</button><button class="demo-btn" data-action="stop">Stop</button></div><div id="demo-view" class="demo-view"></div><div class="demo-note">상태 데이터는 3초마다 자동 갱신되고 Play/Stop으로 GLTF clip 재생을 시도합니다 · clip이 없으면 fallback clip 또는 no-op로 동작합니다</div><div id="demo-log" class="demo-log">loading...</div>
   <script src="../../../../../../preview_runtime.js"></script>
   <script src="../../../../../../Mixins/MeshStateMixin.js"></script>
   <script src="../../../../../../Mixins/AnimationMixin.js"></script>
@@ -130,6 +130,8 @@ window.addEventListener('resize', () => {
   renderer.setSize(w, h);
 });
 (function animate() { requestAnimationFrame(animate); controls.update(); renderer.render(scene, camera); })();
+const STATUS_SEQUENCE = ['normal', 'warning', 'error', 'offline'];
+let statusTick = 0;
 function ensureMixins() { if (!__preview.instance.meshState) applyMeshStateMixin(__preview.instance, {
     colorMap: {
         normal:  0x34d399,
@@ -138,10 +140,22 @@ function ensureMixins() { if (!__preview.instance.meshState) applyMeshStateMixin
         offline: 0x6b7280
     }
 }); if (!__preview.instance.animation) applyAnimationMixin(__preview.instance); }
-function applyState(status) { ensureMixins(); __preview.instance.meshState.renderData({ response: __preview.MESH_NAMES.map((meshName) => ({ meshName, status })) }); __preview.log('status=' + status + '\nclips=' + JSON.stringify(__preview.instance.animation.getClipNames())); }
+function nextStatusData() {
+  const data = __preview.MESH_NAMES.map((meshName, index) => ({ meshName, status: STATUS_SEQUENCE[(statusTick + index) % STATUS_SEQUENCE.length] }));
+  statusTick = (statusTick + 1) % STATUS_SEQUENCE.length;
+  return data;
+}
+function applyData(data, reason) {
+  if (!__preview.instance.appendElement) return;
+  ensureMixins();
+  __preview.instance.meshState.renderData({ response: data });
+  __preview.log(reason + '\n' + data.map(({ meshName, status }) => meshName + '=' + status).join('\n') + '\nclips=' + JSON.stringify(__preview.instance.animation.getClipNames()));
+}
+function applyState(status) { applyData(__preview.MESH_NAMES.map((meshName) => ({ meshName, status })), 'manual status=' + status); }
 document.querySelectorAll('[data-status]').forEach((btn) => btn.addEventListener('click', () => applyState(btn.dataset.status)));
 document.querySelector('[data-action="play"]').addEventListener('click', () => { ensureMixins(); const clipName = __preview.instance.animation.getClipNames()[0]; if (!clipName) return __preview.log('no clips available'); __preview.instance.animation.play(clipName, { loop: THREE.LoopRepeat }); __preview.log('play ▶ ' + clipName); });
 document.querySelector('[data-action="stop"]').addEventListener('click', () => { ensureMixins(); __preview.instance.animation.stopAll(); __preview.log('stop all clips'); });
+setInterval(() => applyData(nextStatusData(), 'auto refresh (3s)'), 3000);
   </script>
 </body>
 </html>
