@@ -76,13 +76,12 @@ styleAttrs: {
 }
 ```
 
-### nodeKey (기본값: 'id')
+### 기타 옵션
 
-각 노드를 고유하게 식별하는 데이터 키. 기본값은 `'id'`.
-
-### childrenKey (기본값: 'children')
-
-자식 노드 배열을 담는 데이터 키. 기본값은 `'children'`.
+| 옵션 | 타입 | 필수 | 기본값 | 의미 |
+|------|------|------|--------|------|
+| `nodeKey` | string | X | `'id'` | 각 노드를 고유하게 식별하는 데이터 KEY. 해당 값이 `data-node-id`로 자동 부여됨 |
+| `childrenKey` | string | X | `'children'` | 자식 배열을 담는 데이터 KEY. 값이 배열이고 길이 > 0이면 재귀 렌더링 |
 
 ### renderData가 기대하는 데이터
 
@@ -261,6 +260,58 @@ bindEvents(this, this.customEvents);
 | `getNodeState(id)` | 노드의 data 속성을 조회 (복사본 반환) |
 | `clear()` | 컨테이너의 모든 노드를 제거 |
 | `destroy()` | Mixin이 주입한 모든 속성과 메서드를 정리 |
+
+---
+
+## 메서드 입력 포맷
+
+### `renderData(payload)`
+
+**`payload` 형태**
+
+```javascript
+{
+    response: Array<TreeNode>
+}
+
+// TreeNode (재귀적):
+{
+    [nodeKey]:     string | number,        // 기본 'id'. 필수. data-node-id로 자동 부여
+    [childrenKey]: TreeNode[] (선택),       // 기본 'children'. 배열이고 length > 0일 때 재귀
+    [key: string]: string | number | null  // key는 cssSelectors의 KEY 중 하나
+}
+```
+
+| 필드 | 타입 | 필수 | 기본값 | 의미 |
+|------|------|------|--------|------|
+| `response` | `Array<TreeNode>` | ✓ | — | 재귀 구조. 다음 경우 **Error throw**: `null`, 배열 아님, `container` 미발견, `template` 미발견 |
+
+**반환**: `void`
+
+**자동 부여되는 속성** (각 노드 요소에)
+
+| 속성 | 값 | 비고 |
+|------|------|------|
+| `data-node-id` | `nodeData[nodeKey]` | 노드 고유 ID |
+| `data-depth` | 숫자 (루트 = 0) | 깊이 |
+| `data-has-children` | `"true"` / `"false"` | 자식 존재 여부 |
+| `data-expanded` | `"true"` (자식 있을 때만) | 초기값 펼쳐진 상태 |
+| `style.paddingLeft` | `(depth * 20) + 'px'` | 들여쓰기 |
+
+### 상태 전환 메서드
+
+모든 상태 전환 메서드는 단순 시그니처 — `id`가 `data-node-id` 값.
+
+| 메서드 | 파라미터 | 타입 | 필수 | 기본값 | 의미 | 반환 |
+|--------|----------|------|------|--------|------|------|
+| `expand` | `id` | string \| number | ✓ | — | 지정 노드 펼침. 자식이 이전에 expanded였다면 재귀적으로 펼침. `data-has-children` 없으면 no-op | `void` |
+| `collapse` | `id` | string \| number | ✓ | — | 지정 노드 접힘. 모든 하위 노드 `display: none` | `void` |
+| `toggle` | `id` | string \| number | ✓ | — | `data-expanded` 상태에 따라 `expand`/`collapse` 위임 | `void` |
+| `expandAll` | — | — | — | — | 전체 트리 펼침 | `void` |
+| `collapseAll` | — | — | — | — | 전체 트리 접힘 (루트 depth=0만 노출) | `void` |
+| `getNodeState` | `id` | string \| number | ✓ | — | 노드의 모든 `data-*` 속성 복사본 (`data-` prefix 제거) | `object \| null` |
+| `clear` | — | — | — | — | 컨테이너의 `innerHTML = ''` | `void` |
+| `destroy` | — | — | — | — | 네임스페이스/인스턴스 null | `void` |
 
 ---
 

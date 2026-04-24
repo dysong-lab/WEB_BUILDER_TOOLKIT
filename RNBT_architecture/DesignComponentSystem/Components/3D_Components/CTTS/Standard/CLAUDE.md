@@ -14,7 +14,7 @@ MeshStateMixin
 
 ### meshName
 
-`HV-CTTS-17`
+HV-CTTS-17
 
 ### colorMap
 

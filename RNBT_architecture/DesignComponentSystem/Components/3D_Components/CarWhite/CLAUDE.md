@@ -1,17 +1,9 @@
-# CarWhite
-
-## 컴포넌트 정보
+# 컴포넌트 정보
 
 | 항목 | 값 |
 |------|-----|
 | 유형 | 개별 (1 GLTF = 1 Mesh) |
 | 기본 Mixin | MeshStateMixin |
-| meshName | CarWhite |
-
-## 모델 구조
-
-- 루트 노드: `root`
-- meshName: `CarWhite`
 
 ## 세트 현황
 

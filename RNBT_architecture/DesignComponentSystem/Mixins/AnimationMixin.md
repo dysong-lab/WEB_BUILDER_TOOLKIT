@@ -63,16 +63,6 @@ this.subscriptions = {
 
 ---
 
-## play options
-
-| 옵션 | 필수 | 의미 |
-|------|------|------|
-| `loop` | X | THREE.LoopRepeat / THREE.LoopOnce / THREE.LoopPingPong (기본값 THREE.LoopRepeat) |
-| `timeScale` | X | 재생 속도 배율 (기본값 1.0) |
-| `clampWhenFinished` | X | LoopOnce 시 마지막 프레임 유지 여부 (기본값 false) |
-
----
-
 ## 주입되는 네임스페이스
 
 `this.animation`
@@ -86,3 +76,46 @@ this.subscriptions = {
 | `isPlaying(clipName)` | 지정 클립이 현재 재생 중인지 조회 (boolean) |
 | `getClipNames()` | 사용 가능한 클립 이름 목록 반환 (string[]) |
 | `destroy()` | RAF 중단 + mixer 정리 + actionMap 정리 + null 처리 |
+
+---
+
+## 메서드 입력 포맷
+
+### `play(clipName, options?)`
+
+| 파라미터 | 타입 | 필수 | 기본값 | 의미 |
+|---------|------|------|--------|------|
+| `clipName` | string | ✓ | — | `THREE.AnimationClip.findByName(instance.animations, clipName)` 조회 대상. 미발견 시 무시 |
+| `options` | `object` | X | `undefined` | 아래 참고 |
+
+**`options` 형태**
+
+```javascript
+{
+    loop?:              number,   // THREE.LoopRepeat | LoopOnce | LoopPingPong
+    timeScale?:         number,   // 재생 속도 배율
+    clampWhenFinished?: boolean   // LoopOnce 시 마지막 프레임 유지
+}
+```
+
+| 필드 | 타입 | 필수 | 기본값 | 의미 |
+|------|------|------|--------|------|
+| `loop` | number (THREE 상수) | X | `THREE.LoopRepeat` | 루프 모드 |
+| `timeScale` | number | X | `1.0` | 재생 속도 배율 (음수면 역재생) |
+| `clampWhenFinished` | boolean | X | `false` | `LoopOnce` 종료 시 마지막 프레임 유지 여부 |
+
+**반환**: `void`
+
+**비고**: `instance.animations`가 비어 있거나 `clipName`이 일치하는 클립이 없으면 **무시**(no-op, 오류 아님). 이미 재생 중이면 재시작 없이 무시.
+
+### 단순 시그니처
+
+| 메서드 | 파라미터 | 타입 | 필수 | 기본값 | 의미 | 반환 |
+|--------|----------|------|------|--------|------|------|
+| `stop` | `clipName` | string | ✓ | — | 해당 클립의 Action 정지 + actionMap 제거. 활성 Action 0이면 내부 RAF 중단 | `void` |
+| `setSpeed` | `clipName` | string | ✓ | — | 재생 중인 Action에만 적용. 미재생 시 무시 | `void` |
+| `setSpeed` | `speed` | number | ✓ | — | `action.timeScale`에 대입 | — |
+| `stopAll` | — | — | — | — | 모든 Action `stop()` + actionMap clear + RAF 중단 | `void` |
+| `isPlaying` | `clipName` | string | ✓ | — | Action 존재 + `isRunning()` | `boolean` |
+| `getClipNames` | — | — | — | — | `instance.animations[].name` 배열 반환. 클립 없으면 `[]` | `string[]` |
+| `destroy` | — | — | — | — | RAF 중단 + `mixer.stopAllAction()` + `mixer.uncacheRoot()` + actionMap clear + 네임스페이스 null | `void` |

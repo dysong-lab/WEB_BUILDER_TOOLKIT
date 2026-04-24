@@ -1,17 +1,9 @@
-# CTT
-
-## 컴포넌트 정보
+# 컴포넌트 정보
 
 | 항목 | 값 |
 |------|-----|
 | 유형 | 개별 (1 GLTF = 2 Mesh: CTT_034, CTT_035) |
 | 기본 Mixin | MeshStateMixin |
-| meshName | CTT_034, CTT_035 |
-
-## 모델 구조
-
-- 루트 노드: `CTT`
-- meshName: `CTT_034`, `CTT_035`
 
 ## 세트 현황
 

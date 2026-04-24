@@ -3,13 +3,7 @@
 | 항목 | 값 |
 |------|-----|
 | 유형 | 개별 (1 GLTF = 2 Mesh: automaticDoor, doorGlass_A) |
-| meshName | automaticDoor, doorGlass_A |
 | 기본 Mixin | MeshStateMixin |
-
-## 모델 구조
-
-- 루트 노드: `root`
-- meshName: `automaticDoor`, `doorGlass_A`
 
 ## 세트 현황
 

@@ -6,11 +6,6 @@
 | 기본 Mixin | MeshStateMixin |
 | meshName | BCB |
 
-## 모델 구조
-
-- 루트 노드: `BCB`
-- meshName: `BCB`
-
 ## 세트 현황
 
 | 세트 | 상태 |

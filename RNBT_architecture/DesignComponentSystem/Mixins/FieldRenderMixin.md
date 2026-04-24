@@ -154,6 +154,45 @@ DOM:
 
 ---
 
+## 메서드 입력 포맷
+
+### `renderData(payload)`
+
+**`payload` 형태**
+
+```javascript
+{
+    response: {
+        [key: string]: string | number | null   // key는 cssSelectors의 KEY 중 하나
+    }
+}
+```
+
+| 필드 | 타입 | 필수 | 기본값 | 의미 |
+|------|------|------|--------|------|
+| `response` | object (plain) | ✓ | — | KEY → 값 매핑. `response` 자체가 `null`/`undefined`이면 **Error throw** (`[FieldRenderMixin] data is null`) |
+
+**값의 처리 규칙** (`_applyValue`)
+
+| 조건 | 결과 |
+|------|------|
+| `value == null` | 해당 KEY 건너뜀 (명시적 skip) |
+| `cssSelectors[key]` 없음 | 해당 KEY 건너뜀 |
+| `datasetAttrs[key]` 존재 | `el.setAttribute('data-' + datasetAttrs[key], value)` |
+| `elementAttrs[key]` 존재 | `el.setAttribute(elementAttrs[key], value)` |
+| `styleAttrs[key]` 존재 | `el.style[property] = value + unit` |
+| 위 3개 모두 없음 | `el.textContent = value` |
+
+**반환**: `void`
+
+### `destroy()`
+
+파라미터 없음. 네임스페이스 필드(`renderData`, `cssSelectors`, `datasetAttrs`, `elementAttrs`, `styleAttrs`) 및 `instance.fieldRender` 모두 null.
+
+**반환**: `void`
+
+---
+
 ## 디자인 변형
 
 같은 register.js로 HTML/CSS만 교체할 수 있다. 조건은 **cssSelectors와 datasetAttrs의 VALUE에 해당하는 요소가 HTML에 존재**하는 것이다.

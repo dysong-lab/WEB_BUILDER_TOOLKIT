@@ -21,10 +21,6 @@ MeshStateMixin
 | error | 0xf87171 |
 | offline | 0x6b7280 |
 
-### meshName
-
-`ALTS-A1`
-
 ### 구독 (subscriptions)
 
 | topic | handler |

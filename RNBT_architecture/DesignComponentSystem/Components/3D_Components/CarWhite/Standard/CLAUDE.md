@@ -12,10 +12,6 @@
 
 MeshStateMixin
 
-### meshName
-
-`CarWhite`
-
 ### colorMap
 
 | 상태 | 색상 |

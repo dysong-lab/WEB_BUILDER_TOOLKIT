@@ -14,7 +14,7 @@ MeshStateMixin
 
 ### meshName
 
-`SHV-3-1`
+SHV-3-1
 
 ### colorMap
 

@@ -65,6 +65,25 @@ applyMeshVisibilityMixin(this, {});
 | `isVisible(meshName)` | 지정 메시의 현재 가시성 조회 (boolean) |
 | `destroy()` | 모든 메시 보이게 복원 + 상태 맵 정리 + 모든 속성/메서드 null 처리 |
 
+---
+
+## 메서드 입력 포맷
+
+모든 파라미터가 단순 타입이므로 표로 기술.
+
+| 메서드 | 파라미터 | 타입 | 필수 | 기본값 | 의미 | 반환 |
+|--------|----------|------|------|--------|------|------|
+| `show` | `meshName` | string | ✓ | — | `getObjectByName(meshName)` 대상. `mesh.visible = true` + visibilityMap 기록. 조회 실패 시 no-op | `void` |
+| `hide` | `meshName` | string | ✓ | — | `mesh.visible = false` + visibilityMap 기록 | `void` |
+| `toggle` | `meshName` | string | ✓ | — | 현재 `mesh.visible`의 부정값으로 토글 | `void` |
+| `showOnly` | `meshNames` | `string[]` | ✓ | — | `appendElement.traverse`로 모든 named 자식 순회 — `meshNames`에 포함되면 visible=true, 아니면 false. root는 제외 (`child === instance.appendElement` 건너뜀) | `void` |
+| `showAll` | — | — | — | — | 모든 named 자식(root 제외)을 visible=true | `void` |
+| `hideAll` | — | — | — | — | 모든 named 자식(root 제외)을 visible=false | `void` |
+| `isVisible` | `meshName` | string | ✓ | — | visibilityMap 우선 조회, 없으면 `mesh.visible` 실시간 조회. 메시 미존재 시 `false` | `boolean` |
+| `destroy` | — | — | — | — | 내부적으로 `showAll()` 호출 후 맵 clear + 네임스페이스 null | `void` |
+
+**계층 구조 주의**: Three.js의 `visible`은 **상속**되므로, `Group floor1 { Mesh wall1 }`에서 `hideAll()` 후 `show('floor1')`만 하면 자식 `wall1`의 `visible=false`가 남아 실제 렌더되지 않음. 자식 이름으로 직접 `show` 또는 `showOnly(['wall1', ...])` 사용해야 함.
+
 ### 일괄 메서드 (showAll / hideAll / showOnly) 주의사항
 
 - 사전 `show/hide` 호출 없이 바로 사용 가능. `appendElement.traverse`로 모든 named 객체를 자율 탐색한다.

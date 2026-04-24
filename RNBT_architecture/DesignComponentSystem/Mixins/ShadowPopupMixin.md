@@ -62,9 +62,10 @@ instance.appendElement
 
 ### 기타 옵션
 
-| 옵션 | 필수 | 의미 |
-|------|------|------|
-| `onCreated` | X | Shadow DOM 생성 완료 후 콜백. `(shadowRoot) => void` |
+| 옵션 | 타입 | 필수 | 기본값 | 의미 |
+|------|------|------|--------|------|
+| `onCreated` | `(shadowRoot: ShadowRoot) => void` | X | — | Shadow DOM 생성 완료 직후 1회 호출. 팝업 내부에서 다른 Mixin을 적용할 때 사용 |
+| `datasetAttrs` | `object` | X | `{}` | dataset 속성 매핑. `cssSelectors`와 동일한 KEY 규약 |
 
 ---
 
@@ -83,6 +84,52 @@ instance.appendElement
 | `bindPopupEvents(events)` | Shadow DOM 내 이벤트 위임. `show()` 전에 호출 가능 (지연 바인딩) |
 | `removePopupEvents()` | `bindPopupEvents`로 바인딩된 이벤트 해제 |
 | `destroy()` | 이벤트 해제 + Shadow DOM 호스트 제거 + 모든 속성/메서드 null 처리 |
+
+---
+
+## 메서드 입력 포맷
+
+### 단순 시그니처
+
+| 메서드 | 파라미터 | 타입 | 필수 | 기본값 | 의미 | 반환 |
+|--------|----------|------|------|--------|------|------|
+| `show` | — | — | — | — | 최초 호출 시 `ensureInstance()`로 Shadow DOM 생성. `template` 미발견 시 **`Error` throw** | `void` |
+| `hide` | — | — | — | — | Shadow DOM 호스트의 `display: none`. Shadow DOM 자체는 유지 | `void` |
+| `query` | `selector` | string | ✓ | — | CSS 선택자. Shadow DOM 내 단일 요소 | `Element \| null` (shadowRoot 미생성 시 `null`) |
+| `queryAll` | `selector` | string | ✓ | — | CSS 선택자 | `NodeList` (shadowRoot 미생성 시 빈 배열 `[]`) |
+| `removePopupEvents` | — | — | — | — | `bindPopupEvents`로 등록된 모든 리스너 해제 | `void` |
+| `destroy` | — | — | — | — | `removePopupEvents` 호출 + host DOM 제거 + 모든 네임스페이스 필드 null | `void` |
+
+> `query` / `queryAll` 반환 타입이 다르다는 점 주의. `query`는 미생성 시 `null`, `queryAll`은 빈 배열.
+
+### 복합 객체 파라미터
+
+#### `bindPopupEvents(events)`
+
+**`events` 형태**
+
+```javascript
+{
+    [eventType]: {                      // 'click' | 'mouseover' | 'input' | ...
+        [selector]: handler | '@eventBusTopic'
+    }
+}
+```
+
+| 키 | 타입 | 의미 |
+|----|------|------|
+| `eventType` | string | DOM 이벤트 이름 |
+| `selector` | string (CSS 선택자) | Shadow DOM 내부 요소 선택자. 보통 `this.shadowPopup.cssSelectors.xxx` computed property로 참조 |
+| value: `handler` | `(event: Event) => void` | **DOM event 객체 하나만 인자로 받는 함수**. `targetInstance`는 전달되지 않음 |
+| value: `'@topic'` | string (`@`로 시작) | Weventbus 토픽으로 전파. 페이로드는 `{ event, targetInstance: instance }` |
+
+**반환**: `void`
+
+**동작 시점**
+
+- `show()` 호출 전: 내부 `_pendingEvents`에 보관만 함. 실제 바인딩 없음.
+- 최초 `show()` 호출: Shadow DOM 생성 직후 `_pendingEvents`를 일괄 바인딩.
+- `show()` 이후: 즉시 바인딩.
 
 ---
 

@@ -12,10 +12,6 @@
 
 MeshStateMixin
 
-### meshName
-
-`fabric_A`, `officeChair`
-
 ### colorMap
 
 | 상태 | 색상 |

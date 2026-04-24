@@ -2,7 +2,7 @@
 
 | 항목 | 값 |
 |------|-----|
-| 유형 | 개별 (1 GLTF = 1 장비, 8 Mesh) |
+| 유형 | 개별 (1 GLTF = 1 Mesh) |
 | 기본 Mixin | MeshStateMixin |
 
 ## 장비 설명
@@ -12,15 +12,7 @@ ACB(Air Circuit Breaker) Metasol — 기중차단기. DC ACB Switch Disconnector
 ## 모델 구조
 
 - 루트 노드: `ACBmetasol`
-- meshName 목록:
-  - `DDH003`
-  - `DDH005`
-  - `DDH001`
-  - `DDH002`
-  - `DDH021`
-  - `Object231`
-  - `Rectangle070`
-  - `Line005`
+- meshName: `ACBmetasol`
 
 ## 세트 현황
 

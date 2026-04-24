@@ -12,10 +12,6 @@
 
 MeshStateMixin
 
-### meshName
-
-`CONTREV`
-
 ### colorMap
 
 | 상태 | 색상 |

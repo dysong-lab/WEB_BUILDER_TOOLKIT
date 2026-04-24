@@ -32,6 +32,7 @@
 | ClippingPlaneMixin | 3D 모델의 내부를 보여준다 (ClippingPlane으로 절단면 표시) |
 | ShadowPopupMixin | Shadow DOM으로 팝업을 생성하고 표시/숨김을 관리한다 |
 | 3DShadowPopupMixin | 3D 컴포넌트에서 Shadow DOM으로 팝업을 생성하고 표시/숨김을 관리한다 |
+| ComponentMixin | 뷰어 전용 라이프사이클 훅(`_onViewerReady`/`_onViewerDestroy`) 규약과 3D ModelLoader 리소스 로딩(`applyModelLoaderMixin`)을 제공한다 |
 
 ---
 

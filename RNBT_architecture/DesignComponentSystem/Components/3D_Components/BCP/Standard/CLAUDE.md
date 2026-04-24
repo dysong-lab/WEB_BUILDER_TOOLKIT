@@ -12,10 +12,6 @@
 
 MeshStateMixin
 
-### meshName
-
-`BCP`
-
 ### colorMap
 
 | 상태 | 색상 |

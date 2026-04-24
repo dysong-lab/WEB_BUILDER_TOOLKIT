@@ -14,7 +14,7 @@ MeshStateMixin
 
 ### meshName
 
-`JP-2`
+JP-2
 
 ### colorMap
 

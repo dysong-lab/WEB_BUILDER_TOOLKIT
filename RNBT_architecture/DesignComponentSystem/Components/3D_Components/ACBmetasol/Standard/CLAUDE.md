@@ -21,19 +21,6 @@ MeshStateMixin
 | error | 0xf87171 |
 | offline | 0x6b7280 |
 
-### meshName 목록
-
-| meshName | 설명 |
-|----------|------|
-| DDH003 | 본체 메시 1 |
-| DDH005 | 본체 메시 2 |
-| DDH001 | 본체 메시 3 |
-| DDH002 | 본체 메시 4 |
-| DDH021 | 본체 메시 5 |
-| Object231 | 상단 보조 메시 |
-| Rectangle070 | 하단 보조 메시 |
-| Line005 | 라인 메시 |
-
 ### 구독 (subscriptions)
 
 | topic | handler |

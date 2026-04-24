@@ -18,9 +18,12 @@ ECharts 인스턴스의 라이프사이클(생성, 옵션 적용, 리사이즈, 
 |-----|------|------|
 | `container` | O | 차트가 렌더링될 요소 |
 
-### option (선택)
+### 기타 옵션
 
-차트의 기본 옵션 객체. Mixin 적용 시 전달하며, renderData가 데이터를 이 옵션에 병합한다.
+| 옵션 | 타입 | 필수 | 기본값 | 의미 |
+|------|------|------|--------|------|
+| `option` | `object` (ECharts option) | X | `{}` | 차트의 기본 옵션. `renderData` 호출 시 매번 `JSON.parse(JSON.stringify(option))`으로 deep clone된 후 데이터가 병합됨 |
+| `mapData` | `(data, optionCopy) => mergedOption` | X | — | 데이터 병합 커스텀 함수. Pie/Gauge/Radar 등 기본 규약에 맞지 않는 차트에 사용. 미제공 시 기본 규약 적용 |
 
 ```javascript
 option: {
@@ -29,10 +32,6 @@ option: {
     series: [{ type: 'line' }]
 }
 ```
-
-### mapData (선택)
-
-데이터를 옵션에 병합하는 커스텀 함수. `(data, optionCopy) => mergedOption` 형태. Pie, Gauge, Radar 등 기본 규약에 맞지 않는 차트에 사용한다. 미제공 시 기본 규약이 적용된다.
 
 ### renderData가 기대하는 데이터
 
@@ -98,3 +97,56 @@ this.subscriptions = {
 | `resize()` | 차트 리사이즈 (윈도우 리사이즈 시 호출) |
 | `getInstance()` | ECharts 인스턴스 반환 (고급 사용) |
 | `destroy()` | 인스턴스 dispose + 모든 속성/메서드 정리 |
+
+---
+
+## 메서드 입력 포맷
+
+### `renderData(payload)`
+
+**`payload` 형태**
+
+```javascript
+// 기본 규약 (mapData 미제공 시):
+{
+    response: {
+        categories: Array<string | number>,  // xAxis.data 로 매핑
+        values:     Array<Array<number>>     // values[i] → series[i].data
+    }
+}
+
+// mapData 제공 시: response는 mapData 함수의 첫 인자로 그대로 전달됨 (자유 스키마)
+```
+
+| 필드 | 타입 | 필수 | 기본값 | 의미 |
+|------|------|------|--------|------|
+| `response` | `object` | ✓ | — | `null` 이면 **Error throw** (`[EChartsMixin] data is null`). 내부에서 option deep clone 후 병합하여 `setOption` 호출 |
+
+**병합 규칙**
+
+| 조건 | 처리 |
+|------|------|
+| `mapData` 제공 | `mapData(data, optionCopy)` 반환값을 그대로 `setOption`에 전달 |
+| `mapData` 미제공 + `data.categories` 있음 + `option.xAxis` 있음 | `option.xAxis.data = data.categories` |
+| `mapData` 미제공 + `data.values` 있음 + `option.series` 있음 | `option.series[i].data = data.values[i]` (series 길이만큼) |
+
+**반환**: `void`
+
+### `setOption(option, notMerge?)`
+
+| 파라미터 | 타입 | 필수 | 기본값 | 의미 |
+|---------|------|------|--------|------|
+| `option` | `object` (ECharts option) | ✓ | — | ECharts에 직접 전달 |
+| `notMerge` | `boolean` | X | `false` | `true`면 기존 옵션 대체, `false`면 merge |
+
+**반환**: `void` (내부적으로 `ensureInstance()`로 lazy init 후 ECharts의 `setOption` 호출)
+
+### 파라미터 없는 메서드
+
+| 메서드 | 의미 | 반환 |
+|--------|------|------|
+| `resize` | ECharts 인스턴스의 `resize()` 호출. 인스턴스 미생성 시 no-op | `void` |
+| `getInstance` | 현재 ECharts 인스턴스 반환. `renderData`/`setOption` 호출 전이면 `null` | `echarts.ECharts \| null` |
+| `destroy` | window resize 리스너 해제 + 인스턴스 `dispose()` + 네임스페이스 null | `void` |
+
+**비고**: `container`가 `appendElement`에 없으면 `ensureInstance()`가 **Error throw** (`container not found`). 즉 `renderData`/`setOption` 첫 호출 시까지 오류 발견이 지연됨.

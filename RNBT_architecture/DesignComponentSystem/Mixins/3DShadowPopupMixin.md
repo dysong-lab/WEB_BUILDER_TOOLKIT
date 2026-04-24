@@ -42,10 +42,10 @@
 
 ### 옵션
 
-| 옵션 | 필수 | 의미 |
-|------|------|------|
-| `getHTML` | O | 팝업 HTML을 반환하는 함수. `this`는 instance로 바인딩된다. `() => string` |
-| `getStyles` | O | 팝업 CSS를 반환하는 함수. `this`는 instance로 바인딩된다. `() => string` |
+| 옵션 | 타입 | 필수 | 기본값 | 의미 |
+|------|------|------|--------|------|
+| `getHTML` | `(this: instance) => string` | ✓ | — | 팝업 HTML을 반환하는 함수. `getHTML.call(instance)`로 호출 — `this`는 instance에 바인딩 |
+| `getStyles` | `(this: instance) => string` | ✓ | — | 팝업 CSS를 반환하는 함수. 반환 문자열이 `<style>{css}</style>` 형태로 Shadow DOM에 주입 |
 
 ### 네임스페이스 (`this.shadowPopup`)
 
@@ -58,6 +58,50 @@
 | `bindPopupEvents(events)` | Shadow DOM 내 이벤트 위임. `'@eventName'`은 Weventbus로 전파. **`show()` 전에 호출 가능 (지연 바인딩)** |
 | `removePopupEvents()` | `bindPopupEvents`로 바인딩된 이벤트 해제 |
 | `destroy()` | 이벤트 해제 + Shadow DOM 호스트 제거 + 모든 속성/메서드 null 처리 |
+
+---
+
+## 메서드 입력 포맷
+
+### 단순 시그니처
+
+| 메서드 | 파라미터 | 타입 | 필수 | 기본값 | 의미 | 반환 |
+|--------|----------|------|------|--------|------|------|
+| `show` | — | — | — | — | 최초 호출 시 `ensureInstance()` — `document.createElement('div')` → `instance.page.appendElement.appendChild(host)` → `attachShadow` → `getHTML()`/`getStyles()` 결과 주입. **완전 동기** | `void` |
+| `hide` | — | — | — | — | `host.style.display = 'none'`. Shadow DOM 유지 | `void` |
+| `query` | `selector` | string | ✓ | — | CSS 선택자 | `Element \| null` (shadowRoot 미생성 시 `null`) |
+| `queryAll` | `selector` | string | ✓ | — | CSS 선택자 | `NodeList` (shadowRoot 미생성 시 빈 배열 `[]`) |
+| `removePopupEvents` | — | — | — | — | 등록된 모든 리스너 해제 | `void` |
+| `destroy` | — | — | — | — | `removePopupEvents` 호출 + host DOM 제거 + 네임스페이스 필드 null | `void` |
+
+### 복합 객체 파라미터
+
+#### `bindPopupEvents(events)`
+
+**`events` 형태** (2D ShadowPopup과 **동일한 규약**)
+
+```javascript
+{
+    [eventType]: {                      // 'click' | 'mouseover' | ...
+        [selector]: handler | '@eventBusTopic'
+    }
+}
+```
+
+| 키 | 타입 | 의미 |
+|----|------|------|
+| `eventType` | string | DOM 이벤트 이름 |
+| `selector` | string (CSS 선택자) | Shadow DOM 내부 요소 선택자 |
+| value: `handler` | `(event: Event) => void` | DOM event 객체 하나만 받는 함수 |
+| value: `'@topic'` | string (`@`로 시작) | Weventbus 토픽으로 전파. 페이로드 `{ event, targetInstance: instance }` |
+
+**반환**: `void`
+
+**동작 시점** (2D와 동일한 lazy 규약)
+
+- `show()` 이전: 내부 `_pendingEvents`에 큐잉만 됨
+- 최초 `show()`: Shadow DOM 생성 직후 큐에서 꺼내 일괄 바인딩
+- `show()` 이후: 즉시 바인딩
 
 ---
 

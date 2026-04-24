@@ -97,7 +97,7 @@ Advanced 변형에서 필요한 기능이 기존 Mixin으로 표현되지 않을
 | 2 | meshesArea/area_01 | 컨테이너 | camera_highlight | 카메라 이동과 발광 강조 동시 적용 (MeshState+CameraFocus+MeshHighlight) | 완료 |
 | 3 | meshesArea/area_01 | 컨테이너 | visibility | 층별/구역별 선택적 표시 (MeshState+MeshVisibility) | 완료 |
 | 4 | meshesArea/area_01 | 컨테이너 | animation | 레이어/시간 GLTF 애니메이션 재생 (MeshState+AnimationMixin) | 완료 |
-| 5 | meshesArea/area_01 | 컨테이너 | clipping | 건물 단면 분석 (MeshState+ClippingPlane) | 대기 |
+| 5 | meshesArea/area_01 | 컨테이너 | clipping | 건물 단면 분석 (MeshState+ClippingPlane) | 완료 |
 | 6 | meshesArea/area_01 | 컨테이너 | hudInfo | 구역별 인원/자산/상태 오버레이 (MeshState+FieldRender+meshName) | 대기 |
 | 7 | Chiller | 개별 | visibility | 하우징/내부 컴포넌트 선택 노출 (MeshState+MeshVisibility) | 대기 |
 | 8 | Chiller | 개별 | clipping | 압축기 내부 단면 분석 (MeshState+ClippingPlane) | 대기 |
@@ -113,6 +113,53 @@ Advanced 변형에서 필요한 기능이 기존 Mixin으로 표현되지 않을
 | 18 | meshesArea/STATCOM_MMC | 컨테이너 | pipeFlow | 파이프 mesh의 baseColorTexture UV 스크롤로 유체 흐름 시각화 (MeshState+커스텀 메서드) | 완료 |
 | 19 | meshesArea/STATCOM_BD | 컨테이너 | animation | GLTF 내장 rotation 클립 재생으로 장비 동작 시각화 (MeshState+Animation) | 완료 |
 | 20 | meshesArea/STATCOM_Submodule | 컨테이너 | animation | GLTF 내장 다채널 translation/rotation 클립 재생으로 서브모듈 동작 시각화 (MeshState+Animation) | 완료 |
+| 21 | GasDetector | 개별 | sensorHud | 실시간 가스농도 3D 수치 라벨 + 감지반경 반투명 구체 시각화 (MeshState+커스텀 메서드) | 대기 |
+| 22 | LeakDetector | 개별 | leakAlarmPulse | 누수 감지 시 색상 펄스 + 누수 방향 화살표 표시 (MeshState+커스텀 메서드) | 대기 |
+| 23 | IntrusionDetectionSensor | 개별 | sensorAlertDirection | 침입 방향 화살표 + 경고 원형 펄스 웨이브 방사 (MeshState+커스텀 메서드) | 대기 |
+| 24 | tempHumiTH2B | 개별 | sensorDataHud | 실시간 온습도 3D 라벨 + 임계값 초과 시 색상/펄스 (MeshState+커스텀 메서드) | 대기 |
+| 25 | thermohygrostat | 개별 | sensorDataHud | 실시간 온습도 3D 라벨 + 임계값 초과 시 색상/펄스 (MeshState+커스텀 메서드) | 대기 |
+| 26 | MonnitTemperature_sensor | 개별 | sensorDataHud | 실시간 온도 3D 라벨 + 임계값 초과 펄스 (MeshState+커스텀 메서드) | 대기 |
+| 27 | THERMALCAM | 개별 | heatmapSurface | 열화상 온도 분포를 표면 color gradient texture로 동적 매핑 (MeshState+커스텀 메서드) | 대기 |
+| 28 | FLIREx | 개별 | heatmapSurface | 적외선 온도 분포 표면 매핑 스트리밍 (MeshState+커스텀 메서드) | 대기 |
+| 29 | Marker_FixedCCTV | 개별 | fieldOfView | 반투명 원뿔 시야각 콘 표시 (신규 Mixin: CameraFOVConeMixin) | 대기 |
+| 30 | Marker_RotationaCCTV | 개별 | fieldOfView | PTZ rotation 동기화 시야각 콘 (신규 Mixin: CameraFOVConeMixin) | 대기 |
+| 31 | Marker_MoveCCTV | 개별 | fieldOfView | 이동형 시야각 콘 (신규 Mixin: CameraFOVConeMixin) | 대기 |
+| 32 | Marker_AICCTV | 개별 | ai_detectionZone | FOV 콘 + AI 감지객체 3D 마커 스폰 (CameraFOVConeMixin+커스텀 메서드) | 대기 |
+| 33 | IRISID_iCAM7 | 개별 | detectionMarker | 홍채/얼굴 인식 성공/실패 위치 임시 마커 (MeshState+커스텀 메서드) | 대기 |
+| 34 | LPR | 개별 | plateDetectionOverlay | 번호판 bbox 강조 + 번호 팝업 표시 (MeshHighlight+3DShadowPopup+커스텀 메서드) | 대기 |
+| 35 | CoolingTower | 개별 | steamEjection | 상부 수증기 파티클 (온도 비례 생성률) (MeshState+커스텀 메서드) | 대기 |
+| 36 | CoolingTower02 | 개별 | steamEjection | 상부 수증기 파티클 (MeshState+커스텀 메서드) | 대기 |
+| 37 | CoolingTower03 | 개별 | steamEjection | 상부 수증기 파티클 (MeshState+커스텀 메서드) | 대기 |
+| 38 | Pump | 개별 | dynamicRpm | RPM 비례 임펠러 회전 + 관성 감쇠 (MeshState+커스텀 메서드) | 대기 |
+| 39 | Heatexchanger | 개별 | dynamicRpm | RPM 비례 팬 회전 (MeshState+커스텀 메서드) | 대기 |
+| 40 | AHU103 | 개별 | dynamicRpm | 팬/블레이드 RPM 비례 회전 (MeshState+커스텀 메서드) | 대기 |
+| 41 | OHU103 | 개별 | outdoorUnitPerformance | 냉매 압력/온도 3D 게이지 + 팬 회전 (MeshState+커스텀 메서드) | 대기 |
+| 42 | Generator | 개별 | generatorOutput | 출력 kW 3D 바그래프 실시간 (MeshState+커스텀 메서드) | 대기 |
+| 43 | GeneratorSmall | 개별 | generatorOutput | 출력 kW 3D 바그래프 (MeshState+커스텀 메서드) | 대기 |
+| 44 | Aircon_Ceiling01 | 개별 | indoorUnitTemperature | 모드/설정온도 HUD + 실내온도 미니차트 texture (MeshState+ECharts Canvas+커스텀 메서드) | 대기 |
+| 45 | VCB | 개별 | breaker_leverPosition | ON/OFF/TRIP 레버 회전 애니메이션 (MeshState+커스텀 메서드) | 대기 |
+| 46 | MCCB | 개별 | breaker_leverPosition | ON/OFF/TRIP 레버 회전 (MeshState+커스텀 메서드) | 대기 |
+| 47 | ALTS | 개별 | breaker_leverPosition | ON/OFF/TRIP 레버 회전 (MeshState+커스텀 메서드) | 대기 |
+| 48 | ACBmetasol | 개별 | breaker_leverPosition | ON/OFF/TRIP 레버 회전 (MeshState+커스텀 메서드) | 대기 |
+| 49 | ACBsusol | 개별 | breaker_leverPosition | ON/OFF/TRIP 레버 회전 (MeshState+커스텀 메서드) | 대기 |
+| 50 | Inverter | 개별 | powerFlowIndicator | 충/방전 방향 화살표 + 전력량 선 굵기 (MeshState+커스텀 메서드) | 대기 |
+| 51 | PCS | 개별 | powerFlowIndicator | 전력 흐름 방향 화살표 (MeshState+커스텀 메서드) | 대기 |
+| 52 | LithiumionBattery | 개별 | batteryHierarchyZoom | Rack→Module→Cell 계층 확대 + 각 레벨 HUD (MeshVisibility+CameraFocus+커스텀 메서드) | 대기 |
+| 53 | UPS | 개별 | upsStatus | 3모드 LED(정상/바이패스/배터리) + 잔여시간 카운트다운 (MeshState+커스텀 메서드) | 대기 |
+| 54 | B3F_UPS | 개별 | upsStatus | 3모드 LED + 방전 카운트다운 (MeshState+커스텀 메서드) | 대기 |
+| 55 | AutomaticDoor2P | 개별 | doorOpenClose | 문 개폐 애니메이션 + 불허 시 경광 펄스 (MeshState+커스텀 메서드) | 대기 |
+| 56 | UBio-XFace | 개별 | facialRecognitionFeedback | 인식 성공/실패 하이라이트 + 이름 팝업 (MeshHighlight+3DShadowPopup+커스텀 메서드) | 대기 |
+| 57 | UBio-XFacePremium | 개별 | facialRecognitionFeedback | 인식 성공/실패 피드백 + 팝업 (MeshHighlight+3DShadowPopup+커스텀 메서드) | 대기 |
+| 58 | SpeedGateSet01 | 개별 | gateAccessEvent | 게이트 암 회전 애니메이션 + LED 허가/거부 피드백 (MeshState+커스텀 메서드) | 대기 |
+| 59 | SpeedGateSet02 | 개별 | gateAccessEvent | 게이트 암 회전 + LED 피드백 (MeshState+커스텀 메서드) | 대기 |
+| 60 | SpeedGateSet03 | 개별 | gateAccessEvent | 게이트 암 회전 + LED 피드백 (MeshState+커스텀 메서드) | 대기 |
+| 61 | CardReader_T40 | 개별 | cardAccessFeedback | 카드 태깅 LED 상태(녹/황/적) + 사운드 피드백 (MeshState+커스텀 메서드) | 대기 |
+| 62 | Marker_Firealarm | 개별 | emergencyZoneRadius | 보호 영역 반투명 구체 + 비상 시 발광 증가 (MeshState+커스텀 메서드) | 대기 |
+| 63 | Marker_IndoorHydrant | 개별 | emergencyZoneRadius | 보호 영역 반투명 구체 (MeshState+커스텀 메서드) | 대기 |
+| 64 | Marker_OutdoorHydrant | 개별 | emergencyZoneRadius | 보호 영역 반투명 구체 (MeshState+커스텀 메서드) | 대기 |
+| 65 | meshesArea/area_01 | 컨테이너 | zonalHeatmap | 구역별 점유율/온도/위험도 color gradient 매핑 (신규 Mixin: ZonalHeatmapMixin) | 대기 |
+| 66 | meshesArea/STATCOM_BD | 컨테이너 | statcom_powerFlow | 무효전력 투입 진행 3D 바/원형 progress (MeshState+커스텀 메서드) | 대기 |
+| 67 | meshesArea/STATCOM_Submodule | 컨테이너 | submoduleDetailZoom | 서브모듈 부품 확대 + 부품별 온도/수명 라벨 (CameraFocus+MeshVisibility+커스텀 메서드) | 대기 |
 
 > `plan-3d-advanced-queue`로 후보를 발굴하여 등록한다.
 >

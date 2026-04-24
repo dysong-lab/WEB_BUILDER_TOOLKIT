@@ -12,10 +12,6 @@
 
 MeshStateMixin
 
-### meshName
-
-`UPS`
-
 ### colorMap
 
 | 상태 | 색상 |

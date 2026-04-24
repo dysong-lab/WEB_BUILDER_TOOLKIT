@@ -245,6 +245,67 @@ this.customEvents = {
 
 ---
 
+## 메서드 입력 포맷
+
+### `renderData(payload)`
+
+**`payload` 형태**
+
+```javascript
+{
+    response: Array<{
+        [key: string]: string | number | null   // key는 cssSelectors의 KEY 중 하나
+    }>
+}
+```
+
+| 필드 | 타입 | 필수 | 기본값 | 의미 |
+|------|------|------|--------|------|
+| `response` | `Array<object>` | ✓ | — | 각 항목이 template을 clone해서 렌더링됨. 다음 경우 **Error throw**: `null`(`data is null`), 배열 아님(`data is not an array`), `container` 미발견, `template` 미발견 |
+
+**값 처리 규칙** — FieldRenderMixin과 동일한 4경로:
+
+| 조건 | 결과 |
+|------|------|
+| `value == null` 또는 `cssSelectors[key]` 없음 | 건너뜀 |
+| `datasetAttrs[key]` 존재 | `data-{datasetAttrs[key]}` 속성 |
+| `elementAttrs[key]` 존재 | 요소 속성(`src`, `fill` 등) |
+| `styleAttrs[key]` 존재 | `el.style[property] = value + unit` |
+| 위 3개 모두 없음 | `textContent` |
+
+**반환**: `void`
+
+### `updateItemState(id, state)` — `itemKey` 옵션 사용 시
+
+| 파라미터 | 타입 | 필수 | 기본값 | 의미 |
+|---------|------|------|--------|------|
+| `id` | string \| number | ✓ | — | `itemKey`에 해당하는 값. 내부적으로 `[data-{itemKey}="{id}"]` 속성으로 항목 탐색 |
+| `state` | `object` | ✓ | — | `{ [attrName]: value }` 형태. 각 KEY가 `data-{attrName}` 속성으로 설정됨 |
+
+**반환**: `void` (미발견 항목이면 no-op)
+
+### `getItemState(id)` — `itemKey` 옵션 사용 시
+
+| 파라미터 | 타입 | 필수 | 기본값 | 의미 |
+|---------|------|------|--------|------|
+| `id` | string \| number | ✓ | — | `itemKey`에 해당하는 값 |
+
+**반환**: `object | null` — 항목의 `data-*` 속성 복사본 `{ [attrName]: value }`. 미발견이면 `null`.
+
+### `clear()`
+
+파라미터 없음. 컨테이너의 `innerHTML = ''`.
+
+**반환**: `void`
+
+### `destroy()`
+
+파라미터 없음. 네임스페이스 필드와 `instance.listRender` 모두 null.
+
+**반환**: `void`
+
+---
+
 ## template 태그의 약속
 
 template 내부의 HTML 구조는 자유롭지만, **cssSelectors의 VALUE에 해당하는 요소**가 반드시 존재해야 한다.
