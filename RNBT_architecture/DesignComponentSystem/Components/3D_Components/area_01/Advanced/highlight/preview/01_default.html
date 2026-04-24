@@ -60,6 +60,10 @@ const log = (msg) => { logEl.textContent = msg; };
 log("area_01 Advanced/highlight preview");
 const instance = { appendElement: null, animations: [] };
 let clickable = [];
+const MODEL_CANDIDATES = [
+  "../../../../../../models/meshesArea/area_01/01_default/area_01.gltf",
+  "../../../../../models/meshesArea/area_01/01_default/area_01.gltf"
+];
 function makeFallbackModel() {
   const group = new THREE.Group();
   MESH_NAMES.forEach((name, index) => {
@@ -91,7 +95,7 @@ function finalizeModel(model, animations = []) {
   instance.appendElement = model;
   instance.animations = animations;
   scene.add(model);
-  clickable = [];
+  clickable.length = 0;
   model.traverse((obj) => { if (obj.isMesh) clickable.push(obj); });
   const box = new THREE.Box3().setFromObject(model);
   const center = box.getCenter(new THREE.Vector3());
@@ -102,14 +106,18 @@ function finalizeModel(model, animations = []) {
   camera.updateProjectionMatrix();
   controls.update();
 }
-new GLTFLoader().load("../../../../../models/meshesArea/area_01/01_default/area_01.gltf", (gltf) => {
-  finalizeModel(gltf.scene, gltf.animations || []);
-  log('model loaded\nmeshes=' + clickable.length + '\nclips=' + instance.animations.length);
-}, undefined, (error) => {
-  const model = makeFallbackModel();
-  finalizeModel(model, instance.animations || []);
-  log('model load failed, fallback used\n' + (error?.message || error));
-});
+function loadModel(candidateIndex = 0) {
+  new GLTFLoader().load(MODEL_CANDIDATES[candidateIndex], (gltf) => {
+    finalizeModel(gltf.scene, gltf.animations || []);
+    log('model loaded\npath=' + MODEL_CANDIDATES[candidateIndex] + '\nmeshes=' + clickable.length + '\nclips=' + instance.animations.length);
+  }, undefined, (error) => {
+    if (candidateIndex < MODEL_CANDIDATES.length - 1) return loadModel(candidateIndex + 1);
+    const model = makeFallbackModel();
+    finalizeModel(model, instance.animations || []);
+    log('model load failed, fallback used\n' + (error?.message || error));
+  });
+}
+loadModel();
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 function pick(event) {
