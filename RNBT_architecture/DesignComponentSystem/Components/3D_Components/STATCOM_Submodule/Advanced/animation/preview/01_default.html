@@ -104,7 +104,7 @@ function finalizeModel(model, animations = []) {
   camera.updateProjectionMatrix();
   controls.update();
 }
-new GLTFLoader().load("../../../../../models/meshesArea/STATCOM_Submodule/01_default/STATCOM_Submodule.gltf", (gltf) => {
+new GLTFLoader().load("../../../../../models/STATCOM_Submodule/01_default/STATCOM_Submodule.gltf", (gltf) => {
   finalizeModel(gltf.scene, gltf.animations || []);
   log('model loaded\nmeshes=' + clickable.length + '\nclips=' + instance.animations.length);
 }, undefined, (error) => {
