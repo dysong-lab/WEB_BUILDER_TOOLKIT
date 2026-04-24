@@ -20,7 +20,7 @@
   </style>
 </head>
 <body>
-  <div class="demo-controls"><button class="demo-btn" data-status="normal">Normal</button><button class="demo-btn" data-status="warning">Warning</button><button class="demo-btn" data-status="error">Error</button><button class="demo-btn" data-status="offline">Offline</button></div><div id="demo-view" class="demo-view"></div><div class="demo-note">클릭된 mesh의 visible 상태를 토글합니다</div><div id="demo-log" class="demo-log">loading...</div>
+  <div class="demo-controls"><button class="demo-btn" data-status="normal">Normal</button><button class="demo-btn" data-status="warning">Warning</button><button class="demo-btn" data-status="error">Error</button><button class="demo-btn" data-status="offline">Offline</button><button class="demo-btn" data-action="visibility">Visibility</button><button class="demo-btn" data-action="reset">Reset</button></div><div id="demo-view" class="demo-view"></div><div class="demo-note">3D 모델을 클릭하면 해당 Mesh의 visible 상태가 토글됩니다 · 상태 데이터는 3초마다 자동 갱신됩니다</div><div id="demo-log" class="demo-log">loading...</div>
   <script src="../../../../../../preview_runtime.js"></script>
   <script src="../../../../../../Mixins/MeshStateMixin.js"></script>
   <script src="../../../../../../Mixins/MeshVisibilityMixin.js"></script>
@@ -136,6 +136,10 @@ window.addEventListener('resize', () => {
   renderer.setSize(w, h);
 });
 (function animate() { requestAnimationFrame(animate); controls.update(); renderer.render(scene, camera); })();
+const STATUS_SEQUENCE = ['normal', 'warning', 'error', 'offline'];
+const statusMap = new Map();
+let statusTick = 0;
+let selectedMeshName = null;
 function ensureBase() { if (!__preview.instance.meshState) applyMeshStateMixin(__preview.instance, {
     colorMap: {
         normal:  0x34d399,
@@ -144,9 +148,30 @@ function ensureBase() { if (!__preview.instance.meshState) applyMeshStateMixin(_
         offline: 0x6b7280
     }
 }); if (!__preview.instance.meshVisibility) applyMeshVisibilityMixin(__preview.instance, {}); }
-function applyState(status) { ensureBase(); __preview.instance.meshState.renderData({ response: __preview.MESH_NAMES.map((meshName) => ({ meshName, status })) }); __preview.log('status=' + status); }
+function nextStatusData() {
+  const data = __preview.MESH_NAMES.map((meshName, index) => ({ meshName, status: STATUS_SEQUENCE[(statusTick + index) % STATUS_SEQUENCE.length] }));
+  statusTick = (statusTick + 1) % STATUS_SEQUENCE.length;
+  return data;
+}
+function applyData(data, reason) {
+  if (!__preview.instance.appendElement) return;
+  ensureBase();
+  __preview.instance.meshState.renderData({ response: data });
+  data.forEach(({ meshName, status }) => statusMap.set(meshName, status));
+  __preview.log(reason + '\n' + data.map(({ meshName, status }) => meshName + '=' + status).join('\n'));
+}
+function applyState(status) { applyData(__preview.MESH_NAMES.map((meshName) => ({ meshName, status })), 'manual status=' + status); }
 document.querySelectorAll('[data-status]').forEach((btn) => btn.addEventListener('click', () => applyState(btn.dataset.status)));
-__preview.renderer.domElement.addEventListener('click', (event) => { const intersects = __preview.pick(event); if (!intersects.length) return; const meshName = intersects[0].object.name; ensureBase(); __preview.instance.meshVisibility.toggle(meshName); __preview.log('toggle ▶ ' + meshName + ' = ' + __preview.instance.meshVisibility.isVisible(meshName)); });
+function toggleMesh(meshName, reason = 'toggle') {
+  ensureBase();
+  selectedMeshName = meshName;
+  __preview.instance.meshVisibility.toggle(meshName);
+  __preview.log(reason + ' ▶ ' + meshName + ' = ' + __preview.instance.meshVisibility.isVisible(meshName) + '\nstatus=' + (statusMap.get(meshName) || 'unassigned'));
+}
+document.querySelector('[data-action="visibility"]').addEventListener('click', () => toggleMesh(selectedMeshName || __preview.MESH_NAMES[0], 'manual visibility'));
+document.querySelector('[data-action="reset"]').addEventListener('click', () => { ensureBase(); __preview.instance.meshVisibility.showAll(); __preview.log('visibility reset'); });
+__preview.renderer.domElement.addEventListener('click', (event) => { const intersects = __preview.pick(event); if (!intersects.length) return; toggleMesh(intersects[0].object.name); });
+setInterval(() => applyData(nextStatusData(), 'auto refresh (3s)'), 3000);
   </script>
 </body>
 </html>

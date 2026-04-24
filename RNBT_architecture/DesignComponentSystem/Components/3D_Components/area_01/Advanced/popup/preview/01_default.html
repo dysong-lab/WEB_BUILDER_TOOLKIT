@@ -20,9 +20,10 @@
   </style>
 </head>
 <body>
-  <div class="demo-controls"><button class="demo-btn" data-status="normal">Normal</button><button class="demo-btn" data-status="warning">Warning</button><button class="demo-btn" data-status="error">Error</button><button class="demo-btn" data-status="offline">Offline</button></div><div id="demo-view" class="demo-view"></div><div class="demo-note">클릭된 mesh 이름을 확인하는 popup 대상 preview입니다</div><div id="demo-log" class="demo-log">loading...</div>
+  <div class="demo-controls"><button class="demo-btn" data-status="normal">Normal</button><button class="demo-btn" data-status="warning">Warning</button><button class="demo-btn" data-status="error">Error</button><button class="demo-btn" data-status="offline">Offline</button><button class="demo-btn" data-action="popup">Popup</button><button class="demo-btn" data-action="clear">Clear</button></div><div id="demo-view" class="demo-view"></div><div class="demo-note">3D 모델을 클릭하면 해당 Mesh의 이름과 상태가 Shadow Popup에 표시됩니다 · 상태 데이터는 3초마다 자동 갱신됩니다</div><div id="demo-log" class="demo-log">loading...</div>
   <script src="../../../../../../preview_runtime.js"></script>
   <script src="../../../../../../Mixins/MeshStateMixin.js"></script>
+  <script src="../../../../../../Mixins/3DShadowPopupMixin.js"></script>
   <script type="importmap">
   {
     "imports": {
@@ -37,6 +38,89 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 window.THREE = THREE;
 const MESH_NAMES = ["HV-U8-B","BLK-HV-01","cnsFloorB4f","G-1","HV-P1-A"];
+const popupHTML = `
+  <div class="popup-backdrop">
+    <div class="popup-card">
+      <div class="popup-header">
+        <div>
+          <div class="popup-eyebrow">area_01 / Advanced</div>
+          <h3 class="popup-name">-</h3>
+        </div>
+        <button class="popup-close" type="button" aria-label="Close">×</button>
+      </div>
+      <div class="popup-body">
+        <div class="popup-row"><span>Status</span><strong class="popup-status">-</strong></div>
+        <div class="popup-row"><span>Mesh</span><strong class="popup-mesh">-</strong></div>
+        <div class="popup-row"><span>Source</span><strong>equipmentStatus</strong></div>
+      </div>
+    </div>
+  </div>
+`;
+const popupCSS = `
+  .popup-backdrop {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.5);
+    z-index: 10;
+    font-family: Arial, sans-serif;
+  }
+  .popup-card {
+    width: 320px;
+    border-radius: 12px;
+    border: 1px solid #334155;
+    background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
+    color: #e5e7eb;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.45);
+    overflow: hidden;
+  }
+  .popup-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+  }
+  .popup-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #94a3b8;
+    margin-bottom: 6px;
+  }
+  .popup-name {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.2;
+  }
+  .popup-close {
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, 0.12);
+    color: #e5e7eb;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  .popup-body {
+    padding: 14px 18px 18px;
+    display: grid;
+    gap: 10px;
+  }
+  .popup-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 13px;
+  }
+  .popup-row span {
+    color: #94a3b8;
+  }
+`;
 const container = document.getElementById('demo-view');
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x111827);
@@ -57,7 +141,7 @@ scene.add(new THREE.GridHelper(12, 24, 0x334155, 0x1f2937));
 const logEl = document.getElementById('demo-log');
 const log = (msg) => { logEl.textContent = msg; };
 log("area_01 Advanced/popup preview");
-const instance = { appendElement: null, animations: [] };
+const instance = { appendElement: null, animations: [], page: { appendElement: container } };
 let clickable = [];
 const MODEL_CANDIDATES = [
   "../../../../../../models/meshesArea/area_01/01_default/area_01.gltf",
@@ -135,6 +219,10 @@ window.addEventListener('resize', () => {
   renderer.setSize(w, h);
 });
 (function animate() { requestAnimationFrame(animate); controls.update(); renderer.render(scene, camera); })();
+const statusMap = new Map();
+const STATUS_SEQUENCE = ['normal', 'warning', 'error', 'offline'];
+let statusTick = 0;
+let activePopupMesh = null;
 function ensureBase() { if (!__preview.instance.meshState) applyMeshStateMixin(__preview.instance, {
     colorMap: {
         normal:  0x34d399,
@@ -142,10 +230,52 @@ function ensureBase() { if (!__preview.instance.meshState) applyMeshStateMixin(_
         error:   0xf87171,
         offline: 0x6b7280
     }
-});  }
-function applyState(status) { ensureBase(); __preview.instance.meshState.renderData({ response: __preview.MESH_NAMES.map((meshName) => ({ meshName, status })) }); __preview.log('status=' + status); }
+}); if (!__preview.instance.shadowPopup) { apply3DShadowPopupMixin(__preview.instance, { getHTML: () => popupHTML, getStyles: () => popupCSS }); __preview.instance.shadowPopup.bindPopupEvents({ click: { '.popup-close': () => __preview.instance.shadowPopup.hide() } }); } }
+function syncPopup(meshName) {
+  if (!meshName || !__preview.instance.shadowPopup) return;
+  __preview.instance.shadowPopup.query('.popup-name').textContent = meshName;
+  __preview.instance.shadowPopup.query('.popup-mesh').textContent = meshName;
+  __preview.instance.shadowPopup.query('.popup-status').textContent = statusMap.get(meshName) || 'unassigned';
+}
+function nextStatusData() {
+  const data = __preview.MESH_NAMES.map((meshName, index) => ({ meshName, status: STATUS_SEQUENCE[(statusTick + index) % STATUS_SEQUENCE.length] }));
+  statusTick = (statusTick + 1) % STATUS_SEQUENCE.length;
+  return data;
+}
+function applyData(data, reason) {
+  if (!__preview.instance.appendElement) return;
+  ensureBase();
+  __preview.instance.meshState.renderData({ response: data });
+  data.forEach(({ meshName, status }) => statusMap.set(meshName, status));
+  if (activePopupMesh) syncPopup(activePopupMesh);
+  __preview.log(reason + '\n' + data.map(({ meshName, status }) => meshName + '=' + status).join('\n'));
+}
+function applyState(status) { applyData(__preview.MESH_NAMES.map((meshName) => ({ meshName, status })), 'manual status=' + status); }
 document.querySelectorAll('[data-status]').forEach((btn) => btn.addEventListener('click', () => applyState(btn.dataset.status)));
-__preview.renderer.domElement.addEventListener('click', (event) => { const intersects = __preview.pick(event); if (!intersects.length) return; const meshName = intersects[0].object.name; ensureBase(); __preview.log('popup target ▶ ' + meshName + '\n실서비스에서는 shadowPopup.show() 호출'); });
+document.querySelector('[data-action="popup"]').addEventListener('click', () => {
+  ensureBase();
+  activePopupMesh = activePopupMesh || __preview.MESH_NAMES[0];
+  __preview.instance.shadowPopup.show();
+  syncPopup(activePopupMesh);
+  __preview.log('manual popup ▶ ' + activePopupMesh);
+});
+document.querySelector('[data-action="clear"]').addEventListener('click', () => {
+  ensureBase();
+  activePopupMesh = null;
+  __preview.instance.shadowPopup.hide();
+  __preview.log('popup cleared');
+});
+__preview.renderer.domElement.addEventListener('click', (event) => {
+  const intersects = __preview.pick(event);
+  if (!intersects.length) return;
+  const meshName = intersects[0].object.name;
+  ensureBase();
+  activePopupMesh = meshName;
+  __preview.instance.shadowPopup.show();
+  syncPopup(meshName);
+  __preview.log('popup ▶ ' + meshName + '\nstatus=' + (statusMap.get(meshName) || 'unassigned'));
+});
+setInterval(() => applyData(nextStatusData(), 'auto refresh (3s)'), 3000);
   </script>
 </body>
 </html>
