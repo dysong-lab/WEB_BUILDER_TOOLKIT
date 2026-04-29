@@ -4555,6 +4555,26 @@
                       "path": "Components/3D_Components/meshesArea/area_01/Advanced/visibility/preview/01_default.html"
                     }
                   ]
+                },
+                {
+                  "name": "clipping",
+                  "spec": "Components/3D_Components/meshesArea/area_01/Advanced/clipping/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/meshesArea/area_01/Advanced/clipping/preview/01_default.html"
+                    }
+                  ]
+                },
+                {
+                  "name": "hudInfo",
+                  "spec": "Components/3D_Components/meshesArea/area_01/Advanced/hudInfo/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 default",
+                      "path": "Components/3D_Components/meshesArea/area_01/Advanced/hudInfo/preview/01_default.html"
+                    }
+                  ]
                 }
               ]
             }

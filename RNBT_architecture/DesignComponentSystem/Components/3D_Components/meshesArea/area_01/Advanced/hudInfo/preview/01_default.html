@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>area_01 — Advanced/hudInfo</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #111827; color: #e5e7eb; font-family: Arial, sans-serif; }
+    .demo-shell { width: 820px; margin: 0 auto; padding: 16px 0 24px; }
+    .demo-controls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 12px; }
+    .demo-btn { padding: 8px 14px; border: 0; border-radius: 6px; cursor: pointer; font-weight: 600; }
+    .demo-btn[data-status="normal"] { background: #34d399; color: #052e16; }
+    .demo-btn[data-status="warning"] { background: #fbbf24; color: #422006; }
+    .demo-btn[data-status="error"] { background: #f87171; color: #450a0a; }
+    .demo-btn[data-action] { background: #374151; color: #f9fafb; }
+    .demo-stage { position: relative; width: 820px; height: 520px; overflow: hidden; border-radius: 10px; border: 1px solid #374151; }
+    .demo-view { width: 100%; height: 100%; }
+    .hud-overlay { position: absolute; inset: 0; pointer-events: none; }
+    .hud-card {
+      position: absolute;
+      min-width: 126px;
+      padding: 10px 12px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.82);
+      box-shadow: 0 12px 24px rgba(2, 6, 23, 0.28);
+      transform: translate(-50%, -115%);
+      backdrop-filter: blur(8px);
+    }
+    .hud-card__title { font-size: 11px; letter-spacing: 0.08em; color: #94a3b8; text-transform: uppercase; }
+    .hud-card__metrics { display: flex; gap: 10px; margin-top: 6px; font-size: 12px; color: #e2e8f0; }
+    .hud-card__metric strong { display: block; font-size: 18px; line-height: 1.2; color: #f8fafc; }
+    .hud-state {
+      display: inline-flex;
+      margin-top: 8px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      background: rgba(100, 116, 139, 0.18);
+      color: #e2e8f0;
+    }
+    .hud-state[data-state="normal"] { background: rgba(52, 211, 153, 0.18); color: #6ee7b7; }
+    .hud-state[data-state="warning"] { background: rgba(251, 191, 36, 0.18); color: #fde68a; }
+    .hud-state[data-state="error"] { background: rgba(248, 113, 113, 0.18); color: #fca5a5; }
+    .hud-state[data-state="offline"] { background: rgba(148, 163, 184, 0.18); color: #cbd5e1; }
+    .demo-log { margin-top: 12px; padding: 12px 14px; background: #0f172a; border: 1px solid #1f2937; border-radius: 8px; color: #94a3b8; font: 12px/1.5 ui-monospace, monospace; white-space: pre-wrap; }
+    .demo-note { margin-top: 8px; color: #9ca3af; font-size: 12px; text-align: center; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <div class="demo-shell">
+    <div class="demo-controls">
+      <button class="demo-btn" data-status="normal">All Normal</button>
+      <button class="demo-btn" data-status="warning">All Warning</button>
+      <button class="demo-btn" data-status="error">All Error</button>
+      <button class="demo-btn" data-action="refresh">Refresh</button>
+      <button class="demo-btn" data-action="shuffle">Shuffle HUD</button>
+    </div>
+    <div class="demo-stage">
+      <div id="demo-view" class="demo-view"></div>
+      <div id="hud-overlay" class="hud-overlay"></div>
+    </div>
+    <div class="demo-note">HUD 카드는 페이지가 렌더링하는 DOM 오버레이를 시뮬레이션합니다. 3초마다 status / zoneHud 두 토픽을 각각 다시 발행합니다.</div>
+    <div id="demo-log" class="demo-log">loading...</div>
+  </div>
+
+  <script src="../../../../../../../preview_runtime.js"></script>
+  <script src="../../../../../../../Mixins/MeshStateMixin.js"></script>
+  <script src="../../../../../../../Mixins/FieldRenderMixin.js"></script>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+window.THREE = THREE;
+
+const MESH_NAMES = ['HV-U8-B', 'BLK-HV-01', 'cnsFloorB4f', 'G-1', 'HV-P1-A'];
+const HUD_MESH_NAMES = ['HV-U8-B', 'BLK-HV-01', 'cnsFloorB4f'];
+
+const container = document.getElementById('demo-view');
+const hudRoot = document.getElementById('hud-overlay');
+const logEl = document.getElementById('demo-log');
+const log = (message) => { logEl.textContent = message; };
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x111827);
+
+const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+camera.position.set(4, 3, 6);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(container.clientWidth, container.clientHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+container.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.85));
+const mainLight = new THREE.DirectionalLight(0xffffff, 1.1);
+mainLight.position.set(4, 8, 5);
+scene.add(mainLight);
+scene.add(new THREE.GridHelper(12, 24, 0x334155, 0x1f2937));
+
+const instance = { appendElement: null };
+let clickable = [];
+let statusTick = 0;
+
+const MODEL_CANDIDATES = [
+  '../../../../../../../models/meshesArea/area_01/01_default/area_01.gltf',
+  '../../../../../../models/meshesArea/area_01/01_default/area_01.gltf'
+];
+
+function makeFallbackModel() {
+  const group = new THREE.Group();
+  HUD_MESH_NAMES.forEach((name, index) => {
+    const mesh = new THREE.Mesh(
+      new THREE.BoxGeometry(0.8, 0.6, 0.8),
+      new THREE.MeshStandardMaterial({ color: 0xffffff })
+    );
+    mesh.name = name;
+    mesh.position.set(index * 1.5 - 1.5, 0.5, (index % 2) * 1.5 - 0.75);
+    group.add(mesh);
+  });
+  return group;
+}
+
+function finalizeModel(model) {
+  instance.appendElement = model;
+  scene.add(model);
+  clickable = [];
+  model.traverse((obj) => {
+    if (obj.isMesh) clickable.push(obj);
+  });
+
+  const box = new THREE.Box3().setFromObject(model);
+  const center = box.getCenter(new THREE.Vector3());
+  const size = box.getSize(new THREE.Vector3());
+  const maxDim = Math.max(size.x, size.y, size.z) || 1;
+
+  controls.target.copy(center);
+  camera.position.set(center.x + maxDim * 2.2, center.y + maxDim * 1.4, center.z + maxDim * 2.2);
+  camera.updateProjectionMatrix();
+  controls.update();
+}
+
+function loadModel(candidateIndex = 0) {
+  new GLTFLoader().load(MODEL_CANDIDATES[candidateIndex], (gltf) => {
+    finalizeModel(gltf.scene);
+    log('model loaded\npath=' + MODEL_CANDIDATES[candidateIndex] + '\nmeshes=' + clickable.length);
+  }, undefined, (error) => {
+    if (candidateIndex < MODEL_CANDIDATES.length - 1) {
+      return loadModel(candidateIndex + 1);
+    }
+    finalizeModel(makeFallbackModel());
+    log('model load failed, fallback used\n' + (error?.message || error));
+  });
+}
+
+loadModel();
+
+window.addEventListener('resize', () => {
+  const width = container.clientWidth;
+  const height = container.clientHeight;
+  camera.aspect = width / height;
+  camera.updateProjectionMatrix();
+  renderer.setSize(width, height);
+});
+
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  syncHudCardPositions();
+  renderer.render(scene, camera);
+}
+
+// ════════════════════════════════════════════════════════════════
+//  [PREVIEW 인프라]  preview 런타임 / Three.js 셋업
+// ────────────────────────────────────────────────────────────────
+//  scene, camera, renderer, OrbitControls, GLTFLoader, mesh 좌표의
+//  screen projection은 preview 학습용 보일러플레이트입니다.
+// ════════════════════════════════════════════════════════════════
+
+function projectMeshToScreen(meshName) {
+  const mesh = instance.appendElement?.getObjectByName(meshName);
+  if (!mesh) return null;
+
+  const worldPosition = new THREE.Vector3();
+  mesh.getWorldPosition(worldPosition);
+  worldPosition.project(camera);
+
+  return {
+    x: ((worldPosition.x + 1) / 2) * container.clientWidth,
+    y: ((-worldPosition.y + 1) / 2) * container.clientHeight
+  };
+}
+
+function syncHudCardPositions() {
+  Array.from(hudRoot.querySelectorAll('[data-mesh-name]')).forEach((card) => {
+    const point = projectMeshToScreen(card.getAttribute('data-mesh-name'));
+    if (!point) return;
+    card.style.left = point.x + 'px';
+    card.style.top = point.y + 'px';
+  });
+}
+
+// ████████████████████████████████████████████████████████████████
+//  [COMPONENT register.js 본문]  — 페이지는 작성하지 않습니다
+// ────────────────────────────────────────────────────────────────
+//  아래 블록은 scripts/register.js의 내용을 그대로 옮긴 것이며,
+//  운영 환경에서는 컴포넌트 등록 시점에 자동으로 적용됩니다.
+// ████████████████████████████████████████████████████████████████
+applyMeshStateMixin(instance, {
+  colorMap: {
+    normal:  0x34d399,
+    warning: 0xfbbf24,
+    error:   0xf87171,
+    offline: 0x6b7280
+  }
+});
+
+applyFieldRenderMixin(instance, {
+  cssSelectors: {
+    population: '.hud-population',
+    assets:     '.hud-assets',
+    stateLabel: '.hud-state',
+    state:      '.hud-state'
+  },
+  datasetAttrs: {
+    state: 'state'
+  }
+});
+
+instance.renderHud = ({ response: data }) => {
+  if (!data) throw new Error('[FieldRenderMixin] data is null');
+  if (!instance.hudRoot || !Array.isArray(data)) return;
+
+  const { cssSelectors, datasetAttrs, elementAttrs, styleAttrs } = instance.fieldRender;
+
+  const applyValue = (el, key, value) => {
+    if (datasetAttrs[key]) {
+      el.setAttribute('data-' + datasetAttrs[key], value);
+    } else if (elementAttrs[key]) {
+      el.setAttribute(elementAttrs[key], value);
+    } else if (styleAttrs[key]) {
+      const { property, unit = '' } = styleAttrs[key];
+      el.style[property] = value + unit;
+    } else {
+      el.textContent = value;
+    }
+  };
+
+  data.forEach((item) => {
+    const card = instance.hudRoot.querySelector('[data-mesh-name="' + item.meshName + '"]');
+    if (!card) return;
+
+    Object.entries(item).forEach(([key, value]) => {
+      if (key === 'meshName' || value == null || !cssSelectors[key]) return;
+      const el = card.querySelector(cssSelectors[key]);
+      if (!el) return;
+      applyValue(el, key, value);
+    });
+  });
+};
+// ████████████████████████████████████████████████████████████████
+//  [COMPONENT register.js 본문]  — 끝
+// ████████████████████████████████████████████████████████████████
+
+// ════════════════════════════════════════════════════════════════
+//  [PAGE]  데이터 발행 — 페이지가 작성하는 영역
+// ────────────────────────────────────────────────────────────────
+//  운영: this.pageDataMappings = [
+//          { topic: 'equipmentStatus', datasetInfo: {...}, refreshInterval: 30000 },
+//          { topic: 'zoneHud', datasetInfo: {...}, refreshInterval: 30000 }
+//        ];
+//  preview: setInterval + 직접 호출로 시뮬레이션
+// ════════════════════════════════════════════════════════════════
+function mountHudCards(meshNames) {
+  hudRoot.innerHTML = meshNames.map((meshName) => `
+    <div class="hud-card" data-mesh-name="${meshName}">
+      <div class="hud-card__title">${meshName}</div>
+      <div class="hud-card__metrics">
+        <div class="hud-card__metric">POP<strong class="hud-population">-</strong></div>
+        <div class="hud-card__metric">AST<strong class="hud-assets">-</strong></div>
+      </div>
+      <span class="hud-state" data-state="">-</span>
+    </div>
+  `).join('');
+}
+
+instance.hudRoot = hudRoot;
+instance.renderer = renderer;
+mountHudCards(HUD_MESH_NAMES);
+
+const STATUS_SEQUENCE = ['normal', 'warning', 'error', 'offline'];
+
+function nextStatusData(forcedStatus) {
+  const data = MESH_NAMES.map((meshName, index) => ({
+    meshName,
+    status: forcedStatus || STATUS_SEQUENCE[(statusTick + index) % STATUS_SEQUENCE.length]
+  }));
+  statusTick = (statusTick + 1) % STATUS_SEQUENCE.length;
+  return data;
+}
+
+function nextHudData(forcedStatus) {
+  return HUD_MESH_NAMES.map((meshName, index) => {
+    const state = forcedStatus || STATUS_SEQUENCE[(statusTick + index) % STATUS_SEQUENCE.length];
+    return {
+      meshName,
+      population: 18 + (statusTick * 3) + index,
+      assets: 6 + ((statusTick + index) % 5),
+      stateLabel: state.toUpperCase(),
+      state
+    };
+  });
+}
+
+function fetchAndApplyData(reason, forcedStatus) {
+  if (!instance.appendElement) return;
+
+  const statusResponse = nextStatusData(forcedStatus);
+  const hudResponse = nextHudData(forcedStatus);
+
+  instance.meshState.renderData({ response: statusResponse }); // ← subscribe go({equipmentStatus})
+  instance.renderHud({ response: hudResponse });               // ← subscribe go({zoneHud})
+
+  log(
+    reason + '\n' +
+    statusResponse.map(({ meshName, status }) => meshName + '=' + status).join('\n') +
+    '\n---\n' +
+    hudResponse.map(({ meshName, population, assets, stateLabel }) =>
+      meshName + ' pop=' + population + ', assets=' + assets + ', label=' + stateLabel
+    ).join('\n')
+  );
+}
+
+fetchAndApplyData('initial publish');
+setInterval(() => fetchAndApplyData('auto refresh (3s)'), 3000);
+
+// ════════════════════════════════════════════════════════════════
+//  [PREVIEW 전용]  데모 컨트롤 버튼 — 운영 환경에는 없음
+// ════════════════════════════════════════════════════════════════
+document.querySelectorAll('[data-status]').forEach((button) => {
+  button.addEventListener('click', () => {
+    fetchAndApplyData('manual force=' + button.dataset.status, button.dataset.status);
+  });
+});
+
+document.querySelector('[data-action="refresh"]').addEventListener('click', () => {
+  fetchAndApplyData('manual refresh');
+});
+
+document.querySelector('[data-action="shuffle"]').addEventListener('click', () => {
+  HUD_MESH_NAMES.push(HUD_MESH_NAMES.shift());
+  mountHudCards(HUD_MESH_NAMES);
+  fetchAndApplyData('shuffle hud cards');
+});
+
+animate();
+  </script>
+</body>
+</html>
