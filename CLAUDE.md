@@ -30,11 +30,11 @@ flowchart TD
 flowchart LR
     subgraph Skills
         direction TB
-        S0[0-produce<br/>produce-component<br/>produce-standard-loop<br/>produce-standard-auto<br/>plan-advanced-queue<br/>produce-advanced-loop<br/>produce-3d-standard-loop<br/>produce-3d-standard-auto<br/>plan-3d-advanced-queue<br/>produce-3d-advanced-loop]
+        S0[0-produce<br/>produce-component<br/>produce-standard-loop<br/>produce-standard-auto<br/>plan-advanced-queue<br/>produce-advanced-loop<br/>produce-advanced-auto<br/>produce-3d-standard-loop<br/>produce-3d-standard-auto<br/>plan-3d-advanced-queue<br/>produce-3d-advanced-loop<br/>produce-3d-advanced-auto]
         S1[1-figma<br/>figma-to-html<br/>figma-to-inline-svg]
         S2[2-component<br/>create-2d<br/>create-symbol-state<br/>create-3d<br/>create-3d-container]
         S3[3-page<br/>create-project]
-        S4[4-review<br/>audit-project]
+        S4[4-review<br/>audit-project<br/>apply-preview-labels-auto]
         S5[5-mixin<br/>create-mixin-spec<br/>implement-mixin]
         S6[6-design<br/>create-html-css]
     end
@@ -63,10 +63,12 @@ flowchart LR
 | 2D 컴포넌트 Standard를 서브에이전트 기반 완전 자동 생산 | `produce-standard-auto` |
 | 2D 컴포넌트 Advanced 변형 후보 발굴 → ADVANCED_QUEUE.md 등록 | `plan-advanced-queue` |
 | 2D 컴포넌트 Advanced를 ADVANCED_QUEUE.md 순서대로 순차 생산 | `produce-advanced-loop` |
+| 2D 컴포넌트 Advanced를 서브에이전트 기반 완전 자동 생산 | `produce-advanced-auto` |
 | 3D 컴포넌트 Standard를 models/ 알파벳 순으로 순차 생산 | `produce-3d-standard-loop` |
 | 3D 컴포넌트 Standard를 models/ 알파벳 순 서브에이전트 기반 완전 자동 생산 | `produce-3d-standard-auto` |
 | 3D 컴포넌트 Advanced 변형 후보 발굴 → ADVANCED_QUEUE.md 등록 | `plan-3d-advanced-queue` |
 | 3D 컴포넌트 Advanced를 ADVANCED_QUEUE.md 순서대로 순차 생산 | `produce-3d-advanced-loop` |
+| 3D 컴포넌트 Advanced를 서브에이전트 기반 완전 자동 생산 | `produce-3d-advanced-auto` |
 
 `produce-component`는 전체 프로세스를 안내하며, 필요에 따라 아래 스킬들을 호출한다.
 
@@ -96,6 +98,7 @@ flowchart LR
 | 조건 | SKILL |
 |------|-------|
 | 프로젝트 전체의 구조/구현/문서/SKILL 일관성 종합 진단 | `audit-project` |
+| 이미 생산된 preview.html에 4종 라벨을 retroactive로 일괄 적용 | `apply-preview-labels-auto` |
 
 ### Mixin 개발 (5-mixin)
 

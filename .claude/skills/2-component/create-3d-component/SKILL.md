@@ -716,6 +716,21 @@ models/
 
 ---
 
+## Preview 코드 영역 식별 규약
+
+`preview/*.html`의 `<script>` 내부 코드는 빌더(다른 페이지 개발자)가 컴포넌트 사용법을 학습하는 **가이드** 역할을 한다. 따라서 다음 4종 라벨로 영역을 분리하여 페이지 책임 코드와 컴포넌트 register.js 본문이 한눈에 구분되도록 작성한다.
+
+| 라벨 | 의미 |
+|------|------|
+| `[PREVIEW 인프라]` | Three.js scene/camera/light 셋업, GLTFLoader, model.traverse, OrbitControls, originalColors 저장 등 운영과 무관한 보일러플레이트 |
+| `[PAGE]` | 페이지 개발자가 운영에서 직접 작성할 코드 (외부 DOM 정적 렌더 시뮬레이션, 외부 자원 주입, `pageDataMappings` 시뮬레이션) |
+| `[COMPONENT register.js 본문]` | register.js의 내용을 그대로 옮긴 부분 (`applyXxxMixin`, 커스텀 메서드 정의, `subscribe go({...})`) — 운영에서는 자동 적용, 페이지는 작성 X |
+| `[PREVIEW 전용]` | 데모 컨트롤만의 일회성 코드 (강제 상태 버튼, 디버그 토글, 컴포넌트 외부 명령형 API 시연용 슬라이더 등) |
+
+표기 규약(시각 우선순위 3단계: ████ 두꺼운 블록 / ════ 단일선 헤더 / ──── 점선 인라인)과 적용 예시는 [`_shared/preview-area-labeling.md`](/.claude/skills/0-produce/_shared/preview-area-labeling.md)에 단일 진실 출처로 정리되어 있다. 신규 변형 작성 시 반드시 본 규약을 따르며, 기준 사례는 `Components/3D_Components/meshesArea/area_01/Advanced/hudInfo/preview/01_default.html`이다.
+
+---
+
 ## 관련 자료
 
 | 문서 | 경로 |

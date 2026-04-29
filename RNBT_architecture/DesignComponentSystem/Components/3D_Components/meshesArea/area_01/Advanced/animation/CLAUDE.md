@@ -3,7 +3,7 @@
 ## 기능 정의
 
 1. **상태 색상 표시** — equipmentStatus 토픽으로 수신한 데이터에 따라 다수 Mesh 색상 변경
-2. **GLTF 애니메이션 재생** — area_01.gltf 내장 AnimationClip을 재생/정지/속도 제어
+2. **GLTF 애니메이션 재생** — area_01.glb 내장 AnimationClip을 재생/정지/속도 제어
    - 레이어별 등장 연출, 시간대 전환, 장비 동작 등
 
 ---
@@ -57,4 +57,4 @@ MeshStateMixin + AnimationMixin
 
 ## 모델 주의사항
 
-area_01.gltf에 AnimationClip이 없으면 `this.animation.*` 호출은 no-op로 동작한다 (AnimationMixin graceful fallback). clip 존재 여부는 `this.animation.getClipNames()`로 런타임 조회 가능하다.
+area_01.glb에 AnimationClip이 없으면 `this.animation.*` 호출은 no-op로 동작한다 (AnimationMixin graceful fallback). clip 존재 여부는 `this.animation.getClipNames()`로 런타임 조회 가능하다.

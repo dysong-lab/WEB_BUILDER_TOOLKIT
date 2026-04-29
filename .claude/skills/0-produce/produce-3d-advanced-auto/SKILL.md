@@ -1,0 +1,322 @@
+---
+name: produce-3d-advanced-auto
+description: 3D Advanced 변형을 ADVANCED_QUEUE.md 순서대로 서브에이전트 기반 완전 자동 생산합니다. 메인은 Phase 0(큐 파싱+Standard 선행 필터) → Agent 호출 → Phase 2(검증+커밋+큐업데이트) → 반복.
+---
+
+# 3D Advanced 컴포넌트 완전 자동 생산
+
+## 목표
+
+`RNBT_architecture/DesignComponentSystem/Components/3D_Components/ADVANCED_QUEUE.md`에 등록된 3D Advanced 변형을 순번 순서대로 생산한다.
+한 번 실행하면 **남은 모든 "대기" 항목**을 순차로 소화한다.
+각 사이클은 **독립된 서브에이전트**가 처리하므로 메인 컨텍스트는 누적되지 않는다.
+
+기존 `produce-3d-advanced-loop`(수동, 승인 기반)의 완전 자동 대체 버전.
+
+---
+
+## 2D Advanced auto와의 대칭
+
+| 측면 | 2D (produce-advanced-auto) | 3D (이 문서) |
+|------|---------------------------|-------------|
+| 큐 파일 | Components/ADVANCED_QUEUE.md | Components/3D_Components/ADVANCED_QUEUE.md |
+| 큐 표 형식 | 5열 (순번/경로/변형/설명/상태) | **6열 (순번/경로/유형/변형/설명/상태)** |
+| 유형 분기 | 없음 | **개별 / 컨테이너** |
+| 개발 스킬 | create-2d-component | create-3d-component (개별) / create-3d-container-component (컨테이너) |
+| Standard 선행 필터 | 없음 | **있음 (Standard 폴더 없으면 건너뜀)** |
+| Phase 1.5 체크리스트 | 7항목 | **8항목 (3중 등록 + UI↔API 축 일치 등 추가)** |
+| 모델 부재 처리 | N/A | **[MODEL_READY] placeholder 지원** |
+
+---
+
+## 구조 원칙
+
+```
+[메인 루프]
+    │
+    ├─ Phase 0: ADVANCED_QUEUE.md "대기" 첫 항목 추출 → Standard 선행 필터 → {경로}/{유형}/{변형}/{설명}
+    ├─ Phase 1: Agent(subagent_type=general-purpose) 호출 → 단일 변형 생산 위임
+    ├─ Phase 2: 결과 확인 + 큐 상태 업데이트 + 커밋
+    └─ Phase 3: 다음 대상으로 반복 (남은 "대기" 항목이 없을 때까지)
+```
+
+- **매 사이클마다 새 Agent 호출**
+- **사용자 승인 포인트 없음**
+- **Phase 1.5 패턴 대조도 Agent 자율 검증** — 8항목 체크리스트 통째 포함, 기준 변형 자동 선정, 결과 1줄 반환
+- **큐 상태 업데이트는 메인이 담당** — Agent는 ADVANCED_QUEUE.md를 직접 수정하지 않는다
+- **Standard 선행 필터** — 큐 항목의 컴포넌트가 Standard 폴더 없으면 사용자에게 안내 후 다음 큐 항목 시도
+- **실패 시 즉시 중단** — 큐 상태는 "대기"로 유지하여 재실행 가능 보장
+
+---
+
+## 메인 루프 절차
+
+### Phase 0. 다음 대상 파악 + Standard 선행 필터
+
+매 사이클 시작 시 실행한다.
+
+1. ADVANCED_QUEUE.md 읽기:
+   ```
+   경로: RNBT_architecture/DesignComponentSystem/Components/3D_Components/ADVANCED_QUEUE.md
+   ```
+
+2. **표 형식** (6열):
+   ```
+   | 순번 | 컴포넌트경로 | 유형 | 변형 이름 | 설명 | 상태 |
+   ```
+
+3. 표 행 중 **상태가 "대기"인 첫 행**을 다음 대상으로 삼는다. 다음 변수를 추출:
+   - `{컴포넌트경로}` — 예: `Chiller`, `meshesArea/area_01`
+   - `{유형}` — `개별` 또는 `컨테이너`
+   - `{변형이름}` — 예: `highlight`, `dynamicRpm`, `pipeFlow`
+   - `{설명}` — 한 줄 요약 (Mixin 조합 정보 포함)
+
+4. **Standard 선행 필터** (필수):
+   ```bash
+   ls RNBT_architecture/DesignComponentSystem/Components/3D_Components/{컴포넌트경로}/Standard/scripts/register.js 2>/dev/null
+   ```
+   - **없으면** → 해당 항목을 건너뛰고 사용자에게 안내:
+     ```
+     ⚠️ Standard 미생산: {경로} — Advanced 생산 전에 `produce-3d-standard-auto`로 Standard를 먼저 생산해주세요.
+     이 항목은 건너뛰고 다음 "대기" 항목을 시도합니다.
+     ```
+   - 있으면 다음 단계로
+
+5. **유형별 개발 스킬 결정**:
+   | 유형 | 호출 스킬 |
+   |------|----------|
+   | 개별 | `create-3d-component` |
+   | 컨테이너 | `create-3d-container-component` |
+
+6. 출력 폴더 사전 점검:
+   ```bash
+   ls RNBT_architecture/DesignComponentSystem/Components/3D_Components/{컴포넌트경로}/Advanced/{변형이름}/scripts/register.js 2>/dev/null
+   ```
+   이미 register.js가 있으면 큐 상태가 잘못된 것으로 판단하고 중단, 사용자에게 "이미 생산됨: 3D_Components/{경로}/Advanced/{변형이름} — 큐 상태가 '대기'인데 파일이 존재합니다. 수동 확인 필요" 보고.
+
+7. **"대기" 항목 없음** (Standard 선행 필터로 모든 항목이 건너뛰어진 경우 포함) → 전체 루프 종료, 사용자에게 완료 보고:
+   ```
+   ✅ 3D Advanced 전체 생산 완료.
+   생산된 변형: N개 / 건너뛴 항목(Standard 미생산): M개 / 커밋: N개
+   ```
+
+---
+
+### Phase 1. 서브에이전트 호출
+
+`Agent` 도구로 `subagent_type=general-purpose`에 위임한다.
+
+**프롬프트 템플릿** (매 사이클 `{컴포넌트경로}` / `{유형}` / `{변형이름}` / `{설명}` / `{개발스킬}` 교체):
+
+```
+대상: 3D 컴포넌트 `{컴포넌트경로}/Advanced/{변형이름}`를 처음부터 끝까지 생산한다.
+유형: {유형} (개별 / 컨테이너)
+개발 스킬: {개발스킬}  (create-3d-component / create-3d-container-component)
+변형 설명(큐): {설명}
+
+## 배경
+
+Renobit 웹 빌더의 DesignComponentSystem은 Mixin 기반 3D 컴포넌트 집합이다.
+너는 단일 Advanced 변형 하나를 완결하여 생산하고 요약만 반환한다.
+사용자 승인이 필요 없는 완전 자동 모드로 동작한다.
+이 컴포넌트의 Standard 폴더는 이미 존재한다 (메인이 사전 검증).
+
+## 필수 읽어야 할 문서 (순서대로)
+
+1. `/.claude/skills/SHARED_INSTRUCTIONS.md` — 공통 규칙
+2. `/.claude/skills/0-produce/produce-component/SKILL.md` — 생산 프로세스
+3. `/.claude/skills/0-produce/produce-3d-advanced-loop/SKILL.md` — 3D Advanced의 분리 정당성·Phase 1.5 8항목 체크리스트 원전 (이 프롬프트가 인용)
+4. `/.claude/skills/2-component/{개발스킬}/SKILL.md` — 3D 구현
+5. `/.claude/guides/CODING_STYLE.md` — 코딩 스타일
+6. `/RNBT_architecture/DesignComponentSystem/Mixins/README.md` — Mixin 카탈로그
+7. `/RNBT_architecture/DesignComponentSystem/docs/architecture/COMPONENT_SYSTEM_DESIGN.md` — 시스템 설계
+8. `Components/3D_Components/{컴포넌트경로}/CLAUDE.md` — 컴포넌트 역할 (이미 존재)
+9. `Components/3D_Components/{컴포넌트경로}/Standard/scripts/register.js` — Standard 기준선 (이미 존재)
+10. `Components/3D_Components/ADVANCED_QUEUE.md` — 상단 "커스텀 메서드 vs 신규 Mixin 판단 규칙" 섹션
+
+## 산출물 (모두 자동으로 작성)
+
+1. `Advanced/{변형이름}/CLAUDE.md` — 기능 정의 + 구현 명세 + **Standard와의 분리 정당성**(register.js 차이 명시) + Mixin 조합 근거
+2. `Advanced/{변형이름}/scripts/register.js` — Mixin 조립 + 이벤트 (top-level 평탄 작성, IIFE 금지)
+3. `Advanced/{변형이름}/scripts/beforeDestroy.js` — 정리 코드 (구독 해제 → `removeCustomEvents` → `this.xxx?.destroy()` 호출만, self-null Mixin은 명시 null 생략)
+4. `Advanced/{변형이름}/page/loaded.js`, `before_load.js`, `before_unload.js` (필요 시)
+5. `Advanced/{변형이름}/preview/` 변형 (preview attach 함수의 destroy 콜백도 register.js와 동일 규약). **`<script>` 내부 코드는 [`_shared/preview-area-labeling.md`](/.claude/skills/0-produce/_shared/preview-area-labeling.md)의 4종 라벨(`[PREVIEW 인프라]` / `[PAGE]` / `[COMPONENT register.js 본문]` / `[PREVIEW 전용]`)로 영역 분리 필수 — 기준 사례: `meshesArea/area_01/Advanced/hudInfo/preview/01_default.html`**
+6. `DesignComponentSystem/manifest.json` — 해당 컴포넌트의 `sets[Advanced].items[]`에 항목 추가
+7. **컴포넌트 루트 CLAUDE.md** — 세트 현황 표에 "Advanced/{변형이름} | 완료" 행 추가 (3중 등록의 한 축)
+
+## 모델 부재 시 처리
+
+모델이 없으면 [MODEL_READY] placeholder를 사용한다:
+
+```javascript
+// TODO: [MODEL_READY] 모델의 실제 meshName으로 교체
+const MESH_NAME = '장비명';
+```
+
+모델 무관 파일은 100% 작성 가능:
+- scripts/register.js (meshName만 placeholder)
+- scripts/beforeDestroy.js
+- page/loaded.js, before_load.js, before_unload.js
+
+모델 도착 시 `grep -r "MODEL_READY"`로 전수 교체 가능하도록 일관된 형식 유지.
+
+## Phase 1.5 — 기존 변형과의 패턴 대조 (자율 검증, 커밋 직전 필수)
+
+> 대표 사례 — `meshesArea/STATCOM_MMC/Advanced/pipeFlow`는 초기 커밋 이후 IIFE 제거·destroy 규약 동기화·preview destroy 누락·UV 축 u→v 교체·슬라이더 콜백 축 불일치 총 5건의 후행 refactor 커밋이 필요했다. Phase 1.5를 수행했다면 초기 커밋에서 모두 흡수 가능했다.
+
+### 1. 기준 변형 자동 선정
+
+다음 우선순위로 비교 기준 파일을 선택:
+
+1. **동일 컨테이너 타입**(개별 vs `meshesArea/*`) 중 **가장 가까운 완료 변형** 1개를 기준 파일로 선정
+   - 신규가 `meshesArea/X/Advanced/highlight` → 기준: `meshesArea/area_01/Advanced/highlight`
+2. 신규가 커스텀 메서드(`this.xxx` 네임스페이스)를 포함 → 기준에 `Mixins/MeshStateMixin.js`의 destroy 패턴 추가 대조
+3. 신규 커스텀 메서드에 RAF·리소스 Wrap 설정·텍스처 mutation이 있다면 기준 파일은 **최근 완료된 유사 커스텀 변형**(예: `STATCOM_MMC/Advanced/pipeFlow`)까지 포함
+
+`find Components/3D_Components -type d -path "*/Advanced/*"`로 완료 변형 목록 확인 가능.
+
+### 2. 대조 체크리스트 8항목
+
+| # | 항목 | 관례 |
+|---|------|------|
+| 1 | **register.js 평탄 작성** | top-level 평탄 작성. IIFE/수동 클로저로 감싸지 않는다 (인스턴스마다 새 실행 컨텍스트에서 평가됨) |
+| 2 | **인스턴스 네임스페이스 self-null** | `this.xxx.destroy()` 내부에서 `this.xxx = null`까지 스스로 수행 (MeshStateMixin.destroy 패턴 — `Mixins/MeshStateMixin.js:115`) |
+| 3 | **beforeDestroy.js는 호출만** | `this.xxx?.destroy()` 호출만 남기고 null 할당은 생략 (destroy가 self-null 하므로 중복 금지) |
+| 4 | **preview 내부 attach 함수 destroy 일치** | preview의 `attachXxx` 내부 destroy 콜백도 register.js와 동일 규약 (`inst.xxx = null` 포함). "register.js와 동일 로직" 주석이 있다면 실제 구현도 동일 |
+| 5 | **커스텀 메서드 시그니처 일관성** | 기존 유사 커스텀(`pipeFlow` 등) 및 Mixin API와 동사·인자 형태가 일관 (`start/stop/setSpeed(meshName, {u,v})/getMeshNames/destroy`) |
+| 6 | **UI ↔ API 인자 축 일치** | preview 슬라이더/버튼이 변경하는 축(u/v·x/y·속도/시간)과 API 호출 인자가 일치. 축 불일치는 "0으로 맞춰도 멈추지 않음" 류 버그의 주 원인 |
+| 7 | **기본값의 시각적 관찰 가능성** | 실제 텍스처/모델 특성(그라디언트 방향, 반복성, 클립 존재 여부 등)에서 기본값이 화면에 관찰 가능. 관찰 불가하면 기본값 조정 또는 근거를 CLAUDE.md에 명시 |
+| 8 | **manifest·ADVANCED_QUEUE·컴포넌트 루트 CLAUDE.md 3중 등록** | 세 곳 중 manifest와 컴포넌트 루트 CLAUDE.md 두 곳에 변형이 기재되어 있고 spec/preview 경로가 실제 파일과 일치. ADVANCED_QUEUE.md는 메인이 업데이트하므로 너는 **수정하지 않는다** (확인만) |
+
+### 3. 신규 커스텀 메서드 추가 시
+
+추가로 `ADVANCED_QUEUE.md` 상단의 **"커스텀 메서드 vs 신규 Mixin 판단 규칙"**에 따라 커스텀/Mixin 선택이 적절한지 재확인. 2번째 컴포넌트에서 동일 기법이 요청될 경우의 승격 시나리오를 컴포넌트 CLAUDE.md에 한 줄 메모.
+
+### 4. 실패 처리
+
+항목 중 하나라도 drift가 있으면 **반환 직전에** 정정. 정정 불가하면 반환의 "발견한 문제"에 명시.
+
+## 필수 제약
+
+- 컴포넌트 CLAUDE.md의 cssSelectors 계약(있으면)을 HTML과 JS에서 일치시킨다.
+- Hook 검증(P0~P3) 통과를 보장한다.
+- manifest.json 수정 후 `node -e "JSON.parse(require('fs').readFileSync('RNBT_architecture/DesignComponentSystem/manifest.json','utf8'))"`로 JSON 유효성을 직접 검증한다.
+- 기존 완성된 컴포넌트 파일은 수정하지 않는다 (단 컴포넌트 루트 CLAUDE.md의 세트 현황 표에 "Advanced/{변형이름} | 완료" 행 추가는 예외 — 3중 등록 규약).
+- 커밋은 하지 않는다 (메인 루프가 커밋한다).
+- **ADVANCED_QUEUE.md는 수정하지 않는다** (메인 루프가 상태 업데이트).
+- **신규 Mixin 생성 금지.** 큐 설명에 "신규 Mixin: XxxMixin"이라고 명시되어 있어도 이 사이클에서는 커스텀 메서드로 완결하고 반환의 "발견한 문제"에 `Mixin 승격 후보: {설명}`로 기록만 남긴다. `create-mixin-spec` / `implement-mixin` 스킬은 호출하지 않는다.
+
+## 반환 형식 (200단어 이내)
+
+- 생산한 변형 경로
+- 선택한 Mixin 조합 + 근거 1줄
+- 커스텀 메서드(있으면) 시그니처 + 근거 1줄
+- 주요 이벤트 / 구독 토픽 1줄씩
+- Standard와의 분리 정당성 1줄
+- **Phase 1.5 자율검증 결과 1줄** (예: "기준=meshesArea/area_01/Advanced/highlight, 8항목 통과")
+- [MODEL_READY] placeholder 사용 여부 (사용 시 위치 1줄)
+- 특이 결정사항
+- 발견한 문제/의문점 (있으면)
+```
+
+**호출**:
+
+```javascript
+Agent({
+    description: "{컴포넌트경로}/Advanced/{변형이름} 생산",
+    subagent_type: "general-purpose",
+    prompt: "(위 템플릿)"
+})
+```
+
+---
+
+### Phase 2. 결과 확인 + 큐 업데이트 + 커밋
+
+Agent 반환 후 다음 순서로 진행:
+
+1. **생성된 파일 존재 확인**:
+   ```bash
+   ls RNBT_architecture/DesignComponentSystem/Components/3D_Components/{컴포넌트경로}/Advanced/{변형이름}/scripts/register.js
+   ```
+   `register.js`, `beforeDestroy.js`, `CLAUDE.md`가 최소 존재해야 한다. preview/page는 변형 성격에 따라 선택적.
+
+2. **manifest.json JSON 유효성 재확인**:
+   ```bash
+   node -e "JSON.parse(require('fs').readFileSync('RNBT_architecture/DesignComponentSystem/manifest.json','utf8')); console.log('OK')"
+   ```
+
+3. **컴포넌트 루트 CLAUDE.md 갱신 확인** (3중 등록):
+   - `Components/3D_Components/{컴포넌트경로}/CLAUDE.md` 또는 컨테이너 루트 CLAUDE.md의 세트 현황 표에 "Advanced/{변형이름} | 완료" 행이 추가되었는지 확인.
+
+4. **ADVANCED_QUEUE.md 상태 업데이트**:
+   - 해당 행의 마지막 컬럼(`상태`)을 `대기` → `완료`로 Edit (정확한 행 매칭을 위해 `| {순번} | {컴포넌트경로} | {유형} | {변형이름} |` 접두를 포함한 unique한 패턴으로 교체)
+
+5. **커밋**:
+   ```
+   feat: 3D_Components/{컴포넌트경로}/Advanced/{변형이름} 컴포넌트 자동 생산 — {Agent 요약 첫 줄}
+   ```
+   커밋에는 산출물 파일 + manifest.json + 컴포넌트 루트 CLAUDE.md + ADVANCED_QUEUE.md를 모두 포함.
+
+6. **실패 감지 — 즉시 중단**:
+   - 파일 누락 → "Phase 2 파일 검증 실패: {누락 목록}" 보고
+   - JSON 오류 → "manifest.json 파손: {오류}" 보고
+   - 컴포넌트 루트 CLAUDE.md 누락 → "3중 등록 누락: 컴포넌트 루트 CLAUDE.md" 보고
+   - Agent가 실패를 보고 → Agent 요약 그대로 사용자에게 전달
+   - 실패 시 ADVANCED_QUEUE.md 상태는 **변경하지 않는다** (재실행 가능 보장)
+
+---
+
+### Phase 3. 다음 사이클
+
+남은 "대기" 항목이 있으면 Phase 0부터 다시 실행. 없으면 종료.
+
+Standard 선행 필터로 건너뛴 항목은 그대로 "대기" 유지 — 사용자가 `produce-3d-standard-auto`로 Standard를 채운 뒤 본 SKILL을 재실행하면 자동 처리.
+
+---
+
+## 종료 보고
+
+모든 대상 소화 완료 시:
+
+```
+✅ 3D Advanced 전체 생산 완료.
+생산된 변형: N개
+건너뛴 항목 (Standard 미생산): M개  ← 0이 아니면 produce-3d-standard-auto 안내
+커밋: N개
+```
+
+중단 시:
+
+```
+⚠️ 중단: {사유}
+현재까지 생산: N개
+마지막 대상: 3D_Components/{경로}/Advanced/{변형이름}
+큐 상태: "대기" 유지 (재실행 가능)
+재개하려면 `/produce-3d-advanced-auto`를 다시 실행하세요.
+```
+
+---
+
+## 금지 사항
+
+- ❌ 사용자에게 중간 승인 요청
+- ❌ 한 사이클 안에서 여러 변형 생산
+- ❌ Agent 호출 없이 메인이 직접 변형 생산
+- ❌ Standard 선행 필터를 우회하여 Standard 없는 컴포넌트의 Advanced 생산
+- ❌ 실패를 덮고 다음 사이클 진행
+- ❌ Agent가 ADVANCED_QUEUE.md를 직접 수정 (메인 전담)
+- ❌ 신규 Mixin 생성 (큐 설명에 명시되어 있어도 커스텀 메서드로 완결)
+
+---
+
+## 참조 문서
+
+- 수동 버전: `/.claude/skills/0-produce/produce-3d-advanced-loop/SKILL.md` (승인 기반, 기존 유지)
+- Phase 1.5 체크리스트 원전: 위 문서 lines 107~139
+- 큐 후보 발굴: `/.claude/skills/0-produce/plan-3d-advanced-queue/SKILL.md`
+- Standard 선행 자동화: `/.claude/skills/0-produce/produce-3d-standard-auto/SKILL.md`
+- 생산 프로세스: `/.claude/skills/0-produce/produce-component/SKILL.md`
+- 3D 개별 구현: `/.claude/skills/2-component/create-3d-component/SKILL.md`
+- 3D 컨테이너 구현: `/.claude/skills/2-component/create-3d-container-component/SKILL.md`
+- SHARED_INSTRUCTIONS: `/.claude/skills/SHARED_INSTRUCTIONS.md`

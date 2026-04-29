@@ -98,7 +98,7 @@ Advanced 변형에서 필요한 기능이 기존 Mixin으로 표현되지 않을
 | 3 | meshesArea/area_01 | 컨테이너 | visibility | 층별/구역별 선택적 표시 (MeshState+MeshVisibility) | 완료 |
 | 4 | meshesArea/area_01 | 컨테이너 | animation | 레이어/시간 GLTF 애니메이션 재생 (MeshState+AnimationMixin) | 완료 |
 | 5 | meshesArea/area_01 | 컨테이너 | clipping | 건물 단면 분석 (MeshState+ClippingPlane) | 완료 |
-| 6 | meshesArea/area_01 | 컨테이너 | hudInfo | 구역별 인원/자산/상태 오버레이 (MeshState+FieldRender+meshName) | 대기 |
+| 6 | meshesArea/area_01 | 컨테이너 | hudInfo | 구역별 인원/자산/상태 오버레이 (MeshState+FieldRender+meshName) | 완료 |
 | 7 | Chiller | 개별 | visibility | 하우징/내부 컴포넌트 선택 노출 (MeshState+MeshVisibility) | 대기 |
 | 8 | Chiller | 개별 | clipping | 압축기 내부 단면 분석 (MeshState+ClippingPlane) | 대기 |
 | 9 | Chiller | 개별 | dynamicRpm | RPM 데이터 비례 압축기 동작 속도 (AnimationMixin+커스텀 메서드) | 대기 |

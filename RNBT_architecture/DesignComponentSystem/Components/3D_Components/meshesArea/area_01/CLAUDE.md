@@ -17,3 +17,5 @@
 | Advanced/camera_highlight | 완료 |
 | Advanced/visibility | 완료 |
 | Advanced/animation | 완료 |
+| Advanced/clipping | 완료 |
+| Advanced/hudInfo | 완료 |
