@@ -63,7 +63,7 @@
       <div id="demo-view" class="demo-view"></div>
       <div id="hud-overlay" class="hud-overlay"></div>
     </div>
-    <div class="demo-note">HUD 카드는 페이지가 렌더링하는 DOM 오버레이를 시뮬레이션합니다. 3초마다 status / zoneHud 두 토픽을 각각 다시 발행합니다.</div>
+    <div class="demo-note">HUD 카드는 페이지가 고정 배치하는 DOM 오버레이를 시뮬레이션합니다. 3초마다 status / zoneHud 두 토픽을 각각 다시 발행합니다.</div>
     <div id="demo-log" class="demo-log">loading...</div>
   </div>
 
@@ -117,6 +117,7 @@ scene.add(new THREE.GridHelper(12, 24, 0x334155, 0x1f2937));
 const instance = { appendElement: null };
 let clickable = [];
 let statusTick = 0;
+let layoutTick = 0;
 
 const MODEL_CANDIDATES = [
   '../../../../../../../models/meshesArea/area_01/01_default/area_01.gltf',
@@ -182,39 +183,15 @@ window.addEventListener('resize', () => {
 function animate() {
   requestAnimationFrame(animate);
   controls.update();
-  syncHudCardPositions();
   renderer.render(scene, camera);
 }
 
 // ════════════════════════════════════════════════════════════════
 //  [PREVIEW 인프라]  preview 런타임 / Three.js 셋업
 // ────────────────────────────────────────────────────────────────
-//  scene, camera, renderer, OrbitControls, GLTFLoader, mesh 좌표의
-//  screen projection은 preview 학습용 보일러플레이트입니다.
+//  scene, camera, renderer, OrbitControls, GLTFLoader는 preview
+//  학습용 보일러플레이트입니다.
 // ════════════════════════════════════════════════════════════════
-
-function projectMeshToScreen(meshName) {
-  const mesh = instance.appendElement?.getObjectByName(meshName);
-  if (!mesh) return null;
-
-  const worldPosition = new THREE.Vector3();
-  mesh.getWorldPosition(worldPosition);
-  worldPosition.project(camera);
-
-  return {
-    x: ((worldPosition.x + 1) / 2) * container.clientWidth,
-    y: ((-worldPosition.y + 1) / 2) * container.clientHeight
-  };
-}
-
-function syncHudCardPositions() {
-  Array.from(hudRoot.querySelectorAll('[data-mesh-name]')).forEach((card) => {
-    const point = projectMeshToScreen(card.getAttribute('data-mesh-name'));
-    if (!point) return;
-    card.style.left = point.x + 'px';
-    card.style.top = point.y + 'px';
-  });
-}
 
 // ████████████████████████████████████████████████████████████████
 //  [COMPONENT register.js 본문]  — 페이지는 작성하지 않습니다
@@ -288,8 +265,25 @@ instance.renderHud = ({ response: data }) => {
 //  preview: setInterval + 직접 호출로 시뮬레이션
 // ════════════════════════════════════════════════════════════════
 function mountHudCards(meshNames) {
+  const layouts = [
+    {
+      'HV-U8-B': { left: '16%', top: '22%' },
+      'BLK-HV-01': { left: '76%', top: '28%' },
+      'cnsFloorB4f': { left: '52%', top: '74%' }
+    },
+    {
+      'HV-U8-B': { left: '20%', top: '68%' },
+      'BLK-HV-01': { left: '74%', top: '18%' },
+      'cnsFloorB4f': { left: '58%', top: '48%' }
+    }
+  ];
+  const layout = layouts[layoutTick % layouts.length];
   hudRoot.innerHTML = meshNames.map((meshName) => `
-    <div class="hud-card" data-mesh-name="${meshName}">
+    <div
+      class="hud-card"
+      data-mesh-name="${meshName}"
+      style="left:${layout[meshName]?.left || '50%'}; top:${layout[meshName]?.top || '50%'};"
+    >
       <div class="hud-card__title">${meshName}</div>
       <div class="hud-card__metrics">
         <div class="hud-card__metric">POP<strong class="hud-population">-</strong></div>
@@ -364,9 +358,9 @@ document.querySelector('[data-action="refresh"]').addEventListener('click', () =
 });
 
 document.querySelector('[data-action="shuffle"]').addEventListener('click', () => {
-  HUD_MESH_NAMES.push(HUD_MESH_NAMES.shift());
+  layoutTick += 1;
   mountHudCards(HUD_MESH_NAMES);
-  fetchAndApplyData('shuffle hud cards');
+  fetchAndApplyData('shuffle hud layout');
 });
 
 animate();
