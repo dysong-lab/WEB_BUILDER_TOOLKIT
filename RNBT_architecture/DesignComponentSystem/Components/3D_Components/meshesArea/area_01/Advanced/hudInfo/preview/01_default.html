@@ -15,16 +15,24 @@
     .demo-btn[data-action] { background: #374151; color: #f9fafb; }
     .demo-stage { position: relative; width: 820px; height: 520px; overflow: hidden; border-radius: 10px; border: 1px solid #374151; }
     .demo-view { width: 100%; height: 100%; }
-    .hud-overlay { position: absolute; inset: 0; pointer-events: none; }
-    .hud-card {
+    .hud-overlay {
       position: absolute;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 15px;
+      padding-top: 18px;
+      pointer-events: none;
+    }
+    .hud-card {
+      position: relative;
       min-width: 126px;
       padding: 10px 12px;
       border: 1px solid rgba(148, 163, 184, 0.35);
       border-radius: 10px;
       background: rgba(15, 23, 42, 0.82);
       box-shadow: 0 12px 24px rgba(2, 6, 23, 0.28);
-      transform: translate(-50%, -115%);
       backdrop-filter: blur(8px);
     }
     .hud-card__title { font-size: 11px; letter-spacing: 0.08em; color: #94a3b8; text-transform: uppercase; }
@@ -117,8 +125,6 @@ scene.add(new THREE.GridHelper(12, 24, 0x334155, 0x1f2937));
 const instance = { appendElement: null };
 let clickable = [];
 let statusTick = 0;
-let layoutTick = 0;
-
 const MODEL_CANDIDATES = [
   '../../../../../../../models/meshesArea/area_01/01_default/area_01.gltf',
   '../../../../../../models/meshesArea/area_01/01_default/area_01.gltf'
@@ -265,25 +271,8 @@ instance.renderHud = ({ response: data }) => {
 //  preview: setInterval + 직접 호출로 시뮬레이션
 // ════════════════════════════════════════════════════════════════
 function mountHudCards(meshNames) {
-  const layouts = [
-    {
-      'HV-U8-B': { left: '16%', top: '22%' },
-      'BLK-HV-01': { left: '76%', top: '28%' },
-      'cnsFloorB4f': { left: '52%', top: '74%' }
-    },
-    {
-      'HV-U8-B': { left: '20%', top: '68%' },
-      'BLK-HV-01': { left: '74%', top: '18%' },
-      'cnsFloorB4f': { left: '58%', top: '48%' }
-    }
-  ];
-  const layout = layouts[layoutTick % layouts.length];
   hudRoot.innerHTML = meshNames.map((meshName) => `
-    <div
-      class="hud-card"
-      data-mesh-name="${meshName}"
-      style="left:${layout[meshName]?.left || '50%'}; top:${layout[meshName]?.top || '50%'};"
-    >
+    <div class="hud-card" data-mesh-name="${meshName}">
       <div class="hud-card__title">${meshName}</div>
       <div class="hud-card__metrics">
         <div class="hud-card__metric">POP<strong class="hud-population">-</strong></div>
@@ -358,9 +347,9 @@ document.querySelector('[data-action="refresh"]').addEventListener('click', () =
 });
 
 document.querySelector('[data-action="shuffle"]').addEventListener('click', () => {
-  layoutTick += 1;
+  HUD_MESH_NAMES.push(HUD_MESH_NAMES.shift());
   mountHudCards(HUD_MESH_NAMES);
-  fetchAndApplyData('shuffle hud layout');
+  fetchAndApplyData('shuffle hud order');
 });
 
 animate();
