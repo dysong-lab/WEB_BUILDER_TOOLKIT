@@ -43,7 +43,7 @@ Components/<컴포넌트경로>/Advanced/<변형이름>/
 | 4 | AppBars | notificationBadge | 알림 배지 표시 + 클릭 이벤트 — badgeInfo 구독, @badgeClicked 발행 | 대기 |
 | 5 | Badges | realtime | 실시간 카운트 갱신 시 펄스 애니메이션 — onBadgeUpdate + AnimationMixin pulse | 대기 |
 | 6 | Badges | pulseOnChange | 값 변경 감지 시 펄스 애니메이션 — previousValue 추적, @valueChanged 발행 | 대기 |
-| 7 | Buttons/Buttons | longPress | 길게 누르기(500ms) 이벤트 — pointerdown/up 추적, @buttonLongPressed 발행 | 대기 |
+| 7 | Buttons/Buttons | longPress | 길게 누르기(500ms) 이벤트 — pointerdown/up 추적, @buttonLongPressed 발행 | 완료 |
 | 8 | Buttons/Buttons | confirmation | 클릭 시 2단계 확인 UI 후 액션 실행 — confirmationState, @confirmationNeeded | 대기 |
 | 9 | Buttons/Buttons | holdToConfirm | 누르고 있어야 액션 실행 (progress bar) — holdTimer + @holdConfirmed | 대기 |
 | 10 | Buttons/ExtendedFABs | draggable | FAB 드래그 가능 — pointerdown/move/up + position 제어 | 대기 |

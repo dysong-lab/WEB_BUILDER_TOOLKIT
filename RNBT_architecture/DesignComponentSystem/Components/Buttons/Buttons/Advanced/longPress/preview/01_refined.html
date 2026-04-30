@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Buttons/Advanced/longPress — 01_refined</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        background: #09111b;
+        color: #e8efff;
+        font-family: "Pretendard", sans-serif;
+        padding: 36px;
+      }
+      .preview-shell { display: flex; flex-direction: column; gap: 18px; max-width: 940px; margin: 0 auto; }
+      .preview-head { display: flex; flex-direction: column; gap: 8px; }
+      .preview-kicker { font-size: 12px; letter-spacing: 1.6px; color: #9db2ff; text-transform: uppercase; }
+      .preview-copy { color: #9fb0d1; line-height: 1.6; }
+      .preview-grid { display: flex; gap: 18px; flex-wrap: wrap; }
+      .preview-log {
+        min-height: 132px; padding: 16px 18px; border-radius: 18px;
+        background: rgba(255, 255, 255, 0.04); color: #b9caec;
+        font-family: "IBM Plex Mono", monospace; font-size: 12px; white-space: pre-line;
+      }
+      .button-shell {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: center;
+        gap: 14px;
+        min-width: 260px;
+        min-height: 150px;
+        padding: 24px;
+        border-radius: 28px;
+        background:
+          radial-gradient(circle at top left, rgba(154, 203, 255, 0.3), transparent 42%),
+          linear-gradient(180deg, #0d1d31 0%, #08111d 100%);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      }
+      .md-button {
+        min-width: 124px;
+        min-height: 46px;
+        padding: 0 22px;
+        border: 0;
+        border-radius: 999px;
+        background: linear-gradient(180deg, #edf6ff 0%, #d6e7ff 100%);
+        color: #0c3972;
+        cursor: pointer;
+      }
+      .md-button__label {
+        display: inline-block;
+        max-width: 220px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: "Tomorrow", "Pretendard", sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+      }
+      .button-feedback { display: flex; flex-direction: column; gap: 7px; }
+      .button-feedback__track {
+        height: 8px;
+        border-radius: 999px;
+        overflow: hidden;
+        background: rgba(235, 243, 255, 0.12);
+      }
+      .button-feedback__progress {
+        display: block;
+        width: 100%;
+        height: 100%;
+        transform-origin: left center;
+        transform: scaleX(0);
+        background: linear-gradient(90deg, #9ed0ff 0%, #6c8bff 100%);
+        transition: transform 80ms linear;
+      }
+      .button-feedback__hint {
+        color: #a5b8dd;
+        font-family: "Pretendard", sans-serif;
+        font-size: 12px;
+        line-height: 1.4;
+      }
+      .button-shell[data-phase="holding"] .md-button { filter: brightness(1.03); }
+      .button-shell[data-phase="completed"] .md-button {
+        background: linear-gradient(180deg, #c9fff0 0%, #8ae9c4 100%);
+        color: #063f2a;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-shell">
+      <div class="preview-head">
+        <span class="preview-kicker">Persona A / Refined Technical</span>
+        <h1>Long press separates safe click from deliberate hold</h1>
+        <p class="preview-copy">클릭은 기본 액션을 유지하고, 500ms 이상 누르면 별도 `@buttonLongPressed`를 발행한다. 길게 누를 때만 위험/보호 액션을 실행해야 하는 버튼에 쓰는 변형이다.</p>
+      </div>
+      <div class="preview-grid">
+        <div id="button-demo"></div>
+      </div>
+      <div class="preview-log" id="preview-log">Hold one of the buttons for 500ms.</div>
+    </div>
+    <script src="../../../../../../preview_runtime.js"></script>
+    <script>
+      (async () => {
+        const createComponentHtml = (label) => `
+          <div class="button-shell" data-phase="idle">
+            <button class="md-button" type="button" aria-label="${label}" data-phase="idle">
+              <span class="md-button__label">${label}</span>
+            </button>
+            <div class="button-feedback">
+              <div class="button-feedback__track">
+                <span class="button-feedback__progress"></span>
+              </div>
+              <span class="button-feedback__hint">Hold for 500ms</span>
+            </div>
+          </div>
+        `;
+        const payload = { label: "Arm system" };
+        document.getElementById("button-demo").innerHTML = createComponentHtml(payload.label);
+
+        const createButtonInstance = (id) => {
+          const instance = { id, appendElement: document.getElementById(id) };
+          instance.cssSelectors = {
+            shell: ".button-shell",
+            button: ".md-button",
+            label: ".md-button__label",
+            progress: ".button-feedback__progress",
+            hint: ".button-feedback__hint",
+          };
+          instance.longPressDuration = 500;
+          instance._longPressTimer = null;
+          instance._progressRaf = null;
+          instance._pressStartAt = 0;
+          instance._longPressTriggered = false;
+          instance.renderButtonInfo = function (data = {}) {
+            const button = this.appendElement.querySelector(this.cssSelectors.button);
+            const label = this.appendElement.querySelector(this.cssSelectors.label);
+            if (!button || !label) return;
+            const nextLabel = data?.label == null ? "" : String(data.label);
+            label.textContent = nextLabel;
+            button.setAttribute("aria-label", nextLabel);
+          };
+          instance.setProgressState = function (progress = 0, phase = "idle") {
+            const shell = this.appendElement.querySelector(this.cssSelectors.shell);
+            const button = this.appendElement.querySelector(this.cssSelectors.button);
+            const bar = this.appendElement.querySelector(this.cssSelectors.progress);
+            const hint = this.appendElement.querySelector(this.cssSelectors.hint);
+            if (!shell || !button || !bar || !hint) return;
+            const clamped = Math.max(0, Math.min(1, progress));
+            shell.dataset.phase = phase;
+            button.dataset.phase = phase;
+            bar.style.transform = `scaleX(${clamped})`;
+            hint.textContent = phase === "holding" ? `Hold ${Math.round(clamped * this.longPressDuration)} / ${this.longPressDuration}ms` : phase === "completed" ? "Long press complete" : `Hold for ${this.longPressDuration}ms`;
+          };
+          instance.cancelLongPress = function () {
+            if (this._longPressTimer) window.clearTimeout(this._longPressTimer);
+            if (this._progressRaf) window.cancelAnimationFrame(this._progressRaf);
+            this._longPressTimer = null;
+            this._progressRaf = null;
+            this._pressStartAt = 0;
+            this._longPressTriggered = false;
+            this.setProgressState(0, "idle");
+          };
+          instance.completeLongPress = function (event) {
+            if (this._longPressTriggered) return;
+            this._longPressTriggered = true;
+            this.setProgressState(1, "completed");
+            Weventbus.emit("@buttonLongPressed", {
+              event,
+              targetInstance: this,
+              response: { holdDuration: this.longPressDuration, label: this.appendElement.querySelector(this.cssSelectors.label)?.textContent?.trim() || "" },
+            });
+          };
+          instance.startLongPress = function (event) {
+            this.cancelLongPress();
+            this._pressStartAt = performance.now();
+            this.setProgressState(0, "holding");
+            const tick = () => {
+              const elapsed = performance.now() - this._pressStartAt;
+              this.setProgressState(elapsed / this.longPressDuration, "holding");
+              if (!this._longPressTriggered && elapsed < this.longPressDuration) this._progressRaf = requestAnimationFrame(tick);
+            };
+            this._progressRaf = requestAnimationFrame(tick);
+            this._longPressTimer = window.setTimeout(() => {
+              this.completeLongPress(event);
+              this._longPressTimer = null;
+            }, this.longPressDuration);
+          };
+          const button = instance.appendElement.querySelector(instance.cssSelectors.button);
+          button.addEventListener("pointerdown", (event) => instance.startLongPress(event));
+          ["pointerup", "pointerleave", "pointercancel"].forEach((eventName) => {
+            button.addEventListener(eventName, () => {
+              if (!instance._longPressTriggered) instance.cancelLongPress();
+            });
+          });
+          button.addEventListener("click", (event) => {
+            if (instance._longPressTriggered) {
+              event.preventDefault();
+              event.stopImmediatePropagation();
+              instance.cancelLongPress();
+            }
+          }, true);
+          instance.customEvents = { click: { [instance.cssSelectors.button]: "@buttonClicked" } };
+          Wkit.bindEvents(instance, instance.customEvents);
+          instance.setProgressState(0, "idle");
+          return instance;
+        };
+
+        const instance = createButtonInstance("button-demo");
+        const log = document.getElementById("preview-log");
+        instance.renderButtonInfo(payload);
+
+        Wkit.onEventBusHandlers({
+          "@buttonClicked": ({ targetInstance }) => {
+            const label = targetInstance.appendElement.querySelector(".md-button__label")?.textContent?.trim() || "";
+            log.textContent = `event: @buttonClicked\nbutton: ${targetInstance.id}\nlabel: ${label}\nmeaning: quick tap kept the normal action.`;
+          },
+          "@buttonLongPressed": ({ targetInstance, response }) => {
+            log.textContent = `event: @buttonLongPressed\nbutton: ${targetInstance.id}\nlabel: ${response?.label || ""}\nhold: ${response?.holdDuration || 0}ms\nmeaning: deliberate hold action fired.`;
+            window.setTimeout(() => {
+              if (targetInstance?.setProgressState) targetInstance.setProgressState(0, "idle");
+            }, 700);
+          },
+        });
+      })();
+    </script>
+  </body>
+</html>

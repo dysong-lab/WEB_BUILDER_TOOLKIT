@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Buttons/Advanced/longPress — 03_editorial</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        background: #f5efe6;
+        color: #3a2e22;
+        font-family: "Iowan Old Style", "Times New Roman", serif;
+        padding: 36px;
+      }
+      .preview-shell { display: flex; flex-direction: column; gap: 18px; max-width: 940px; margin: 0 auto; }
+      .preview-copy { color: #6b5847; line-height: 1.7; }
+      .preview-grid { display: flex; gap: 18px; flex-wrap: wrap; }
+      .preview-log {
+        min-height: 132px; padding: 16px 18px; border-radius: 18px;
+        background: rgba(255, 252, 247, 0.8); color: #5f4a39;
+        font-family: "Courier New", monospace; font-size: 12px; white-space: pre-line;
+        border: 1px solid rgba(95, 71, 48, 0.12);
+      }
+      .button-shell {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: center;
+        gap: 14px;
+        min-width: 260px;
+        min-height: 150px;
+        padding: 24px;
+        border-radius: 28px;
+        background: linear-gradient(180deg, rgba(255, 251, 245, 0.98) 0%, rgba(245, 238, 227, 0.96) 100%);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88);
+      }
+      .md-button {
+        min-width: 132px;
+        min-height: 44px;
+        padding: 0 22px;
+        border: 1px solid rgba(90, 67, 44, 0.22);
+        border-radius: 999px;
+        background: rgba(255, 248, 239, 0.9);
+        color: #3c2d21;
+        cursor: pointer;
+      }
+      .md-button__label {
+        display: inline-block;
+        max-width: 220px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: "Iowan Old Style", "Times New Roman", serif;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+      }
+      .button-feedback { display: flex; flex-direction: column; gap: 7px; }
+      .button-feedback__track {
+        height: 6px;
+        border-radius: 999px;
+        overflow: hidden;
+        background: rgba(90, 67, 44, 0.12);
+      }
+      .button-feedback__progress {
+        display: block;
+        width: 100%;
+        height: 100%;
+        transform-origin: left center;
+        transform: scaleX(0);
+        background: linear-gradient(90deg, #a57b4f 0%, #5f4730 100%);
+        transition: transform 80ms linear;
+      }
+      .button-feedback__hint {
+        color: #6d5642;
+        font-family: "Georgia", serif;
+        font-size: 12px;
+        line-height: 1.4;
+      }
+      .button-shell[data-phase="completed"] .md-button { background: #efe0c5; }
+    </style>
+  </head>
+  <body>
+    <div class="preview-shell">
+      <div>
+        <h1>Editorial hold-to-intent button</h1>
+        <p class="preview-copy">hold는 사용자의 의도를 한 번 더 확인하는 장치다. 짧은 탭은 일반 액션으로 남기고, 길게 누르기만 별도 이벤트로 분리한다.</p>
+      </div>
+      <div class="preview-grid">
+        <div id="button-demo"></div>
+      </div>
+      <div class="preview-log" id="preview-log">Hold one of the buttons for 500ms.</div>
+    </div>
+    <script src="../../../../../../preview_runtime.js"></script>
+    <script>
+      (async () => {
+        const createComponentHtml = (label) => `
+          <div class="button-shell" data-phase="idle">
+            <button class="md-button" type="button" aria-label="${label}" data-phase="idle">
+              <span class="md-button__label">${label}</span>
+            </button>
+            <div class="button-feedback">
+              <div class="button-feedback__track">
+                <span class="button-feedback__progress"></span>
+              </div>
+              <span class="button-feedback__hint">Hold for 500ms</span>
+            </div>
+          </div>
+        `;
+        const payload = { label: "Archive thread" };
+        document.getElementById("button-demo").innerHTML = createComponentHtml(payload.label);
+        const createInstance = (id) => {
+          const instance = { id, appendElement: document.getElementById(id), longPressDuration: 500, _longPressTimer: null, _progressRaf: null, _pressStartAt: 0, _longPressTriggered: false };
+          instance.cssSelectors = { shell: ".button-shell", button: ".md-button", label: ".md-button__label", progress: ".button-feedback__progress", hint: ".button-feedback__hint" };
+          instance.renderButtonInfo = function (data = {}) { const button = this.appendElement.querySelector(this.cssSelectors.button); const label = this.appendElement.querySelector(this.cssSelectors.label); if (!button || !label) return; const nextLabel = data?.label == null ? "" : String(data.label); label.textContent = nextLabel; button.setAttribute("aria-label", nextLabel); };
+          instance.setProgressState = function (progress = 0, phase = "idle") { const shell = this.appendElement.querySelector(this.cssSelectors.shell); const button = this.appendElement.querySelector(this.cssSelectors.button); const bar = this.appendElement.querySelector(this.cssSelectors.progress); const hint = this.appendElement.querySelector(this.cssSelectors.hint); if (!shell || !button || !bar || !hint) return; const clamped = Math.max(0, Math.min(1, progress)); shell.dataset.phase = phase; button.dataset.phase = phase; bar.style.transform = `scaleX(${clamped})`; hint.textContent = phase === "holding" ? `Hold ${Math.round(clamped * this.longPressDuration)} / ${this.longPressDuration}ms` : phase === "completed" ? "Long press complete" : `Hold for ${this.longPressDuration}ms`; };
+          instance.cancelLongPress = function () { if (this._longPressTimer) clearTimeout(this._longPressTimer); if (this._progressRaf) cancelAnimationFrame(this._progressRaf); this._longPressTimer = null; this._progressRaf = null; this._pressStartAt = 0; this._longPressTriggered = false; this.setProgressState(0, "idle"); };
+          instance.completeLongPress = function (event) { if (this._longPressTriggered) return; this._longPressTriggered = true; this.setProgressState(1, "completed"); Weventbus.emit("@buttonLongPressed", { event, targetInstance: this, response: { holdDuration: this.longPressDuration, label: this.appendElement.querySelector(this.cssSelectors.label)?.textContent?.trim() || "" } }); };
+          instance.startLongPress = function (event) { this.cancelLongPress(); this._pressStartAt = performance.now(); this.setProgressState(0, "holding"); const tick = () => { const elapsed = performance.now() - this._pressStartAt; this.setProgressState(elapsed / this.longPressDuration, "holding"); if (!this._longPressTriggered && elapsed < this.longPressDuration) this._progressRaf = requestAnimationFrame(tick); }; this._progressRaf = requestAnimationFrame(tick); this._longPressTimer = setTimeout(() => { this.completeLongPress(event); this._longPressTimer = null; }, this.longPressDuration); };
+          const button = instance.appendElement.querySelector(instance.cssSelectors.button);
+          button.addEventListener("pointerdown", (event) => instance.startLongPress(event));
+          ["pointerup", "pointerleave", "pointercancel"].forEach((name) => button.addEventListener(name, () => { if (!instance._longPressTriggered) instance.cancelLongPress(); }));
+          button.addEventListener("click", (event) => { if (instance._longPressTriggered) { event.preventDefault(); event.stopImmediatePropagation(); instance.cancelLongPress(); } }, true);
+          instance.customEvents = { click: { [instance.cssSelectors.button]: "@buttonClicked" } };
+          Wkit.bindEvents(instance, instance.customEvents);
+          instance.setProgressState(0, "idle");
+          return instance;
+        };
+        const instance = createInstance("button-demo");
+        const log = document.getElementById("preview-log");
+        instance.renderButtonInfo(payload);
+        Wkit.onEventBusHandlers({
+          "@buttonClicked": ({ targetInstance }) => { log.textContent = `event: @buttonClicked\nbutton: ${targetInstance.id}\nmeaning: tap preserved the normal lightweight action.`; },
+          "@buttonLongPressed": ({ targetInstance, response }) => { log.textContent = `event: @buttonLongPressed\nbutton: ${targetInstance.id}\nlabel: ${response?.label || ""}\nhold: ${response?.holdDuration || 0}ms\nmeaning: intentional hold action fired.`; setTimeout(() => targetInstance?.setProgressState?.(0, "idle"), 700); },
+        });
+      })();
+    </script>
+  </body>
+</html>
