@@ -86,3 +86,6 @@ FieldRenderMixin
 | 파일 | 페르소나 | 설명 |
 |------|---------|------|
 | 01_refined | A: Refined Technical | 퍼플 팔레트, 그라디언트 깊이, 다크, Pretendard |
+| 02_material | B: Material Elevated | 블루 팔레트, 라이트 서피스, Roboto, 소프트 필드 |
+| 03_editorial | C: Minimal Editorial | 웜 그레이, 세리프 헤드라인, 라이트, 절제된 검색 라인 |
+| 04_operational | D: Dark Operational | 시안 팔레트, 모노스페이스, 다크, framed search |

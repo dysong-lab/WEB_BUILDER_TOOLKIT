@@ -30,11 +30,15 @@ applyListRenderMixin(this, {
         template:  '#top-app-bar-action-template',
         item:      '.top-app-bar__action-item',
         id:        '.top-app-bar__action-item',
+        actionLabel: '.top-app-bar__action-item',
         icon:      '.top-app-bar__action-icon',
         label:     '.top-app-bar__action-label'
     },
     datasetAttrs: {
         id: 'id'
+    },
+    elementAttrs: {
+        actionLabel: 'aria-label'
     }
 });
 
@@ -44,7 +48,14 @@ applyListRenderMixin(this, {
 
 this.renderSelection = ({ response }) => {
     this.fieldRender.renderData({ response: { count: response.count } });
-    this.listRender.renderData({ response: response.actions });
+    this.listRender.renderData({
+        response: Array.isArray(response?.actions)
+            ? response.actions.map((action) => ({
+                ...action,
+                actionLabel: action.label || ''
+            }))
+            : []
+    });
 };
 
 // ======================

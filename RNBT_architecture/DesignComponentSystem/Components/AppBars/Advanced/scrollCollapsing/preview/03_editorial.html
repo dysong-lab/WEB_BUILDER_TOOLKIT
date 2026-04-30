@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>AppBars/Advanced/scrollCollapsing — 03_editorial</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #F6F2EC; font-family: 'Inter', sans-serif; padding: 32px 0; }
+        .demo-shell { width: 680px; margin: 0 auto; }
+        #top-app-bar-container, .demo-controls, .demo-scroll, .demo-log { width: 600px; margin: 0 auto; }
+        .demo-controls { display: flex; gap: 12px; margin-top: 16px; }
+        .demo-controls button { padding: 10px 0; border: none; border-bottom: 1px solid #CFC5BA; background: none; color: #5B544D; cursor: pointer; }
+        .demo-scroll { height: 340px; margin-top: 12px; overflow: auto; border-top: 1px solid #DDD4C9; border-bottom: 1px solid #DDD4C9; }
+        .demo-section { padding: 28px 0; border-bottom: 1px solid #E8E0D6; color: #2C2824; }
+        .demo-section p { color: #6B6560; line-height: 1.7; }
+        .demo-log { margin-top: 16px; padding-top: 12px; border-top: 1px solid #DDD4C9; color: #6B6560; }
+    </style>
+</head>
+<body>
+<div class="demo-shell">
+    <div id="top-app-bar-container"></div>
+    <div class="demo-controls">
+        <button id="btn-expand">Expand</button>
+        <button id="btn-collapse">Collapse</button>
+        <button id="btn-title">Shift Title</button>
+    </div>
+    <div class="demo-scroll" id="demo-scroll"></div>
+    <div class="demo-log" id="demo-log">log: ready</div>
+</div>
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/FieldRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('top-app-bar-container', '../views/03_editorial.html', '../styles/03_editorial.css');
+    const instance = { id: 'top-app-bar', appendElement: document.getElementById('top-app-bar-container') };
+    applyFieldRenderMixin(instance, { cssSelectors: { title: '.top-app-bar__title', bar: '.top-app-bar', navIcon: '.top-app-bar__nav-icon', action: '.top-app-bar__action' } });
+    const bar = () => instance.appendElement.querySelector('.top-app-bar');
+    instance.collapse = () => { bar().dataset.collapsed = 'true'; log('collapsed'); };
+    instance.expand = () => { bar().dataset.collapsed = 'false'; log('expanded'); };
+    const scrollEl = document.getElementById('demo-scroll');
+    scrollEl.addEventListener('scroll', () => (scrollEl.scrollTop >= 96 ? instance.collapse() : instance.expand()), { passive: true });
+    instance.fieldRender.renderData({ response: { title: 'Weekly Field Notes' } });
+    const log = (message) => { document.getElementById('demo-log').textContent = 'log: ' + message; };
+    scrollEl.innerHTML = Array.from({ length: 7 }).map((_, i) => `<section class="demo-section"><h3>Essay ${i + 1}</h3><p>Editorial variant keeps the collapse subtle and driven by whitespace rather than chrome.</p></section>`).join('');
+    document.getElementById('btn-expand').addEventListener('click', () => instance.expand());
+    document.getElementById('btn-collapse').addEventListener('click', () => instance.collapse());
+    document.getElementById('btn-title').addEventListener('click', () => instance.fieldRender.renderData({ response: { title: 'Incident Archive' } }));
+})();
+</script>
+</body>
+</html>

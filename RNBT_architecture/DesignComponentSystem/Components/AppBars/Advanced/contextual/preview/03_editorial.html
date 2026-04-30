@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>AppBars/Advanced/contextual — 03_editorial (Persona C)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f2efe9; font-family: 'Inter', sans-serif; padding: 40px 0; }
+        .sim-wrap { width: 600px; margin: 0 auto; }
+        .sim-note {
+            padding: 12px 0 16px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #ddd4c9;
+            color: #5b544d;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+        .sim-note strong { color: #2c2824; font-family: 'DM Serif Display', serif; font-size: 20px; }
+        .mock-list {
+            margin-top: 8px;
+            background: rgba(255, 255, 255, 0.45);
+            border: 1px solid #ddd4c9;
+        }
+        .mock-list__header {
+            padding: 12px 16px;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #8d8276;
+            border-bottom: 1px solid #ddd4c9;
+        }
+        .mock-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border-bottom: 1px solid #ebe3d9;
+            color: #433d37;
+            font-size: 14px;
+        }
+        .mock-item:last-child { border-bottom: none; }
+        .mock-item--active { background: rgba(255, 255, 255, 0.55); color: #2c2824; }
+        .mock-item input[type="checkbox"] { accent-color: #6c6258; width: 16px; height: 16px; }
+        .demo-log {
+            margin-top: 16px;
+            padding: 12px 0 0;
+            border-top: 1px solid #ddd4c9;
+            color: #5b544d;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+        .demo-log strong { color: #2c2824; font-family: 'DM Serif Display', serif; font-size: 18px; }
+    </style>
+</head>
+<body>
+
+<div class="sim-wrap">
+    <div class="sim-note">
+        <strong>Editorial Selection Flow</strong><br>
+        페이지가 선택 상태에 따라 AppBar의 액션 구성을 바꿉니다.
+    </div>
+    <div id="top-app-bar-container"></div>
+    <div class="mock-list">
+        <div class="mock-list__header">Story blocks</div>
+        <div id="mock-list-body"></div>
+    </div>
+    <div class="demo-log" id="demo-log"><strong>Session note</strong><br>—</div>
+</div>
+
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/FieldRenderMixin.js"></script>
+<script src="../../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('top-app-bar-container', '../views/03_editorial.html', '../styles/03_editorial.css');
+
+    const instance = { id: 'top-app-bar', appendElement: document.getElementById('top-app-bar-container') };
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            bar: '.top-app-bar',
+            count: '.top-app-bar__count',
+            closeIcon: '.top-app-bar__close'
+        }
+    });
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container: '.top-app-bar__action-list',
+            template: '#top-app-bar-action-template',
+            item: '.top-app-bar__action-item',
+            id: '.top-app-bar__action-item',
+            actionLabel: '.top-app-bar__action-item',
+            icon: '.top-app-bar__action-icon',
+            label: '.top-app-bar__action-label'
+        },
+        datasetAttrs: { id: 'id' },
+        elementAttrs: { actionLabel: 'aria-label' }
+    });
+
+    instance.renderSelection = ({ response }) => {
+        instance.fieldRender.renderData({ response: { count: response.count } });
+        instance.listRender.renderData({
+            response: response.actions.map((action) => ({
+                ...action,
+                actionLabel: action.label || ''
+            }))
+        });
+    };
+
+    const ITEMS = [
+        { id: 'note-01', label: 'Issue summary' },
+        { id: 'note-02', label: 'Control room diary' },
+        { id: 'note-03', label: 'Inspection schedule' },
+        { id: 'note-04', label: 'Battery maintenance' }
+    ];
+    const selected = new Set();
+    const listEl = document.getElementById('mock-list-body');
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>Session note</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>Session note</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).slice(0, 12).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    const renderMockList = () => {
+        listEl.innerHTML = ITEMS.map((item) => {
+            const isActive = selected.has(item.id);
+            return `
+                <label class="mock-item ${isActive ? 'mock-item--active' : ''}">
+                    <input type="checkbox" data-id="${item.id}" ${isActive ? 'checked' : ''}>
+                    <span>${item.label}</span>
+                </label>
+            `;
+        }).join('');
+    };
+
+    const computeActions = (count) => {
+        if (count === 0) return [];
+        if (count === 1) return [
+            { id: 'edit', icon: 'edit', label: 'Edit' },
+            { id: 'bookmark', icon: 'bookmark', label: 'Bookmark' }
+        ];
+        return [
+            { id: 'merge', icon: 'merge', label: 'Merge' },
+            { id: 'archive', icon: 'archive', label: 'Archive' }
+        ];
+    };
+
+    const syncAppBar = () => {
+        const count = selected.size;
+        instance.renderSelection({
+            response: {
+                count: count ? `${count} selected` : '',
+                actions: computeActions(count)
+            }
+        });
+    };
+
+    listEl.addEventListener('change', (e) => {
+        if (e.target.type !== 'checkbox') return;
+        const { id } = e.target.dataset;
+        if (e.target.checked) selected.add(id);
+        else selected.delete(id);
+        renderMockList();
+        syncAppBar();
+        log(`selection updated -> ${selected.size} item(s)`);
+    });
+
+    Wkit.onEventBusHandlers({
+        '@selectionActionClicked': ({ event }) => {
+            const actionId = event.target.closest('.top-app-bar__action-item')?.dataset.id;
+            log(`action "${actionId}" committed`);
+            selected.clear();
+            renderMockList();
+            syncAppBar();
+        },
+        '@selectionCleared': () => {
+            log('selection cleared');
+            selected.clear();
+            renderMockList();
+            syncAppBar();
+        }
+    });
+
+    instance.customEvents = {
+        click: {
+            [instance.fieldRender.cssSelectors.closeIcon]: '@selectionCleared',
+            [instance.listRender.cssSelectors.item]: '@selectionActionClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    renderMockList();
+    syncAppBar();
+})();
+</script>
+</body>
+</html>

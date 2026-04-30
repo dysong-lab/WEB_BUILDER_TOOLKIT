@@ -9,7 +9,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #12153D; font-family: 'Pretendard', sans-serif; padding: 40px 0; }
 
-        .sim-wrap { width: 360px; margin: 0 auto; }
+        .sim-wrap { width: 600px; margin: 0 auto; }
 
         /* 프리뷰 설명 */
         .sim-note {
@@ -143,15 +143,22 @@
             template:  '#top-app-bar-action-template',
             item:      '.top-app-bar__action-item',
             id:        '.top-app-bar__action-item',
+            actionLabel: '.top-app-bar__action-item',
             icon:      '.top-app-bar__action-icon',
             label:     '.top-app-bar__action-label'
         },
-        datasetAttrs: { id: 'id' }
+        datasetAttrs: { id: 'id' },
+        elementAttrs: { actionLabel: 'aria-label' }
     });
 
     instance.renderSelection = ({ response }) => {
         instance.fieldRender.renderData({ response: { count: response.count } });
-        instance.listRender.renderData({ response: response.actions });
+        instance.listRender.renderData({
+            response: response.actions.map((action) => ({
+                ...action,
+                actionLabel: action.label || ''
+            }))
+        });
     };
 
     instance.subscriptions = { selectionInfo: [instance.renderSelection] };

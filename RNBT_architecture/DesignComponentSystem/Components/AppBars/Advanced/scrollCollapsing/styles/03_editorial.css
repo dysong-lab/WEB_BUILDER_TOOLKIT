@@ -1,0 +1,84 @@
+#top-app-bar-container {
+    .top-app-bar {
+        display: flex;
+        align-items: center;
+        height: 112px;
+        padding: 0 32px;
+        gap: 24px;
+        background: #faf9f7;
+        border-bottom: 1px solid #e8e4de;
+        transition: height 150ms ease-out, border-color 150ms ease-out;
+    }
+
+    .top-app-bar[data-collapsed="true"] {
+        height: 72px;
+        border-bottom-color: #d7cfc5;
+    }
+
+    .top-app-bar__nav-icon,
+    .top-app-bar__action {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border: none;
+        border-radius: 0;
+        background: none;
+        color: #A09890;
+        cursor: pointer;
+        transition: color 150ms ease-out, border-bottom-color 150ms ease-out;
+        border-bottom: 1px solid transparent;
+        flex-shrink: 0;
+    }
+
+    .top-app-bar__nav-icon:hover,
+    .top-app-bar__action:hover {
+        color: #3D3833;
+        border-bottom-color: currentColor;
+    }
+
+    .top-app-bar__body {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        min-width: 0;
+        flex: 1;
+    }
+
+    .top-app-bar__eyebrow {
+        font-family: 'Inter', sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.18em;
+        color: #8D8276;
+        text-transform: uppercase;
+        transition: opacity 150ms ease-out;
+    }
+
+    .top-app-bar[data-collapsed="true"] .top-app-bar__eyebrow {
+        opacity: 0;
+    }
+
+    .top-app-bar__title {
+        font-family: 'DM Serif Display', serif;
+        font-size: 32px;
+        font-weight: 400;
+        color: #2C2824;
+        line-height: 1.15;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: font-size 150ms ease-out;
+    }
+
+    .top-app-bar[data-collapsed="true"] .top-app-bar__title {
+        font-size: 24px;
+    }
+
+    .top-app-bar__actions {
+        display: flex;
+        gap: 12px;
+        flex-shrink: 0;
+    }
+}

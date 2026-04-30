@@ -1,16 +1,13 @@
 /* 01_refined: Persona A — Refined Technical
    퍼플 팔레트 / 그라디언트 깊이 / Pretendard / 다크 */
 #top-app-bar-container {
-    width: 360px;
-    height: 56px;
-
     .top-app-bar {
         display: flex;
         align-items: center;
-        height: 100%;
+        height: 56px;
         padding: 0 8px;
-        gap: 8px;
-        background: linear-gradient(90deg, rgba(80, 46, 233, 0.06) 0%, rgba(146, 168, 244, 0.03) 100%),
+        gap: 10px;
+        background: linear-gradient(90deg, rgba(36, 0, 196, 0.08) 0%, rgba(5, 171, 207, 0.03) 100%),
                     #191D50;
         border-bottom: 1px solid #2A2574;
     }
@@ -45,16 +42,16 @@
         flex: 1;
         min-width: 0;
         height: 40px;
-        padding: 0 8px;
-        background: rgba(146, 168, 244, 0.06);
-        border: 1px solid #2A2574;
-        border-radius: 10px;
+        padding: 0 10px;
+        background: linear-gradient(90deg, rgba(0, 0, 0, 0.18) 0%, rgba(80, 46, 233, 0.08) 100%), #232972;
+        border: 1px solid rgba(75, 92, 148, 0.7);
+        border-radius: 20px;
         transition: border-color 150ms ease-out, background-color 150ms ease-out;
     }
 
     .top-app-bar__search:focus-within {
-        border-color: #502EE9;
-        background: rgba(80, 46, 233, 0.10);
+        border-color: #92A8F4;
+        background: linear-gradient(90deg, rgba(36, 0, 196, 0.12) 0%, rgba(5, 171, 207, 0.05) 100%), #232972;
     }
 
     .top-app-bar__search-icon {
@@ -72,7 +69,7 @@
         outline: none;
         background: transparent;
         font-family: 'Pretendard', sans-serif;
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 500;
         color: #E8EDFF;
     }
@@ -107,12 +104,13 @@
     }
 
     .top-app-bar__count {
-        font-family: 'Pretendard', sans-serif;
-        font-size: 11px;
-        font-weight: 500;
-        color: #707EB4;
-        padding: 0 4px;
+        font-family: 'Tomorrow', sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        color: #A6B3DE;
+        padding: 0 10px;
         white-space: nowrap;
         flex-shrink: 0;
+        letter-spacing: 0.04em;
     }
 }

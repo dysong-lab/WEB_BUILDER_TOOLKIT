@@ -1,58 +1,59 @@
-/* 01_refined: Persona A — Refined Technical
-   퍼플 팔레트 / 그라디언트 깊이 / Pretendard / 다크 */
+/* 04_operational: Persona D — Dark Operational
+   시안 팔레트 / control-room selection bar / IBM Plex Mono / 다크 */
 #top-app-bar-container {
     .top-app-bar {
         display: flex;
         align-items: center;
-        height: 56px;
+        height: 48px;
         padding: 0 8px;
-        gap: 4px;
-        background: linear-gradient(90deg, rgba(36, 0, 196, 0.12) 0%, rgba(5, 171, 207, 0.04) 100%),
-                    #191D50;
-        border-bottom: 1px solid #2A2574;
+        gap: 2px;
+        background: #0d1117;
+        border-bottom: 1px solid rgba(77, 208, 225, 0.15);
     }
 
     .top-app-bar__close {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 40px;
-        height: 40px;
-        border: none;
+        width: 36px;
+        height: 36px;
+        border: 1px solid transparent;
         background: none;
-        color: #707EB4;
+        color: #7a8fa5;
         cursor: pointer;
-        border-radius: 8px;
-        transition: background-color 150ms ease-out, color 150ms ease-out;
+        border-radius: 3px;
+        transition: border-color 150ms ease-out;
         flex-shrink: 0;
     }
 
     .top-app-bar__close:hover {
-        color: #A6B3DE;
-        background: rgba(80, 46, 233, 0.12);
+        color: #c9d6e3;
+        border-color: rgba(77, 208, 225, 0.3);
     }
 
     .top-app-bar__close .material-symbols-outlined {
-        font-size: 22px;
+        font-size: 20px;
     }
 
     .top-app-bar__count {
         flex: 1;
         min-width: 0;
-        padding-left: 12px;
-        font-family: 'Pretendard', sans-serif;
-        font-size: 18px;
-        font-weight: 600;
-        color: #E8EDFF;
+        padding-left: 8px;
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 14px;
+        font-weight: 500;
+        color: #c9d6e3;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
     }
 
     .top-app-bar__action-list {
         display: flex;
         align-items: center;
-        gap: 4px;
+        gap: 2px;
         flex-shrink: 0;
     }
 
@@ -60,23 +61,23 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 40px;
-        height: 40px;
-        border: none;
+        width: 36px;
+        height: 36px;
+        border: 1px solid transparent;
         background: none;
-        color: #707EB4;
+        color: #7a8fa5;
         cursor: pointer;
-        border-radius: 8px;
-        transition: background-color 150ms ease-out, color 150ms ease-out;
+        border-radius: 3px;
+        transition: border-color 150ms ease-out;
     }
 
     .top-app-bar__action-item:hover {
-        color: #A6B3DE;
-        background: rgba(80, 46, 233, 0.16);
+        color: #c9d6e3;
+        border-color: rgba(77, 208, 225, 0.3);
     }
 
     .top-app-bar__action-icon {
-        font-size: 22px;
+        font-size: 18px;
         line-height: 1;
     }
 

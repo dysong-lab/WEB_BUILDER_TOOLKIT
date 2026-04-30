@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>AppBars/Advanced/contextual — 02_material (Persona B)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f5f5f5; font-family: 'Roboto', sans-serif; padding: 40px 0; }
+        .sim-wrap { width: 600px; margin: 0 auto; }
+        .sim-note {
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            background: #ffffff;
+            border: 1px solid #d9e2f2;
+            border-radius: 16px;
+            color: #455a64;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .sim-note strong { color: #1565C0; }
+        .mock-list {
+            margin-top: 8px;
+            background: #ffffff;
+            border: 1px solid #d9e2f2;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .mock-list__header {
+            padding: 10px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #1565C0;
+            background: #f7faff;
+            border-bottom: 1px solid #d9e2f2;
+        }
+        .mock-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-bottom: 1px solid #edf1f7;
+            color: #37474f;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .mock-item:last-child { border-bottom: none; }
+        .mock-item--active { background: #eef5ff; color: #1565C0; }
+        .mock-item input[type="checkbox"] {
+            accent-color: #1565C0;
+            width: 16px;
+            height: 16px;
+        }
+        .demo-log {
+            margin-top: 16px;
+            padding: 12px 16px;
+            background: #ffffff;
+            border: 1px solid #d9e2f2;
+            border-radius: 16px;
+            color: #455a64;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .demo-log strong { color: #1565C0; }
+    </style>
+</head>
+<body>
+
+<div class="sim-wrap">
+    <div class="sim-note">
+        <strong>Simulation</strong><br>
+        List mock에서 selection 상태가 바뀌면 페이지가 contextual AppBar 인스턴스를 갱신합니다.
+    </div>
+    <div id="top-app-bar-container"></div>
+    <div class="mock-list">
+        <div class="mock-list__header">Equipment list</div>
+        <div id="mock-list-body"></div>
+    </div>
+    <div class="demo-log" id="demo-log"><strong>Event log</strong><br>—</div>
+</div>
+
+<script src="../../../../../preview_runtime.js"></script>
+<script src="../../../../../Mixins/FieldRenderMixin.js"></script>
+<script src="../../../../../Mixins/ListRenderMixin.js"></script>
+<script>
+(async () => {
+    await loadComponentAssets('top-app-bar-container', '../views/02_material.html', '../styles/02_material.css');
+
+    const instance = { id: 'top-app-bar', appendElement: document.getElementById('top-app-bar-container') };
+
+    applyFieldRenderMixin(instance, {
+        cssSelectors: {
+            bar: '.top-app-bar',
+            count: '.top-app-bar__count',
+            closeIcon: '.top-app-bar__close'
+        }
+    });
+
+    applyListRenderMixin(instance, {
+        cssSelectors: {
+            container: '.top-app-bar__action-list',
+            template: '#top-app-bar-action-template',
+            item: '.top-app-bar__action-item',
+            id: '.top-app-bar__action-item',
+            actionLabel: '.top-app-bar__action-item',
+            icon: '.top-app-bar__action-icon',
+            label: '.top-app-bar__action-label'
+        },
+        datasetAttrs: { id: 'id' },
+        elementAttrs: { actionLabel: 'aria-label' }
+    });
+
+    instance.renderSelection = ({ response }) => {
+        instance.fieldRender.renderData({ response: { count: response.count } });
+        instance.listRender.renderData({
+            response: response.actions.map((action) => ({
+                ...action,
+                actionLabel: action.label || ''
+            }))
+        });
+    };
+
+    instance.subscriptions = { selectionInfo: [instance.renderSelection] };
+    Object.entries(instance.subscriptions).forEach(([topic, handlers]) =>
+        handlers.forEach((handler) => GlobalDataPublisher.subscribe(topic, instance, handler))
+    );
+
+    instance.customEvents = {
+        click: {
+            [instance.fieldRender.cssSelectors.closeIcon]: '@selectionCleared',
+            [instance.listRender.cssSelectors.item]: '@selectionActionClicked'
+        }
+    };
+    Wkit.bindEvents(instance, instance.customEvents);
+
+    const ITEMS = [
+        { id: 'battery-01', label: 'Battery rack 01' },
+        { id: 'battery-02', label: 'Battery rack 02' },
+        { id: 'ups-01', label: 'UPS line A' },
+        { id: 'ups-02', label: 'UPS line B' },
+        { id: 'crac-01', label: 'Cooling CRAC 01' }
+    ];
+
+    const selected = new Set();
+    const listEl = document.getElementById('mock-list-body');
+    const logEl = document.getElementById('demo-log');
+    let logHtml = '<strong>Event log</strong><br>—';
+    const log = (msg) => {
+        logHtml = '<strong>Event log</strong><br>' + msg + '<br>' + logHtml.split('<br>').slice(1).slice(0, 12).join('<br>');
+        logEl.innerHTML = logHtml;
+    };
+
+    const renderMockList = () => {
+        listEl.innerHTML = ITEMS.map((item) => {
+            const isActive = selected.has(item.id);
+            return `
+                <label class="mock-item ${isActive ? 'mock-item--active' : ''}">
+                    <input type="checkbox" data-id="${item.id}" ${isActive ? 'checked' : ''}>
+                    <span>${item.label}</span>
+                </label>
+            `;
+        }).join('');
+    };
+
+    const computeActions = (count) => {
+        if (count === 0) return [];
+        if (count === 1) {
+            return [
+                { id: 'edit', icon: 'edit', label: 'Edit' },
+                { id: 'share', icon: 'share', label: 'Share' },
+                { id: 'delete', icon: 'delete', label: 'Delete' }
+            ];
+        }
+        return [
+            { id: 'archive', icon: 'archive', label: 'Archive' },
+            { id: 'share', icon: 'share', label: 'Share' },
+            { id: 'delete', icon: 'delete', label: 'Delete' }
+        ];
+    };
+
+    const syncAppBar = () => {
+        const count = selected.size;
+        instance.renderSelection({
+            response: {
+                count: count ? `${count} selected` : '',
+                actions: computeActions(count)
+            }
+        });
+    };
+
+    listEl.addEventListener('change', (e) => {
+        if (e.target.type !== 'checkbox') return;
+        const { id } = e.target.dataset;
+        if (e.target.checked) selected.add(id);
+        else selected.delete(id);
+        renderMockList();
+        syncAppBar();
+        log(`selection changed -> ${selected.size} selected`);
+    });
+
+    Wkit.onEventBusHandlers({
+        '@selectionActionClicked': ({ event }) => {
+            const actionId = event.target.closest('.top-app-bar__action-item')?.dataset.id;
+            log(`action "${actionId}" -> applied`);
+            selected.clear();
+            renderMockList();
+            syncAppBar();
+        },
+        '@selectionCleared': () => {
+            log('selection cleared');
+            selected.clear();
+            renderMockList();
+            syncAppBar();
+        }
+    });
+
+    renderMockList();
+    syncAppBar();
+})();
+</script>
+</body>
+</html>

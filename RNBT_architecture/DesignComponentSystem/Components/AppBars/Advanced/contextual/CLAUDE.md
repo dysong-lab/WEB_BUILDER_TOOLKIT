@@ -30,17 +30,18 @@ FieldRenderMixin + ListRenderMixin
 | count | `.top-app-bar__count` | 선택 카운트 텍스트 |
 | closeIcon | `.top-app-bar__close` | 선택 해제 아이콘 |
 | actionList | `.top-app-bar__action-list` | 액션 리스트 컨테이너 (ListRender root) |
-| actionTemplate | `.top-app-bar__action-item[data-template]` | 액션 아이템 template |
+| actionTemplate | `#top-app-bar-action-template` | 액션 아이템 template |
 | actionItem | `.top-app-bar__action-item` | 렌더된 액션 아이템 — click 위임 |
+| actionLabel | `.top-app-bar__action-item` | 액션 버튼의 `aria-label` 속성 |
 
 ### elementAttrs
 
 | KEY | 속성 |
 |-----|------|
-| — | (없음) |
+| actionLabel | `aria-label` |
 
 > count는 textContent로 렌더된다.
-> actionList 내부 아이템은 ListRenderMixin이 `id`, `icon`, `label` 필드를 template에 바인딩한다 (template 내 `data-bind` 속성으로 매핑).
+> actionList 내부 아이템은 ListRenderMixin이 `id`, `icon`, `label` 필드를 template에 바인딩하고, `actionLabel`은 버튼의 `aria-label` 속성으로 동기화한다.
 
 ### 구독 (subscriptions)
 
@@ -66,6 +67,7 @@ FieldRenderMixin + ListRenderMixin
 
 - `count` → FieldRenderMixin이 `.top-app-bar__count` textContent에 바인딩
 - `actions[]` → ListRenderMixin이 actionTemplate을 반복 렌더 (`icon` textContent는 material symbol 리거처명 또는 이모지 — 디자인 변형에 따름)
+- `actionLabel` → `label` 값에서 파생되어 액션 버튼의 `aria-label`로 바인딩
 - `id` → `datasetAttrs: { id: 'id' }`로 `data-id` 속성에 바인딩 (클릭 payload에서 참조)
 
 ### 이벤트 (customEvents)
@@ -109,3 +111,6 @@ FieldRenderMixin + ListRenderMixin
 | 파일 | 페르소나 | 설명 |
 |------|---------|------|
 | 01_refined | A: Refined Technical | 퍼플 팔레트, 그라디언트 깊이, 다크, Pretendard |
+| 02_material | B: Material Elevated | 블루 팔레트, 라이트 서피스, Roboto, MD3 contextual actions |
+| 03_editorial | C: Minimal Editorial | 웜 그레이, 세리프 헤드라인, 라이트, understated actions |
+| 04_operational | D: Dark Operational | 시안 팔레트, 모노스페이스, 다크, control-room selection bar |

@@ -1,0 +1,87 @@
+#top-app-bar-container {
+    .top-app-bar {
+        display: flex;
+        align-items: center;
+        height: 72px;
+        padding: 0 28px;
+        background: #FAF9F7;
+        border-bottom: 1px solid #E8E4DE;
+    }
+
+    .top-app-bar__nav-icon,
+    .top-app-bar__action {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border: none;
+        border-radius: 0;
+        border-bottom: 1px solid transparent;
+        background: none;
+        color: #A09890;
+        cursor: pointer;
+        transition: color 150ms ease-out, border-bottom-color 150ms ease-out;
+        flex-shrink: 0;
+    }
+
+    .top-app-bar__nav-icon:hover,
+    .top-app-bar__action:hover {
+        color: #3D3833;
+        border-bottom-color: currentColor;
+    }
+
+    .top-app-bar__title {
+        flex: 1;
+        min-width: 0;
+        padding-left: 20px;
+        font-family: 'DM Serif Display', serif;
+        font-size: 24px;
+        font-weight: 400;
+        color: #2C2824;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .top-app-bar__actions {
+        display: flex;
+        gap: 12px;
+        flex-shrink: 0;
+    }
+
+    .top-app-bar__badge {
+        position: absolute;
+        top: 4px;
+        right: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 16px;
+        height: 16px;
+        padding: 0 4px;
+        border-radius: 16px;
+        background: #6C6258;
+        color: #FAF9F7;
+    }
+
+    .top-app-bar__badge[data-visible="false"] {
+        display: none;
+    }
+
+    .top-app-bar__badge[data-tone="warning"] {
+        background: #9B6A2C;
+    }
+
+    .top-app-bar__badge[data-tone="critical"] {
+        background: #8A3D3D;
+    }
+
+    .top-app-bar__badge-count {
+        font-family: 'Inter', sans-serif;
+        font-size: 9px;
+        font-weight: 600;
+        line-height: 1;
+    }
+}
