@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Buttons/Advanced/holdToConfirm — 01_refined</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        background: #09111b;
+        color: #e8efff;
+        font-family: "Pretendard", sans-serif;
+        padding: 36px;
+      }
+      .preview-shell { display: flex; flex-direction: column; gap: 18px; max-width: 880px; margin: 0 auto; }
+      .preview-head { display: flex; flex-direction: column; gap: 8px; }
+      .preview-kicker { font-size: 12px; letter-spacing: 1.6px; color: #9db2ff; text-transform: uppercase; }
+      .preview-copy { color: #9fb0d1; line-height: 1.6; }
+      .preview-log {
+        min-height: 132px; padding: 16px 18px; border-radius: 18px;
+        background: rgba(255, 255, 255, 0.04); color: #b9caec;
+        font-family: "IBM Plex Mono", monospace; font-size: 12px; white-space: pre-line;
+      }
+      .button-shell {
+        display: inline-flex; flex-direction: column; gap: 14px; min-width: 260px;
+        min-height: 150px; padding: 24px; border-radius: 28px;
+        background:
+          radial-gradient(circle at top left, rgba(154, 203, 255, 0.3), transparent 42%),
+          linear-gradient(180deg, #0d1d31 0%, #08111d 100%);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      }
+      .md-button {
+        min-width: 124px; min-height: 46px; padding: 0 22px; border: 0;
+        border-radius: 999px; background: linear-gradient(180deg, #edf6ff 0%, #d6e7ff 100%);
+        color: #0c3972; cursor: pointer;
+      }
+      .md-button__label {
+        font-family: "Tomorrow", "Pretendard", sans-serif;
+        font-size: 14px; font-weight: 600; letter-spacing: 0.2px;
+      }
+      .button-feedback { display: flex; flex-direction: column; gap: 7px; }
+      .button-feedback__track { height: 8px; border-radius: 999px; overflow: hidden; background: rgba(235, 243, 255, 0.12); }
+      .button-feedback__progress {
+        display: block; width: 100%; height: 100%; transform-origin: left center;
+        transform: scaleX(0); background: linear-gradient(90deg, #9ed0ff 0%, #6c8bff 100%);
+        transition: transform 80ms linear;
+      }
+      .button-feedback__hint { color: #a5b8dd; font-size: 12px; line-height: 1.4; }
+      .button-shell[data-phase="holding"] .md-button { filter: brightness(1.03); }
+      .button-shell[data-phase="completed"] .md-button {
+        background: linear-gradient(180deg, #c9fff0 0%, #8ae9c4 100%);
+        color: #063f2a;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-shell">
+      <div class="preview-head">
+        <span class="preview-kicker">Persona A / Refined Technical</span>
+        <h1>Hold to confirm blocks accidental taps</h1>
+        <p class="preview-copy">짧은 클릭은 아무 이벤트도 내지 않고, 1500ms를 끝까지 유지했을 때만 <code>@holdConfirmed</code>가 발행된다.</p>
+      </div>
+      <div class="button-shell" data-phase="idle">
+        <button class="md-button" type="button" aria-label="Arm system" data-phase="idle">
+          <span class="md-button__label">Arm system</span>
+        </button>
+        <div class="button-feedback">
+          <div class="button-feedback__track"><span class="button-feedback__progress"></span></div>
+          <span class="button-feedback__hint">Hold for 1500ms to confirm</span>
+        </div>
+      </div>
+      <div class="preview-log" id="preview-log">Press and keep holding the button for 1500ms.</div>
+    </div>
+    <script>
+      (() => {
+        const holdDuration = 1500;
+        const shell = document.querySelector(".button-shell");
+        const button = document.querySelector(".md-button");
+        const progress = document.querySelector(".button-feedback__progress");
+        const hint = document.querySelector(".button-feedback__hint");
+        const log = document.getElementById("preview-log");
+        let pressStartAt = 0;
+        let holdTimer = null;
+        let progressRaf = null;
+        let resetTimer = null;
+        let holdLatched = false;
+
+        const setPhase = (phase, amount = 0) => {
+          const clamped = Math.max(0, Math.min(1, amount));
+          shell.dataset.phase = phase;
+          button.dataset.phase = phase;
+          progress.style.transform = `scaleX(${clamped})`;
+          hint.textContent =
+            phase === "holding"
+              ? `Hold ${Math.round(clamped * holdDuration)} / ${holdDuration}ms`
+              : phase === "completed"
+                ? "Confirmed"
+                : `Hold for ${holdDuration}ms to confirm`;
+        };
+
+        const resetHold = () => {
+          clearTimeout(holdTimer);
+          clearTimeout(resetTimer);
+          cancelAnimationFrame(progressRaf);
+          holdTimer = null;
+          resetTimer = null;
+          progressRaf = null;
+          pressStartAt = 0;
+          holdLatched = false;
+          setPhase("idle", 0);
+        };
+
+        const tick = () => {
+          if (!pressStartAt || holdLatched) return;
+          const elapsed = performance.now() - pressStartAt;
+          setPhase("holding", elapsed / holdDuration);
+          if (elapsed < holdDuration) progressRaf = requestAnimationFrame(tick);
+        };
+
+        button.addEventListener("pointerdown", () => {
+          resetHold();
+          pressStartAt = performance.now();
+          setPhase("holding", 0);
+          progressRaf = requestAnimationFrame(tick);
+          holdTimer = window.setTimeout(() => {
+            holdLatched = true;
+            setPhase("completed", 1);
+            log.textContent = "event: @holdConfirmed\nbutton: Arm system\nholdMs: 1500\nmeaning: protected action fired only after a full hold.";
+          }, holdDuration);
+        });
+
+        ["pointerleave", "pointercancel"].forEach((name) =>
+          button.addEventListener(name, resetHold),
+        );
+        button.addEventListener("pointerup", () => {
+          if (holdLatched) {
+            resetTimer = window.setTimeout(resetHold, 200);
+            return;
+          }
+          log.textContent = "event: none\nmeaning: releasing early cancels the action and resets progress.";
+          resetHold();
+        });
+        button.addEventListener("click", (event) => {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+        }, true);
+      })();
+    </script>
+  </body>
+</html>
