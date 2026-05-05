@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Buttons/Advanced/confirmation — 03_editorial</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { background: #f5efe6; color: #3a2e22; font-family: "Iowan Old Style", "Times New Roman", serif; padding: 36px; }
+      .preview-shell { display: flex; flex-direction: column; gap: 18px; max-width: 940px; margin: 0 auto; }
+      .preview-copy { color: #6b5847; line-height: 1.7; }
+      .preview-log { min-height: 132px; padding: 16px 18px; border-radius: 18px; background: rgba(255,252,247,0.8); color: #5f4a39; font-family: "Courier New", monospace; font-size: 12px; white-space: pre-line; border: 1px solid rgba(95,71,48,0.12); }
+      .button-shell { display: inline-flex; flex-direction: column; align-items: stretch; gap: 14px; min-width: 280px; min-height: 154px; padding: 24px; border-radius: 28px; background: linear-gradient(180deg, rgba(255,251,245,0.98) 0%, rgba(245,238,227,0.96) 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.88); }
+      .md-button { min-width: 142px; min-height: 44px; padding: 0 22px; border: 1px solid rgba(90,67,44,0.22); border-radius: 999px; background: rgba(255,248,239,0.9); color: #3c2d21; cursor: pointer; }
+      .button-feedback { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+      .button-feedback__hint { color: #6d5642; font-size: 12px; line-height: 1.5; }
+      .button-feedback__cancel { display: none; border: 0; background: transparent; color: #8e6241; cursor: pointer; }
+      .button-shell[data-phase="confirm"] .md-button { border-color: rgba(157,78,60,0.35); background: #f6ddd6; color: #6c2215; }
+      .button-shell[data-phase="confirm"] .button-feedback__cancel { display: inline-flex; }
+    </style>
+  </head>
+  <body>
+    <div class="preview-shell">
+      <div>
+        <h1>Editorial confirmation button</h1>
+        <p class="preview-copy">직접적인 modal 대신 버튼 자체가 confirm state로 바뀌는 절제된 2-step 확인 예시다.</p>
+      </div>
+      <div id="button-demo"></div>
+      <div class="preview-log" id="preview-log">Click the button once, then click again to confirm.</div>
+    </div>
+    <script src="../../../../../../preview_runtime.js"></script>
+    <script>
+      (() => {
+        const payload = { label: "Archive thread", confirmLabel: "Confirm archive", helperText: "Click once to arm confirmation", confirmHelperText: "Click again within 3s to execute" };
+        document.getElementById("button-demo").innerHTML = `<div class="button-shell" data-phase="idle"><button class="md-button" type="button" aria-label="${payload.label}" data-phase="idle"><span class="md-button__label">${payload.label}</span></button><div class="button-feedback"><span class="button-feedback__hint">${payload.helperText}</span><button class="button-feedback__cancel" type="button">Cancel</button></div></div>`;
+        const log = document.getElementById("preview-log");
+        const instance = { id: "button-demo", appendElement: document.getElementById("button-demo"), confirmationTimeout: 3000, _confirmTimer: null, _confirmationState: false, _buttonMeta: payload };
+        instance.cssSelectors = { shell: ".button-shell", button: ".md-button", label: ".md-button__label", helper: ".button-feedback__hint", cancel: ".button-feedback__cancel" };
+        instance.applyConfirmationState = function () { const shell=this.appendElement.querySelector(this.cssSelectors.shell); const button=this.appendElement.querySelector(this.cssSelectors.button); const label=this.appendElement.querySelector(this.cssSelectors.label); const helper=this.appendElement.querySelector(this.cssSelectors.helper); shell.dataset.phase="confirm"; button.dataset.phase="confirm"; label.textContent=this._buttonMeta.confirmLabel; helper.textContent=this._buttonMeta.confirmHelperText; };
+        instance.resetConfirmationState = function () { if (this._confirmTimer) clearTimeout(this._confirmTimer); this._confirmTimer=null; this._confirmationState=false; const shell=this.appendElement.querySelector(this.cssSelectors.shell); const button=this.appendElement.querySelector(this.cssSelectors.button); const label=this.appendElement.querySelector(this.cssSelectors.label); const helper=this.appendElement.querySelector(this.cssSelectors.helper); shell.dataset.phase="idle"; button.dataset.phase="idle"; label.textContent=this._buttonMeta.label; helper.textContent=this._buttonMeta.helperText; };
+        instance.enterConfirmationState = function (event) { this._confirmationState=true; this.applyConfirmationState(); this._confirmTimer=setTimeout(()=>this.resetConfirmationState(), this.confirmationTimeout); Weventbus.emit("@confirmationNeeded", { event, targetInstance:this, response:{ label:this._buttonMeta.label, timeout:this.confirmationTimeout } }); };
+        instance.confirmAction = function (event) { Weventbus.emit("@buttonClicked", { event, targetInstance:this, response:{ label:this._buttonMeta.label, confirmed:true } }); this.resetConfirmationState(); };
+        const button = instance.appendElement.querySelector(instance.cssSelectors.button);
+        const cancel = instance.appendElement.querySelector(instance.cssSelectors.cancel);
+        button.addEventListener("click", (event) => { event.preventDefault(); if (instance._confirmationState) instance.confirmAction(event); else instance.enterConfirmationState(event); });
+        cancel.addEventListener("click", (event) => { event.preventDefault(); instance.resetConfirmationState(); log.textContent = "event: cancel\nmeaning: confirmation state reset."; });
+        Wkit.onEventBusHandlers({ "@confirmationNeeded": ({ response }) => { log.textContent = `event: @confirmationNeeded\nlabel: ${response?.label || ""}\ntimeout: ${response?.timeout || 0}ms\nmeaning: waiting for second click.`; }, "@buttonClicked": ({ response }) => { log.textContent = `event: @buttonClicked\nlabel: ${response?.label || ""}\nconfirmed: ${String(response?.confirmed)}\nmeaning: second click executed the action.`; } });
+        instance.resetConfirmationState();
+      })();
+    </script>
+  </body>
+</html>
