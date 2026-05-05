@@ -17,3 +17,6 @@ Standard 변형은 MeshStateMixin만 적용하여 `equipmentStatus` 데이터에
 | 세트 | 상태 |
 |------|------|
 | Standard | 완료 |
+| Advanced/powerFlowIndicator | 완료 |
+
+> **PowerFlowIndicatorMixin 승격 후보 (#50+#51 예정)** — 본 변형(#50 Inverter)이 1차 등장. **#51 PCS/powerFlowIndicator가 본 변형 시그니처 100% 답습 예정** (시그니처 일관성 매우 중요). 2번째 채택(#51) 시점에 사용자가 `create-mixin-spec` → `implement-mixin` 호출로 `PowerFlowIndicatorMixin` 승격 검토 권장. 시그니처(`setDirection/setPowerKw/setMaxKw/setMaxArrows/setArrowAxis/setArrowSpan/setArrowSpacing/setArrowSpeed/setArrowOffset/setBaseScale/setMaxThicknessScale/setColors/setMeshName/getDirection/getPowerKw/getActiveCount/enable/disable/isEnabled/destroy`) 그대로 흡수 가능 + 충/방전(in/out/none) 도메인이 ESS/Inverter/PCS 전반에 동일.

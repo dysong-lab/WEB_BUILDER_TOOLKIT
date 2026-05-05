@@ -29,3 +29,6 @@ Standard 변형은 MeshStateMixin만 적용하여 `equipmentStatus` 데이터에
 | 세트 | 상태 |
 |------|------|
 | Standard | 완료 |
+| Advanced/ai_detectionZone | 완료 |
+
+> **CameraFOVConeMixin 승격 강력 권장 — #29~#32 4개 컴포넌트 동일 기법 확정. AI 마커 스폰은 본 컴포넌트 전용으로 잠정 커스텀 유지, 향후 LPR/IRISID에서 동일 기법 등장 시 별도 Mixin 승격 검토.**

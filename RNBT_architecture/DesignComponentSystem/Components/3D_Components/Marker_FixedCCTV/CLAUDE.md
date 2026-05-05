@@ -29,3 +29,4 @@ Standard 변형은 MeshStateMixin만 적용하여 `equipmentStatus` 데이터에
 | 세트 | 상태 |
 |------|------|
 | Standard | 완료 |
+| Advanced/fieldOfView | 완료 |

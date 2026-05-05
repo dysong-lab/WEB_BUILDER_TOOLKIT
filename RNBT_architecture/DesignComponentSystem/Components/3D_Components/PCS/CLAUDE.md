@@ -32,3 +32,6 @@ Standard 변형은 MeshStateMixin만 적용하여 `equipmentStatus` 데이터에
 | 세트 | 상태 |
 |------|------|
 | Standard | 완료 |
+| Advanced/powerFlowIndicator | 완료 |
+
+> **PowerFlowIndicatorMixin 즉시 승격 권장 — 임계점 2개 도달 (#50 Inverter + #51 PCS).** 본 변형(#51 PCS/powerFlowIndicator)은 **#50 Inverter/Advanced/powerFlowIndicator를 시그니처 100% 답습** (`_meshName` 기본값만 `'PCS'`로 차이, 나머지 옵션 기본값/시그니처 20개 메서드/RAF 정책/destroy 규약 모두 동일). #50과 #51이 시그니처 100% 동일함을 본 사이클로 입증했으므로 다음 사이클에서 사용자가 `create-mixin-spec` → `implement-mixin` 호출로 `PowerFlowIndicatorMixin` 승격을 검토 권장. 시그니처(`setDirection/setPowerKw/setMaxKw/setMaxArrows/setArrowAxis/setArrowSpan/setArrowSpacing/setArrowSpeed/setArrowOffset/setBaseScale/setMaxThicknessScale/setColors/setMeshName/getDirection/getPowerKw/getActiveCount/enable/disable/isEnabled/destroy`) 그대로 흡수 가능 + 충/방전(in/out/none) 도메인이 ESS/Inverter/PCS 전반에 동일하므로 후속 변형(BatteryPack/UPS 등)에도 즉시 재사용 가능.

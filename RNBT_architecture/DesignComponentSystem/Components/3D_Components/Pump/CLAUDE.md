@@ -35,3 +35,6 @@ Standard 변형은 MeshStateMixin만 적용하여 `equipmentStatus` 데이터에
 | 세트 | 상태 |
 |------|------|
 | Standard | 완료 |
+| Advanced/dynamicRpm | 완료 |
+
+> **RotaryRpmMixin 승격 후보 — 큐 #38(본) + #39 Heatexchanger + #40 AHU103 = 3개 임계점 도달 예정. 향후 RotaryRpmMixin(또는 MeshRotationMixin) 승격 강력 검토. setTargetRpm/setInertia/setRotationAxis/setRpmPerUnit/start/stop/enable/disable/destroy 시그니처 그대로 흡수 가능. 본 사이클은 신규 Mixin 금지 정책으로 커스텀.**

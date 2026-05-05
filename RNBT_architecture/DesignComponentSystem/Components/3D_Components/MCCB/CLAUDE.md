@@ -43,3 +43,6 @@ Standard 변형은 MeshStateMixin만 적용하여 `equipmentStatus` 데이터에
 | 세트 | 상태 |
 |------|------|
 | Standard | 완료 |
+| Advanced/breaker_leverPosition | 완료 |
+
+> **BreakerLeverPositionMixin 승격 후보 (#46~#49 예정)** — 본 변형은 차단기 시리즈 5개(#45 VCB Standard 미생산으로 보류 + #46 MCCB(본) + #47 ALTS + #48 ACBmetasol + #49 ACBsusol) 중 1차 등장. 후속 ALTS/ACBmetasol/ACBsusol 답습이 누적되어 4개 컴포넌트 임계점에 도달하면 `BreakerLeverPositionMixin` 승격 검토 권장. 시그니처(`setState/setAngleMap/setRotationAxis/setLeverMeshName/setInertia/getState/getCurrentAngle/enable/disable/destroy`) 그대로 흡수 가능 + ON/OFF/TRIP 3-state 도메인이 차단기 전반에 동일.

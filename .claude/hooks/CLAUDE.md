@@ -248,6 +248,7 @@ structural-script 로직:
 | P3-2 | JS에 var 금지 | 스코프 오류 가능성 | Hook(command) |
 | P3-3 | preview.html에 로컬 CSS `<link>` 금지 | 독립 실행 불가 | Hook(command) |
 | P3-4 | Flexbox 우선 사용 (Grid/absolute 지양) | 레이아웃 일관성 | audit-project |
+| P3-5 | preview `<script src>` ../개수 == 폴더 깊이 | preview ReferenceError (`loadComponentAssets is not defined`) | Hook(command) |
 
 ---
 
@@ -359,6 +360,7 @@ loaded.js          → P0-4만 검사
 | `cross-register-destroy.sh` | P1-2, P1-3, P1-4 | register.js ↔ beforeDestroy.js | Mixin수=destroy수, bind↔remove, 역순, 함수 null |
 | `cross-selectors-html.sh` | P2-1, P2-2 | register.js ↔ views/*.html | cssSelectors↔HTML + ListRender↔template |
 | `cross-page-lifecycle.sh` | P1-2, P1-4 | loaded.js ↔ before_unload.js | 생성-정리 매핑 + 3D raycasting/Three 정리 확인 |
+| `check-preview-script-depth.sh` | P3-5 | preview/*.html | `<script src>` ../개수 == Components 이후 segment 수 (DesignComponentSystem 루트 점프 거리) |
 
 ### 전수 테스트 결과
 

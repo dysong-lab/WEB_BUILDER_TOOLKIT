@@ -27,3 +27,6 @@ Standard 변형은 MeshStateMixin만 적용하여 `equipmentStatus` 데이터에
 | 세트 | 상태 |
 |------|------|
 | Standard | 완료 |
+| Advanced/outdoorUnitPerformance | 완료 |
+
+> **RotaryRpmMixin 승격 강력 권장 — #38 Pump + #39 Heatexchanger + #40 AHU103/dynamicRpm + 본 컴포넌트 outdoorUnitPerformance(#41) = 4개 컴포넌트 동일 회전 기법, 임계점을 두 번째로 명백히 초과.** setTargetRpm/setInertia/setRotationAxis/setRpmPerUnit/setMeshName/start/stop/enable/disable/destroy 시그니처 그대로 흡수 가능. 추가로 본 변형은 #13 BATT/dataHud + #21 GasDetector/sensorHud + #24/#25/#26 sensorDataHud + 본 변형 = **MeshTrackingHudMixin 승격 6번째 채택**. **본 사이클은 신규 Mixin 금지 정책으로 커스텀 유지하나 사용자가 메인 외부에서 즉시 `create-mixin-spec` → `implement-mixin` 호출로 두 Mixin 승격 검토 강력 권장.**

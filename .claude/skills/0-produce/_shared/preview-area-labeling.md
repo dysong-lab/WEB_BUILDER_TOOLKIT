@@ -134,3 +134,23 @@ instance.renderHud({ response: hudResponse });                 // ← subscribe 
 ## 참조 사례 (기준 예시)
 
 `Components/3D_Components/meshesArea/area_01/Advanced/hudInfo/preview/01_default.html` — 4종 라벨이 모두 적용된 첫 기준 예시. 신규 변형 작성 시 이 파일의 영역 분리 패턴을 그대로 따른다.
+
+---
+
+## Preview script src 상대경로 — verbatim 복사 강제
+
+`<script src="../...">`의 `../` 개수는 **계산하지 말고 동일 깊이의 기준 변형 첫 두 줄을 verbatim 복사**한다. 폴더 깊이별 정답:
+
+| preview 위치 | ../개수 | 예 |
+|----------|---------|---|
+| `Components/<범주>/Standard/preview/*.html` | 4 (`../../../../`) | AppBars/Standard |
+| `Components/<범주>/Advanced/<변형>/preview/*.html` | 5 (`../../../../../`) | Cards/Advanced/expandable |
+| `Components/<범주>/<서브범주>/Advanced/<변형>/preview/*.html` | 6 (`../../../../../../`) | Buttons/Buttons/Advanced/longPress |
+
+`preview_runtime.js`는 `DesignComponentSystem/` 루트, Mixin은 `DesignComponentSystem/Mixins/` 아래.
+
+공식: `src` 안의 `../` 개수 == "Components 이후 segment 수" (파일 자신 포함). preview 폴더 → 점프 → DesignComponentSystem 루트까지.
+
+**위반 시 차단**: Hook `check-preview-script-depth.sh`(P3-5)가 PostToolUse에서 정적 검증하여 exit 2로 즉시 차단한다.
+
+**회귀 사례** (2026-05-04): Cards/Advanced/expandable + swipeAction 8 파일이 4단계로 잘못 작성되어 `loadComponentAssets is not defined` ReferenceError 발생. 사이클 순서와 무관하게 50% 확률로 흩어졌으며(같은 Cards 안에서도 #19 expandable 틀림 → #20 sortable 맞음 → #21 selectable 맞음 → #22 swipeAction 틀림), 원인은 에이전트가 매 사이클 폴더 깊이를 직접 셈하기 때문. 본 규약 + Hook P3-5로 회귀 차단. (commit 954f6ff5에서 retroactive 정정.)

@@ -50,7 +50,7 @@
 |---------|------|------|
 | `container` | O | 메시를 찾을 3D 컨테이너 (THREE.Object3D) |
 | `meshName` | O | 포커스 대상 메시 이름 (`container.getObjectByName`으로 탐색) |
-| `offset` | X | 카메라 오프셋 `{ x, y, z }`. 없으면 기본값 `{ y: +5, z: +10 }` |
+| `offset` | X | 카메라 오프셋 `{ x, y, z }`. 미제공 시 mesh maxDim 비례 default `{ y: maxDim*2.5, z: maxDim*5 }` (4ab4a3e4 — 절대값 default가 모델 크기에 따라 zoom-in/out이 뒤바뀌던 회귀를 비례식으로 보정) |
 | `camera` | X | 기본값 override |
 | `controls` | X | 기본값 override |
 

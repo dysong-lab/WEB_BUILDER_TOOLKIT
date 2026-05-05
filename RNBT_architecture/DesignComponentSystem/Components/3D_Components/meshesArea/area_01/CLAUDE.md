@@ -19,3 +19,4 @@
 | Advanced/animation | 완료 |
 | Advanced/clipping | 완료 |
 | Advanced/hudInfo | 완료 |
+| Advanced/zonalHeatmap | 완료 |

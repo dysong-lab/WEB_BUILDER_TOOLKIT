@@ -27,3 +27,10 @@ Standard 변형은 MeshStateMixin만 적용하여 `equipmentStatus` 데이터에
 | 세트 | 상태 |
 |------|------|
 | Standard | 완료 |
+| Advanced/batteryHierarchyZoom | 완료 |
+
+> **HierarchyZoomMixin / LevelZoomMixin (가칭) 승격 임계점 도달 — 2번째 채택 (#16 BATT/hierarchyZoom + #52 LithiumionBattery/batteryHierarchyZoom)**: 시그니처 100% 동일(`goTo/next/prev/reset/getLevel/getLevels/destroy`). 옵션화 후보: `levels` 배열(이름·거리비율), `defaultLevel`, `initialLevel`, `useVisibility`(모듈/셀 mesh 분리 모델일 때 자동 showOnly 시퀀스), `cameraOffsetRatioY`. 다음 채택 직전에 즉시 승격 권장.
+>
+> **MeshTrackingHudMixin 승격 매우 강력 권장 — HUD 8번째 채택 (#13 BATT/dataHud + #21 GasDetector/sensorHud + #24/#25/#26 sensorDataHud + #41 OHU103/outdoorUnitPerformance + #42 Generator/generatorOutput + 본 batteryHierarchyZoom HUD 부분)**: setData/setOffset/show/hide/start/stop/destroy + `_renderer/_camera/_hudRoot/_cardEl` 외부 주입 자원 패턴이 8개 컴포넌트에서 완전 동일.
+>
+> **본 사이클은 신규 Mixin 금지 정책으로 커스텀 유지하나, 사용자가 메인 외부에서 즉시 `create-mixin-spec` → `implement-mixin` 호출로 두 Mixin 승격 검토 권장.**

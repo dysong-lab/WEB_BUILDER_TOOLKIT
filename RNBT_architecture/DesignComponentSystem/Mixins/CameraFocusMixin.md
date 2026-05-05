@@ -85,7 +85,7 @@ applyCameraFocusMixin(this, {
 |------|------|------|--------|------|
 | `container` | `THREE.Object3D` | ✓ | — | `container.getObjectByName(meshName)`으로 메시 탐색. 조회 실패 시 호출 전체 no-op |
 | `meshName` | string | ✓ | — | 포커스 대상 메시 이름 |
-| `offset` | object | X | `{ y: 5, z: 10 }` | 메시 중심 기준 카메라 위치 오프셋. 일부 축만 제공 시 **나머지 축은 0으로 간주** (`offset.x \|\| 0`). 미제공 시 Mixin 기본값 `{ x: 0, y: 5, z: 10 }` 적용 |
+| `offset` | object | X | `{ y: maxDim*2.5, z: maxDim*5 }` | 메시 중심 기준 카메라 위치 오프셋. 일부 축만 제공 시 **나머지 축은 0으로 간주** (`offset.x \|\| 0`). **`offset` 자체 미제공 시 mesh maxDim 비례 default 적용** — `box.getSize().max()`로 계산한 `maxDim`에 대해 `y += maxDim*2.5`, `z += maxDim*5` (카메라 ↔ mesh 거리 ≈ `maxDim × 5.59`). 작은 mesh일수록 가까이, 큰 mesh일수록 멀리 자동 조정. 절대값 default가 모델 크기에 따라 zoom-in/out이 뒤바뀌던 회귀(4ab4a3e4)를 비례식으로 보정 |
 | `camera` | `THREE.Camera` | X | apply 시점 `camera` | 이번 호출에만 적용할 오버라이드 |
 | `controls` | `THREE.Controls` | X | apply 시점 `controls` | 이번 호출에만 적용할 오버라이드 |
 

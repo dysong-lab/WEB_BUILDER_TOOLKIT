@@ -29,3 +29,6 @@ Standard 변형은 MeshStateMixin만 적용하여 `equipmentStatus` 데이터에
 | 세트 | 상태 |
 |------|------|
 | Standard | 완료 |
+| Advanced/fieldOfView | 완료 |
+
+> **CameraFOVConeMixin 승격 후보가 #30 등록으로 임계점 도달.** 향후 Mixin 신설 시 setFov/setRange/setColor/setOpacity/setPan/setTilt/enable/disable/destroy를 그대로 흡수 가능. #31 Move CCTV는 attach(mesh) RAF 추적만 추가하면 됨.

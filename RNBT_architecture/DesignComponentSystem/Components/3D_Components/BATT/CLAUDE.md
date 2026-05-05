@@ -14,3 +14,10 @@
 | Advanced/popup | 완료 |
 | Advanced/highlight | 완료 |
 | Advanced/camera_highlight | 완료 |
+| Advanced/visibility | 완료 |
+| Advanced/clipping | 완료 |
+| Advanced/dataHud | 완료 |
+| Advanced/alarmPulse | 완료 |
+| Advanced/chargeFlowArrow | 완료 |
+| Advanced/hierarchyZoom | 완료 |
+| Advanced/cellHeatmap | 완료 |

@@ -21,3 +21,6 @@ Material은 단일 PBR material(`Heatexchanger`)이며 `textures/Heatexchanger.j
 | 세트 | 상태 |
 |------|------|
 | Standard | 완료 |
+| Advanced/dynamicRpm | 완료 |
+
+> **RotaryRpmMixin 승격 후보 — #38 Pump/dynamicRpm + 본 변형(#39) = 2개 임계점. #40 AHU103/dynamicRpm 완료 시 3개 임계점 명백히 초과 → RotaryRpmMixin(또는 MeshRotationMixin) 승격 강력 권장. setTargetRpm/setInertia/setRotationAxis/setRpmPerUnit/setMeshName/start/stop/enable/disable/destroy 시그니처 그대로 흡수 가능. 본 사이클은 신규 Mixin 금지 정책으로 커스텀 유지.**

@@ -18,3 +18,6 @@ Standard 변형은 MeshStateMixin만 적용하여 `equipmentStatus` 데이터에
 | 세트 | 상태 |
 |------|------|
 | Standard | 완료 |
+| Advanced/detectionMarker | 완료 |
+
+> **WorldMarkerSpawnMixin 승격 후보 — 큐 #32 Marker_AICCTV/aiMarkers + 본 변형(#33) IRISID_iCAM7/detectionMarkers = 2개 임계점. 향후 LPR plate marker / 기타 위치 마커 등장 시 즉시 승격 검토. add/remove/clear/setTypeStyle/list/enable/disable/isEnabled/destroy 시그니처를 그대로 흡수 가능.**

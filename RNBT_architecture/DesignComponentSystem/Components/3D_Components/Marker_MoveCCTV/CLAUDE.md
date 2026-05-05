@@ -29,3 +29,6 @@ Standard 변형은 MeshStateMixin만 적용하여 `equipmentStatus` 데이터에
 | 세트 | 상태 |
 |------|------|
 | Standard | 완료 |
+| Advanced/fieldOfView | 완료 |
+
+> **CameraFOVConeMixin 승격 강력 권장 — 큐 #29~#31 3개 컴포넌트가 동일 기법으로 완결됨.** setFov/setRange/setColor/setOpacity/setPan/setTilt/setRotation/attach/detach/setTrackRotation/isTracking/enable/disable/destroy를 그대로 흡수 가능. #32 AICCTV ai_detectionZone는 FOV 콘 + AI 감지 marker 스폰의 합성이므로 Mixin 적용 후 ai_marker 스폰만 추가 커스텀으로 처리.
