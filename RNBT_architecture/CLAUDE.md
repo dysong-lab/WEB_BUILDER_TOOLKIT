@@ -33,6 +33,23 @@
 - 가이드에 없는 스타일(background, box-shadow 등)을 임의로 추가하지 않습니다
 - 셀렉터 변경 등 연결에 필수적인 수정만 합니다
 
+### Advanced preview 상대경로를 깊이별로 검증합니다
+
+- preview HTML을 만들 때 `preview_runtime.js`, `Mixins/*.js`, view/style 상대경로를 **폴더 깊이 기준으로 직접 계산**합니다
+- 추측해서 Standard 경로를 복사하지 않습니다. `Standard/preview`와 `Advanced/<variant>/preview`는 깊이가 다릅니다
+- **2D 컴포넌트 기준 규칙**
+  - `Components/<Category>/<Component>/Standard/preview/*.html`
+    - `preview_runtime.js` 경로: `../../../../../preview_runtime.js`
+  - `Components/<Category>/<Component>/Advanced/<variant>/preview/*.html`
+    - `preview_runtime.js` 경로: `../../../../../../preview_runtime.js`
+    - `Mixins/*.js` 경로도 동일하게 `../../../../../../Mixins/...`
+- `../views/...`, `../styles/...` 처럼 preview와 같은 세트 내부 파일은 현재 preview 폴더 기준으로 다시 계산합니다
+- preview 작성 직후에는 최소한 다음 두 가지를 확인합니다
+  - `<script src>` 상대경로가 실제 깊이와 일치하는가
+  - `loadComponentAssets(..., "../views/...", "../styles/...")`가 현재 preview 폴더 기준으로 맞는가
+- **금지 행위:** Standard preview의 `<script src>`를 Advanced preview에 그대로 복사
+- **올바른 패턴:** “현재 파일이 `.../Advanced/<variant>/preview/` 아래에 있으므로 루트까지 6단계”처럼 계산 후 기입
+
 ---
 
 *최종 업데이트: 2026-04-05*

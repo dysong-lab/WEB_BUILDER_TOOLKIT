@@ -206,6 +206,14 @@ grep "Wkit.functionName" Utils/Wkit.js
 ls RNBT_architecture/DesignComponentSystem/models/
 ```
 
+## Preview 경로 검증 원칙
+
+preview HTML에서 상대경로는 추측하지 않는다. 특히 `Standard/preview`와 `Advanced/<variant>/preview`는 폴더 깊이가 다르므로 `preview_runtime.js`, `Mixins/*.js`, `../views/...`, `../styles/...`를 그대로 복사하면 안 된다.
+
+**금지 행위:** Standard preview의 `<script src="../../../../../preview_runtime.js">`를 Advanced preview에 그대로 붙여넣기
+
+**올바른 패턴:** 현재 preview 파일의 실제 위치를 기준으로 단계 수를 직접 세고, 작성 직후 경로 문자열을 다시 확인한다. RNBT 작업에서는 `RNBT_architecture/CLAUDE.md`의 preview 깊이 규칙을 우선 따른다.
+
 ---
 
 ## Git 충돌 처리 원칙
