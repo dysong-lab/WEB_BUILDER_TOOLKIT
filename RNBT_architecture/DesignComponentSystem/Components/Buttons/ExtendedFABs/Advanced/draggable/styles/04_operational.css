@@ -1,0 +1,39 @@
+@import "../../../_shared/semantic-status.css";
+
+.extended-fab-draggable-shell {
+  display: inline-flex;
+  padding: 20px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, #09131c 0%, #050a11 100%);
+  border: 1px solid rgba(0, 229, 255, 0.14);
+}
+
+.extended-fab-draggable-stage { position: relative; width: 320px; height: 220px; }
+
+.extended-fab {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 18px;
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  border-radius: 14px;
+  background: rgba(6, 18, 26, 0.94);
+  color: #c6f8ff;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  transition: box-shadow 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.extended-fab[data-drag-state="dragging"] {
+  cursor: grabbing;
+  border-color: #00e5ff;
+  box-shadow: 0 0 0 1px #00e5ff, 0 0 18px rgba(0, 229, 255, 0.32);
+}
+
+.extended-fab__icon { font-size: 20px; }
+.extended-fab__label { font: 600 14px/1 "JetBrains Mono", "IBM Plex Mono", monospace; white-space: nowrap; }

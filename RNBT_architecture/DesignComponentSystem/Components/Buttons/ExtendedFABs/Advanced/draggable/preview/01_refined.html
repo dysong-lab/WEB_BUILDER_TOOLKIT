@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ExtendedFABs/Advanced/draggable — 01_refined</title>
+    <script src="../../../../../preview_runtime.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { background: #09111b; color: #eaf2ff; font-family: "Pretendard", sans-serif; padding: 36px; }
+      .preview-shell { max-width: 920px; margin: 0 auto; display: grid; gap: 18px; }
+      .preview-log { min-height: 112px; padding: 16px; border-radius: 18px; background: rgba(255,255,255,0.04); white-space: pre-line; font: 12px/1.6 "IBM Plex Mono", monospace; color: #bad0ee; }
+    </style>
+  </head>
+  <body>
+    <div class="preview-shell">
+      <h1>draggable Extended FAB</h1>
+      <div id="demo"></div>
+      <div class="preview-log" id="log">Drag over 5px to emit @positionChanged. Short click keeps @extendedFabClicked.</div>
+    </div>
+    <script>
+      (async () => {
+        await loadComponentAssets("demo", "../views/01_refined.html", "../styles/01_refined.css");
+        const fab = document.querySelector("#demo .extended-fab");
+        const log = document.getElementById("log");
+        let x = 0, y = 0, startX = 0, startY = 0, originX = 0, originY = 0, down = false, dragging = false;
+        const threshold = 5;
+        const clamp = (nx, ny) => {
+          const parent = fab.parentElement.getBoundingClientRect();
+          return {
+            x: Math.min(Math.max(0, nx), Math.max(0, parent.width - fab.offsetWidth)),
+            y: Math.min(Math.max(0, ny), Math.max(0, parent.height - fab.offsetHeight))
+          };
+        };
+        const apply = () => { fab.style.transform = `translate3d(${x}px, ${y}px, 0)`; };
+        fab.addEventListener("pointerdown", (e) => {
+          down = true; dragging = false; startX = e.clientX; startY = e.clientY; originX = x; originY = y; fab.dataset.dragState = "idle";
+        });
+        fab.addEventListener("pointermove", (e) => {
+          if (!down) return;
+          const dx = e.clientX - startX;
+          const dy = e.clientY - startY;
+          if (Math.hypot(dx, dy) >= threshold) { dragging = true; fab.dataset.dragState = "dragging"; }
+          const next = clamp(originX + dx, originY + dy);
+          x = next.x; y = next.y; apply();
+        });
+        fab.addEventListener("pointerup", () => {
+          if (!down) return;
+          down = false; fab.dataset.dragState = "idle";
+          if (dragging) log.textContent = `event: @positionChanged\nx: ${x}\ny: ${y}`;
+        });
+        fab.addEventListener("click", (e) => {
+          if (dragging) { e.preventDefault(); e.stopImmediatePropagation(); dragging = false; return; }
+          log.textContent = "event: @extendedFabClicked\nmeaning: short click kept the primary action.";
+        }, true);
+      })();
+    </script>
+  </body>
+</html>
