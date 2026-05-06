@@ -585,6 +585,55 @@
                   "path": "Components/Buttons/SegmentedButtons/Standard/preview/04_operational.html"
                 }
               ]
+            },
+            {
+              "name": "Advanced",
+              "items": [
+                {
+                  "name": "draggableReorder",
+                  "spec": "Components/Buttons/SegmentedButtons/Advanced/draggableReorder/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 refined",
+                      "path": "Components/Buttons/SegmentedButtons/Advanced/draggableReorder/preview/01_refined.html"
+                    },
+                    {
+                      "label": "02 material",
+                      "path": "Components/Buttons/SegmentedButtons/Advanced/draggableReorder/preview/02_material.html"
+                    },
+                    {
+                      "label": "03 editorial",
+                      "path": "Components/Buttons/SegmentedButtons/Advanced/draggableReorder/preview/03_editorial.html"
+                    },
+                    {
+                      "label": "04 operational",
+                      "path": "Components/Buttons/SegmentedButtons/Advanced/draggableReorder/preview/04_operational.html"
+                    }
+                  ]
+                },
+                {
+                  "name": "multiSelect",
+                  "spec": "Components/Buttons/SegmentedButtons/Advanced/multiSelect/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 refined",
+                      "path": "Components/Buttons/SegmentedButtons/Advanced/multiSelect/preview/01_refined.html"
+                    },
+                    {
+                      "label": "02 material",
+                      "path": "Components/Buttons/SegmentedButtons/Advanced/multiSelect/preview/02_material.html"
+                    },
+                    {
+                      "label": "03 editorial",
+                      "path": "Components/Buttons/SegmentedButtons/Advanced/multiSelect/preview/03_editorial.html"
+                    },
+                    {
+                      "label": "04 operational",
+                      "path": "Components/Buttons/SegmentedButtons/Advanced/multiSelect/preview/04_operational.html"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         },
