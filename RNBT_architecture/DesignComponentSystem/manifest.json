@@ -662,6 +662,33 @@
                   "path": "Components/Buttons/SplitButtons/Standard/preview/04_operational.html"
                 }
               ]
+            },
+            {
+              "name": "Advanced",
+              "items": [
+                {
+                  "name": "recentActions",
+                  "spec": "Components/Buttons/SplitButtons/Advanced/recentActions/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 refined",
+                      "path": "Components/Buttons/SplitButtons/Advanced/recentActions/preview/01_refined.html"
+                    },
+                    {
+                      "label": "02 material",
+                      "path": "Components/Buttons/SplitButtons/Advanced/recentActions/preview/02_material.html"
+                    },
+                    {
+                      "label": "03 editorial",
+                      "path": "Components/Buttons/SplitButtons/Advanced/recentActions/preview/03_editorial.html"
+                    },
+                    {
+                      "label": "04 operational",
+                      "path": "Components/Buttons/SplitButtons/Advanced/recentActions/preview/04_operational.html"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }
