@@ -59,8 +59,8 @@
   position: absolute;
   left: 0;
   top: 0;
-  width: 46px;
-  height: 46px;
+  width: 42px;
+  height: 42px;
   border: 1px solid rgba(0, 229, 255, 0.22);
   border-radius: 12px;
   background: rgba(7, 24, 35, 0.96);
@@ -73,14 +73,7 @@
 }
 
 .speed-dial__item-label {
-  position: absolute;
-  right: calc(100% + 10px);
-  top: 50%;
-  transform: translateY(-50%);
-  color: #8eefff;
-  white-space: nowrap;
-  font: 600 11px/1 "IBM Plex Mono", monospace;
-  opacity: 0;
+  display: none;
 }
 
 .speed-dial--operational {
@@ -97,8 +90,4 @@
   opacity: 1;
   pointer-events: auto;
   transform: translate(var(--x, 0), var(--y, 0)) scale(1);
-}
-
-.speed-dial[data-speed-dial-state="open"] .speed-dial__item .speed-dial__item-label {
-  opacity: 1;
 }

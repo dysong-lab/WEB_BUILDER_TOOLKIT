@@ -25,7 +25,7 @@ applyListRenderMixin(this, {
 });
 
 this._isOpen = false;
-this._radialOptions = { radius: 110, startAngle: 200, endAngle: 340 };
+this._radialOptions = { radius: 124, startAngle: 258, endAngle: 348 };
 this._outsideClickHandler = null;
 this._escKeyHandler = null;
 this._containerClickHandler = null;
@@ -56,11 +56,11 @@ this.renderFabInfo = function ({ response: data } = {}) {
   if (persona.includes("editorial")) {
     this._radialOptions = null;
   } else if (persona.includes("material")) {
-    this._radialOptions = { radius: 120, startAngle: 200, endAngle: 340 };
+    this._radialOptions = { radius: 136, startAngle: 252, endAngle: 342 };
   } else if (persona.includes("operational")) {
-    this._radialOptions = { radius: 100, startAngle: 205, endAngle: 335 };
+    this._radialOptions = { radius: 124, startAngle: 252, endAngle: 342 };
   } else {
-    this._radialOptions = { radius: 110, startAngle: 200, endAngle: 340 };
+    this._radialOptions = { radius: 124, startAngle: 258, endAngle: 348 };
   }
 };
 

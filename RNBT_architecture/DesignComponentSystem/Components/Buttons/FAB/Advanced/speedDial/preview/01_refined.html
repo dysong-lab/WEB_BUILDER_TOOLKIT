@@ -29,13 +29,13 @@
           { actionId: "newPhoto", icon: "photo_camera", label: "New photo" },
           { actionId: "newDraft", icon: "draft", label: "New draft" },
         ];
-        const radius = 110;
-        const start = 200;
-        const end = 340;
+        const radius = 124;
+        const start = 258;
+        const end = 348;
         list.innerHTML = items.map((item, index) => {
           const angle = items.length === 1 ? start + (end - start) / 2 : start + ((end - start) * index) / (items.length - 1);
           const rad = angle * Math.PI / 180;
-          return `<button class="speed-dial__item" type="button" data-action-id="${item.actionId}" style="--x:${Math.cos(rad) * radius}px;--y:${Math.sin(rad) * radius}px"><span class="speed-dial__item-icon material-symbols-outlined">${item.icon}</span><span class="speed-dial__item-label">${item.label}</span></button>`;
+          return `<button class="speed-dial__item" type="button" data-action-id="${item.actionId}" style="--x:${Math.cos(rad) * radius}px;--y:${Math.sin(rad) * radius}px"><span class="speed-dial__item-icon material-symbols-outlined">${item.icon}</span></button>`;
         }).join("");
         root.addEventListener("click", (event) => {
           const fab = event.target.closest(".fab");

@@ -23,7 +23,7 @@
         await loadComponentAssets("demo", "../views/03_editorial.html", "../styles/03_editorial.css");
         const root = document.getElementById("demo").firstElementChild;
         const log = document.getElementById("log");
-        root.querySelector(".speed-dial__items").innerHTML = `<button class="speed-dial__item" type="button" data-action-id="mail"><span class="speed-dial__item-icon material-symbols-outlined">mail</span><span class="speed-dial__item-label">Mail</span></button><button class="speed-dial__item" type="button" data-action-id="link"><span class="speed-dial__item-icon material-symbols-outlined">link</span><span class="speed-dial__item-label">Link</span></button><button class="speed-dial__item" type="button" data-action-id="export"><span class="speed-dial__item-icon material-symbols-outlined">ios_share</span><span class="speed-dial__item-label">Export</span></button>`;
+        root.querySelector(".speed-dial__items").innerHTML = `<button class="speed-dial__item" type="button" data-action-id="mail"><span class="speed-dial__item-icon material-symbols-outlined">mail</span></button><button class="speed-dial__item" type="button" data-action-id="link"><span class="speed-dial__item-icon material-symbols-outlined">link</span></button><button class="speed-dial__item" type="button" data-action-id="export"><span class="speed-dial__item-icon material-symbols-outlined">ios_share</span></button>`;
         root.addEventListener("click", (event) => {
           const fab = event.target.closest(".fab");
           if (fab) {

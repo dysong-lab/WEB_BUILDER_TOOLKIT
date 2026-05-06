@@ -30,9 +30,9 @@
           { actionId: "reset", icon: "restart_alt", label: "RESET" },
           { actionId: "kill", icon: "close", label: "KILL" },
         ];
-        const radius = 100;
-        const start = 205;
-        const end = 335;
+        const radius = 124;
+        const start = 252;
+        const end = 342;
         list.innerHTML = items.map((item, index) => {
           const angle = start + ((end - start) * index) / (items.length - 1);
           const rad = angle * Math.PI / 180;

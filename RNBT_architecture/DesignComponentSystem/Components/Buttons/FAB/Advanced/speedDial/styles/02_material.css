@@ -57,11 +57,9 @@
   position: absolute;
   left: 0;
   top: 0;
-  gap: 10px;
-  min-width: 48px;
-  height: 48px;
-  padding: 0 16px 0 14px;
-  border-radius: 16px;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
   background: #fff8f3;
   color: #433526;
   box-shadow: 0 12px 28px rgba(123, 103, 76, 0.14);
@@ -72,8 +70,7 @@
 }
 
 .speed-dial__item-label {
-  white-space: nowrap;
-  font: 500 13px/1 "Roboto", sans-serif;
+  display: none;
 }
 
 .speed-dial--material {

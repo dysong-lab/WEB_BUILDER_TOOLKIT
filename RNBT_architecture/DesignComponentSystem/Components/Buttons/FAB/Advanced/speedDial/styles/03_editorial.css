@@ -52,13 +52,13 @@
   display: flex;
   flex-direction: column-reverse;
   align-items: flex-start;
-  gap: 10px;
+  gap: 14px;
 }
 
 .speed-dial__item {
-  gap: 10px;
-  min-height: 46px;
-  padding: 0 18px 0 14px;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
   border: 1px solid rgba(92, 77, 56, 0.26);
   background: rgba(255, 251, 245, 0.92);
   color: #594632;
@@ -70,8 +70,7 @@
 }
 
 .speed-dial__item-label {
-  white-space: nowrap;
-  font: 600 13px/1 Georgia, serif;
+  display: none;
 }
 
 .speed-dial--editorial {
