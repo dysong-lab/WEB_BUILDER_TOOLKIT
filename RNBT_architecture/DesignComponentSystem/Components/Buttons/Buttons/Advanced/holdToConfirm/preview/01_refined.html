@@ -11,10 +11,19 @@
         font-family: "Pretendard", sans-serif;
         padding: 36px;
       }
-      .preview-shell { display: flex; flex-direction: column; gap: 18px; max-width: 880px; margin: 0 auto; }
+      .preview-shell { display: flex; flex-direction: column; gap: 18px; max-width: 940px; margin: 0 auto; }
       .preview-head { display: flex; flex-direction: column; gap: 8px; }
       .preview-kicker { font-size: 12px; letter-spacing: 1.6px; color: #9db2ff; text-transform: uppercase; }
       .preview-copy { color: #9fb0d1; line-height: 1.6; }
+      .demo-panel {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: 20px;
+        padding: 20px;
+        border-radius: 28px;
+        background: linear-gradient(180deg, rgba(12, 25, 42, 0.94) 0%, rgba(7, 15, 25, 0.98) 100%);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      }
       .preview-log {
         min-height: 132px; padding: 16px 18px; border-radius: 18px;
         background: rgba(255, 255, 255, 0.04); color: #b9caec;
@@ -50,6 +59,31 @@
         background: linear-gradient(180deg, #c9fff0 0%, #8ae9c4 100%);
         color: #063f2a;
       }
+      .state-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        padding: 16px 18px;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(154, 203, 255, 0.12);
+      }
+      .state-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 13px;
+        color: #9fb0d1;
+      }
+      .state-row strong {
+        color: #edf6ff;
+        font-weight: 600;
+      }
+      @media (max-width: 760px) {
+        .demo-panel {
+          grid-template-columns: 1fr;
+        }
+      }
     </style>
   </head>
   <body>
@@ -59,24 +93,35 @@
         <h1>Hold to confirm blocks accidental taps</h1>
         <p class="preview-copy">짧은 클릭은 아무 이벤트도 내지 않고, 1500ms를 끝까지 유지했을 때만 <code>@holdConfirmed</code>가 발행된다.</p>
       </div>
-      <div class="button-shell" data-phase="idle">
-        <button class="md-button" type="button" aria-label="Arm system" data-phase="idle">
-          <span class="md-button__label">Arm system</span>
-        </button>
-        <div class="button-feedback">
-          <div class="button-feedback__track"><span class="button-feedback__progress"></span></div>
-          <span class="button-feedback__hint">Hold for 1500ms to confirm</span>
+      <div class="demo-panel">
+        <div id="button-demo"></div>
+        <div class="state-panel">
+          <div class="state-row"><span>Intent</span><strong>Protected arm action</strong></div>
+          <div class="state-row"><span>Quick tap</span><strong>No event</strong></div>
+          <div class="state-row"><span>Completed hold</span><strong>@holdConfirmed</strong></div>
+          <div class="preview-log" id="preview-log">Press and keep holding the button for 1500ms.</div>
         </div>
       </div>
-      <div class="preview-log" id="preview-log">Press and keep holding the button for 1500ms.</div>
     </div>
     <script>
       (() => {
+        document.getElementById("button-demo").innerHTML = `
+          <div class="button-shell" data-phase="idle">
+            <button class="md-button" type="button" aria-label="Arm system" data-phase="idle">
+              <span class="md-button__label">Arm system</span>
+            </button>
+            <div class="button-feedback">
+              <div class="button-feedback__track"><span class="button-feedback__progress"></span></div>
+              <span class="button-feedback__hint">Hold for 1500ms to confirm</span>
+            </div>
+          </div>
+        `;
         const holdDuration = 1500;
-        const shell = document.querySelector(".button-shell");
-        const button = document.querySelector(".md-button");
-        const progress = document.querySelector(".button-feedback__progress");
-        const hint = document.querySelector(".button-feedback__hint");
+        const root = document.getElementById("button-demo");
+        const shell = root.querySelector(".button-shell");
+        const button = root.querySelector(".md-button");
+        const progress = root.querySelector(".button-feedback__progress");
+        const hint = root.querySelector(".button-feedback__hint");
         const log = document.getElementById("preview-log");
         let pressStartAt = 0;
         let holdTimer = null;
