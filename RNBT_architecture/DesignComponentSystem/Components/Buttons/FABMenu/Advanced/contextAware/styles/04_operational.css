@@ -1,0 +1,88 @@
+@import "../../../_shared/semantic-status.css";
+
+.fab-menu-shell {
+  display: inline-flex;
+  padding: 24px;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at top, rgba(0, 229, 255, 0.16), transparent 38%),
+    linear-gradient(180deg, #091114 0%, #05090b 100%);
+  box-shadow: inset 0 1px 0 rgba(107, 214, 255, 0.08), 0 18px 38px rgba(0, 0, 0, 0.42);
+}
+
+.fab-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  min-width: 208px;
+  --fabmenu-border: rgba(0, 229, 255, 0.38);
+  --fabmenu-glow: rgba(0, 229, 255, 0.16);
+}
+
+.fab-menu__trigger,
+.fab-menu__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.fab-menu__trigger {
+  min-height: 56px;
+  padding: 0 18px;
+  border: 1px solid var(--fabmenu-border);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(5, 35, 40, 0.92) 0%, rgba(4, 21, 24, 0.92) 100%);
+  color: #bfffff;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.03), 0 0 18px var(--fabmenu-glow);
+}
+
+.fab-menu__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(-6px);
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 140ms ease, transform 140ms ease, visibility 140ms ease;
+}
+
+.fab-menu[data-open="true"] .fab-menu__list {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.fab-menu__item {
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid color-mix(in srgb, var(--fabmenu-border) 72%, transparent);
+  border-radius: 10px;
+  background: rgba(5, 35, 40, 0.92);
+  color: #7deeff;
+  box-shadow: 0 0 14px color-mix(in srgb, var(--fabmenu-glow) 90%, transparent);
+}
+
+.fab-menu[data-context-key="idle"] {
+  --fabmenu-border: rgba(0, 229, 255, 0.38);
+  --fabmenu-glow: rgba(0, 229, 255, 0.16);
+}
+
+.fab-menu[data-context-key="running"] {
+  --fabmenu-border: rgba(255, 196, 81, 0.48);
+  --fabmenu-glow: rgba(255, 196, 81, 0.18);
+}
+
+.fab-menu[data-context-key="alert"] {
+  --fabmenu-border: rgba(255, 98, 81, 0.48);
+  --fabmenu-glow: rgba(255, 98, 81, 0.2);
+}
+
+.fab-menu__trigger-label,
+.fab-menu__item-label {
+  white-space: nowrap;
+  font: 600 12px/1 "IBM Plex Mono", monospace;
+}

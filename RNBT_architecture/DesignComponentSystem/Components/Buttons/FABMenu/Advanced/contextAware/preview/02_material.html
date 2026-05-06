@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>FABMenu/Advanced/contextAware — 02_material</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <script src="../../../../../../preview_runtime.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { background: #f3eee7; color: #312719; font-family: "Roboto", sans-serif; padding: 36px; }
+      .preview-shell { max-width: 920px; margin: 0 auto; display: grid; gap: 18px; }
+      .context-switches { display: flex; gap: 10px; flex-wrap: wrap; }
+      .context-button { border: 1px solid rgba(103, 80, 164, 0.24); background: rgba(255, 255, 255, 0.78); color: #54423a; padding: 8px 12px; border-radius: 999px; cursor: pointer; }
+      .preview-log { min-height: 112px; padding: 16px; border-radius: 18px; background: rgba(255, 255, 255, 0.72); box-shadow: 0 12px 28px rgba(117, 95, 67, 0.08); white-space: pre-line; font: 12px/1.6 "IBM Plex Mono", monospace; color: #5f4c35; }
+    </style>
+  </head>
+  <body>
+    <div class="preview-shell">
+      <h1>contextAware FABMenu</h1>
+      <div class="context-switches">
+        <button class="context-button" data-context="nav">nav</button>
+        <button class="context-button" data-context="actions">actions</button>
+        <button class="context-button" data-context="selection">selection</button>
+      </div>
+      <div id="demo"></div>
+      <div class="preview-log" id="log">Material container tint changes with the context key.</div>
+    </div>
+    <script>
+      (async () => {
+        await loadComponentAssets("demo", "../views/02_material.html", "../styles/02_material.css");
+        const root = document.getElementById("demo").firstElementChild;
+        const log = document.getElementById("log");
+        const configs = {
+          nav: [{ actionId: "home", icon: "home", label: "Home" }, { actionId: "folder", icon: "folder", label: "Folder" }, { actionId: "bookmark", icon: "bookmark", label: "Bookmark" }],
+          actions: [{ actionId: "doc", icon: "description", label: "Doc" }, { actionId: "sheet", icon: "table_chart", label: "Sheet" }, { actionId: "slide", icon: "slideshow", label: "Slide" }],
+          selection: [{ actionId: "group", icon: "group_work", label: "Group" }, { actionId: "move", icon: "open_with", label: "Move" }, { actionId: "delete", icon: "delete", label: "Delete" }],
+        };
+        const renderContext = (contextKey) => {
+          root.dataset.contextKey = contextKey;
+          root.querySelector(".fab-menu__list").innerHTML = configs[contextKey].map((item) => `<button class="fab-menu__item" type="button" data-action-id="${item.actionId}"><span class="fab-menu__item-icon material-symbols-outlined">${item.icon}</span><span class="fab-menu__item-label">${item.label}</span></button>`).join("");
+          log.textContent = `topic: menuByContext\ncontextKey: ${contextKey}\nitems: ${configs[contextKey].map((item) => item.actionId).join(", ")}`;
+        };
+        renderContext("nav");
+        document.querySelectorAll(".context-button").forEach((button) => button.addEventListener("click", () => renderContext(button.dataset.context)));
+        root.addEventListener("click", (event) => {
+          const trigger = event.target.closest(".fab-menu__trigger");
+          if (trigger) {
+            root.dataset.open = root.dataset.open === "true" ? "false" : "true";
+            return;
+          }
+          const item = event.target.closest(".fab-menu__item");
+          if (item) {
+            log.textContent = `event: @fabMenuActionClicked\ncontextKey: ${root.dataset.contextKey}\nactionId: ${item.dataset.actionId}`;
+            root.dataset.open = "false";
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

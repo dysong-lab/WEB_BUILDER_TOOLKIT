@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>FABMenu/Advanced/contextAware — 01_refined</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <script src="../../../../../../preview_runtime.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { background: #09111b; color: #eaf2ff; font-family: "Pretendard", sans-serif; padding: 36px; }
+      .preview-shell { max-width: 920px; margin: 0 auto; display: grid; gap: 18px; }
+      .context-switches { display: flex; gap: 10px; flex-wrap: wrap; }
+      .context-button { border: 1px solid rgba(154, 203, 255, 0.24); background: rgba(255, 255, 255, 0.04); color: #dce9ff; padding: 8px 12px; border-radius: 999px; cursor: pointer; }
+      .preview-log { min-height: 112px; padding: 16px; border-radius: 18px; background: rgba(255, 255, 255, 0.04); white-space: pre-line; font: 12px/1.6 "IBM Plex Mono", monospace; color: #bad0ee; }
+    </style>
+  </head>
+  <body>
+    <div class="preview-shell">
+      <h1>contextAware FABMenu</h1>
+      <div class="context-switches">
+        <button class="context-button" data-context="edit">edit</button>
+        <button class="context-button" data-context="share">share</button>
+        <button class="context-button" data-context="view">view</button>
+      </div>
+      <div id="demo"></div>
+      <div class="preview-log" id="log">Switch context, then open the menu to see the item set replace in one cycle.</div>
+    </div>
+    <script>
+      (async () => {
+        await loadComponentAssets("demo", "../views/01_refined.html", "../styles/01_refined.css");
+        const root = document.getElementById("demo").firstElementChild;
+        const log = document.getElementById("log");
+        const configs = {
+          edit: [{ actionId: "headline", icon: "title", label: "Headline" }, { actionId: "image", icon: "imagesmode", label: "Image" }, { actionId: "comment", icon: "comment", label: "Comment" }],
+          share: [{ actionId: "mail", icon: "mail", label: "Mail" }, { actionId: "copyLink", icon: "link", label: "Copy link" }, { actionId: "export", icon: "ios_share", label: "Export" }],
+          view: [{ actionId: "outline", icon: "list_alt", label: "Outline" }, { actionId: "focus", icon: "center_focus_strong", label: "Focus" }, { actionId: "zoom", icon: "zoom_in", label: "Zoom" }],
+        };
+        const renderContext = (contextKey) => {
+          root.dataset.contextKey = contextKey;
+          root.querySelector(".fab-menu__list").innerHTML = configs[contextKey].map((item) => `<button class="fab-menu__item" type="button" data-action-id="${item.actionId}"><span class="fab-menu__item-icon material-symbols-outlined">${item.icon}</span><span class="fab-menu__item-label">${item.label}</span></button>`).join("");
+          log.textContent = `topic: menuByContext\ncontextKey: ${contextKey}\nitems: ${configs[contextKey].map((item) => item.actionId).join(", ")}`;
+        };
+        renderContext("edit");
+        document.querySelectorAll(".context-button").forEach((button) => button.addEventListener("click", () => renderContext(button.dataset.context)));
+        root.addEventListener("click", (event) => {
+          const trigger = event.target.closest(".fab-menu__trigger");
+          if (trigger) {
+            root.dataset.open = root.dataset.open === "true" ? "false" : "true";
+            return;
+          }
+          const item = event.target.closest(".fab-menu__item");
+          if (item) {
+            log.textContent = `event: @fabMenuActionClicked\ncontextKey: ${root.dataset.contextKey}\nactionId: ${item.dataset.actionId}`;
+            root.dataset.open = "false";
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
