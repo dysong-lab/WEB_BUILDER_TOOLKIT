@@ -8,7 +8,19 @@
   box-shadow: 0 18px 36px rgba(130, 146, 170, 0.18);
 }
 
-.extended-fab-draggable-stage { position: relative; width: 320px; height: 220px; }
+.extended-fab-draggable-stage {
+  position: relative;
+  width: 320px;
+  height: 220px;
+  overflow: hidden;
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0.2)),
+    linear-gradient(90deg, rgba(108, 132, 170, 0.08) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(108, 132, 170, 0.08) 1px, transparent 1px);
+  background-size: auto, 28px 28px, 28px 28px;
+  border: 1px solid rgba(163, 177, 198, 0.32);
+}
 
 .extended-fab {
   position: absolute;
@@ -26,15 +38,30 @@
   cursor: grab;
   touch-action: none;
   user-select: none;
-  transition: box-shadow 180ms ease, transform 180ms ease, background 180ms ease;
+  will-change: transform;
+  transition: box-shadow 180ms ease, background 180ms ease;
   box-shadow: 0 8px 18px rgba(101, 124, 157, 0.22);
+}
+
+.extended-fab:hover {
+  box-shadow: 0 12px 22px rgba(101, 124, 157, 0.24);
 }
 
 .extended-fab[data-drag-state="dragging"] {
   cursor: grabbing;
   background: #c9d8f2;
+  transition: none;
   box-shadow: 0 14px 28px rgba(101, 124, 157, 0.28);
 }
 
-.extended-fab__icon { font-size: 24px; }
+.extended-fab__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  font-size: 20px;
+  background: rgba(56, 90, 128, 0.1);
+}
 .extended-fab__label { font: 500 15px/1 "Roboto", sans-serif; white-space: nowrap; }

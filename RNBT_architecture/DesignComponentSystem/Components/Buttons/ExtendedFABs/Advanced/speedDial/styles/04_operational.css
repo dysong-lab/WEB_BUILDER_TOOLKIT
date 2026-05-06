@@ -2,12 +2,13 @@
 
 .speed-dial {
   position: relative; display: inline-flex; min-width: 240px; min-height: 300px; padding: 20px; border-radius: 22px;
-  align-items: end; justify-content: start; background: linear-gradient(180deg, #09131c 0%, #050a11 100%); border: 1px solid rgba(0,229,255,.14);
+  align-items: end; justify-content: start; background: linear-gradient(180deg, #09131c 0%, #050a11 100%); border: 1px solid rgba(0,229,255,.14); overflow: hidden;
 }
 .extended-fab, .speed-dial__item { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 18px; border-radius: 14px; white-space: nowrap; }
-.extended-fab { position: relative; z-index: 2; border: 1px solid rgba(0,229,255,.3); background: rgba(6,18,26,.94); color: #c6f8ff; cursor: pointer; }
+.extended-fab { position: relative; z-index: 2; border: 1px solid rgba(0,229,255,.3); background: rgba(6,18,26,.94); color: #c6f8ff; cursor: pointer; transition: box-shadow 120ms ease, border-color 120ms ease; }
 .speed-dial__items { position: absolute; left: 20px; right: 20px; bottom: 82px; display: flex; flex-direction: column-reverse; gap: 8px; }
 .speed-dial__item { width: max-content; border: 1px solid rgba(0,229,255,.24); background: rgba(5,16,22,.96); color: #c6f8ff; opacity: 0; pointer-events: none; transform: translateY(4px); transition: opacity 120ms ease, transform 120ms ease, box-shadow 120ms ease; }
+.extended-fab:hover { box-shadow: 0 0 0 1px rgba(0,229,255,.35),0 0 14px rgba(0,229,255,.18); }
 .speed-dial[data-speed-dial-state="open"] .speed-dial__item { opacity: 1; pointer-events: auto; transform: translateY(0); box-shadow: 0 0 0 1px rgba(0,229,255,.35), 0 0 14px rgba(0,229,255,.18); }
-.extended-fab__icon, .speed-dial__item-icon { font-size: 20px; }
+.extended-fab__icon, .speed-dial__item-icon { display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;font-size:18px;background:rgba(0,229,255,.08); }
 .extended-fab__label, .speed-dial__item-label { font: 600 14px/1 "JetBrains Mono", "IBM Plex Mono", monospace; }

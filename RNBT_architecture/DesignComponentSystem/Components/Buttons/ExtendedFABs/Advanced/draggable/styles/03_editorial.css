@@ -7,7 +7,17 @@
   background: linear-gradient(180deg, #fbf5eb 0%, #f0e4d3 100%);
 }
 
-.extended-fab-draggable-stage { position: relative; width: 320px; height: 220px; }
+.extended-fab-draggable-stage {
+  position: relative;
+  width: 320px;
+  height: 220px;
+  overflow: hidden;
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0.08)),
+    repeating-linear-gradient(0deg, rgba(111, 91, 71, 0.05) 0 1px, transparent 1px 32px);
+  border: 1px solid rgba(111, 91, 71, 0.16);
+}
 
 .extended-fab {
   position: absolute;
@@ -25,15 +35,30 @@
   cursor: grab;
   touch-action: none;
   user-select: none;
-  transition: box-shadow 180ms ease, border-color 180ms ease, transform 180ms ease;
+  will-change: transform;
+  transition: box-shadow 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.extended-fab:hover {
+  background: rgba(255, 252, 247, 0.96);
 }
 
 .extended-fab[data-drag-state="dragging"] {
   cursor: grabbing;
   border-width: 2px;
   border-color: rgba(86, 72, 57, 0.36);
+  transition: none;
   box-shadow: 0 12px 26px rgba(85, 72, 56, 0.12);
 }
 
-.extended-fab__icon { font-size: 22px; }
+.extended-fab__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  font-size: 18px;
+  background: rgba(86, 72, 57, 0.08);
+}
 .extended-fab__label { font: 600 16px/1 "Cormorant Garamond", "Georgia", serif; letter-spacing: 0.5px; white-space: nowrap; }

@@ -8,7 +8,19 @@
   border: 1px solid rgba(0, 229, 255, 0.14);
 }
 
-.extended-fab-draggable-stage { position: relative; width: 320px; height: 220px; }
+.extended-fab-draggable-stage {
+  position: relative;
+  width: 320px;
+  height: 220px;
+  overflow: hidden;
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(0, 229, 255, 0.04), rgba(0, 229, 255, 0.01)),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(0, 229, 255, 0.08) 1px, transparent 1px);
+  background-size: auto, 24px 24px, 24px 24px;
+  border: 1px solid rgba(0, 229, 255, 0.14);
+}
 
 .extended-fab {
   position: absolute;
@@ -26,14 +38,29 @@
   cursor: grab;
   touch-action: none;
   user-select: none;
-  transition: box-shadow 160ms ease, border-color 160ms ease, transform 160ms ease;
+  will-change: transform;
+  transition: box-shadow 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.extended-fab:hover {
+  box-shadow: 0 0 0 1px rgba(0, 229, 255, 0.28), 0 0 14px rgba(0, 229, 255, 0.18);
 }
 
 .extended-fab[data-drag-state="dragging"] {
   cursor: grabbing;
   border-color: #00e5ff;
+  transition: none;
   box-shadow: 0 0 0 1px #00e5ff, 0 0 18px rgba(0, 229, 255, 0.32);
 }
 
-.extended-fab__icon { font-size: 20px; }
+.extended-fab__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  font-size: 18px;
+  background: rgba(0, 229, 255, 0.08);
+}
 .extended-fab__label { font: 600 14px/1 "JetBrains Mono", "IBM Plex Mono", monospace; white-space: nowrap; }

@@ -14,6 +14,14 @@
   position: relative;
   width: 320px;
   height: 220px;
+  overflow: hidden;
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+    linear-gradient(90deg, rgba(135, 170, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(135, 170, 255, 0.08) 1px, transparent 1px);
+  background-size: auto, 32px 32px, 32px 32px;
+  border: 1px solid rgba(162, 191, 255, 0.14);
 }
 
 .extended-fab {
@@ -32,15 +40,30 @@
   cursor: grab;
   touch-action: none;
   user-select: none;
-  transition: box-shadow 180ms ease, transform 180ms ease, filter 180ms ease;
+  will-change: transform;
+  transition: box-shadow 180ms ease, filter 180ms ease, background 180ms ease;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92), 0 10px 24px rgba(56, 116, 194, 0.28);
+}
+
+.extended-fab:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92), 0 16px 30px rgba(56, 116, 194, 0.3);
 }
 
 .extended-fab[data-drag-state="dragging"] {
   cursor: grabbing;
   filter: saturate(1.03);
+  transition: none;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92), 0 16px 34px rgba(93, 84, 235, 0.34), 0 0 0 1px rgba(125, 118, 255, 0.36);
 }
 
-.extended-fab__icon { font-size: 24px; }
+.extended-fab__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  font-size: 20px;
+  background: rgba(63, 121, 195, 0.12);
+}
 .extended-fab__label { font: 700 15px/1 "SUIT", "Pretendard", sans-serif; white-space: nowrap; }
