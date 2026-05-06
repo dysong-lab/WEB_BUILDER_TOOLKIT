@@ -529,6 +529,34 @@
                   "path": "Components/Buttons/IconButtons/Standard/preview/04_operational.html"
                 }
               ]
+            },
+            {
+              "name": "Advanced",
+              "spec": null,
+              "items": [
+                {
+                  "name": "toggleGroup",
+                  "spec": "Components/Buttons/IconButtons/Advanced/toggleGroup/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 refined",
+                      "path": "Components/Buttons/IconButtons/Advanced/toggleGroup/preview/01_refined.html"
+                    },
+                    {
+                      "label": "02 material",
+                      "path": "Components/Buttons/IconButtons/Advanced/toggleGroup/preview/02_material.html"
+                    },
+                    {
+                      "label": "03 editorial",
+                      "path": "Components/Buttons/IconButtons/Advanced/toggleGroup/preview/03_editorial.html"
+                    },
+                    {
+                      "label": "04 operational",
+                      "path": "Components/Buttons/IconButtons/Advanced/toggleGroup/preview/04_operational.html"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         },
