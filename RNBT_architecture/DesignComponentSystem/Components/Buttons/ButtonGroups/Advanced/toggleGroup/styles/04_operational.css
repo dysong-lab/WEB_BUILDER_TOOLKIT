@@ -1,0 +1,40 @@
+@import "../../../_shared/semantic-status.css";
+
+.button-group-toggle {
+  display: inline-flex;
+  padding: 18px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #09141c 0%, #050a10 100%);
+  border: 1px solid rgba(0, 229, 255, 0.14);
+}
+
+.button-group-toggle__list {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 12px;
+  background: rgba(8, 29, 39, 0.92);
+}
+
+.button-group-toggle__item {
+  min-width: 92px;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #7e96a7;
+  cursor: pointer;
+  transition: color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.button-group-toggle__item[data-selected="true"] {
+  background: rgba(0, 229, 255, 0.12);
+  color: #c8fbff;
+  box-shadow: 0 0 0 1px #00e5ff, 0 0 14px rgba(0, 229, 255, 0.3);
+}
+
+.button-group-toggle__label {
+  font: 600 13px/1 "IBM Plex Mono", "D2Coding", monospace;
+  text-transform: uppercase;
+}

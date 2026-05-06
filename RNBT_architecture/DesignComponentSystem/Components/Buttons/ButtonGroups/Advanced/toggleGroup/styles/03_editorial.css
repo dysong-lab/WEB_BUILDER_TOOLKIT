@@ -1,0 +1,39 @@
+@import "../../../_shared/semantic-status.css";
+
+.button-group-toggle {
+  display: inline-flex;
+  padding: 22px;
+  border-radius: 28px;
+  background: linear-gradient(180deg, #fcf7ef 0%, #f1e7d8 100%);
+}
+
+.button-group-toggle__list {
+  display: inline-flex;
+  gap: 0;
+  padding: 4px;
+  border: 1px solid rgba(90, 76, 62, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.button-group-toggle__item {
+  min-width: 98px;
+  min-height: 42px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #6a5a49;
+  cursor: pointer;
+  transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+
+.button-group-toggle__item[data-selected="true"] {
+  background: #4b3f36;
+  color: #fff9f2;
+}
+
+.button-group-toggle__label {
+  font: 600 14px/1 "Cormorant Garamond", "Times New Roman", serif;
+  letter-spacing: 0.6px;
+}

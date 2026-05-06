@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ButtonGroups/Advanced/multiSelect — 01_refined</title>
+    <script src="../../../../../preview_runtime.js"></script>
+    <script src="../../../../../Mixins/ListRenderMixin.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { background: #08111b; color: #e6eefc; font-family: "Pretendard", sans-serif; padding: 40px; }
+      .preview-shell { max-width: 920px; margin: 0 auto; display: grid; gap: 20px; }
+      .preview-panel { display: grid; gap: 18px; padding: 24px; border-radius: 28px; background: rgba(255,255,255,0.04); }
+      .preview-log { min-height: 120px; padding: 16px; border-radius: 18px; background: rgba(255,255,255,0.05); color: #bad0ee; white-space: pre-line; font: 12px/1.6 "IBM Plex Mono", monospace; }
+    </style>
+  </head>
+  <body>
+    <div class="preview-shell">
+      <div>
+        <h1>multiSelect</h1>
+        <p>각 버튼은 독립적으로 토글되고, 선택 집합 전체가 <code>@buttonGroupMultiSelected</code> payload로 발행된다.</p>
+      </div>
+      <div class="preview-panel">
+        <div id="multi-group-demo"></div>
+        <div class="preview-log" id="preview-log">Toggle one or more filters.</div>
+      </div>
+    </div>
+    <script>
+      (async () => {
+        await loadComponentAssets("multi-group-demo", "../views/01_refined.html", "../styles/01_refined.css");
+        const root = document.getElementById("multi-group-demo");
+        const log = document.getElementById("preview-log");
+        const selectedIds = new Set(["power", "cooling"]);
+
+        root.querySelector(".button-group-multi__list").innerHTML = `
+          <button class="button-group-multi__item" type="button" data-id="power" data-selected="true" aria-pressed="true"><span class="button-group-multi__label">Power</span></button>
+          <button class="button-group-multi__item" type="button" data-id="cooling" data-selected="true" aria-pressed="true"><span class="button-group-multi__label">Cooling</span></button>
+          <button class="button-group-multi__item" type="button" data-id="network" data-selected="false" aria-pressed="false"><span class="button-group-multi__label">Network</span></button>
+          <button class="button-group-multi__item" type="button" data-id="security" data-selected="false" aria-pressed="false"><span class="button-group-multi__label">Security</span></button>
+        `;
+
+        const sync = (changedId, changedTo) => {
+          root.querySelectorAll(".button-group-multi__item").forEach((item) => {
+            const active = selectedIds.has(item.dataset.id);
+            item.dataset.selected = active ? "true" : "false";
+            item.setAttribute("aria-pressed", active ? "true" : "false");
+          });
+          root.querySelector(".button-group-multi").dataset.selectedCount = String(selectedIds.size);
+          log.textContent = `event: @buttonGroupMultiSelected\nselectedIds: ${Array.from(selectedIds).join(", ") || "-"}\nchangedId: ${changedId || "-"}\nchangedTo: ${changedTo || "-"}`;
+        };
+
+        root.addEventListener("click", (event) => {
+          const item = event.target.closest(".button-group-multi__item");
+          if (!item) return;
+          const id = item.dataset.id;
+          if (selectedIds.has(id)) {
+            selectedIds.delete(id);
+            sync(id, "off");
+            return;
+          }
+          selectedIds.add(id);
+          sync(id, "on");
+        });
+
+        sync(null, null);
+      })();
+    </script>
+  </body>
+</html>

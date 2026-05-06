@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ButtonGroups/Advanced/toggleGroup — 02_material</title>
+    <script src="../../../../../preview_runtime.js"></script>
+    <script src="../../../../../Mixins/ListRenderMixin.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { background: #f4f6fb; color: #223144; font-family: "Roboto", sans-serif; padding: 40px; }
+      .preview-shell { max-width: 920px; margin: 0 auto; display: grid; gap: 20px; }
+      .preview-panel { display: grid; gap: 18px; padding: 24px; border-radius: 28px; background: #ffffff; box-shadow: 0 18px 36px rgba(113, 131, 160, 0.16); }
+      .preview-log { min-height: 120px; padding: 16px; border-radius: 18px; background: #eff3f9; color: #43546a; white-space: pre-line; font: 12px/1.6 "IBM Plex Mono", monospace; }
+    </style>
+  </head>
+  <body>
+    <div class="preview-shell">
+      <div>
+        <h1>toggleGroup</h1>
+        <p>Material persona에서 단일 선택 버튼 그룹을 시연한다.</p>
+      </div>
+      <div class="preview-panel">
+        <div id="toggle-group-demo"></div>
+        <div class="preview-log" id="preview-log">Click a connected button.</div>
+      </div>
+    </div>
+    <script>
+      (async () => {
+        await loadComponentAssets("toggle-group-demo", "../views/02_material.html", "../styles/02_material.css");
+        const root = document.getElementById("toggle-group-demo");
+        const log = document.getElementById("preview-log");
+        let selectedId = "grid";
+
+        const applySelection = () => {
+          root.querySelectorAll(".button-group-toggle__item").forEach((item) => {
+            const active = item.dataset.id === selectedId;
+            item.dataset.selected = active ? "true" : "false";
+            item.setAttribute("aria-pressed", active ? "true" : "false");
+          });
+        };
+
+        root.querySelector(".button-group-toggle__list").innerHTML = `
+          <button class="button-group-toggle__item" type="button" data-id="grid" data-selected="true" aria-pressed="true"><span class="button-group-toggle__label">Grid</span></button>
+          <button class="button-group-toggle__item" type="button" data-id="list" data-selected="false" aria-pressed="false"><span class="button-group-toggle__label">List</span></button>
+          <button class="button-group-toggle__item" type="button" data-id="focus" data-selected="false" aria-pressed="false"><span class="button-group-toggle__label">Focus</span></button>
+        `;
+
+        root.addEventListener("click", (event) => {
+          const item = event.target.closest(".button-group-toggle__item");
+          if (!item || item.dataset.id === selectedId) return;
+          const previousId = selectedId;
+          selectedId = item.dataset.id;
+          applySelection();
+          log.textContent = `event: @buttonGroupToggled\nselectedId: ${selectedId}\npreviousId: ${previousId}`;
+        });
+
+        applySelection();
+      })();
+    </script>
+  </body>
+</html>

@@ -127,6 +127,8 @@ Components/<컴포넌트경로>/Advanced/<변형이름>/
 | 88 | Trees | lazyLoad | 노드 확장 시 자식 lazy 로드 — childrenLoaded map + @childrenRequested | 완료 |
 | 89 | Trees | checkbox | 트리 선택 모드 + cascade — selectedNodes set + cascade logic | 완료 |
 | 90 | Trees | filterSearch | 검색어로 트리 필터링 — filterText + @filtered | 완료 |
+| 91 | Buttons/ButtonGroups | toggleGroup | 연결된 버튼 그룹 단일 선택 강제 — `_selectedId` 상태 + `@buttonGroupToggled` | 완료 |
+| 92 | Buttons/ButtonGroups | multiSelect | 연결된 버튼 그룹 다중 선택 누적 — `_selectedIds:Set` + `@buttonGroupMultiSelected` | 완료 |
 
 > depth 2 케이스 등록 예시: `| N | Buttons/SplitButtons | ... | ... | 대기 |`
 
