@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>FAB/Advanced/draggable — 03_editorial</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <script src="../../../../../../preview_runtime.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { background: #f6efe4; color: #4a3b2c; font-family: Georgia, serif; padding: 36px; }
+      .preview-shell { max-width: 920px; margin: 0 auto; display: grid; gap: 18px; }
+      .preview-log { min-height: 112px; padding: 16px; border-radius: 18px; background: rgba(255, 251, 244, 0.8); white-space: pre-line; font: 12px/1.6 "IBM Plex Mono", monospace; color: #6a5741; }
+    </style>
+  </head>
+  <body>
+    <div class="preview-shell">
+      <h1>draggable FAB</h1>
+      <div id="demo"></div>
+      <div class="preview-log" id="log">Slide the editorial note tool along the margin. Release without moving to keep click behavior.</div>
+    </div>
+    <script>
+      (async () => {
+        await loadComponentAssets("demo", "../views/03_editorial.html", "../styles/03_editorial.css");
+        const fab = document.querySelector("#demo .fab");
+        const log = document.getElementById("log");
+        let x = 0, y = 0, startX = 0, startY = 0, originX = 0, originY = 0, down = false, dragging = false;
+        const threshold = 5;
+        const clamp = (nx, ny) => {
+          const parent = fab.parentElement.getBoundingClientRect();
+          return { x: Math.min(Math.max(0, nx), Math.max(0, parent.width - fab.offsetWidth)), y: Math.min(Math.max(0, ny), Math.max(0, parent.height - fab.offsetHeight)) };
+        };
+        const apply = () => { fab.style.transform = `translate3d(${x}px, ${y}px, 0)`; };
+        fab.addEventListener("pointerdown", (event) => {
+          down = true; dragging = false; startX = event.clientX; startY = event.clientY; originX = x; originY = y; fab.dataset.dragState = "idle";
+        });
+        fab.addEventListener("pointermove", (event) => {
+          if (!down) return;
+          const dx = event.clientX - startX;
+          const dy = event.clientY - startY;
+          if (Math.hypot(dx, dy) >= threshold) { dragging = true; fab.dataset.dragState = "dragging"; }
+          const next = clamp(originX + dx, originY + dy);
+          x = next.x; y = next.y; apply();
+        });
+        fab.addEventListener("pointerup", () => {
+          if (!down) return;
+          down = false; fab.dataset.dragState = "idle";
+          if (dragging) log.textContent = `event: @positionChanged\nx: ${x}\ny: ${y}`;
+        });
+        fab.addEventListener("click", (event) => {
+          if (dragging) { event.preventDefault(); event.stopImmediatePropagation(); dragging = false; return; }
+          log.textContent = "event: @fabClicked\nmeaning: annotation action fired.";
+        }, true);
+      })();
+    </script>
+  </body>
+</html>

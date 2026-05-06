@@ -1,0 +1,76 @@
+@import "../../../_shared/semantic-status.css";
+
+.fab-draggable-shell {
+  display: inline-flex;
+  padding: 24px;
+  border-radius: 32px;
+}
+
+.fab-draggable-stage {
+  position: relative;
+  width: 280px;
+  height: 220px;
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+.fab {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border: 0;
+  border-radius: 16px;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  will-change: transform;
+  transition: box-shadow 180ms ease, background 180ms ease, transform 180ms ease;
+}
+
+.fab[data-size="medium"] {
+  width: 72px;
+  height: 72px;
+}
+
+.fab[data-size="large"] {
+  width: 96px;
+  height: 96px;
+}
+
+.fab__icon {
+  font-size: 24px;
+}
+
+.fab-draggable-shell--material {
+  background: linear-gradient(180deg, #f7f4ef 0%, #ece7df 100%);
+  box-shadow: 0 18px 40px rgba(92, 76, 53, 0.14);
+}
+
+.fab-draggable-shell--material .fab-draggable-stage {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.9)),
+    linear-gradient(90deg, rgba(122, 108, 89, 0.08) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(122, 108, 89, 0.08) 1px, transparent 1px);
+  background-size: auto, 28px 28px, 28px 28px;
+  border: 1px solid rgba(145, 132, 114, 0.14);
+}
+
+.fab-draggable-shell--material .fab {
+  background: linear-gradient(180deg, #6750a4 0%, #5b4697 100%);
+  color: #fff8ff;
+  box-shadow: 0 8px 18px rgba(74, 58, 110, 0.28);
+}
+
+.fab-draggable-shell--material .fab[data-drag-state="dragging"] {
+  cursor: grabbing;
+  transition: none;
+  background: linear-gradient(180deg, #715ab0 0%, #614c9d 100%);
+  box-shadow:
+    0 14px 28px rgba(74, 58, 110, 0.32),
+    0 0 0 4px rgba(103, 80, 164, 0.18);
+}
