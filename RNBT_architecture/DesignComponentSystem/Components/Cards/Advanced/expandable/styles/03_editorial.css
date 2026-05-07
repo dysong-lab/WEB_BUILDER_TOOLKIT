@@ -1,0 +1,22 @@
+.card-expandable {
+    position: relative;
+    width: 360px;
+    padding: 26px;
+    border-radius: 22px;
+    border: 1px solid #d3c7b9;
+    background: #faf5ee;
+    color: #33271e;
+    cursor: pointer;
+}
+.card-expandable__toggle { position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; border: 1px solid #d3c7b9; border-radius: 999px; background: #fffaf2; color: #5f4b3b; }
+.card-expandable__header { display: flex; gap: 16px; align-items: center; }
+.card-expandable__icon { font-size: 26px; color: #7c644f; }
+.card-expandable__subhead { font: 600 11px/1.2 "Georgia", serif; letter-spacing: .12em; text-transform: uppercase; color: #8f7a67; }
+.card-expandable__headline { font: 700 29px/1.05 "Georgia", serif; }
+.card-expandable__summary { margin-top: 18px; font: 400 16px/1.7 "Georgia", serif; color: #564434; }
+.card-expandable__details { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 320ms ease, opacity 320ms ease; }
+.card-expandable__details-text { padding-top: 18px; font: 400 15px/1.8 "Georgia", serif; color: #6d5947; }
+.card-expandable__actions { display: flex; gap: 10px; padding-top: 16px; }
+.card-expandable__action { padding: 10px 14px; border: 1px solid #c7b9aa; border-radius: 999px; background: transparent; color: #4f3f31; font: 600 12px/1 "Georgia", serif; letter-spacing: .04em; }
+.card-expandable[data-expanded="true"] .card-expandable__details { max-height: 220px; opacity: 1; }
+.card-expandable[data-expanded="true"] .card-expandable__toggle { transform: rotate(180deg); }
