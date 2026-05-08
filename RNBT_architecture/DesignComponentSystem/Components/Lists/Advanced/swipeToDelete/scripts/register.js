@@ -19,7 +19,9 @@ applyListRenderMixin(this, {
 this._currentItems = [];
 this._dragState = null;
 this._isDraggingDetected = false;
+this._suppressNextClick = false;
 this._swipeDirection = "both";
+this._dragThreshold = 5;
 this._deleteThreshold = 120;
 this._lastDeletedAt = null;
 
@@ -54,10 +56,17 @@ this._applyOffset = (faceEl, dx) => {
   faceEl.style.transform = `translate3d(${dx}px, 0, 0)`;
 };
 
+this._setBackSide = (itemEl, direction) => {
+  const backEl = itemEl?.querySelector(".list-swipedel__back");
+  if (!backEl) return;
+  backEl.dataset.side = direction || "idle";
+};
+
 this._springBack = () => {
   const itemEl = this._getItemElement(this._dragState?.itemId);
   const faceEl = itemEl?.querySelector(".list-swipedel__face");
   if (itemEl) itemEl.dataset.swiping = "false";
+  this._setBackSide(itemEl, "idle");
   if (faceEl) {
     faceEl.style.transition = "transform 180ms ease";
     this._applyOffset(faceEl, 0);
@@ -97,6 +106,7 @@ this._finishDelete = () => {
   const sign = dragState.direction === "right" ? 1 : -1;
   faceEl.style.transition = "transform 120ms ease-out";
   this._applyOffset(faceEl, sign * width);
+  this._suppressNextClick = true;
 
   setTimeout(() => {
     this._currentItems = this._currentItems.filter(
@@ -119,11 +129,12 @@ this._emitSwipeProgress = (itemId, dx, direction) => {
     itemId,
     dx,
     direction,
-    ratio: dx / this._deleteThreshold,
+    ratio: Math.min(Math.abs(dx) / this._deleteThreshold, 1),
   });
 };
 
 this._handlePointerDown = (event) => {
+  if (event.button != null && event.button !== 0) return;
   const faceEl = event.target.closest(".list-swipedel__face");
   const itemEl = event.target.closest(".list-swipedel__item");
   if (!faceEl || !itemEl) return;
@@ -136,6 +147,9 @@ this._handlePointerDown = (event) => {
     started: false,
   };
   this._isDraggingDetected = false;
+  this._suppressNextClick = false;
+  itemEl.dataset.swiping = "false";
+  this._setBackSide(itemEl, "idle");
   faceEl.setPointerCapture?.(event.pointerId);
 };
 
@@ -153,15 +167,17 @@ this._handlePointerMove = (event) => {
   this._dragState.currentX = event.clientX;
   this._dragState.direction = direction;
 
-  if (Math.abs(rawDx) < 5) return;
+  if (Math.abs(rawDx) < this._dragThreshold) return;
 
   if (!this._dragState.started) {
     this._dragState.started = true;
     this._isDraggingDetected = true;
+    this._suppressNextClick = true;
     this._emitSwipeStart(this._dragState.itemId, direction);
   }
 
   itemEl.dataset.swiping = "true";
+  this._setBackSide(itemEl, allowed ? direction : "idle");
   this._applyOffset(faceEl, dx);
   this._emitSwipeProgress(this._dragState.itemId, dx, direction);
 };
@@ -182,10 +198,11 @@ this._handlePointerCancel = () => {
 };
 
 this._handleClickCapture = (event) => {
-  if (!this._isDraggingDetected) return;
+  if (!this._suppressNextClick) return;
   event.preventDefault();
   event.stopImmediatePropagation();
   this._isDraggingDetected = false;
+  this._suppressNextClick = false;
 };
 
 this._clickHandler = (event) => {
