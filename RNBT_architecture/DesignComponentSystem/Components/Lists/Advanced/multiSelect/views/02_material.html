@@ -1,0 +1,22 @@
+<section class="list-ms" role="group" data-selected-count="0">
+  <header class="list-ms__header">
+    <button class="list-ms__select-all" type="button" role="checkbox" aria-checked="false" data-state="unchecked">
+      <input class="list-ms__select-all-input" type="checkbox" tabindex="-1" aria-hidden="true" />
+      <span class="list-ms__select-all-label">Select all</span>
+    </button>
+    <span class="list-ms__count">0 / 0</span>
+  </header>
+
+  <div class="list-ms__items" role="list" aria-label="Multi select list"></div>
+
+  <template id="list-ms-item-template">
+    <article class="list-ms__item" role="option" data-itemid="" data-selected="false" aria-selected="false">
+      <span class="list-ms__check" aria-hidden="true"></span>
+      <span class="list-ms__leading"></span>
+      <span class="list-ms__body">
+        <strong class="list-ms__headline"></strong>
+        <span class="list-ms__supporting"></span>
+      </span>
+    </article>
+  </template>
+</section>
