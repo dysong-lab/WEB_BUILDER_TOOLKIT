@@ -8,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/marked@12.0.0/marked.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github.min.css">
     <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/highlight.min.js"></script>
+    <script src="manifest.inline.js"></script>
 
     <style>
         :root {
@@ -658,15 +659,37 @@ const PREVIEW_BRIDGE_TYPE = 'RNBT_PREVIEW_EVENT_LOG';
 
 // ── Bootstrap ─────────────────────────────────────────────
 async function init() {
+    if (window.location.protocol === 'file:' && window.__RNBT_MANIFEST__) {
+        state.manifest = window.__RNBT_MANIFEST__;
+        renderComponentsSidebar();
+        renderMixinsSidebar();
+        bindTopTabs();
+        bindCompTabs();
+        bindVariantSelect();
+        bindPreviewEventLog();
+        return;
+    }
+
     try {
         const res = await fetch('manifest.json');
         if (!res.ok) throw new Error(`manifest.json HTTP ${res.status}`);
         state.manifest = await res.json();
     } catch (e) {
+        if (window.__RNBT_MANIFEST__) {
+            state.manifest = window.__RNBT_MANIFEST__;
+            renderComponentsSidebar();
+            renderMixinsSidebar();
+            bindTopTabs();
+            bindCompTabs();
+            bindVariantSelect();
+            bindPreviewEventLog();
+            return;
+        }
+
         document.querySelector('.pane-body').innerHTML =
             `<div class="error">manifest.json 로드 실패: ${e.message}<br><br>` +
-            `브라우저 보안 정책상 file:// 로 직접 열면 fetch가 차단됩니다. ` +
-            `로컬 HTTP 서버(예: <code>npx http-server</code> 또는 mock_server)에서 열어주세요.</div>`;
+            `브라우저 보안 정책상 file:// 로 직접 열면 fetch가 차단될 수 있습니다. ` +
+            `manifest.inline.js fallback 도 함께 확인해주세요.</div>`;
         return;
     }
 
@@ -928,6 +951,15 @@ function displaySet(ci, compIdx, setIdx) {
 
     const hasItems = (set.items || []).length > 0;
     if (hasItems) {
+        const firstImplementedItemIdx = (set.items || []).findIndex(
+            (item) => (item.previews || []).length > 0
+        );
+
+        if (firstImplementedItemIdx >= 0) {
+            displayItem(ci, compIdx, setIdx, firstImplementedItemIdx);
+            return;
+        }
+
         const subtitle = `${set.items.length}개 구현`;
         setHeaderTitle(breadcrumb, subtitle);
         showCompPreview(null, `${set.name} 하위 구현을 좌측 트리에서 선택하세요.`);
