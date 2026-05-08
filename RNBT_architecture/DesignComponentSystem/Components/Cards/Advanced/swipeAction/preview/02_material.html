@@ -1,1 +1,90 @@
-<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>Cards/Advanced/swipeAction - 02_material</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"><style>body{margin:0;padding:32px;background:#eef2ff;font-family:Roboto,sans-serif}.card-swipe{position:relative;width:360px;height:140px;margin:0 auto;overflow:hidden;border-radius:22px;background:#e8edff}.card-swipe__actions{position:absolute;inset:0;display:flex;align-items:center;padding:0 18px}.card-swipe__actions--left{justify-content:flex-start;background:#dde5ff}.card-swipe__actions--right{justify-content:flex-end;background:#ffe5e7}.card-swipe__action{padding:10px 16px;border:0;border-radius:20px;background:rgba(255,255,255,.7);color:#314a9b;font:500 13px/1 Roboto,sans-serif}.card-swipe__face{position:absolute;inset:0;display:flex;gap:14px;align-items:center;padding:22px;background:#fff;color:#21304e;box-shadow:0 8px 24px rgba(69,90,166,.12)}.card-swipe__icon{font-size:28px;color:#4763b8}.card-swipe__title{font:500 24px/1.1 Roboto,sans-serif}.card-swipe__summary{margin-top:6px;font:400 14px/1.6 Roboto,sans-serif;color:#60708f}</style></head><body><article class="card-swipe"><div class="card-swipe__actions card-swipe__actions--left"><button class="card-swipe__action" type="button">Share</button></div><div class="card-swipe__actions card-swipe__actions--right"><button class="card-swipe__action" type="button">Delete</button></div><div class="card-swipe__face"><span class="material-symbols-outlined card-swipe__icon">mail</span><div><h3 class="card-swipe__title">Inbox Follow-up</h3><p class="card-swipe__summary">Swipe to share or delete this thread.</p></div></div></article></body></html>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Cards/Advanced/swipeAction - 02_material</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+  <style>
+    body{margin:0;padding:32px;background:#eef2ff;font-family:Roboto,sans-serif}
+    .card-swipe{position:relative;width:360px;height:140px;margin:0 auto;overflow:hidden;border-radius:22px;background:#e8edff}
+    .card-swipe__actions{position:absolute;inset:0;display:flex;justify-content:space-between}
+    .card-swipe__action-zone{width:88px;display:flex;align-items:center;justify-content:center}
+    .card-swipe__action-zone--left{background:#dde5ff}
+    .card-swipe__action-zone--right{background:#ffe5e7}
+    .card-swipe__action{padding:10px 16px;border:0;border-radius:20px;background:rgba(255,255,255,.7);color:#314a9b;font:500 13px/1 Roboto,sans-serif}
+    .card-swipe__face{position:absolute;inset:0;display:flex;gap:14px;align-items:center;padding:22px;background:#fff;color:#21304e;box-shadow:0 8px 24px rgba(69,90,166,.12);touch-action:none;cursor:grab;transition:transform .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s ease}
+    .card-swipe[data-dragging="true"] .card-swipe__face{cursor:grabbing;transition:none;box-shadow:0 18px 28px rgba(69,90,166,.2)}
+    .card-swipe__icon{font-size:28px;color:#4763b8}
+    .card-swipe__title{font:500 24px/1.1 Roboto,sans-serif}
+    .card-swipe__summary{margin-top:6px;font:400 14px/1.6 Roboto,sans-serif;color:#60708f}
+    .status{width:360px;margin:12px auto 0;color:#506281;font:12px/1.5 monospace}
+  </style>
+</head>
+<body>
+  <article class="card-swipe" data-open="none">
+    <div class="card-swipe__actions">
+      <div class="card-swipe__action-zone card-swipe__action-zone--left"><button class="card-swipe__action" type="button" data-action="share">Share</button></div>
+      <div class="card-swipe__action-zone card-swipe__action-zone--right"><button class="card-swipe__action" type="button" data-action="delete">Delete</button></div>
+    </div>
+    <div class="card-swipe__face">
+      <span class="material-symbols-outlined card-swipe__icon">mail</span>
+      <div><h3 class="card-swipe__title">Inbox Follow-up</h3><p class="card-swipe__summary">Swipe to share or delete this thread.</p></div>
+    </div>
+  </article>
+  <div class="status" id="status">Swipe left or right.</div>
+  <script>
+    const card=document.querySelector('.card-swipe');
+    const face=card.querySelector('.card-swipe__face');
+    const status=document.getElementById('status');
+    const limit=104;
+    const threshold=60;
+    let activeId=null;
+    let startX=0;
+    let baseX=0;
+    let currentX=0;
+
+    const clamp=value=>Math.max(-limit,Math.min(limit,value));
+    const render=()=>{face.style.transform=`translateX(${currentX}px)`;};
+    const setState=open=>{
+      card.dataset.open=open;
+      status.textContent=open==='left'?'Share action ready.':open==='right'?'Delete action ready.':'Swipe left or right.';
+    };
+
+    face.addEventListener('pointerdown',e=>{
+      activeId=e.pointerId;
+      startX=e.clientX;
+      baseX=currentX;
+      card.dataset.dragging='true';
+      face.setPointerCapture(e.pointerId);
+    });
+
+    face.addEventListener('pointermove',e=>{
+      if(activeId!==e.pointerId)return;
+      currentX=clamp(baseX+(e.clientX-startX));
+      render();
+    });
+
+    const finish=e=>{
+      if(activeId!==e.pointerId)return;
+      face.releasePointerCapture(e.pointerId);
+      card.dataset.dragging='false';
+      currentX=currentX>threshold?88:currentX<-threshold?-88:0;
+      render();
+      setState(currentX>0?'left':currentX<0?'right':'none');
+      activeId=null;
+    };
+
+    face.addEventListener('pointerup',finish);
+    face.addEventListener('pointercancel',finish);
+
+    card.querySelectorAll('.card-swipe__action').forEach(button=>{
+      button.addEventListener('click',()=>{
+        status.textContent=`Action: ${button.dataset.action}`;
+        currentX=0;
+        render();
+        setState('none');
+      });
+    });
+  </script>
+</body>
+</html>
