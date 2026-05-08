@@ -9,7 +9,8 @@
     body{margin:0;padding:32px;background:#0d1427;font-family:Pretendard,sans-serif}
     .card-sortable__list{width:392px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
     .card-sortable__item{display:flex;gap:12px;align-items:flex-start;padding:18px;border-radius:22px;background:linear-gradient(180deg,#111b36,#0b1225);color:#e8f2ff;box-shadow:0 18px 34px rgba(7,11,25,.26);cursor:grab;user-select:none;touch-action:none;position:relative;transition:transform .18s ease,box-shadow .18s ease,opacity .18s ease}
-    .card-sortable__item[data-drag-state="dragging"]{z-index:4;cursor:grabbing;opacity:.96;box-shadow:0 28px 48px rgba(8,13,31,.42);transform:translateY(var(--drag-offset,0)) scale(1.015)}
+    .card-sortable__item[data-drag-state="dragging"]{z-index:20;cursor:grabbing;opacity:.98;box-shadow:0 28px 48px rgba(8,13,31,.42);pointer-events:none}
+    .card-sortable__placeholder{border-radius:22px;background:rgba(95,122,214,.14);border:1px dashed rgba(143,165,255,.45)}
     .card-sortable__handle,.card-sortable__icon{font-size:22px;color:#8fa5ff}
     .card-sortable__title{font:700 18px/1.2 Pretendard,sans-serif}
     .card-sortable__summary{margin-top:6px;font:400 13px/1.6 Pretendard,sans-serif;color:#b6c4ec}
@@ -41,14 +42,16 @@
     const list=document.querySelector('.card-sortable__list');
     const log=document.getElementById('log');
     let dragging=null;
-    let startY=0;
+    let placeholder=null;
+    let pointerOffsetY=0;
+    let pointerOffsetX=0;
 
     const updateLog=()=>{
       log.textContent='order: '+[...list.querySelectorAll('.card-sortable__title')].map(el=>el.textContent).join(' > ');
     };
 
     const snapshotPositions=()=>new Map(
-      [...list.children].filter(el=>el!==dragging).map(el=>[el,el.getBoundingClientRect().top])
+      [...list.children].filter(el=>el!==dragging&&el!==placeholder).map(el=>[el,el.getBoundingClientRect().top])
     );
 
     const animateShift=previous=>{
@@ -66,16 +69,16 @@
     };
 
     const moveDraggedItem=clientY=>{
-      const siblings=[...list.children].filter(el=>el!==dragging);
+      const siblings=[...list.children].filter(el=>el!==dragging&&el!==placeholder);
       const next=siblings.find(el=>{
         const rect=el.getBoundingClientRect();
         return clientY<rect.top+rect.height/2;
       });
       const previous=snapshotPositions();
       if(next){
-        if(next.previousElementSibling!==dragging)list.insertBefore(dragging,next);
-      }else if(list.lastElementChild!==dragging){
-        list.appendChild(dragging);
+        if(next.previousElementSibling!==placeholder)list.insertBefore(placeholder,next);
+      }else if(list.lastElementChild!==placeholder){
+        list.appendChild(placeholder);
       }
       animateShift(previous);
     };
@@ -83,22 +86,41 @@
     list.querySelectorAll('.card-sortable__item').forEach(item=>{
       item.addEventListener('pointerdown',e=>{
         dragging=item;
-        startY=e.clientY;
+        const rect=item.getBoundingClientRect();
+        pointerOffsetY=e.clientY-rect.top;
+        pointerOffsetX=e.clientX-rect.left;
+        placeholder=document.createElement('div');
+        placeholder.className='card-sortable__placeholder';
+        placeholder.style.height=`${rect.height}px`;
+        placeholder.style.width=`${rect.width}px`;
+        list.insertBefore(placeholder,item.nextSibling);
         item.dataset.dragState='dragging';
+        item.style.width=`${rect.width}px`;
+        item.style.left=`${rect.left}px`;
+        item.style.top=`${rect.top}px`;
+        item.style.position='fixed';
         item.style.transition='none';
         item.setPointerCapture(e.pointerId);
+        moveDraggedItem(e.clientY);
       });
 
       item.addEventListener('pointermove',e=>{
         if(dragging!==item)return;
-        item.style.setProperty('--drag-offset',`${e.clientY-startY}px`);
+        item.style.left=`${e.clientX-pointerOffsetX}px`;
+        item.style.top=`${e.clientY-pointerOffsetY}px`;
         moveDraggedItem(e.clientY);
       });
 
       const finish=e=>{
         if(dragging!==item)return;
         item.releasePointerCapture(e.pointerId);
-        item.style.removeProperty('--drag-offset');
+        list.insertBefore(item,placeholder);
+        placeholder.remove();
+        placeholder=null;
+        item.style.removeProperty('width');
+        item.style.removeProperty('left');
+        item.style.removeProperty('top');
+        item.style.removeProperty('position');
         item.style.transition='';
         delete item.dataset.dragState;
         dragging=null;
