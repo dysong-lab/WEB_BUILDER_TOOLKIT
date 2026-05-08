@@ -1189,6 +1189,77 @@
                   "path": "Components/Dialogs/Standard/preview/04_operational.html"
                 }
               ]
+            },
+            {
+              "name": "Advanced",
+              "items": [
+                {
+                  "name": "fullscreen",
+                  "spec": "Components/Dialogs/Advanced/fullscreen/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 refined",
+                      "path": "Components/Dialogs/Advanced/fullscreen/preview/01_refined.html"
+                    },
+                    {
+                      "label": "02 material",
+                      "path": "Components/Dialogs/Advanced/fullscreen/preview/02_material.html"
+                    },
+                    {
+                      "label": "03 editorial",
+                      "path": "Components/Dialogs/Advanced/fullscreen/preview/03_editorial.html"
+                    },
+                    {
+                      "label": "04 operational",
+                      "path": "Components/Dialogs/Advanced/fullscreen/preview/04_operational.html"
+                    }
+                  ]
+                },
+                {
+                  "name": "draggable",
+                  "spec": "Components/Dialogs/Advanced/draggable/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 refined",
+                      "path": "Components/Dialogs/Advanced/draggable/preview/01_refined.html"
+                    },
+                    {
+                      "label": "02 material",
+                      "path": "Components/Dialogs/Advanced/draggable/preview/02_material.html"
+                    },
+                    {
+                      "label": "03 editorial",
+                      "path": "Components/Dialogs/Advanced/draggable/preview/03_editorial.html"
+                    },
+                    {
+                      "label": "04 operational",
+                      "path": "Components/Dialogs/Advanced/draggable/preview/04_operational.html"
+                    }
+                  ]
+                },
+                {
+                  "name": "resizable",
+                  "spec": "Components/Dialogs/Advanced/resizable/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 refined",
+                      "path": "Components/Dialogs/Advanced/resizable/preview/01_refined.html"
+                    },
+                    {
+                      "label": "02 material",
+                      "path": "Components/Dialogs/Advanced/resizable/preview/02_material.html"
+                    },
+                    {
+                      "label": "03 editorial",
+                      "path": "Components/Dialogs/Advanced/resizable/preview/03_editorial.html"
+                    },
+                    {
+                      "label": "04 operational",
+                      "path": "Components/Dialogs/Advanced/resizable/preview/04_operational.html"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

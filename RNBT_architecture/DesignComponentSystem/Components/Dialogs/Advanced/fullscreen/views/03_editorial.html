@@ -1,0 +1,20 @@
+<div class="dialogs dialogs--fullscreen-editorial">
+  <template id="dialog-popup-template">
+    <style>@import url("../styles/03_editorial.css");</style>
+    <div class="dialog__overlay">
+      <div class="dialog__surface" data-fullscreen="false" role="dialog" aria-modal="true">
+        <div class="dialog__topbar">
+          <button type="button" class="dialog__close-btn" aria-label="Close dialog">×</button>
+          <div class="dialog__topbar-action">Editorial review</div>
+        </div>
+        <div class="dialog__content">
+          <div class="dialog__icon"></div>
+          <h2 class="dialog__headline">Dialog headline</h2>
+          <p class="dialog__supporting">Dialog supporting copy.</p>
+        </div>
+        <div class="dialog__actions"></div>
+      </div>
+    </div>
+    <template id="dialog-action-template"><button type="button" class="dialog__action" data-actionid=""><span class="dialog__action-label"></span></button></template>
+  </template>
+</div>

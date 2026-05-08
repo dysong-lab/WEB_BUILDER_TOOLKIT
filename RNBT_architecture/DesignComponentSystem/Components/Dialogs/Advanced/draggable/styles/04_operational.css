@@ -1,0 +1,4 @@
+@import url("./01_refined.css");
+.dialog__overlay { --overlay-bg: rgba(4,17,22,.74); }
+.dialog__surface { --surface-bg: #08151a; --text-color: #d8fbff; --surface-border: rgba(0,188,212,.28); --surface-shadow: 0 20px 48px rgba(0,0,0,.34); --surface-drag-shadow: 0 24px 56px rgba(0,188,212,.18); --font-family: "JetBrains Mono", "IBM Plex Mono", monospace; --muted-color: rgba(216,251,255,.72); --icon-bg: rgba(0,188,212,.12); --icon-color: #4dd0e1; --action-border: rgba(77,208,225,.26); --action-bg: rgba(77,208,225,.08); --action-accent-bg: #00bcd4; --action-accent-color: #02161a; --grip-bg: linear-gradient(90deg,rgba(77,208,225,.12),rgba(77,208,225,.42),rgba(77,208,225,.12)); }
+
