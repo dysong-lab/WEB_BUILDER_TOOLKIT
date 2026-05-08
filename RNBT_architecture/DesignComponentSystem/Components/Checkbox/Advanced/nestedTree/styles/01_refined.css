@@ -1,0 +1,387 @@
+.tree-checkbox-shell--refined,
+.tree-checkbox-shell--material,
+.tree-checkbox-shell--editorial,
+.tree-checkbox-shell--operational {
+  display: inline-flex;
+  min-width: 320px;
+}
+
+.tree-checkbox-shell--refined {
+  --text: #ecf0ff;
+  --muted: #97a0c9;
+  --accent: #8b5cf6;
+  padding: 22px;
+  border-radius: 24px;
+  background: radial-gradient(circle at top left, rgba(139, 92, 246, 0.2), transparent 34%), linear-gradient(180deg, #0f1830 0%, #09111f 100%);
+}
+
+.tree-checkbox-shell--refined .tree-checkbox__list,
+.tree-checkbox-shell--material .tree-checkbox__list,
+.tree-checkbox-shell--editorial .tree-checkbox__list,
+.tree-checkbox-shell--operational .tree-checkbox__list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.tree-checkbox-shell--refined .tree-checkbox__node,
+.tree-checkbox-shell--material .tree-checkbox__node,
+.tree-checkbox-shell--editorial .tree-checkbox__node,
+.tree-checkbox-shell--operational .tree-checkbox__node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 34px;
+}
+
+.tree-checkbox-shell--refined .tree-checkbox__toggle,
+.tree-checkbox-shell--material .tree-checkbox__toggle,
+.tree-checkbox-shell--editorial .tree-checkbox__toggle,
+.tree-checkbox-shell--operational .tree-checkbox__toggle {
+  width: 18px;
+  height: 18px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.tree-checkbox-shell--refined .tree-checkbox__node[data-has-children="false"] .tree-checkbox__toggle,
+.tree-checkbox-shell--material .tree-checkbox__node[data-has-children="false"] .tree-checkbox__toggle,
+.tree-checkbox-shell--editorial .tree-checkbox__node[data-has-children="false"] .tree-checkbox__toggle,
+.tree-checkbox-shell--operational .tree-checkbox__node[data-has-children="false"] .tree-checkbox__toggle {
+  visibility: hidden;
+}
+
+.tree-checkbox-shell--refined .tree-checkbox__chevron,
+.tree-checkbox-shell--material .tree-checkbox__chevron,
+.tree-checkbox-shell--editorial .tree-checkbox__chevron,
+.tree-checkbox-shell--operational .tree-checkbox__chevron {
+  display: block;
+  width: 0;
+  height: 0;
+  margin: 4px auto 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 7px solid currentColor;
+  transition: transform 160ms ease;
+}
+
+.tree-checkbox-shell--refined .tree-checkbox__node[data-expanded="true"] .tree-checkbox__chevron,
+.tree-checkbox-shell--material .tree-checkbox__node[data-expanded="true"] .tree-checkbox__chevron,
+.tree-checkbox-shell--editorial .tree-checkbox__node[data-expanded="true"] .tree-checkbox__chevron,
+.tree-checkbox-shell--operational .tree-checkbox__node[data-expanded="true"] .tree-checkbox__chevron {
+  transform: rotate(90deg);
+}
+
+.tree-checkbox-shell--refined .tree-checkbox__box,
+.tree-checkbox-shell--material .tree-checkbox__box,
+.tree-checkbox-shell--editorial .tree-checkbox__box,
+.tree-checkbox-shell--operational .tree-checkbox__box {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.tree-checkbox-shell--refined .tree-checkbox__check-mark,
+.tree-checkbox-shell--refined .tree-checkbox__dash-mark,
+.tree-checkbox-shell--material .tree-checkbox__check-mark,
+.tree-checkbox-shell--material .tree-checkbox__dash-mark,
+.tree-checkbox-shell--editorial .tree-checkbox__check-mark,
+.tree-checkbox-shell--editorial .tree-checkbox__dash-mark,
+.tree-checkbox-shell--operational .tree-checkbox__check-mark,
+.tree-checkbox-shell--operational .tree-checkbox__dash-mark {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.tree-checkbox-shell--refined .tree-checkbox__label,
+.tree-checkbox-shell--material .tree-checkbox__label,
+.tree-checkbox-shell--editorial .tree-checkbox__label,
+.tree-checkbox-shell--operational .tree-checkbox__label {
+  flex: 1;
+}
+
+.tree-checkbox-shell--refined .tree-checkbox__depth-indicator,
+.tree-checkbox-shell--material .tree-checkbox__depth-indicator,
+.tree-checkbox-shell--editorial .tree-checkbox__depth-indicator,
+.tree-checkbox-shell--operational .tree-checkbox__depth-indicator {
+  min-width: 32px;
+  text-align: right;
+  opacity: 0.7;
+}
+
+.tree-checkbox-shell--refined .tree-checkbox__node::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--depth-guide, 0px) + 9px);
+  top: -6px;
+  bottom: -6px;
+  border-left: 1px dashed rgba(162, 176, 255, 0.16);
+}
+
+.tree-checkbox-shell--refined .tree-checkbox__node[data-depth="0"]::before {
+  display: none;
+}
+
+.tree-checkbox-shell--refined .tree-checkbox__toggle,
+.tree-checkbox-shell--refined .tree-checkbox__label {
+  color: var(--muted);
+}
+
+.tree-checkbox-shell--refined .tree-checkbox__box {
+  width: 18px;
+  height: 18px;
+  border: 1px solid rgba(202, 214, 255, 0.22);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.tree-checkbox-shell--refined .tree-checkbox__check-mark::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 5px;
+  height: 10px;
+  border: 2px solid #fff;
+  border-top: 0;
+  border-left: 0;
+  transform: rotate(45deg);
+}
+
+.tree-checkbox-shell--refined .tree-checkbox__dash-mark::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  top: 7px;
+  height: 3px;
+  border-radius: 999px;
+  background: #fff;
+}
+
+.tree-checkbox-shell--refined .tree-checkbox__label {
+  color: var(--text);
+  font: 500 14px/1.45 "Pretendard", "SUIT", sans-serif;
+}
+
+.tree-checkbox-shell--refined .tree-checkbox__depth-indicator::before {
+  content: attr(data-depth-badge);
+  font: 500 11px/1 "IBM Plex Mono", monospace;
+}
+
+.tree-checkbox-shell--refined .tree-checkbox__node[data-checked="true"] .tree-checkbox__box,
+.tree-checkbox-shell--refined .tree-checkbox__node[data-indeterminate="true"] .tree-checkbox__box {
+  background: linear-gradient(180deg, #8b5cf6 0%, #6d45d6 100%);
+  border-color: transparent;
+}
+
+.tree-checkbox-shell--refined .tree-checkbox__node[data-checked="true"] .tree-checkbox__check-mark,
+.tree-checkbox-shell--refined .tree-checkbox__node[data-indeterminate="true"] .tree-checkbox__dash-mark {
+  opacity: 1;
+}
+
+.tree-checkbox-shell--material {
+  --text: #f4eff4;
+  --muted: #cac4d0;
+  --accent: #1a73e8;
+  padding: 18px;
+  border-radius: 20px;
+  background: #1f1b24;
+}
+
+.tree-checkbox-shell--material .tree-checkbox__toggle,
+.tree-checkbox-shell--material .tree-checkbox__label {
+  color: var(--muted);
+}
+
+.tree-checkbox-shell--material .tree-checkbox__box {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #938f99;
+  border-radius: 4px;
+}
+
+.tree-checkbox-shell--material .tree-checkbox__check-mark::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0;
+  width: 5px;
+  height: 10px;
+  border: 2px solid #fff;
+  border-top: 0;
+  border-left: 0;
+  transform: rotate(45deg);
+}
+
+.tree-checkbox-shell--material .tree-checkbox__dash-mark::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  top: 6px;
+  height: 3px;
+  border-radius: 999px;
+  background: #fff;
+}
+
+.tree-checkbox-shell--material .tree-checkbox__label {
+  color: var(--text);
+  font: 400 15px/1.45 "Roboto", "SUIT", sans-serif;
+}
+
+.tree-checkbox-shell--material .tree-checkbox__depth-indicator::before {
+  content: "L" attr(data-depth-badge);
+  font: 500 10px/1 "Roboto Mono", monospace;
+}
+
+.tree-checkbox-shell--material .tree-checkbox__node[data-checked="true"] .tree-checkbox__box,
+.tree-checkbox-shell--material .tree-checkbox__node[data-indeterminate="true"] .tree-checkbox__box {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.tree-checkbox-shell--material .tree-checkbox__node[data-checked="true"] .tree-checkbox__check-mark,
+.tree-checkbox-shell--material .tree-checkbox__node[data-indeterminate="true"] .tree-checkbox__dash-mark {
+  opacity: 1;
+}
+
+.tree-checkbox-shell--editorial {
+  --text: #382f28;
+  --muted: #6f6257;
+  padding: 24px;
+  border: 1px solid #ece6dc;
+  background: #f8f2ea;
+}
+
+.tree-checkbox-shell--editorial .tree-checkbox__toggle,
+.tree-checkbox-shell--editorial .tree-checkbox__label {
+  color: var(--muted);
+}
+
+.tree-checkbox-shell--editorial .tree-checkbox__box {
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid #6f6257;
+}
+
+.tree-checkbox-shell--editorial .tree-checkbox__check-mark::before {
+  content: "✓";
+  position: absolute;
+  inset: -4px 0 0 2px;
+  color: #4d3e32;
+  font: 700 14px/1 Georgia, serif;
+}
+
+.tree-checkbox-shell--editorial .tree-checkbox__dash-mark::before {
+  content: "–";
+  position: absolute;
+  inset: -5px 0 0 3px;
+  color: #4d3e32;
+  font: italic 700 18px/1 Georgia, serif;
+}
+
+.tree-checkbox-shell--editorial .tree-checkbox__label {
+  color: var(--text);
+  font: 400 16px/1.5 Georgia, "Times New Roman", serif;
+}
+
+.tree-checkbox-shell--editorial .tree-checkbox__depth-indicator::before {
+  content: ".." attr(data-depth-badge);
+  font: 400 11px/1 Georgia, serif;
+}
+
+.tree-checkbox-shell--editorial .tree-checkbox__node[data-checked="true"] .tree-checkbox__check-mark,
+.tree-checkbox-shell--editorial .tree-checkbox__node[data-indeterminate="true"] .tree-checkbox__dash-mark {
+  opacity: 1;
+}
+
+.tree-checkbox-shell--operational {
+  --text: #d7fbff;
+  --muted: #82c3cb;
+  --accent: #00bcd4;
+  padding: 18px;
+  border: 1px solid rgba(0, 188, 212, 0.2);
+  border-radius: 12px;
+  background: linear-gradient(180deg, #061217 0%, #0b1f25 100%);
+}
+
+.tree-checkbox-shell--operational .tree-checkbox__toggle,
+.tree-checkbox-shell--operational .tree-checkbox__label {
+  color: var(--muted);
+}
+
+.tree-checkbox-shell--operational .tree-checkbox__chevron {
+  border: 0;
+  width: auto;
+  height: auto;
+  margin: 0;
+}
+
+.tree-checkbox-shell--operational .tree-checkbox__chevron::before {
+  content: "[+]";
+  font: 500 11px/1 "JetBrains Mono", monospace;
+}
+
+.tree-checkbox-shell--operational .tree-checkbox__node[data-expanded="true"] .tree-checkbox__chevron {
+  transform: none;
+}
+
+.tree-checkbox-shell--operational .tree-checkbox__node[data-expanded="true"] .tree-checkbox__chevron::before {
+  content: "[-]";
+}
+
+.tree-checkbox-shell--operational .tree-checkbox__box {
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid rgba(77, 208, 225, 0.55);
+}
+
+.tree-checkbox-shell--operational .tree-checkbox__check-mark::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: -1px;
+  width: 4px;
+  height: 8px;
+  border: 2px solid #00181d;
+  border-top: 0;
+  border-left: 0;
+  transform: rotate(45deg);
+}
+
+.tree-checkbox-shell--operational .tree-checkbox__dash-mark::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  top: 5px;
+  height: 2px;
+  background: #00181d;
+}
+
+.tree-checkbox-shell--operational .tree-checkbox__label {
+  color: var(--text);
+  font: 500 13px/1.45 "JetBrains Mono", "IBM Plex Mono", monospace;
+}
+
+.tree-checkbox-shell--operational .tree-checkbox__depth-indicator::before {
+  content: "L" attr(data-depth-badge);
+  font: 500 10px/1 "JetBrains Mono", monospace;
+}
+
+.tree-checkbox-shell--operational .tree-checkbox__node[data-checked="true"] .tree-checkbox__box,
+.tree-checkbox-shell--operational .tree-checkbox__node[data-indeterminate="true"] .tree-checkbox__box {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.tree-checkbox-shell--operational .tree-checkbox__node[data-checked="true"] .tree-checkbox__check-mark,
+.tree-checkbox-shell--operational .tree-checkbox__node[data-indeterminate="true"] .tree-checkbox__dash-mark {
+  opacity: 1;
+}
