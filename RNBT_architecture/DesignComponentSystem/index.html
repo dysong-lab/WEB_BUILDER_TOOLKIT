@@ -571,11 +571,8 @@
             <button class="top-tab" data-view="mixins">Mixins</button>
         </div>
         <div class="topbar-stats" id="topbar-stats">
-            <span class="topbar-stat-total">총 0개</span>
-            <span>2D 0</span>
+            <span class="topbar-stat-total">2D 0</span>
             <span>3D 0</span>
-            <span>Standard 0</span>
-            <span>Advanced 0</span>
         </div>
     </header>
 
@@ -780,42 +777,21 @@ function renderTopbarStats() {
     const statsEl = document.getElementById('topbar-stats');
     if (!statsEl || !state.manifest) return;
 
-    let total = 0;
+    let twoD = 0;
     let threeD = 0;
-    let standard = 0;
-    let advanced = 0;
 
     (state.manifest.categories || []).forEach((category) => {
         const count = countPreviewComponentsFromCategory(category);
-        total += count;
         if (category.name === '3D_Components') {
             threeD += count;
+        } else {
+            twoD += count;
         }
-
-        (category.components || []).forEach((comp) => {
-            (comp.sets || []).forEach((set) => {
-                if (Array.isArray(set.previews)) {
-                    if (set.name === 'Standard') standard += set.previews.length;
-                    if (set.name === 'Advanced') advanced += set.previews.length;
-                }
-                if (Array.isArray(set.items)) {
-                    set.items.forEach((item) => {
-                        const itemCount = Array.isArray(item.previews) ? item.previews.length : 0;
-                        if (set.name === 'Standard') standard += itemCount;
-                        if (set.name === 'Advanced') advanced += itemCount;
-                    });
-                }
-            });
-        });
     });
 
-    const twoD = total - threeD;
     statsEl.innerHTML = `
-        <span class="topbar-stat-total">총 ${total}개</span>
-        <span>2D ${twoD}</span>
+        <span class="topbar-stat-total">2D ${twoD}</span>
         <span>3D ${threeD}</span>
-        <span>Standard ${standard}</span>
-        <span>Advanced ${advanced}</span>
     `;
 }
 

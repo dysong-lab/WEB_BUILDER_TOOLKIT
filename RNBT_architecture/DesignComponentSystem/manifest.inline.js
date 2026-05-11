@@ -988,6 +988,55 @@ window.__RNBT_MANIFEST__ = {
                   "path": "Components/Checkbox/Standard/preview/04_operational.html"
                 }
               ]
+            },
+            {
+              "name": "Advanced",
+              "items": [
+                {
+                  "name": "indeterminate",
+                  "spec": "Components/Checkbox/Advanced/indeterminate/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 refined",
+                      "path": "Components/Checkbox/Advanced/indeterminate/preview/01_refined.html"
+                    },
+                    {
+                      "label": "02 material",
+                      "path": "Components/Checkbox/Advanced/indeterminate/preview/02_material.html"
+                    },
+                    {
+                      "label": "03 editorial",
+                      "path": "Components/Checkbox/Advanced/indeterminate/preview/03_editorial.html"
+                    },
+                    {
+                      "label": "04 operational",
+                      "path": "Components/Checkbox/Advanced/indeterminate/preview/04_operational.html"
+                    }
+                  ]
+                },
+                {
+                  "name": "nestedTree",
+                  "spec": "Components/Checkbox/Advanced/nestedTree/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 refined",
+                      "path": "Components/Checkbox/Advanced/nestedTree/preview/01_refined.html"
+                    },
+                    {
+                      "label": "02 material",
+                      "path": "Components/Checkbox/Advanced/nestedTree/preview/02_material.html"
+                    },
+                    {
+                      "label": "03 editorial",
+                      "path": "Components/Checkbox/Advanced/nestedTree/preview/03_editorial.html"
+                    },
+                    {
+                      "label": "04 operational",
+                      "path": "Components/Checkbox/Advanced/nestedTree/preview/04_operational.html"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }
@@ -1140,6 +1189,77 @@ window.__RNBT_MANIFEST__ = {
                   "path": "Components/Dialogs/Standard/preview/04_operational.html"
                 }
               ]
+            },
+            {
+              "name": "Advanced",
+              "items": [
+                {
+                  "name": "fullscreen",
+                  "spec": "Components/Dialogs/Advanced/fullscreen/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 refined",
+                      "path": "Components/Dialogs/Advanced/fullscreen/preview/01_refined.html"
+                    },
+                    {
+                      "label": "02 material",
+                      "path": "Components/Dialogs/Advanced/fullscreen/preview/02_material.html"
+                    },
+                    {
+                      "label": "03 editorial",
+                      "path": "Components/Dialogs/Advanced/fullscreen/preview/03_editorial.html"
+                    },
+                    {
+                      "label": "04 operational",
+                      "path": "Components/Dialogs/Advanced/fullscreen/preview/04_operational.html"
+                    }
+                  ]
+                },
+                {
+                  "name": "draggable",
+                  "spec": "Components/Dialogs/Advanced/draggable/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 refined",
+                      "path": "Components/Dialogs/Advanced/draggable/preview/01_refined.html"
+                    },
+                    {
+                      "label": "02 material",
+                      "path": "Components/Dialogs/Advanced/draggable/preview/02_material.html"
+                    },
+                    {
+                      "label": "03 editorial",
+                      "path": "Components/Dialogs/Advanced/draggable/preview/03_editorial.html"
+                    },
+                    {
+                      "label": "04 operational",
+                      "path": "Components/Dialogs/Advanced/draggable/preview/04_operational.html"
+                    }
+                  ]
+                },
+                {
+                  "name": "resizable",
+                  "spec": "Components/Dialogs/Advanced/resizable/CLAUDE.md",
+                  "previews": [
+                    {
+                      "label": "01 refined",
+                      "path": "Components/Dialogs/Advanced/resizable/preview/01_refined.html"
+                    },
+                    {
+                      "label": "02 material",
+                      "path": "Components/Dialogs/Advanced/resizable/preview/02_material.html"
+                    },
+                    {
+                      "label": "03 editorial",
+                      "path": "Components/Dialogs/Advanced/resizable/preview/03_editorial.html"
+                    },
+                    {
+                      "label": "04 operational",
+                      "path": "Components/Dialogs/Advanced/resizable/preview/04_operational.html"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }
@@ -1206,6 +1326,62 @@ window.__RNBT_MANIFEST__ = {
                 {
                   "label": "04 operational",
                   "path": "Components/Lists/Standard/preview/04_operational.html"
+                }
+              ]
+            },
+            {
+              "name": "Advanced",
+              "spec": "Components/Lists/CLAUDE.md",
+              "items": [
+                {
+                  "name": "swipeToDelete",
+                  "spec": "Components/Lists/Advanced/swipeToDelete/CLAUDE.md",
+                  "previews": [
+                    { "label": "01 refined", "path": "Components/Lists/Advanced/swipeToDelete/preview/01_refined.html" },
+                    { "label": "02 material", "path": "Components/Lists/Advanced/swipeToDelete/preview/02_material.html" },
+                    { "label": "03 editorial", "path": "Components/Lists/Advanced/swipeToDelete/preview/03_editorial.html" },
+                    { "label": "04 operational", "path": "Components/Lists/Advanced/swipeToDelete/preview/04_operational.html" }
+                  ]
+                },
+                {
+                  "name": "virtualScroll",
+                  "spec": "Components/Lists/Advanced/virtualScroll/CLAUDE.md",
+                  "previews": [
+                    { "label": "01 refined", "path": "Components/Lists/Advanced/virtualScroll/preview/01_refined.html" },
+                    { "label": "02 material", "path": "Components/Lists/Advanced/virtualScroll/preview/02_material.html" },
+                    { "label": "03 editorial", "path": "Components/Lists/Advanced/virtualScroll/preview/03_editorial.html" },
+                    { "label": "04 operational", "path": "Components/Lists/Advanced/virtualScroll/preview/04_operational.html" }
+                  ]
+                },
+                {
+                  "name": "draggableReorder",
+                  "spec": "Components/Lists/Advanced/draggableReorder/CLAUDE.md",
+                  "previews": [
+                    { "label": "01 refined", "path": "Components/Lists/Advanced/draggableReorder/preview/01_refined.html" },
+                    { "label": "02 material", "path": "Components/Lists/Advanced/draggableReorder/preview/02_material.html" },
+                    { "label": "03 editorial", "path": "Components/Lists/Advanced/draggableReorder/preview/03_editorial.html" },
+                    { "label": "04 operational", "path": "Components/Lists/Advanced/draggableReorder/preview/04_operational.html" }
+                  ]
+                },
+                {
+                  "name": "multiSelect",
+                  "spec": "Components/Lists/Advanced/multiSelect/CLAUDE.md",
+                  "previews": [
+                    { "label": "01 refined", "path": "Components/Lists/Advanced/multiSelect/preview/01_refined.html" },
+                    { "label": "02 material", "path": "Components/Lists/Advanced/multiSelect/preview/02_material.html" },
+                    { "label": "03 editorial", "path": "Components/Lists/Advanced/multiSelect/preview/03_editorial.html" },
+                    { "label": "04 operational", "path": "Components/Lists/Advanced/multiSelect/preview/04_operational.html" }
+                  ]
+                },
+                {
+                  "name": "infiniteScroll",
+                  "spec": "Components/Lists/Advanced/infiniteScroll/CLAUDE.md",
+                  "previews": [
+                    { "label": "01 refined", "path": "Components/Lists/Advanced/infiniteScroll/preview/01_refined.html" },
+                    { "label": "02 material", "path": "Components/Lists/Advanced/infiniteScroll/preview/02_material.html" },
+                    { "label": "03 editorial", "path": "Components/Lists/Advanced/infiniteScroll/preview/03_editorial.html" },
+                    { "label": "04 operational", "path": "Components/Lists/Advanced/infiniteScroll/preview/04_operational.html" }
+                  ]
                 }
               ]
             }
