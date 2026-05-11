@@ -73,6 +73,20 @@
         .top-tab:hover { background: var(--bg); color: var(--text); }
         .top-tab.active { background: var(--accent-soft); color: var(--accent); }
 
+        .topbar-stats {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 12px;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+        .topbar-stat-total {
+            font-weight: 600;
+            color: var(--text);
+        }
+
         main {
             display: grid;
             grid-template-columns: 320px 1fr;
@@ -556,6 +570,13 @@
             <button class="top-tab active" data-view="components">Components</button>
             <button class="top-tab" data-view="mixins">Mixins</button>
         </div>
+        <div class="topbar-stats" id="topbar-stats">
+            <span class="topbar-stat-total">총 0개</span>
+            <span>2D 0</span>
+            <span>3D 0</span>
+            <span>Standard 0</span>
+            <span>Advanced 0</span>
+        </div>
     </header>
 
     <main>
@@ -661,6 +682,7 @@ const PREVIEW_BRIDGE_TYPE = 'RNBT_PREVIEW_EVENT_LOG';
 async function init() {
     if (window.location.protocol === 'file:' && window.__RNBT_MANIFEST__) {
         state.manifest = window.__RNBT_MANIFEST__;
+        renderTopbarStats();
         renderComponentsSidebar();
         renderMixinsSidebar();
         bindTopTabs();
@@ -677,6 +699,7 @@ async function init() {
     } catch (e) {
         if (window.__RNBT_MANIFEST__) {
             state.manifest = window.__RNBT_MANIFEST__;
+            renderTopbarStats();
             renderComponentsSidebar();
             renderMixinsSidebar();
             bindTopTabs();
@@ -693,6 +716,7 @@ async function init() {
         return;
     }
 
+    renderTopbarStats();
     renderComponentsSidebar();
     renderMixinsSidebar();
     bindTopTabs();
@@ -735,6 +759,64 @@ function isCollapsedCategory(cat) {
 function activate(el) {
     document.querySelectorAll('#sidebar-components .active').forEach(e => e.classList.remove('active'));
     if (el) el.classList.add('active');
+}
+
+function countPreviewComponentsFromCategory(category) {
+    let count = 0;
+    (category.components || []).forEach((comp) => {
+        (comp.sets || []).forEach((set) => {
+            if (Array.isArray(set.previews)) count += set.previews.length;
+            if (Array.isArray(set.items)) {
+                set.items.forEach((item) => {
+                    count += Array.isArray(item.previews) ? item.previews.length : 0;
+                });
+            }
+        });
+    });
+    return count;
+}
+
+function renderTopbarStats() {
+    const statsEl = document.getElementById('topbar-stats');
+    if (!statsEl || !state.manifest) return;
+
+    let total = 0;
+    let threeD = 0;
+    let standard = 0;
+    let advanced = 0;
+
+    (state.manifest.categories || []).forEach((category) => {
+        const count = countPreviewComponentsFromCategory(category);
+        total += count;
+        if (category.name === '3D_Components') {
+            threeD += count;
+        }
+
+        (category.components || []).forEach((comp) => {
+            (comp.sets || []).forEach((set) => {
+                if (Array.isArray(set.previews)) {
+                    if (set.name === 'Standard') standard += set.previews.length;
+                    if (set.name === 'Advanced') advanced += set.previews.length;
+                }
+                if (Array.isArray(set.items)) {
+                    set.items.forEach((item) => {
+                        const itemCount = Array.isArray(item.previews) ? item.previews.length : 0;
+                        if (set.name === 'Standard') standard += itemCount;
+                        if (set.name === 'Advanced') advanced += itemCount;
+                    });
+                }
+            });
+        });
+    });
+
+    const twoD = total - threeD;
+    statsEl.innerHTML = `
+        <span class="topbar-stat-total">총 ${total}개</span>
+        <span>2D ${twoD}</span>
+        <span>3D ${threeD}</span>
+        <span>Standard ${standard}</span>
+        <span>Advanced ${advanced}</span>
+    `;
 }
 
 // ── Components Sidebar ───────────────────────────────────
