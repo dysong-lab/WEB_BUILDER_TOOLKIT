@@ -133,8 +133,32 @@
         .tree-cat-empty .tree-cat-arrow { visibility: hidden; }
         .tree-cat-name { flex: 1; }
         .tree-cat-count {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: auto;
             font-size: 11px;
             color: var(--muted);
+        }
+        .tree-cat-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 18px;
+            height: 18px;
+            padding: 0 6px;
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 700;
+            line-height: 1;
+        }
+        .tree-cat-badge.standard {
+            background: #e0efff;
+            color: #2563eb;
+        }
+        .tree-cat-badge.advanced {
+            background: #fff1c7;
+            color: #b45309;
         }
 
         .tree-children {
@@ -728,6 +752,28 @@ function isCollapsedCategory(cat) {
     return cat.components.length === 1 && cat.components[0].name === cat.name;
 }
 
+function getCategorySidebarStats(category) {
+    let hasStandard = false;
+    let advancedCount = 0;
+
+    (category.components || []).forEach((comp) => {
+        (comp.sets || []).forEach((set) => {
+            if (set.name === 'Standard' && Array.isArray(set.previews) && set.previews.length > 0) {
+                hasStandard = true;
+            }
+            if (set.name === 'Advanced' && Array.isArray(set.items)) {
+                set.items.forEach((item) => {
+                    if (Array.isArray(item.previews) && item.previews.length > 0) {
+                        advancedCount += 1;
+                    }
+                });
+            }
+        });
+    });
+
+    return { hasStandard, advancedCount };
+}
+
 function activate(el) {
     document.querySelectorAll('#sidebar-components .active').forEach(e => e.classList.remove('active'));
     if (el) el.classList.add('active');
@@ -778,16 +824,23 @@ function renderComponentsSidebar() {
     state.manifest.categories.forEach((cat, ci) => {
         const total = cat.components.length;
         const impl = cat.components.filter(isComponentImplemented).length;
+        const sidebarStats = getCategorySidebarStats(cat);
 
         const catEl = document.createElement('div');
         catEl.className = 'tree-cat' + (total === 0 ? ' tree-cat-empty' : '');
 
         const header = document.createElement('div');
         header.className = 'tree-cat-header';
+        const countHtml = total === 0
+            ? '미구현'
+            : [
+                sidebarStats.hasStandard ? '<span class="tree-cat-badge standard">S</span>' : '',
+                sidebarStats.advancedCount > 0 ? `<span class="tree-cat-badge advanced">A-${sidebarStats.advancedCount}</span>` : '',
+            ].filter(Boolean).join('') || `${impl}/${total}`;
         header.innerHTML = `
             <span class="tree-cat-arrow">▶</span>
             <span class="tree-cat-name">${cat.name}</span>
-            <span class="tree-cat-count">${total > 0 ? `${impl}/${total}` : '미구현'}</span>
+            <span class="tree-cat-count">${countHtml}</span>
         `;
         header.addEventListener('click', () => {
             const childrenEl = catEl.querySelector(':scope > .tree-children');
