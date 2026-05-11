@@ -186,6 +186,14 @@
             color: var(--disabled);
         }
         .tree-comp-name { flex: 1; }
+        .tree-comp-count {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: auto;
+            font-size: 11px;
+            color: var(--muted);
+        }
 
         .tree-item {
             padding: 5px 12px 5px 24px;
@@ -774,6 +782,26 @@ function getCategorySidebarStats(category) {
     return { hasStandard, advancedCount };
 }
 
+function getComponentSidebarStats(component) {
+    let hasStandard = false;
+    let advancedCount = 0;
+
+    (component.sets || []).forEach((set) => {
+        if (set.name === 'Standard' && Array.isArray(set.previews) && set.previews.length > 0) {
+            hasStandard = true;
+        }
+        if (set.name === 'Advanced' && Array.isArray(set.items)) {
+            set.items.forEach((item) => {
+                if (Array.isArray(item.previews) && item.previews.length > 0) {
+                    advancedCount += 1;
+                }
+            });
+        }
+    });
+
+    return { hasStandard, advancedCount };
+}
+
 function activate(el) {
     document.querySelectorAll('#sidebar-components .active').forEach(e => e.classList.remove('active'));
     if (el) el.classList.add('active');
@@ -829,14 +857,17 @@ function renderComponentsSidebar() {
         const catEl = document.createElement('div');
         catEl.className = 'tree-cat' + (total === 0 ? ' tree-cat-empty' : '');
 
+        const collapsed = isCollapsedCategory(cat);
         const header = document.createElement('div');
         header.className = 'tree-cat-header';
         const countHtml = total === 0
             ? '미구현'
-            : [
+            : collapsed
+            ? [
                 sidebarStats.hasStandard ? '<span class="tree-cat-badge standard">S</span>' : '',
                 sidebarStats.advancedCount > 0 ? `<span class="tree-cat-badge advanced">A-${sidebarStats.advancedCount}</span>` : '',
-            ].filter(Boolean).join('') || `${impl}/${total}`;
+            ].filter(Boolean).join('') || `${impl}/${total}`
+            : `${impl}/${total}`;
         header.innerHTML = `
             <span class="tree-cat-arrow">▶</span>
             <span class="tree-cat-name">${cat.name}</span>
@@ -857,7 +888,7 @@ function renderComponentsSidebar() {
             const childrenEl = document.createElement('div');
             childrenEl.className = 'tree-children';
 
-            if (isCollapsedCategory(cat)) {
+            if (collapsed) {
                 const comp = cat.components[0];
                 if ((comp.sets || []).length > 0) {
                     comp.sets.forEach((set, si) => {
@@ -894,12 +925,18 @@ function makeComponentNode(ci, compIdx, comp) {
 
     const hasSets = (comp.sets || []).length > 0;
     const implemented = isComponentImplemented(comp);
+    const sidebarStats = getComponentSidebarStats(comp);
+    const countHtml = [
+        sidebarStats.hasStandard ? '<span class="tree-cat-badge standard">S</span>' : '',
+        sidebarStats.advancedCount > 0 ? `<span class="tree-cat-badge advanced">A-${sidebarStats.advancedCount}</span>` : '',
+    ].filter(Boolean).join('');
 
     const header = document.createElement('div');
     header.className = 'tree-comp-header' + (implemented ? '' : ' unimplemented');
     header.innerHTML = `
         <span class="tree-cat-arrow">${hasSets ? '▶' : '·'}</span>
         <span class="tree-comp-name">${comp.name}</span>
+        <span class="tree-comp-count">${countHtml}</span>
     `;
     header.addEventListener('click', (ev) => {
         ev.stopPropagation();
