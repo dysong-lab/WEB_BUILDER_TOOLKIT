@@ -16,35 +16,35 @@ ListRenderMixin
 
 ### cssSelectors
 
-| KEY | VALUE | 용도 |
-|-----|-------|------|
-| menu      | `.fab-menu`                | 열림 상태(.is-open) 토글 대상 — 페이지가 참조 |
-| trigger   | `.fab-menu__trigger`       | FAB 트리거 — 토글 클릭 이벤트 매핑 |
-| container | `.fab-menu__list`          | 항목이 추가될 부모 (ListRenderMixin 규약) |
-| template  | `#fab-menu-item-template`  | cloneNode 대상 (ListRenderMixin 규약) |
-| item      | `.fab-menu__item`          | 렌더된 항목 — 클릭 이벤트 매핑 |
-| id        | `.fab-menu__item`          | 항목 식별 (data-id) |
-| icon      | `.fab-menu__item-icon`     | 아이콘 |
-| label     | `.fab-menu__item-label`    | 라벨 |
+| KEY       | VALUE                     | 용도                                          |
+| --------- | ------------------------- | --------------------------------------------- |
+| menu      | `.fab-menu`               | 열림 상태(.is-open) 토글 대상 — 페이지가 참조 |
+| trigger   | `.fab-menu__trigger`      | FAB 트리거 — 토글 클릭 이벤트 매핑            |
+| container | `.fab-menu__list`         | 항목이 추가될 부모 (ListRenderMixin 규약)     |
+| template  | `#fab-menu-item-template` | cloneNode 대상 (ListRenderMixin 규약)         |
+| item      | `.fab-menu__item`         | 렌더된 항목 — 클릭 이벤트 매핑                |
+| id        | `.fab-menu__item`         | 항목 식별 (data-id)                           |
+| icon      | `.fab-menu__item-icon`    | 아이콘                                        |
+| label     | `.fab-menu__item-label`   | 라벨                                          |
 
 ### datasetAttrs
 
 | KEY | VALUE |
-|-----|-------|
+| --- | ----- |
 | id  | id    |
 
 ### 구독 (subscriptions)
 
-| topic | handler |
-|-------|---------|
+| topic        | handler                      |
+| ------------ | ---------------------------- |
 | fabMenuItems | `this.listRender.renderData` |
 
 ### 이벤트 (customEvents)
 
-| 이벤트 | 선택자 (computed) | 발행 |
-|--------|------------------|------|
-| click | `trigger` (ListRenderMixin cssSelectors) | `@fabMenuToggled` |
-| click | `item` (ListRenderMixin cssSelectors)    | `@fabMenuItemClicked` |
+| 이벤트 | 선택자 (computed)                        | 발행                  |
+| ------ | ---------------------------------------- | --------------------- |
+| click  | `trigger` (ListRenderMixin cssSelectors) | `@fabMenuToggled`     |
+| click  | `item` (ListRenderMixin cssSelectors)    | `@fabMenuItemClicked` |
 
 ### 커스텀 메서드
 
@@ -64,9 +64,9 @@ ListRenderMixin
 
 ### 디자인 변형
 
-| 파일 | 페르소나 | 설명 |
-|------|---------|------|
+| 파일           | 페르소나             | 설명                                             |
+| -------------- | -------------------- | ------------------------------------------------ |
 | 01_refined     | A: Refined Technical | 다크, primary 그라데이션 FAB, 항목 카드형 리스트 |
-| 02_material    | B: Material Elevated | 라이트, surface container, elevation level 3 |
-| 03_editorial   | C: Minimal Editorial | 라이트, outline only, 간결한 타이포 |
-| 04_operational | D: Dark Operational  | 다크, 컴팩트, 시안 outline |
+| 02_material    | B: Material Elevated | 라이트, surface container, elevation level 3     |
+| 03_editorial   | C: Minimal Editorial | 라이트, outline only, 간결한 타이포              |
+| 04_operational | D: Dark Operational  | 다크, 컴팩트, 시안 outline                       |

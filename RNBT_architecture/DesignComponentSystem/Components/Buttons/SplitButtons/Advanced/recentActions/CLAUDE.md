@@ -27,79 +27,79 @@ FieldRenderMixin (메인 액션 버튼 라벨/아이콘) + ListRenderMixin (Rece
 
 #### FieldRenderMixin (`this.fieldRender`) — 메인 액션 버튼
 
-| KEY | VALUE | 용도 |
-|-----|-------|------|
-| action     | `.split-button__action`       | 메인 액션 버튼 — 이벤트 매핑 + actionId dataset 부착 |
-| actionIcon | `.split-button__action-icon`  | 메인 아이콘 (선택적) |
-| actionLabel| `.split-button__action-label` | 메인 라벨 |
+| KEY         | VALUE                         | 용도                                                 |
+| ----------- | ----------------------------- | ---------------------------------------------------- |
+| action      | `.split-button__action`       | 메인 액션 버튼 — 이벤트 매핑 + actionId dataset 부착 |
+| actionIcon  | `.split-button__action-icon`  | 메인 아이콘 (선택적)                                 |
+| actionLabel | `.split-button__action-label` | 메인 라벨                                            |
 
 #### ListRenderMixin (`this.listRender`) — Recent + 전체 메뉴 항목
 
-| KEY | VALUE | 용도 |
-|-----|-------|------|
-| container | `.split-button__menu-list`             | 항목이 추가될 부모 ul (규약) |
-| template  | `#split-button-recent-item-template`   | cloneNode 대상 (규약) |
-| item      | `.split-button__menu-item`             | 항목 식별 + 이벤트 매핑 |
-| actionId  | `.split-button__menu-item`             | data-action-id (항목 click 시 actionId 추출) |
-| isRecent  | `.split-button__menu-item`             | data-recent (Recent 항목 시각 분기) |
-| menuLabel | `.split-button__menu-label`            | 메뉴 항목 라벨 |
-| menuIcon  | `.split-button__menu-icon`             | 메뉴 항목 아이콘 (선택적) |
+| KEY       | VALUE                                | 용도                                         |
+| --------- | ------------------------------------ | -------------------------------------------- |
+| container | `.split-button__menu-list`           | 항목이 추가될 부모 ul (규약)                 |
+| template  | `#split-button-recent-item-template` | cloneNode 대상 (규약)                        |
+| item      | `.split-button__menu-item`           | 항목 식별 + 이벤트 매핑                      |
+| actionId  | `.split-button__menu-item`           | data-action-id (항목 click 시 actionId 추출) |
+| isRecent  | `.split-button__menu-item`           | data-recent (Recent 항목 시각 분기)          |
+| menuLabel | `.split-button__menu-label`          | 메뉴 항목 라벨                               |
+| menuIcon  | `.split-button__menu-icon`           | 메뉴 항목 아이콘 (선택적)                    |
 
 #### datasetAttrs (ListRender)
 
-| KEY | data-* | 용도 |
-|-----|--------|------|
+| KEY      | data-\*     | 용도                                                                               |
+| -------- | ----------- | ---------------------------------------------------------------------------------- |
 | actionId | `action-id` | 항목 click 시 `event.target.closest('.split-button__menu-item')?.dataset.actionId` |
-| isRecent | `recent`    | `data-recent="true"` Recent 항목 CSS 시각 분기 |
+| isRecent | `recent`    | `data-recent="true"` Recent 항목 CSS 시각 분기                                     |
 
 #### 사용자 정의 (cssSelectors 외부)
 
-| KEY | VALUE | 용도 |
-|-----|-------|------|
-| trigger | `.split-button__trigger` | 메뉴 토글 트레일링 버튼 — 이벤트 매핑 전용 |
-| menuRoot| `.split-button`          | `data-menu-state` 토글 루트 |
-| recentLabel | `.split-button__recent-label` | Recent 섹션 라벨 (정적) — recent 0개 시 CSS로 숨김 |
+| KEY           | VALUE                           | 용도                                                        |
+| ------------- | ------------------------------- | ----------------------------------------------------------- |
+| trigger       | `.split-button__trigger`        | 메뉴 토글 트레일링 버튼 — 이벤트 매핑 전용                  |
+| menuRoot      | `.split-button`                 | `data-menu-state` 토글 루트                                 |
+| recentLabel   | `.split-button__recent-label`   | Recent 섹션 라벨 (정적) — recent 0개 시 CSS로 숨김          |
 | recentDivider | `.split-button__recent-divider` | Recent와 전체 사이 구분선 (정적) — recent 0개 시 CSS로 숨김 |
 
 ### 인스턴스 옵션 / 상태
 
-| 키 | 설명 |
-|----|------|
-| `recentStorageKey` | localStorage key suffix (기본: `instance.id`). 페이지가 옵션으로 재정의 가능. 같은 페이지에 여러 SplitButton 인스턴스가 있을 때 격리에 사용. |
-| `recentLimit`      | 표시할 recent 항목 수 (기본: 3) |
-| `_isOpen`          | 메뉴 펼침 상태(boolean) |
-| `_lastMenuItems`   | 가장 최근에 받은 menuItems 배열 — 메뉴 토글 시 재렌더용 cache |
-| `_recentActionsMem`| localStorage 실패 시 in-memory fallback 배열 |
-| `_outsideClickHandler` / `_escKeyHandler` | bound handler 참조 (beforeDestroy detach용) |
+| 키                                        | 설명                                                                                                                                         |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `recentStorageKey`                        | localStorage key suffix (기본: `instance.id`). 페이지가 옵션으로 재정의 가능. 같은 페이지에 여러 SplitButton 인스턴스가 있을 때 격리에 사용. |
+| `recentLimit`                             | 표시할 recent 항목 수 (기본: 3)                                                                                                              |
+| `_isOpen`                                 | 메뉴 펼침 상태(boolean)                                                                                                                      |
+| `_lastMenuItems`                          | 가장 최근에 받은 menuItems 배열 — 메뉴 토글 시 재렌더용 cache                                                                                |
+| `_recentActionsMem`                       | localStorage 실패 시 in-memory fallback 배열                                                                                                 |
+| `_outsideClickHandler` / `_escKeyHandler` | bound handler 참조 (beforeDestroy detach용)                                                                                                  |
 
 ### 구독 (subscriptions)
 
-| topic | handler |
-|-------|---------|
+| topic             | handler                                                          |
+| ----------------- | ---------------------------------------------------------------- |
 | `splitButtonInfo` | `this._renderWithRecent` (페이로드: `{ mainAction, menuItems }`) |
 
 ### 이벤트 (customEvents)
 
-| 이벤트 | 선택자 (computed) | 발행 | payload |
-|--------|------------------|------|---------|
-| click | `action` (FieldRender)           | `@splitMainClicked`     | (페이지가 `event.target.closest('.split-button__action')?.dataset.actionId` 추출) |
-| click | `.split-button__trigger`         | `@splitMenuToggled`     | — |
-| click | `item` (ListRender)              | `@splitMenuItemClicked` | (페이지가 `event.target.closest('.split-button__menu-item')?.dataset.actionId` + `dataset.recent` 추출) |
+| 이벤트 | 선택자 (computed)        | 발행                    | payload                                                                                                 |
+| ------ | ------------------------ | ----------------------- | ------------------------------------------------------------------------------------------------------- |
+| click  | `action` (FieldRender)   | `@splitMainClicked`     | (페이지가 `event.target.closest('.split-button__action')?.dataset.actionId` 추출)                       |
+| click  | `.split-button__trigger` | `@splitMenuToggled`     | —                                                                                                       |
+| click  | `item` (ListRender)      | `@splitMenuItemClicked` | (페이지가 `event.target.closest('.split-button__menu-item')?.dataset.actionId` + `dataset.recent` 추출) |
 
 > 메인 버튼의 `actionId`는 `_renderWithRecent`가 `mainAction.id`를 메인 버튼 element의 `data-action-id`로 직접 부착(FieldRender의 datasetAttrs로 매핑할 수도 있으나 단일 객체이므로 직접 부착이 단순). 항목 클릭의 fromRecent 분기는 페이지 핸들러가 `dataset.recent === 'true'`로 판별.
 
 ### 커스텀 메서드
 
-| 메서드 | 설명 |
-|--------|------|
-| `_loadRecent()` | localStorage에서 `splitButton_recentActions_<storageKey>` 읽기. JSON parse 실패/접근 실패 시 `this._recentActionsMem` 반환. 항상 array 반환(빈 배열 fallback). |
-| `_saveRecent(actionId)` | actionId를 recent 배열의 맨 앞에 unshift, 중복 제거, 상한 10개 truncate. localStorage 쓰기 시도, 실패 시 `this._recentActionsMem`에만 저장. |
+| 메서드                            | 설명                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `_loadRecent()`                   | localStorage에서 `splitButton_recentActions_<storageKey>` 읽기. JSON parse 실패/접근 실패 시 `this._recentActionsMem` 반환. 항상 array 반환(빈 배열 fallback).                                                                                                                                                                                                                                                                                                                                                                    |
+| `_saveRecent(actionId)`           | actionId를 recent 배열의 맨 앞에 unshift, 중복 제거, 상한 10개 truncate. localStorage 쓰기 시도, 실패 시 `this._recentActionsMem`에만 저장.                                                                                                                                                                                                                                                                                                                                                                                       |
 | `_renderWithRecent({ response })` | `splitButtonInfo` 핸들러. ① `mainAction`을 `fieldRender.renderData`로 메인 버튼에 렌더 + 메인 버튼 element의 `dataset.actionId = mainAction.id` 부착, ② `this._lastMenuItems = menuItems` cache, ③ recent 배열을 `_loadRecent`로 읽어 menuItems와 join하여 단일 배열 `[{ actionId, label, icon, isRecent }]` 생성(recent 항목 N개 + 전체 menuItems), ④ `listRender.renderData({ response: merged })` 호출, ⑤ recent 0개면 `.split-button__recent-label` / `.split-button__recent-divider`에 `data-empty="true"` 부착(CSS로 숨김). |
-| `_handleMenuItemClick(e)` | bindEvents가 `@splitMenuItemClicked`를 먼저 발행한 후 본 핸들러는 ① 클릭된 항목의 `dataset.actionId`로 `_saveRecent(actionId)`, ② `_close()`. |
-| `_handleTriggerClick(e)` | bindEvents가 `@splitMenuToggled`를 먼저 발행한 후 본 핸들러는 `_isOpen` 토글. open 직전에 `_renderWithRecent({ response: { mainAction: <prev>, menuItems: this._lastMenuItems } })`로 최신 recent로 재렌더. |
-| `_handleOutsideClick(e)` | document capture click. `_isOpen=true`이고 `appendElement.contains(e.target)`가 false면 `_close()`. |
-| `_handleEscKey(e)` | document keydown. `_isOpen=true`이고 `e.key === 'Escape'`면 `_close()`. |
-| `_open()` / `_close()` | `_isOpen` 갱신 + `.split-button` 루트의 `dataset.menuState = 'open'\|'closed'`. |
+| `_handleMenuItemClick(e)`         | bindEvents가 `@splitMenuItemClicked`를 먼저 발행한 후 본 핸들러는 ① 클릭된 항목의 `dataset.actionId`로 `_saveRecent(actionId)`, ② `_close()`.                                                                                                                                                                                                                                                                                                                                                                                     |
+| `_handleTriggerClick(e)`          | bindEvents가 `@splitMenuToggled`를 먼저 발행한 후 본 핸들러는 `_isOpen` 토글. open 직전에 `_renderWithRecent({ response: { mainAction: <prev>, menuItems: this._lastMenuItems } })`로 최신 recent로 재렌더.                                                                                                                                                                                                                                                                                                                       |
+| `_handleOutsideClick(e)`          | document capture click. `_isOpen=true`이고 `appendElement.contains(e.target)`가 false면 `_close()`.                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| `_handleEscKey(e)`                | document keydown. `_isOpen=true`이고 `e.key === 'Escape'`면 `_close()`.                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `_open()` / `_close()`            | `_isOpen` 갱신 + `.split-button` 루트의 `dataset.menuState = 'open'\|'closed'`.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 
 ### 페이지 연결 사례
 
@@ -152,11 +152,11 @@ FieldRenderMixin (메인 액션 버튼 라벨/아이콘) + ListRenderMixin (Rece
 
 ## 디자인 변형
 
-| 파일 | 페르소나 | Recent 시각 차별화 방식 | 도메인 예 |
-|------|---------|------------------------|----------|
-| `01_refined`     | A: Refined Technical | Recent 섹션: 좌측 ★ 별 아이콘 + accent 퍼플 라벨 + Pretendard semibold | 자주 쓰는 공유 액션 (Email/Embed/Archive) |
+| 파일             | 페르소나             | Recent 시각 차별화 방식                                                                  | 도메인 예                                        |
+| ---------------- | -------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| `01_refined`     | A: Refined Technical | Recent 섹션: 좌측 ★ 별 아이콘 + accent 퍼플 라벨 + Pretendard semibold                   | 자주 쓰는 공유 액션 (Email/Embed/Archive)        |
 | `02_material`    | B: Material Elevated | Recent 섹션: secondary container surface(라이트 블루 tint) + 시계 아이콘 + Roboto medium | 자주 쓰는 작성 액션 (문서/스프레드시트/슬라이드) |
-| `03_editorial`   | C: Minimal Editorial | Recent 섹션: italic Georgia + "Recent" 라벨 small caps + 좌측 vertical rule | 자주 쓰는 편집 액션 (서식/주석/공유) |
-| `04_operational` | D: Dark Operational  | Recent 섹션: 시안 ring border + 빈도 카운트 표시(`#1`, `#2` 등 인덱스) + JetBrains Mono | 자주 쓰는 운영 명령 (RUN/STOP/RESTART) |
+| `03_editorial`   | C: Minimal Editorial | Recent 섹션: italic Georgia + "Recent" 라벨 small caps + 좌측 vertical rule              | 자주 쓰는 편집 액션 (서식/주석/공유)             |
+| `04_operational` | D: Dark Operational  | Recent 섹션: 시안 ring border + 빈도 카운트 표시(`#1`, `#2` 등 인덱스) + JetBrains Mono  | 자주 쓰는 운영 명령 (RUN/STOP/RESTART)           |
 
 각 페르소나는 페르소나 프로파일(produce-component SKILL Step 5-1)을 따르며, Recent 섹션의 시각 차별화는 일반 메뉴 항목과 식별 가능하면서도 페르소나의 톤을 깨지 않는 범위에서 적용된다.

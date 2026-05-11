@@ -1,1 +1,123 @@
-const { subscribe } = GlobalDataPublisher;const { each,go } = fx;applyFieldRenderMixin(this,{cssSelectors:{button:".button",label:".button__label",icon:".button__icon"}});this._confirmationState="idle";this._confirmTimeoutMs=4000;this._confirmTimer=null;this._progressRaf=null;this._confirmStartedAt=0;this._idleLabel="";this._confirmLabel="Confirm?";this._buttonEl=null;this._labelEl=null;this._renderButtonInfo=function({response:data}={}){this._buttonEl=this.appendElement.querySelector(this.fieldRender.cssSelectors.button);this._labelEl=this.appendElement.querySelector(this.fieldRender.cssSelectors.label);if(!this._buttonEl||!this._labelEl||!data)return;this._idleLabel=data.label==null?"":String(data.label);this._confirmLabel=data.confirmLabel==null?"Confirm?":String(data.confirmLabel);this.fieldRender.renderData({response:{label:this._confirmationState==="confirming"?this._confirmLabel:this._idleLabel,icon:data.icon==null?"":String(data.icon)}});this._buttonEl.setAttribute("aria-label",this._confirmationState==="confirming"?this._confirmLabel:this._idleLabel)};this._tickProgress=()=>{if(this._confirmationState!=="confirming"||!this._buttonEl)return;const progress=Math.min(1,(performance.now()-this._confirmStartedAt)/this._confirmTimeoutMs);this._buttonEl.style.setProperty("--confirmation-progress",String(progress));if(progress<1)this._progressRaf=requestAnimationFrame(this._tickProgress)};this._exitToIdle=({fire=false,reason=null}={})=>{clearTimeout(this._confirmTimer);cancelAnimationFrame(this._progressRaf);this._confirmTimer=null;this._progressRaf=null;this._confirmationState="idle";if(this._buttonEl){this._buttonEl.dataset.confirmationState="idle";this._buttonEl.style.setProperty("--confirmation-progress","0")}if(this._labelEl)this._labelEl.textContent=this._idleLabel;if(fire){Weventbus.emit("@buttonClicked",{targetInstance:this});return}if(reason){Weventbus.emit("@confirmationCancelled",{targetInstance:this,reason})}};this._enterConfirming=()=>{if(!this._buttonEl||!this._labelEl)return;this._confirmationState="confirming";this._buttonEl.dataset.confirmationState="confirming";this._labelEl.textContent=this._confirmLabel;this._confirmStartedAt=performance.now();this._buttonEl.style.setProperty("--confirmation-progress","0");this._confirmTimer=setTimeout(()=>this._exitToIdle({reason:"timeout"}),this._confirmTimeoutMs);this._progressRaf=requestAnimationFrame(this._tickProgress);Weventbus.emit("@confirmationNeeded",{targetInstance:this,timeoutMs:this._confirmTimeoutMs})};this._handleButtonClick=()=>{if(this._confirmationState==="idle"){this._enterConfirming();return}this._exitToIdle({fire:true})};this._handleExternalCancel=()=>{if(this._confirmationState!=="confirming")return;this._exitToIdle({reason:"external"})};this.subscriptions={buttonInfo:[this._renderButtonInfo],confirmationCancel:[this._handleExternalCancel]};go(Object.entries(this.subscriptions),each(([topic,handlers])=>each((handler)=>subscribe(topic,this,handler),handlers)));this._buttonEl=this.appendElement.querySelector(this.fieldRender.cssSelectors.button);this._labelEl=this.appendElement.querySelector(this.fieldRender.cssSelectors.label);this._clickHandler=this._handleButtonClick.bind(this);if(this._buttonEl){this._buttonEl.dataset.confirmationState="idle";this._buttonEl.addEventListener("click",this._clickHandler)}
+const { subscribe } = GlobalDataPublisher;
+const { each, go } = fx;
+applyFieldRenderMixin(this, {
+  cssSelectors: {
+    button: ".button",
+    label: ".button__label",
+    icon: ".button__icon",
+  },
+});
+this._confirmationState = "idle";
+this._confirmTimeoutMs = 4000;
+this._confirmTimer = null;
+this._progressRaf = null;
+this._confirmStartedAt = 0;
+this._idleLabel = "";
+this._confirmLabel = "Confirm?";
+this._buttonEl = null;
+this._labelEl = null;
+this._renderButtonInfo = function ({ response: data } = {}) {
+  this._buttonEl = this.appendElement.querySelector(
+    this.fieldRender.cssSelectors.button,
+  );
+  this._labelEl = this.appendElement.querySelector(
+    this.fieldRender.cssSelectors.label,
+  );
+  if (!this._buttonEl || !this._labelEl || !data) return;
+  this._idleLabel = data.label == null ? "" : String(data.label);
+  this._confirmLabel =
+    data.confirmLabel == null ? "Confirm?" : String(data.confirmLabel);
+  this.fieldRender.renderData({
+    response: {
+      label:
+        this._confirmationState === "confirming"
+          ? this._confirmLabel
+          : this._idleLabel,
+      icon: data.icon == null ? "" : String(data.icon),
+    },
+  });
+  this._buttonEl.setAttribute(
+    "aria-label",
+    this._confirmationState === "confirming"
+      ? this._confirmLabel
+      : this._idleLabel,
+  );
+};
+this._tickProgress = () => {
+  if (this._confirmationState !== "confirming" || !this._buttonEl) return;
+  const progress = Math.min(
+    1,
+    (performance.now() - this._confirmStartedAt) / this._confirmTimeoutMs,
+  );
+  this._buttonEl.style.setProperty("--confirmation-progress", String(progress));
+  if (progress < 1)
+    this._progressRaf = requestAnimationFrame(this._tickProgress);
+};
+this._exitToIdle = ({ fire = false, reason = null } = {}) => {
+  clearTimeout(this._confirmTimer);
+  cancelAnimationFrame(this._progressRaf);
+  this._confirmTimer = null;
+  this._progressRaf = null;
+  this._confirmationState = "idle";
+  if (this._buttonEl) {
+    this._buttonEl.dataset.confirmationState = "idle";
+    this._buttonEl.style.setProperty("--confirmation-progress", "0");
+  }
+  if (this._labelEl) this._labelEl.textContent = this._idleLabel;
+  if (fire) {
+    Weventbus.emit("@buttonClicked", { targetInstance: this });
+    return;
+  }
+  if (reason) {
+    Weventbus.emit("@confirmationCancelled", { targetInstance: this, reason });
+  }
+};
+this._enterConfirming = () => {
+  if (!this._buttonEl || !this._labelEl) return;
+  this._confirmationState = "confirming";
+  this._buttonEl.dataset.confirmationState = "confirming";
+  this._labelEl.textContent = this._confirmLabel;
+  this._confirmStartedAt = performance.now();
+  this._buttonEl.style.setProperty("--confirmation-progress", "0");
+  this._confirmTimer = setTimeout(
+    () => this._exitToIdle({ reason: "timeout" }),
+    this._confirmTimeoutMs,
+  );
+  this._progressRaf = requestAnimationFrame(this._tickProgress);
+  Weventbus.emit("@confirmationNeeded", {
+    targetInstance: this,
+    timeoutMs: this._confirmTimeoutMs,
+  });
+};
+this._handleButtonClick = () => {
+  if (this._confirmationState === "idle") {
+    this._enterConfirming();
+    return;
+  }
+  this._exitToIdle({ fire: true });
+};
+this._handleExternalCancel = () => {
+  if (this._confirmationState !== "confirming") return;
+  this._exitToIdle({ reason: "external" });
+};
+this.subscriptions = {
+  buttonInfo: [this._renderButtonInfo],
+  confirmationCancel: [this._handleExternalCancel],
+};
+go(
+  Object.entries(this.subscriptions),
+  each(([topic, handlers]) =>
+    each((handler) => subscribe(topic, this, handler), handlers),
+  ),
+);
+this._buttonEl = this.appendElement.querySelector(
+  this.fieldRender.cssSelectors.button,
+);
+this._labelEl = this.appendElement.querySelector(
+  this.fieldRender.cssSelectors.label,
+);
+this._clickHandler = this._handleButtonClick.bind(this);
+if (this._buttonEl) {
+  this._buttonEl.dataset.confirmationState = "idle";
+  this._buttonEl.addEventListener("click", this._clickHandler);
+}

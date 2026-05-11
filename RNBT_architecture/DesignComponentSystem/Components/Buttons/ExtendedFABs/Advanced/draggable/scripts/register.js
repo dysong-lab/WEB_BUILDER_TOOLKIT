@@ -22,7 +22,9 @@ this._isDraggingDetected = false;
 this._fabEl = null;
 
 this.renderExtendedFabInfo = function ({ response: data } = {}) {
-  const fab = this.appendElement.querySelector(this.fieldRender.cssSelectors.extendedFab);
+  const fab = this.appendElement.querySelector(
+    this.fieldRender.cssSelectors.extendedFab,
+  );
   if (!fab || !data) return;
 
   this.fieldRender.renderData({
@@ -70,7 +72,9 @@ this._handlePointerDown = function (event) {
   if (event.pointerType === "mouse" && event.button !== 0) return;
   if (this._isPointerDown) return;
 
-  this._fabEl = this.appendElement.querySelector(this.fieldRender.cssSelectors.extendedFab);
+  this._fabEl = this.appendElement.querySelector(
+    this.fieldRender.cssSelectors.extendedFab,
+  );
   if (!this._fabEl) return;
 
   this._isPointerDown = true;
@@ -100,7 +104,10 @@ this._handlePointerMove = function (event) {
     this._fabEl.dataset.dragState = "dragging";
   }
 
-  const nextPosition = this._clampPosition(this._originX + dx, this._originY + dy);
+  const nextPosition = this._clampPosition(
+    this._originX + dx,
+    this._originY + dy,
+  );
   this._x = nextPosition.x;
   this._y = nextPosition.y;
   this._applyTransform();
@@ -166,7 +173,9 @@ this.customEvents = {
 };
 bindEvents(this, this.customEvents);
 
-this._fabEl = this.appendElement.querySelector(this.fieldRender.cssSelectors.extendedFab);
+this._fabEl = this.appendElement.querySelector(
+  this.fieldRender.cssSelectors.extendedFab,
+);
 this._pointerDownHandler = this._handlePointerDown.bind(this);
 this._pointerMoveHandler = this._handlePointerMove.bind(this);
 this._pointerUpHandler = this._handlePointerUp.bind(this);

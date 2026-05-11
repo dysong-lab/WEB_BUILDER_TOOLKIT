@@ -1,1 +1,134 @@
-@import "../../../_shared/semantic-status.css";.split-button-shell{display:inline-flex;padding:28px;border-radius:28px;background:radial-gradient(circle at top,rgba(0,229,255,.16),transparent 38%),linear-gradient(180deg,#091114 0%,#05090b 100%)}.split-button{position:relative;display:grid;grid-template-columns:auto 46px;align-items:stretch}.split-button__action,.split-button__trigger,.split-button__menu-item{border:1px solid rgba(0,229,255,.32);cursor:pointer}.split-button__action,.split-button__trigger{min-height:42px;background:linear-gradient(180deg,rgba(7,34,39,.96) 0%,rgba(4,18,22,.96) 100%);color:#bfffff}.split-button__action{display:inline-flex;align-items:center;gap:10px;padding:0 18px;border-right:0;border-radius:12px 0 0 12px;font:600 13px/1 "JetBrains Mono","IBM Plex Mono",monospace}.split-button__action-icon,.split-button__trigger-icon,.split-button__menu-icon,.split-button__recent-star{font-size:18px;line-height:1}.split-button__trigger{border-radius:0 12px 12px 0}.split-button__menu-panel{position:absolute;top:52px;right:0;min-width:256px;padding:14px;border-radius:16px;background:rgba(4,14,18,.98);border:1px solid rgba(0,229,255,.18);box-shadow:0 24px 60px rgba(0,0,0,.38);opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-6px);transition:opacity 180ms ease,transform 180ms ease,visibility 180ms ease}.split-button[data-menu-state="open"] .split-button__menu-panel{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)}.split-button__recent-label{display:flex;align-items:center;gap:8px;margin-bottom:10px;color:#87f4ff;font:600 11px/1 "JetBrains Mono","IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase}.split-button__recent-divider{height:1px;margin-bottom:10px;background:linear-gradient(90deg,rgba(0,229,255,.28),rgba(0,229,255,0))}.split-button__recent-label[data-empty="true"],.split-button__recent-divider[data-empty="true"]{display:none}.split-button__menu-list{display:flex;flex-direction:column;gap:8px}.split-button__menu-item{display:grid;grid-template-columns:18px 1fr auto;align-items:center;gap:10px;min-height:40px;padding:0 14px;border-radius:10px;background:rgba(5,35,40,.92);color:#7deeff;font:500 12px/1 "JetBrains Mono","IBM Plex Mono",monospace;text-align:left}.split-button__menu-item[data-recent="true"]{box-shadow:inset 0 0 0 1px rgba(0,229,255,.3)}.split-button__menu-meta{color:#52ddeb}.split-button__menu-meta:empty{display:none}
+@import "../../../_shared/semantic-status.css";
+.split-button-shell {
+  display: inline-flex;
+  padding: 28px;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at top, rgba(0, 229, 255, 0.16), transparent 38%),
+    linear-gradient(180deg, #091114 0%, #05090b 100%);
+}
+.split-button {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 46px;
+  align-items: stretch;
+}
+.split-button__action,
+.split-button__trigger,
+.split-button__menu-item {
+  border: 1px solid rgba(0, 229, 255, 0.32);
+  cursor: pointer;
+}
+.split-button__action,
+.split-button__trigger {
+  min-height: 42px;
+  background: linear-gradient(
+    180deg,
+    rgba(7, 34, 39, 0.96) 0%,
+    rgba(4, 18, 22, 0.96) 100%
+  );
+  color: #bfffff;
+}
+.split-button__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 18px;
+  border-right: 0;
+  border-radius: 12px 0 0 12px;
+  font:
+    600 13px/1 "JetBrains Mono",
+    "IBM Plex Mono",
+    monospace;
+}
+.split-button__action-icon,
+.split-button__trigger-icon,
+.split-button__menu-icon,
+.split-button__recent-star {
+  font-size: 18px;
+  line-height: 1;
+}
+.split-button__trigger {
+  border-radius: 0 12px 12px 0;
+}
+.split-button__menu-panel {
+  position: absolute;
+  top: 52px;
+  right: 0;
+  min-width: 256px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(4, 14, 18, 0.98);
+  border: 1px solid rgba(0, 229, 255, 0.18);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.38);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-6px);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease,
+    visibility 180ms ease;
+}
+.split-button[data-menu-state="open"] .split-button__menu-panel {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+.split-button__recent-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  color: #87f4ff;
+  font:
+    600 11px/1 "JetBrains Mono",
+    "IBM Plex Mono",
+    monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.split-button__recent-divider {
+  height: 1px;
+  margin-bottom: 10px;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 229, 255, 0.28),
+    rgba(0, 229, 255, 0)
+  );
+}
+.split-button__recent-label[data-empty="true"],
+.split-button__recent-divider[data-empty="true"] {
+  display: none;
+}
+.split-button__menu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.split-button__menu-item {
+  display: grid;
+  grid-template-columns: 18px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 10px;
+  background: rgba(5, 35, 40, 0.92);
+  color: #7deeff;
+  font:
+    500 12px/1 "JetBrains Mono",
+    "IBM Plex Mono",
+    monospace;
+  text-align: left;
+}
+.split-button__menu-item[data-recent="true"] {
+  box-shadow: inset 0 0 0 1px rgba(0, 229, 255, 0.3);
+}
+.split-button__menu-meta {
+  color: #52ddeb;
+}
+.split-button__menu-meta:empty {
+  display: none;
+}

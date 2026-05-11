@@ -31,7 +31,9 @@ this._escKeyHandler = null;
 this._containerClickHandler = null;
 
 this.renderFabInfo = function ({ response: data } = {}) {
-  const fab = this.appendElement.querySelector(this.fieldRender.cssSelectors.fab);
+  const fab = this.appendElement.querySelector(
+    this.fieldRender.cssSelectors.fab,
+  );
   if (!fab || !data) return;
 
   this.fieldRender.renderData({
@@ -46,7 +48,8 @@ this.renderFabInfo = function ({ response: data } = {}) {
         ? ""
         : String(data.icon)
       : String(data.ariaLabel);
-  const nextSize = data.size === "medium" || data.size === "large" ? data.size : "fab";
+  const nextSize =
+    data.size === "medium" || data.size === "large" ? data.size : "fab";
 
   fab.setAttribute("aria-label", nextAria);
   fab.dataset.size = nextSize;
@@ -68,7 +71,8 @@ this.renderSpeedDialItems = function ({ response } = {}) {
   const items = Array.isArray(response) ? response : [];
   this.listRender.renderData({
     response: items.map((item) => ({
-      actionId: item.actionId == null ? String(item.id ?? "") : String(item.actionId),
+      actionId:
+        item.actionId == null ? String(item.id ?? "") : String(item.actionId),
       icon: item.icon == null ? "" : String(item.icon),
       label: item.label == null ? "" : String(item.label),
     })),
@@ -91,14 +95,19 @@ this._close = function () {
 this._applyRadialAngles = function () {
   if (!this._radialOptions) return;
 
-  const items = [...this.appendElement.querySelectorAll(this.listRender.cssSelectors.item)];
+  const items = [
+    ...this.appendElement.querySelectorAll(this.listRender.cssSelectors.item),
+  ];
   if (items.length === 0) return;
 
   const { radius, startAngle, endAngle } = this._radialOptions;
   const range = endAngle - startAngle;
 
   items.forEach((item, index) => {
-    const angle = items.length === 1 ? startAngle + range / 2 : startAngle + (range * index) / (items.length - 1);
+    const angle =
+      items.length === 1
+        ? startAngle + range / 2
+        : startAngle + (range * index) / (items.length - 1);
     const rad = (angle * Math.PI) / 180;
     const x = Math.cos(rad) * radius;
     const y = Math.sin(rad) * radius;

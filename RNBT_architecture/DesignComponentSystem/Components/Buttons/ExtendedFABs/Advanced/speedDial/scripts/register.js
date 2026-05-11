@@ -32,7 +32,9 @@ this._mainClickHandler = null;
 this._itemClickHandler = null;
 
 this.renderExtendedFabInfo = function ({ response: data } = {}) {
-  const fab = this.appendElement.querySelector(this.fieldRender.cssSelectors.extendedFab);
+  const fab = this.appendElement.querySelector(
+    this.fieldRender.cssSelectors.extendedFab,
+  );
   if (!fab || !data) return;
 
   this.fieldRender.renderData({
@@ -60,7 +62,8 @@ this.renderSpeedDialItems = function ({ response } = {}) {
   const items = Array.isArray(response) ? response : [];
   this.listRender.renderData({
     response: items.map((item) => ({
-      actionId: item.actionId == null ? String(item.id ?? "") : String(item.actionId),
+      actionId:
+        item.actionId == null ? String(item.id ?? "") : String(item.actionId),
       icon: item.icon == null ? "" : String(item.icon),
       label: item.label == null ? "" : String(item.label),
     })),

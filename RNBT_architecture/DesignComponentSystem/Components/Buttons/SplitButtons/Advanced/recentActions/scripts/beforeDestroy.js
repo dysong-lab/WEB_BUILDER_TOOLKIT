@@ -1,1 +1,19 @@
-const { unsubscribe } = GlobalDataPublisher;const { each, go } = fx;this.appendElement.removeEventListener("click",this._rootClickHandler);document.removeEventListener("click",this._outsideClickHandler,true);document.removeEventListener("keydown",this._escKeyHandler);go(Object.entries(this.subscriptions||{}),each(([topic,_])=>unsubscribe(topic,this)));this.subscriptions=null;if(this.fieldRender)this.fieldRender.destroy();if(this.listRender)this.listRender.destroy();this._rootEl=null;this._actionEl=null;this._recentLabelEl=null;this._recentDividerEl=null;this._rootClickHandler=null;this._outsideClickHandler=null;this._escKeyHandler=null;
+const { unsubscribe } = GlobalDataPublisher;
+const { each, go } = fx;
+this.appendElement.removeEventListener("click", this._rootClickHandler);
+document.removeEventListener("click", this._outsideClickHandler, true);
+document.removeEventListener("keydown", this._escKeyHandler);
+go(
+  Object.entries(this.subscriptions || {}),
+  each(([topic, _]) => unsubscribe(topic, this)),
+);
+this.subscriptions = null;
+if (this.fieldRender) this.fieldRender.destroy();
+if (this.listRender) this.listRender.destroy();
+this._rootEl = null;
+this._actionEl = null;
+this._recentLabelEl = null;
+this._recentDividerEl = null;
+this._rootClickHandler = null;
+this._outsideClickHandler = null;
+this._escKeyHandler = null;

@@ -21,7 +21,9 @@ this._isDraggingDetected = false;
 this._fabEl = null;
 
 this.renderFabInfo = function ({ response: data } = {}) {
-  const fab = this.appendElement.querySelector(this.fieldRender.cssSelectors.fab);
+  const fab = this.appendElement.querySelector(
+    this.fieldRender.cssSelectors.fab,
+  );
   if (!fab || !data) return;
 
   this.fieldRender.renderData({
@@ -36,7 +38,8 @@ this.renderFabInfo = function ({ response: data } = {}) {
         ? ""
         : String(data.icon)
       : String(data.ariaLabel);
-  const nextSize = data.size === "medium" || data.size === "large" ? data.size : "fab";
+  const nextSize =
+    data.size === "medium" || data.size === "large" ? data.size : "fab";
 
   fab.setAttribute("aria-label", nextAria);
   fab.dataset.size = nextSize;
@@ -67,7 +70,9 @@ this._handlePointerDown = function (event) {
   if (event.pointerType === "mouse" && event.button !== 0) return;
   if (this._isPointerDown) return;
 
-  this._fabEl = this.appendElement.querySelector(this.fieldRender.cssSelectors.fab);
+  this._fabEl = this.appendElement.querySelector(
+    this.fieldRender.cssSelectors.fab,
+  );
   if (!this._fabEl) return;
 
   this._isPointerDown = true;
@@ -97,7 +102,10 @@ this._handlePointerMove = function (event) {
     this._fabEl.dataset.dragState = "dragging";
   }
 
-  const nextPosition = this._clampPosition(this._originX + dx, this._originY + dy);
+  const nextPosition = this._clampPosition(
+    this._originX + dx,
+    this._originY + dy,
+  );
   this._x = nextPosition.x;
   this._y = nextPosition.y;
   this._applyTransform();
@@ -161,7 +169,9 @@ this.customEvents = {
 };
 bindEvents(this, this.customEvents);
 
-this._fabEl = this.appendElement.querySelector(this.fieldRender.cssSelectors.fab);
+this._fabEl = this.appendElement.querySelector(
+  this.fieldRender.cssSelectors.fab,
+);
 this._pointerDownHandler = this._handlePointerDown.bind(this);
 this._pointerMoveHandler = this._handlePointerMove.bind(this);
 this._pointerUpHandler = this._handlePointerUp.bind(this);

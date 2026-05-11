@@ -29,7 +29,10 @@
   touch-action: none;
   user-select: none;
   will-change: transform;
-  transition: box-shadow 180ms ease, background 180ms ease, transform 180ms ease;
+  transition:
+    box-shadow 180ms ease,
+    background 180ms ease,
+    transform 180ms ease;
 }
 
 .fab[data-size="medium"] {
@@ -53,10 +56,17 @@
 
 .fab-draggable-shell--material .fab-draggable-stage {
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.9)),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.72),
+      rgba(255, 255, 255, 0.9)
+    ),
     linear-gradient(90deg, rgba(122, 108, 89, 0.08) 1px, transparent 1px),
     linear-gradient(0deg, rgba(122, 108, 89, 0.08) 1px, transparent 1px);
-  background-size: auto, 28px 28px, 28px 28px;
+  background-size:
+    auto,
+    28px 28px,
+    28px 28px;
   border: 1px solid rgba(145, 132, 114, 0.14);
 }
 

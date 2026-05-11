@@ -15,10 +15,17 @@
   overflow: hidden;
   border-radius: 22px;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0.2)),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.52),
+      rgba(255, 255, 255, 0.2)
+    ),
     linear-gradient(90deg, rgba(108, 132, 170, 0.08) 1px, transparent 1px),
     linear-gradient(0deg, rgba(108, 132, 170, 0.08) 1px, transparent 1px);
-  background-size: auto, 28px 28px, 28px 28px;
+  background-size:
+    auto,
+    28px 28px,
+    28px 28px;
   border: 1px solid rgba(163, 177, 198, 0.32);
 }
 
@@ -39,7 +46,9 @@
   touch-action: none;
   user-select: none;
   will-change: transform;
-  transition: box-shadow 180ms ease, background 180ms ease;
+  transition:
+    box-shadow 180ms ease,
+    background 180ms ease;
   box-shadow: 0 8px 18px rgba(101, 124, 157, 0.22);
 }
 
@@ -64,4 +73,9 @@
   font-size: 20px;
   background: rgba(56, 90, 128, 0.1);
 }
-.extended-fab__label { font: 500 15px/1 "Roboto", sans-serif; white-space: nowrap; }
+.extended-fab__label {
+  font:
+    500 15px/1 "Roboto",
+    sans-serif;
+  white-space: nowrap;
+}

@@ -29,60 +29,60 @@ FieldRenderMixin (메인 FAB 라벨/아이콘 렌더) + ListRenderMixin (보조 
 
 #### FieldRenderMixin (메인 FAB)
 
-| KEY | VALUE | 용도 |
-|-----|-------|------|
-| extendedFab | `.extended-fab` | 메인 FAB 컨테이너 — click 이벤트 + FieldRender 매핑 루트 |
-| icon        | `.extended-fab__icon`  | 메인 FAB 리딩 아이콘 (FieldRender) |
-| label       | `.extended-fab__label` | 메인 FAB 라벨 텍스트 (FieldRender) |
+| KEY         | VALUE                  | 용도                                                     |
+| ----------- | ---------------------- | -------------------------------------------------------- |
+| extendedFab | `.extended-fab`        | 메인 FAB 컨테이너 — click 이벤트 + FieldRender 매핑 루트 |
+| icon        | `.extended-fab__icon`  | 메인 FAB 리딩 아이콘 (FieldRender)                       |
+| label       | `.extended-fab__label` | 메인 FAB 라벨 텍스트 (FieldRender)                       |
 
 #### ListRenderMixin (보조 액션)
 
-| KEY | VALUE | 용도 |
-|-----|-------|------|
-| container | `.speed-dial__items` | 보조 액션이 추가될 부모 (메인 FAB 위쪽) |
-| template  | `#speed-dial-item-template` | 보조 액션 template — 항목 1개 구조 |
-| item      | `.speed-dial__item` | 각 보조 액션 루트 — customEvents click 위임 대상 |
-| actionId  | `.speed-dial__item` | data-action-id 식별자(item과 동일 요소에 dataset) |
-| icon      | `.speed-dial__item-icon` | 보조 액션 아이콘 — material-symbols class에 textContent로 아이콘 이름 |
-| label     | `.speed-dial__item-label` | 보조 액션 라벨 텍스트 |
+| KEY       | VALUE                       | 용도                                                                  |
+| --------- | --------------------------- | --------------------------------------------------------------------- |
+| container | `.speed-dial__items`        | 보조 액션이 추가될 부모 (메인 FAB 위쪽)                               |
+| template  | `#speed-dial-item-template` | 보조 액션 template — 항목 1개 구조                                    |
+| item      | `.speed-dial__item`         | 각 보조 액션 루트 — customEvents click 위임 대상                      |
+| actionId  | `.speed-dial__item`         | data-action-id 식별자(item과 동일 요소에 dataset)                     |
+| icon      | `.speed-dial__item-icon`    | 보조 액션 아이콘 — material-symbols class에 textContent로 아이콘 이름 |
+| label     | `.speed-dial__item-label`   | 보조 액션 라벨 텍스트                                                 |
 
 #### datasetAttrs (ListRender)
 
-| KEY | data-* | 용도 |
-|-----|--------|------|
+| KEY      | data-\*     | 용도                                                                                                                                 |
+| -------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | actionId | `action-id` | 항목 click 시 `event.target.closest(item)?.dataset.actionId`로 actionId 추출. ListRender가 `data-action-id` 속성을 항목에 자동 설정. |
 
 ### 인스턴스 상태
 
-| 키 | 설명 |
-|----|------|
-| `_isOpen` | 현재 펼침 상태(boolean). open/close 토글 게이트. |
+| 키                                        | 설명                                                                              |
+| ----------------------------------------- | --------------------------------------------------------------------------------- |
+| `_isOpen`                                 | 현재 펼침 상태(boolean). open/close 토글 게이트.                                  |
 | `_outsideClickHandler` / `_escKeyHandler` | bound handler 참조 — beforeDestroy에서 정확히 removeEventListener 하기 위해 보관. |
 
 ### 구독 (subscriptions)
 
-| topic | handler |
-|-------|---------|
+| topic             | handler                                                                      |
+| ----------------- | ---------------------------------------------------------------------------- |
 | `extendedFabInfo` | `this.fieldRender.renderData` (Standard와 동일한 페이로드 `{ label, icon }`) |
-| `speedDialItems`  | `this.listRender.renderData` (페이로드 `[{ actionId, icon, label }]`) |
+| `speedDialItems`  | `this.listRender.renderData` (페이로드 `[{ actionId, icon, label }]`)        |
 
 ### 이벤트 (customEvents)
 
-| 이벤트 | 선택자 (computed) | 발행 시점 | 동작 |
-|--------|------------------|-----------|------|
-| click | `extendedFab` (FieldRender) | 메인 FAB 클릭 | `_handleMainClick`이 `_isOpen` 토글. 별도 Weventbus 발행 없음(Standard의 `@extendedFabClicked`는 본 변형에서 trigger로만 쓰임). |
-| click | `item` (ListRender) | 보조 액션 항목 클릭 | bindEvents 위임 + `@speedDialActionClicked` 발행(payload: `{ targetInstance, event }`). 발행 후 `_close()`로 자동 닫힘. |
+| 이벤트 | 선택자 (computed)           | 발행 시점           | 동작                                                                                                                            |
+| ------ | --------------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| click  | `extendedFab` (FieldRender) | 메인 FAB 클릭       | `_handleMainClick`이 `_isOpen` 토글. 별도 Weventbus 발행 없음(Standard의 `@extendedFabClicked`는 본 변형에서 trigger로만 쓰임). |
+| click  | `item` (ListRender)         | 보조 액션 항목 클릭 | bindEvents 위임 + `@speedDialActionClicked` 발행(payload: `{ targetInstance, event }`). 발행 후 `_close()`로 자동 닫힘.         |
 
 ### 커스텀 메서드
 
-| 메서드 | 설명 |
-|--------|------|
-| `_handleMainClick(e)` | 메인 FAB 클릭 핸들러. `bindEvents`의 `@extendedFabClicked` 위임 대신 자체 click 위임으로 처리하여 토글 사이드이펙트만 수행. `_isOpen`이 true면 `_close()`, false면 `_open()`. |
-| `_handleItemClick(e)` | 보조 항목 click 핸들러. `bindEvents`가 `@speedDialActionClicked`를 위임 발행한 직후 본 핸들러는 `_close()`만 호출(공통 UX: 액션 선택 = 메뉴 닫기). |
-| `_handleOutsideClick(e)` | document capture click 핸들러. `_isOpen=false`면 무시. `appendElement.contains(e.target)`가 false면 `_close()` (자기 자신 클릭은 무시 — 메인 FAB도 자기 자신이므로). |
-| `_handleEscKey(e)` | document keydown 핸들러. `_isOpen=false`이거나 `e.key !== 'Escape'`면 무시. 둘 다 만족 시 `_close()`. |
-| `_open()` | `_isOpen=true` + `appendElement.firstElementChild.dataset.speedDialState = 'open'` (또는 컨테이너 wrapper에 부착). CSS가 `[data-speed-dial-state="open"] .speed-dial__item`을 staggered transition으로 펼친다. |
-| `_close()` | `_isOpen=false` + `dataset.speedDialState = 'closed'`. CSS가 reverse transition으로 접는다. |
+| 메서드                   | 설명                                                                                                                                                                                                           |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `_handleMainClick(e)`    | 메인 FAB 클릭 핸들러. `bindEvents`의 `@extendedFabClicked` 위임 대신 자체 click 위임으로 처리하여 토글 사이드이펙트만 수행. `_isOpen`이 true면 `_close()`, false면 `_open()`.                                  |
+| `_handleItemClick(e)`    | 보조 항목 click 핸들러. `bindEvents`가 `@speedDialActionClicked`를 위임 발행한 직후 본 핸들러는 `_close()`만 호출(공통 UX: 액션 선택 = 메뉴 닫기).                                                             |
+| `_handleOutsideClick(e)` | document capture click 핸들러. `_isOpen=false`면 무시. `appendElement.contains(e.target)`가 false면 `_close()` (자기 자신 클릭은 무시 — 메인 FAB도 자기 자신이므로).                                           |
+| `_handleEscKey(e)`       | document keydown 핸들러. `_isOpen=false`이거나 `e.key !== 'Escape'`면 무시. 둘 다 만족 시 `_close()`.                                                                                                          |
+| `_open()`                | `_isOpen=true` + `appendElement.firstElementChild.dataset.speedDialState = 'open'` (또는 컨테이너 wrapper에 부착). CSS가 `[data-speed-dial-state="open"] .speed-dial__item`을 staggered transition으로 펼친다. |
+| `_close()`               | `_isOpen=false` + `dataset.speedDialState = 'closed'`. CSS가 reverse transition으로 접는다.                                                                                                                    |
 
 ### 페이지 연결 사례
 
@@ -110,11 +110,11 @@ FieldRenderMixin (메인 FAB 라벨/아이콘 렌더) + ListRenderMixin (보조 
 
 ### 디자인 변형
 
-| 파일 | 페르소나 | 펼침 motion | 도메인 라벨 예 |
-|------|---------|------------|---------------|
-| `01_refined`     | A: Refined Technical | Stagger fade-up — 항목별 60ms delay × index, opacity 0→1 + translateY 8px→0 | "Compose" 메인 + 새 글/사진/초안 (작성 도메인) |
+| 파일             | 페르소나             | 펼침 motion                                                                                | 도메인 라벨 예                                           |
+| ---------------- | -------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------- |
+| `01_refined`     | A: Refined Technical | Stagger fade-up — 항목별 60ms delay × index, opacity 0→1 + translateY 8px→0                | "Compose" 메인 + 새 글/사진/초안 (작성 도메인)           |
 | `02_material`    | B: Material Elevated | Stagger scale-up — 항목별 50ms delay × index, scale 0.7→1 + opacity 0→1, level 3 elevation | "Create" 메인 + 문서/스프레드시트/슬라이드 (생성 도메인) |
-| `03_editorial`   | C: Minimal Editorial | Cascade slide — 항목별 80ms delay × index, translateY 16px→0 + opacity 0→1, 정적 outline | "Share" 메인 + 메일/링크/내보내기 (공유 도메인) |
-| `04_operational` | D: Dark Operational  | Instant snap — 항목 즉시 표시(stagger 없이 동시), 시안 border glow flash | "EXEC" 메인 + RUN/STOP/RESET (제어 도메인) |
+| `03_editorial`   | C: Minimal Editorial | Cascade slide — 항목별 80ms delay × index, translateY 16px→0 + opacity 0→1, 정적 outline   | "Share" 메인 + 메일/링크/내보내기 (공유 도메인)          |
+| `04_operational` | D: Dark Operational  | Instant snap — 항목 즉시 표시(stagger 없이 동시), 시안 border glow flash                   | "EXEC" 메인 + RUN/STOP/RESET (제어 도메인)               |
 
 각 페르소나는 페르소나 프로파일(SKILL Step 5-1)을 따르며, speedDial의 `data-speed-dial-state="open"` 시각이 Standard click 버튼과 명확히 구분되도록 보조 액션 컨테이너의 가시성/motion을 페르소나별로 차별화한다.

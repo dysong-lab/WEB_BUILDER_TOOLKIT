@@ -1,1 +1,57 @@
-@import "../../../_shared/semantic-status.css";.button-shell{display:inline-flex;align-items:center;justify-content:center;min-width:280px;min-height:132px;padding:24px;border-radius:28px;background:linear-gradient(180deg,#f7f4ef 0%,#ece7df 100%);box-shadow:0 18px 40px rgba(92,76,53,.14)}.button{position:relative;display:inline-flex;align-items:center;gap:10px;min-width:170px;min-height:48px;padding:0 20px;border:0;border-radius:18px;background:#6750a4;color:#fff8ff;cursor:pointer;overflow:hidden}.button__label,.button__icon{position:relative;z-index:1}.button__label{font:500 15px/1 "Roboto",sans-serif}.button__icon{font-size:20px}.button__progress{position:absolute;inset:0;border-radius:inherit;background:conic-gradient(from -90deg,#ffb4ab calc(var(--hold-progress)*1turn),transparent 0);opacity:.35}.button[data-hold-state="holding"]{transform:scale(.98)}.button[data-hold-state="confirmed"]{background:#8c1d18}
+@import "../../../_shared/semantic-status.css";
+.button-shell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 280px;
+  min-height: 132px;
+  padding: 24px;
+  border-radius: 28px;
+  background: linear-gradient(180deg, #f7f4ef 0%, #ece7df 100%);
+  box-shadow: 0 18px 40px rgba(92, 76, 53, 0.14);
+}
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 170px;
+  min-height: 48px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 18px;
+  background: #6750a4;
+  color: #fff8ff;
+  cursor: pointer;
+  overflow: hidden;
+}
+.button__label,
+.button__icon {
+  position: relative;
+  z-index: 1;
+}
+.button__label {
+  font:
+    500 15px/1 "Roboto",
+    sans-serif;
+}
+.button__icon {
+  font-size: 20px;
+}
+.button__progress {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: conic-gradient(
+    from -90deg,
+    #ffb4ab calc(var(--hold-progress) * 1turn),
+    transparent 0
+  );
+  opacity: 0.35;
+}
+.button[data-hold-state="holding"] {
+  transform: scale(0.98);
+}
+.button[data-hold-state="confirmed"] {
+  background: #8c1d18;
+}

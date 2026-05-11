@@ -1,1 +1,102 @@
-<!doctype html><html lang="ko"><head><meta charset="UTF-8"/><title>Buttons/Advanced/holdToConfirm — 03_editorial</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/><script src="../../../../../../preview_runtime.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#f6efe4;color:#4a3b2c;font-family:Georgia,serif;padding:36px}.preview-shell{max-width:920px;margin:0 auto;display:grid;gap:18px}.preview-log{min-height:112px;padding:16px;border-radius:18px;background:rgba(255,251,244,.8);white-space:pre-line;font:12px/1.6 "IBM Plex Mono",monospace;color:#6a5741}</style></head><body><div class="preview-shell"><h1>holdToConfirm Button</h1><div id="demo"></div><div class="preview-log" id="log">The underline must fully charge before submit is emitted.</div></div><script>(async()=>{await loadComponentAssets("demo","../views/03_editorial.html","../styles/03_editorial.css");const button=document.querySelector("#demo .button");const log=document.getElementById("log");let timer=null,start=0;const tick=()=>{if(button.dataset.holdState!=="holding")return;button.style.setProperty("--hold-progress",String(Math.min(1,(performance.now()-start)/1500)));requestAnimationFrame(tick)};button.addEventListener("pointerdown",()=>{button.dataset.holdState="holding";start=performance.now();requestAnimationFrame(tick);timer=setTimeout(()=>{button.dataset.holdState="confirmed";log.textContent="event: @holdConfirmed\nholdMs: 1500";setTimeout(()=>{button.dataset.holdState="idle";button.style.setProperty("--hold-progress","0")},200)},1500)});["pointerup","pointerleave","pointercancel"].forEach((type)=>button.addEventListener(type,()=>{clearTimeout(timer);if(button.dataset.holdState!=="confirmed"){button.dataset.holdState="idle";button.style.setProperty("--hold-progress","0")}}));button.addEventListener("click",(e)=>{e.preventDefault();e.stopImmediatePropagation()},true)})();</script></body></html>
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Buttons/Advanced/holdToConfirm — 03_editorial</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <script src="../../../../../../preview_runtime.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #f6efe4;
+        color: #4a3b2c;
+        font-family: Georgia, serif;
+        padding: 36px;
+      }
+      .preview-shell {
+        max-width: 920px;
+        margin: 0 auto;
+        display: grid;
+        gap: 18px;
+      }
+      .preview-log {
+        min-height: 112px;
+        padding: 16px;
+        border-radius: 18px;
+        background: rgba(255, 251, 244, 0.8);
+        white-space: pre-line;
+        font:
+          12px/1.6 "IBM Plex Mono",
+          monospace;
+        color: #6a5741;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-shell">
+      <h1>holdToConfirm Button</h1>
+      <div id="demo"></div>
+      <div class="preview-log" id="log">
+        The underline must fully charge before submit is emitted.
+      </div>
+    </div>
+    <script>
+      (async () => {
+        await loadComponentAssets(
+          "demo",
+          "../views/03_editorial.html",
+          "../styles/03_editorial.css",
+        );
+        const button = document.querySelector("#demo .button");
+        const log = document.getElementById("log");
+        let timer = null,
+          start = 0;
+        const tick = () => {
+          if (button.dataset.holdState !== "holding") return;
+          button.style.setProperty(
+            "--hold-progress",
+            String(Math.min(1, (performance.now() - start) / 1500)),
+          );
+          requestAnimationFrame(tick);
+        };
+        button.addEventListener("pointerdown", () => {
+          button.dataset.holdState = "holding";
+          start = performance.now();
+          requestAnimationFrame(tick);
+          timer = setTimeout(() => {
+            button.dataset.holdState = "confirmed";
+            log.textContent = "event: @holdConfirmed\nholdMs: 1500";
+            setTimeout(() => {
+              button.dataset.holdState = "idle";
+              button.style.setProperty("--hold-progress", "0");
+            }, 200);
+          }, 1500);
+        });
+        ["pointerup", "pointerleave", "pointercancel"].forEach((type) =>
+          button.addEventListener(type, () => {
+            clearTimeout(timer);
+            if (button.dataset.holdState !== "confirmed") {
+              button.dataset.holdState = "idle";
+              button.style.setProperty("--hold-progress", "0");
+            }
+          }),
+        );
+        button.addEventListener(
+          "click",
+          (e) => {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+          },
+          true,
+        );
+      })();
+    </script>
+  </body>
+</html>

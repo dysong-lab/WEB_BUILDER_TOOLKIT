@@ -1,1 +1,10 @@
-const { unsubscribe } = GlobalDataPublisher;const { each,go } = fx;this.appendElement.removeEventListener("click",this._groupClickHandler);go(Object.entries(this.subscriptions),each(([topic,_])=>unsubscribe(topic,this)));this.subscriptions=null;if(this.listRender)this.listRender.destroy();this._groupClickHandler=null;
+const { unsubscribe } = GlobalDataPublisher;
+const { each, go } = fx;
+this.appendElement.removeEventListener("click", this._groupClickHandler);
+go(
+  Object.entries(this.subscriptions),
+  each(([topic, _]) => unsubscribe(topic, this)),
+);
+this.subscriptions = null;
+if (this.listRender) this.listRender.destroy();
+this._groupClickHandler = null;

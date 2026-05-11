@@ -26,57 +26,57 @@ ListRenderMixin (세그먼트 항목 배열 렌더) + 자체 메서드(`_renderS
 
 ### cssSelectors
 
-| KEY | VALUE | 용도 |
-|-----|-------|------|
-| group     | `.segmented-button-multi`              | 그룹 컨테이너 — `role="group"`, `data-selected-count` dataset 부착 대상(시각 옵션) |
-| container | `.segmented-button-multi__list`        | 항목이 추가될 부모 (ListRenderMixin 규약) |
-| template  | `#segmented-button-multi-item-template`| `<template>` cloneNode 대상 (ListRenderMixin 규약) |
-| item      | `.segmented-button-multi__item`        | 렌더된 각 segment 루트 — click 위임 + `data-selected`/`aria-pressed` 부착 |
-| actionId  | `.segmented-button-multi__item`        | 항목 식별 (data-action-id) |
-| icon      | `.segmented-button-multi__icon`        | 아이콘 (material symbol textContent, 선택) |
-| label     | `.segmented-button-multi__label`       | 라벨 텍스트 |
+| KEY       | VALUE                                   | 용도                                                                               |
+| --------- | --------------------------------------- | ---------------------------------------------------------------------------------- |
+| group     | `.segmented-button-multi`               | 그룹 컨테이너 — `role="group"`, `data-selected-count` dataset 부착 대상(시각 옵션) |
+| container | `.segmented-button-multi__list`         | 항목이 추가될 부모 (ListRenderMixin 규약)                                          |
+| template  | `#segmented-button-multi-item-template` | `<template>` cloneNode 대상 (ListRenderMixin 규약)                                 |
+| item      | `.segmented-button-multi__item`         | 렌더된 각 segment 루트 — click 위임 + `data-selected`/`aria-pressed` 부착          |
+| actionId  | `.segmented-button-multi__item`         | 항목 식별 (data-action-id)                                                         |
+| icon      | `.segmented-button-multi__icon`         | 아이콘 (material symbol textContent, 선택)                                         |
+| label     | `.segmented-button-multi__label`        | 라벨 텍스트                                                                        |
 
 > **체크마크 처리**: `.segmented-button-multi__check`는 template에 고정 존재하며 `data-selected="true"` 시 CSS로만 표시된다. cssSelectors KEY로 등록하지 않는다 (데이터 바인딩 대상이 아니므로).
 
 ### datasetAttrs (ListRender)
 
-| KEY | data-* | 용도 |
-|-----|--------|------|
+| KEY      | data-\*     | 용도                                                                                                                                 |
+| -------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | actionId | `action-id` | 항목 click 시 `event.target.closest(item)?.dataset.actionId`로 actionId 추출. ListRender가 `data-action-id` 속성을 항목에 자동 설정. |
 
 > **note**: Standard는 `selected`도 `datasetAttrs`에 등록하지만, multiSelect는 selected 정책을 자체 상태(`_selectedIds`)로 흡수하므로 ListRender의 데이터 바인딩 경로에서는 selected를 다루지 않는다. 초기 selected는 `_renderSegments`가 페이로드 `selected:true` 항목들을 `_selectedIds`에 누적한 뒤 `_applySelection`이 일괄로 DOM에 적용한다.
 
 ### 인스턴스 상태
 
-| 키 | 설명 |
-|----|------|
-| `_selectedIds` | 현재 선택된 항목 id의 `Set<string>`. `_setSelected`가 add/delete로 갱신. `_renderSegments`가 초기값 결정. |
+| 키                   | 설명                                                                                                                                                                                                                                                                                                                         |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `_selectedIds`       | 현재 선택된 항목 id의 `Set<string>`. `_setSelected`가 add/delete로 갱신. `_renderSegments`가 초기값 결정.                                                                                                                                                                                                                    |
 | `_groupClickHandler` | bound handler 참조 — beforeDestroy에서 정확히 removeEventListener 하기 위해 보관. (bindEvents가 `@segmentMultiSelected`를 위임 발행하지만, 다중 선택 토글 + DOM dataset 갱신 사이드이펙트는 자체 native click delegator가 담당하여 `_selectedIds` 상태 갱신과 `data-selected`/`aria-pressed` 일괄 적용을 한 cycle에 묶는다.) |
 
 ### 구독 (subscriptions)
 
-| topic | handler |
-|-------|---------|
+| topic                 | handler                                                                                                                                                                                                    |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `segmentInfo`         | `this._renderSegments` (페이로드 `[{ id, label, icon?, selected? }]`) — 내부에서 actionId로 키 변환 후 `this.listRender.renderData({ response })` 호출 + 초기 `_selectedIds` 결정 + `_applySelection` 호출 |
-| `setSelectedSegments` | `this._setSelectedFromTopic` (페이로드 `{ ids: [...] }`) — 외부에서 강제로 selected 집합 통째로 변경. 빈 배열도 허용(전체 해제). |
+| `setSelectedSegments` | `this._setSelectedFromTopic` (페이로드 `{ ids: [...] }`) — 외부에서 강제로 selected 집합 통째로 변경. 빈 배열도 허용(전체 해제).                                                                           |
 
 ### 이벤트 (customEvents)
 
-| 이벤트 | 선택자 (computed) | 발행 시점 | payload |
-|--------|------------------|-----------|---------|
-| click | `item` (ListRender) | 항목 클릭 | `@segmentMultiSelected` (bindEvents가 위임 발행). 페이로드 `{ targetInstance, event }` — 페이지가 `event.target.closest('.segmented-button-multi__item')?.dataset.actionId`로 변경 항목 추출 가능. 단, 본 변형은 register.js가 자체 native delegator로 `_selectedIds` 토글 + DOM `data-selected`/`aria-pressed` 갱신 사이드이펙트를 함께 수행하고, `Weventbus.emit('@segmentMultiSelected', { targetInstance: this, selectedIds: [...this._selectedIds], changedId, changedTo })`을 직접 호출하여 명시 페이로드를 추가 발행한다. 따라서 페이지는 두 페이로드 형태 중 명시 payload(`selectedIds`, `changedId`, `changedTo`)를 받는다. |
+| 이벤트 | 선택자 (computed)   | 발행 시점 | payload                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| ------ | ------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| click  | `item` (ListRender) | 항목 클릭 | `@segmentMultiSelected` (bindEvents가 위임 발행). 페이로드 `{ targetInstance, event }` — 페이지가 `event.target.closest('.segmented-button-multi__item')?.dataset.actionId`로 변경 항목 추출 가능. 단, 본 변형은 register.js가 자체 native delegator로 `_selectedIds` 토글 + DOM `data-selected`/`aria-pressed` 갱신 사이드이펙트를 함께 수행하고, `Weventbus.emit('@segmentMultiSelected', { targetInstance: this, selectedIds: [...this._selectedIds], changedId, changedTo })`을 직접 호출하여 명시 페이로드를 추가 발행한다. 따라서 페이지는 두 페이로드 형태 중 명시 payload(`selectedIds`, `changedId`, `changedTo`)를 받는다. |
 
 > **이벤트 발행 분리 이유**: bindEvents의 위임 발행은 `{ targetInstance, event }`만 전달하므로 `selectedIds` 집합과 변경된 항목 정보가 없다. multiSelect는 페이지가 매번 DOM을 다시 스캔하지 않고도 현재 선택 집합과 단일 변경 항목을 바로 받을 수 있어야 하므로(예: 다중 필터링에서 단일 토글만 효율적으로 적용/해제) 자체 native delegator에서 명시 payload를 emit한다. customEvents의 위임 발행은 본 변형에서는 trigger 알림 의미 + Weventbus 채널 등록 보장 의미로 유지하되, 페이지가 사용하는 페이로드는 명시 emit이 우선한다.
 
 ### 커스텀 메서드
 
-| 메서드 | 설명 |
-|--------|------|
-| `_renderSegments({ response })` | `segmentInfo` 핸들러. items 배열을 ListRender selectorKEY(`actionId`)에 맞게 매핑(`{id → actionId}`)한 후 `listRender.renderData` 호출. 그 다음 ① 페이로드의 `selected:true` 항목들을 `_selectedIds`에 누적, ② `_applySelection()` 호출하여 DOM에 반영. 새 batch가 들어올 때마다 `_selectedIds`는 새 페이로드 기준으로 재구성(이전 선택 누적 X — 새 batch는 새 진실). |
-| `_handleSelect(e)` | 컨테이너 native click delegator. `e.target.closest(item)`로 클릭된 항목 찾음 → `dataset.actionId` 추출 → `_setSelected(id, toggleAction)` 호출(현재 상태 반대로). |
-| `_setSelected(id, action)` | `action: 'on' | 'off' | 'toggle'`. `'on'` → Set.add, `'off'` → Set.delete, `'toggle'` → 현재 상태 반대. 변경 없으면 silent return. 변경 시 `changedTo` 값을 결정한 후 `_applySelection()` 호출 → `Weventbus.emit('@segmentMultiSelected', { targetInstance: this, selectedIds: [...this._selectedIds], changedId: id, changedTo })`. |
-| `_applySelection()` | 모든 항목 순회하며 `dataset.selected = (set.has(id) ? 'true' : 'false')`, `setAttribute('aria-pressed', ...)` 동기화. 그룹 컨테이너의 `dataset.selectedCount`도 갱신(CSS 컨텍스트 셀렉터 옵션). |
-| `_setSelectedFromTopic({ response })` | `setSelectedSegments` 토픽 핸들러. `response = { ids: [...] }` 페이로드를 받아 `_selectedIds`를 페이로드 ids 집합으로 통째로 교체 → `_applySelection()` 호출 → 변경된 항목 집합에 대해 emit (선택 — 본 구현은 일괄 emit 한 번: `{ selectedIds, changedId: null, changedTo: 'bulk' }`). 외부에서 클릭 외 경로로 선택을 강제할 때 사용. 빈 배열은 전체 해제. |
+| 메서드                                | 설명                                                                                                                                                                                                                                                                                                                                                                  |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `_renderSegments({ response })`       | `segmentInfo` 핸들러. items 배열을 ListRender selectorKEY(`actionId`)에 맞게 매핑(`{id → actionId}`)한 후 `listRender.renderData` 호출. 그 다음 ① 페이로드의 `selected:true` 항목들을 `_selectedIds`에 누적, ② `_applySelection()` 호출하여 DOM에 반영. 새 batch가 들어올 때마다 `_selectedIds`는 새 페이로드 기준으로 재구성(이전 선택 누적 X — 새 batch는 새 진실). |
+| `_handleSelect(e)`                    | 컨테이너 native click delegator. `e.target.closest(item)`로 클릭된 항목 찾음 → `dataset.actionId` 추출 → `_setSelected(id, toggleAction)` 호출(현재 상태 반대로).                                                                                                                                                                                                     |
+| `_setSelected(id, action)`            | `action: 'on'                                                                                                                                                                                                                                                                                                                                                         | 'off' | 'toggle'`. `'on'`→ Set.add,`'off'`→ Set.delete,`'toggle'`→ 현재 상태 반대. 변경 없으면 silent return. 변경 시`changedTo`값을 결정한 후`\_applySelection()`호출 →`Weventbus.emit('@segmentMultiSelected', { targetInstance: this, selectedIds: [...this._selectedIds], changedId: id, changedTo })`. |
+| `_applySelection()`                   | 모든 항목 순회하며 `dataset.selected = (set.has(id) ? 'true' : 'false')`, `setAttribute('aria-pressed', ...)` 동기화. 그룹 컨테이너의 `dataset.selectedCount`도 갱신(CSS 컨텍스트 셀렉터 옵션).                                                                                                                                                                       |
+| `_setSelectedFromTopic({ response })` | `setSelectedSegments` 토픽 핸들러. `response = { ids: [...] }` 페이로드를 받아 `_selectedIds`를 페이로드 ids 집합으로 통째로 교체 → `_applySelection()` 호출 → 변경된 항목 집합에 대해 emit (선택 — 본 구현은 일괄 emit 한 번: `{ selectedIds, changedId: null, changedTo: 'bulk' }`). 외부에서 클릭 외 경로로 선택을 강제할 때 사용. 빈 배열은 전체 해제.            |
 
 ### 페이지 연결 사례
 
@@ -121,11 +121,11 @@ ListRenderMixin (세그먼트 항목 배열 렌더) + 자체 메서드(`_renderS
 
 ## 디자인 변형
 
-| 파일 | 페르소나 | 선택 시각 차별화 (누적 가능) | 도메인 컨텍스트 예 |
-|------|---------|---------------------------|------------------|
-| `01_refined`     | A: Refined Technical | 선택 항목 각각: 퍼플 그라데이션 fill + 글로우. 비선택은 transparent + muted. 인접 selected가 시각적으로 묶이지 않고 **개별로** 누적 표시(체크박스 의미). | 다중 알람 채널(SMS / Push / Email) — 동시 활성화할 채널 누적 선택 |
-| `02_material`    | B: Material Elevated | 선택 항목 각각: secondary container surface(`#C0CAFF`) + 작은 elevation. 비선택은 transparent + 회색 outline. | 다중 카테고리 태그(전자 / 가전 / 도서 / 식품) — 카테고리 누적 적용 |
-| `03_editorial`   | C: Minimal Editorial | 선택 항목 각각: outline 두께 2px + serif 체크 마크 prefix + 미세 배경 톤. 비선택은 1px outline + transparent. | 다중 필터 우선순위(latest / popular / featured) — 동시 활성 필터 |
+| 파일             | 페르소나             | 선택 시각 차별화 (누적 가능)                                                                                                                                                                   | 도메인 컨텍스트 예                                                               |
+| ---------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `01_refined`     | A: Refined Technical | 선택 항목 각각: 퍼플 그라데이션 fill + 글로우. 비선택은 transparent + muted. 인접 selected가 시각적으로 묶이지 않고 **개별로** 누적 표시(체크박스 의미).                                       | 다중 알람 채널(SMS / Push / Email) — 동시 활성화할 채널 누적 선택                |
+| `02_material`    | B: Material Elevated | 선택 항목 각각: secondary container surface(`#C0CAFF`) + 작은 elevation. 비선택은 transparent + 회색 outline.                                                                                  | 다중 카테고리 태그(전자 / 가전 / 도서 / 식품) — 카테고리 누적 적용               |
+| `03_editorial`   | C: Minimal Editorial | 선택 항목 각각: outline 두께 2px + serif 체크 마크 prefix + 미세 배경 톤. 비선택은 1px outline + transparent.                                                                                  | 다중 필터 우선순위(latest / popular / featured) — 동시 활성 필터                 |
 | `04_operational` | D: Dark Operational  | 선택 항목 각각: 시안 fill(`rgba(0,229,255,.16)`) + 시안 ring(`box-shadow: 0 0 0 1px #00E5FF`) + 시안 텍스트. 그룹 컨테이너에 `data-selected-count` 기반 카운트 라벨 표시(운영 임계 동시 활성). | 다중 센서 그룹 표시(temp / pressure / humidity / vibration) — 모니터링 채널 누적 |
 
 각 페르소나는 페르소나 프로파일(produce-component SKILL Step 5-1)을 따르며, `[data-selected="true"]`(또는 `[aria-pressed="true"]`) 셀렉터로 선택 시각을 분기한다. 선택 변경 시 transition 200~300ms로 부드럽게 시각 전환.

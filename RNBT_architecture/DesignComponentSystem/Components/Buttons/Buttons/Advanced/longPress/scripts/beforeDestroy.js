@@ -1,1 +1,23 @@
-const { unsubscribe } = GlobalDataPublisher;const { removeCustomEvents } = Wkit;const { each,go } = fx;if(this._buttonEl){this._buttonEl.removeEventListener("pointerdown",this._pointerDownHandler);this._buttonEl.removeEventListener("pointerup",this._pointerUpHandler);this._buttonEl.removeEventListener("pointerleave",this._pointerLeaveHandler);this._buttonEl.removeEventListener("pointercancel",this._pointerCancelHandler);this._buttonEl.removeEventListener("click",this._clickCaptureHandler,true)}removeCustomEvents(this,this.customEvents);go(Object.entries(this.subscriptions),each(([topic,_])=>unsubscribe(topic,this)));clearTimeout(this._holdTimer);cancelAnimationFrame(this._progressRaf);this.subscriptions=null;if(this.fieldRender)this.fieldRender.destroy();this._buttonEl=null;
+const { unsubscribe } = GlobalDataPublisher;
+const { removeCustomEvents } = Wkit;
+const { each, go } = fx;
+if (this._buttonEl) {
+  this._buttonEl.removeEventListener("pointerdown", this._pointerDownHandler);
+  this._buttonEl.removeEventListener("pointerup", this._pointerUpHandler);
+  this._buttonEl.removeEventListener("pointerleave", this._pointerLeaveHandler);
+  this._buttonEl.removeEventListener(
+    "pointercancel",
+    this._pointerCancelHandler,
+  );
+  this._buttonEl.removeEventListener("click", this._clickCaptureHandler, true);
+}
+removeCustomEvents(this, this.customEvents);
+go(
+  Object.entries(this.subscriptions),
+  each(([topic, _]) => unsubscribe(topic, this)),
+);
+clearTimeout(this._holdTimer);
+cancelAnimationFrame(this._progressRaf);
+this.subscriptions = null;
+if (this.fieldRender) this.fieldRender.destroy();
+this._buttonEl = null;

@@ -1,1 +1,101 @@
-const { subscribe } = GlobalDataPublisher;const { each,go } = fx;applyFieldRenderMixin(this,{cssSelectors:{button:".button",label:".button__label",icon:".button__icon"}});this._holdMs=1500;this._holdTimer=null;this._holdRaf=null;this._holdStartedAt=0;this._holdLatched=false;this._resetTimer=null;this._buttonEl=null;this._tickHold=()=>{if(!this._buttonEl||this._buttonEl.dataset.holdState!=="holding")return;const progress=Math.min(1,(performance.now()-this._holdStartedAt)/this._holdMs);this._buttonEl.style.setProperty("--hold-progress",String(progress));if(progress<1&&!this._holdLatched)this._holdRaf=requestAnimationFrame(this._tickHold)};this._resetHold=({wasConfirmed=false}={})=>{clearTimeout(this._holdTimer);cancelAnimationFrame(this._holdRaf);this._holdTimer=null;this._holdRaf=null;const finish=()=>{if(!this._buttonEl)return;this._buttonEl.dataset.holdState="idle";this._buttonEl.style.setProperty("--hold-progress","0");this._holdLatched=false};if(wasConfirmed&&this._buttonEl){this._buttonEl.dataset.holdState="confirmed";clearTimeout(this._resetTimer);this._resetTimer=setTimeout(finish,200);return}finish()};this._handlePointerDown=(event)=>{if(event.pointerType==="mouse"&&event.button!==0)return;if(!this._buttonEl)return;this._buttonEl.dataset.holdState="holding";this._buttonEl.style.setProperty("--hold-progress","0");this._holdStartedAt=performance.now();this._holdLatched=false;this._holdTimer=setTimeout(()=>{if(this._holdLatched)return;this._holdLatched=true;if(this._buttonEl)this._buttonEl.dataset.holdState="confirmed";Weventbus.emit("@holdConfirmed",{targetInstance:this,holdMs:this._holdMs})},this._holdMs);this._holdRaf=requestAnimationFrame(this._tickHold)};this._handlePointerUp=()=>{if(!this._buttonEl)return;this._resetHold({wasConfirmed:this._holdLatched})};this._handlePointerLeave=()=>{if(this._holdLatched)return;this._resetHold({wasConfirmed:false})};this._handlePointerCancel=()=>{this._resetHold({wasConfirmed:false})};this._handleClickCapture=(event)=>{event.preventDefault();event.stopImmediatePropagation()};this.subscriptions={buttonInfo:[this.fieldRender.renderData]};go(Object.entries(this.subscriptions),each(([topic,handlers])=>each((handler)=>subscribe(topic,this,handler),handlers)));this._buttonEl=this.appendElement.querySelector(this.fieldRender.cssSelectors.button);this._pointerDownHandler=this._handlePointerDown.bind(this);this._pointerUpHandler=this._handlePointerUp.bind(this);this._pointerLeaveHandler=this._handlePointerLeave.bind(this);this._pointerCancelHandler=this._handlePointerCancel.bind(this);this._clickCaptureHandler=this._handleClickCapture.bind(this);if(this._buttonEl){this._buttonEl.dataset.holdState="idle";this._buttonEl.addEventListener("pointerdown",this._pointerDownHandler);this._buttonEl.addEventListener("pointerup",this._pointerUpHandler);this._buttonEl.addEventListener("pointerleave",this._pointerLeaveHandler);this._buttonEl.addEventListener("pointercancel",this._pointerCancelHandler);this._buttonEl.addEventListener("click",this._clickCaptureHandler,true)}
+const { subscribe } = GlobalDataPublisher;
+const { each, go } = fx;
+applyFieldRenderMixin(this, {
+  cssSelectors: {
+    button: ".button",
+    label: ".button__label",
+    icon: ".button__icon",
+  },
+});
+this._holdMs = 1500;
+this._holdTimer = null;
+this._holdRaf = null;
+this._holdStartedAt = 0;
+this._holdLatched = false;
+this._resetTimer = null;
+this._buttonEl = null;
+this._tickHold = () => {
+  if (!this._buttonEl || this._buttonEl.dataset.holdState !== "holding") return;
+  const progress = Math.min(
+    1,
+    (performance.now() - this._holdStartedAt) / this._holdMs,
+  );
+  this._buttonEl.style.setProperty("--hold-progress", String(progress));
+  if (progress < 1 && !this._holdLatched)
+    this._holdRaf = requestAnimationFrame(this._tickHold);
+};
+this._resetHold = ({ wasConfirmed = false } = {}) => {
+  clearTimeout(this._holdTimer);
+  cancelAnimationFrame(this._holdRaf);
+  this._holdTimer = null;
+  this._holdRaf = null;
+  const finish = () => {
+    if (!this._buttonEl) return;
+    this._buttonEl.dataset.holdState = "idle";
+    this._buttonEl.style.setProperty("--hold-progress", "0");
+    this._holdLatched = false;
+  };
+  if (wasConfirmed && this._buttonEl) {
+    this._buttonEl.dataset.holdState = "confirmed";
+    clearTimeout(this._resetTimer);
+    this._resetTimer = setTimeout(finish, 200);
+    return;
+  }
+  finish();
+};
+this._handlePointerDown = (event) => {
+  if (event.pointerType === "mouse" && event.button !== 0) return;
+  if (!this._buttonEl) return;
+  this._buttonEl.dataset.holdState = "holding";
+  this._buttonEl.style.setProperty("--hold-progress", "0");
+  this._holdStartedAt = performance.now();
+  this._holdLatched = false;
+  this._holdTimer = setTimeout(() => {
+    if (this._holdLatched) return;
+    this._holdLatched = true;
+    if (this._buttonEl) this._buttonEl.dataset.holdState = "confirmed";
+    Weventbus.emit("@holdConfirmed", {
+      targetInstance: this,
+      holdMs: this._holdMs,
+    });
+  }, this._holdMs);
+  this._holdRaf = requestAnimationFrame(this._tickHold);
+};
+this._handlePointerUp = () => {
+  if (!this._buttonEl) return;
+  this._resetHold({ wasConfirmed: this._holdLatched });
+};
+this._handlePointerLeave = () => {
+  if (this._holdLatched) return;
+  this._resetHold({ wasConfirmed: false });
+};
+this._handlePointerCancel = () => {
+  this._resetHold({ wasConfirmed: false });
+};
+this._handleClickCapture = (event) => {
+  event.preventDefault();
+  event.stopImmediatePropagation();
+};
+this.subscriptions = { buttonInfo: [this.fieldRender.renderData] };
+go(
+  Object.entries(this.subscriptions),
+  each(([topic, handlers]) =>
+    each((handler) => subscribe(topic, this, handler), handlers),
+  ),
+);
+this._buttonEl = this.appendElement.querySelector(
+  this.fieldRender.cssSelectors.button,
+);
+this._pointerDownHandler = this._handlePointerDown.bind(this);
+this._pointerUpHandler = this._handlePointerUp.bind(this);
+this._pointerLeaveHandler = this._handlePointerLeave.bind(this);
+this._pointerCancelHandler = this._handlePointerCancel.bind(this);
+this._clickCaptureHandler = this._handleClickCapture.bind(this);
+if (this._buttonEl) {
+  this._buttonEl.dataset.holdState = "idle";
+  this._buttonEl.addEventListener("pointerdown", this._pointerDownHandler);
+  this._buttonEl.addEventListener("pointerup", this._pointerUpHandler);
+  this._buttonEl.addEventListener("pointerleave", this._pointerLeaveHandler);
+  this._buttonEl.addEventListener("pointercancel", this._pointerCancelHandler);
+  this._buttonEl.addEventListener("click", this._clickCaptureHandler, true);
+}

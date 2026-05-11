@@ -1,1 +1,22 @@
-const { unsubscribe } = GlobalDataPublisher;const { each,go } = fx;if(this._buttonEl){this._buttonEl.removeEventListener("pointerdown",this._pointerDownHandler);this._buttonEl.removeEventListener("pointerup",this._pointerUpHandler);this._buttonEl.removeEventListener("pointerleave",this._pointerLeaveHandler);this._buttonEl.removeEventListener("pointercancel",this._pointerCancelHandler);this._buttonEl.removeEventListener("click",this._clickCaptureHandler,true)}go(Object.entries(this.subscriptions),each(([topic,_])=>unsubscribe(topic,this)));clearTimeout(this._holdTimer);clearTimeout(this._resetTimer);cancelAnimationFrame(this._holdRaf);this.subscriptions=null;if(this.fieldRender)this.fieldRender.destroy();this._buttonEl=null;
+const { unsubscribe } = GlobalDataPublisher;
+const { each, go } = fx;
+if (this._buttonEl) {
+  this._buttonEl.removeEventListener("pointerdown", this._pointerDownHandler);
+  this._buttonEl.removeEventListener("pointerup", this._pointerUpHandler);
+  this._buttonEl.removeEventListener("pointerleave", this._pointerLeaveHandler);
+  this._buttonEl.removeEventListener(
+    "pointercancel",
+    this._pointerCancelHandler,
+  );
+  this._buttonEl.removeEventListener("click", this._clickCaptureHandler, true);
+}
+go(
+  Object.entries(this.subscriptions),
+  each(([topic, _]) => unsubscribe(topic, this)),
+);
+clearTimeout(this._holdTimer);
+clearTimeout(this._resetTimer);
+cancelAnimationFrame(this._holdRaf);
+this.subscriptions = null;
+if (this.fieldRender) this.fieldRender.destroy();
+this._buttonEl = null;

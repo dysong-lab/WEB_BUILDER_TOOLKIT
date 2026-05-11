@@ -29,63 +29,63 @@ FieldRenderMixin (메인 FAB 아이콘 렌더) + ListRenderMixin (보조 액션 
 
 #### FieldRenderMixin (메인 FAB)
 
-| KEY | VALUE | 용도 |
-|-----|-------|------|
+| KEY  | VALUE        | 용도                                                     |
+| ---- | ------------ | -------------------------------------------------------- |
 | fab  | `.fab`       | 메인 FAB 컨테이너 — click 이벤트 + FieldRender 매핑 루트 |
-| icon | `.fab__icon` | 메인 FAB 아이콘 (FieldRender) |
+| icon | `.fab__icon` | 메인 FAB 아이콘 (FieldRender)                            |
 
 #### ListRenderMixin (보조 액션)
 
-| KEY | VALUE | 용도 |
-|-----|-------|------|
-| container | `.speed-dial__items` | 보조 액션이 추가될 부모 (메인 FAB 주위) |
-| template  | `#speed-dial-item-template` | 보조 액션 template — 항목 1개 구조 |
-| item      | `.speed-dial__item` | 각 보조 액션 루트 — customEvents click 위임 대상 + 방사형 inline style 주입 대상 |
-| actionId  | `.speed-dial__item` | data-action-id 식별자(item과 동일 요소에 dataset) |
-| icon      | `.speed-dial__item-icon` | 보조 액션 아이콘 — material-symbols class에 textContent로 아이콘 이름 |
-| label     | `.speed-dial__item-label` | 보조 액션 라벨 텍스트 (radial 페르소나에서는 툴팁 스타일, vertical 페르소나에서는 인라인 텍스트) |
+| KEY       | VALUE                       | 용도                                                                                             |
+| --------- | --------------------------- | ------------------------------------------------------------------------------------------------ |
+| container | `.speed-dial__items`        | 보조 액션이 추가될 부모 (메인 FAB 주위)                                                          |
+| template  | `#speed-dial-item-template` | 보조 액션 template — 항목 1개 구조                                                               |
+| item      | `.speed-dial__item`         | 각 보조 액션 루트 — customEvents click 위임 대상 + 방사형 inline style 주입 대상                 |
+| actionId  | `.speed-dial__item`         | data-action-id 식별자(item과 동일 요소에 dataset)                                                |
+| icon      | `.speed-dial__item-icon`    | 보조 액션 아이콘 — material-symbols class에 textContent로 아이콘 이름                            |
+| label     | `.speed-dial__item-label`   | 보조 액션 라벨 텍스트 (radial 페르소나에서는 툴팁 스타일, vertical 페르소나에서는 인라인 텍스트) |
 
 #### datasetAttrs (ListRender)
 
-| KEY | data-* | 용도 |
-|-----|--------|------|
+| KEY      | data-\*     | 용도                                                                                                                                 |
+| -------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | actionId | `action-id` | 항목 click 시 `event.target.closest(item)?.dataset.actionId`로 actionId 추출. ListRender가 `data-action-id` 속성을 항목에 자동 설정. |
 
 ### 인스턴스 상태
 
-| 키 | 설명 |
-|----|------|
-| `_isOpen` | 현재 펼침 상태(boolean). open/close 토글 게이트. |
-| `_radialOptions` | 방사형 분포 매개변수 `{ radius, startAngle, endAngle }` (deg). null이면 vertical fan(좌표 주입 안 함). 페르소나별로 다르게 설정 — refined/material/operational은 radius=110, 부채꼴 200°~340°(위쪽 호); editorial은 null(vertical). |
-| `_containerClickHandler` / `_outsideClickHandler` / `_escKeyHandler` | bound handler 참조 — beforeDestroy에서 정확히 removeEventListener 하기 위해 보관. |
+| 키                                                                   | 설명                                                                                                                                                                                                                                |
+| -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `_isOpen`                                                            | 현재 펼침 상태(boolean). open/close 토글 게이트.                                                                                                                                                                                    |
+| `_radialOptions`                                                     | 방사형 분포 매개변수 `{ radius, startAngle, endAngle }` (deg). null이면 vertical fan(좌표 주입 안 함). 페르소나별로 다르게 설정 — refined/material/operational은 radius=110, 부채꼴 200°~340°(위쪽 호); editorial은 null(vertical). |
+| `_containerClickHandler` / `_outsideClickHandler` / `_escKeyHandler` | bound handler 참조 — beforeDestroy에서 정확히 removeEventListener 하기 위해 보관.                                                                                                                                                   |
 
 ### 구독 (subscriptions)
 
-| topic | handler |
-|-------|---------|
-| `fabInfo` | `this.fieldRender.renderData` (Standard와 동일한 페이로드 `{ icon }`) |
+| topic            | handler                                                                                                                                                              |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fabInfo`        | `this.fieldRender.renderData` (Standard와 동일한 페이로드 `{ icon }`)                                                                                                |
 | `speedDialItems` | `this._renderItems` (페이로드 `[{ actionId, icon, label }]`) — 내부에서 `this.listRender.renderData()` 호출 후 `this._applyRadialAngles()` 호출하여 방사형 좌표 주입 |
 
 > `_renderItems`는 ListRender의 renderData를 그대로 호출 후 좌표 주입을 추가하는 wrapper다. ListRender가 항목을 DOM에 append한 직후 좌표를 inline style로 주입해야 하므로 두 단계가 같은 사이클에 묶여야 한다. ListRender 메서드를 재정의하지 않고 wrapper로 처리한다(Mixin 메서드 재정의 금지 규칙 준수).
 
 ### 이벤트 (customEvents)
 
-| 이벤트 | 선택자 (computed) | 발행 시점 | 동작 |
-|--------|------------------|-----------|------|
-| click | `fab` (FieldRender) | 메인 FAB 클릭 | bindEvents가 `@fabClicked` 발행(Standard 호환). `_handleContainerClick` 자체 native delegator가 `_isOpen` 토글 수행. |
-| click | `item` (ListRender) | 보조 액션 항목 클릭 | bindEvents 위임 + `@speedDialActionClicked` 발행. `_handleContainerClick`이 발행 직후 `_close()` 호출. |
+| 이벤트 | 선택자 (computed)   | 발행 시점           | 동작                                                                                                                 |
+| ------ | ------------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| click  | `fab` (FieldRender) | 메인 FAB 클릭       | bindEvents가 `@fabClicked` 발행(Standard 호환). `_handleContainerClick` 자체 native delegator가 `_isOpen` 토글 수행. |
+| click  | `item` (ListRender) | 보조 액션 항목 클릭 | bindEvents 위임 + `@speedDialActionClicked` 발행. `_handleContainerClick`이 발행 직후 `_close()` 호출.               |
 
 ### 커스텀 메서드
 
-| 메서드 | 설명 |
-|--------|------|
-| `_handleContainerClick(e)` | appendElement에 부착된 단일 native click delegator. 보조 항목 클릭이면 `_close()`. 메인 FAB 클릭이면 `_isOpen` 토글(`_open`/`_close`). bindEvents의 Weventbus 발행과 분리되어 _isOpen 상태 갱신만 전담. |
-| `_handleOutsideClick(e)` | document capture click 핸들러. `_isOpen=false`면 무시. `appendElement.contains(e.target)`가 false면 `_close()`. |
-| `_handleEscKey(e)` | document keydown 핸들러. `_isOpen=false`이거나 `e.key !== 'Escape'`면 무시. 둘 다 만족 시 `_close()`. |
-| `_open()` | `_isOpen=true` + `appendElement.querySelector('.speed-dial').dataset.speedDialState='open'`. CSS가 페르소나별 motion으로 항목을 펼친다. |
-| `_close()` | `_isOpen=false` + `dataset.speedDialState='closed'`. CSS가 reverse transition으로 접는다. |
-| `_applyRadialAngles()` | `_radialOptions`가 null이면 noop(vertical 페르소나). 아니면 `.speed-dial__item` 전체에 대해 항목 수 N으로 `[startAngle, endAngle]`을 (N=1: 중앙, N>=2: 등분)으로 나눈 각 angle에 대해 `x = radius * cos(angle * π/180)`, `y = radius * sin(angle * π/180)` 계산. CSS 좌표계는 y가 아래로 양수이므로 위쪽 호를 만들기 위해 angle은 200°~340° 범위(또는 startAngle/endAngle 설정)를 사용한다. 각 item에 `style.setProperty('--x', x + 'px')` + `style.setProperty('--y', y + 'px')` 주입. |
-| `_renderItems({ response })` | ListRender renderData wrapper. `this.listRender.renderData({ response })` 호출 후 즉시 `this._applyRadialAngles()` 호출. |
+| 메서드                       | 설명                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `_handleContainerClick(e)`   | appendElement에 부착된 단일 native click delegator. 보조 항목 클릭이면 `_close()`. 메인 FAB 클릭이면 `_isOpen` 토글(`_open`/`_close`). bindEvents의 Weventbus 발행과 분리되어 \_isOpen 상태 갱신만 전담.                                                                                                                                                                                                                                                                                |
+| `_handleOutsideClick(e)`     | document capture click 핸들러. `_isOpen=false`면 무시. `appendElement.contains(e.target)`가 false면 `_close()`.                                                                                                                                                                                                                                                                                                                                                                         |
+| `_handleEscKey(e)`           | document keydown 핸들러. `_isOpen=false`이거나 `e.key !== 'Escape'`면 무시. 둘 다 만족 시 `_close()`.                                                                                                                                                                                                                                                                                                                                                                                   |
+| `_open()`                    | `_isOpen=true` + `appendElement.querySelector('.speed-dial').dataset.speedDialState='open'`. CSS가 페르소나별 motion으로 항목을 펼친다.                                                                                                                                                                                                                                                                                                                                                 |
+| `_close()`                   | `_isOpen=false` + `dataset.speedDialState='closed'`. CSS가 reverse transition으로 접는다.                                                                                                                                                                                                                                                                                                                                                                                               |
+| `_applyRadialAngles()`       | `_radialOptions`가 null이면 noop(vertical 페르소나). 아니면 `.speed-dial__item` 전체에 대해 항목 수 N으로 `[startAngle, endAngle]`을 (N=1: 중앙, N>=2: 등분)으로 나눈 각 angle에 대해 `x = radius * cos(angle * π/180)`, `y = radius * sin(angle * π/180)` 계산. CSS 좌표계는 y가 아래로 양수이므로 위쪽 호를 만들기 위해 angle은 200°~340° 범위(또는 startAngle/endAngle 설정)를 사용한다. 각 item에 `style.setProperty('--x', x + 'px')` + `style.setProperty('--y', y + 'px')` 주입. |
+| `_renderItems({ response })` | ListRender renderData wrapper. `this.listRender.renderData({ response })` 호출 후 즉시 `this._applyRadialAngles()` 호출.                                                                                                                                                                                                                                                                                                                                                                |
 
 ### 페이지 연결 사례
 
@@ -114,11 +114,11 @@ FieldRenderMixin (메인 FAB 아이콘 렌더) + ListRenderMixin (보조 액션 
 
 ### 디자인 변형
 
-| 파일 | 페르소나 | 분포 + 펼침 motion | 도메인 라벨 예 |
-|------|---------|-------------------|---------------|
-| `01_refined`     | A: Refined Technical | **Radial fan** (radius 110, 200°~340°) — 메인 FAB 45° 회전 + 항목별 60ms × index stagger fade-up + 퍼플 글로우 | `edit` 메인 + 새 글/사진/초안 (작성 도메인) |
-| `02_material`    | B: Material Elevated | **Radial fan** (radius 120, 200°~340°) — 메인 FAB 90° 회전 + 항목별 50ms × index stagger scale-up + level 3 elevation | `add` 메인 + 문서/스프레드시트/슬라이드/폼 (생성 도메인) |
-| `03_editorial`   | C: Minimal Editorial | **Vertical fan** (radial 좌표 주입 없음) — 메인 FAB 45° 회전 + 항목별 80ms × index cascade slide-up + outline only | `share` 메인 + 메일/링크/내보내기 (공유 도메인 — 정적 문서 흐름) |
-| `04_operational` | D: Dark Operational  | **Radial fan** (radius 100, 200°~340°) — 메인 FAB 45° 회전 + 항목 instant snap(stagger 없이 동시) + 시안 border glow | `bolt` 메인 + RUN/STOP/RESET/KILL (제어 도메인) |
+| 파일             | 페르소나             | 분포 + 펼침 motion                                                                                                    | 도메인 라벨 예                                                   |
+| ---------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| `01_refined`     | A: Refined Technical | **Radial fan** (radius 110, 200°~340°) — 메인 FAB 45° 회전 + 항목별 60ms × index stagger fade-up + 퍼플 글로우        | `edit` 메인 + 새 글/사진/초안 (작성 도메인)                      |
+| `02_material`    | B: Material Elevated | **Radial fan** (radius 120, 200°~340°) — 메인 FAB 90° 회전 + 항목별 50ms × index stagger scale-up + level 3 elevation | `add` 메인 + 문서/스프레드시트/슬라이드/폼 (생성 도메인)         |
+| `03_editorial`   | C: Minimal Editorial | **Vertical fan** (radial 좌표 주입 없음) — 메인 FAB 45° 회전 + 항목별 80ms × index cascade slide-up + outline only    | `share` 메인 + 메일/링크/내보내기 (공유 도메인 — 정적 문서 흐름) |
+| `04_operational` | D: Dark Operational  | **Radial fan** (radius 100, 200°~340°) — 메인 FAB 45° 회전 + 항목 instant snap(stagger 없이 동시) + 시안 border glow  | `bolt` 메인 + RUN/STOP/RESET/KILL (제어 도메인)                  |
 
 각 페르소나는 페르소나 프로파일(produce-component SKILL Step 5-1)을 따르며, speedDial의 `data-speed-dial-state="open"` 시각이 Standard click 버튼과 명확히 구분되도록 보조 액션 컨테이너의 가시성/분포/motion을 페르소나별로 차별화한다. **radial 채택 페르소나(refined/material/operational)에서는 보조 항목이 메인 FAB 위쪽 부채꼴로 동시 분포**하여 원형 FAB의 시각 중심을 강화하고, **editorial은 의도적으로 vertical fan**을 선택해 정적 문서 흐름을 유지한다.

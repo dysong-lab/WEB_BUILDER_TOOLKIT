@@ -15,22 +15,22 @@ FieldRenderMixin
 
 ### cssSelectors
 
-| KEY | VALUE | 용도 |
-|-----|-------|------|
+| KEY        | VALUE                | 용도                   |
+| ---------- | -------------------- | ---------------------- |
 | iconButton | `.icon-button`       | 컨테이너 — 이벤트 매핑 |
-| icon       | `.icon-button__icon` | 아이콘 |
+| icon       | `.icon-button__icon` | 아이콘                 |
 
 ### 구독 (subscriptions)
 
-| topic | handler |
-|-------|---------|
+| topic          | handler                       |
+| -------------- | ----------------------------- |
 | iconButtonInfo | `this.fieldRender.renderData` |
 
 ### 이벤트 (customEvents)
 
-| 이벤트 | 선택자 | 발행 |
-|--------|--------|------|
-| click | `iconButton` (cssSelectors) | `@iconButtonClicked` |
+| 이벤트 | 선택자                      | 발행                 |
+| ------ | --------------------------- | -------------------- |
+| click  | `iconButton` (cssSelectors) | `@iconButtonClicked` |
 
 ### 커스텀 메서드
 
@@ -46,9 +46,9 @@ FieldRenderMixin
 
 ### 디자인 변형
 
-| 파일 | 페르소나 | 설명 |
-|------|---------|------|
-| 01_refined | A: Refined Technical | Filled 스타일 — 다크, primary 컨테이너 |
-| 02_material | B: Material Elevated | Filled tonal — 라이트, secondary container |
-| 03_editorial | C: Minimal Editorial | Standard — 라이트, 컨테이너 없음, 미니멀 |
-| 04_operational | D: Dark Operational | Outlined — 다크, 컴팩트, 시안 outline |
+| 파일           | 페르소나             | 설명                                       |
+| -------------- | -------------------- | ------------------------------------------ |
+| 01_refined     | A: Refined Technical | Filled 스타일 — 다크, primary 컨테이너     |
+| 02_material    | B: Material Elevated | Filled tonal — 라이트, secondary container |
+| 03_editorial   | C: Minimal Editorial | Standard — 라이트, 컨테이너 없음, 미니멀   |
+| 04_operational | D: Dark Operational  | Outlined — 다크, 컴팩트, 시안 outline      |

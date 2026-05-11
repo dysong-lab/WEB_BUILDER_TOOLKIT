@@ -26,53 +26,53 @@ ListRenderMixin (그룹 항목 배열 렌더) + 자체 메서드(`_renderGroup` 
 
 ### cssSelectors
 
-| KEY | VALUE | 용도 |
-|-----|-------|------|
-| group     | `.icon-button-group`              | 라디오그룹 컨테이너 — `role="radiogroup"`, `data-selected-id` dataset 부착 대상 |
-| container | `.icon-button-group__list`        | 항목이 추가될 부모 (ListRenderMixin 규약) |
-| template  | `#icon-button-group-item-template`| `<template>` cloneNode 대상 (ListRenderMixin 규약) |
-| item      | `.icon-button-group__item`        | 렌더된 각 IconButton 루트 — click 위임 + `data-selected`/`aria-checked` 부착 |
-| actionId  | `.icon-button-group__item`        | 항목 식별 (data-action-id) |
-| icon      | `.icon-button-group__item-icon`   | 아이콘 (material symbol textContent) |
-| label     | `.icon-button-group__item-label`  | 라벨 (선택 — 아이콘 only도 허용, 빈 문자열이면 `:empty` CSS로 숨김) |
+| KEY       | VALUE                              | 용도                                                                            |
+| --------- | ---------------------------------- | ------------------------------------------------------------------------------- |
+| group     | `.icon-button-group`               | 라디오그룹 컨테이너 — `role="radiogroup"`, `data-selected-id` dataset 부착 대상 |
+| container | `.icon-button-group__list`         | 항목이 추가될 부모 (ListRenderMixin 규약)                                       |
+| template  | `#icon-button-group-item-template` | `<template>` cloneNode 대상 (ListRenderMixin 규약)                              |
+| item      | `.icon-button-group__item`         | 렌더된 각 IconButton 루트 — click 위임 + `data-selected`/`aria-checked` 부착    |
+| actionId  | `.icon-button-group__item`         | 항목 식별 (data-action-id)                                                      |
+| icon      | `.icon-button-group__item-icon`    | 아이콘 (material symbol textContent)                                            |
+| label     | `.icon-button-group__item-label`   | 라벨 (선택 — 아이콘 only도 허용, 빈 문자열이면 `:empty` CSS로 숨김)             |
 
 ### datasetAttrs (ListRender)
 
-| KEY | data-* | 용도 |
-|-----|--------|------|
+| KEY      | data-\*     | 용도                                                                                                                                 |
+| -------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | actionId | `action-id` | 항목 click 시 `event.target.closest(item)?.dataset.actionId`로 actionId 추출. ListRender가 `data-action-id` 속성을 항목에 자동 설정. |
 
 ### 인스턴스 상태
 
-| 키 | 설명 |
-|----|------|
-| `_selectedId` | 현재 선택된 항목 id(string \| null). `_setSelected`가 갱신. `_renderGroup`이 초기값 결정. |
+| 키                   | 설명                                                                                                                                                                                                                                                                                                                     |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `_selectedId`        | 현재 선택된 항목 id(string \| null). `_setSelected`가 갱신. `_renderGroup`이 초기값 결정.                                                                                                                                                                                                                                |
 | `_groupClickHandler` | bound handler 참조 — beforeDestroy에서 정확히 removeEventListener 하기 위해 보관. (bindEvents가 `@iconButtonToggled`를 위임 발행하지만, 단일 선택 강제 + DOM dataset 갱신 사이드이펙트는 자체 native click delegator가 담당하여 `_selectedId` 상태 갱신과 `data-selected`/`aria-checked` 일괄 적용을 한 cycle에 묶는다.) |
 
 ### 구독 (subscriptions)
 
-| topic | handler |
-|-------|---------|
-| `iconButtonGroup`  | `this._renderGroup` (페이로드 `[{ actionId, icon, label?, selected? }]`) — 내부에서 `this.listRender.renderData({ response: items })` 호출 + 초기 selected 결정 + `_applySelection` 호출 |
-| `toggleSelection`  | `this._setSelectedFromTopic` (페이로드 `{ id }`) — 외부에서 강제로 selected 항목 변경. `_setSelected(id)` wrapping. |
+| topic             | handler                                                                                                                                                                                  |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `iconButtonGroup` | `this._renderGroup` (페이로드 `[{ actionId, icon, label?, selected? }]`) — 내부에서 `this.listRender.renderData({ response: items })` 호출 + 초기 selected 결정 + `_applySelection` 호출 |
+| `toggleSelection` | `this._setSelectedFromTopic` (페이로드 `{ id }`) — 외부에서 강제로 selected 항목 변경. `_setSelected(id)` wrapping.                                                                      |
 
 ### 이벤트 (customEvents)
 
-| 이벤트 | 선택자 (computed) | 발행 시점 | payload |
-|--------|------------------|-----------|---------|
-| click | `item` (ListRender) | 항목 클릭 | `@iconButtonToggled` (bindEvents가 위임 발행). 페이로드 `{ targetInstance, event }` — 페이지가 `event.target.closest('.icon-button-group__item')?.dataset.actionId`로 새 selectedId 추출. 단, 본 변형은 register.js가 자체 native delegator로 `_selectedId` 갱신 + DOM `data-selected`/`aria-checked` 갱신 사이드이펙트를 함께 수행하고, `Weventbus.emit('@iconButtonToggled', { targetInstance: this, selectedId, previousId })`을 직접 호출하여 `selectedId` + `previousId`를 명시 페이로드로 추가 발행한다. 따라서 페이지는 두 페이로드 형태 중 명시 payload(`selectedId`, `previousId`)를 받는다. |
+| 이벤트 | 선택자 (computed)   | 발행 시점 | payload                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| ------ | ------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| click  | `item` (ListRender) | 항목 클릭 | `@iconButtonToggled` (bindEvents가 위임 발행). 페이로드 `{ targetInstance, event }` — 페이지가 `event.target.closest('.icon-button-group__item')?.dataset.actionId`로 새 selectedId 추출. 단, 본 변형은 register.js가 자체 native delegator로 `_selectedId` 갱신 + DOM `data-selected`/`aria-checked` 갱신 사이드이펙트를 함께 수행하고, `Weventbus.emit('@iconButtonToggled', { targetInstance: this, selectedId, previousId })`을 직접 호출하여 `selectedId` + `previousId`를 명시 페이로드로 추가 발행한다. 따라서 페이지는 두 페이로드 형태 중 명시 payload(`selectedId`, `previousId`)를 받는다. |
 
 > **이벤트 발행 분리 이유**: bindEvents의 위임 발행은 `{ targetInstance, event }`만 전달하므로 `previousId` 정보가 없다. toggleGroup은 직전 선택을 명시 정보로 페이지에 전달해야 하므로(예: 정렬 방향이 asc → desc로 바뀌었음을 알아야 함) 자체 native delegator에서 `Weventbus.emit('@iconButtonToggled', { targetInstance, selectedId, previousId })`을 직접 호출한다. customEvents의 위임 발행은 본 변형에서는 trigger 알림 의미 + Weventbus 채널 등록 보장 의미로 유지하되, 페이지가 사용하는 페이로드는 명시 emit이 우선한다.
 
 ### 커스텀 메서드
 
-| 메서드 | 설명 |
-|--------|------|
-| `_renderGroup({ response })` | `iconButtonGroup` 핸들러. items 배열을 ListRender로 렌더한 후 ① 페이로드에서 `selected:true` 항목 탐색 → `_selectedId` 결정, ② 없으면 `items[0]?.actionId`를 fallback, ③ `_applySelection()` 호출하여 DOM에 반영. |
-| `_handleSelect(e)` | 컨테이너 native click delegator. `e.target.closest(item)`로 클릭된 항목 찾음 → `dataset.actionId` 추출 → 같으면 no-op(이미 선택된 것을 다시 누름) → 다르면 `_setSelected(newId)` 호출. |
-| `_setSelected(newId)` | `previousId = this._selectedId` 저장 → `_selectedId = newId` 갱신 → `_applySelection()` 호출 → `Weventbus.emit('@iconButtonToggled', { targetInstance: this, selectedId: newId, previousId })`. newId가 null이거나 그룹에 없는 id면 silent return. |
-| `_applySelection()` | 모든 항목 순회하며 `dataset.selected = (id === _selectedId ? 'true' : 'false')`, `setAttribute('aria-checked', ...)` 동기화. 그룹 컨테이너의 `dataset.selectedId`도 갱신(CSS 컨텍스트 셀렉터 옵션). |
-| `_setSelectedFromTopic({ response })` | `toggleSelection` 토픽 핸들러. `response = { id }` 페이로드를 받아 `_setSelected(response.id)` 호출. 외부에서 클릭 외 경로로 선택을 강제할 때 사용. |
+| 메서드                                | 설명                                                                                                                                                                                                                                               |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `_renderGroup({ response })`          | `iconButtonGroup` 핸들러. items 배열을 ListRender로 렌더한 후 ① 페이로드에서 `selected:true` 항목 탐색 → `_selectedId` 결정, ② 없으면 `items[0]?.actionId`를 fallback, ③ `_applySelection()` 호출하여 DOM에 반영.                                  |
+| `_handleSelect(e)`                    | 컨테이너 native click delegator. `e.target.closest(item)`로 클릭된 항목 찾음 → `dataset.actionId` 추출 → 같으면 no-op(이미 선택된 것을 다시 누름) → 다르면 `_setSelected(newId)` 호출.                                                             |
+| `_setSelected(newId)`                 | `previousId = this._selectedId` 저장 → `_selectedId = newId` 갱신 → `_applySelection()` 호출 → `Weventbus.emit('@iconButtonToggled', { targetInstance: this, selectedId: newId, previousId })`. newId가 null이거나 그룹에 없는 id면 silent return. |
+| `_applySelection()`                   | 모든 항목 순회하며 `dataset.selected = (id === _selectedId ? 'true' : 'false')`, `setAttribute('aria-checked', ...)` 동기화. 그룹 컨테이너의 `dataset.selectedId`도 갱신(CSS 컨텍스트 셀렉터 옵션).                                                |
+| `_setSelectedFromTopic({ response })` | `toggleSelection` 토픽 핸들러. `response = { id }` 페이로드를 받아 `_setSelected(response.id)` 호출. 외부에서 클릭 외 경로로 선택을 강제할 때 사용.                                                                                                |
 
 ### 페이지 연결 사례
 
@@ -116,11 +116,11 @@ ListRenderMixin (그룹 항목 배열 렌더) + 자체 메서드(`_renderGroup` 
 
 ## 디자인 변형
 
-| 파일 | 페르소나 | 선택 시각 차별화 | 도메인 컨텍스트 예 |
-|------|---------|-----------------|------------------|
-| `01_refined`     | A: Refined Technical | 선택 항목: 퍼플 그라데이션 fill + 글로우(rgba(80,46,233,.45) box-shadow) + 아이콘 화이트. 비선택: 투명 배경 + 아이콘 muted. | 정렬 방향 (asc / desc) — 데이터 정렬 방향을 단일 선택 |
-| `02_material`    | B: Material Elevated | 선택 항목: secondary container surface tint(`#C0CAFF`) + level 2 elevation. 비선택: 투명 + 아이콘 outline. | 뷰 모드 (grid / list / compact) — 콘텐츠 표시 모드 단일 선택 |
-| `03_editorial`   | C: Minimal Editorial | 선택 항목: outline border thicken(2px solid `#4A3F35`) + 배경 미세 톤(`rgba(140,123,107,.08)`). 비선택: 1px outline `#C9BFB1` + 배경 transparent. | 필터 우선순위 (latest / popular / relevant) — 검색/피드 정렬 우선 단일 선택 |
-| `04_operational` | D: Dark Operational  | 선택 항목: 시안 ring(`box-shadow: 0 0 0 1px #00E5FF, 0 0 14px rgba(0,229,255,.45)`) + 아이콘 시안 컬러. 그룹 컨테이너에 노랑 accent 라벨로 active 상태 표시. 비선택: 회색 outline + 아이콘 muted. | 운영 알람 단계 (info / warning / critical) — 모니터링 임계 단일 선택 |
+| 파일             | 페르소나             | 선택 시각 차별화                                                                                                                                                                                  | 도메인 컨텍스트 예                                                          |
+| ---------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `01_refined`     | A: Refined Technical | 선택 항목: 퍼플 그라데이션 fill + 글로우(rgba(80,46,233,.45) box-shadow) + 아이콘 화이트. 비선택: 투명 배경 + 아이콘 muted.                                                                       | 정렬 방향 (asc / desc) — 데이터 정렬 방향을 단일 선택                       |
+| `02_material`    | B: Material Elevated | 선택 항목: secondary container surface tint(`#C0CAFF`) + level 2 elevation. 비선택: 투명 + 아이콘 outline.                                                                                        | 뷰 모드 (grid / list / compact) — 콘텐츠 표시 모드 단일 선택                |
+| `03_editorial`   | C: Minimal Editorial | 선택 항목: outline border thicken(2px solid `#4A3F35`) + 배경 미세 톤(`rgba(140,123,107,.08)`). 비선택: 1px outline `#C9BFB1` + 배경 transparent.                                                 | 필터 우선순위 (latest / popular / relevant) — 검색/피드 정렬 우선 단일 선택 |
+| `04_operational` | D: Dark Operational  | 선택 항목: 시안 ring(`box-shadow: 0 0 0 1px #00E5FF, 0 0 14px rgba(0,229,255,.45)`) + 아이콘 시안 컬러. 그룹 컨테이너에 노랑 accent 라벨로 active 상태 표시. 비선택: 회색 outline + 아이콘 muted. | 운영 알람 단계 (info / warning / critical) — 모니터링 임계 단일 선택        |
 
 각 페르소나는 페르소나 프로파일(produce-component SKILL Step 5-1)을 따르며, `[data-selected="true"]`(또는 `[aria-checked="true"]`) 셀렉터로 선택 시각을 분기한다. 선택 변경 시 transition 200~300ms로 부드럽게 시각 전환.

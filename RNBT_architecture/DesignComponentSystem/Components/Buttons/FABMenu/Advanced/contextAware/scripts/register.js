@@ -22,18 +22,22 @@ applyListRenderMixin(this, {
 this._currentContextKey = null;
 
 this._renderByContext = function ({ response } = {}) {
-  const contextKey = response?.contextKey == null ? "" : String(response.contextKey);
+  const contextKey =
+    response?.contextKey == null ? "" : String(response.contextKey);
   const items = Array.isArray(response?.items) ? response.items : [];
 
   this.listRender.renderData({
     response: items.map((item) => ({
-      actionId: item.actionId == null ? String(item.id ?? "") : String(item.actionId),
+      actionId:
+        item.actionId == null ? String(item.id ?? "") : String(item.actionId),
       icon: item.icon == null ? "" : String(item.icon),
       label: item.label == null ? "" : String(item.label),
     })),
   });
 
-  const menu = this.appendElement.querySelector(this.listRender.cssSelectors.menu);
+  const menu = this.appendElement.querySelector(
+    this.listRender.cssSelectors.menu,
+  );
   if (menu) {
     menu.dataset.contextKey = contextKey;
   }

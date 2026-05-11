@@ -30,7 +30,10 @@
   padding: 0 18px;
   border-radius: 18px;
   color: #fff8ff;
-  background: var(--fabmenu-trigger-bg, linear-gradient(180deg, #6750a4 0%, #5b4697 100%));
+  background: var(
+    --fabmenu-trigger-bg,
+    linear-gradient(180deg, #6750a4 0%, #5b4697 100%)
+  );
   box-shadow: 0 10px 24px rgba(74, 58, 110, 0.26);
 }
 
@@ -42,7 +45,10 @@
   transform: translateY(-8px);
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease,
+    visibility 180ms ease;
 }
 
 .fab-menu[data-open="true"] .fab-menu__list {
@@ -79,5 +85,7 @@
 .fab-menu__trigger-label,
 .fab-menu__item-label {
   white-space: nowrap;
-  font: 500 14px/1 "Roboto", sans-serif;
+  font:
+    500 14px/1 "Roboto",
+    sans-serif;
 }

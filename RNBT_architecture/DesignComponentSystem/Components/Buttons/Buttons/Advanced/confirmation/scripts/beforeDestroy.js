@@ -1,1 +1,17 @@
-const { unsubscribe } = GlobalDataPublisher;const { each,go } = fx;if(this._buttonEl)this._buttonEl.removeEventListener("click",this._clickHandler);go(Object.entries(this.subscriptions),each(([topic,_])=>unsubscribe(topic,this)));clearTimeout(this._confirmTimer);cancelAnimationFrame(this._progressRaf);this.subscriptions=null;if(this.fieldRender)this.fieldRender.destroy();this._renderButtonInfo=null;this._handleExternalCancel=null;this._clickHandler=null;this._buttonEl=null;this._labelEl=null;
+const { unsubscribe } = GlobalDataPublisher;
+const { each, go } = fx;
+if (this._buttonEl)
+  this._buttonEl.removeEventListener("click", this._clickHandler);
+go(
+  Object.entries(this.subscriptions),
+  each(([topic, _]) => unsubscribe(topic, this)),
+);
+clearTimeout(this._confirmTimer);
+cancelAnimationFrame(this._progressRaf);
+this.subscriptions = null;
+if (this.fieldRender) this.fieldRender.destroy();
+this._renderButtonInfo = null;
+this._handleExternalCancel = null;
+this._clickHandler = null;
+this._buttonEl = null;
+this._labelEl = null;

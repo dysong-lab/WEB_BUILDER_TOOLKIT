@@ -28,7 +28,10 @@
   touch-action: none;
   user-select: none;
   will-change: transform;
-  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
 }
 
 .fab[data-size="medium"] {
@@ -52,7 +55,11 @@
 
 .fab-draggable-shell--editorial .fab-draggable-stage {
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(255, 250, 243, 0.76)),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.42),
+      rgba(255, 250, 243, 0.76)
+    ),
     repeating-linear-gradient(
       0deg,
       rgba(131, 110, 78, 0.06),

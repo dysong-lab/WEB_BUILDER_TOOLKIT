@@ -1,1 +1,101 @@
-const { subscribe } = GlobalDataPublisher;const { bindEvents } = Wkit;const { each,go } = fx;applyFieldRenderMixin(this,{cssSelectors:{button:".button",label:".button__label",icon:".button__icon"}});this._holdMs=500;this._holdTimer=null;this._progressRaf=null;this._holdStartedAt=0;this._suppressNextClick=false;this._buttonEl=null;this._tickProgress=()=>{if(!this._buttonEl||!this._buttonEl.classList.contains("button--pressing"))return;const progress=Math.min(1,(performance.now()-this._holdStartedAt)/this._holdMs);this._buttonEl.style.setProperty("--longpress-progress",String(progress));if(progress<1)this._progressRaf=requestAnimationFrame(this._tickProgress)};this._clearHold=()=>{clearTimeout(this._holdTimer);cancelAnimationFrame(this._progressRaf);this._holdTimer=null;this._progressRaf=null;if(this._buttonEl){this._buttonEl.classList.remove("button--pressing");this._buttonEl.style.setProperty("--longpress-progress","0");if(this._buttonEl.classList.contains("button--longpressed"))setTimeout(()=>this._buttonEl&&this._buttonEl.classList.remove("button--longpressed"),180)}};this._handlePointerDown=(event)=>{if(event.pointerType==="mouse"&&event.button!==0)return;if(!this._buttonEl)return;this._buttonEl.classList.add("button--pressing");this._holdStartedAt=performance.now();this._holdTimer=setTimeout(()=>{this._suppressNextClick=true;this._buttonEl.classList.add("button--longpressed");Weventbus.emit("@buttonLongPressed",{targetInstance:this,durationMs:this._holdMs});this._clearHold()},this._holdMs);this._progressRaf=requestAnimationFrame(this._tickProgress)};this._handlePointerUp=()=>{if(this._holdTimer)this._clearHold()};this._handlePointerLeave=()=>{if(this._holdTimer)this._clearHold()};this._handlePointerCancel=()=>{if(this._holdTimer)this._clearHold()};this._handleClickCapture=(event)=>{if(!this._suppressNextClick)return;event.stopImmediatePropagation();event.preventDefault();this._suppressNextClick=false};this.subscriptions={buttonInfo:[this.fieldRender.renderData]};go(Object.entries(this.subscriptions),each(([topic,handlers])=>each((handler)=>subscribe(topic,this,handler),handlers)));this.customEvents={click:{[this.fieldRender.cssSelectors.button]:"@buttonClicked"}};bindEvents(this,this.customEvents);this._buttonEl=this.appendElement.querySelector(this.fieldRender.cssSelectors.button);this._pointerDownHandler=this._handlePointerDown.bind(this);this._pointerUpHandler=this._handlePointerUp.bind(this);this._pointerLeaveHandler=this._handlePointerLeave.bind(this);this._pointerCancelHandler=this._handlePointerCancel.bind(this);this._clickCaptureHandler=this._handleClickCapture.bind(this);if(this._buttonEl){this._buttonEl.addEventListener("pointerdown",this._pointerDownHandler);this._buttonEl.addEventListener("pointerup",this._pointerUpHandler);this._buttonEl.addEventListener("pointerleave",this._pointerLeaveHandler);this._buttonEl.addEventListener("pointercancel",this._pointerCancelHandler);this._buttonEl.addEventListener("click",this._clickCaptureHandler,true)}
+const { subscribe } = GlobalDataPublisher;
+const { bindEvents } = Wkit;
+const { each, go } = fx;
+applyFieldRenderMixin(this, {
+  cssSelectors: {
+    button: ".button",
+    label: ".button__label",
+    icon: ".button__icon",
+  },
+});
+this._holdMs = 500;
+this._holdTimer = null;
+this._progressRaf = null;
+this._holdStartedAt = 0;
+this._suppressNextClick = false;
+this._buttonEl = null;
+this._tickProgress = () => {
+  if (!this._buttonEl || !this._buttonEl.classList.contains("button--pressing"))
+    return;
+  const progress = Math.min(
+    1,
+    (performance.now() - this._holdStartedAt) / this._holdMs,
+  );
+  this._buttonEl.style.setProperty("--longpress-progress", String(progress));
+  if (progress < 1)
+    this._progressRaf = requestAnimationFrame(this._tickProgress);
+};
+this._clearHold = () => {
+  clearTimeout(this._holdTimer);
+  cancelAnimationFrame(this._progressRaf);
+  this._holdTimer = null;
+  this._progressRaf = null;
+  if (this._buttonEl) {
+    this._buttonEl.classList.remove("button--pressing");
+    this._buttonEl.style.setProperty("--longpress-progress", "0");
+    if (this._buttonEl.classList.contains("button--longpressed"))
+      setTimeout(
+        () =>
+          this._buttonEl &&
+          this._buttonEl.classList.remove("button--longpressed"),
+        180,
+      );
+  }
+};
+this._handlePointerDown = (event) => {
+  if (event.pointerType === "mouse" && event.button !== 0) return;
+  if (!this._buttonEl) return;
+  this._buttonEl.classList.add("button--pressing");
+  this._holdStartedAt = performance.now();
+  this._holdTimer = setTimeout(() => {
+    this._suppressNextClick = true;
+    this._buttonEl.classList.add("button--longpressed");
+    Weventbus.emit("@buttonLongPressed", {
+      targetInstance: this,
+      durationMs: this._holdMs,
+    });
+    this._clearHold();
+  }, this._holdMs);
+  this._progressRaf = requestAnimationFrame(this._tickProgress);
+};
+this._handlePointerUp = () => {
+  if (this._holdTimer) this._clearHold();
+};
+this._handlePointerLeave = () => {
+  if (this._holdTimer) this._clearHold();
+};
+this._handlePointerCancel = () => {
+  if (this._holdTimer) this._clearHold();
+};
+this._handleClickCapture = (event) => {
+  if (!this._suppressNextClick) return;
+  event.stopImmediatePropagation();
+  event.preventDefault();
+  this._suppressNextClick = false;
+};
+this.subscriptions = { buttonInfo: [this.fieldRender.renderData] };
+go(
+  Object.entries(this.subscriptions),
+  each(([topic, handlers]) =>
+    each((handler) => subscribe(topic, this, handler), handlers),
+  ),
+);
+this.customEvents = {
+  click: { [this.fieldRender.cssSelectors.button]: "@buttonClicked" },
+};
+bindEvents(this, this.customEvents);
+this._buttonEl = this.appendElement.querySelector(
+  this.fieldRender.cssSelectors.button,
+);
+this._pointerDownHandler = this._handlePointerDown.bind(this);
+this._pointerUpHandler = this._handlePointerUp.bind(this);
+this._pointerLeaveHandler = this._handlePointerLeave.bind(this);
+this._pointerCancelHandler = this._handlePointerCancel.bind(this);
+this._clickCaptureHandler = this._handleClickCapture.bind(this);
+if (this._buttonEl) {
+  this._buttonEl.addEventListener("pointerdown", this._pointerDownHandler);
+  this._buttonEl.addEventListener("pointerup", this._pointerUpHandler);
+  this._buttonEl.addEventListener("pointerleave", this._pointerLeaveHandler);
+  this._buttonEl.addEventListener("pointercancel", this._pointerCancelHandler);
+  this._buttonEl.addEventListener("click", this._clickCaptureHandler, true);
+}

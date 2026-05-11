@@ -25,63 +25,63 @@ FieldRenderMixin (라벨/아이콘 렌더 전용) + 커스텀 메서드 (`_handl
 
 ### cssSelectors
 
-| KEY | VALUE | 용도 |
-|-----|-------|------|
-| button | `.button` | 버튼 요소 — click 이벤트 매핑 + `data-confirmation-state` 속성 + `.button--confirming` 클래스 토글 |
-| label | `.button__label` | 라벨 텍스트 (FieldRender + idle/confirming 전환 시 textContent 교체 대상) |
-| icon | `.button__icon` | 아이콘 (FieldRender, 선택적) |
-| progress | `.button__progress` | 카운트다운 시각화 요소 — `--confirmation-progress` 0~1 변수 setProperty 대상 |
+| KEY      | VALUE               | 용도                                                                                               |
+| -------- | ------------------- | -------------------------------------------------------------------------------------------------- |
+| button   | `.button`           | 버튼 요소 — click 이벤트 매핑 + `data-confirmation-state` 속성 + `.button--confirming` 클래스 토글 |
+| label    | `.button__label`    | 라벨 텍스트 (FieldRender + idle/confirming 전환 시 textContent 교체 대상)                          |
+| icon     | `.button__icon`     | 아이콘 (FieldRender, 선택적)                                                                       |
+| progress | `.button__progress` | 카운트다운 시각화 요소 — `--confirmation-progress` 0~1 변수 setProperty 대상                       |
 
 ### datasetAttrs
 
-| KEY | data-* | 용도 |
-|-----|--------|------|
-| confirmationState | `confirmation-state` | `data-confirmation-state="idle|confirming"` 속성을 button에 부착(상태머신 진입/이탈 시 직접 setAttribute로 갱신; FieldRender의 datasetAttrs는 사용하지 않고 `_buttonEl.dataset.confirmationState` 직접 셋팅) |
+| KEY               | data-\*              | 용도                           |
+| ----------------- | -------------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| confirmationState | `confirmation-state` | `data-confirmation-state="idle | confirming"`속성을 button에 부착(상태머신 진입/이탈 시 직접 setAttribute로 갱신; FieldRender의 datasetAttrs는 사용하지 않고`\_buttonEl.dataset.confirmationState` 직접 셋팅) |
 
 > 실제 register.js에서는 datasetAttrs를 등록하지 않고 인스턴스 메서드가 `_buttonEl.dataset.confirmationState`를 직접 갱신한다. 위 표는 HTML이 사용하는 속성 명세를 명시하기 위함.
 
 ### 인스턴스 상태
 
-| 키 | 설명 |
-|----|------|
-| `_confirmationState` | `'idle'` \| `'confirming'`. 기본 `'idle'`. |
-| `_confirmTimeoutMs` | 자동 idle 복귀 임계(고정 4000ms). `@confirmationNeeded` payload `timeoutMs`로 노출. |
-| `_confirmTimer` | setTimeout 핸들. timeout 도달 시 자동 idle 복귀 + `@confirmationCancelled`. |
-| `_progressRaf` | requestAnimationFrame 핸들. confirming 동안 progress 변수 갱신용. |
-| `_confirmStartedAt` | confirming 진입 시각(performance.now). progress 계산용. |
-| `_idleLabel` | `buttonInfo`에서 받은 idle 상태 라벨 (페이지가 publish한 기본). |
-| `_confirmLabel` | `buttonInfo`에서 받은 confirming 상태 라벨 (없으면 `'Confirm?'` 기본값 사용). |
-| `_buttonEl` / `_labelEl` | querySelector 결과 cache. |
-| `_clickHandler` | bound `_handleButtonClick` 참조 — beforeDestroy에서 정확히 removeEventListener. |
-| `_renderButtonInfo` | `buttonInfo` 수신 핸들러(label/confirmLabel/icon 분리 후 fieldRender 위임). |
+| 키                       | 설명                                                                                |
+| ------------------------ | ----------------------------------------------------------------------------------- |
+| `_confirmationState`     | `'idle'` \| `'confirming'`. 기본 `'idle'`.                                          |
+| `_confirmTimeoutMs`      | 자동 idle 복귀 임계(고정 4000ms). `@confirmationNeeded` payload `timeoutMs`로 노출. |
+| `_confirmTimer`          | setTimeout 핸들. timeout 도달 시 자동 idle 복귀 + `@confirmationCancelled`.         |
+| `_progressRaf`           | requestAnimationFrame 핸들. confirming 동안 progress 변수 갱신용.                   |
+| `_confirmStartedAt`      | confirming 진입 시각(performance.now). progress 계산용.                             |
+| `_idleLabel`             | `buttonInfo`에서 받은 idle 상태 라벨 (페이지가 publish한 기본).                     |
+| `_confirmLabel`          | `buttonInfo`에서 받은 confirming 상태 라벨 (없으면 `'Confirm?'` 기본값 사용).       |
+| `_buttonEl` / `_labelEl` | querySelector 결과 cache.                                                           |
+| `_clickHandler`          | bound `_handleButtonClick` 참조 — beforeDestroy에서 정확히 removeEventListener.     |
+| `_renderButtonInfo`      | `buttonInfo` 수신 핸들러(label/confirmLabel/icon 분리 후 fieldRender 위임).         |
 
 ### 구독 (subscriptions)
 
-| topic | handler | 비고 |
-|-------|---------|------|
-| `buttonInfo` | `this._renderButtonInfo` | `{ label, confirmLabel?, icon }` 수신 → label/icon은 fieldRender로, confirmLabel은 `_confirmLabel`에 보관. 현재 상태에 맞는 라벨로 즉시 textContent 갱신. |
-| `confirmationCancel` | `this._handleExternalCancel` | (선택) 페이지에서 외부 cancel 트리거(다른 UI 진입 등). confirming이면 idle 복귀 + `@confirmationCancelled` 발행. |
+| topic                | handler                      | 비고                                                                                                                                                      |
+| -------------------- | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `buttonInfo`         | `this._renderButtonInfo`     | `{ label, confirmLabel?, icon }` 수신 → label/icon은 fieldRender로, confirmLabel은 `_confirmLabel`에 보관. 현재 상태에 맞는 라벨로 즉시 textContent 갱신. |
+| `confirmationCancel` | `this._handleExternalCancel` | (선택) 페이지에서 외부 cancel 트리거(다른 UI 진입 등). confirming이면 idle 복귀 + `@confirmationCancelled` 발행.                                          |
 
 ### 이벤트 (customEvents)
 
-| 이벤트 | 선택자 (computed) | 발행 시점 | payload |
-|--------|------------------|-----------|---------|
-| `@buttonClicked` | — (Weventbus.emit, 직접 발행) | 2차 click 시(confirming → idle 복귀와 동시) | `{ targetInstance: this }` |
-| `@confirmationNeeded` | — | 1차 click 시(idle → confirming 진입) | `{ targetInstance: this, timeoutMs: 4000 }` |
-| `@confirmationCancelled` | — | timeout 만료 또는 외부 cancel 수신 시 | `{ targetInstance: this, reason: 'timeout' \| 'external' }` |
+| 이벤트                   | 선택자 (computed)             | 발행 시점                                   | payload                                                     |
+| ------------------------ | ----------------------------- | ------------------------------------------- | ----------------------------------------------------------- |
+| `@buttonClicked`         | — (Weventbus.emit, 직접 발행) | 2차 click 시(confirming → idle 복귀와 동시) | `{ targetInstance: this }`                                  |
+| `@confirmationNeeded`    | —                             | 1차 click 시(idle → confirming 진입)        | `{ targetInstance: this, timeoutMs: 4000 }`                 |
+| `@confirmationCancelled` | —                             | timeout 만료 또는 외부 cancel 수신 시       | `{ targetInstance: this, reason: 'timeout' \| 'external' }` |
 
 > click은 **bindEvents에 등록하지 않는다**. `_handleButtonClick`이 직접 `addEventListener('click', ...)`로 부착되어 상태에 따라 1차/2차를 분기 발행한다(같은 click을 두 갈래로 갈라 발행해야 하므로 bindEvents 위임으로는 표현 불가). 즉 `customEvents`는 본 변형에서 비어 있고, `bindEvents` 호출도 생략한다.
 
 ### 커스텀 메서드
 
-| 메서드 | 설명 |
-|--------|------|
-| `_renderButtonInfo({ response })` | `{ label, confirmLabel?, icon }` 수신 → `_idleLabel = label`, `_confirmLabel = confirmLabel ?? 'Confirm?'` 보관 → fieldRender.renderData로 label/icon 렌더(현재 상태가 confirming이면 직접 `_confirmLabel`을 textContent로 덮어쓰기). |
-| `_handleButtonClick(e)` | 좌클릭만 허용. 현재 상태가 idle이면 `_enterConfirming()`, confirming이면 `_exitToIdle({ fire: true })` (액션 실행 → `@buttonClicked` 발행). |
-| `_enterConfirming()` | `_confirmationState='confirming'` → `data-confirmation-state` 갱신, `.button--confirming` 추가, `_labelEl.textContent = _confirmLabel`, `_confirmStartedAt = performance.now()`, `_confirmTimer = setTimeout(timeout 핸들러, 4000)`, `_progressRaf = requestAnimationFrame(_tickProgress)`, `Weventbus.emit('@confirmationNeeded', { targetInstance: this, timeoutMs: 4000 })`. |
-| `_exitToIdle({ fire?, reason? })` | `clearTimeout(_confirmTimer)` + `cancelAnimationFrame(_progressRaf)` + `_confirmationState='idle'` → `data-confirmation-state` 갱신, `.button--confirming` 제거, `--confirmation-progress=0`, `_labelEl.textContent = _idleLabel`. `fire=true`면 `@buttonClicked` 발행. `fire=false`이고 `reason` 있으면 `@confirmationCancelled` 발행. |
-| `_tickProgress()` | `progress = min(1, (now - _confirmStartedAt) / _confirmTimeoutMs)` → `_buttonEl.style.setProperty('--confirmation-progress', String(progress))`. progress<1이고 confirming이면 다음 frame 예약. |
-| `_handleExternalCancel({ response })` | confirming 상태면 `_exitToIdle({ reason: 'external' })`. idle이면 무시. |
+| 메서드                                | 설명                                                                                                                                                                                                                                                                                                                                                                            |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `_renderButtonInfo({ response })`     | `{ label, confirmLabel?, icon }` 수신 → `_idleLabel = label`, `_confirmLabel = confirmLabel ?? 'Confirm?'` 보관 → fieldRender.renderData로 label/icon 렌더(현재 상태가 confirming이면 직접 `_confirmLabel`을 textContent로 덮어쓰기).                                                                                                                                           |
+| `_handleButtonClick(e)`               | 좌클릭만 허용. 현재 상태가 idle이면 `_enterConfirming()`, confirming이면 `_exitToIdle({ fire: true })` (액션 실행 → `@buttonClicked` 발행).                                                                                                                                                                                                                                     |
+| `_enterConfirming()`                  | `_confirmationState='confirming'` → `data-confirmation-state` 갱신, `.button--confirming` 추가, `_labelEl.textContent = _confirmLabel`, `_confirmStartedAt = performance.now()`, `_confirmTimer = setTimeout(timeout 핸들러, 4000)`, `_progressRaf = requestAnimationFrame(_tickProgress)`, `Weventbus.emit('@confirmationNeeded', { targetInstance: this, timeoutMs: 4000 })`. |
+| `_exitToIdle({ fire?, reason? })`     | `clearTimeout(_confirmTimer)` + `cancelAnimationFrame(_progressRaf)` + `_confirmationState='idle'` → `data-confirmation-state` 갱신, `.button--confirming` 제거, `--confirmation-progress=0`, `_labelEl.textContent = _idleLabel`. `fire=true`면 `@buttonClicked` 발행. `fire=false`이고 `reason` 있으면 `@confirmationCancelled` 발행.                                         |
+| `_tickProgress()`                     | `progress = min(1, (now - _confirmStartedAt) / _confirmTimeoutMs)` → `_buttonEl.style.setProperty('--confirmation-progress', String(progress))`. progress<1이고 confirming이면 다음 frame 예약.                                                                                                                                                                                 |
+| `_handleExternalCancel({ response })` | confirming 상태면 `_exitToIdle({ reason: 'external' })`. idle이면 무시.                                                                                                                                                                                                                                                                                                         |
 
 ### 페이지 연결 사례
 
@@ -117,11 +117,11 @@ timeout / 외부 cancel:
 
 ### 디자인 변형
 
-| 파일 | 페르소나 | confirming 상태 시각 표현 |
-|------|---------|--------------------------|
-| `01_refined` | A: Refined Technical | 퍼플(idle) → 크림슨 그라디언트(confirming) + 글로우 강화 + progress underline 좌→우 |
-| `02_material` | B: Material Elevated | elevated 라이트 → 에러 톤 배경 + elevation 단계 상승 + 360° conic-gradient progress ring |
-| `03_editorial` | C: Minimal Editorial | text 스타일 → 라벨 색 강조 + italic + 아이콘 페이드아웃 + 하단 underline scaleX 진행 |
-| `04_operational` | D: Dark Operational | outlined 시안 → 노랑 펄스 border + label uppercase 강조 + 좌→우 노랑 fill 카운트다운 |
+| 파일             | 페르소나             | confirming 상태 시각 표현                                                                |
+| ---------------- | -------------------- | ---------------------------------------------------------------------------------------- |
+| `01_refined`     | A: Refined Technical | 퍼플(idle) → 크림슨 그라디언트(confirming) + 글로우 강화 + progress underline 좌→우      |
+| `02_material`    | B: Material Elevated | elevated 라이트 → 에러 톤 배경 + elevation 단계 상승 + 360° conic-gradient progress ring |
+| `03_editorial`   | C: Minimal Editorial | text 스타일 → 라벨 색 강조 + italic + 아이콘 페이드아웃 + 하단 underline scaleX 진행     |
+| `04_operational` | D: Dark Operational  | outlined 시안 → 노랑 펄스 border + label uppercase 강조 + 좌→우 노랑 fill 카운트다운     |
 
 각 페르소나는 `[data-confirmation-state="confirming"]` 셀렉터로 idle 대비 명확한 상태 시각 차별을 둔다.

@@ -15,23 +15,23 @@ FieldRenderMixin
 
 ### cssSelectors
 
-| KEY | VALUE | 용도 |
-|-----|-------|------|
-| button | `.button` | 버튼 요소 — 이벤트 매핑 |
-| label | `.button__label` | 라벨 텍스트 |
-| icon | `.button__icon` | 아이콘 (선택적) |
+| KEY    | VALUE            | 용도                    |
+| ------ | ---------------- | ----------------------- |
+| button | `.button`        | 버튼 요소 — 이벤트 매핑 |
+| label  | `.button__label` | 라벨 텍스트             |
+| icon   | `.button__icon`  | 아이콘 (선택적)         |
 
 ### 구독 (subscriptions)
 
-| topic | handler |
-|-------|---------|
+| topic      | handler                       |
+| ---------- | ----------------------------- |
 | buttonInfo | `this.fieldRender.renderData` |
 
 ### 이벤트 (customEvents)
 
-| 이벤트 | 선택자 | 발행 |
-|--------|--------|------|
-| click | `button` (cssSelectors) | `@buttonClicked` |
+| 이벤트 | 선택자                  | 발행             |
+| ------ | ----------------------- | ---------------- |
+| click  | `button` (cssSelectors) | `@buttonClicked` |
 
 ### 커스텀 메서드
 
@@ -47,9 +47,9 @@ FieldRenderMixin
 
 ### 디자인 변형
 
-| 파일 | 페르소나 | 설명 |
-|------|---------|------|
-| 01_refined | A: Refined Technical | Filled 스타일 — 다크, Pretendard |
-| 02_material | B: Material Elevated | Elevated 스타일 — shadow, 라이트, Roboto |
-| 03_editorial | C: Minimal Editorial | Text 스타일 — 미니멀, 라이트, 세리프 |
-| 04_operational | D: Dark Operational | Outlined 스타일 — 컴팩트, 다크, 모노스페이스 |
+| 파일           | 페르소나             | 설명                                         |
+| -------------- | -------------------- | -------------------------------------------- |
+| 01_refined     | A: Refined Technical | Filled 스타일 — 다크, Pretendard             |
+| 02_material    | B: Material Elevated | Elevated 스타일 — shadow, 라이트, Roboto     |
+| 03_editorial   | C: Minimal Editorial | Text 스타일 — 미니멀, 라이트, 세리프         |
+| 04_operational | D: Dark Operational  | Outlined 스타일 — 컴팩트, 다크, 모노스페이스 |
