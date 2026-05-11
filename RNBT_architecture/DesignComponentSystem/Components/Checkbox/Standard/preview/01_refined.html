@@ -93,18 +93,53 @@
 
         primary.listRender.renderData({
           response: [
-            { id: "cpu", label: "CPU 모니터링", checked: "true", disabled: "false" },
-            { id: "mem", label: "메모리 모니터링", checked: "false", disabled: "false" },
-            { id: "disk", label: "디스크 모니터링", checked: "true", disabled: "false" },
-            { id: "net", label: "네트워크 (점검 중)", checked: "false", disabled: "true" },
+            {
+              id: "cpu",
+              label: "CPU 모니터링",
+              checked: "true",
+              disabled: "false",
+            },
+            {
+              id: "mem",
+              label: "메모리 모니터링",
+              checked: "false",
+              disabled: "false",
+            },
+            {
+              id: "disk",
+              label: "디스크 모니터링",
+              checked: "true",
+              disabled: "false",
+            },
+            {
+              id: "net",
+              label: "네트워크 (점검 중)",
+              checked: "false",
+              disabled: "true",
+            },
           ],
         });
 
         secondary.listRender.renderData({
           response: [
-            { id: "alert-email", label: "이메일 알림", checked: "true", disabled: "false" },
-            { id: "alert-sms", label: "SMS 알림", checked: "false", disabled: "false" },
-            { id: "alert-slack", label: "Slack 알림", checked: "true", disabled: "false" },
+            {
+              id: "alert-email",
+              label: "이메일 알림",
+              checked: "true",
+              disabled: "false",
+            },
+            {
+              id: "alert-sms",
+              label: "SMS 알림",
+              checked: "false",
+              disabled: "false",
+            },
+            {
+              id: "alert-slack",
+              label: "Slack 알림",
+              checked: "true",
+              disabled: "false",
+            },
           ],
         });
       })();

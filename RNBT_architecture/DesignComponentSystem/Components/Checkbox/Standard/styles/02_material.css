@@ -65,12 +65,16 @@
 }
 
 /* 체크 상태 */
-.checkbox-group-shell--material .checkbox-item[data-checked="true"] .checkbox-item__box {
+.checkbox-group-shell--material
+  .checkbox-item[data-checked="true"]
+  .checkbox-item__box {
   border-color: #d0bcff;
   background: #d0bcff;
 }
 
-.checkbox-group-shell--material .checkbox-item[data-checked="true"] .checkbox-item__box::after {
+.checkbox-group-shell--material
+  .checkbox-item[data-checked="true"]
+  .checkbox-item__box::after {
   border-color: #381e72;
 }
 
@@ -83,6 +87,8 @@
   color: #e6e1e5;
 }
 
-.checkbox-group-shell--material .checkbox-item[data-disabled="true"] .checkbox-item__label {
+.checkbox-group-shell--material
+  .checkbox-item[data-disabled="true"]
+  .checkbox-item__label {
   color: rgba(230, 225, 229, 0.38);
 }

@@ -6,10 +6,32 @@
     <script src="../../../../../preview_runtime.js"></script>
     <script src="../../../../../Mixins/TreeRenderMixin.js"></script>
     <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { background: #08111a; color: #eef3ff; padding: 40px; font-family: "Pretendard", sans-serif; }
-      .preview-shell { max-width: 760px; margin: 0 auto; display: grid; gap: 16px; }
-      .preview-log { padding: 14px 16px; border-radius: 16px; background: rgba(255,255,255,.05); white-space: pre-line; font: 12px/1.6 "IBM Plex Mono", monospace; }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #08111a;
+        color: #eef3ff;
+        padding: 40px;
+        font-family: "Pretendard", sans-serif;
+      }
+      .preview-shell {
+        max-width: 760px;
+        margin: 0 auto;
+        display: grid;
+        gap: 16px;
+      }
+      .preview-log {
+        padding: 14px 16px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.05);
+        white-space: pre-line;
+        font:
+          12px/1.6 "IBM Plex Mono",
+          monospace;
+      }
     </style>
   </head>
   <body>
@@ -20,18 +42,145 @@
     </div>
     <script>
       (async () => {
-        await loadComponentAssets("demo", "../views/01_refined.html", "../styles/01_refined.css");
+        await loadComponentAssets(
+          "demo",
+          "../views/01_refined.html",
+          "../styles/01_refined.css",
+        );
         const instance = { appendElement: document.getElementById("demo") };
-        applyTreeRenderMixin(instance, { cssSelectors: { container: ".tree-checkbox__list", template: "#tree-checkbox-node-template", node: ".tree-checkbox__node", toggle: ".tree-checkbox__toggle", label: ".tree-checkbox__label" }, nodeKey: "id", childrenKey: "children" });
-        const data = [{ id: "electronics", label: "Electronics", children: [{ id: "phones", label: "Phones", children: [{ id: "iphone", label: "iPhone", selected: true }, { id: "galaxy", label: "Galaxy" }] }, { id: "tablets", label: "Tablets", children: [{ id: "ipad", label: "iPad", selected: true }] }] }, { id: "books", label: "Books" }];
+        applyTreeRenderMixin(instance, {
+          cssSelectors: {
+            container: ".tree-checkbox__list",
+            template: "#tree-checkbox-node-template",
+            node: ".tree-checkbox__node",
+            toggle: ".tree-checkbox__toggle",
+            label: ".tree-checkbox__label",
+          },
+          nodeKey: "id",
+          childrenKey: "children",
+        });
+        const data = [
+          {
+            id: "electronics",
+            label: "Electronics",
+            children: [
+              {
+                id: "phones",
+                label: "Phones",
+                children: [
+                  { id: "iphone", label: "iPhone", selected: true },
+                  { id: "galaxy", label: "Galaxy" },
+                ],
+              },
+              {
+                id: "tablets",
+                label: "Tablets",
+                children: [{ id: "ipad", label: "iPad", selected: true }],
+              },
+            ],
+          },
+          { id: "books", label: "Books" },
+        ];
         const log = document.getElementById("log");
         const states = new Map();
-        const build = (nodes, parent = null) => (nodes || []).forEach((node) => { const id = String(node.id); const children = Array.isArray(node.children) ? node.children : []; states.set(id, { selected: !!node.selected, indeterminate: false, expanded: node.expanded !== false, parent, children: children.map((child) => String(child.id)) }); build(children, id); });
-        const down = (id, value) => { const queue = [id]; while (queue.length) { const current = queue.shift(); const state = states.get(current); if (!state) continue; state.selected = value; state.indeterminate = false; queue.push(...state.children); } };
-        const full = (nodes) => { const visit = (node) => { const state = states.get(String(node.id)); const children = Array.isArray(node.children) ? node.children : []; if (!children.length) return state; const childStates = children.map(visit); if (childStates.every((child) => child.selected && !child.indeterminate)) { state.selected = true; state.indeterminate = false; } else if (childStates.every((child) => !child.selected && !child.indeterminate)) { state.selected = false; state.indeterminate = false; } else { state.selected = false; state.indeterminate = true; } return state; }; (nodes || []).forEach(visit); };
-        const apply = () => { states.forEach((state, id) => { const el = instance.appendElement.querySelector(`.tree-checkbox__node[data-node-id="${id}"]`); if (!el) return; const badge = el.querySelector(".tree-checkbox__depth-indicator"); el.dataset.checked = String(state.selected); el.dataset.indeterminate = String(state.indeterminate); el.dataset.expanded = String(state.expanded); el.style.setProperty("--depth-guide", `${Number(el.dataset.depth || 0) * 20}px`); if (badge) badge.dataset.depthBadge = el.dataset.depth || "0"; if (state.children.length) { if (state.expanded) instance.treeRender.expand(id); else instance.treeRender.collapse(id); } }); log.textContent = `selectedIds: ${JSON.stringify([...states.entries()].filter(([, v]) => v.selected).map(([id]) => id))}\nindeterminateIds: ${JSON.stringify([...states.entries()].filter(([, v]) => v.indeterminate).map(([id]) => id))}`; };
-        instance.treeRender.renderData({ response: data }); build(data); states.forEach((state, id) => state.selected && down(id, true)); full(data); apply();
-        instance.appendElement.addEventListener("click", (event) => { const toggle = event.target.closest(".tree-checkbox__toggle"); if (toggle) { const node = toggle.closest(".tree-checkbox__node"); const state = states.get(node.dataset.nodeId); state.expanded = !state.expanded; apply(); return; } const node = event.target.closest(".tree-checkbox__node"); if (!node) return; const state = states.get(node.dataset.nodeId); down(node.dataset.nodeId, state.indeterminate ? true : !state.selected); full(data); apply(); });
+        const build = (nodes, parent = null) =>
+          (nodes || []).forEach((node) => {
+            const id = String(node.id);
+            const children = Array.isArray(node.children) ? node.children : [];
+            states.set(id, {
+              selected: !!node.selected,
+              indeterminate: false,
+              expanded: node.expanded !== false,
+              parent,
+              children: children.map((child) => String(child.id)),
+            });
+            build(children, id);
+          });
+        const down = (id, value) => {
+          const queue = [id];
+          while (queue.length) {
+            const current = queue.shift();
+            const state = states.get(current);
+            if (!state) continue;
+            state.selected = value;
+            state.indeterminate = false;
+            queue.push(...state.children);
+          }
+        };
+        const full = (nodes) => {
+          const visit = (node) => {
+            const state = states.get(String(node.id));
+            const children = Array.isArray(node.children) ? node.children : [];
+            if (!children.length) return state;
+            const childStates = children.map(visit);
+            if (
+              childStates.every(
+                (child) => child.selected && !child.indeterminate,
+              )
+            ) {
+              state.selected = true;
+              state.indeterminate = false;
+            } else if (
+              childStates.every(
+                (child) => !child.selected && !child.indeterminate,
+              )
+            ) {
+              state.selected = false;
+              state.indeterminate = false;
+            } else {
+              state.selected = false;
+              state.indeterminate = true;
+            }
+            return state;
+          };
+          (nodes || []).forEach(visit);
+        };
+        const apply = () => {
+          states.forEach((state, id) => {
+            const el = instance.appendElement.querySelector(
+              `.tree-checkbox__node[data-node-id="${id}"]`,
+            );
+            if (!el) return;
+            const badge = el.querySelector(".tree-checkbox__depth-indicator");
+            el.dataset.checked = String(state.selected);
+            el.dataset.indeterminate = String(state.indeterminate);
+            el.dataset.expanded = String(state.expanded);
+            el.style.setProperty(
+              "--depth-guide",
+              `${Number(el.dataset.depth || 0) * 20}px`,
+            );
+            if (badge) badge.dataset.depthBadge = el.dataset.depth || "0";
+            if (state.children.length) {
+              if (state.expanded) instance.treeRender.expand(id);
+              else instance.treeRender.collapse(id);
+            }
+          });
+          log.textContent = `selectedIds: ${JSON.stringify([...states.entries()].filter(([, v]) => v.selected).map(([id]) => id))}\nindeterminateIds: ${JSON.stringify([...states.entries()].filter(([, v]) => v.indeterminate).map(([id]) => id))}`;
+        };
+        instance.treeRender.renderData({ response: data });
+        build(data);
+        states.forEach((state, id) => state.selected && down(id, true));
+        full(data);
+        apply();
+        instance.appendElement.addEventListener("click", (event) => {
+          const toggle = event.target.closest(".tree-checkbox__toggle");
+          if (toggle) {
+            const node = toggle.closest(".tree-checkbox__node");
+            const state = states.get(node.dataset.nodeId);
+            state.expanded = !state.expanded;
+            apply();
+            return;
+          }
+          const node = event.target.closest(".tree-checkbox__node");
+          if (!node) return;
+          const state = states.get(node.dataset.nodeId);
+          down(
+            node.dataset.nodeId,
+            state.indeterminate ? true : !state.selected,
+          );
+          full(data);
+          apply();
+        });
       })();
     </script>
   </body>

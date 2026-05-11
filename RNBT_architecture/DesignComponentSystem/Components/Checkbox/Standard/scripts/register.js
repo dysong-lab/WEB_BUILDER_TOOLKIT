@@ -7,33 +7,33 @@ const { each, go } = fx;
 // ======================
 
 applyListRenderMixin(this, {
-    cssSelectors: {
-        container: '.checkbox-group',
-        template:  '#checkbox-item-template',
-        item:      '.checkbox-item',
-        id:        '.checkbox-item',
-        checked:   '.checkbox-item',
-        disabled:  '.checkbox-item',
-        label:     '.checkbox-item__label',
-    },
-    itemKey: 'id',
-    datasetAttrs: {
-        id:       'id',
-        checked:  'checked',
-        disabled: 'disabled',
-    },
+  cssSelectors: {
+    container: ".checkbox-group",
+    template: "#checkbox-item-template",
+    item: ".checkbox-item",
+    id: ".checkbox-item",
+    checked: ".checkbox-item",
+    disabled: ".checkbox-item",
+    label: ".checkbox-item__label",
+  },
+  itemKey: "id",
+  datasetAttrs: {
+    id: "id",
+    checked: "checked",
+    disabled: "disabled",
+  },
 });
 
 this.toggleItem = function (id) {
-    const target = this.appendElement.querySelector(
-        `${this.listRender.cssSelectors.item}[data-id="${String(id)}"]`,
-    );
-    if (!target || target.dataset.disabled === 'true') return;
+  const target = this.appendElement.querySelector(
+    `${this.listRender.cssSelectors.item}[data-id="${String(id)}"]`,
+  );
+  if (!target || target.dataset.disabled === "true") return;
 
-    target.setAttribute(
-        'data-checked',
-        target.dataset.checked === 'true' ? 'false' : 'true',
-    );
+  target.setAttribute(
+    "data-checked",
+    target.dataset.checked === "true" ? "false" : "true",
+  );
 };
 
 // ======================
@@ -41,14 +41,14 @@ this.toggleItem = function (id) {
 // ======================
 
 this.subscriptions = {
-    checkboxItems: [this.listRender.renderData],
+  checkboxItems: [this.listRender.renderData],
 };
 
 go(
-    Object.entries(this.subscriptions),
-    each(([topic, handlers]) =>
-        each(handler => subscribe(topic, this, handler), handlers)
-    )
+  Object.entries(this.subscriptions),
+  each(([topic, handlers]) =>
+    each((handler) => subscribe(topic, this, handler), handlers),
+  ),
 );
 
 // ======================
@@ -56,8 +56,8 @@ go(
 // ======================
 
 this.customEvents = {
-    click: {
-        [this.listRender.cssSelectors.item]: '@checkboxChanged',
-    },
+  click: {
+    [this.listRender.cssSelectors.item]: "@checkboxChanged",
+  },
 };
 bindEvents(this, this.customEvents);

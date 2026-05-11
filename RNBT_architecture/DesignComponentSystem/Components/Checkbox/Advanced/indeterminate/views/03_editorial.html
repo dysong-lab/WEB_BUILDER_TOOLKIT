@@ -1,18 +1,40 @@
 <div class="checkbox-adv-shell checkbox-adv-shell--editorial">
   <div class="checkbox-group" role="group" data-state="unchecked">
-    <button class="checkbox-group__parent" type="button" data-state="unchecked" aria-label="Toggle parent selection">
-      <input class="checkbox-group__parent-input" type="checkbox" tabindex="-1" aria-hidden="true" />
+    <button
+      class="checkbox-group__parent"
+      type="button"
+      data-state="unchecked"
+      aria-label="Toggle parent selection"
+    >
+      <input
+        class="checkbox-group__parent-input"
+        type="checkbox"
+        tabindex="-1"
+        aria-hidden="true"
+      />
       <span class="checkbox-group__parent-box">
-        <span class="checkbox-group__parent-mark checkbox-group__parent-mark--check"></span>
-        <span class="checkbox-group__parent-mark checkbox-group__parent-mark--dash"></span>
+        <span
+          class="checkbox-group__parent-mark checkbox-group__parent-mark--check"
+        ></span>
+        <span
+          class="checkbox-group__parent-mark checkbox-group__parent-mark--dash"
+        ></span>
       </span>
       <span class="checkbox-group__parent-label"></span>
     </button>
     <div class="checkbox-group__children"></div>
   </div>
   <template id="checkbox-group-child-template">
-    <button class="checkbox-group__child" type="button" data-checkid="" data-checked="false" aria-checked="false">
-      <span class="checkbox-group__child-box"><span class="checkbox-group__child-mark"></span></span>
+    <button
+      class="checkbox-group__child"
+      type="button"
+      data-checkid=""
+      data-checked="false"
+      aria-checked="false"
+    >
+      <span class="checkbox-group__child-box"
+        ><span class="checkbox-group__child-mark"></span
+      ></span>
       <span class="checkbox-group__child-label"></span>
     </button>
   </template>

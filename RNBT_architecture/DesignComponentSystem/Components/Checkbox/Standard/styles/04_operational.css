@@ -66,12 +66,16 @@
 }
 
 /* 체크 상태 — 초록 강조 (운영 상태 표시) */
-.checkbox-group-shell--operational .checkbox-item[data-checked="true"] .checkbox-item__box {
+.checkbox-group-shell--operational
+  .checkbox-item[data-checked="true"]
+  .checkbox-item__box {
   border-color: #3fb950;
   background: #238636;
 }
 
-.checkbox-group-shell--operational .checkbox-item[data-checked="true"] .checkbox-item__box::after {
+.checkbox-group-shell--operational
+  .checkbox-item[data-checked="true"]
+  .checkbox-item__box::after {
   border-color: #fff;
 }
 
@@ -85,10 +89,14 @@
   letter-spacing: 0;
 }
 
-.checkbox-group-shell--operational .checkbox-item[data-checked="true"] .checkbox-item__label {
+.checkbox-group-shell--operational
+  .checkbox-item[data-checked="true"]
+  .checkbox-item__label {
   color: #f0f6fc;
 }
 
-.checkbox-group-shell--operational .checkbox-item[data-disabled="true"] .checkbox-item__label {
+.checkbox-group-shell--operational
+  .checkbox-item[data-disabled="true"]
+  .checkbox-item__label {
   color: rgba(201, 209, 217, 0.3);
 }

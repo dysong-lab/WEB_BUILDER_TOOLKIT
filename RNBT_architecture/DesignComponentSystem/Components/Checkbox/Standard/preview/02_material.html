@@ -88,17 +88,42 @@
         primary.listRender.renderData({
           response: [
             { id: "wifi", label: "Wi-Fi", checked: "true", disabled: "false" },
-            { id: "bluetooth", label: "Bluetooth", checked: "true", disabled: "false" },
+            {
+              id: "bluetooth",
+              label: "Bluetooth",
+              checked: "true",
+              disabled: "false",
+            },
             { id: "nfc", label: "NFC", checked: "false", disabled: "false" },
-            { id: "vpn", label: "VPN (사용 불가)", checked: "false", disabled: "true" },
+            {
+              id: "vpn",
+              label: "VPN (사용 불가)",
+              checked: "false",
+              disabled: "true",
+            },
           ],
         });
 
         secondary.listRender.renderData({
           response: [
-            { id: "dark", label: "다크 모드", checked: "true", disabled: "false" },
-            { id: "notify", label: "알림", checked: "false", disabled: "false" },
-            { id: "sync", label: "자동 동기화", checked: "true", disabled: "false" },
+            {
+              id: "dark",
+              label: "다크 모드",
+              checked: "true",
+              disabled: "false",
+            },
+            {
+              id: "notify",
+              label: "알림",
+              checked: "false",
+              disabled: "false",
+            },
+            {
+              id: "sync",
+              label: "자동 동기화",
+              checked: "true",
+              disabled: "false",
+            },
           ],
         });
       })();

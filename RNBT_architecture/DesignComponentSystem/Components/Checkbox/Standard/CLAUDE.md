@@ -15,14 +15,14 @@ ListRenderMixin
 
 ### cssSelectors
 
-| KEY | VALUE | 용도 |
-|-----|-------|------|
-| container | `.checkbox__list` | 항목이 추가될 부모 (규약) |
-| template  | `#checkbox-item-template` | cloneNode 대상 (규약) |
-| checkid   | `.checkbox__item` | 항목 식별 + 이벤트 매핑 |
-| checked   | `.checkbox__item` | 체크 상태 (data-checked: "true"/"false"/"indeterminate") |
-| disabled  | `.checkbox__item` | 비활성화 상태 (data-disabled) |
-| label     | `.checkbox__label` | 라벨 텍스트 |
+| KEY       | VALUE                     | 용도                                                     |
+| --------- | ------------------------- | -------------------------------------------------------- |
+| container | `.checkbox__list`         | 항목이 추가될 부모 (규약)                                |
+| template  | `#checkbox-item-template` | cloneNode 대상 (규약)                                    |
+| checkid   | `.checkbox__item`         | 항목 식별 + 이벤트 매핑                                  |
+| checked   | `.checkbox__item`         | 체크 상태 (data-checked: "true"/"false"/"indeterminate") |
+| disabled  | `.checkbox__item`         | 비활성화 상태 (data-disabled)                            |
+| label     | `.checkbox__label`        | 라벨 텍스트                                              |
 
 > **체크마크/인디터미네이트 처리**: `.checkbox__check-mark`(체크 아이콘)와 `.checkbox__indeterminate-mark`(대시 아이콘)는 template에 고정 존재하며 `data-checked` 값에 따라 CSS로만 표시를 제어한다. cssSelectors KEY로 등록하지 않는다 (데이터 바인딩 대상이 아니므로).
 
@@ -32,23 +32,23 @@ checkid
 
 ### datasetAttrs
 
-| KEY | VALUE |
-|-----|-------|
-| checkid  | checkid |
-| checked  | checked |
+| KEY      | VALUE    |
+| -------- | -------- |
+| checkid  | checkid  |
+| checked  | checked  |
 | disabled | disabled |
 
 ### 구독 (subscriptions)
 
-| topic | handler |
-|-------|---------|
+| topic         | handler                      |
+| ------------- | ---------------------------- |
 | checkboxItems | `this.listRender.renderData` |
 
 ### 이벤트 (customEvents)
 
-| 이벤트 | 선택자 | 발행 |
-|--------|--------|------|
-| click | `checkid` (computed property) | `@checkboxClicked` |
+| 이벤트 | 선택자                        | 발행               |
+| ------ | ----------------------------- | ------------------ |
+| click  | `checkid` (computed property) | `@checkboxClicked` |
 
 ### 커스텀 메서드
 
@@ -65,12 +65,12 @@ checkid
 
 ### 디자인 변형
 
-| 파일 | 페르소나 | 설명 |
-|------|---------|------|
+| 파일           | 페르소나             | 설명                                             |
+| -------------- | -------------------- | ------------------------------------------------ |
 | 01_refined     | A: Refined Technical | 다크 퍼플 tonal, Pretendard, 그라디언트 체크박스 |
-| 02_material    | B: Material Elevated | outlined 둥근 모서리, 라이트 블루, Roboto |
-| 03_editorial   | C: Minimal Editorial | 웜 그레이, Georgia 세리프, 미니멀 사각 |
-| 04_operational | D: Dark Operational  | 컴팩트 다크 시안, JetBrains Mono, 각진 모서리 |
+| 02_material    | B: Material Elevated | outlined 둥근 모서리, 라이트 블루, Roboto        |
+| 03_editorial   | C: Minimal Editorial | 웜 그레이, Georgia 세리프, 미니멀 사각           |
+| 04_operational | D: Dark Operational  | 컴팩트 다크 시안, JetBrains Mono, 각진 모서리    |
 
 ### 결정사항
 

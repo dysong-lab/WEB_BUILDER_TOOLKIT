@@ -6,10 +6,32 @@
     <script src="../../../../../preview_runtime.js"></script>
     <script src="../../../../../Mixins/ListRenderMixin.js"></script>
     <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { background: #08111a; color: #eef3ff; padding: 40px; font-family: "Pretendard", sans-serif; }
-      .preview-shell { max-width: 720px; margin: 0 auto; display: grid; gap: 16px; }
-      .preview-log { padding: 14px 16px; border-radius: 16px; background: rgba(255,255,255,.05); white-space: pre-line; font: 12px/1.6 "IBM Plex Mono", monospace; }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #08111a;
+        color: #eef3ff;
+        padding: 40px;
+        font-family: "Pretendard", sans-serif;
+      }
+      .preview-shell {
+        max-width: 720px;
+        margin: 0 auto;
+        display: grid;
+        gap: 16px;
+      }
+      .preview-log {
+        padding: 14px 16px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.05);
+        white-space: pre-line;
+        font:
+          12px/1.6 "IBM Plex Mono",
+          monospace;
+      }
     </style>
   </head>
   <body>
@@ -20,23 +42,75 @@
     </div>
     <script>
       (async () => {
-        await loadComponentAssets("demo", "../views/01_refined.html", "../styles/01_refined.css");
+        await loadComponentAssets(
+          "demo",
+          "../views/01_refined.html",
+          "../styles/01_refined.css",
+        );
         const instance = { appendElement: document.getElementById("demo") };
         applyListRenderMixin(instance, {
-          cssSelectors: { parent: ".checkbox-group__parent", parentInput: ".checkbox-group__parent-input", parentLabel: ".checkbox-group__parent-label", container: ".checkbox-group__children", template: "#checkbox-group-child-template", childItem: ".checkbox-group__child", checkid: ".checkbox-group__child", label: ".checkbox-group__child-label" },
+          cssSelectors: {
+            parent: ".checkbox-group__parent",
+            parentInput: ".checkbox-group__parent-input",
+            parentLabel: ".checkbox-group__parent-label",
+            container: ".checkbox-group__children",
+            template: "#checkbox-group-child-template",
+            childItem: ".checkbox-group__child",
+            checkid: ".checkbox-group__child",
+            label: ".checkbox-group__child-label",
+          },
           itemKey: "checkid",
           datasetAttrs: { checkid: "checkid" },
         });
         const log = document.getElementById("log");
         const state = new Map();
-        const data = { parent: { id: "perm-all", label: "All Permissions" }, children: [ { id: "read", label: "Read", selected: true }, { id: "write", label: "Write", selected: false }, { id: "delete", label: "Delete", selected: true } ] };
-        const applyChild = (id, selected) => { const el = instance.appendElement.querySelector(`.checkbox-group__child[data-checkid="${id}"]`); if (!el) return; el.dataset.checked = String(selected); el.setAttribute("aria-checked", String(selected)); };
-        const parentState = () => { const vals = [...state.values()]; if (!vals.length) return "unchecked"; if (vals.every(Boolean)) return "checked"; if (vals.some(Boolean)) return "indeterminate"; return "unchecked"; };
-        const syncParent = () => { const root = instance.appendElement.querySelector(".checkbox-group__parent"); const input = instance.appendElement.querySelector(".checkbox-group__parent-input"); const next = parentState(); root.dataset.state = next; input.checked = next === "checked"; input.indeterminate = next === "indeterminate"; return next; };
+        const data = {
+          parent: { id: "perm-all", label: "All Permissions" },
+          children: [
+            { id: "read", label: "Read", selected: true },
+            { id: "write", label: "Write", selected: false },
+            { id: "delete", label: "Delete", selected: true },
+          ],
+        };
+        const applyChild = (id, selected) => {
+          const el = instance.appendElement.querySelector(
+            `.checkbox-group__child[data-checkid="${id}"]`,
+          );
+          if (!el) return;
+          el.dataset.checked = String(selected);
+          el.setAttribute("aria-checked", String(selected));
+        };
+        const parentState = () => {
+          const vals = [...state.values()];
+          if (!vals.length) return "unchecked";
+          if (vals.every(Boolean)) return "checked";
+          if (vals.some(Boolean)) return "indeterminate";
+          return "unchecked";
+        };
+        const syncParent = () => {
+          const root = instance.appendElement.querySelector(
+            ".checkbox-group__parent",
+          );
+          const input = instance.appendElement.querySelector(
+            ".checkbox-group__parent-input",
+          );
+          const next = parentState();
+          root.dataset.state = next;
+          input.checked = next === "checked";
+          input.indeterminate = next === "indeterminate";
+          return next;
+        };
         const render = () => {
-          instance.appendElement.querySelector(".checkbox-group__parent-label").textContent = data.parent.label;
+          instance.appendElement.querySelector(
+            ".checkbox-group__parent-label",
+          ).textContent = data.parent.label;
           data.children.forEach((child) => state.set(child.id, child.selected));
-          instance.listRender.renderData({ response: data.children.map((child) => ({ checkid: child.id, label: child.label })) });
+          instance.listRender.renderData({
+            response: data.children.map((child) => ({
+              checkid: child.id,
+              label: child.label,
+            })),
+          });
           state.forEach((selected, id) => applyChild(id, selected));
           log.textContent = `parentState: ${syncParent()}\nchildren: ${JSON.stringify([...state.entries()])}`;
         };
@@ -44,8 +118,18 @@
         instance.appendElement.addEventListener("click", (event) => {
           const parent = event.target.closest(".checkbox-group__parent");
           const child = event.target.closest(".checkbox-group__child");
-          if (parent) { const next = syncParent() !== "checked"; state.forEach((_, id) => { state.set(id, next); applyChild(id, next); }); }
-          if (child) { const id = child.dataset.checkid; state.set(id, !state.get(id)); applyChild(id, state.get(id)); }
+          if (parent) {
+            const next = syncParent() !== "checked";
+            state.forEach((_, id) => {
+              state.set(id, next);
+              applyChild(id, next);
+            });
+          }
+          if (child) {
+            const id = child.dataset.checkid;
+            state.set(id, !state.get(id));
+            applyChild(id, state.get(id));
+          }
           log.textContent = `parentState: ${syncParent()}\nchildren: ${JSON.stringify([...state.entries()])}`;
         });
       })();

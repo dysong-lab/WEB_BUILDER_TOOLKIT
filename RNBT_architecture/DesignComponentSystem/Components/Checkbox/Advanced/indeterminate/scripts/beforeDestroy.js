@@ -1,11 +1,11 @@
 const { unsubscribe } = GlobalDataPublisher;
 const { each, go } = fx;
 
-this.appendElement.removeEventListener('click', this._groupClickHandler);
+this.appendElement.removeEventListener("click", this._groupClickHandler);
 
 go(
-    Object.entries(this.subscriptions),
-    each(([topic]) => unsubscribe(topic, this)),
+  Object.entries(this.subscriptions),
+  each(([topic]) => unsubscribe(topic, this)),
 );
 
 this.subscriptions = null;

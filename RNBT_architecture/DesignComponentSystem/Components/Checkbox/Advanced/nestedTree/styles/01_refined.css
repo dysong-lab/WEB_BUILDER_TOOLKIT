@@ -12,7 +12,13 @@
   --accent: #8b5cf6;
   padding: 22px;
   border-radius: 24px;
-  background: radial-gradient(circle at top left, rgba(139, 92, 246, 0.2), transparent 34%), linear-gradient(180deg, #0f1830 0%, #09111f 100%);
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(139, 92, 246, 0.2),
+      transparent 34%
+    ),
+    linear-gradient(180deg, #0f1830 0%, #09111f 100%);
 }
 
 .tree-checkbox-shell--refined .tree-checkbox__list,
@@ -49,10 +55,18 @@
   flex-shrink: 0;
 }
 
-.tree-checkbox-shell--refined .tree-checkbox__node[data-has-children="false"] .tree-checkbox__toggle,
-.tree-checkbox-shell--material .tree-checkbox__node[data-has-children="false"] .tree-checkbox__toggle,
-.tree-checkbox-shell--editorial .tree-checkbox__node[data-has-children="false"] .tree-checkbox__toggle,
-.tree-checkbox-shell--operational .tree-checkbox__node[data-has-children="false"] .tree-checkbox__toggle {
+.tree-checkbox-shell--refined
+  .tree-checkbox__node[data-has-children="false"]
+  .tree-checkbox__toggle,
+.tree-checkbox-shell--material
+  .tree-checkbox__node[data-has-children="false"]
+  .tree-checkbox__toggle,
+.tree-checkbox-shell--editorial
+  .tree-checkbox__node[data-has-children="false"]
+  .tree-checkbox__toggle,
+.tree-checkbox-shell--operational
+  .tree-checkbox__node[data-has-children="false"]
+  .tree-checkbox__toggle {
   visibility: hidden;
 }
 
@@ -70,10 +84,18 @@
   transition: transform 160ms ease;
 }
 
-.tree-checkbox-shell--refined .tree-checkbox__node[data-expanded="true"] .tree-checkbox__chevron,
-.tree-checkbox-shell--material .tree-checkbox__node[data-expanded="true"] .tree-checkbox__chevron,
-.tree-checkbox-shell--editorial .tree-checkbox__node[data-expanded="true"] .tree-checkbox__chevron,
-.tree-checkbox-shell--operational .tree-checkbox__node[data-expanded="true"] .tree-checkbox__chevron {
+.tree-checkbox-shell--refined
+  .tree-checkbox__node[data-expanded="true"]
+  .tree-checkbox__chevron,
+.tree-checkbox-shell--material
+  .tree-checkbox__node[data-expanded="true"]
+  .tree-checkbox__chevron,
+.tree-checkbox-shell--editorial
+  .tree-checkbox__node[data-expanded="true"]
+  .tree-checkbox__chevron,
+.tree-checkbox-shell--operational
+  .tree-checkbox__node[data-expanded="true"]
+  .tree-checkbox__chevron {
   transform: rotate(90deg);
 }
 
@@ -166,22 +188,35 @@
 
 .tree-checkbox-shell--refined .tree-checkbox__label {
   color: var(--text);
-  font: 500 14px/1.45 "Pretendard", "SUIT", sans-serif;
+  font:
+    500 14px/1.45 "Pretendard",
+    "SUIT",
+    sans-serif;
 }
 
 .tree-checkbox-shell--refined .tree-checkbox__depth-indicator::before {
   content: attr(data-depth-badge);
-  font: 500 11px/1 "IBM Plex Mono", monospace;
+  font:
+    500 11px/1 "IBM Plex Mono",
+    monospace;
 }
 
-.tree-checkbox-shell--refined .tree-checkbox__node[data-checked="true"] .tree-checkbox__box,
-.tree-checkbox-shell--refined .tree-checkbox__node[data-indeterminate="true"] .tree-checkbox__box {
+.tree-checkbox-shell--refined
+  .tree-checkbox__node[data-checked="true"]
+  .tree-checkbox__box,
+.tree-checkbox-shell--refined
+  .tree-checkbox__node[data-indeterminate="true"]
+  .tree-checkbox__box {
   background: linear-gradient(180deg, #8b5cf6 0%, #6d45d6 100%);
   border-color: transparent;
 }
 
-.tree-checkbox-shell--refined .tree-checkbox__node[data-checked="true"] .tree-checkbox__check-mark,
-.tree-checkbox-shell--refined .tree-checkbox__node[data-indeterminate="true"] .tree-checkbox__dash-mark {
+.tree-checkbox-shell--refined
+  .tree-checkbox__node[data-checked="true"]
+  .tree-checkbox__check-mark,
+.tree-checkbox-shell--refined
+  .tree-checkbox__node[data-indeterminate="true"]
+  .tree-checkbox__dash-mark {
   opacity: 1;
 }
 
@@ -232,22 +267,35 @@
 
 .tree-checkbox-shell--material .tree-checkbox__label {
   color: var(--text);
-  font: 400 15px/1.45 "Roboto", "SUIT", sans-serif;
+  font:
+    400 15px/1.45 "Roboto",
+    "SUIT",
+    sans-serif;
 }
 
 .tree-checkbox-shell--material .tree-checkbox__depth-indicator::before {
   content: "L" attr(data-depth-badge);
-  font: 500 10px/1 "Roboto Mono", monospace;
+  font:
+    500 10px/1 "Roboto Mono",
+    monospace;
 }
 
-.tree-checkbox-shell--material .tree-checkbox__node[data-checked="true"] .tree-checkbox__box,
-.tree-checkbox-shell--material .tree-checkbox__node[data-indeterminate="true"] .tree-checkbox__box {
+.tree-checkbox-shell--material
+  .tree-checkbox__node[data-checked="true"]
+  .tree-checkbox__box,
+.tree-checkbox-shell--material
+  .tree-checkbox__node[data-indeterminate="true"]
+  .tree-checkbox__box {
   background: var(--accent);
   border-color: var(--accent);
 }
 
-.tree-checkbox-shell--material .tree-checkbox__node[data-checked="true"] .tree-checkbox__check-mark,
-.tree-checkbox-shell--material .tree-checkbox__node[data-indeterminate="true"] .tree-checkbox__dash-mark {
+.tree-checkbox-shell--material
+  .tree-checkbox__node[data-checked="true"]
+  .tree-checkbox__check-mark,
+.tree-checkbox-shell--material
+  .tree-checkbox__node[data-indeterminate="true"]
+  .tree-checkbox__dash-mark {
   opacity: 1;
 }
 
@@ -275,7 +323,9 @@
   position: absolute;
   inset: -4px 0 0 2px;
   color: #4d3e32;
-  font: 700 14px/1 Georgia, serif;
+  font:
+    700 14px/1 Georgia,
+    serif;
 }
 
 .tree-checkbox-shell--editorial .tree-checkbox__dash-mark::before {
@@ -283,21 +333,32 @@
   position: absolute;
   inset: -5px 0 0 3px;
   color: #4d3e32;
-  font: italic 700 18px/1 Georgia, serif;
+  font:
+    italic 700 18px/1 Georgia,
+    serif;
 }
 
 .tree-checkbox-shell--editorial .tree-checkbox__label {
   color: var(--text);
-  font: 400 16px/1.5 Georgia, "Times New Roman", serif;
+  font:
+    400 16px/1.5 Georgia,
+    "Times New Roman",
+    serif;
 }
 
 .tree-checkbox-shell--editorial .tree-checkbox__depth-indicator::before {
   content: ".." attr(data-depth-badge);
-  font: 400 11px/1 Georgia, serif;
+  font:
+    400 11px/1 Georgia,
+    serif;
 }
 
-.tree-checkbox-shell--editorial .tree-checkbox__node[data-checked="true"] .tree-checkbox__check-mark,
-.tree-checkbox-shell--editorial .tree-checkbox__node[data-indeterminate="true"] .tree-checkbox__dash-mark {
+.tree-checkbox-shell--editorial
+  .tree-checkbox__node[data-checked="true"]
+  .tree-checkbox__check-mark,
+.tree-checkbox-shell--editorial
+  .tree-checkbox__node[data-indeterminate="true"]
+  .tree-checkbox__dash-mark {
   opacity: 1;
 }
 
@@ -325,14 +386,20 @@
 
 .tree-checkbox-shell--operational .tree-checkbox__chevron::before {
   content: "[+]";
-  font: 500 11px/1 "JetBrains Mono", monospace;
+  font:
+    500 11px/1 "JetBrains Mono",
+    monospace;
 }
 
-.tree-checkbox-shell--operational .tree-checkbox__node[data-expanded="true"] .tree-checkbox__chevron {
+.tree-checkbox-shell--operational
+  .tree-checkbox__node[data-expanded="true"]
+  .tree-checkbox__chevron {
   transform: none;
 }
 
-.tree-checkbox-shell--operational .tree-checkbox__node[data-expanded="true"] .tree-checkbox__chevron::before {
+.tree-checkbox-shell--operational
+  .tree-checkbox__node[data-expanded="true"]
+  .tree-checkbox__chevron::before {
   content: "[-]";
 }
 
@@ -367,21 +434,34 @@
 
 .tree-checkbox-shell--operational .tree-checkbox__label {
   color: var(--text);
-  font: 500 13px/1.45 "JetBrains Mono", "IBM Plex Mono", monospace;
+  font:
+    500 13px/1.45 "JetBrains Mono",
+    "IBM Plex Mono",
+    monospace;
 }
 
 .tree-checkbox-shell--operational .tree-checkbox__depth-indicator::before {
   content: "L" attr(data-depth-badge);
-  font: 500 10px/1 "JetBrains Mono", monospace;
+  font:
+    500 10px/1 "JetBrains Mono",
+    monospace;
 }
 
-.tree-checkbox-shell--operational .tree-checkbox__node[data-checked="true"] .tree-checkbox__box,
-.tree-checkbox-shell--operational .tree-checkbox__node[data-indeterminate="true"] .tree-checkbox__box {
+.tree-checkbox-shell--operational
+  .tree-checkbox__node[data-checked="true"]
+  .tree-checkbox__box,
+.tree-checkbox-shell--operational
+  .tree-checkbox__node[data-indeterminate="true"]
+  .tree-checkbox__box {
   background: var(--accent);
   border-color: var(--accent);
 }
 
-.tree-checkbox-shell--operational .tree-checkbox__node[data-checked="true"] .tree-checkbox__check-mark,
-.tree-checkbox-shell--operational .tree-checkbox__node[data-indeterminate="true"] .tree-checkbox__dash-mark {
+.tree-checkbox-shell--operational
+  .tree-checkbox__node[data-checked="true"]
+  .tree-checkbox__check-mark,
+.tree-checkbox-shell--operational
+  .tree-checkbox__node[data-indeterminate="true"]
+  .tree-checkbox__dash-mark {
   opacity: 1;
 }
