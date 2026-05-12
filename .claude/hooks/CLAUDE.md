@@ -349,9 +349,9 @@ loaded.js          → P0-4만 검사
 
 ### 구현 완료
 
-| 스크립트 | 커�� 계약 | 대상 파일 | 검증 결과 |
+| 스크립트 | 커버 계약 | 대상 파일 | 검증 결과 |
 |----------|----------|----------|----------|
-| `check-p3.sh` | P3-1, P3-2, P3-3 | *.css, *.js, preview.html | 기존 인라인 Hook 3���를 ��합 |
+| `check-p3.sh` | P3-1, P3-2, P3-3 | *.css, *.js, preview.html | 기존 인라인 Hook 3개를 통합 |
 | `check-register.sh` | P0-2, P1-1 | register.js | fetch 차단 + subscribe 존재 확인 |
 | `check-beforeDestroy.sh` | P1-4 | beforeDestroy.js | null 정리 + destroy() + unsubscribe 존재 확인 |
 | `check-page-loaded.sh` | P0-4 | loaded.js (page) | DOM 조작 차단 + 데이터 매핑 존재 확인 |
@@ -365,7 +365,7 @@ loaded.js          → P0-4만 검사
 ### 전수 테스트 결과
 
 ```
-대상: 모든 DesignComponentSystem 라이���사이클 파일
+대상: 모든 DesignComponentSystem 라이프사이클 파일
   - Components/ 2D: 8개 컴포넌트
   - Components/ 3D: 7개 장비 × 3 변형 = 21개
   - Examples/ 2D: 4개 프로젝트 = 29개 컴포넌트
@@ -390,4 +390,4 @@ audit-project:  P2-4, P3-4 — SKILL 완료 후 수동 실행으로 유지
 *작성일: 2026-03-31*
 *개정일: 2026-04-04 — 선별 기준을 "정규식 가능 여부"에서 "설계 중요도"로 전환*
 *근거: 03-31 전수 검토 22건 분석 — 실제 위반의 95%가 기존 Hook 선별 범위 밖*
-*개정���: 2026-04-05 — Phase 1(단일 파일) + Phase 2(교차 검증) 구현 완료, 9개 스크립트 배��*
+*개정일: 2026-04-05 — Phase 1(단일 파일) + Phase 2(교차 검증) 구현 완료, 9개 스크립트 배포*

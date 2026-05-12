@@ -5,7 +5,7 @@
 ```
 Figma_Conversion/
 ├── CLAUDE.md                   # 이 문서 (핵심 원칙)
-├── Static_Components/          # 변환된 HTML/CSS 결과물 (TBD: 경로 재구성 예정)
+├── Static_Components/          # 변환된 HTML/CSS 결과물 (폴더 미생성 — 첫 변환 시 생성됨)
 │   └── [프로젝트명]/
 │       └── [컴포넌트명]/
 │           ├── assets/         # SVG, 이미지 에셋
@@ -76,6 +76,19 @@ Figma_Conversion/
 - [ ] SVG 에셋이 올바른 크기로 렌더링됨 (img에 픽셀 단위 width/height 명시)
 - [ ] SVG 에셋을 CSS나 외부 아이콘으로 임의 대체하지 않음
 - [ ] Playwright 스크린샷으로 Figma 원본과 **픽셀 단위로** 비교 완료
+  ```bash
+  # Figma_Conversion/ 에서 실행
+  node -e "
+  const { chromium } = require('playwright');
+  (async () => {
+    const b = await chromium.launch();
+    const p = await b.newPage();
+    await p.goto('file://' + require('path').resolve('Static_Components/<project>/<component>/<name>.html'));
+    await p.screenshot({ path: 'Static_Components/<project>/<component>/screenshots/impl.png' });
+    await b.close();
+  })();
+  "
+  ```
 
 ---
 
